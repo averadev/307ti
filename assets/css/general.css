@@ -42,7 +42,7 @@ body {
     margin: 12px 0 0 40px;
 }
 .general-section{
-    padding: 0 30px;
+    padding: 0 20px 0 240px;
 }
 .menu-section{
     z-index: 1000;
@@ -106,6 +106,12 @@ body {
     background-color: #e8e8e8;
 }
 
+.moduleHide{
+    display: none;
+}
+
+
+
 .fiter-section{
     margin-left: inherit;
     margin-right: inherit;
@@ -114,12 +120,26 @@ body {
     background-color: #ffffff;
 }
 .section-bar{
+    position: relative;
+    height: 34px;
     font-size: 14px;
     font-weight: bold;
-    max-width: 200px;
+    width: 200px;
     color: #ffffff;
-    padding: 10px 10px 10px 30px;
+    padding: 10px 10px 10px 60px;
     background: #183a59 url("../img/common/arrowSection.png") no-repeat right;
+}
+.collapseFilter{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 34px;
+    cursor: pointer;
+    background: url("../img/common/iconCollapse.png") no-repeat left;
+}
+.filter-fields{
+    margin-top: 20px !important;
 }
 .rdoField{
     padding: 10px 0 0 40px;

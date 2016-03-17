@@ -7,10 +7,10 @@ setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
  * Author: Alberto Vera Espitia
  * GeekBucket 2016
  */
-class Person extends CI_Controller {
+class People extends CI_Controller {
 
     
 	public function index(){
-        $this->load->view('vwPerson');
+        $this->load->view('vwPeople');
 	}
 }

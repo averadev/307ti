@@ -1,8 +1,8 @@
             
 <div class="row fiter-section">
-    <div class="medium-2 columns section-bar">Consultas</div>
-    <div class="medium-8 columns">
-        <div class="row">
+    <div class="section-bar">Consultas<div class="collapseFilter"></div></div>
+    <div class="medium-12 columns">
+        <div class="row filter-fields">
             <div class="rdoField">
               <input type="radio" id="rdoFilter1" name="rdoFilter" value="Red" checked>
                 <label for="rdoFilter1">Persona Id</label>
@@ -26,7 +26,7 @@
 </div>
 
 <div class="row pagination-section">
-    <div class="medium-2 columns section-bar">Resultados</div>
+    <div class="medium-2 columns section-bar"><span>Resultados</span></div>
     <div class="pages">
         <div>Pagina</div>
         <div class="number">1</div>

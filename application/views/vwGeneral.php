@@ -28,17 +28,9 @@
         
         <div class="menu-section">
             <div class="menu-content">
-                <div class="menu-sel">Persona</div>
-                <div class="menu-sel">Contrato</div>
-                <div class="menu-sel">Tour</div>
-                <div class="menu-sel">Comisiones</div>
-                <div class="menu-sel">Cobranza</div>
-                <div class="menu-sel">Transacciones</div>
-                <div class="menu-sel">Reportes</div>
-                <div class="menu-sel">Reservaciones</div>
-                <div class="menu-sel">Mantenimiento</div>
-                <div class="menu-sel">Front Desk</div>
-                <div class="menu-sel">Catalogo</div>
+                <div class="menu-sel" attr-screen="people">Persona</div>
+                <div class="menu-sel" attr-screen="contract">Contrato</div>
+                <div class="menu-sel" attr-screen="catalog">Catalogo</div>
                 <div class="menu-fix">&nbsp;</div>
             </div>
         </div>
