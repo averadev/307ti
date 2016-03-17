@@ -1,0 +1,179 @@
+*{
+    font-family: Arimo;
+}
+body {
+    background-color: #f2f2f2;
+}
+.top-menu{
+    background-color: #c7c7c7;
+}
+.menu-opt{
+    float: left;
+    margin-left: 10px;
+}
+.btn-menu{
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    background: #3e3e3c url("../img/common/iconMenu.png") no-repeat;
+}
+.btn-menu:hover {
+    background-color: #183a59;
+    -webkit-transition: background-color 500ms linear;
+    -moz-transition: background-color 500ms linear;
+    -o-transition: background-color 500ms linear;
+    -ms-transition: background-color 500ms linear;
+    transition: background-color 500ms linear;
+}
+.btn-menu-sel{
+    background-color: #183a59;
+}
+.logo img{
+    width: 45px;
+    height: 45px;
+}
+
+.top-title{
+    background-color: #ffffff;
+    border-bottom: solid 4px #183a59;
+}
+.top-title h6{
+    color: #ffffff;
+    margin: 12px 0 0 40px;
+}
+.general-section{
+    padding: 0 30px;
+}
+.menu-section{
+    z-index: 1000;
+    float: left;
+    position: fixed;
+    height: 100%;
+    width: 230px;
+    background-color: #f2f2f2;
+}
+.menu-content{
+    height: 100%;
+    width: 220px;
+    overflow-y: auto;
+    padding: 20px 0 0 20px;
+    background-color: #c7c7c7;
+}
+.menu-sel{
+    cursor: pointer;
+    padding-top: 12px;
+    margin-bottom: 20px;
+    height: 40px;
+    width: 180px;
+    color: #3b3b3b;
+    font-size: 14px;
+    text-align: center;
+    background-color: #aaaaaa;
+}
+.menu-sel:hover{
+    color: #ffffff;
+    background-color: #183a59;
+}
+.menu-fix{
+    height: 80px;
+}
+
+.tabs dd > a, .tabs .tab-title > a{
+    font-size: 14px;
+    margin: 8px 5px 0 0;
+    padding: 5px 30px;
+    border-radius: 10px 10px 0px 0px;
+    -moz-border-radius: 10px 10px 0px 0px;
+    -webkit-border-radius: 10px 10px 0px 0px;
+    border: 1px solid #000000;
+    border-bottom: 0px;
+}
+.tabs dd > a, .tabs .tab-title > a {
+    color: #ffffff;
+    background: #183a59;
+}
+.iconCloseTab{
+    top: -30px;
+    right: 10px;
+    float: right;
+    cursor: pointer;
+    position: inherit;
+}
+.iconCloseTab:hover{
+    background-color: #265580;
+}
+.active .iconCloseTab:hover{
+    background-color: #e8e8e8;
+}
+
+.fiter-section{
+    margin-left: inherit;
+    margin-right: inherit;
+    max-width: none;
+    padding: 10px 0;
+    background-color: #ffffff;
+}
+.section-bar{
+    font-size: 14px;
+    font-weight: bold;
+    max-width: 200px;
+    color: #ffffff;
+    padding: 10px 10px 10px 30px;
+    background: #183a59 url("../img/common/arrowSection.png") no-repeat right;
+}
+.rdoField{
+    padding: 10px 0 0 40px;
+    float: left;
+}
+.rowSearch{
+    margin: 0 0 20px 20px;
+}
+.txtSearch{
+    max-width: 500px;
+    background: url("../img/common/iconSearch.png") no-repeat right;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+
+.pagination-section{
+    margin-left: inherit;
+    margin-right: inherit;
+    max-width: none;
+}
+.pages{
+    float: right;
+}
+.pages div{
+    float: left;
+    height: 34px;
+    padding: 10px;
+    color: #666666;
+    font-size: 14px;
+}
+.pages .number{
+    cursor: pointer;
+}
+.pages .number:hover{
+    background-color: #c2c2c2;
+}
+.pages .selected{
+    color: #ffffff !important;
+    background-color: #939393;
+}
+.arrow-pag{
+    padding: 5px 7px !important;
+    color: #ffffff !important;
+    font-size: 20px !important;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #1f5c88;
+}
+
+.table-section{
+    margin-left: inherit;
+    margin-right: inherit;
+    max-width: none;
+    background-color: #ffffff;
+    height: 400px;
+}

@@ -1,0 +1,25 @@
+body {
+    background-color: #1c3a5c;
+}
+.formLogin{
+    margin-top: 20%;
+    background-color: #f6f6f6;
+}
+.imgLogo{
+}
+
+.imgLogo img{
+    margin-top: 50px;
+    margin-bottom: 40px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    -webkit-box-shadow: -7px 9px 5px -2px rgba(0,0,0,0.51);
+    -moz-box-shadow: -7px 9px 5px -2px rgba(0,0,0,0.51);
+    box-shadow: -7px 9px 5px -2px rgba(0,0,0,0.51);
+}
+
+.btnAction{
+    width: 100%;
+    background-color: #1c3a5c;
+}
