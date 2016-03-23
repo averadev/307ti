@@ -9,7 +9,6 @@ setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
  */
 class People extends CI_Controller {
 
-    
 	public function index(){
         $this->load->view('vwPeople');
 	}

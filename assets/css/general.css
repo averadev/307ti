@@ -128,6 +128,9 @@ body {
     color: #ffffff;
     padding: 10px 10px 10px 60px;
     background: #183a59 url("../img/common/arrowSection.png") no-repeat right;
+	float:left;
+	margin-right:10px;
+	cursor:pointer;
 }
 .collapseFilter{
     position: absolute;
@@ -196,4 +199,27 @@ body {
     max-width: none;
     background-color: #ffffff;
     height: 400px;
+}
+
+.dialogModal .ui-dialog-titlebar{
+	color:#FFF;	
+	background:#183a59 ;
+}
+	
+/*.dialogDash .ui-button .ui-button-text{
+	color:#FFF;	
+	background:#cf2a0e;
+	border-color:#cf2a0e;
+}*/
+	
+.dialogModalButtonCancel .ui-button-text{
+	color:#FFF;	
+	background:#cf2a0e;
+	border-color:#cf2a0e;
+}
+
+.dialogModalButtonAccept .ui-button-text{
+	color:#FFF;	
+	background:#008CBA;
+	border-color:#007095;
 }
