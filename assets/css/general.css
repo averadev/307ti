@@ -1,9 +1,30 @@
+/**
+* @style       Standard Layout
+* @media       screen
+* @version     1.0
+* @author      Alfredo Chi
+* @copyright   Geek Bucket
+* @section	   css general de las pantallas
+*/
+
+
+/**
+* @section body
+* @todo cuerpo del html
+*/
+
 *{
     font-family: Arimo;
 }
 body {
     background-color: #f2f2f2;
 }
+
+/**
+* @section top menu
+* @todo menu principal
+*/
+
 .top-menu{
     background-color: #c7c7c7;
 }
@@ -110,7 +131,10 @@ body {
     display: none;
 }
 
-
+/**
+* @section filter
+* @todo filtros de busqueda y formularios de busqueda
+*/
 
 .fiter-section{
     margin-left: inherit;
@@ -150,7 +174,19 @@ body {
 }
 .rowSearch{
     margin: 0 0 20px 20px;
+	margin-bottom:0;
 }
+
+.groupBtnSearch{
+	float:right;
+}
+
+.btnSearch{
+	border-color:#FFFFFF;
+	background:#183a59;
+	font-size:0.8rem;
+}
+
 .txtSearch{
     max-width: 500px;
     background: url("../img/common/iconSearch.png") no-repeat right;
@@ -158,6 +194,43 @@ body {
     -moz-border-radius: 8px;
     border-radius: 8px;
 }
+
+/**
+* @section fieldset
+* @todo contenedores de formularios
+*/
+
+.fieldset{
+	border:1px solid #999;
+	border-radius:5px;
+	box-shadow:0 0 10px #999;
+}
+.fieldset legend {
+	background:#fff;
+	font-size: 0.875rem;
+	font-weight:normal;
+}
+
+.fieldsetFilter-advanced-hide{
+	border:none;
+	box-shadow:none;
+	padding:0;
+	margin:0;
+	padding-left:2.5rem;
+}
+
+.fieldsetFilter-advanced-show{
+	box-shadow:none;
+	margin-top:0;
+	padding-top:0;
+	padding-bottom:0;
+	margin-left:2rem;
+}
+
+/**
+* @section paginador
+* @todo paginador en general
+*/
 
 .pagination-section{
     margin-left: inherit;
@@ -167,7 +240,26 @@ body {
 .pages{
     float: right;
 }
-.pages div{
+
+.pagination {
+    display: inline-block;
+    border: 1px solid #CDCDCD;
+    border-radius: 3px;
+	margin-top:4px;
+	margin-right:5px;
+	padding-bottom:0;
+}
+
+.pagination a {
+	height:24px;
+	width:24px;
+	padding-bottom:0;
+	/*background-color: #000000;
+	margin-top:0;*/
+}
+
+
+/*.pages div{
     float: left;
     height: 34px;
     padding: 10px;
@@ -192,18 +284,36 @@ body {
     cursor: pointer;
     background-color: #1f5c88;
 }
+*/
+/**
+* @section tabla de busqueda
+* @todo tabla que muestra los resultados de la busqueda
+*/
 
 .table-section{
+	position:relative;
+	float:right;
     margin-left: inherit;
     margin-right: inherit;
     max-width: none;
     background-color: #ffffff;
     height: 400px;
+	overflow:scroll;
+	width:100%;
 }
+
+#tablePeople thead tr th, #tablePeople thead tr td{
+	font-size:.7rem;
+}
+
+/**
+* @section modal form
+* @todo cambios del modal de jquery en general
+*/
 
 .dialogModal .ui-dialog-titlebar{
 	color:#FFF;	
-	background:#183a59 ;
+	background:#183a59;
 }
 	
 /*.dialogDash .ui-button .ui-button-text{
@@ -223,3 +333,61 @@ body {
 	background:#008CBA;
 	border-color:#007095;
 }
+
+/**
+* @section loading de busqueda 
+* @todo loading de la tabla de busqueda  
+*/
+
+.divLoadingTable{
+	position:absolute;
+	float:left;
+	width:100%;
+	height:400px;
+	display:none;
+}
+
+.bgLoadingTable{
+	position:absolute;
+	width:100%;
+	height:100%;
+	background:rgba(0,0,0, .4);
+}
+
+.loadingTable{
+	position:absolute;
+	left:40%;
+	top:40%;
+	height:90px;
+	width:150px;
+	background:#183a59;
+	border-radius:5px;
+	box-shadow:0 0 10px #e6e6e6;
+}
+
+.subLoadingTable{
+	position:relative;
+	height:86px;
+	width:146px;
+	background:#FFFFFF;
+	border-radius:5px;
+	margin-top:2px;
+	margin-left:2px;
+	padding-left:6px;
+	padding-right:6px;
+}
+
+.subLoadingTable label{
+	padding-top:15px;
+	text-align:center;
+	padding-bottom:10px;
+	font-size:12px;
+	font-weight:bold;
+}
+
+.subLoadingTable #progressbar{
+	height:20px;
+}
+
+/********************************/
+/**********paginador*************/

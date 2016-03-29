@@ -19,33 +19,46 @@
                     <div class="imgLogo"><img src="<?php echo base_url().IMG; ?>logo/demo.png"/></div>
                 </div>
                 
-                <form>
+                <!--<form>-->
+				<?php //echo validation_errors(); ?>
+
+				<?php //echo form_open('login/guardar_post'); ?>
                     <div class="row">
                         <div class="medium-2 columns">&nbsp;</div>
                         <div class="medium-8 columns">
                             <div class="large-12 columns">
                                 <label>Usuario
-                                <input type="text" id="txtUser" />
+                                <input type="text" id="txtUser" name="txtUser" />
                                 </label>
                             </div>
                             
                             <div class="large-12 columns">
                                 <label>Contraseña
-                                <input type="text" id="txtPassword" />
+                                <input type="password" id="txtPassword" name="txtPassword" />
                                 </label>
                             </div>
                             
                             <div class="large-12 columns">
-                                <a href="home" class="button btnAction">LOGIN</a>
+                                <button class="button btnAction" id="btnLogin">
+									<div class="ripple-container">
+										<span class="ripple-effect"></span>
+									</div>
+									LOGIN
+								</button>
                             </div>
                         </div>
                         <div class="medium-2 columns">&nbsp;</div>
                     </div>
-                </form>
+                <!--</form>-->
             </div>
             <div class="medium-2 columns">&nbsp;</div>
             
         </div>
 	</body>
+	
+	<script>
+		var URL_BASE = '<?php echo base_url(); ?>';
+    </script>
+	<script type="text/javascript" src="<?php echo base_url().JS; ?>login.js"></script>
     
 </html>

@@ -1,12 +1,12 @@
 /**
-* @fileoverview Funciones del screen people (alta)
+* @fileoverview Funciones del screen people (alta/busqueda)
 *
 * @author Alfredo Chi
 * @version 0.1
 */
 var dialogUser = null;
 var maxHeight = 400;
-
+isSearch = true;
 
 /**************Index****************/
 
@@ -16,6 +16,21 @@ $('#newUser').click(function(){ showModal('alta'); });
 $('#btnAddressData').click(function(){ showDivModal('address'); });
 //muestra o oculta la informacion de contacto
 $('#btnContactData').click(function(){ showDivModal('contact'); });
+
+
+//busqueda de usuarios
+$('#btnSearch').click(function(){ searchPeople(0); });
+//busqueda de usuarios mediante enter
+$('#txtSearch').keyup(function(e){
+    if(e.keyCode ==13){
+		searchPeople(0);	
+    }
+});
+//limpia el campo busqueda
+$('#btnCleanSearch').click(function(){ CleandFieldSearch(); });
+//muestra u oculta la busqueda avanzada
+$('#checkFilterAdvance').click(function(){ searchAdvanced(); });
+
 
 /************Funciones**************/
 
@@ -34,16 +49,50 @@ $( document ).ready(function() {
 		width: "50%",
 		modal: true,
 		dialogClass: 'dialogModal',
-		buttons: [{
-            text: "Aceptar",
+		buttons: [
+		{
+            text: "Guardar y cerrar",
             "class": 'dialogModalButtonAccept',
             click: function() {
-                CreateNewUser()
+                CreateNewUser(false)
             }
-        }],
+        },
+		{
+            text: "Guardar",
+            "class": 'dialogModalButtonAccept',
+            click: function() {
+                CreateNewUser(true)
+            }
+        },
+		{
+            text: "Cancelar",
+            "class": 'dialogModalButtonCancel',
+            click: function() {
+				dialogUser.dialog('close');
+				cleanUserFields();
+            }
+        },
+		],
 		close: function() {
+			cleanUserFields();
 		}
 	});
+	
+	$( "#progressbar" ).progressbar({
+      value: false
+    });
+	
+	$('#paginationPeople').jqPagination({
+		max_page: 1,
+		paged: function(page) {
+			if(isSearch){
+				isSearch = false;
+			}else{
+				searchPeople(page);
+			}
+		}
+	});
+	
 });
 
 /**
@@ -51,6 +100,7 @@ $( document ).ready(function() {
 * @param type tipo de 
 */
 function showModal(type){
+	cleanUserFields();
     dialogUser.dialog('open');
 	/**/
 }
@@ -69,19 +119,45 @@ function showDivModal(div){
 
 /**
 * llama a las funciones para crear un nuevo usuario 
+* @param isClosed indica si el modal se mantendra abierto cuando se guarde la info
 */
-function CreateNewUser(){
+function CreateNewUser(isClosed){
 	var result = validateUserFields()
 	if(result){
-		saveUserData(0)
+		saveUserData(0,isClosed)
 	}
 }
 
 /**
 * guarda la informacion del usuario
 * @param id identificador del usuario / si es 0 es nuevo usuario
+* @param isClosed indica si el modal se mantendra abierto cuando se guarde la info
 */
-function saveUserData(id){
+function saveUserData(id, isClosed){
+	
+	var phoneArray = new Array();
+	$(".phonePeople").each(function (index){
+		if($(this).val().trim().length != 0){
+			phoneArray.push($(this).val().trim());
+		}
+	});
+	var jsonPhone = JSON.stringify(phoneArray);
+	
+	var emailArray = new Array();
+	$(".emailPeople").each(function (index){
+		if($(this).val().trim().length != 0){
+			emailArray.push($(this).val().trim());
+		}
+	});
+	var jsonEmail = JSON.stringify(emailArray);
+	
+	var gender;
+	
+	if($("#RadioMale").is(':checked')) {
+		gender = "M";
+	}else{
+		gender = "F";
+	}
 	
 	$.ajax({
    		type: "POST",
@@ -89,16 +165,37 @@ function saveUserData(id){
 		dataType:'json',
 		data: { 
 			id:id,
-			name:$('#txtEventName').val()
+			name:$('#textName').val().trim(),
+			lName:$('#textLastName').val().trim(),
+			lName2:$('#TextSecondLastName').val().trim(),
+			birthDate:$('#textBirthdate').val().trim(),
+			gender:gender,
+			WeddingAnniversary:$('#textWeddingAnniversary').val().trim(),
+			nationality:$('#textNationality').val().trim(),
+			street:$('#textStreet').val().trim(),
+			colony:$('#textColony').val().trim(),
+			city:$('#textCity').val().trim(),
+			state:$('#textState').val().trim(),
+			country:$('#textCountry').val().trim(),
+			postalCode:$('#textPostalCode').val().trim(),
+			stateCode:$('#textState option:selected').attr('code'),
+			countryCode:$('#textCountry option:selected').attr('code'),
+			phone:jsonPhone,
+			email:jsonEmail,
 		},
 		success: function(data){
+			alert(data);
+			if(isClosed){
+				dialogUser.dialog('close');
+				cleanUserFields();
+			}
 		},
 		error: function(){
-			
+			alert("error al insertar los datos, intentelo mas tarde");
+			dialogUser.dialog('close');
+			cleanUserFields();
 		}
-	});
-	
-	
+	});	
 }
 
 /**
@@ -111,6 +208,17 @@ function validateUserFields(){
 	var infoContact = true;
 	hideAlertUserFields();
 	
+	var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
+	//email 2
+	if($('#textEmail2').val().trim().length > 0){
+		if(!regex.test($('#textEmail2').val().trim())){
+			$('#alertEmail2').addClass('error');
+			$('#textEmail2').focus();
+			result = false;
+			infoContact = false;
+		}
+	}
+	
 	//Email
 	if($('#textEmail1').val().trim().length == 0){
 		$('#alertEmail1').addClass('error');
@@ -118,8 +226,38 @@ function validateUserFields(){
 		result = false;
 		infoContact = false;
 	}
+	
+    if(!regex.test($('#textEmail1').val().trim())){
+		$('#alertEmail1').addClass('error');
+		$('#textEmail1').focus();
+		result = false;
+		infoContact = false;
+    }
+	
+	//Telefono 2
+	if($('#textPhone3').val().trim().length > 0 && $('#textPhone3').val().trim().length > 7 ){
+		$('#alertPhone3').addClass('error');
+		$('#textPhone3').focus();
+		result = false;
+		infoContact = false;
+	}
+	
+	//Telefono 2
+	if($('#textPhone2').val().trim().length > 0 && $('#textPhone2').val().trim().length > 7 ){
+		$('#alertPhone2').addClass('error');
+		$('#textPhone2').focus();
+		result = false;
+		infoContact = false;
+	}
+	
 	//Telefono
 	if($('#textPhone1').val().trim().length == 0){
+		$('#alertPhone1').addClass('error');
+		$('#textPhone1').focus();
+		result = false;
+		infoContact = false;
+	}
+	if($('#textPhone1').val().trim().length > 7){
 		$('#alertPhone1').addClass('error');
 		$('#textPhone1').focus();
 		result = false;
@@ -134,20 +272,6 @@ function validateUserFields(){
 	if($('#textPostalCode').val().trim().length == 0){
 		$('#alertPostalCode').addClass('error');
 		$('#textPostalCode').focus();
-		result = false;
-		infoAddress = false;
-	}
-	//pais
-	if($('#textCountry').val().trim().length == 0){
-		$('#alertCountry').addClass('error');
-		$('#textCountry').focus();
-		result = false;
-		infoAddress = false;
-	}
-	//estado
-	if($('#textState').val().trim().length == 0){
-		$('#alertState').addClass('error');
-		$('#textState').focus();
 		result = false;
 		infoAddress = false;
 	}
@@ -183,6 +307,18 @@ function validateUserFields(){
 		$('#textBirthdate').focus();
 		result = false;
 	}
+	//genero
+	var gender = 0;
+	$(".RadioGender").each(function (index){
+		if(!$(this).is(':checked')) {
+			gender = gender + 1;
+        } 
+	});
+	if(gender == 0){
+		$('#alertGender').addClass('error');
+		result = false;
+	}
+	
 	//apellido paterno
 	if($('#textLastName').val().trim().length == 0){
 		$('#alertLastName').addClass('error');
@@ -212,14 +348,136 @@ function hideAlertUserFields(){
 	$('#alertName').removeClass('error');
 	$('#alertLastName').removeClass('error');
 	$('#alertBirthdate').removeClass('error');
+	$('#alertGender').removeClass('error');
 	
 	$('#alertStreet').removeClass('error');
 	$('#alertColony').removeClass('error');
 	$('#alertCity').removeClass('error');
-	$('#alertState').removeClass('error');
 	$('#alertCountry').removeClass('error');
 	$('#alertPostalCode').removeClass('error');
 	
 	$('#alertPhone1').removeClass('error');
+	$('#alertPhone2').removeClass('error');
+	$('#alertPhone3').removeClass('error');
 	$('#alertEmail1').removeClass('error');
+	$('#alertEmail2').removeClass('error');
+}
+
+/**
+* limpia los campos de people
+*/
+function cleanUserFields(){
+	hideAlertUserFields();
+	$('#textName').val("");
+	$('#textLastName').val("");
+	$('#TextSecondLastName').val("");
+	$('#textBirthdate').val("");
+	$('#textWeddingAnniversary').val("");
+	//$('#textNationality').val("");
+	$('#textQualification').val("");
+	
+	$('#textStreet').val("");
+	$('#textColony').val("");
+	$('#textCity').val("");
+	//$('#textState').val("");
+	//$('#textCountry').val("");
+	$('#textPostalCode').val("");
+	
+	$('#textPhone1').val("");
+	$('#textPhone2').val("");
+	$('#textPhone3').val("");
+	$('#textEmail1').val("");
+	$('#textEmail2').val("");
+	
+}
+
+//////
+/**
+* genera una busqueda de usuarios filtrado
+* @param page nueva pagina a buscar/ si es 0 es una busqueda nueva
+*/
+function searchPeople(page){
+	$('.divLoadingTable').show();
+	$.ajax({
+   		type: "POST",
+       	url: "people/getPeopleBySearch",
+		dataType:'json',
+		data: {
+			search:$("#txtSearch").val().trim(),
+			peopleId:$("#checkFilter1").is(':checked'),
+			lastName:$("#checkFilter2").is(':checked'),
+			name:$("#checkFilter3").is(':checked'),
+			page:page,
+		},
+		success: function(data){
+			var total = data.total;
+			if( parseInt(total) == 0 ){ total = 1; }
+			total = parseInt( total/10 );
+			if(data.total%10 == 0){
+				total = total - 1;		
+			}
+			total = total + 1
+			if(page == 0){
+				loadPaginatorPeople( total );
+				isSearch = true;
+			}
+			$('#tablePeople tbody').empty();
+			for(i=0;i<data.items.length;i++){
+				var item = data.items[i];
+				$('#tablePeople tbody').append(
+					'<tr>' +
+						'<td></td>' +
+						'<td>' + item.pkPeopleId + '</td>' +
+						'<td>' + item.Name + '</td>' +
+						'<td>' + item.LName + " " + item.LName2 + '</td>' +
+						'<td>' + item.Gender + '</td>' +
+						'<td>' + item.birthdate + '</td>' +
+						'<td>' + item.Street1 + ", " + item.Street2 + '</td>' +
+						'<td>' + item.City + '</td>' +
+						'<td>' + item.StateDesc + '</td>' +
+						'<td>' + item.CountryDesc + '</td>' +
+						'<td>' + item.ZipCode + '</td>' +
+						'<td>' + item.phone1 + '</td>' +
+						'<td>' + item.phone2 + '</td>' +
+						'<td>' + item.phone3 + '</td>' +
+						'<td>' + item.email1 + '</td>' +
+						'<td>' + item.email2 + '</td>' +
+					'</tr>'
+				);
+			}
+			$('.divLoadingTable').hide();
+		},
+		error: function(){
+			$('.divLoadingTable').hide();
+			alert("error en la busqueda, intentelo mas tarde");
+		}
+	});	
+}
+
+/**
+* Limpia el campo de busqueda de personas
+*/
+function CleandFieldSearch(){
+	$("#txtSearch").val("");
+}
+
+/**
+* muestra las busquedas avanzadas
+*/
+function searchAdvanced(){
+	$('#containerFilterAdv').toggle(1000);
+	if($("#checkFilterAdvance").is(':checked')) {
+		$('#fieldsetFilterAdvanced').removeClass('fieldsetFilter-advanced-hide');
+		$('#fieldsetFilterAdvanced').addClass('fieldsetFilter-advanced-show');
+	}else{
+		$('#fieldsetFilterAdvanced').addClass('fieldsetFilter-advanced-hide');
+		$('#fieldsetFilterAdvanced').removeClass('fieldsetFilter-advanced-show');
+	}
+}
+
+/**
+ * Carga el paginador
+ */
+function loadPaginatorPeople(maxPage){
+	$('#paginationPeople').jqPagination('option', 'max_page', maxPage);
 }

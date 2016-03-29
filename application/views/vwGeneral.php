@@ -8,11 +8,14 @@
         <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <link rel="stylesheet" href="<?php echo base_url().CSS; ?>foundation.css" />
-        <link rel="stylesheet" href="<?php echo base_url().CSS; ?>general.css" />
+		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>paginacion/jqpagination.css" />
+		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>general.css" />
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script type="text/javascript" src="<?php echo base_url().JS; ?>foundation.min.js"></script>
+		<script type="text/javascript" src="<?php echo base_url().JS; ?>responsive-tables.js"></script>
         <script type="text/javascript" src="<?php echo base_url().JS; ?>general.js"></script>
+		<script type="text/javascript" src="<?php echo base_url().JS; ?>paginacion/jquery.jqpagination.js"></script>
     </head>
     <body>
         <nav class="top-bar top-menu" data-topbar>

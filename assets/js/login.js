@@ -6,6 +6,11 @@
 */
 
 
+$('#btnLogin').click(function(){ setTimeout ("login()", 500); });
+
+function login(){
+	window.location="home";
+}
 
 /**
 * funcionalidad del efecto ripple

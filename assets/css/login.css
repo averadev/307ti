@@ -1,13 +1,25 @@
+/**
+* @style       Standard Layout
+* @media       screen
+* @version     1.0
+* @author      Alfredo Chi
+* @copyright   Geek Bucket
+*/
+
 body {
     background-color: #1c3a5c;
 }
+
+/**
+* @section form login
+* @todo cascaron e imagen del login
+*/
 .formLogin{
     margin-top: 20%;
     background-color: #f6f6f6;
 }
 .imgLogo{
 }
-
 .imgLogo img{
     margin-top: 50px;
     margin-bottom: 40px;
@@ -19,7 +31,78 @@ body {
     box-shadow: -7px 9px 5px -2px rgba(0,0,0,0.51);
 }
 
+/**
+* @section bottom login
+* @todo boton aceptar del login
+*/
 .btnAction{
     width: 100%;
-    background-color: #1c3a5c;
+	background-color: #1c3a5c;
+}
+.btnAction:hover{
+	background-color: #1c3a5c;
+}
+.btnAction:focus{
+	background-color: #1c3a5c;
+}
+
+
+/**
+* @section effect ripple
+* @todo consigue el efecto ripple(gota de agua) en el boton
+*/
+.ripple-container {
+	/*Con los siguientes valores de position, top, left, width y height aseguramos que el div tome todo el tamaño de su padre*/
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background: transparent;
+}
+.ripple-effect {
+	position: absolute;
+	/*En javascript colocaremos el top y left de este span en el punto donde hizo click el usuario. Por eso es necesario trasladarlo en -50% en ambos ejes, para que el centro del efecto coincida con el click*/
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%); 
+	opacity: 0;
+	width: 0;
+	height: 0;
+	border-radius: 50%;
+	background: rgba(255,255,255, 0.2);
+}
+.btn-flat .ripple-effect{
+	background: rgba(33,150,243, 0.4);
+}
+.ripple-container.ripple-effect-animation .ripple-effect{
+	/*Aplicamos la animación que mas adelante definiremos con @keyframes*/
+	-webkit-animation: ripple .4s ease-in;
+	animation: ripple .4s ease-in;
+}
+@-webkit-keyframes ripple {
+	0% {
+		opacity: 0;
+	}
+	30% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		padding-bottom: 200%;
+		width: 200%;
+	}
+}
+@-webkit-keyframes ripple {
+	0% {
+		opacity: 0;
+	}
+	30% {
+		opacity: 1;
+	}	
+	100% {
+		opacity: 0;
+		padding-bottom: 200%;
+		width: 200%;
+	}
 }
