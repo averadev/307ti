@@ -56,7 +56,7 @@ class People extends CI_Controller {
 					'CrDt'				=> $strHoy,
 				);
 				
-				$idPeople = $this->people_db->insertReturnId($insert,"tblPeopleEmail");
+				$idPeople = $this->people_db->insertReturnId($insert,"tblPeople");
 				
 				$insertAddress = array(
 					'fkAddressTypeid'	=> 9,
@@ -71,7 +71,7 @@ class People extends CI_Controller {
 					'CrDt'				=> $strHoy,
 				);
 				
-				$idAddress = $this->people_db->insertReturnId($insertAddress,"tblPeopleEmail");
+				$idAddress = $this->people_db->insertReturnId($insertAddress,"tblAddress");
 				
 				$insertPeopleAddress = array(
 					'fkPeopleId'	=> $idPeople,
@@ -82,7 +82,7 @@ class People extends CI_Controller {
 					'CrDt'			=> $strHoy,
 				);
 				
-				$this->people_db->insert($insertPeopleAddress,"tblPeopleEmail");
+				$this->people_db->insert($insertPeopleAddress,"tblPeopleAddress");
 				
 				$email = json_decode(stripslashes($_POST['email']));
 				$isPrimary = 1;
@@ -153,13 +153,16 @@ class People extends CI_Controller {
 		$peopleId = $_POST['peopleId'];
 		$lastName = $_POST['lastName'];
 		$name = $_POST['name'];
+		$page = $_POST['page'];
 		if($_POST['page'] == 0 || $_POST['page'] == "0"){
-			$page = 1 * 10;
+			$page = 1;
 		}
+		$page = ($page - 1) * 10;
 		$data = $this->people_db->getPeople($_POST['search'],$peopleId,$lastName,$name,$page);
-		
+		$total = count($data);
+		$data = array_slice($data, $page, 10);
 		if($_POST['page'] == 0 || $_POST['page'] == "0"){
-			$total = $this->people_db->getTotalPeople($_POST['search'],$peopleId,$lastName,$name);
+			//$total = $this->people_db->getTotalPeople($_POST['search'],$peopleId,$lastName,$name);
 		}
 		
 		foreach($data as $item){
@@ -197,7 +200,7 @@ class People extends CI_Controller {
 				$item->email2 = "";
 			}
 		}
-		echo json_encode(array('items' => $data, 'total' => count($total)));
+		echo json_encode(array('items' => $data, 'total' => $total));
 	}
 	
 	

@@ -75,6 +75,7 @@
 			<a href="#" class="next" data-action="next">&rsaquo;</a>
 			<a href="#" class="last" data-action="last">&raquo;</a>
 		</div>
+		<input type="hidden" id="paginationPeople" value="true" />
     </div>
 	
 </div>

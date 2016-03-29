@@ -85,9 +85,11 @@ $( document ).ready(function() {
 	$('#paginationPeople').jqPagination({
 		max_page: 1,
 		paged: function(page) {
-			if(isSearch){
-				isSearch = false;
+			console.log($('#paginationPeople').val())
+			if($('#paginationPeople').val() == true){
+				$('#paginationPeople').val(false);
 			}else{
+				console.log("hola");
 				searchPeople(page);
 			}
 		}
@@ -397,6 +399,8 @@ function cleanUserFields(){
 * @param page nueva pagina a buscar/ si es 0 es una busqueda nueva
 */
 function searchPeople(page){
+	console.log(page)
+	$('#tablePeople tbody').empty();
 	$('.divLoadingTable').show();
 	$.ajax({
    		type: "POST",
@@ -410,6 +414,7 @@ function searchPeople(page){
 			page:page,
 		},
 		success: function(data){
+			console.log(data);
 			var total = data.total;
 			if( parseInt(total) == 0 ){ total = 1; }
 			total = parseInt( total/10 );
@@ -418,10 +423,9 @@ function searchPeople(page){
 			}
 			total = total + 1
 			if(page == 0){
+				$('#paginationPeople').val(true);
 				loadPaginatorPeople( total );
-				isSearch = true;
 			}
-			$('#tablePeople tbody').empty();
 			for(i=0;i<data.items.length;i++){
 				var item = data.items[i];
 				$('#tablePeople tbody').append(
