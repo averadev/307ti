@@ -6,9 +6,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>307TI</title>
         <link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <link rel="stylesheet" href="<?php echo base_url().CSS; ?>foundation.css" />
         <link rel="stylesheet" href="<?php echo base_url().CSS; ?>login.css" />
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script type="text/javascript" src="<?php echo base_url().JS; ?>foundation.min.js"></script>
     </head>
     <body>
@@ -26,6 +28,12 @@
                     <div class="row">
                         <div class="medium-2 columns">&nbsp;</div>
                         <div class="medium-8 columns">
+							<div class="large-12 columns">
+								<div data-alert class="alert-box alert " id="alertLogin" style="display:none;">
+								
+									<a href="#" class="close">&times;</a>
+								</div>
+							</div>
                             <div class="large-12 columns">
                                 <label>Usuario
                                 <input type="text" id="txtUser" name="txtUser" />
@@ -54,6 +62,18 @@
             <div class="medium-2 columns">&nbsp;</div>
             
         </div>
+		
+		<div id="modalLogin">
+			<div id="bgModalLogin"></div>
+			<div id="modal">
+				<div id="subModal">
+					<label>Conectando</label>
+					<div id="progressbar"></div>
+					<button class="button tiny" id="btnCloseModal">Aceptar</button>
+				</div>
+			</div>
+		</div>
+		
 	</body>
 	
 	<script>
