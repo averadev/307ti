@@ -33,6 +33,7 @@ Class people_db extends CI_MODEL
 		//$this->db->select('tblPeopleAddress.fkAddressId');
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');
 		$this->db->select('tblState.StateDesc, tblCountry.CountryDesc');
+		//$this->db->select('""CASE WHEN City IS NULL THEN 0 ELSE City END AS City""');
         $this->db->from('tblPeople');
 		$this->db->join('tblPeopleAddress', 'tblPeopleAddress.fkPeopleId = tblPeople.pkPeopleId', 'left');
 		$this->db->join('tblAddress', 'tblAddress.pkAddressid = tblPeopleAddress.fkAddressId', 'left');
@@ -59,6 +60,22 @@ Class people_db extends CI_MODEL
 			$cadena = $cadena . ")";
 			$this->db->where($cadena, NULL);
 		}
+		return  $this->db->get()->result();
+	}
+	
+	public function getCountry(){
+		$this->db->distinct('tblCountry.pkCountryId');
+		$this->db->select('tblCountry.pkCountryId, tblCountry.CountryCode, tblCountry.CountryDesc');
+		$this->db->from('tblCountry');
+		$this->db->join('tblState', 'tblState.fkCountryId = tblCountry.pkCountryId', 'inner');
+		//$this->db->where('tblCountry.YnActive = ', 1);
+		return  $this->db->get()->result();
+	}
+	
+	public function getState(){
+		$this->db->select('tblState.pkStateId, tblState.StateCode, tblState.StateDesc');
+		$this->db->from('tblState');
+		//$this->db->where('tblState.YnActive = ', 1);
 		return  $this->db->get()->result();
 	}
 	

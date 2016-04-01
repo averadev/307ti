@@ -50,3 +50,24 @@
         showMenu();
     </script>
 <?php } ?>
+
+<script> 
+/*function getScript(src){
+	var val, src;
+	$('script').each(function() {
+		console.log($(this).attr('src'));
+		
+	});
+}
+
+getScript('people.js')
+//test: 
+function loa(){ 
+   // alert('algo.js está cargado:'+getScript('people.js')); 
+    //alert('test.js está cargado:'+getScript('test.js')); 
+} 
+
+$( document ).ready(function() { 
+	getScript('people.js')
+});*/
+</script>

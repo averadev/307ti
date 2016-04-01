@@ -6,6 +6,10 @@
 * @copyright   Geek Bucket
 */
 
+*{
+    font-family: Arimo;
+}
+
 body {
     background-color: #1c3a5c;
 }
@@ -17,6 +21,7 @@ body {
 .formLogin{
     margin-top: 20%;
     background-color: #f6f6f6;
+	box-shadow: 0 1px 2px 1px rgba(0,0,0,.08), 0 3px 6px rgba(0,0,0,.08);
 }
 .imgLogo{
 }
@@ -106,3 +111,69 @@ body {
 		width: 200%;
 	}
 }
+
+/**
+* @section modal login
+* @todo modal del login
+*/
+
+#modalLogin{
+	position:fixed;
+	height:100%;
+	width:100%;
+	left:0;
+	top:0;
+	display:none;
+}
+
+#bgModalLogin{
+	position:absolute;
+	height:100%;
+	width:100%;
+	background:rgba(204,204,204,.4);
+}
+
+#modal{
+	position:fixed;
+	background:#183a59;
+	padding-right:6px;
+	width: 250px;
+    height: 110px;
+    left: 558px;
+    top: 179px;
+	border-radius:3px;
+}
+
+#subModal{
+	text-align:center;
+	position:fixed;
+	background:#183a59;
+	background:rgba(99,146,189,0.78);
+	padding-right:6px;
+	width: 246px;
+    height: 106px;
+    left: 560px;
+    top: 181px;
+	border-radius:3px;
+}
+#subModal label{
+	text-align:center;
+	padding-top:7px;
+	color:#FFFFFF;
+}
+
+#progressbar{
+	height:25px;
+	margin-left:15px;
+	margin-right:15px;
+	margin-top:15px;
+}
+
+#btnCloseModal{
+	background:#183a59;
+	color:#FFFFFF;
+	border-radius:4px;
+	display:none;
+	margin-top:25px;
+}
+

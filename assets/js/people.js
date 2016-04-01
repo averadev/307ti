@@ -12,10 +12,17 @@ isSearch = true;
 
 //muestra el modal de usuarios
 $('#newUser').click(function(){ showModal('alta'); });
+//esconde el modal de usuarios
+//$('.imgCloseModal').click(function(){ hideModal(); });
+//$(".imgCloseModal").button().on( "click", function() { hideModal(); });
+$(document).on('click','.imgCloseModal', function(){ hideModal(); });
+
 //muestra o oculta los datos del domicilio
-$('#btnAddressData').click(function(){ showDivModal('address'); });
+//$(document).on('click','.btnAddressData', function(){ showDivModal('address'); });
+$('.btnAddressData').on('click', function(){ showDivModal('address'); });
 //muestra o oculta la informacion de contacto
-$('#btnContactData').click(function(){ showDivModal('contact'); });
+//$(document).on('click','.btnContactData', function(){ showDivModal('contact'); });
+$('.btnContactData').on('click', function(){ showDivModal('contact'); });
 
 
 //busqueda de usuarios
@@ -37,7 +44,7 @@ $('#checkFilterAdvance').click(function(){ searchAdvanced(); });
 /**
 * Carga el modal
 */
-$( document ).ready(function() {
+$(function() {
 	
 	//maxHeight
 	maxHeight = screen.height * .25;
@@ -50,31 +57,34 @@ $( document ).ready(function() {
 		modal: true,
 		dialogClass: 'dialogModal',
 		buttons: [
-		{
-            text: "Guardar y cerrar",
-            "class": 'dialogModalButtonAccept',
-            click: function() {
-                CreateNewUser(false)
-            }
-        },
-		{
-            text: "Guardar",
-            "class": 'dialogModalButtonAccept',
-            click: function() {
-                CreateNewUser(true)
-            }
-        },
-		{
-            text: "Cancelar",
-            "class": 'dialogModalButtonCancel',
-            click: function() {
-				dialogUser.dialog('close');
-				cleanUserFields();
-            }
-        },
+			{
+				text: "Cancelar",
+				"class": 'dialogModalButtonCancel',
+				click: function() {
+					dialogUser.dialog('close');
+					cleanUserFields();
+					//$('.ui-dialog-titlebar').empty();
+					//dialogUser.dialog('destroy');
+				}
+			},
+			{
+				text: "Guardar y cerrar",
+				"class": 'dialogModalButtonAccept',
+				click: function() {
+					CreateNewUser(false)
+				}
+			},
+			{
+				text: "Guardar",
+				"class": 'dialogModalButtonAccept',
+				click: function() {
+					CreateNewUser(true)
+				}
+			},
 		],
 		close: function() {
 			cleanUserFields();
+			//$('.ui-dialog-titlebar').empty();
 		}
 	});
 	
@@ -89,11 +99,12 @@ $( document ).ready(function() {
 			if($('#paginationPeople').val() == true){
 				$('#paginationPeople').val(false);
 			}else{
-				console.log("hola");
 				searchPeople(page);
 			}
 		}
 	});
+	
+	
 	
 });
 
@@ -104,6 +115,19 @@ $( document ).ready(function() {
 function showModal(type){
 	cleanUserFields();
     dialogUser.dialog('open');
+	$('.ui-dialog-titlebar').append(
+		'<div class="ui-dialog-titlebar2"><label>Alta de personas</label></div><img class="imgCloseModal" src="' + BASE_URL+'assets/img/common/iconClose2.png">'
+	)
+	/**/
+}
+
+/**
+*esconde
+*/
+function hideModal(){
+	cleanUserFields();
+    dialogUser.dialog('close');
+	//$('.ui-dialog-titlebar').empty();
 	/**/
 }
 
@@ -113,9 +137,27 @@ function showModal(type){
 */
 function showDivModal(div){
 	if(div == "address"){
-		$('#containerAddress').toggle(1000);
+		$('.containerAddress').toggle(1000);
+		if($("#imgCoppapseAddress").attr('class') == "imgCollapseFieldset down"){
+			$("#imgCoppapseAddress").removeClass('down');
+			$("#imgCoppapseAddress").addClass('up');
+			$("#imgCoppapseAddress").attr( 'src', BASE_URL+'assets/img/common/iconCollapseUp.png' )
+		}else{
+			$("#imgCoppapseAddress").removeClass('up');
+			$("#imgCoppapseAddress").addClass('down');
+			$("#imgCoppapseAddress").attr( 'src', BASE_URL+'assets/img/common/iconCollapseDown.png' )
+		}
 	}else if(div == "contact"){
 		$('#containerContact').toggle(1000);
+		if($("#imgCoppapseContact").attr('class') == "imgCollapseFieldset down"){
+			$("#imgCoppapseContact").removeClass('down');
+			$("#imgCoppapseContact").addClass('up');
+			$("#imgCoppapseContact").attr( 'src', BASE_URL+'assets/img/common/iconCollapseUp.png' )
+		}else{
+			$("#imgCoppapseContact").removeClass('up');
+			$("#imgCoppapseContact").addClass('down');
+			$("#imgCoppapseContact").attr( 'src', BASE_URL+'assets/img/common/iconCollapseDown.png' )
+		}
 	}
 }
 
@@ -300,7 +342,7 @@ function validateUserFields(){
 		infoAddress = false;
 	}
 	if(infoAddress == false){
-		$('#containerAddress').show();
+		$('.containerAddress').show();
 	}
 	
 	//fecha de nacimiento
@@ -399,7 +441,6 @@ function cleanUserFields(){
 * @param page nueva pagina a buscar/ si es 0 es una busqueda nueva
 */
 function searchPeople(page){
-	console.log(page)
 	$('#tablePeople tbody').empty();
 	$('.divLoadingTable').show();
 	$.ajax({
@@ -436,7 +477,7 @@ function searchPeople(page){
 						'<td>' + item.LName + " " + item.LName2 + '</td>' +
 						'<td>' + item.Gender + '</td>' +
 						'<td>' + item.birthdate + '</td>' +
-						'<td>' + item.Street1 + ", " + item.Street2 + '</td>' +
+						'<td>' + item.Street1 + '</td>' +
 						'<td>' + item.City + '</td>' +
 						'<td>' + item.StateDesc + '</td>' +
 						'<td>' + item.CountryDesc + '</td>' +

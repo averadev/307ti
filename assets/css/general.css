@@ -20,6 +20,16 @@ body {
     background-color: #f2f2f2;
 }
 
+
+input.round, select.round{
+	border-radius:8px;
+	font-family: Arimo;
+	font-size: 0.875rem;
+}
+
+select.round{
+}
+
 /**
 * @section top menu
 * @todo menu principal
@@ -202,8 +212,9 @@ body {
 
 .fieldset{
 	border:1px solid #999;
-	border-radius:5px;
-	box-shadow:0 0 10px #999;
+	border-radius:1px;
+	/*box-shadow:0 0 10px #999;*/
+	box-shadow: 0 1px 2px 1px rgba(0,0,0,.08), 0 3px 6px rgba(0,0,0,.08);
 }
 .fieldset legend {
 	background:#fff;
@@ -225,6 +236,11 @@ body {
 	padding-top:0;
 	padding-bottom:0;
 	margin-left:2rem;
+}
+
+.imgCollapseFieldset{
+	width:20px;
+	margin:0 5px;
 }
 
 /**
@@ -311,27 +327,93 @@ body {
 * @todo cambios del modal de jquery en general
 */
 
+#aaaaa{
+	width:100px;
+	height:1000px;
+	background:#000000;
+}
+
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br{
+	/*padding-top:1px;
+	padding-left:1px;
+	padding-left:1px;*/
+	padding-top:0;
+	padding-left:0;
+	padding-right:0;
+	border-radius:0;
+}
+
+.dialogModal .ui-dialog-titlebar-close{
+	display:none;
+}
+
 .dialogModal .ui-dialog-titlebar{
 	color:#FFF;	
 	background:#183a59;
+	border-radius:0;
+	margin:0;
+	/*background:#183a59 url("../img/common/arrowSection.png") no-repeat right;*/
+	background-color:#225b88;
 }
+
+.ui-dialog .ui-dialog-title{
+	font-family: Arimo;
+	font-size:15px;
+	font-weight:normal;
+}
+
+.ui-dialog-titlebar2{
+	position:absolute;
+	height:100%;
+	width:95%;
+	background:#183a59 url("../img/common/arrowSection.png") no-repeat right;
+	top:0;
+	left:0;
+}
+
+.ui-dialog-titlebar2 label{
+	font-family: Arimo;
+	font-size:15px;
+	font-weight:normal;
+	color:#FFFFFF;
+	padding-left:30px;
+	padding-top:5px;
+}
+
+.imgCloseModal{
+	position:absolute;
+	right:5px;
+	top:5px;
+	width:20px;
+	cursor:pointer;
+}
+
+.ui-draggable .ui-dialog-titlebar{
 	
-/*.dialogDash .ui-button .ui-button-text{
-	color:#FFF;	
-	background:#cf2a0e;
-	border-color:#cf2a0e;
-}*/
+}
 	
 .dialogModalButtonCancel .ui-button-text{
 	color:#FFF;	
-	background:#cf2a0e;
-	border-color:#cf2a0e;
+	background:#225b88;
+	border-color:#225b88;
+	box-shadow: 0 1px 2px 1px rgba(0,0,0,.08), 0 3px 6px rgba(0,0,0,.08);
+	font-family: Arimo;
+	font-size:14px;
+	font-weight:normal;
+	width:150px;
+	padding: .6em 1em;
 }
 
 .dialogModalButtonAccept .ui-button-text{
 	color:#FFF;	
-	background:#008CBA;
-	border-color:#007095;
+	background:#183a59;
+	border-color:#183a59;
+	box-shadow: 0 1px 2px 1px rgba(0,0,0,.08), 0 3px 6px rgba(0,0,0,.08);
+	font-family: Arimo;
+	font-size:14px;
+	font-weight:normal;
+	width:150px;
+	padding: .6em 1em;
 }
 
 /**

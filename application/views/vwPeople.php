@@ -1,5 +1,5 @@
-            
-<div class="row fiter-section">
+
+<div class="row fiter-section" id="section-people">
     <div class="section-bar">Consultas<div class="collapseFilter"></div></div>
 	<div class="section-bar" id="newUser">Nuevo</div>
     <div class="medium-12 columns">
@@ -133,117 +133,120 @@
 		<!-- nombre-->
 		<div class="row">
 			<div class="small-3 columns">
-				<label id="alertName" for="right-label" class="text-right">Nombre</label>
+				<label id="alertName" for="right-label" class="text-left">Nombre</label>
 			</div>
 			<div class="small-9 columns">
-				<input type="text" id="textName">
+				<input type="text" id="textName" class="round">
 			</div>
 		</div>
 		<!-- apellido paterno-->
 		<div class="row">
 			<div class="small-3 columns">
-				<label id="alertLastName" for="right-label" class="">Apellido paterno</label>
+				<label id="alertLastName" for="right-label" class="text-left">Apellido paterno</label>
 			</div>
 			<div class="small-9 columns">
-				<input type="text" id="textLastName">
+				<input type="text" id="textLastName" class="round">
 			</div>
 		</div>
 		<!-- apellido materno-->
 		<div class="row">
 			<div class="small-3 columns">
-				<label for="right-label" class="text-right">Apellido materno</label>
+				<label for="right-label" class="text-left">Apellido materno</label>
 			</div>
 			<div class="small-9 columns">
-				<input type="text" id="TextSecondLastName">
+				<input type="text" id="TextSecondLastName" class="round">
 			</div>
 		</div>
 		<!-- genero -->
 		<div class="row">
 			<div class="small-3 columns">
-				<label id="alertGender" for="right-label" class="text-right">Genero</label>
+				<label id="alertGender" for="right-label" class="text-left">Genero</label>
 			</div>
 			<div class="small-9 columns">
 				<input type="radio" name="hombre" class="RadioGender" value="M" id="RadioMale" required><label for="RadioMale">Hombre</label>
 				<input type="radio" name="mujer" class="RadioGender" value="F" id="RadioFemale"><label for="RadioFemale">Mujer</label>
 			</div>
 		</div>
-		<!-- fecha de nacimiento-->
+		
 		<div class="row">
-			<div class="small-3 columns">
-				<label id="alertBirthdate" for="right-label" class="text-right">Fecha de nacimiento</label>
+			<!-- fecha de nacimiento-->
+			<div class="small-12 large-6 columns" for="alertBirthdate" style="float:right">
+				<label id="alertBirthdate" for="alertBirthdate" class="text-left">Fecha de nacimiento
+					<input type="date" id="textBirthdate" class="round" >
+				</label>
 			</div>
-			<div class="small-9 columns">
-				<input type="date" id="textBirthdate">
+			<!-- aniversario boda-->
+			<div class="small-12 large-6 columns">
+				<label for="textWeddingAnniversary" class="text-left">Aniversario boda
+					<input type="date" id="textWeddingAnniversary" class="round">
+				</label>
 			</div>
 		</div>
-		<!-- aniversario boda-->
+		
+		
 		<div class="row">
-			<div class="small-3 columns">
-				<label for="right-label" class="text-right">Aniversario boda</label>
+			<!-- Nacionalidad-->
+			<div class="small-12 large-6 columns">
+				<label id="alertNationality" for="textNationality" class="text-right">Nacionalidad
+					<select id="textNationality" class="round">
+						<option value="husker">Mexicano</option>
+					</select>
+				</label>
 			</div>
-			<div class="small-9 columns">
-				<input type="date" id="textWeddingAnniversary">
+			<!-- Calificacion-->
+			<div class="small-12 large-6 columns">
+				<label for="textQualification" class="text-right">Calificación
+					<input type="number" id="textQualification" class="round">
+				</label>
 			</div>
 		</div>
-		<!-- Nacionalidad-->
-		<div class="row">
-			<div class="small-3 columns">
-				<label id="alertNationality" for="right-label" class="text-right">Nacionalidad</label>
-			</div>
-			<div class="small-9 columns">
-				<select id="textNationality">
-					<option value="husker">Mexicano</option>
-				</select>
-			</div>
-		</div>
-		<!-- Calificacion-->
-		<div class="row">
-			<div class="small-3 columns">
-				<label for="right-label" class="text-right">Calificación</label>
-			</div>
-			<div class="small-9 columns">
-				<input type="text" id="textQualification">
-			</div>
-		</div>
+		
+		
 	</fieldset>
 	<!-- Datos del domicilio -->
 	<fieldset class="fieldset">
-		<legend id="btnAddressData">Datos del domicilio</legend>
-		<div id="containerAddress" style="display:none;">
+		<legend class="btnAddressData"><img id="imgCoppapseAddress" class="imgCollapseFieldset down" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>Datos del domicilio</legend>
+		<div class="containerAddress" style="display:none;">
 			<!-- calle, numero-->
 			<div class="row">
 				<div class="small-3 columns">
-					<label id="alertStreet" for="right-label" class="text-right">Calle, numero</label>
+					<label id="alertStreet" for="textStreet" class="text-left">Calle, numero</label>
 				</div>
 				<div class="small-9 columns">
-					<input id="textStreet" type="text" id="right-label">
+					<input id="textStreet" type="text" class="round">
 				</div>
 			</div>
 			<!-- Colonia -->
 			<div class="row">
 				<div class="small-3 columns">
-					<label id="alertColony" for="right-label" class="text-right">Colonia</label>
+					<label id="alertColony" for="textColony" class="text-left">Colonia</label>
 				</div>
 				<div class="small-9 columns">
-					<input id="textColony" type="text" id="right-label">
+					<input id="textColony" type="text" class="round">
 				</div>
 			</div>
-			<!-- Ciudad -->
+			
 			<div class="row">
-				<div class="small-3 columns">
-					<label id="alertCity" for="right-label" class="text-right">Ciudad</label>
+				<!-- Pais -->
+				<div class="small-12 large-6 columns">
+					<label id="alertCountry" for="textCountry" class="text-left">Pais
+						<select id="textCountry" class="round">
+						<?php
+					
+							foreach($country as $item){
+								
+								?>
+									<option value="<?php echo $item->pkCountryId; ?>" code="<?php echo $item->CountryCode; ?>"><?php echo $item->CountryDesc; ?></option>
+								<?php
+							}
+						?>
+						</select>
+					</label>
 				</div>
-				<div class="small-9 columns">
-					<input id="textCity" type="text" id="right-label">
-				</div> 
-			</div>
-			<!-- Edtado -->
-			<div class="row">
-				<div class="small-3 columns">
-					<label id="alertState" for="right-label" class="text-right">Estado</label>
-				</div>
-				<div class="small-9 columns">
-					<select id="textState">
+				<!-- Estado-->
+				<div class="small-12 large-6 columns">
+					<label id="alertState" for="textState" class="text-left">Estado
+						<select id="textState" class="round">
 						<?php
 							foreach($state as $item){
 								?>
@@ -251,88 +254,80 @@
 								<?php
 							}
 						?>
-					</select>
+						</select>
+					</label>
 				</div>
 			</div>
-			<!-- Pais -->
+			
 			<div class="row">
-				<div class="small-3 columns">
-					<label id="alertCountry" for="right-label" class="text-right">Pais</label>
+				<!-- Ciudad -->
+				<div class="small-12 large-6 columns">
+					<label id="alertCity" for="textCity" class="text-left">Ciudad
+						<input id="textCity" type="text" class="round">
+					</label>
 				</div>
-				<div class="small-9 columns">
-					<select id="textCountry">
-						<?php
-							foreach($country as $item){
-								?>
-									<option value="<?php echo $item->pkCountryId; ?>" code="<?php echo $item->CountryCode; ?>"><?php echo $item->CountryDesc; ?></option>
-								<?php
-							}
-						?>
-					</select>
+				<!-- Zip Code -->
+				<div class="small-12 large-6 columns">
+					<label id="alertPostalCode" for="textPostalCode" class="text-left">Zip Code
+						<input id="textPostalCode" type="text" class="round">
+					</label>
 				</div>
 			</div>
-			<!-- Zip Code -->
-			<div class="row">
-				<div class="small-3 columns">
-					<label id="alertPostalCode" for="right-label" class="text-right">Zip Code</label>
-				</div>
-				<div class="small-9 columns">
-					<input id="textPostalCode" type="text" id="right-label">
-				</div>
-			</div>
+			
 		</div>
 	</fieldset>
 	<!-- Datos del contacto -->
 	<fieldset class="fieldset">
-		<legend id="btnContactData">Información del contacto</legend>
+		<legend class="btnContactData"><img id="imgCoppapseContact" class="imgCollapseFieldset down" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>Información del contacto</legend>
 		<div id="containerContact" style="display:none">
 			<!-- Telefono 1-->
 			<div class="row">
 				<div class="small-3 columns">
-					<label id="alertPhone1" for="right-label" class="text-right">Telefono 1</label>
+					<label id="alertPhone1" for="textPhone1" class="text-right">Telefono 1</label>
 				</div>
 				<div class="small-9 columns">
-					<input type="tel" class="phonePeople" id="textPhone1" maxlength="7" placeholder="xxx-xxx-xxxx">
+					<input type="tel" class="phonePeople round" id="textPhone1" maxlength="7" placeholder="xxx-xxx-xxxx">
 				</div>
 			</div>
 			<!-- Telefono 2 -->
 			<div class="row">
 				<div class="small-3 columns">
-					<label id="alertPhone2" for="right-label" class="text-right">Telefono 2</label>
+					<label id="alertPhone2" for="textPhone2" class="text-right">Telefono 2</label>
 				</div>
 				<div class="small-9 columns">
-					<input type="tel" class="phonePeople" id="textPhone2" maxlength="7" placeholder="xxx-xxx-xxxx">
+					<input type="tel" class="phonePeople round" id="textPhone2" maxlength="7" placeholder="xxx-xxx-xxxx">
 				</div>
 			</div>
 			<!-- Telefono 3 -->
 			<div class="row">
 				<div class="small-3 columns">
-					<label id="alertPhone3" for="right-label" class="text-right">Telefono 3</label>
+					<label id="alertPhone3" for="textPhone3" class="text-right">Telefono 3</label>
 				</div>
 				<div class="small-9 columns">
-					<input type="tel" class="phonePeople" id="textPhone3" maxlength="7" placeholder="xxx-xxx-xxxx">
+					<input type="tel" class="phonePeople round" id="textPhone3" maxlength="7" placeholder="xxx-xxx-xxxx">
 				</div>
 			</div>
 			<!-- Email 1 -->
 			<div class="row">
 				<div class="small-3 columns">
-					<label id="alertEmail1" for="right-label" class="text-right">Email 1</label>
+					<label id="alertEmail1" for="textEmail1" class="text-right">Email 1</label>
 				</div>
 				<div class="small-9 columns">
-					<input type="email" class="emailPeople" id="textEmail1">
+					<input type="email" class="emailPeople round" id="textEmail1">
 				</div>
 			</div>
 			<!-- Email 2 -->
 			<div class="row">
 				<div class="small-3 columns">
-					<label id="alertEmail2" for="right-label" class="text-right">Email 2</label>
+					<label id="alertEmail2" for="textEmail2" class="text-right">Email 2</label>
 				</div>
 				<div class="small-9 columns">
-					<input type="email" class="emailPeople" id="textEmail2">
+					<input type="email" class="emailPeople round" id="textEmail2">
 				</div>
 			</div>
 		</div>
 	</fieldset>
 </div>
+
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>people.js"></script>

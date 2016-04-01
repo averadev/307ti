@@ -12,16 +12,14 @@ class People extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->helper('url');
-		$this->load->database('remote_windows_sqlsrv');
+		$this->load->database('default');
 		$this->load->model('people_db');
 	}
 
 	public function index(){
 		//$a = $this->people_db->selectUser();
-		//$data['country'] = $this->people_db->getCountry();
-		//$data['state'] = $this->people_db->getState();
-		$data['country'] = array();
-		$data['country'] = array();
+		$data['country'] = $this->people_db->getCountry();
+		$data['state'] = $this->people_db->getState();
         $this->load->view('vwPeople',$data);
 	}
 	
@@ -173,6 +171,29 @@ class People extends CI_Controller {
 			}
 			$item->birthdate = $item->BirthDayDay . "-" . $months[$item->BirthDayMonth] . "-" . $item->BirthDayYear;
 			$phone = $this->people_db->getPeoplePhone($item->pkPeopleId);
+			
+			if(is_null($item->Street1) && is_null($item->Street2)){
+				$item->Street1 = "";
+			}else if(is_null($item->Street1) && is_null(!$item->Street2)){
+				$item->Street2 = "";
+			}else if(is_null(!$item->Street1) && is_null($item->Street2)){
+				$item->Street1 = "";
+			}else{
+				$item->Street1 = $item->Street1 . ", " . $item->Street2;
+			}
+			
+			if(is_null($item->City)){
+				$item->City = "";
+			}
+			if(is_null($item->ZipCode)){
+				$item->ZipCode = "";
+			}
+			if(is_null($item->StateDesc)){
+				$item->StateDesc = "";
+			}
+			if(is_null($item->CountryDesc)){
+				$item->CountryDesc = "";
+			}
 			if(isset($phone[0]->PhoneDesc)) {
 				$item->phone1 = $phone[0]->PhoneDesc;
 			}else{

@@ -47,8 +47,10 @@ function addTabEvent(){
     $('.iconCloseTab').on('click', function() {
         // Eliminos contenido 
         var tab = $(this).parent();
+		//dialogUser.dialog('destroy').remove()
         $("#module-"+tab.attr("attr-screen")).remove();
         tab.remove();
+		
     });
 }
 
