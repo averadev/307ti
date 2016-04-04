@@ -126,12 +126,6 @@
 				<img class="iconCloseTab" src="http://localhost/307ti/assets/img/common/iconClose.png">
 			</li>
 		</ul>
-	<!--<div class="tabsModal">
-		
-		<!--<ul>
-			<li class="tab-title" attr-screen="a"><a>a</a></li>
-		</ul>
-	</div>-->
 	
 	<div class="contentModal">
 		<div id="tabs-1">
