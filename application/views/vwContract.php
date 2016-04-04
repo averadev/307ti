@@ -106,25 +106,31 @@
 </div>
 
 <div id="dialog-Contract" title="Alta de contratos">
-	<div class="row">
-    <div id="contactForm" class="small-12 small-offset-0 medium-8 medium-offset-2 large-8 large-offset-2 columns">
-          
-          <label>Nombre legal</label>
-         <!--  <small class="error">Your full name is required.</small> -->
-          <input type="text" placeholder="Nombre del contrato" required="">
-          <div class="row">
-		    <div class="large-12 columns">
-		      <label>Selecciona un idioma
-		        <select>
-		          <option value="Español">Español</option>
-		          <option value="Ingles">Ingles</option>
-		        </select>
-		      </label>
-		    </div>
-  		</div>
-          
+	<!-- <form action="" onsubmit="EnviaServicio(3, 'modal'); return false"> -->
 
-          <table id="tablecontract" width="100%">
+	<div class="small-12 columns">
+	<form action="" id="contract" enctype="multipart/form-data" method="post" name="contract">
+		<fieldset>
+	    	<legend>Contrato</legend>
+		     <div class="small-4 columns">
+		     	<label>Nombre legal</label>
+		        <input type="text" name="nombreContrat">
+		      </div>
+			<div class="small-4 columns">
+				<label>Idioma</label>
+			    <select>
+			    	<option>Español</option>
+			    	<option>Ingles</option>
+			    </select>
+			 </div>
+			<div class="small-4 columns">
+				<label>Tour ID</label>
+			    <input type="text" name="tourID">
+			 </div>
+		 </fieldset>
+</form>
+</div>
+<table id="tablecontract">
 	<thead>
 		<tr>
 			<th class="cellEdit" >ID</th>
@@ -141,12 +147,48 @@
 		
 	</tbody>
 	</table>
-	
+</div>
+    <!-- <div id="contactForm" class="small-12 small-offset-0 medium-8 medium-offset-2 large-8 large-offset-2 columns">
+          
+          <label>Nombre legal</label>
+          <input id="nameContract" type="text" placeholder="Nombre del contrato" required="">
+          <div class="row">
+		    <div class="large-6 columns">
+		      <label>Selecciona un idioma
+		        <select>
+		          <option value="Español">Español</option>
+		          <option value="Ingles">Ingles</option>
+		        </select>
+		      </label>
+		    </div>
+ 
+  		<div class="large-6 columns">
+  			<label>Tour ID</label>
+   	 		<input type="text" placeholder="Tour ID" required="">
+   	 	</div>
+   	 </div>
     </div>
+    
+   
+   <table id="tablecontract">
+	<thead>
+		<tr>
+			<th class="cellEdit" >ID</th>
+			<th class="cellGeneral">Nombre</th>
+			<th class="cellGeneral">Apellidos</th>
+			<th class="cellGeneral" >Dirección</th>
+			<th class="cellGeneral" >Persona Principal</th>
+			<th class="cellGeneral" >Persona Secundaria</th>
+			<th class="cellGeneral" >Beneficiario</th>
 
+		</tr>
+	</thead>
+	<tbody>
+		
+	</tbody>
+	</table>
 
-
-    </div>
+    </div> -->
 </div>
 
 

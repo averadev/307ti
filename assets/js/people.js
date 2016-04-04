@@ -173,7 +173,7 @@ function showDivModal(div){
 * @param isClosed indica si el modal se mantendra abierto cuando se guarde la info
 */
 function CreateNewUser(isClosed){
-	var result = validateUserFields()
+	var result = validateUserFields();
 	if(result){
 		saveUserData(0,isClosed)
 	}
