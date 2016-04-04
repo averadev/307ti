@@ -79,8 +79,19 @@ function loadModule(screen){
     $( "#module-"+screen ).load( BASE_URL+screen );
 }
 
-
-
+//menu pegajoso
+$(document).ready(function(){
+	var altura = $('.menu-section').offset().top;
+	$(window).on('scroll', function(){
+		if ( $(window).scrollTop() < 91 ){
+			var currentTop = altura - $(window).scrollTop()
+			$('.menu-section').css('top', currentTop + "px");
+		}else{
+			$('.menu-section').css('top', "0px");
+		}
+	});
+ 
+});
 
 
 

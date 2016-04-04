@@ -93,22 +93,22 @@
 	<table id="tablePeople" width="100%">
 	<thead>
 		<tr>
-			<th></th>
-			<th>id</th>
-			<th>Nombre</th>
-			<th>Apellidos</th>
-			<th>Genero</th>
-			<th>Fecha Nacimiento</th>
-			<th>Calle, Numero, colonia</th>
-			<th>Ciudad</th>
-			<th>Estado</th>
-			<th>Pais</th>
-			<th>CP</th>
-			<th>Telefono 1</th>
-			<th>Telefono 2</th>
-			<th>Telefono 3</th>
-			<th>Email</th>
-			<th>Email 2</th>
+			<th class="cellEdit" ></th>
+			<th class="cellEdit" >id</th>
+			<th class="cellGeneral" >Nombre</th>
+			<th class="cellGeneral">Apellidos</th>
+			<th class="cellGeneral">Genero</th>
+			<th class="cellDate" >Fecha Nacimiento</th>
+			<th class="cellAddress" >Calle, Numero, colonia</th>
+			<th class="cellGeneral" >Ciudad</th>
+			<th class="cellGeneral" >Estado</th>
+			<th class="cellGeneral" >Pais</th>
+			<th class="cellGeneral" >CP</th>
+			<th class="cellPhone" >Telefono 1</th>
+			<th class="cellPhone" >Telefono 2</th>
+			<th class="cellPhone" >Telefono 3</th>
+			<th class="cellEmail" >Email</th>
+			<th class="cellEmail" >Email 2</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -119,16 +119,32 @@
 </div>
 
 <div id="dialog-User" title="Alta de usuarios">
-	<!-- Datos personales -->
-	<div class="row" id="alertValidateUSer" style="display:none;">
-		<div class="small-12 columns">
-			<div data-alert class="alert-box alert " >
-				Por favor rellene los campos Obligatorios(rojo)
-			</div>
-		</div>
-	</div>
+	<ul class="tabs" data-tab="" role="tablist">
+                
+            <li class="tab-title active" attr-screen="General">
+				<a>General</a>
+				<img class="iconCloseTab" src="http://localhost/307ti/assets/img/common/iconClose.png">
+			</li>
+		</ul>
+	<!--<div class="tabsModal">
+		
+		<!--<ul>
+			<li class="tab-title" attr-screen="a"><a>a</a></li>
+		</ul>
+	</div>-->
 	
-	<fieldset class="fieldset">
+	<div class="contentModal">
+		<div id="tabs-1">
+			<!-- Datos personales -->
+			<div class="row" id="alertValidateUSer" style="display:none;">
+				<div class="small-12 columns">
+					<div data-alert class="alert-box alert " >
+						Por favor rellene los campos Obligatorios(rojo)
+					</div>
+				</div>
+			</div>
+	
+		<fieldset class="fieldset">
 		<legend>Datos personales</legend>
 		<!-- nombre-->
 		<div class="row">
@@ -136,7 +152,7 @@
 				<label id="alertName" for="right-label" class="text-left">Nombre</label>
 			</div>
 			<div class="small-9 columns">
-				<input type="text" id="textName" class="round">
+				<input type="text" id="textName" class="round general">
 			</div>
 		</div>
 		<!-- apellido paterno-->
@@ -145,7 +161,7 @@
 				<label id="alertLastName" for="right-label" class="text-left">Apellido paterno</label>
 			</div>
 			<div class="small-9 columns">
-				<input type="text" id="textLastName" class="round">
+				<input type="text" id="textLastName" class="round general">
 			</div>
 		</div>
 		<!-- apellido materno-->
@@ -154,7 +170,7 @@
 				<label for="right-label" class="text-left">Apellido materno</label>
 			</div>
 			<div class="small-9 columns">
-				<input type="text" id="TextSecondLastName" class="round">
+				<input type="text" id="TextSecondLastName" class="round general">
 			</div>
 		</div>
 		<!-- genero -->
@@ -316,17 +332,19 @@
 					<input type="email" class="emailPeople round" id="textEmail1">
 				</div>
 			</div>
-			<!-- Email 2 -->
-			<div class="row">
-				<div class="small-3 columns">
-					<label id="alertEmail2" for="textEmail2" class="text-right">Email 2</label>
+				<!-- Email 2 -->
+				<div class="row">
+					<div class="small-3 columns">
+						<label id="alertEmail2" for="textEmail2" class="text-right">Email 2</label>
+					</div>
+					<div class="small-9 columns">
+						<input type="email" class="emailPeople round" id="textEmail2">
+					</div>
+					</div>
 				</div>
-				<div class="small-9 columns">
-					<input type="email" class="emailPeople round" id="textEmail2">
-				</div>
-			</div>
+			</fieldset>
 		</div>
-	</fieldset>
+	</div>
 </div>
 
 

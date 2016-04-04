@@ -7,7 +7,7 @@ Class people_db extends CI_MODEL
     }
  
     /**
-     * Obtiene los mensajes de la residencia
+     * Obtiene la lista de personas
      */
 	public function getPeople($text,$peopleId,$lastName,$name,$page){
 		$cadena = "(";
@@ -63,6 +63,9 @@ Class people_db extends CI_MODEL
 		return  $this->db->get()->result();
 	}
 	
+	/**
+    * Obtiene los paises
+    */
 	public function getCountry(){
 		$this->db->distinct('tblCountry.pkCountryId');
 		$this->db->select('tblCountry.pkCountryId, tblCountry.CountryCode, tblCountry.CountryDesc');
@@ -72,6 +75,9 @@ Class people_db extends CI_MODEL
 		return  $this->db->get()->result();
 	}
 	
+	/**
+    * Obtiene los estados
+    */
 	public function getState(){
 		$this->db->select('tblState.pkStateId, tblState.StateCode, tblState.StateDesc');
 		$this->db->from('tblState');
@@ -79,6 +85,9 @@ Class people_db extends CI_MODEL
 		return  $this->db->get()->result();
 	}
 	
+	/**
+    * Obtiene los telefonos de las personas por id
+    */
 	public function getPeoplePhone($id){
 		$this->db->select('tblPhone.PhoneDesc');
 		$this->db->from('tblPhone');
@@ -87,12 +96,34 @@ Class people_db extends CI_MODEL
 		return  $this->db->get()->result();
 	}
 	
+	/**
+    * Obtiene los email de las personas por id
+    */
 	public function getPeopleEmail($id){
 		$this->db->select('tblEmail.EmailDesc');
 		$this->db->from('tblEmail');
 		$this->db->join('tblPeopleEmail', 'tblPeopleEmail.fkEmailId = tblEmail.pkEmail', 'left');
 		$this->db->where('tblPeopleEmail.fkPeopleId = ', $id);
 		return  $this->db->get()->result();
+	}
+	
+	/**
+    * Obtiene la informacion de la persona por id
+    */
+	public function getPeopleById($id){
+		$this->db->select('tblPeople.pkPeopleId, tblPeople.Name, tblPeople.LName, tblPeople.LName2');
+		$this->db->select('tblPeople.Gender, tblPeople.BirthDayMonth, tblPeople.BirthDayDay, tblPeople.BirthDayYear');
+		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');
+		$this->db->select('tblState.pkStateId, tblState.StateCode, tblState.StateDesc');
+		$this->db->select('tblCountry.pkCountryId, tblCountry.CountryCode, tblCountry.CountryDesc');
+        $this->db->from('tblPeople');
+		$this->db->join('tblPeopleAddress', 'tblPeopleAddress.fkPeopleId = tblPeople.pkPeopleId', 'left');
+		$this->db->join('tblAddress', 'tblAddress.pkAddressid = tblPeopleAddress.fkAddressId', 'left');
+		$this->db->join('tblState', 'tblState.pkStateId = tblAddress.FkStateId', 'left');
+		$this->db->join('tblCountry', 'tblCountry.pkCountryId = tblAddress.fkCountryId', 'left');
+		$this->db->where('tblPeople.pkPeopleId = ', $id);
+		return  $this->db->get()->result();
+		
 	}
 	
 	/**

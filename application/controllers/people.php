@@ -224,5 +224,70 @@ class People extends CI_Controller {
 		echo json_encode(array('items' => $data, 'total' => $total));
 	}
 	
-	
+	/**
+	* obtiene la informacion de una persona por identificador
+	**/
+	public function getPeopleById(){
+		if($this->input->is_ajax_request()){
+			$months = array('', 'Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic');
+			$data = $this->people_db->getPeopleById($_POST['id']);
+			foreach($data as $item){
+				$item->birthdate = $item->BirthDayDay . "-" . $months[$item->BirthDayMonth] . "-" . $item->BirthDayYear;
+				
+				if(is_null($item->Street1)){
+					$item->Street1 = "";
+				}
+				if(is_null($item->Street2)){
+					$item->Street2 = "";
+				}
+			
+				if(is_null($item->City)){
+					$item->City = "";
+				}
+				if(is_null($item->ZipCode)){
+					$item->ZipCode = "";
+				}
+				if(is_null($item->StateDesc)){
+					$item->StateDesc = "";
+				}
+				if(is_null($item->StateCode)){
+					$item->StateCode = "";
+				}
+				if(is_null($item->CountryDesc)){
+					$item->CountryDesc = "";
+				}
+				if(is_null($item->CountryCode)){
+					$item->CountryCode = "";
+				}
+				$phone = $this->people_db->getPeoplePhone($item->pkPeopleId);
+				if(isset($phone[0]->PhoneDesc)) {
+					$item->phone1 = $phone[0]->PhoneDesc;
+				}else{
+					$item->phone1 = "";
+				}
+				if(isset($phone[1]->PhoneDesc)) {
+					$item->phone2 = $phone[1]->PhoneDesc;
+				}else{
+					$item->phone2 = "";
+				}
+				if(isset($phone[2]->PhoneDesc)) {
+					$item->phone3 = $phone[2]->PhoneDesc;
+				}else{
+					$item->phone3 = "";
+				}
+				$email = $this->people_db->getPeopleEmail($item->pkPeopleId);
+				if(isset($email[0]->EmailDesc)) {
+					$item->email1 = $email[0]->EmailDesc;
+				}else{
+					$item->email1 = "";
+				}
+				if(isset($email[1]->EmailDesc)) {
+					$item->email2 = $email[1]->EmailDesc;
+				}else{
+					$item->email2 = "";
+				}
+			}
+			echo json_encode($data);
+		}
+	}
 }

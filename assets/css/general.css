@@ -20,6 +20,16 @@ body {
     background-color: #f2f2f2;
 }
 
+input.general {
+	/*background:#000000;*/
+	border-color:rgb(230, 230, 230);
+}
+
+input.general:hover{
+	border-color:#ebebeb;
+	border-color:rgb(200, 200, 200);
+	/*box-shadow: 0 2px 6px rgba(0,0,0,.2), 0 2px 3px rgba(0,0,0,.5);*/
+}
 
 input.round, select.round{
 	border-radius:8px;
@@ -29,6 +39,8 @@ input.round, select.round{
 
 select.round{
 }
+
+
 
 /**
 * @section top menu
@@ -314,12 +326,48 @@ select.round{
     max-width: none;
     background-color: #ffffff;
     height: 400px;
-	overflow:scroll;
+	overflow-y:auto;
 	width:100%;
 }
 
+
 #tablePeople thead tr th, #tablePeople thead tr td{
 	font-size:.7rem;
+}
+
+/**
+* tamaño de las celdas
+*/
+
+.cellEdit{
+	min-width:50px;
+}
+
+.cellGeneral{
+	min-width:75px;
+}
+
+.cellDate{
+	min-width:120px;
+}
+
+.cellAddress{
+	min-width:150px;
+}
+
+.cellPhone{
+	min-width:90px;
+}
+
+.cellEmail{
+	min-width:90px;
+}
+
+/*** fin :)***/
+
+.iconEdit{
+	width:25px;
+	cursor:pointer;
 }
 
 /**
@@ -416,6 +464,48 @@ select.round{
 	padding: .6em 1em;
 }
 
+.ui-dialog .ui-dialog-content {
+	padding-left:0;
+	padding-right:0;
+	padding-top:0;
+}
+
+.tabsModal{
+	float:left;
+	width:100%;
+	background:rgba(170,170,170,.2);
+}
+
+.tabsModal ul {
+	list-style:none;
+	
+}
+
+.tabsModal dd > a, .tabsModal .tab-title > a{
+    font-size: 14px;
+    margin: 8px 5px 0 0;
+    padding: 5px 30px;
+    border-radius: 10px 10px 0px 0px;
+    -moz-border-radius: 10px 10px 0px 0px;
+    -webkit-border-radius: 10px 10px 0px 0px;
+    border: 1px solid #000000;
+    border-bottom: 0px;
+	margin-top:50px;
+	
+}
+.tabsModal dd > a, .tabsModal .tab-title > a {
+    color: #000000;
+    background: #FFFFFF;
+}
+
+.contentModal{
+	float:left;
+	width:100%;
+	height:auto;
+	border-top:1px solid #aaaaaa;
+	padding: .5em 1em;
+}
+
 /**
 * @section loading de busqueda 
 * @todo loading de la tabla de busqueda  
@@ -431,7 +521,7 @@ select.round{
 
 .bgLoadingTable{
 	position:absolute;
-	width:100%;
+	width:200%;
 	height:100%;
 	background:rgba(0,0,0, .4);
 }

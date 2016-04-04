@@ -7,11 +7,12 @@
 var dialogUser = null;
 var maxHeight = 400;
 isSearch = true;
+var xhrPeople
 
 /**************Index****************/
 
 //muestra el modal de usuarios
-$('#newUser').click(function(){ showModal('alta'); });
+$('#newUser').click(function(){ showModal(0); });
 //esconde el modal de usuarios
 //$('.imgCloseModal').click(function(){ hideModal(); });
 //$(".imgCloseModal").button().on( "click", function() { hideModal(); });
@@ -37,6 +38,9 @@ $('#txtSearch').keyup(function(e){
 $('#btnCleanSearch').click(function(){ CleandFieldSearch(); });
 //muestra u oculta la busqueda avanzada
 $('#checkFilterAdvance').click(function(){ searchAdvanced(); });
+
+////edit
+$(document).on('click','.iconEdit',function(){ showModal($(this).attr('value')); });
 
 
 /************Funciones**************/
@@ -95,7 +99,6 @@ $(function() {
 	$('#paginationPeople').jqPagination({
 		max_page: 1,
 		paged: function(page) {
-			console.log($('#paginationPeople').val())
 			if($('#paginationPeople').val() == true){
 				$('#paginationPeople').val(false);
 			}else{
@@ -104,20 +107,24 @@ $(function() {
 		}
 	});
 	
-	
+	//$( "#tabs" ).tabs();
 	
 });
 
 /**
-* muestra el modal de alta de usuario
-* @param type tipo de 
+* muestra el modal de personas
+* @param id id de la persona
 */
-function showModal(type){
+function showModal(id){
 	cleanUserFields();
-    dialogUser.dialog('open');
-	$('.ui-dialog-titlebar').append(
-		'<div class="ui-dialog-titlebar2"><label>Alta de personas</label></div><img class="imgCloseModal" src="' + BASE_URL+'assets/img/common/iconClose2.png">'
-	)
+	if(id == 0){
+		dialogUser.dialog('open');
+		$('.ui-dialog-titlebar').append(
+			'<div class="ui-dialog-titlebar2"><label>Alta de personas</label></div><img class="imgCloseModal" src="' + BASE_URL+'assets/img/common/iconClose2.png">'
+		)
+	}else{
+		getInfoPeople(id);
+	}
 	/**/
 }
 
@@ -228,7 +235,6 @@ function saveUserData(id, isClosed){
 			email:jsonEmail,
 		},
 		success: function(data){
-			alert(data);
 			if(isClosed){
 				dialogUser.dialog('close');
 				cleanUserFields();
@@ -443,6 +449,13 @@ function cleanUserFields(){
 function searchPeople(page){
 	$('#tablePeople tbody').empty();
 	$('.divLoadingTable').show();
+	
+	/*if(xhrPeople && xhrPeople.readyState != 4) { 
+		xhrPeople.abort();
+		xhrPeople = null;
+	}*/
+	
+	
 	$.ajax({
    		type: "POST",
        	url: "people/getPeopleBySearch",
@@ -455,7 +468,6 @@ function searchPeople(page){
 			page:page,
 		},
 		success: function(data){
-			console.log(data);
 			var total = data.total;
 			if( parseInt(total) == 0 ){ total = 1; }
 			total = parseInt( total/10 );
@@ -471,7 +483,7 @@ function searchPeople(page){
 				var item = data.items[i];
 				$('#tablePeople tbody').append(
 					'<tr>' +
-						'<td></td>' +
+						'<td class="cellEdit"><img class="iconEdit" value="' + item.pkPeopleId +'" src="' + BASE_URL+ 'assets/img/common/editIcon2.png"/></td>' +
 						'<td>' + item.pkPeopleId + '</td>' +
 						'<td>' + item.Name + '</td>' +
 						'<td>' + item.LName + " " + item.LName2 + '</td>' +
@@ -492,7 +504,8 @@ function searchPeople(page){
 			}
 			$('.divLoadingTable').hide();
 		},
-		error: function(){
+		error: function(error){
+			console.log(error)
 			$('.divLoadingTable').hide();
 			alert("error en la busqueda, intentelo mas tarde");
 		}
@@ -525,4 +538,31 @@ function searchAdvanced(){
  */
 function loadPaginatorPeople(maxPage){
 	$('#paginationPeople').jqPagination('option', 'max_page', maxPage);
+}
+
+/**
+ * CObtiene la informacion de una persona por identificador
+ * @param id identificador de persona a buscar
+ */
+function getInfoPeople(id){
+	$('.divLoadingTable').show();
+	$.ajax({
+   		type: "POST",
+       	url: "people/getPeopleById",
+		dataType:'json',
+		data: {
+			id:id,
+		},
+		success: function(data){
+			console.log(data);
+			dialogUser.dialog( 'open' )
+			$('.divLoadingTable').hide();
+		},
+		error: function(error){
+			console.log(error)
+			$('.divLoadingTable').hide();
+			alert("error en la busqueda, intentelo mas tarde");
+		}
+	});	
+	
 }
