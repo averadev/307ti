@@ -47,8 +47,10 @@ function addTabEvent(){
     $('.iconCloseTab').on('click', function() {
         // Eliminos contenido 
         var tab = $(this).parent();
+		//dialogUser.dialog('destroy').remove()
         $("#module-"+tab.attr("attr-screen")).remove();
         tab.remove();
+		
     });
 }
 
@@ -77,8 +79,19 @@ function loadModule(screen){
     $( "#module-"+screen ).load( BASE_URL+screen );
 }
 
-
-
+//menu pegajoso
+$(document).ready(function(){
+	var altura = $('.menu-section').offset().top;
+	$(window).on('scroll', function(){
+		if ( $(window).scrollTop() < 91 ){
+			var currentTop = altura - $(window).scrollTop()
+			$('.menu-section').css('top', currentTop + "px");
+		}else{
+			$('.menu-section').css('top', "0px");
+		}
+	});
+ 
+});
 
 
 
