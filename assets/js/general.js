@@ -19,7 +19,7 @@ $(function() {
         // Add new tab
         if(isNew){
             $('.tab-title').removeClass('active');
-            var screen = $(this).attr('attr-screen')
+            var screen = $(this).attr('attr-screen');
             var iconClose = '<img class="iconCloseTab" src="'+BASE_URL+'assets/img/common/iconClose.png" />'
             $('.tabs').append( '<li class="tab-title active" attr-screen="'+screen+'"><a>'+$(this).html()+'</a>'+iconClose+'</li>' );
             $(".module").addClass("moduleHide")
@@ -92,3 +92,5 @@ $(document).ready(function(){
 	});
  
 });
+
+

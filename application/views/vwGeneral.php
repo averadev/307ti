@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="<?php echo base_url().CSS; ?>foundation.css" />
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>paginacion/jqpagination.css" />
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>general.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script type="text/javascript" src="<?php echo base_url().JS; ?>foundation.min.js"></script>

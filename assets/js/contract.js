@@ -46,8 +46,8 @@ $(function(){
 });
 
 function cleanContractFields(id){
-	var formData = document.getElementById(id);
-    formData.reset();
+	// var formData = document.getElementById(id);
+ //    formData.reset();
 }
 
 
@@ -71,4 +71,10 @@ function createNewContract(id){
         .fail(function( jqXHR, textStatus, errorThrown ) {
             //alertify.error("Ocurrio un error vuelve a intentarlo");
         });
+}
+
+function EnviaFormularioCliente(id){
+	//var formData = new FormData(document.getElementById("contract"));
+    //formData.append("peticion", "agregarServicio");
+	console.log(id);
 }

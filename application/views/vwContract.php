@@ -1,4 +1,3 @@
-
 <div class="row fiter-section" id="section-contract">
     <div class="section-bar">Consultas<div class="collapseFilter"></div></div>
 	<div class="section-bar" id="newContract">Nuevo</div>
@@ -87,7 +86,7 @@
 			<th class="cellEdit" ></th>
 			<th class="cellEdit" >ContratoId</th>
 			<th class="cellGeneral" >Folio</th>
-			<th class="cellGeneral">Nombre Lega</th>
+			<th class="cellGeneral">Nombre Legal</th>
 			<th class="cellGeneral">Tipo Unidad</th>
 			<th class="cellGeneral" >Fecruencia</th>
 			<th class="cellGeneral" >status</th>
@@ -105,32 +104,86 @@
 	</table>
 </div>
 
-<div id="dialog-Contract" title="Alta de contratos">
-	<!-- <form action="" onsubmit="EnviaServicio(3, 'modal'); return false"> -->
 
+
+<div id="dialog-Contract" title="Alta de Contratos">
+	<ul class="tabs" data-tab="" role="tablist">
+            <li class="tab-title active" attr-screen="General">
+				<a>General</a>
+				<img class="iconCloseTab" src="http://localhost/307ti/assets/img/common/iconClose.png">
+			</li>
+		</ul>
+	<div class="contentModal">
+		<div id="tabs-1">
+<!-- Datos personales -->
+			<div class="row" id="alertValidateUSer" style="display:none;">
+				<div class="small-12 columns">
+					<div data-alert class="alert-box alert " >
+						Por favor rellene los campos Obligatorios(rojo)
+					</div>
+				</div>
+			</div>
+	
+		<fieldset class="fieldset">
+		<legend>Datos Contrato</legend>
+		<!-- nombre legal-->
+		<div class="row">
+			<div class="small-3 columns">
+				<label for="legalName" class="text-left">Nombre legal</label>
+			</div>
+			<div class="small-9 columns">
+				<input name="legalName" type="text" id="legalName" class="general">
+			</div>
+		</div>
+		<!-- Idioma-->
+		<div class="row">
+			<div class="small-3 columns">
+				<label id="alertLastName" for="right-label" class="text-left">Idioma</label>
+			</div>
+			<div class="small-9 columns">
+				<select>
+      			<option selected disabled>Elige</option>
+					<option>Español</option>
+					<option>Ingles</option>
+				</select>
+			</div>
+		</div>
+		<!-- Tour ID-->
+	  <div class="row">
+	  <div class="small-3 columns">
+				<label id="alertLastName" for="right-label" class="text-left">Tour ID</label>
+			</div>
+	    <div class="large-9 columns">
+	      <div class="row collapse">
+	        <div class="small-10 columns">
+	          <input type="text" placeholder="ID">
+	        </div>
+	        <div class="small-2 columns">
+	          <a href="#" class="button postfix">Agregar</a>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+		
+	</fieldset>
+<!-- Datos Personas -->
+	<fieldset class="fieldset">
+		<legend class="btnAddressData">Personas</legend>
+		<div class="containerPeople">
+		<div class="row">
+		<div class="divLoadingTable">
+		<div class="bgLoadingTable"></div>
+		<div class="loadingTable" >
+			<div class="subLoadingTable">
+				<label>Cargando..</label>
+				<div id="progressbar"></div>
+			</div>
+		</div>
+	</div>
 	<div class="small-12 columns">
-	<form action="" id="contract" enctype="multipart/form-data" method="post" name="contract">
-		<fieldset>
-	    	<legend>Contrato</legend>
-		     <div class="small-4 columns">
-		     	<label>Nombre legal</label>
-		        <input type="text" name="nombreContrat">
-		      </div>
-			<div class="small-4 columns">
-				<label>Idioma</label>
-			    <select>
-			    	<option>Español</option>
-			    	<option>Ingles</option>
-			    </select>
-			 </div>
-			<div class="small-4 columns">
-				<label>Tour ID</label>
-			    <input type="text" name="tourID">
-			 </div>
-		 </fieldset>
-</form>
-</div>
-<table id="tablecontract">
+		<a href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>
+	</div>
+	<table id="tablePeople" width="100%">
 	<thead>
 		<tr>
 			<th class="cellEdit" >ID</th>
@@ -140,56 +193,196 @@
 			<th class="cellGeneral" >Persona Principal</th>
 			<th class="cellGeneral" >Persona Secundaria</th>
 			<th class="cellGeneral" >Beneficiario</th>
-
 		</tr>
 	</thead>
 	<tbody>
-		
 	</tbody>
 	</table>
 </div>
-    <!-- <div id="contactForm" class="small-12 small-offset-0 medium-8 medium-offset-2 large-8 large-offset-2 columns">
-          
-          <label>Nombre legal</label>
-          <input id="nameContract" type="text" placeholder="Nombre del contrato" required="">
-          <div class="row">
-		    <div class="large-6 columns">
-		      <label>Selecciona un idioma
-		        <select>
-		          <option value="Español">Español</option>
-		          <option value="Ingles">Ingles</option>
-		        </select>
-		      </label>
-		    </div>
- 
-  		<div class="large-6 columns">
-  			<label>Tour ID</label>
-   	 		<input type="text" placeholder="Tour ID" required="">
-   	 	</div>
-   	 </div>
+		</div>
+	</fieldset>
+<!-- Unidades -->
+
+	<fieldset class="fieldset">
+		<legend class="btnAddressData">Unidades</legend>
+		<div class="containerPeople">
+			<div class="row">
+				<div class="divLoadingTable">
+					<div class="bgLoadingTable"></div>
+					<div class="loadingTable" >
+						<div class="subLoadingTable">
+							<label>Cargando..</label>
+							<div id="progressbar"></div>
+						</div>
+					</div>
+				</div>
+		<div class="small-12 columns">
+			<a href="#" class="button tiny"><i class="fa fa-home"></i></a>
+		</div>
+		<table id="tableUnidades" width="100%">
+			<thead>
+				<tr>
+					<th class="cellEdit" >Codigo</th>
+					<th class="cellGeneral">Descripcion</th>
+					<th class="cellGeneral">Precio</th>
+					<th class="cellGeneral" ># de Semana</th>
+					<th class="cellGeneral" >Primer año OCC</th>
+					<th class="cellGeneral" >Ultimo año OCC</th>
+					<th class="cellGeneral" >Frecuencia</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		</div>
+		</div>
+	</fieldset>
+
+<fieldset class="fieldset">
+		<legend>Condiciones de Financiamiento</legend>
+		<!-- nombre legal-->
+		<div class="row">
+			<div class="small-6 columns">
+			<div class="row">
+								<div class="small-3 columns">
+					<label  class="text-left">Tipo de venta</label>
+				</div>
+				<div class="small-9 columns">
+					<select>
+	      			<option selected disabled>Seleccione un tipo</option>
+						<option>Unidad de Compañia</option>
+						<option>Reventa</option>
+						<option>Upgrade</option>
+						<option>Downgrade</option>
+					</select>
+				</div>
+			</div>
+
+			</div>
+		<div class="small-6 columns">
+			<div class="row">
+			  <div class="small-3 columns">
+						<label id="alertLastName" for="right-label" class="text-left">Contrato Relacionado</label>
+					</div>
+			    <div class="large-9 columns">
+			      <div class="row collapse">
+			        <div class="small-10 columns">
+			          <input type="text" placeholder="Folio">
+			        </div>
+			        <div class="small-2 columns">
+			          <a href="#" class="button postfix"><i class="fa fa-search"></i></a>
+			        </div>
+			      </div>
+			    </div>
+	  </div>
+		</div>
+		</div>
+		<div class="row">
+					<table id="tableFinanciamiento" class="small-12 columns">
+			<thead>
+				<tr>
+					<th class="cellEdit" >Folio</th>
+					<th class="cellGeneral">Nombre Legal</th>
+					<th class="cellGeneral">Tipo de unidad</th>
+					<th class="cellDate" >Fecha</th>
+					<th class="cellGeneral" >Total</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		</div>
+	<div class="row">
+    <div class="large-4 columns">
+      <label>Precio Unidad
+        <input type="text" placeholder="Precio Unidad" />
+      </label>
     </div>
-    
-   
-   <table id="tablecontract">
-	<thead>
-		<tr>
-			<th class="cellEdit" >ID</th>
-			<th class="cellGeneral">Nombre</th>
-			<th class="cellGeneral">Apellidos</th>
-			<th class="cellGeneral" >Dirección</th>
-			<th class="cellGeneral" >Persona Principal</th>
-			<th class="cellGeneral" >Persona Secundaria</th>
-			<th class="cellGeneral" >Beneficiario</th>
+    <div class="large-4 columns">
+      <label>Referencia Pack
+        <input type="text" placeholder="Referencia" />
+      </label>
+    </div>
+    <div class="large-4 columns">
+      <label>Precio Venta
+        <input type="text" placeholder="Precio Venta" />
+      </label>
+    </div>
+  </div>
 
-		</tr>
-	</thead>
-	<tbody>
-		
-	</tbody>
-	</table>
 
-    </div> -->
+	<div class="row">
+    	<div class="large-4 columns">
+      		<label>Enganche
+        		<input type="text" placeholder="Precio Unidad" />
+      		</label>
+    	</div>
+    <div class="large-4 columns">
+      <label>Elige</label>
+      <input type="radio" name="pokemon" value="Red" id="porcentaje"><label for="pokemonRed">Porcentaje</label>
+      <input type="radio" name="pokemon" value="Blue" id="cantidad"><label for="pokemonBlue">Cantidad</label>
+    </div>
+    <div class="large-4 columns">
+      		<label>Monto
+        		<input type="text" placeholder="%" />
+      		</label>
+    	</div>
+   </div>
+   <!--Enganche-->
+<div class="row">
+	<div class="small-3 columns">
+		<label id="alertLastName" for="right-label" class="text-left">Deposito Enganche</label>
+	</div>
+    <div class="large-9 columns">
+      <div class="row collapse">
+        <div class="small-10 columns">
+          <input type="text" placeholder="Deposito">
+        </div>
+        <div class="small-2 columns">
+          <a href="#" class="button postfix">Capturar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Pagos progrmados-->
+  <div class="row">
+	<div class="small-3 columns">
+		<label id="alertLastName" for="right-label" class="text-left">Pagos programados</label>
+	</div>
+    <div class="large-9 columns">
+      <div class="row collapse">
+        <div class="small-10 columns">
+          <input type="text" placeholder="Deposito">
+        </div>
+        <div class="small-2 columns">
+          <a href="#" class="button postfix">Capturar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!--Montos a Descontar-->
+  <div class="row">
+	<div class="small-3 columns">
+		<label id="alertLastName" for="right-label" class="text-left">Montos Regalados a Descontar</label>
+	</div>
+    <div class="large-9 columns">
+      <div class="row collapse">
+        <div class="small-10 columns">
+          <input type="text" placeholder="Deposito">
+        </div>
+        <div class="small-2 columns">
+          <a href="#" class="button postfix">Capturar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+	</fieldset>
+
+	</div>
 </div>
+</div>
+
+
 
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>contract.js"></script>
