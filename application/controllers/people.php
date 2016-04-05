@@ -29,20 +29,20 @@ class People extends CI_Controller {
 	public function savePeople(){
 		if($this->input->is_ajax_request()){
 			
+			$hoy = getdate();
+			$strHoy = $hoy["year"]."-".$hoy["mon"]."-".$hoy["mday"] . " " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
+				
+			$birthDate_at_unix = strtotime($_POST['birthDate']);
+			$BirthDayDay = date('d', ($birthDate_at_unix));
+			$BirthDayMonth = date('n', ($birthDate_at_unix));
+			$BirthDayYear =	date('Y', ($birthDate_at_unix));
+			
 			if($_POST['id'] == 0){
-				
-				$hoy = getdate();
-				$strHoy = $hoy["year"]."-".$hoy["mon"]."-".$hoy["mday"] . " " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
-				
-				$birthDate_at_unix = strtotime($_POST['birthDate']);
-				
-				$BirthDayDay = date('d', ($birthDate_at_unix));
-				$BirthDayMonth = date('n', ($birthDate_at_unix));
-				$BirthDayYear =	date('Y', ($birthDate_at_unix));
 				
 				$insert = array(
 					'fkPeopleTypeId'	=> 18,
 					'Name'				=> $_POST['name'],
+					'SecondName'		=> $_POST['SecondName'],
 					'LName'				=> $_POST['lName'],
 					'LName2'			=> $_POST['lName2'],
 					'Gender'			=> $_POST['gender'],
@@ -137,6 +137,156 @@ class People extends CI_Controller {
 				}
 				
 				$data = "Datos guardados";
+			}else{
+				
+				$update = array(
+					//'fkPeopleTypeId'	=> 18,
+					'Name'				=> $_POST['name'],
+					'SecondName'		=> $_POST['SecondName'],
+					'LName'				=> $_POST['lName'],
+					'LName2'			=> $_POST['lName2'],
+					'Gender'			=> $_POST['gender'],
+					'BirthDayMonth'		=> $BirthDayMonth,
+					'BirthDayDay'		=> $BirthDayDay,
+					'BirthDayYear'		=> $BirthDayYear,
+					'MdBy'				=> 1,
+					'MdDt'				=> $strHoy,
+				);
+				$condicion = "pkPeopleId = " . $_POST['id'];
+				
+				$this->people_db->update($update,"tblPeople", $condicion);
+				
+				$isTrue = $this->people_db->getRelation('tblPeopleAddress', $_POST['id']);
+				
+				if(count($isTrue) > 0){
+					
+					$updateAddress = array(
+						'Street1'			=> $_POST['street'],
+						'Street2'			=> $_POST['colony'],
+						'fkCountryId'		=> $_POST['country'],
+						'FkStateId'			=> $_POST['state'],
+						'City'				=> $_POST['city'],
+						'ZipCode'			=> $_POST['postalCode'],
+						'MdBy'				=> 1,
+						'MdDt'				=> $strHoy,
+					);
+					
+					$condicion = "pkAddressid = " . $isTrue[0]->fkAddressId;
+				
+					$this->people_db->update($updateAddress,"tblAddress", $condicion);
+					
+				}else{
+					$insertAddress = array(
+						'fkAddressTypeid'	=> 9,
+						'Street1'			=> $_POST['street'],
+						'Street2'			=> $_POST['colony'],
+						'fkCountryId'		=> $_POST['country'],
+						'FkStateId'			=> $_POST['state'],
+						'City'				=> $_POST['city'],
+						'ZipCode'			=> $_POST['postalCode'],
+						'YnActive'			=> 1,
+						'CrBy'				=> 1,
+						'CrDt'				=> $strHoy,
+					);
+				
+					$idAddress = $this->people_db->insertReturnId($insertAddress,"tblAddress");
+				
+					$insertPeopleAddress = array(
+						'fkPeopleId'	=> $_POST['id'],
+						'fkAddressId'	=> $idAddress,
+						'ynPrimary'		=> 1,
+						'ynActive'		=> 1,
+						'CrBy'			=> 1,
+						'CrDt'			=> $strHoy,
+					);
+				
+					$this->people_db->insert($insertPeopleAddress,"tblPeopleAddress");
+				}
+				
+				$email = json_decode(stripslashes($_POST['email']));
+				$isTrue = $this->people_db->getRelationEmail($_POST['id']);
+				$isPrimary = 1;
+				$cont = 0;
+				foreach($email as $item){
+					
+					if(isset($isTrue[$cont]->pkEmail)){
+						$updateEmail = array(
+							'EmailDesc'			=> $item,
+							'MdBy'				=> 1,
+							'MdDt'				=> $strHoy,
+						);
+						$condicion = "pkEmail = " . $isTrue[$cont]->pkEmail;
+						$this->people_db->update($updateEmail,"tblEmail", $condicion);
+					}else{
+						$insertEmail = array(
+							'fkEmailTypeId'		=> 1,
+							'EmailDesc'			=> $item,
+							'ynActive'			=> 1,
+							'CrBy'				=> 1,
+							'CrDt'				=> $strHoy,
+						);
+					
+						$idEmail = $this->people_db->insertReturnId($insertEmail,"tblEmail");
+						
+						$insertPeopleEmail = array(
+							'fkPeopleId'		=> $_POST['id'],
+							'fkEmailId'			=> $idEmail,
+							'ynPrimaryEmail'	=> $isPrimary,
+							'ynActive'			=> 1,
+							'CrBy'				=> 1,
+							'CrDt'				=> $strHoy,
+						);
+						$isPrimary = 0;
+						
+						$this->people_db->insert($insertPeopleEmail,"tblPeopleEmail");
+					}
+					$cont = $cont + 1;
+					/**/
+				}
+				
+				$phone = json_decode(stripslashes($_POST['phone']));
+				$isTrue = $this->people_db->getRelationPhone($_POST['id']);
+				$isPrimary = 1;
+				$cont = 0;
+				foreach($phone as $item){
+					if(isset($isTrue[$cont]->pkPhoneId)){
+						$updatePhone = array(
+							'CountryCode'		=> $_POST['country'],
+							'AreaCode'			=> $_POST['state'],
+							'PhoneDesc'			=> $item,
+							'MdBy'				=> 1,
+							'MdDt'				=> $strHoy,
+						);
+						$condicion = "pkPhoneId = " . $isTrue[$cont]->pkPhoneId;
+						$this->people_db->update($updatePhone,"tblPhone", $condicion);
+					}else{
+						$insertPhone = array(
+							'fkPhoneTypeId'		=> 1,
+							'CountryCode'		=> $_POST['country'],
+							'AreaCode'			=> $_POST['state'],
+							'PhoneDesc'			=> $item,
+							'ynActive'			=> 1,
+							'CrBy'				=> 1,
+							'CrDt'				=> $strHoy,
+						);
+					
+						$idPhone = $this->people_db->insertReturnId($insertPhone,"tblPhone");
+					
+						$insertPeoplePhone = array(
+							'fkPeopleId'		=> $_POST['id'],
+							'fkPhoneId'			=> $idPhone,
+							'ynPrimaryPhone'	=> $isPrimary,
+							'ynActive'			=> 1,
+							'CrBy'				=> 1,
+							'CrDt'				=> $strHoy,
+						);
+						$this->people_db->insert($insertPeoplePhone,"tblPeoplePhone");
+					}
+					$isPrimary = 0;
+					$cont = $cont + 1;
+				}
+				
+				$data = "Datos editados";
 			}
 			
 			echo json_encode($data);	
@@ -147,17 +297,26 @@ class People extends CI_Controller {
 	* Obtiene la lista de usuario de la busqueda
 	**/
 	public function getPeopleBySearch(){
-		
 		$months = array('', 'Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic');
 		$peopleId = $_POST['peopleId'];
 		$lastName = $_POST['lastName'];
 		$name = $_POST['name'];
+		$advanced = $_POST['advanced'];
+		if($advanced == "initials"){
+			$advanced = "tblPeople.Initials";
+		}else if($advanced == "EmailDesc"){
+			$advanced = "tblEmail.EmailDesc";
+		}else if($advanced == "Folio"){
+			$advanced = "tblRes.Folio";
+		}else if($advanced == "ResCode"){
+			$advanced = "tblRes.ResCode";
+		}
 		$page = $_POST['page'];
 		if($_POST['page'] == 0 || $_POST['page'] == "0"){
 			$page = 1;
 		}
 		$page = ($page - 1) * 10;
-		$data = $this->people_db->getPeople($_POST['search'],$peopleId,$lastName,$name,$page);
+		$data = $this->people_db->getPeople($_POST['search'],$peopleId,$lastName,$name,$advanced,$page);
 		$total = count($data);
 		$data = array_slice($data, $page, 10);
 		if($_POST['page'] == 0 || $_POST['page'] == "0"){
@@ -172,6 +331,10 @@ class People extends CI_Controller {
 			}
 			$item->birthdate = $item->BirthDayDay . "-" . $months[$item->BirthDayMonth] . "-" . $item->BirthDayYear;
 			$phone = $this->people_db->getPeoplePhone($item->pkPeopleId);
+			
+			if(is_null(!$item->SecondName) or $item->SecondName != "                         " ){
+				$item->Name = $item->Name . " " . $item->SecondName;
+			}
 			
 			if(is_null($item->Street1) && is_null($item->Street2)){
 				$item->Street1 = "";

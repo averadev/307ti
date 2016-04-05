@@ -23,19 +23,19 @@
 					<legend><input type="checkbox" id="checkFilterAdvance" class="checkFilter">&nbsp;&nbsp;Busqueda Avanzada</legend>
 					<div class="row" id="containerFilterAdv" style="display:none;">
 						<div class="large-6 columns">
-							<input id="checkbox1" type="checkbox"><label for="checkbox1">Iniciales / Codigo Empleado</label>
+							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="initials" id="RadioInitials" checked><label for="RadioInitials">Iniciales / Codigo Empleado</label>
 						</div>
 						<div class="large-6 columns">
-							<input id="checkbox2" type="checkbox"><label for="checkbox2">Direccion Email</label>
+							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="EmailDesc" id="RadioEmail"><label for="RadioEmail">Direccion Email</label>
 						</div>
 						<div class="large-6 columns">
-							<input id="checkbox1" type="checkbox"><label for="checkbox1">Folio</label>
+							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="Folio" id="RadioFolio"><label for="RadioFolio">Folio</label>
 						</div>
 						<div class="large-6 columns">
-							<input id="checkbox2" type="checkbox"><label for="checkbox2">Contrato ID</label>
+							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="ResCode" id="RadioCode"><label for="RadioCode">Contrato ID</label>
 						</div>
 						<div class="large-12 columns">
-							<input id="checkbox1" type="checkbox"><label for="checkbox1">Unidad</label>
+							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="FloorPlanDesc" id="RadioFloorPlan"><label for="RadioFloorPlan">Unidad</label>
 						</div>
 					</div>
 				</fieldset>
@@ -118,227 +118,305 @@
 	<!--<button id="downloadButton">Start Download</button>-->
 </div>
 
+<div class="alertScreen" id="alertPeople">
+	<div class="bgAlertScreen" ></div>
+	<div class="alertMessage" >
+		<div class="headerAlertMessage">
+			<p>307TI</p>
+		</div>
+		<div class="bodyAlertMessage">
+			<label>Datos guardados</label>
+			<div id="progressbarAlert"></div>
+			<button class="tiny button radius btnAlertMessage cancel" id="btnCancelAlertPeople">Cancelar</button>
+			<button class="tiny button radius btnAlertMessage success" id="btnSuccessAlertPeople">Aceptar</button>
+		</div>
+	</div>
+</div>
+
 <div id="dialog-User" title="Alta de usuarios">
-	<ul class="tabs" data-tab="" role="tablist">
-                
-            <li class="tab-title active" attr-screen="General">
+	<div class="tabsModal" id="tabsModalPeople">
+		<ul class="tabs" data-tab="people" role="tablist">
+			<li class="tab-title active" attr-screen="tab-PGeneral">
 				<a>General</a>
-				<img class="iconCloseTab" src="http://localhost/307ti/assets/img/common/iconClose.png">
+			</li>
+			<li class="tab-title" attr-screen="tab-PReservaciones">
+				<a>Reservaciones</a>
+			</li>
+			<li class="tab-title" attr-screen="tab-PContratos">
+				<a>Contratos</a>
+			</li>
+			<li class="tab-title" attr-screen="tab-PEmpleados">
+				<a>Empleados</a>
 			</li>
 		</ul>
-	
-	<div class="contentModal">
-		<div id="tabs-1">
+	</div>
+	<div class="contentModal" id="contentModalPeople">
+		<div id="tab-PGeneral" class="tab-modal" style="display:inline;">
 			<!-- Datos personales -->
-			<div class="row" id="alertValidateUSer" style="display:none;">
+			<div class="row" id="alertValPeopleGeneral" style="display:none;">
 				<div class="small-12 columns">
-					<div data-alert class="alert-box alert " >
+					<div data-alert class="alert-box alert" >
 						Por favor rellene los campos Obligatorios(rojo)
 					</div>
 				</div>
 			</div>
 	
-		<fieldset class="fieldset">
-		<legend>Datos personales</legend>
-		<!-- nombre-->
-		<div class="row">
-			<div class="small-3 columns">
-				<label id="alertName" for="right-label" class="text-left">Nombre</label>
-			</div>
-			<div class="small-9 columns">
-				<input type="text" id="textName" class="round general">
-			</div>
-		</div>
-		<!-- apellido paterno-->
-		<div class="row">
-			<div class="small-3 columns">
-				<label id="alertLastName" for="right-label" class="text-left">Apellido paterno</label>
-			</div>
-			<div class="small-9 columns">
-				<input type="text" id="textLastName" class="round general">
-			</div>
-		</div>
-		<!-- apellido materno-->
-		<div class="row">
-			<div class="small-3 columns">
-				<label for="right-label" class="text-left">Apellido materno</label>
-			</div>
-			<div class="small-9 columns">
-				<input type="text" id="TextSecondLastName" class="round general">
-			</div>
-		</div>
-		<!-- genero -->
-		<div class="row">
-			<div class="small-3 columns">
-				<label id="alertGender" for="right-label" class="text-left">Genero</label>
-			</div>
-			<div class="small-9 columns">
-				<input type="radio" name="hombre" class="RadioGender" value="M" id="RadioMale" required><label for="RadioMale">Hombre</label>
-				<input type="radio" name="mujer" class="RadioGender" value="F" id="RadioFemale"><label for="RadioFemale">Mujer</label>
-			</div>
-		</div>
-		
-		<div class="row">
-			<!-- fecha de nacimiento-->
-			<div class="small-12 large-6 columns" for="alertBirthdate" style="float:right">
-				<label id="alertBirthdate" for="alertBirthdate" class="text-left">Fecha de nacimiento
-					<input type="date" id="textBirthdate" class="round" >
-				</label>
-			</div>
-			<!-- aniversario boda-->
-			<div class="small-12 large-6 columns">
-				<label for="textWeddingAnniversary" class="text-left">Aniversario boda
-					<input type="date" id="textWeddingAnniversary" class="round">
-				</label>
-			</div>
-		</div>
-		
-		
-		<div class="row">
-			<!-- Nacionalidad-->
-			<div class="small-12 large-6 columns">
-				<label id="alertNationality" for="textNationality" class="text-right">Nacionalidad
-					<select id="textNationality" class="round">
-						<option value="husker">Mexicano</option>
-					</select>
-				</label>
-			</div>
-			<!-- Calificacion-->
-			<div class="small-12 large-6 columns">
-				<label for="textQualification" class="text-right">Calificación
-					<input type="number" id="textQualification" class="round">
-				</label>
-			</div>
-		</div>
-		
-		
-	</fieldset>
-	<!-- Datos del domicilio -->
-	<fieldset class="fieldset">
-		<legend class="btnAddressData"><img id="imgCoppapseAddress" class="imgCollapseFieldset down" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>Datos del domicilio</legend>
-		<div class="containerAddress" style="display:none;">
-			<!-- calle, numero-->
-			<div class="row">
-				<div class="small-3 columns">
-					<label id="alertStreet" for="textStreet" class="text-left">Calle, numero</label>
-				</div>
-				<div class="small-9 columns">
-					<input id="textStreet" type="text" class="round">
-				</div>
-			</div>
-			<!-- Colonia -->
-			<div class="row">
-				<div class="small-3 columns">
-					<label id="alertColony" for="textColony" class="text-left">Colonia</label>
-				</div>
-				<div class="small-9 columns">
-					<input id="textColony" type="text" class="round">
-				</div>
-			</div>
-			
-			<div class="row">
-				<!-- Pais -->
-				<div class="small-12 large-6 columns">
-					<label id="alertCountry" for="textCountry" class="text-left">Pais
-						<select id="textCountry" class="round">
-						<?php
-					
-							foreach($country as $item){
-								
-								?>
-									<option value="<?php echo $item->pkCountryId; ?>" code="<?php echo $item->CountryCode; ?>"><?php echo $item->CountryDesc; ?></option>
-								<?php
-							}
-						?>
-						</select>
-					</label>
-				</div>
-				<!-- Estado-->
-				<div class="small-12 large-6 columns">
-					<label id="alertState" for="textState" class="text-left">Estado
-						<select id="textState" class="round">
-						<?php
-							foreach($state as $item){
-								?>
-									<option value="<?php echo $item->pkStateId ?>" code="<?php echo $item->StateCode; ?>"><?php echo $item->StateDesc ?></option>
-								<?php
-							}
-						?>
-						</select>
-					</label>
-				</div>
-			</div>
-			
-			<div class="row">
-				<!-- Ciudad -->
-				<div class="small-12 large-6 columns">
-					<label id="alertCity" for="textCity" class="text-left">Ciudad
-						<input id="textCity" type="text" class="round">
-					</label>
-				</div>
-				<!-- Zip Code -->
-				<div class="small-12 large-6 columns">
-					<label id="alertPostalCode" for="textPostalCode" class="text-left">Zip Code
-						<input id="textPostalCode" type="text" class="round">
-					</label>
-				</div>
-			</div>
-			
-		</div>
-	</fieldset>
-	<!-- Datos del contacto -->
-	<fieldset class="fieldset">
-		<legend class="btnContactData"><img id="imgCoppapseContact" class="imgCollapseFieldset down" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>Información del contacto</legend>
-		<div id="containerContact" style="display:none">
-			<!-- Telefono 1-->
-			<div class="row">
-				<div class="small-3 columns">
-					<label id="alertPhone1" for="textPhone1" class="text-right">Telefono 1</label>
-				</div>
-				<div class="small-9 columns">
-					<input type="tel" class="phonePeople round" id="textPhone1" maxlength="7" placeholder="xxx-xxx-xxxx">
-				</div>
-			</div>
-			<!-- Telefono 2 -->
-			<div class="row">
-				<div class="small-3 columns">
-					<label id="alertPhone2" for="textPhone2" class="text-right">Telefono 2</label>
-				</div>
-				<div class="small-9 columns">
-					<input type="tel" class="phonePeople round" id="textPhone2" maxlength="7" placeholder="xxx-xxx-xxxx">
-				</div>
-			</div>
-			<!-- Telefono 3 -->
-			<div class="row">
-				<div class="small-3 columns">
-					<label id="alertPhone3" for="textPhone3" class="text-right">Telefono 3</label>
-				</div>
-				<div class="small-9 columns">
-					<input type="tel" class="phonePeople round" id="textPhone3" maxlength="7" placeholder="xxx-xxx-xxxx">
-				</div>
-			</div>
-			<!-- Email 1 -->
-			<div class="row">
-				<div class="small-3 columns">
-					<label id="alertEmail1" for="textEmail1" class="text-right">Email 1</label>
-				</div>
-				<div class="small-9 columns">
-					<input type="email" class="emailPeople round" id="textEmail1">
-				</div>
-			</div>
-				<!-- Email 2 -->
+			<fieldset class="fieldset">
+				<legend>Datos personales</legend>
+				<!-- nombre-->
 				<div class="row">
 					<div class="small-3 columns">
-						<label id="alertEmail2" for="textEmail2" class="text-right">Email 2</label>
+						<label id="alertName" for="right-label" class="text-left">Nombre</label>
 					</div>
 					<div class="small-9 columns">
-						<input type="email" class="emailPeople round" id="textEmail2">
+						<input type="text" id="textName" class="round general">
 					</div>
+				</div>
+				<!-- segundo nombre-->
+				<div class="row">
+					<div class="small-3 columns">
+						<label id="alertMiddleName" for="right-label" class="text-left">segundo Nombre</label>
+					</div>
+					<div class="small-9 columns">
+						<input type="text" id="textMiddleName" class="round general">
+					</div>
+				</div>
+				<!-- apellido paterno-->
+				<div class="row">
+					<div class="small-3 columns">
+						<label id="alertLastName" for="right-label" class="text-left">Apellido paterno</label>
+					</div>
+					<div class="small-9 columns">
+						<input type="text" id="textLastName" class="round general">
+					</div>
+				</div>
+				<!-- apellido materno-->
+				<div class="row">
+					<div class="small-3 columns">
+						<label for="right-label" class="text-left">Apellido materno</label>
+					</div>
+					<div class="small-9 columns">
+						<input type="text" id="TextSecondLastName" class="round general">
+					</div>
+				</div>
+				<!-- genero -->
+				<div class="row">
+					<div class="small-3 columns">
+						<label id="alertGender" for="right-label" class="text-left">Genero</label>
+					</div>
+					<div class="small-9 columns">
+						<input type="radio" name="RadioGender" class="RadioGender" value="M" id="RadioMale" required><label for="RadioMale">Hombre</label>
+						<input type="radio" name="RadioGender" class="RadioGender" value="F" id="RadioFemale"><label for="RadioFemale">Mujer</label>
+					</div>
+				</div>
+		
+				<div class="row">
+					<!-- fecha de nacimiento-->
+					<div class="small-12 large-6 columns" for="alertBirthdate" style="float:right">
+						<label id="alertBirthdate" for="alertBirthdate" class="text-left">Fecha de nacimiento
+							<input type="date" id="textBirthdate" class="round general" >
+						</label>
+					</div>
+					<!-- aniversario boda-->
+					<div class="small-12 large-6 columns">
+						<label for="textWeddingAnniversary" class="text-left">Aniversario boda
+							<input type="date" id="textWeddingAnniversary" class="round general">
+						</label>
+					</div>
+				</div>
+
+				<div class="row">
+					<!-- Nacionalidad-->
+					<div class="small-12 large-6 columns">
+						<label id="alertNationality" for="textNationality" class="text-right">Nacionalidad
+							<select id="textNationality" class="round">
+								<option value="husker">Mexicano</option>
+							</select>
+						</label>
+					</div>
+					<!-- Calificacion-->
+					<div class="small-12 large-6 columns">
+						<label for="textQualification" class="text-right">Calificación
+							<input type="number" id="textQualification" class="round general">
+						</label>
+					</div>
+				</div>		
+			</fieldset>
+			<!-- Datos del domicilio -->
+			<div class="row" id="alertValPeopleAddress" style="display:none;">
+				<div class="small-12 columns">
+					<div data-alert class="alert-box alert" >
+						Por favor rellene los campos Obligatorios(rojo)
+					</div>
+				</div>
+			</div>
+			<fieldset class="fieldset">
+				<legend class="btnAddressData"><img id="imgCoppapseAddress" class="imgCollapseFieldset down" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>Datos del domicilio</legend>
+				<div class="containerAddress" style="display:none;">
+					<!-- calle, numero-->
+					<div class="row">
+						<div class="small-3 columns">
+							<label id="alertStreet" for="textStreet" class="text-left">Calle, numero</label>
+						</div>
+						<div class="small-9 columns">
+							<input id="textStreet" type="text" class="round general">
+						</div>
+					</div>
+					<!-- Colonia -->
+					<div class="row">
+						<div class="small-3 columns">
+							<label id="alertColony" for="textColony" class="text-left">Colonia</label>
+						</div>
+						<div class="small-9 columns">
+							<input id="textColony" type="text" class="round general">
+						</div>
+					</div>
+			
+					<div class="row">
+						<!-- Pais -->
+						<div class="small-12 large-6 columns">
+							<label id="alertCountry" for="textCountry" class="text-left">Pais
+								<select id="textCountry" class="round">
+									<option value="0" code="0">Seleccione su pais</option>
+									<?php
+									foreach($country as $item){
+								
+									?>
+									<option value="<?php echo $item->pkCountryId; ?>" code="<?php echo $item->CountryCode; ?>"><?php echo $item->CountryDesc; ?></option>
+									<?php
+									}
+									?>
+								</select>
+							</label>
+						</div>
+						<!-- Estado-->
+						<div class="small-12 large-6 columns">
+							<label id="alertState" for="textState" class="text-left">Estado
+								<select id="textState" class="round">
+									<option value="0" code="0">Seleccione su estado</option>
+									<?php
+									foreach($state as $item){
+									?>
+										<option value="<?php echo $item->pkStateId ?>" code="<?php echo $item->StateCode; ?>"><?php echo $item->StateDesc ?></option>
+									<?php
+									}
+									?>
+								</select>
+							</label>
+						</div>
+					</div>
+			
+					<div class="row">
+						<!-- Ciudad -->
+						<div class="small-12 large-6 columns">
+							<label id="alertCity" for="textCity" class="text-left">Ciudad
+								<input id="textCity" type="text" class="round general">
+							</label>
+						</div>
+						<!-- Zip Code -->
+						<div class="small-12 large-6 columns">
+							<label id="alertPostalCode" for="textPostalCode" class="text-left">Zip Code
+								<input id="textPostalCode" type="text" class="round general">
+							</label>
+						</div>
+					</div>
+			
+				</div>
+			</fieldset>
+			<!-- Datos del contacto -->
+			<div class="row" id="alertValPeopleContact" style="display:none;">
+				<div class="small-12 columns">
+					<div data-alert class="alert-box alert" >
+						Por favor rellene los campos Obligatorios(rojo)
+					</div>
+				</div>
+			</div>
+			<fieldset class="fieldset">
+				<legend class="btnContactData"><img id="imgCoppapseContact" class="imgCollapseFieldset down" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>Información del contacto</legend>
+				<div id="containerContact" style="display:none">
+					<!-- Telefono 1-->
+					<div class="row">
+						<div class="small-3 columns">
+							<label id="alertPhone1" for="textPhone1" class="text-right">Telefono 1</label>
+						</div>
+						<div class="small-9 columns">
+							<input type="tel" class="phonePeople round general" id="textPhone1" maxlength="7" placeholder="xxx-xxx-xxxx">
+						</div>
+					</div>
+					<!-- Telefono 2 -->
+					<div class="row">
+						<div class="small-3 columns">
+							<label id="alertPhone2" for="textPhone2" class="text-right">Telefono 2</label>
+						</div>
+						<div class="small-9 columns">
+							<input type="tel" class="phonePeople round general" id="textPhone2" maxlength="7" placeholder="xxx-xxx-xxxx">
+						</div>
+					</div>
+					<!-- Telefono 3 -->
+					<div class="row">
+						<div class="small-3 columns">
+							<label id="alertPhone3" for="textPhone3" class="text-right">Telefono 3</label>
+						</div>
+						<div class="small-9 columns">
+							<input type="tel" class="phonePeople round general" id="textPhone3" maxlength="7" placeholder="xxx-xxx-xxxx">
+						</div>
+					</div>
+					<!-- Email 1 -->
+					<div class="row">
+						<div class="small-3 columns">
+							<label id="alertEmail1" for="textEmail1" class="text-right">Email 1</label>
+						</div>
+						<div class="small-9 columns">
+							<input type="email" class="emailPeople round general" id="textEmail1">
+						</div>
+					</div>
+					<!-- Email 2 -->
+					<div class="row">
+						<div class="small-3 columns">
+							<label id="alertEmail2" for="textEmail2" class="text-right">Email 2</label>
+						</div>
+						<div class="small-9 columns">
+							<input type="email" class="emailPeople round general" id="textEmail2">
+						</div>
 					</div>
 				</div>
 			</fieldset>
 		</div>
+		<div id="tab-PReservaciones" class="tab-modal">
+			<table id="tablePeople" width="100%">
+				<thead>
+					<tr>
+						<th class="cellEdit" ></th>
+						<th class="cellEdit" >codigo</th>
+						<th class="cellGeneral" >Nombre</th>
+						<th class="cellGeneral">Apellidos</th>
+						<th class="cellGeneral">Genero</th>
+						<th class="cellDate" >Fecha Nacimiento</th>
+						<th class="cellAddress" >Calle, Numero, colonia</th>
+						<th class="cellGeneral" >Ciudad</th>
+						<th class="cellGeneral" >Estado</th>
+						<th class="cellGeneral" >Pais</th>
+						<th class="cellGeneral" >CP</th>
+						<th class="cellPhone" >Telefono 1</th>
+						<th class="cellPhone" >Telefono 2</th>
+						<th class="cellPhone" >Telefono 3</th>
+						<th class="cellEmail" >Email</th>
+						<th class="cellEmail" >Email 2</th>
+					</tr>
+				</thead>
+				<tbody>
+		
+				</tbody>
+			</table>
+		</div>
+		<div id="tab-PContratos" class="tab-modal">
+			
+		</div>
+		<div id="tab-PEmpleados" class="tab-modal">
+			
+		</div>
 	</div>
+	<input type="hidden" value="0" id="idPeople" />
 </div>
 
 

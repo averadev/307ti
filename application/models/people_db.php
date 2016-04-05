@@ -9,7 +9,7 @@ Class people_db extends CI_MODEL
     /**
      * Obtiene la lista de personas
      */
-	public function getPeople($text,$peopleId,$lastName,$name,$page){
+	public function getPeople($text,$peopleId,$lastName,$name,$advanced,$page){
 		$cadena = "(";
 		/*$consulta = $this->db->query('WITH OrderedOrders AS
 		(
@@ -28,7 +28,8 @@ Class people_db extends CI_MODEL
 		LEFT JOIN tblCountry on tblCountry.pkCountryId = tblAddress.fkCountryId
 		WHERE RowNumber BETWEEN 5 AND 10;');		
 		return  $consulta->result();*/
-        $this->db->select('tblPeople.pkPeopleId, tblPeople.Name, tblPeople.LName, tblPeople.LName2');
+		$this->db->distinct('tblPeople.pkPeopleId');
+        $this->db->select('tblPeople.pkPeopleId, tblPeople.Name, tblPeople.SecondName, tblPeople.LName, tblPeople.LName2');
 		$this->db->select('tblPeople.Gender, tblPeople.BirthDayMonth, tblPeople.BirthDayDay, tblPeople.BirthDayYear');
 		//$this->db->select('tblPeopleAddress.fkAddressId');
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');
@@ -39,6 +40,14 @@ Class people_db extends CI_MODEL
 		$this->db->join('tblAddress', 'tblAddress.pkAddressid = tblPeopleAddress.fkAddressId', 'left');
 		$this->db->join('tblState', 'tblState.pkStateId = tblAddress.FkStateId', 'left');
 		$this->db->join('tblCountry', 'tblCountry.pkCountryId = tblAddress.fkCountryId', 'left');
+		if($advanced == "tblEmail.EmailDesc"){
+			$this->db->join('tblPeopleEmail', 'tblPeopleEmail.fkPeopleId = tblPeople.pkPeopleId', 'left');
+			$this->db->join('tblEmail', 'tblEmail.pkEmail = tblPeopleEmail.fkEmailId', 'left');
+		}
+		if($advanced == "tblRes.Folio" || $advanced == "tblRes.ResCode"){
+			$this->db->join('tblPeopleTour', 'tblPeopleTour.fkPeopleId = tblPeople.pkPeopleId', 'left');
+			$this->db->join('tblRes', 'tblRes.fkTourId = tblPeopleTour.fkTourId', 'left');
+		}
 		//$this->db->where('RowNumber BETWEEN 10 AND 20');
 		//$this->db->limit(10);
 		if($peopleId == "true"){
@@ -55,6 +64,12 @@ Class people_db extends CI_MODEL
 				$cadena = $cadena . ' OR';
 			}
 			$cadena = $cadena . ' tblPeople.Name LIKE \'%'.$text.'%\'';
+		}
+		if($advanced != ""){
+			if($cadena != "("){
+				$cadena = $cadena . ' OR ';
+			}
+			$cadena = $cadena . $advanced . ' LIKE \'%'.$text.'%\'';
 		}
 		if($cadena != "("){
 			$cadena = $cadena . ")";
@@ -111,7 +126,7 @@ Class people_db extends CI_MODEL
     * Obtiene la informacion de la persona por id
     */
 	public function getPeopleById($id){
-		$this->db->select('tblPeople.pkPeopleId, tblPeople.Name, tblPeople.LName, tblPeople.LName2');
+		$this->db->select('tblPeople.pkPeopleId, tblPeople.Name, tblPeople.SecondName, tblPeople.LName, tblPeople.LName2');
 		$this->db->select('tblPeople.Gender, tblPeople.BirthDayMonth, tblPeople.BirthDayDay, tblPeople.BirthDayYear');
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');
 		$this->db->select('tblState.pkStateId, tblState.StateCode, tblState.StateDesc');
@@ -126,6 +141,28 @@ Class people_db extends CI_MODEL
 		
 	}
 	
+	public function getRelation($table,$id){
+		$this->db->from($table);
+		$this->db->where('fkPeopleId = ', $id);
+		return  $this->db->get()->result();
+	}
+	
+	public function getRelationEmail($id){
+		$this->db->select('tblEmail.pkEmail,tblPeopleEmail.pkPeopleEmail');
+		$this->db->from('tblPeopleEmail');
+		$this->db->join('tblEmail', 'tblPeopleEmail.fkEmailId = tblEmail.pkEmail', 'INNER');
+		$this->db->where('tblPeopleEmail.fkPeopleId = ', $id);
+		return  $this->db->get()->result();
+	}
+	
+	public function getRelationPhone($id){
+		$this->db->select('tblPhone.pkPhoneId,tblPeoplePhone.pkPeoplePhoneId');
+		$this->db->from('tblPeoplePhone');
+		$this->db->join('tblPhone', 'tblPeoplePhone.fkPhoneId = tblPhone.pkPhoneId', 'INNER');
+		$this->db->where('tblPeoplePhone.fkPeopleId = ', $id);
+		return  $this->db->get()->result();
+	}
+	
 	/**
      * inserta 
      */
@@ -135,11 +172,19 @@ Class people_db extends CI_MODEL
 	}
 	
 	/**
-     * inserta
+     * inserta y retorna la id
      */
 	public function insertReturnId($data, $table){
 		$this->db->insert($table, $data); 
 		return $this->db->insert_id();
+	}
+	
+	/**
+     * inserta y retorna la id
+     */
+	public function update($data, $table, $condicion){
+		$this->db->where($condicion);
+		$this->db->update($table, $data);
 	}
 
 }

@@ -8,6 +8,7 @@ var dialogUser = null;
 var maxHeight = 400;
 isSearch = true;
 var xhrPeople
+var idPeople = 0;
 
 /**************Index****************/
 
@@ -39,9 +40,15 @@ $('#btnCleanSearch').click(function(){ CleandFieldSearch(); });
 //muestra u oculta la busqueda avanzada
 $('#checkFilterAdvance').click(function(){ searchAdvanced(); });
 
-////edit
-$(document).on('click','.iconEdit',function(){ showModal($(this).attr('value')); });
+//editar persomas
+// revisar busqueda de personas :)
 
+
+//$(document).off( "click", ".iconEdit" );
+
+//activa los tap del modal
+//$('#tabsModalPeople .tabs .tab-title').unbind( "click" );
+$('#tabsModalPeople .tabs .tab-title').on('click', function() { changeTabsModalPeople($(this).attr('attr-screen')) });
 
 /************Funciones**************/
 
@@ -75,14 +82,24 @@ $(function() {
 				text: "Guardar y cerrar",
 				"class": 'dialogModalButtonAccept',
 				click: function() {
-					CreateNewUser(false)
+					if($("#idPeople").data("pkPeopleId") == undefined || $("#idPeople").data("pkPeopleId") == 0 ){
+						CreateNewUser(false)
+					}else{
+						EditUser(false, $("#idPeople").data("pkPeopleId") )
+					}
 				}
 			},
 			{
 				text: "Guardar",
 				"class": 'dialogModalButtonAccept',
 				click: function() {
-					CreateNewUser(true)
+					//$("#idPeople").data("pkPeopleId",item.pkPeopleId);
+					if($("#idPeople").data("pkPeopleId") == undefined || $("#idPeople").data("pkPeopleId") == 0 ){
+						CreateNewUser(true)
+					}else{
+						EditUser(true, $("#idPeople").data("pkPeopleId") )
+					}
+					
 				}
 			},
 		],
@@ -95,6 +112,11 @@ $(function() {
 	$( "#progressbar" ).progressbar({
       value: false
     });
+	
+	$( "#progressbarAlert" ).progressbar({
+      value: false
+    });
+	
 	
 	$('#paginationPeople').jqPagination({
 		max_page: 1,
@@ -116,13 +138,16 @@ $(function() {
 * @param id id de la persona
 */
 function showModal(id){
+	$("#idPeople").removeData("pkPeopleId");
 	cleanUserFields();
 	if(id == 0){
+		$("#tabsModalPeople").hide();
 		dialogUser.dialog('open');
 		$('.ui-dialog-titlebar').append(
 			'<div class="ui-dialog-titlebar2"><label>Alta de personas</label></div><img class="imgCloseModal" src="' + BASE_URL+'assets/img/common/iconClose2.png">'
 		)
 	}else{
+		$("#tabsModalPeople").show();
 		getInfoPeople(id);
 	}
 	/**/
@@ -173,9 +198,21 @@ function showDivModal(div){
 * @param isClosed indica si el modal se mantendra abierto cuando se guarde la info
 */
 function CreateNewUser(isClosed){
-	var result = validateUserFields();
+	var result = validateUserFields()
 	if(result){
 		saveUserData(0,isClosed)
+	}
+}
+
+/**
+* llama a las funciones para editar un usuario 
+* @param isClosed indica si el modal se mantendra abierto cuando se guarde la info
+* @param idPeople identificador de la persona a editar
+*/
+function EditUser(isClosed, idPeople){
+	var result = validateUserFields()
+	if(result){
+		saveUserData(idPeople,isClosed)
 	}
 }
 
@@ -185,6 +222,8 @@ function CreateNewUser(isClosed){
 * @param isClosed indica si el modal se mantendra abierto cuando se guarde la info
 */
 function saveUserData(id, isClosed){
+	
+	showAlertPeople(true,"Guardando cambios, porfavor espere....",'progressbar');
 	
 	var phoneArray = new Array();
 	$(".phonePeople").each(function (index){
@@ -217,6 +256,7 @@ function saveUserData(id, isClosed){
 		data: { 
 			id:id,
 			name:$('#textName').val().trim(),
+			SecondName:$('#textMiddleName').val().trim(),
 			lName:$('#textLastName').val().trim(),
 			lName2:$('#TextSecondLastName').val().trim(),
 			birthDate:$('#textBirthdate').val().trim(),
@@ -235,15 +275,23 @@ function saveUserData(id, isClosed){
 			email:jsonEmail,
 		},
 		success: function(data){
-			if(isClosed){
+			showAlertPeople(true,data,'button',showAlertPeople);
+			if(!isClosed){
 				dialogUser.dialog('close');
 				cleanUserFields();
+				$("#idPeople").removeData("pkPeopleId");
 			}
+			if($('#tablePeople >tbody >tr').length != 0){
+				var currentPage = $('#paginationPeople').jqPagination('option', 'current_page');
+				searchPeople(currentPage);
+			}
+			
 		},
 		error: function(){
-			alert("error al insertar los datos, intentelo mas tarde");
+			showAlertPeople(true,"error al insertar los datos, intentelo mas tarde.",'button',showAlertPeople);
 			dialogUser.dialog('close');
 			cleanUserFields();
+			$("#idPeople").removeData("pkPeopleId");
 		}
 	});	
 }
@@ -256,6 +304,8 @@ function validateUserFields(){
 	var result = true;
 	var infoAddress = true;
 	var infoContact = true;
+	var infoPeople = true;
+	var errorText = "";
 	hideAlertUserFields();
 	
 	var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
@@ -264,7 +314,7 @@ function validateUserFields(){
 		if(!regex.test($('#textEmail2').val().trim())){
 			$('#alertEmail2').addClass('error');
 			$('#textEmail2').focus();
-			result = false;
+			errorText = "El correo 2 debe ser valido<br>"  + errorText;
 			infoContact = false;
 		}
 	}
@@ -273,22 +323,20 @@ function validateUserFields(){
 	if($('#textEmail1').val().trim().length == 0){
 		$('#alertEmail1').addClass('error');
 		$('#textEmail1').focus();
-		result = false;
+		errorText = "Correo<br>"  + errorText;
 		infoContact = false;
-	}
-	
-    if(!regex.test($('#textEmail1').val().trim())){
+	}else if(!regex.test($('#textEmail1').val().trim())){
 		$('#alertEmail1').addClass('error');
 		$('#textEmail1').focus();
-		result = false;
+		errorText = "EL correo debe ser valido</br>"  + errorText;
 		infoContact = false;
     }
 	
-	//Telefono 2
+	//Telefono 3
 	if($('#textPhone3').val().trim().length > 0 && $('#textPhone3').val().trim().length > 7 ){
 		$('#alertPhone3').addClass('error');
 		$('#textPhone3').focus();
-		result = false;
+		errorText = "El telefono 3 debe tener maximo 7 caracteres<br>"  + errorText;
 		infoContact = false;
 	}
 	
@@ -296,7 +344,7 @@ function validateUserFields(){
 	if($('#textPhone2').val().trim().length > 0 && $('#textPhone2').val().trim().length > 7 ){
 		$('#alertPhone2').addClass('error');
 		$('#textPhone2').focus();
-		result = false;
+		errorText = "El telefono 2 debe tener maximo 7 caracteres<br>"  + errorText;
 		infoContact = false;
 	}
 	
@@ -304,25 +352,31 @@ function validateUserFields(){
 	if($('#textPhone1').val().trim().length == 0){
 		$('#alertPhone1').addClass('error');
 		$('#textPhone1').focus();
-		result = false;
+		errorText = "Telefono<br>"  + errorText;
 		infoContact = false;
 	}
 	if($('#textPhone1').val().trim().length > 7){
 		$('#alertPhone1').addClass('error');
 		$('#textPhone1').focus();
-		result = false;
+		errorText = "El telefono debe tener maximo 7 caracteres<br>"  + errorText;
 		infoContact = false;
 	}
 	
 	if(infoContact == false){
+		
+		result = false;
+		$('#alertValPeopleContact .alert-box').html("<label>Por favor rellene los campos Obligatorios(rojo)</label>" + errorText );
+		$('#alertValPeopleContact').show(100);
 		$('#containerContact').show();
 	}
+	
+	errorText = "";
 	
 	//fecha de nacimiento
 	if($('#textPostalCode').val().trim().length == 0){
 		$('#alertPostalCode').addClass('error');
 		$('#textPostalCode').focus();
-		result = false;
+		errorText = "Codigo postal<br>"  + errorText;
 		infoAddress = false;
 	}
 	
@@ -330,32 +384,38 @@ function validateUserFields(){
 	if($('#textCity').val().trim().length == 0){
 		$('#alertCity').addClass('error');
 		$('#textCity').focus();
-		result = false;
+		errorText = "Ciudad<br>"  + errorText;
 		infoAddress = false;
 	}
 	//colonia
 	if($('#textColony').val().trim().length == 0){
 		$('#alertColony').addClass('error');
 		$('#textColony').focus();
-		result = false;
+		errorText = "Colonia<br>"  + errorText;
 		infoAddress = false;
 	}
 	//calle
 	if($('#textStreet').val().trim().length == 0){
 		$('#alertStreet').addClass('error');
 		$('#textStreet').focus();
-		result = false;
+		errorText = "Calle<br>"  + errorText;
 		infoAddress = false;
 	}
 	if(infoAddress == false){
+		result = false;
+		$('#alertValPeopleAddress .alert-box').html("<label>Por favor rellene los campos Obligatorios(rojo)</label>" + errorText );
+		$('#alertValPeopleAddress').show(100);
 		$('.containerAddress').show();
 	}
+	
+	errorText = "";
 	
 	//fecha de nacimiento
 	if($('#textBirthdate').val().trim().length == 0){
 		$('#alertBirthdate').addClass('error');
 		$('#textBirthdate').focus();
-		result = false;
+		errorText = "Fecha de nacimiento<br>"  + errorText;
+		infoPeople = false;
 	}
 	//genero
 	var gender = 0;
@@ -364,26 +424,33 @@ function validateUserFields(){
 			gender = gender + 1;
         } 
 	});
-	if(gender == 0){
+	
+	if(gender != 1){
+		console.log(gender)
 		$('#alertGender').addClass('error');
-		result = false;
+		errorText = "Genero<br>"  + errorText;
+		infoPeople = false;
 	}
 	
 	//apellido paterno
 	if($('#textLastName').val().trim().length == 0){
 		$('#alertLastName').addClass('error');
 		$('#textLastName').focus();
-		result = false;
+		errorText = "Apellido paterno<br>"  + errorText;
+		infoPeople = false;
 	}
 	//nombre
 	if($('#textName').val().trim().length == 0){
 		$('#alertName').addClass('error');
 		$('#textName').focus();
-		result = false;
+		errorText =  "Nombre<br>" + errorText;
+		infoPeople = false;
 	}
 	
-	if(result == false){
-		$('#alertValidateUSer').show(100);
+	if(infoPeople == false){
+		$('#alertValPeopleGeneral .alert-box').html("<label>Por favor rellene los campos Obligatorios(rojo)</label>" + errorText );
+		$('#alertValPeopleGeneral').show(100);
+		result = false;
 	}
 	
 	return result;
@@ -393,7 +460,9 @@ function validateUserFields(){
 * esconde las alertas de validacion
 */
 function hideAlertUserFields(){
-	$('#alertValidateUSer').hide();
+	$('#alertValPeopleGeneral').hide();
+	$('#alertValPeopleAddress').hide();
+	$('#alertValPeopleContact').hide();
 	
 	$('#alertName').removeClass('error');
 	$('#alertLastName').removeClass('error');
@@ -425,12 +494,16 @@ function cleanUserFields(){
 	$('#textWeddingAnniversary').val("");
 	//$('#textNationality').val("");
 	$('#textQualification').val("");
+	$('#RadioMale').prop( "checked", false );
+	$("#RadioFemale").prop( "checked", false );
 	
 	$('#textStreet').val("");
 	$('#textColony').val("");
 	$('#textCity').val("");
-	//$('#textState').val("");
-	//$('#textCountry').val("");
+	////$('#textCountry option[value=0]').attr('selected', 'selected');
+	//$('#textState option[value=0]').attr('selected', 'selected');
+	$("select#textCountry").val("0");
+	$("select#textState").val("0");
 	$('#textPostalCode').val("");
 	
 	$('#textPhone1').val("");
@@ -455,6 +528,12 @@ function searchPeople(page){
 		xhrPeople = null;
 	}*/
 	
+	//if($('#checkFilterAdvance').val())
+	//console.log($('.RadioSearchPeople:checked').val());
+	opcionAdvanced = "";
+	if($('#checkFilterAdvance').is(':checked')){
+		opcionAdvanced = $('.RadioSearchPeople:checked').val();
+	}
 	
 	$.ajax({
    		type: "POST",
@@ -465,6 +544,7 @@ function searchPeople(page){
 			peopleId:$("#checkFilter1").is(':checked'),
 			lastName:$("#checkFilter2").is(':checked'),
 			name:$("#checkFilter3").is(':checked'),
+			advanced:opcionAdvanced,
 			page:page,
 		},
 		success: function(data){
@@ -502,12 +582,16 @@ function searchPeople(page){
 					'</tr>'
 				);
 			}
+			
+			//$('.iconEdit').on()
+			$("#tablePeople tbody tr .cellEdit .iconEdit").off( "click", ".iconEdit" );
+			$("#tablePeople tbody tr .cellEdit .iconEdit").on("click", function(){ showModal($(this).attr('value')); });
 			$('.divLoadingTable').hide();
 		},
 		error: function(error){
 			console.log(error)
 			$('.divLoadingTable').hide();
-			alert("error en la busqueda, intentelo mas tarde");
+			showAlertPeople(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlertPeople);
 		}
 	});	
 }
@@ -554,15 +638,123 @@ function getInfoPeople(id){
 			id:id,
 		},
 		success: function(data){
-			console.log(data);
+			console.log(data[0]);
+			var item = data[0];
+			$('#textName').val(item.Name.trim());
+			$('#textMiddleName').val(item.SecondName.trim());
+			$('#textLastName').val(item.LName.trim());
+			$('#TextSecondLastName').val(item.LName2.trim());
+			
+			if(item.Gender == "M"){
+				$('#RadioMale').prop("checked", true);
+			}else if(item.Gender == "F"){
+				$("#RadioFemale").prop("checked", true);
+			}
+			$('#textBirthdate').val(convertToDateFormat(item.BirthDayDay, item.BirthDayMonth, item.BirthDayYear ));
+			$('#textStreet').val(item.Street1.trim());
+			$('#textColony').val(item.Street2.trim());
+			$('#textCity').val(item.City.trim());
+			$('#textPostalCode').val(item.ZipCode.trim());
+			if(item.pkCountryId != null || item.pkCountryId != ""){
+				$("select#textCountry").val(item.pkCountryId);
+			}else{
+				$("select#textCountry").val(0);
+			}
+			if(item.pkStateId != null || item.pkStateId != ""){
+				$("select#textState").val(item.pkStateId);
+			}else{
+				$("select#textState").val(0);
+			}
+			
+			$('#textPhone1').val(item.phone1.trim());
+			$('#textPhone2').val(item.phone2.trim());
+			$('#textPhone3').val(item.phone3.trim());
+			$('#textEmail1').val(item.email1.trim());
+			$('#textEmail2').val(item.email2.trim());
+				
+			//$('#idPeople').val(item.pkPeopleId);
+			$("#idPeople").data("pkPeopleId",item.pkPeopleId);
+			//$('#textState').val("");
+			//$('#textCountry').val("");
+			$('.ui-dialog-titlebar').append(
+				'<div class="ui-dialog-titlebar2"><label>Alta de personas</label></div><img class="imgCloseModal" src="' + BASE_URL+	'assets/img/common/iconClose2.png">'
+			)
 			dialogUser.dialog( 'open' )
 			$('.divLoadingTable').hide();
 		},
 		error: function(error){
 			console.log(error)
 			$('.divLoadingTable').hide();
-			alert("error en la busqueda, intentelo mas tarde");
+			showAlertPeople(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlertPeople);
 		}
 	});	
 	
+}
+
+ /*
+ * Convierte a una fecha aceptable para los input date
+ * @param id identificador de persona a buscar
+ */
+function convertToDateFormat( dd, mm, yy ){
+	if(parseInt(dd) < 9){
+		dd = "0" + dd;
+	}
+	if(parseInt(mm) < 9){
+		mm = "0" + mm;
+	}
+	return yy + "-" + mm + "-" + dd;
+}
+
+/**
+ * cambia los pantallas del modal con los tabs
+ * @param screen divicion que se va a mostrar en el modal
+ */
+function changeTabsModalPeople(screen){
+	//asigna la clase active
+	$('#tabsModalPeople .tabs .tab-title').removeClass('active');
+	$('#tabsModalPeople .tabs li[attr-screen=' + screen + ']').addClass('active');
+	//muestra la pantalla selecionada
+	$('#contentModalPeople .tab-modal').hide();
+	$('#' + screen).show();
+}
+
+/**
+* muestra una alerta al usuario
+* @param isOpen indica si la alerta se abre o cierra
+* @param message mensaje que se muestra en la pantalla
+* @param typeForm typo de contenido que tendra (progressbar o button)
+* @param success funcion que se llama si tiene un boton aceptar si esta vacio no aparece
+* @param cancel funcion que se llama si tiene un boton cancelar si esta vacio no aparece
+*/
+function showAlertPeople(isOpen = false,message = null,typeForm = null, success = null, cancel = null){
+	if(isOpen){
+		$('#alertPeople .alertMessage .bodyAlertMessage #progressbarAlert').hide();
+		$('#alertPeople .alertMessage .bodyAlertMessage button').hide();
+		if(typeForm == "progressbar"){
+			$('#alertPeople .alertMessage .bodyAlertMessage #progressbarAlert').show();
+		}else if(typeForm == "button"){
+			$('#alertPeople .alertMessage .bodyAlertMessage button').show();
+			if(success == null){
+				$('#alertPeople .alertMessage .bodyAlertMessage .success').hide();
+			}else{
+				$("#btnSuccessAlertPeople").off();
+				$("#btnSuccessAlertPeople").on('click',function(){
+					success();
+				});
+			}
+			
+			if(cancel == null){
+				$('#alertPeople .alertMessage .bodyAlertMessage .cancel').hide();
+			}else{
+				$("#btnCancelAlertPeople").off();
+				$("#btnCancelAlertPeople").on('click',function(){
+					cancel();
+				});
+			}
+		}
+		$('#alertPeople .alertMessage .bodyAlertMessage label').html(message);
+		$('#alertPeople').show();
+	}else{
+		$('#alertPeople').hide();
+	}
 }
