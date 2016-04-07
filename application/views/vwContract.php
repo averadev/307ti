@@ -104,6 +104,309 @@
 	</table>
 </div>
 
+<div id="dialog-tourID" title="busqueda ID Tour">
+	<div class="contentModal">
+	        <div class="row filter-fields">
+			<div class="large-12 columns">
+				<div class="rdoField">
+				<input type="checkbox" id="checkFilter1" class="checkFilter" value="contractId">
+					<label for="checkFilter1">Persona Id</label>
+				</div>
+				<div class="rdoField">
+				<input type="checkbox" id="checkFilter2" class="checkFilter" value="lastName" checked>
+					<label for="checkFilter2">Apellido</label>
+				</div>
+				<div class="rdoField">
+				<input type="checkbox" id="checkFilter3" class="checkFilter" value="Name" checked>
+					<label for="checkFilter3">Nombre</label>
+				</div>
+			</div>
+					<div class="small-12 ">
+				<fieldset class="fieldset fieldsetFilter-advanced-hide" id="fieldsetFilterAdvanced">
+					<legend>
+						<input type="checkbox" id="checkFilterAdvance" class="checkFilter">Busqueda Avanzada
+					</legend>
+					<div class="row" id="containerFilterAdv" >
+						<div class="large-6 columns">
+							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="initials" id="RadioInitials" checked><label for="RadioInitials">OPC</label>
+						</div>
+						<div class="large-6 columns">
+							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="EmailDesc" id="RadioEmail"><label for="RadioEmail">Direccion Email</label>
+						</div>
+						<div class="large-6 columns">
+							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="Folio" id="RadioFolio"><label for="RadioFolio">Folio</label>
+						</div>
+						<div class="large-6 columns">
+							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="ResCode" id="RadioCode"><label for="RadioCode">Contrato ID</label>
+						</div>
+						<div class="large-12 columns">
+							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="FloorPlanDesc" id="RadioFloorPlan"><label for="RadioFloorPlan">Unidad</label>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+        </div>
+       <div class="row">
+					<!-- fecha Inicial-->
+					<div class="small-12 large-6 columns">
+						<label id="alertBirthdate" for="alertBirthdate" class="text-left">De
+							<input type="date" id="" class="general" >
+						</label>
+					</div>
+					<!-- Fecha final-->
+					<div class="small-12 large-6 columns">
+						<label for="textWeddingAnniversary" class="text-left">A:
+							<input type="date" id="" class="general">
+						</label>
+					</div>
+		</div>
+		
+
+	<div class="row">
+	  <div class="small-2 columns">
+				<label id="alertLastName" for="right-label" class="text-left">Buscar</label>
+		</div>
+	    <div class="large-10 columns">
+	      <div class="row collapse">
+	        <div class="small-8 columns">
+	          <input type="text" placeholder="Campo de busqueda">
+	        </div>
+	        <div class="small-2 columns">
+	          <a id="btn" data-reveal-id="btn" href="#" class="button postfix">Limpiar</a>
+	        </div>
+	        <div class="small-2 columns">
+	          <a id="btn" data-reveal-id="btn" href="#" class="button postfix">Agregar</a>
+	        </div>
+	      </div>
+	    </div>
+		</div>
+		<div class="row">
+			<fieldset>
+				<legend>Relacion de tours</legend>
+				<div class="row">
+					<table>
+						<thead>
+				<tr>
+					<th class="cellEdit" >Tour ID</th>
+					<th class="cellGeneral">Persona ID</th>
+					<th class="cellGeneral">Nombre</th>
+					<th class="cellGeneral" >Apellidos</th>
+					<th class="cellGeneral" >Fecha Tour</th>
+					<th class="cellGeneral" >Locación Contacto</th>
+					<th class="cellGeneral" >OPC</th>
+					<th class="cellGeneral" >Adultos Mayores</th>
+					<th class="cellGeneral" >Menores</th>
+					<th class="cellGeneral" >Nacionalidad</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+					</table>
+				</div>
+			</fieldset>
+		</div>
+
+ </div>
+</div>
+
+
+
+
+<div id="dialog-Personas" title="Personas" style="display: none;">
+	<div class="contentModal">
+	        <div class="row filter-fields">
+			<div class="large-12 columns">
+				<div class="rdoField">
+				<input type="checkbox" id="checkFilter1" class="checkFilter" value="contractId">
+					<label for="checkFilter1">Persona Id</label>
+				</div>
+				<div class="rdoField">
+				<input type="checkbox" id="checkFilter2" class="checkFilter" value="lastName" checked>
+					<label for="checkFilter2">Apellido</label>
+				</div>
+				<div class="rdoField">
+				<input type="checkbox" id="checkFilter3" class="checkFilter" value="Name" checked>
+					<label for="checkFilter3">Nombre</label>
+				</div>
+			</div>
+			<div class="small-12 medium-10 large-7 columns end">
+				<fieldset class="fieldset fieldsetFilter-advanced-hide" id="fieldsetFilterAdvanced">
+					<legend><input type="checkbox" id="checkFilterAdvance" class="checkFilter">&nbsp;&nbsp;Busqueda Avanzada</legend>
+					<div class="row" id="containerFilterAdvContract" >
+						<div class="large-6 columns">
+							<input id="checkbox1" type="checkbox"><label for="checkbox1">Iniciales / Codigo Empleado</label>
+						</div>
+						<div class="large-6 columns">
+							<input id="checkbox2" type="checkbox"><label for="checkbox2">Direccion Email</label>
+						</div>
+						<div class="large-6 columns">
+							<input id="checkbox1" type="checkbox"><label for="checkbox1">Folio</label>
+						</div>
+						<div class="large-6 columns">
+							<input id="checkbox2" type="checkbox"><label for="checkbox2">Contrato ID</label>
+						</div>
+						<div class="large-12 columns">
+							<input id="checkbox1" type="checkbox"><label for="checkbox1">Unidad</label>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+        </div>
+       <div class="row">
+					<!-- fecha Inicial-->
+					<div class="small-12 large-6 columns">
+						<label id="alertBirthdate" for="alertBirthdate" class="text-left">De
+							<input type="date" id="" class="general" >
+						</label>
+					</div>
+					<!-- Fecha final-->
+					<div class="small-12 large-6 columns">
+						<label for="textWeddingAnniversary" class="text-left">A:
+							<input type="date" id="" class="general">
+						</label>
+					</div>
+		</div>
+	<div class="row">
+	  <div class="small-2 columns">
+				<label id="alertLastName" for="right-label" class="text-left">Buscar</label>
+		</div>
+	    <div class="large-10 columns">
+	      <div class="row collapse">
+	        <div class="small-8 columns">
+	          <input type="text" placeholder="Campo de busqueda">
+	        </div>
+	        <div class="small-2 columns">
+	          <a id="btn" data-reveal-id="btn" href="#" class="button postfix">Limpiar</a>
+	        </div>
+	        <div class="small-2 columns">
+	          <a id="btn" data-reveal-id="btn" href="#" class="button postfix">Agregar</a>
+	        </div>
+	      </div>
+	    </div>
+		</div>
+		<div class="row">
+			<fieldset>
+				<legend>Relacion de tours</legend>
+				<div class="row">
+					<table class="smal-12 columns">
+						<thead>
+				<tr>
+					<th class="cellEdit" > <input type="checkbox"></th>
+					<th class="cellGeneral" >ID</th>
+					<th class="cellGeneral">Nombre</th>
+					<th class="cellGeneral">Apellido</th>
+					<th class="cellGeneral" >Dirección</th>
+					<th class="cellGeneral" ></th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+					</table>
+				</div>
+			</fieldset>
+		</div>
+
+ </div>
+</div>
+
+
+<div id="dialog-Unidades" title="Unidades" style="display: none;">
+	<div class="contentModal">
+	        <div class="row filter-fields">
+			<div class="large-12 columns">
+				<div class="rdoField">
+				<input type="checkbox" id="checkFilter1" class="checkFilter" value="contractId">
+					<label for="checkFilter1">Persona Id</label>
+				</div>
+				<div class="rdoField">
+				<input type="checkbox" id="checkFilter2" class="checkFilter" value="lastName" checked>
+					<label for="checkFilter2">Apellido</label>
+				</div>
+				<div class="rdoField">
+				<input type="checkbox" id="checkFilter3" class="checkFilter" value="Name" checked>
+					<label for="checkFilter3">Nombre</label>
+				</div>
+			</div>
+			<div class="small-12 medium-10 large-7 columns end">
+				<fieldset class="fieldset fieldsetFilter-advanced-hide" id="fieldsetFilterAdvanced">
+					<legend><input type="checkbox" id="checkFilterAdvance" class="checkFilter">Busqueda Avanzada</legend>
+					<div class="row" id="containerFilterAdvContract" >
+						<div class="large-6 columns">
+							<input id="checkbox1" type="checkbox"><label for="checkbox1">Iniciales / Codigo Empleado</label>
+						</div>
+						<div class="large-6 columns">
+							<input id="checkbox2" type="checkbox"><label for="checkbox2">Direccion Email</label>
+						</div>
+						<div class="large-6 columns">
+							<input id="checkbox1" type="checkbox"><label for="checkbox1">Folio</label>
+						</div>
+						<div class="large-6 columns">
+							<input id="checkbox2" type="checkbox"><label for="checkbox2">Contrato ID</label>
+						</div>
+						<div class="large-12 columns">
+							<input id="checkbox1" type="checkbox"><label for="checkbox1">Unidad</label>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+        </div>
+       <div class="row">
+					<!-- fecha Inicial-->
+					<div class="small-12 large-6 columns">
+						<label id="alertBirthdate" for="alertBirthdate" class="text-left">De
+							<input type="date" id="" class="general" >
+						</label>
+					</div>
+					<!-- Fecha final-->
+					<div class="small-12 large-6 columns">
+						<label for="textWeddingAnniversary" class="text-left">A:
+							<input type="date" id="" class="general">
+						</label>
+					</div>
+		</div>
+	<div class="row">
+	  <div class="small-2 columns">
+				<label id="alertLastName" for="right-label" class="text-left">Buscar</label>
+		</div>
+	    <div class="large-10 columns">
+	      <div class="row collapse">
+	        <div class="small-8 columns">
+	          <input type="text" placeholder="Campo de busqueda">
+	        </div>
+	        <div class="small-2 columns">
+	          <a id="btn" data-reveal-id="btn" href="#" class="button postfix">Limpiar</a>
+	        </div>
+	        <div class="small-2 columns">
+	          <a id="btn" data-reveal-id="btn" href="#" class="button postfix">Agregar</a>
+	        </div>
+	      </div>
+	    </div>
+		</div>
+		<div class="row">
+			<fieldset>
+				<legend>Relacion de tours</legend>
+				<div class="row">
+					<table class="smal-12 columns">
+						<thead>
+				<tr>
+					<th class="cellEdit" > <input type="checkbox"></th>
+					<th class="cellGeneral" >ID</th>
+					<th class="cellGeneral">Nombre</th>
+					<th class="cellGeneral">Apellido</th>
+					<th class="cellGeneral" >Dirección</th>
+					<th class="cellGeneral" ></th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+					</table>
+				</div>
+			</fieldset>
+		</div>
+
+ </div>
+</div>
+
 
 
 <div id="dialog-Contract" title="Alta de Contratos">
@@ -152,23 +455,19 @@
 	  <div class="row">
 	  <div class="small-3 columns">
 				<label id="alertLastName" for="right-label" class="text-left">Tour ID</label>
-			</div>
+		</div>
 	    <div class="large-9 columns">
 	      <div class="row collapse">
 	        <div class="small-10 columns">
 	          <input type="text" placeholder="ID">
 	        </div>
 	        <div class="small-2 columns">
-	          <a href="#" class="button postfix">Agregar</a>
+	          <a id="btnTourID" data-reveal-id="btnTourID" href="#" class="button postfix">Agregar</a>
 	        </div>
 	      </div>
 	    </div>
 	  </div>
-		
-	</fieldset>
-<!-- Datos Personas -->
-	<fieldset class="fieldset">
-		<legend class="btnAddressData">Personas</legend>
+
 		<div class="containerPeople">
 		<div class="row">
 		<div class="divLoadingTable">
@@ -181,7 +480,7 @@
 		</div>
 	</div>
 	<div class="small-12 columns">
-		<a href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>
+		<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>
 	</div>
 	<table id="tablePeople" width="100%">
 	<thead>
@@ -217,7 +516,7 @@
 					</div>
 				</div>
 		<div class="small-12 columns">
-			<a href="#" class="button tiny"><i class="fa fa-home"></i></a>
+			<a id="btnAddUnidades" href="#" class="button tiny"><i class="fa fa-home"></i></a>
 		</div>
 		<table id="tableUnidades" width="100%">
 			<thead>
@@ -278,7 +577,7 @@
 		</div>
 		</div>
 		<div class="row">
-					<table id="tableFinanciamiento" class="small-12 columns">
+		<table id="tableFinanciamiento" class="small-12 columns">
 			<thead>
 				<tr>
 					<th class="cellEdit" >Folio</th>
@@ -376,6 +675,36 @@
       </div>
     </div>
   </div>
+  <div class="row">
+  	<fieldset>
+  		<legend>
+  			<i class="fa fa-money"></i>
+  		</legend>
+  		<div class="row">
+  			<p>Pack agregados</p>
+  		<table id="tableDescuentos" class="large-12 columns">
+			<thead>
+				<tr>
+					<th class="cellGeneral" >Tipo de Pack</th>
+					<th class="cellGeneral">Monto</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+  		</div>
+  	</fieldset>
+  </div>
+  	<div class="row">
+		<div class="small-6 columns">
+			<label>Montro transferido</label>
+			<input type="text" placeholder="monto">
+		</div>
+		<div class="small-6 columns">
+			<label>Balance a financiar</label>
+			<input type="text" placeholder="monto">
+		</div>
+	</div>
 	</fieldset>
 
 	</div>
