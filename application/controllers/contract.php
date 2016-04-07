@@ -18,13 +18,13 @@ class Contract extends CI_Controller {
 		if($this->input->is_ajax_request()){
 
 			$Contract = [
-				"nombreLegal" => $_POST['nombreLegal'],
-				"idioma"      => $_POST['idioma'],
-				"tourID"      => $_POST['tourID']
+				"nombreLegal" => $_POST['legalName'],
+				"idioma"      => $_POST['IDpersona'],
+				"tourID"      => $_POST['TourID']
 			];
 
 			//$idC = insertContrat($Contract);
-			var_dump($Contract);
+			var_dump($_POST);
 		}else{
 
 			$Contract = [

@@ -641,3 +641,8 @@ select.round{
 	color:#FFFFFF;
 	font-size:16px;
 }
+
+.alertInput{
+	background: red;
+	color: white;
+}

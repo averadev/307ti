@@ -126,6 +126,10 @@ function cleanContractFields(id){
 
 function createNewContract(id){
 
+	var formData = new FormData(document.getElementById("saveDataContract"));
+	//legalName
+	var idioma = $("#idiomaContract").val().trim();
+
 	var formData = new FormData(document.getElementById(id));
     formData.append("peticion", "agregarServicio");
 
@@ -149,18 +153,23 @@ function createNewContract(id){
 function EnviaFormularioCliente(id){
 	//var formData = new FormData(document.getElementById("contract"));
     //formData.append("peticion", "agregarServicio");
+
+    var formData = new FormData(document.getElementById("saveDataContract"));
+
+    //formData.append("IDpersona", 12345);
+    //var divs = ["contractR", "precioUNITY"];
+    //form = getInputsByID(formData, divs)
 	$.ajax({
+		data:formData,
    		type: "POST",
+   		cache: false,
+   		processData: false,
        	url: "contract/saveContract",
 		dataType:'json',
-		data: { 
-			id:id,
-			nombreLegal: "cancun",
-			idioma: "ingles",
-			"tourID": "123456"
-		},
+		contentType: false,
+		
 		success: function(data){
-			console.log("dta"+data);
+			//console.log("dta"+data);
 		},
 		error: function(){
 
@@ -168,3 +177,39 @@ function EnviaFormularioCliente(id){
 	});	
 }
 
+function getInputsByID(formData, divs){
+	for (var i = 0; i < divs.length; i++) {
+		 formData.append(divs[i], $("#"+divs[i]).val().trim()); 
+	}
+	return formData;	
+}
+
+function verifyInputsByID(divs){
+
+	var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
+
+
+	for (var i = 0; i < divs.length; i++) {
+		 if($('#'+divs[i]).val().trim().length > 0){
+		 	if(!regex.test($('#'+divs[i]).val().trim())){
+		 		return true;
+		 	}else{
+		 		//$('#alertValidateContrato').show(100);
+		 		addClassTime(divs[i]);
+		 	}
+		 }else{
+		 	addClassTime(divs[i]);
+		 	$('#alertValidateContrato').show(100);
+		 	//addClassTime(divs[i]);
+		 	return false;
+		 }
+	}
+}
+
+
+function addClassTime(div){
+	$("#"+div).addClass("alertInput").delay(5000).queue(function(next){
+    	$(this).removeClass("error");
+    	next();
+	});
+}

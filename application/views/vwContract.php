@@ -408,34 +408,29 @@
 </div>
 
 
-
 <div id="dialog-Contract" title="Alta de Contratos">
-	<ul class="tabs" data-tab="" role="tablist">
-            <li class="tab-title active" attr-screen="General">
-				<a>General</a>
-				<img class="iconCloseTab" src="http://localhost/307ti/assets/img/common/iconClose.png">
-			</li>
-		</ul>
 	<div class="contentModal">
 		<div id="tabs-1">
-<!-- Datos personales -->
-			<div class="row" id="alertValidateUSer" style="display:none;">
+		<!-- Mensaje Error -->
+			<div class="row" id="alertValidateContrato" style="display:none;">
 				<div class="small-12 columns">
 					<div data-alert class="alert-box alert " >
 						Por favor rellene los campos Obligatorios(rojo)
 					</div>
 				</div>
 			</div>
-	
+	<form id="saveDataContract">
 		<fieldset class="fieldset">
-		<legend>Datos Contrato</legend>
+			<legend>
+				Datos Contrato
+			</legend>
 		<!-- nombre legal-->
 		<div class="row">
 			<div class="small-3 columns">
 				<label for="legalName" class="text-left">Nombre legal</label>
 			</div>
 			<div class="small-9 columns">
-				<input name="legalName" type="text" id="legalName" class="general">
+				<input name="legalName" type="text" id="legalName" name="legalName" class="general" required>
 			</div>
 		</div>
 		<!-- Idioma-->
@@ -444,22 +439,23 @@
 				<label id="alertLastName" for="right-label" class="text-left">Idioma</label>
 			</div>
 			<div class="small-9 columns">
-				<select>
+				<select id="idiomaContract" form="saveDataContract">
       			<option selected disabled>Elige</option>
-					<option>Español</option>
-					<option>Ingles</option>
+					<option value="espanol">Español</option>
+					<option value="ingles">Ingles</option>
 				</select>
 			</div>
 		</div>
 		<!-- Tour ID-->
 	  <div class="row">
 	  <div class="small-3 columns">
-				<label id="alertLastName" for="right-label" class="text-left">Tour ID</label>
+				<label id="tourID" for="right-label" class="text-left">Tour ID</label>
 		</div>
 	    <div class="large-9 columns">
 	      <div class="row collapse">
 	        <div class="small-10 columns">
-	          <input type="text" placeholder="ID">
+	          <input type="text" placeholder="ID" name="TourID" id="TourID">
+	          <small class="error">Invalid entry</small>
 	        </div>
 	        <div class="small-2 columns">
 	          <a id="btnTourID" data-reveal-id="btnTourID" href="#" class="button postfix">Agregar</a>
@@ -470,36 +466,38 @@
 
 		<div class="containerPeople">
 		<div class="row">
-		<div class="divLoadingTable">
-		<div class="bgLoadingTable"></div>
-		<div class="loadingTable" >
-			<div class="subLoadingTable">
-				<label>Cargando..</label>
-				<div id="progressbar"></div>
+				<div class="divLoadingTable">
+				<div class="bgLoadingTable"></div>
+				<div class="loadingTable" >
+					<div class="subLoadingTable">
+						<label>Cargando..</label>
+						<div id="progressbar"></div>
+					</div>
+				</div>
 			</div>
-		</div>
+			<div class="small-12 columns">
+				<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>
+			</div>
+			<table id="tablePeople" width="100%">
+			<thead>
+				<tr>
+					<th class="cellEdit" >ID</th>
+					<th class="cellGeneral">Nombre</th>
+					<th class="cellGeneral">Apellidos</th>
+					<th class="cellGeneral" >Dirección</th>
+					<th class="cellGeneral" >Persona Principal</th>
+					<th class="cellGeneral" >Persona Secundaria</th>
+					<th class="cellGeneral" >Beneficiario</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+			</table>
 	</div>
-	<div class="small-12 columns">
-		<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>
-	</div>
-	<table id="tablePeople" width="100%">
-	<thead>
-		<tr>
-			<th class="cellEdit" >ID</th>
-			<th class="cellGeneral">Nombre</th>
-			<th class="cellGeneral">Apellidos</th>
-			<th class="cellGeneral" >Dirección</th>
-			<th class="cellGeneral" >Persona Principal</th>
-			<th class="cellGeneral" >Persona Secundaria</th>
-			<th class="cellGeneral" >Beneficiario</th>
-		</tr>
-	</thead>
-	<tbody>
-	</tbody>
-	</table>
-</div>
 		</div>
 	</fieldset>
+
+
 <!-- Unidades -->
 
 	<fieldset class="fieldset">
@@ -566,7 +564,7 @@
 			    <div class="large-9 columns">
 			      <div class="row collapse">
 			        <div class="small-10 columns">
-			          <input type="text" placeholder="Folio">
+			          <input id="contractR" name="contractR" type="text" placeholder="Folio">
 			        </div>
 			        <div class="small-2 columns">
 			          <a href="#" class="button postfix"><i class="fa fa-search"></i></a>
@@ -594,17 +592,17 @@
 	<div class="row">
     <div class="large-4 columns">
       <label>Precio Unidad
-        <input type="text" placeholder="Precio Unidad" />
+        <input id="precioUnidad" name="precioUNIDAD" type="text" placeholder="Precio Unidad" />
       </label>
     </div>
     <div class="large-4 columns">
       <label>Referencia Pack
-        <input type="text" placeholder="Referencia" />
+        <input type="text" name="referenciaPACK" placeholder="Referencia" />
       </label>
     </div>
     <div class="large-4 columns">
       <label>Precio Venta
-        <input type="text" placeholder="Precio Venta" />
+        <input type="text" name="precioVENTA" placeholder="Precio Venta" />
       </label>
     </div>
   </div>
@@ -706,7 +704,7 @@
 		</div>
 	</div>
 	</fieldset>
-
+</form>
 	</div>
 </div>
 </div>
