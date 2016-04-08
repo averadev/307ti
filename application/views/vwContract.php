@@ -1,7 +1,16 @@
 <div class="row fiter-section" id="section-contract">
     <div class="section-bar">Consultas<div class="collapseFilter"></div></div>
 	<div class="section-bar" id="newContract">Nuevo</div>
-    <div class="medium-12 columns">
+
+	<div class="small-12  columns">
+		<fieldset class="large-6 columns">
+		    <input type="radio" name="filtroC" value="true" id="personaID" required><label for="personaID">Persona ID</label>
+		    <input type="radio" name="filtroC" value="true" id="nombreC"><label for="nombreC">Nombre</label>
+		    <input type="radio" name="filtroC" value="true" id="ApelidoC"><label for="ApelidoC">Apellido</label>
+		    <input type="radio" name="filtroC" value="true" id="ApelidoC"><label for="ApelidoC">Reservación ID</label>
+  		</fieldset>
+	</div>
+<!--     <div class="medium-12 columns">
         <div class="row filter-fields">
 			<div class="large-12 columns">
 				<div class="rdoField">
@@ -16,8 +25,14 @@
 				<input type="checkbox" id="checkFilter3" class="checkFilter" value="Name" checked>
 					<label for="checkFilter3">Nombre</label>
 				</div>
-			</div>
-			<div class="small-12 medium-10 large-7 columns end">
+				<div class="rdoField">
+					<input type="checkbox" id="checkFilter3" class="checkFilter" value="Name" checked>
+					<label for="checkFilter3">Reservacion ID</label>
+				</div>
+			</div> -->
+
+
+			<!-- <div class="small-12 medium-10 large-7 columns end">
 				<fieldset class="fieldset fieldsetFilter-advanced-hide" id="fieldsetFilterAdvanced">
 					<legend><input type="checkbox" id="checkFilterAdvance" class="checkFilter">&nbsp;&nbsp;Busqueda Avanzada</legend>
 					<div class="row" id="containerFilterAdvContract" style="display:none;">
@@ -38,19 +53,22 @@
 						</div>
 					</div>
 				</fieldset>
-			</div>
+			</div> -->
+			        <div class="row">
+			    <div class="large-9 columns">
+			      <div class="row collapse">
+			        <div class="small-10 columns">
+			          <input id="contractR" name="contractR" type="text" placeholder="palabra a buscar">
+			        </div>
+			        <div class="small-2 columns">
+			          <a href="#" class="button postfix"><i class="fa fa-search"></i></a>
+			        </div>
+			      </div>
+			    </div>
+
         </div>
-        <div class="row">
-            <div class="large-12 columns rowSearch">
-              <input type="text" id="txtSearch" class="txtSearch" placeholder="Ingresa un parámetro de búsqueda" />
-            </div>
-			<div class="large-6 columns end rowBtnSearch">
-				<ul class="button-group radius groupBtnSearch">
-					<li><a id="btnSearch" class="tiny button btnSearch">Buscar</a></li>
-					<li><a id="btnCleanSearch" class="tiny button btnSearch">Limpiar</a></li>
-				</ul>
-			</div>
         </div>
+
     </div>
     <div class="medium-2 columns">&nbsp;</div>
 </div>
@@ -419,7 +437,7 @@
 					</div>
 				</div>
 			</div>
-	<form id="saveDataContract">
+	<form id="saveDataContract" data-abide novalidate>
 		<fieldset class="fieldset">
 			<legend>
 				Datos Contrato
@@ -439,11 +457,12 @@
 				<label id="alertLastName" for="right-label" class="text-left">Idioma</label>
 			</div>
 			<div class="small-9 columns">
-				<select id="idiomaContract" form="saveDataContract">
-      			<option selected disabled>Elige</option>
+				<select id="idiomaContract" form="saveDataContract" required="">
+      			<option></option>
 					<option value="espanol">Español</option>
 					<option value="ingles">Ingles</option>
 				</select>
+
 			</div>
 		</div>
 		<!-- Tour ID-->
@@ -454,8 +473,8 @@
 	    <div class="large-9 columns">
 	      <div class="row collapse">
 	        <div class="small-10 columns">
-	          <input type="text" placeholder="ID" name="TourID" id="TourID">
-	          <small class="error">Invalid entry</small>
+	          <input type="text" placeholder="ID" name="TourID" id="TourID" required>
+	          <small class="error">verifica los datos</small>
 	        </div>
 	        <div class="small-2 columns">
 	          <a id="btnTourID" data-reveal-id="btnTourID" href="#" class="button postfix">Agregar</a>
@@ -558,9 +577,9 @@
 			</div>
 		<div class="small-6 columns">
 			<div class="row">
-			  <div class="small-3 columns">
-						<label id="alertLastName" for="right-label" class="text-left">Contrato Relacionado</label>
-					</div>
+			  	<div class="small-3 columns">
+					<label id="alertLastName" for="right-label" class="text-left">Contrato Relacionado</label>
+				</div>
 			    <div class="large-9 columns">
 			      <div class="row collapse">
 			        <div class="small-10 columns">
@@ -704,12 +723,21 @@
 		</div>
 	</div>
 	</fieldset>
+	<div data-abide-error class="alert callout" style="display: none;">
+    <p><i class="fi-alert"></i> Por favor rellene los campos Obligatorios(rojo).</p>
+  </div>
+	  <div class="row">
+    <fieldset class="large-6 columns">
+      <button class="button" type="submit" value="Submit">Submit</button>
+    </fieldset>
+    <fieldset class="large-6 columns">
+      <button class="button" type="reset" value="Reset">Reset</button>
+    </fieldset>
+  </div>
+
 </form>
 	</div>
 </div>
 </div>
-
-
-
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>contract.js"></script>

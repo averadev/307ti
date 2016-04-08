@@ -11,7 +11,7 @@ class Contract extends CI_Controller {
 
     
 	public function index(){
-        $this->load->view('vwContract.php');
+        $this->load->view('vwContract_pruebas.php');
 	}
 
 	public function saveContract(){

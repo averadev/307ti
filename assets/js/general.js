@@ -8,20 +8,20 @@ $(function() {
     $('.menu-sel').on('click', function() {
         // validate module exist
         var isNew = true;
-        var x = document.getElementsByClassName("tab-title");
+        var x = document.getElementsByClassName("tabs-title");
         for (var i = 0; i < x.length; i++) {
             if ($(x[i]).children().html() == $(this).html()) {
-                $('.tab-title').removeClass('active');
+                $('.tabs-title').removeClass('active');
                 $(x[i]).addClass('active');
                 isNew = false;
             }
         }
         // Add new tab
         if(isNew){
-            $('.tab-title').removeClass('active');
+            $('.tabs-title').removeClass('active');
             var screen = $(this).attr('attr-screen');
             var iconClose = '<img class="iconCloseTab" src="'+BASE_URL+'assets/img/common/iconClose.png" />'
-            $('.tabs').append( '<li class="tab-title active" attr-screen="'+screen+'"><a>'+$(this).html()+'</a>'+iconClose+'</li>' );
+            $('.tabs').append( '<li class="tabs-title active" attr-screen="'+screen+'"><a>'+$(this).html()+'</a>'+iconClose+'</li>' );
             $(".module").addClass("moduleHide")
             addTabEvent();
             loadModule(screen);
@@ -32,11 +32,11 @@ $(function() {
 // Add event tab
 function addTabEvent(){
     // Event Open Tab
-    $('.tab-title').unbind( "click" );
-    $('.tab-title').on('click', function() {
+    $('.tabs-title').unbind( "click" );
+    $('.tabs-title').on('click', function() {
         // Validar seleccion
         if (! $(this).hasClass('active')){
-            $('.tab-title').removeClass('active');
+            $('.tabs-title').removeClass('active');
             $(this).addClass('active');
             $(".module").addClass("moduleHide")
             $("#module-"+$(this).attr("attr-screen")).removeClass("moduleHide")

@@ -1,13 +1,22 @@
+
+$(document).foundation();
 $('#newContract').click(function(){ showModalContracto(0); });
 $('#btnTourID').click(function(){ dialogTourID.dialog('open'); });
 $('#btnAddPeople').click(function(){showModals('dialog-Personas', cleanAddPeople);});
 $('#btnAddUnidades').click(function(){showModals('dialog-Unidades', cleanAddUnidades);});
+
+
 
 function showModalContracto(){
 	dialogContract.dialog('open');
 }
 
 $(function(){
+
+
+
+
+
 	maxHeight = screen.height * .25;
 	maxHeight = screen.height - maxHeight;
 
@@ -213,3 +222,4 @@ function addClassTime(div){
     	next();
 	});
 }
+
