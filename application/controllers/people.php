@@ -138,6 +138,12 @@ class People extends CI_Controller {
 				
 				$data = "Datos guardados";
 			}else{
+				$typePeople;
+				if($_POST['employee'] == true){
+					$typePeople = $_POST['typeSeller'];
+				}else if($_POST['employee'] == false){
+					$typePeople = 17;
+				}
 				
 				$update = array(
 					//'fkPeopleTypeId'	=> 18,
@@ -149,6 +155,8 @@ class People extends CI_Controller {
 					'BirthDayMonth'		=> $BirthDayMonth,
 					'BirthDayDay'		=> $BirthDayDay,
 					'BirthDayYear'		=> $BirthDayYear,
+					'fkPeopleTypeId'	=> $typePeople,
+					'Initials'			=> $_POST['initials'],
 					'MdBy'				=> 1,
 					'MdDt'				=> $strHoy,
 				);
@@ -290,8 +298,6 @@ class People extends CI_Controller {
 			}
 			
 			echo json_encode($data);	
-		}else{
-			echo "OK";
 		}
 	}
 	
@@ -312,6 +318,8 @@ class People extends CI_Controller {
 			$advanced = "tblRes.Folio";
 		}else if($advanced == "ResCode"){
 			$advanced = "tblRes.ResCode";
+		}else if($advanced == "FloorPlanDesc"){
+			$advanced = "tblFloorPlan.FloorPlanDesc";
 		}
 		$page = $_POST['page'];
 		if($_POST['page'] == 0 || $_POST['page'] == "0"){
@@ -397,6 +405,8 @@ class People extends CI_Controller {
 		if($this->input->is_ajax_request()){
 			$months = array('', 'Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic');
 			$data = $this->people_db->getPeopleById($_POST['id']);
+			$condicion = "ynEmp = 1";
+			$PeopleType = $this->people_db->getPeopleType($condicion);
 			foreach($data as $item){
 				$item->birthdate = $item->BirthDayDay . "-" . $months[$item->BirthDayMonth] . "-" . $item->BirthDayYear;
 				
@@ -425,6 +435,11 @@ class People extends CI_Controller {
 				if(is_null($item->CountryCode)){
 					$item->CountryCode = "";
 				}
+				
+				if(is_null($item->Initials)){
+					$item->Initials = "";
+				}
+				
 				$phone = $this->people_db->getPeoplePhone($item->pkPeopleId);
 				if(isset($phone[0]->PhoneDesc)) {
 					$item->phone1 = $phone[0]->PhoneDesc;
@@ -452,8 +467,94 @@ class People extends CI_Controller {
 				}else{
 					$item->email2 = "";
 				}
+				
 			}
-			echo json_encode($data);
+			echo json_encode(array( 'item' => $data, 'peopleType' => $PeopleType));
+		}
+	}
+	
+	public function getReservationsByPeople(){
+		if($this->input->is_ajax_request()){
+			
+			$months = array('', 'Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic');
+			$data = $this->people_db->getReservationsByPeople($_POST['id']);
+			foreach($data as $item){
+				
+				$date = date_create($item->CrDt);
+				$item->hora = date_format($date, 'g:i A');
+				$item->date = date('d', strtotime($item->CrDt)) . ' de ' . 
+					$months[date('n', strtotime($item->CrDt))] . ' del ' . 
+					date('Y', strtotime($item->CrDt)) . " " .
+					date('h', strtotime($item->CrDt)) . " " .
+					date('i', strtotime($item->CrDt)) . ":" .
+					date('s', strtotime($item->CrDt));
+				
+				if(is_null($item->UnitCode)){
+					$item->UnitCode = "";
+				}
+				if(is_null($item->FloorPlanDesc)){
+					$item->FloorPlanDesc = "";
+				}
+				if(is_null($item->SeasonDesc)){
+					$item->SeasonDesc = "";
+				}
+				if(is_null($item->CrDt)){
+					$item->CrDt = "";
+				}
+				if(is_null($item->Intv)){
+					$item->Intv = "";
+				}
+				
+			}
+			echo json_encode(array('items' => $data));
+		}
+	}
+	
+	public function getContractByPeople(){
+		if($this->input->is_ajax_request()){
+			
+			$months = array('', 'Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic');
+			$data = $this->people_db->getContractByPeople($_POST['id']);
+			foreach($data as $item){
+				$item->BalanceCSF = "";
+				$item->LoanBa = "";
+				$date = date_create($item->CrDt);
+				$item->hora = date_format($date, 'g:i A');
+				$item->date = date('d', strtotime($item->CrDt)) . ' de ' . 
+					$months[date('n', strtotime($item->CrDt))] . ' del ' . 
+					date('Y', strtotime($item->CrDt)) . " " .
+					date('h', strtotime($item->CrDt)) . " " .
+					date('i', strtotime($item->CrDt)) . ":" .
+					date('s', strtotime($item->CrDt));
+				
+				if(is_null($item->FloorPlanDesc)){
+					$item->FloorPlanDesc = "";
+				}
+				if(is_null($item->SeasonDesc)){
+					$item->SeasonDesc = "";
+				}
+				if(is_null($item->CrDt)){
+					$item->CrDt = "";
+				}
+				if(is_null($item->Intv)){
+					$item->Intv = "";
+				}
+				if(is_null($item->FrequencyDesc)){
+					$item->FrequencyDesc = "";
+				}
+				if(is_null($item->UnitCode)){
+					$item->UnitCode = "";
+				}
+			}
+			echo json_encode(array('items' => $data));
+		}
+	}
+	
+	public function getEmployeeByPeople(){
+		if($this->input->is_ajax_request()){
+			$condicion = "ynEmp = 1";
+			$data = $this->people_db->getPeopleType($condicion);
+			echo json_encode(array('items' => $data));
 		}
 	}
 }

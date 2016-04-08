@@ -1,3 +1,5 @@
+var progressBarAlert = null;
+
 // Init events
 $(function() {
     // Button Dropdown Menu
@@ -8,21 +10,20 @@ $(function() {
     $('.menu-sel').on('click', function() {
         // validate module exist
         var isNew = true;
-        //var x = document.getElementsByClassName("tabs-title");
-		var x = $('.top-title .tabs .tabs-title');
+        var x = document.getElementsByClassName("tab-title");
         for (var i = 0; i < x.length; i++) {
             if ($(x[i]).children().html() == $(this).html()) {
-                $('.tabs-title').removeClass('active');
+                $('.tab-title').removeClass('active');
                 $(x[i]).addClass('active');
                 isNew = false;
             }
         }
         // Add new tab
         if(isNew){
-            $('.tabs-title').removeClass('active');
+            $('.tab-title').removeClass('active');
             var screen = $(this).attr('attr-screen');
             var iconClose = '<img class="iconCloseTab" src="'+BASE_URL+'assets/img/common/iconClose.png" />'
-            $('.tabs').append( '<li class="tabs-title active" attr-screen="'+screen+'"><a>'+$(this).html()+'</a>'+iconClose+'</li>' );
+            $('.tabs').append( '<li class="tab-title active" attr-screen="'+screen+'"><a>'+$(this).html()+'</a>'+iconClose+'</li>' );
             $(".module").addClass("moduleHide")
             addTabEvent();
             loadModule(screen);
@@ -39,11 +40,11 @@ $(function() {
 // Add event tab
 function addTabEvent(){
     // Event Open Tab
-    $('.tabs-title').unbind( "click" );
-    $('.tabs-title').on('click', function() {
+    $('.tab-title').unbind( "click" );
+    $('.tab-title').on('click', function() {
         // Validar seleccion
         if (! $(this).hasClass('active')){
-            $('.tabs-title').removeClass('active');
+            $('.tab-title').removeClass('active');
             $(this).addClass('active');
             $(".module").addClass("moduleHide")
             $("#module-"+$(this).attr("attr-screen")).removeClass("moduleHide")
@@ -88,7 +89,7 @@ function loadModule(screen){
 
 //menu pegajoso
 $(document).ready(function(){
-	/*var altura = $('.menu-section').offset().top;
+	var altura = $('.menu-section').offset().top;
 	$(window).on('scroll', function(){
 		if ( $(window).scrollTop() < 91 ){
 			var currentTop = altura - $(window).scrollTop()
@@ -96,7 +97,7 @@ $(document).ready(function(){
 		}else{
 			$('.menu-section').css('top', "0px");
 		}
-	});*/
+	});
  
 });
 
@@ -190,4 +191,3 @@ function showLoading(parentElement, isOpen = false,message = null, success = nul
 		}
 	}
 }
-

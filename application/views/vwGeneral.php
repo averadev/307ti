@@ -26,10 +26,12 @@
             <div class="menu-opt logo"><img src="<?php echo base_url().IMG; ?>logo/demo.png"/></div>
         </nav>
         
-        <nav class="top-bar top-title" data-topbar>
-            <ul class="tabs" data-tab role="tablist">
+        <nav class="top-title" data-topbar>
+            <!--<ul class="tabs" data-tabs role="tablist">
                 
-            </ul>
+            </ul>-->
+			<ul class="tabs" data-tabs>
+			</ul>
         </nav>
         
         <div class="menu-section">
@@ -42,7 +44,33 @@
         </div>
         <div class="general-section">
         </div>
-        
+       
+	<!--- meesssage alert ---->
+	<div class="alertScreen" id="alertPeople">
+		<div class="bgAlertScreen" ></div>
+		<div class="alertMessage" >
+			<div class="headerAlertMessage">
+				<p>307TI</p>
+			</div>
+			<div class="bodyAlertMessage">
+				<label>Datos guardados</label>
+				<div id="progressbarAlert"></div>
+				<button class="tiny button radius btnAlertMessage cancel" id="btnCancelAlertPeople">Cancelar</button>
+				<button class="tiny button radius btnAlertMessage success" id="btnSuccessAlertPeople">Aceptar</button>
+			</div>
+		</div>
+	</div>
+	
+	<!--<div class="divLoadingTable">
+		<div class="bgLoadingTable" ></div>
+		<div class="loadingTable" >
+			<div class="subLoadingTable">
+				<label>Cargando..</label>
+				<div id="progressbar"></div>
+			</div>
+		</div>
+	</div>-->
+		
 	</body>
 </html>
 <?php if(!isset($screen)){ ?>
@@ -52,7 +80,7 @@
     </script>
 <?php } ?>
 
-<script> 
+<script>
 /*function getScript(src){
 	var val, src;
 	$('script').each(function() {

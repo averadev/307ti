@@ -29,9 +29,7 @@
                         <div class="medium-2 columns">&nbsp;</div>
                         <div class="medium-8 columns">
 							<div class="large-12 columns">
-								<div data-alert class="alert-box alert " id="alertLogin" style="display:none;">
-								
-									<a href="#" class="close">&times;</a>
+								<div class="callout alert" id="alertLogin" style="display:none;">
 								</div>
 							</div>
                             <div class="large-12 columns">
@@ -48,9 +46,9 @@
                             
                             <div class="large-12 columns">
                                 <button class="button btnAction" id="btnLogin">
-									<div class="ripple-container">
+									<!--<div class="ripple-container">
 										<span class="ripple-effect"></span>
-									</div>
+									</div>-->
 									LOGIN
 								</button>
                             </div>

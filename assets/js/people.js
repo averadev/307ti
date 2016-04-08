@@ -47,8 +47,11 @@ $('#checkFilterAdvance').click(function(){ searchAdvanced(); });
 //$(document).off( "click", ".iconEdit" );
 
 //activa los tap del modal
-//$('#tabsModalPeople .tabs .tab-title').unbind( "click" );
-$('#tabsModalPeople .tabs .tab-title').on('click', function() { changeTabsModalPeople($(this).attr('attr-screen')) });
+//$('#tabsModalPeople .tabs .tabs-title').unbind( "click" );
+$('#tabsModalPeople .tabs .tabs-title').on('click', function() { changeTabsModalPeople($(this).attr('attr-screen')) });
+
+//muestra el formulario de asignar a una persona como empleado
+$('#checkPeopleEmployee').click(function(){ modalTabPeople(); });
 
 /************Funciones**************/
 
@@ -109,15 +112,6 @@ $(function() {
 		}
 	});
 	
-	$( "#progressbar" ).progressbar({
-      value: false
-    });
-	
-	$( "#progressbarAlert" ).progressbar({
-      value: false
-    });
-	
-	
 	$('#paginationPeople').jqPagination({
 		max_page: 1,
 		paged: function(page) {
@@ -140,6 +134,8 @@ $(function() {
 function showModal(id){
 	$("#idPeople").removeData("pkPeopleId");
 	cleanUserFields();
+	$('.tab-modal').hide();
+	$('#tab-PGeneral').show();
 	if(id == 0){
 		$("#tabsModalPeople").hide();
 		dialogUser.dialog('open');
@@ -169,7 +165,7 @@ function hideModal(){
 */
 function showDivModal(div){
 	if(div == "address"){
-		$('.containerAddress').toggle(1000);
+		$('#containerAddress').toggle(1000);
 		if($("#imgCoppapseAddress").attr('class') == "imgCollapseFieldset down"){
 			$("#imgCoppapseAddress").removeClass('down');
 			$("#imgCoppapseAddress").addClass('up');
@@ -223,7 +219,7 @@ function EditUser(isClosed, idPeople){
 */
 function saveUserData(id, isClosed){
 	
-	showAlertPeople(true,"Guardando cambios, porfavor espere....",'progressbar');
+	showAlert(true,"Guardando cambios, porfavor espere....",'progressbar');
 	
 	var phoneArray = new Array();
 	$(".phonePeople").each(function (index){
@@ -242,11 +238,17 @@ function saveUserData(id, isClosed){
 	var jsonEmail = JSON.stringify(emailArray);
 	
 	var gender;
-	
 	if($("#RadioMale").is(':checked')) {
 		gender = "M";
 	}else{
 		gender = "F";
+	}
+	
+	var employee;
+	if($("#checkPeopleEmployee").is(':checked')) {
+		employee = 1;
+	}else{
+		employee = 0;
 	}
 	
 	$.ajax({
@@ -273,9 +275,15 @@ function saveUserData(id, isClosed){
 			countryCode:$('#textCountry option:selected').attr('code'),
 			phone:jsonPhone,
 			email:jsonEmail,
+			employee:employee,
+			codeCollaborator:$('#textCodeCollaborator').val().trim(),
+			initials:$('#textInitials').val().trim(),
+			codeNumber:$('#textCodeNumber').val().trim(),
+			typeSeller:$('#textTypeSeller').val(),
+			roster:$('#textRoster').val().trim(),
 		},
 		success: function(data){
-			showAlertPeople(true,data,'button',showAlertPeople);
+			showAlert(true,data,'button',showAlert);
 			if(!isClosed){
 				dialogUser.dialog('close');
 				cleanUserFields();
@@ -288,7 +296,7 @@ function saveUserData(id, isClosed){
 			
 		},
 		error: function(){
-			showAlertPeople(true,"error al insertar los datos, intentelo mas tarde.",'button',showAlertPeople);
+			showAlert(true,"error al insertar los datos, intentelo mas tarde.",'button',showAlert);
 			dialogUser.dialog('close');
 			cleanUserFields();
 			$("#idPeople").removeData("pkPeopleId");
@@ -302,11 +310,58 @@ function saveUserData(id, isClosed){
 function validateUserFields(){
 	
 	var result = true;
+	var infoEmployee = true;
 	var infoAddress = true;
 	var infoContact = true;
 	var infoPeople = true;
 	var errorText = "";
 	hideAlertUserFields();
+	
+//	alert($("#checkPeopleEmployee").is(':checked'))
+	
+	if($("#checkPeopleEmployee").is(':checked')){
+		
+		/*if($('#textCodeCollaborator').val().trim().length == 0 ){
+			$('#alertCodeCollaborator').addClass('error');
+			$('#textCodeCollaborator').focus();
+			errorText = "Código del colaborador<br>" + errorText;
+			infoEmployee = false;
+		}*/
+		
+		if($('#textInitials').val().trim().length == 0 ){
+			$('#alertInitials').addClass('error');
+			$('#textInitials').focus();
+			errorText = "Iniciales<br>" + errorText;
+			infoEmployee = false;
+		}
+		
+		/*if($('#textCodeNumber').val().trim().length == 0 ){
+			$('#alertCodeNumber').addClass('error');
+			$('#textCodeNumber').focus();
+			errorText = "Código numérico<br>" + errorText;
+			infoEmployee = false;
+		}*/
+		
+		if($('#textTypeSeller').val() == null || $('#textTypeSeller').val() == 0){
+			$('#alertTypeSeller').addClass('error');
+			$('#textTypeSeller').focus();
+			errorText = "Tipo de vendedor<br>" + errorText;
+			infoEmployee = false;
+		}
+		
+		/*if($('#textRoster').val() == null || $('#textRoster').val() == 0){
+			$('#alertRoster').addClass('error');
+			$('#textRoster').focus();
+			errorText = "Nómina<br>" + errorText;
+			infoEmployee = false;
+		}*/
+		
+		if(infoEmployee == false){
+			$('#alertValPeopleEmployee .alert-box').html("<label>Por favor rellene los campos Obligatorios(rojo)</label>" );
+			$('#alertValPeopleEmployee').show(100);
+			result = false;
+		}
+	}
 	
 	var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
 	//email 2
@@ -405,7 +460,7 @@ function validateUserFields(){
 		result = false;
 		$('#alertValPeopleAddress .alert-box').html("<label>Por favor rellene los campos Obligatorios(rojo)</label>" + errorText );
 		$('#alertValPeopleAddress').show(100);
-		$('.containerAddress').show();
+		$('#containerAddress').show();
 	}
 	
 	errorText = "";
@@ -463,6 +518,7 @@ function hideAlertUserFields(){
 	$('#alertValPeopleGeneral').hide();
 	$('#alertValPeopleAddress').hide();
 	$('#alertValPeopleContact').hide();
+	$('#alertValPeopleEmployee').hide();
 	
 	$('#alertName').removeClass('error');
 	$('#alertLastName').removeClass('error');
@@ -480,6 +536,12 @@ function hideAlertUserFields(){
 	$('#alertPhone3').removeClass('error');
 	$('#alertEmail1').removeClass('error');
 	$('#alertEmail2').removeClass('error');
+	
+	$('#alertCodeCollaborator').removeClass('error');
+	$('#alertInitials').removeClass('error');
+	$('#alertCodeNumber').removeClass('error');
+	$('#alertTypeSeller').removeClass('error');
+	$('#alertRoster').removeClass('error');
 }
 
 /**
@@ -500,8 +562,8 @@ function cleanUserFields(){
 	$('#textStreet').val("");
 	$('#textColony').val("");
 	$('#textCity').val("");
-	////$('#textCountry option[value=0]').attr('selected', 'selected');
-	//$('#textState option[value=0]').attr('selected', 'selected');
+	$('#textCountry').val(0);
+	$('#textState').val(0);
 	$("select#textCountry").val("0");
 	$("select#textState").val("0");
 	$('#textPostalCode').val("");
@@ -512,6 +574,17 @@ function cleanUserFields(){
 	$('#textEmail1').val("");
 	$('#textEmail2').val("");
 	
+	$('#textCodeCollaborator').val("");
+	$('#textInitials').val("");
+	$('#textCodeNumber').val("");
+	$('#textTypeSeller').val(0);
+	$('#textRoster').val(0);
+	$('#checkPeopleEmployee').prop( "checked", false );
+	modalTabPeople();
+	
+	$('#containerAddress').hide();
+	$('#containerContact').hide();
+	
 }
 
 //////
@@ -521,8 +594,8 @@ function cleanUserFields(){
 */
 function searchPeople(page){
 	$('#tablePeople tbody').empty();
-	$('.divLoadingTable').show();
-	
+	//$('.divLoadingTable').show();
+	showLoading('#divTablePeople',true);
 	/*if(xhrPeople && xhrPeople.readyState != 4) { 
 		xhrPeople.abort();
 		xhrPeople = null;
@@ -586,12 +659,13 @@ function searchPeople(page){
 			//$('.iconEdit').on()
 			$("#tablePeople tbody tr .cellEdit .iconEdit").off( "click", ".iconEdit" );
 			$("#tablePeople tbody tr .cellEdit .iconEdit").on("click", function(){ showModal($(this).attr('value')); });
-			$('.divLoadingTable').hide();
+			showLoading('#divTablePeople',false);
+			//$('.divLoadingTable').hide();
 		},
 		error: function(error){
 			console.log(error)
-			$('.divLoadingTable').hide();
-			showAlertPeople(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlertPeople);
+			showLoading('#divTablePeople',false);
+			showAlert(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlert);
 		}
 	});	
 }
@@ -629,7 +703,7 @@ function loadPaginatorPeople(maxPage){
  * @param id identificador de persona a buscar
  */
 function getInfoPeople(id){
-	$('.divLoadingTable').show();
+	showLoading('#divTablePeople',true);
 	$.ajax({
    		type: "POST",
        	url: "people/getPeopleById",
@@ -638,8 +712,7 @@ function getInfoPeople(id){
 			id:id,
 		},
 		success: function(data){
-			console.log(data[0]);
-			var item = data[0];
+			var item = data.item[0];
 			$('#textName').val(item.Name.trim());
 			$('#textMiddleName').val(item.SecondName.trim());
 			$('#textLastName').val(item.LName.trim());
@@ -655,12 +728,12 @@ function getInfoPeople(id){
 			$('#textColony').val(item.Street2.trim());
 			$('#textCity').val(item.City.trim());
 			$('#textPostalCode').val(item.ZipCode.trim());
-			if(item.pkCountryId != null || item.pkCountryId != ""){
+			if(item.pkCountryId != null || item.pkCountryId == ""){
 				$("select#textCountry").val(item.pkCountryId);
 			}else{
 				$("select#textCountry").val(0);
 			}
-			if(item.pkStateId != null || item.pkStateId != ""){
+			if(item.pkStateId != null || item.pkStateId == ""){
 				$("select#textState").val(item.pkStateId);
 			}else{
 				$("select#textState").val(0);
@@ -671,7 +744,26 @@ function getInfoPeople(id){
 			$('#textPhone3').val(item.phone3.trim());
 			$('#textEmail1').val(item.email1.trim());
 			$('#textEmail2').val(item.email2.trim());
-				
+			
+			$('#textTypeSeller').empty();
+			$('#textTypeSeller').append('<option value="0" code="0">Seleccione un tipo de vendedor</option>');
+			for(i=0;i<data.peopleType.length;i++){
+				var peopleType = data.peopleType[i];
+				$('#textTypeSeller').append('<option value="' + peopleType.pkPeopleTypeId + '" code="' + peopleType.PeopleTypeCode + '">' + peopleType.PeopleTypeDesc + '</option>');
+			}
+			
+			$('#textCodeCollaborator').val("");
+			$('#textInitials').val(item.Initials.trim());
+			$('#textCodeNumber').val("");
+			$('#textTypeSeller').val(item.fkPeopleTypeId);
+			$('#textRoster').val(0);
+			if(item.ynEmp == 1){
+				$("#checkPeopleEmployee").prop( "checked", true );
+			}else{
+				$("#checkPeopleEmployee").prop( "checked", false );
+			}
+			modalTabPeople();
+			
 			//$('#idPeople').val(item.pkPeopleId);
 			$("#idPeople").data("pkPeopleId",item.pkPeopleId);
 			//$('#textState').val("");
@@ -680,12 +772,12 @@ function getInfoPeople(id){
 				'<div class="ui-dialog-titlebar2"><label>Alta de personas</label></div><img class="imgCloseModal" src="' + BASE_URL+	'assets/img/common/iconClose2.png">'
 			)
 			dialogUser.dialog( 'open' )
-			$('.divLoadingTable').hide();
+			showLoading('#divTablePeople',false);
 		},
 		error: function(error){
 			console.log(error)
-			$('.divLoadingTable').hide();
-			showAlertPeople(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlertPeople);
+			showLoading('#divTablePeople',false);
+			showAlert(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlert);
 		}
 	});	
 	
@@ -711,50 +803,116 @@ function convertToDateFormat( dd, mm, yy ){
  */
 function changeTabsModalPeople(screen){
 	//asigna la clase active
-	$('#tabsModalPeople .tabs .tab-title').removeClass('active');
+	$('#tabsModalPeople .tabs .tabs-title').removeClass('active');
 	$('#tabsModalPeople .tabs li[attr-screen=' + screen + ']').addClass('active');
 	//muestra la pantalla selecionada
 	$('#contentModalPeople .tab-modal').hide();
 	$('#' + screen).show();
+	if(screen == "tab-PReservaciones"){
+		getInfoTabsPeople(screen, "people/getReservationsByPeople");
+	}else if(screen == "tab-PContratos"){
+		getInfoTabsPeople(screen, "people/getContractByPeople");
+	}else if(screen == "tab-PEmpleados"){
+		//getInfoTabsPeople(screen, "people/getEmployeeByPeople");
+	}
 }
 
 /**
-* muestra una alerta al usuario
-* @param isOpen indica si la alerta se abre o cierra
-* @param message mensaje que se muestra en la pantalla
-* @param typeForm typo de contenido que tendra (progressbar o button)
-* @param success funcion que se llama si tiene un boton aceptar si esta vacio no aparece
-* @param cancel funcion que se llama si tiene un boton cancelar si esta vacio no aparece
+* Obtiene las reservaciones de una persona
 */
-function showAlertPeople(isOpen = false,message = null,typeForm = null, success = null, cancel = null){
-	if(isOpen){
-		$('#alertPeople .alertMessage .bodyAlertMessage #progressbarAlert').hide();
-		$('#alertPeople .alertMessage .bodyAlertMessage button').hide();
-		if(typeForm == "progressbar"){
-			$('#alertPeople .alertMessage .bodyAlertMessage #progressbarAlert').show();
-		}else if(typeForm == "button"){
-			$('#alertPeople .alertMessage .bodyAlertMessage button').show();
-			if(success == null){
-				$('#alertPeople .alertMessage .bodyAlertMessage .success').hide();
-			}else{
-				$("#btnSuccessAlertPeople").off();
-				$("#btnSuccessAlertPeople").on('click',function(){
-					success();
-				});
+function getInfoTabsPeople(screen, url){
+	
+	showLoading('#contentModalPeople',true);
+	if(screen == "tab-PReservaciones"){
+		$('#tableReservationsPeople tbody').empty();
+	}
+	$.ajax({
+   		type: "POST",
+       	url: url,
+		dataType:'json',
+		data: {
+			id:$("#idPeople").data("pkPeopleId"),
+		},
+		success: function(data){
+			console.log(data)
+			/*var total = data.total;
+			if( parseInt(total) == 0 ){ total = 1; }
+			total = parseInt( total/10 );
+			if(data.total%10 == 0){
+				total = total - 1;		
+			}
+			total = total + 1
+			if(page == 0){
+				$('#paginationPeople').val(true);
+				loadPaginatorPeople( total );
+			}*/
+			if(screen == "tab-PReservaciones"){
+				for(i=0;i<data.items.length;i++){
+					var item = data.items[i];
+					$('#tableReservationsPeople tbody').append(
+						'<tr>' +
+							'<td>' + item.ResCode + '</td>' +
+							'<td>' + item.pkResId + '</td>' +
+							'<td>' + item.ResTypeDesc + '</td>' +
+							'<td>' + item.OccYear + '</td>' +
+							'<td>' + item.NightId + '</td>' +
+							'<td>' + item.FloorPlanDesc + '</td>' +
+							'<td>' + item.SeasonDesc + '</td>' +
+							'<td>' + item.OccTypeDesc + '</td>' +
+							'<td>' + item.date + '</td>' +
+							'<td>' + item.Intv + '</td>' +
+							'<td>' + item.UnitCode + '</td>' +
+						'</tr>'
+					);
+				}
+			}else if(screen == "tab-PContratos"){
+				for(i=0;i<data.items.length;i++){
+					var item = data.items[i];
+					$('#tableContractPeople tbody').append(
+						'<tr>' +
+							'<td></td>' +
+							'<td>' + item.Folio + '</td>' +
+							'<td>' + item.pkResId + '</td>' +
+							'<td>' + item.OccYear + '</td>' +
+							'<td>' + item.FloorPlanDesc + '</td>' +
+							'<td>' + item.SeasonDesc + '</td>' +
+							'<td>' + item.FrequencyDesc + '</td>' +
+							'<td>' + item.date + '</td>' +
+							'<td>' + item.Intv + '</td>' +
+							'<td>' + item.UnitCode + '</td>' +
+							'<td>' + item.BalanceCSF + '</td>' +
+							'<td>' + item.LoanBa + '</td>' +
+							'<td>' + item.StatusDesc + '</td>' +
+						'</tr>'
+					);
+				}
+			}else if(screen == "tab-PEmpleados"){
+				$('#textTypeSeller').empty();
+				$('#textTypeSeller').append('<option value="0" code="0">Seleccione un tipo de vendedor</option>');
+				for(i=0;i<data.items.length;i++){
+					var item = data.items[i];
+					$('#textTypeSeller').append('<option value="' + item.pkPeopleTypeId + '" code="' + item.PeopleTypeCode + '">' + item.PeopleTypeDesc + '</option>');
+				}
 			}
 			
-			if(cancel == null){
-				$('#alertPeople .alertMessage .bodyAlertMessage .cancel').hide();
-			}else{
-				$("#btnCancelAlertPeople").off();
-				$("#btnCancelAlertPeople").on('click',function(){
-					cancel();
-				});
-			}
+			/*//$('.iconEdit').on()
+			$("#tablePeople tbody tr .cellEdit .iconEdit").off( "click", ".iconEdit" );
+			$("#tablePeople tbody tr .cellEdit .iconEdit").on("click", function(){ showModal($(this).attr('value')); });*/
+			showLoading('#contentModalPeople',false);
+		},
+		error: function(error){
+			console.log(error)
+			showLoading('#contentModalPeople',false);
+			showAlert(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlert);
 		}
-		$('#alertPeople .alertMessage .bodyAlertMessage label').html(message);
-		$('#alertPeople').show();
+	});
+	
+}
+
+function modalTabPeople(){
+	if($("#checkPeopleEmployee").is(':checked')) {
+		//$('#containerPeopleEmployee').show(1000);
 	}else{
-		$('#alertPeople').hide();
+		//$('#containerPeopleEmployee').hide(1000);
 	}
 }

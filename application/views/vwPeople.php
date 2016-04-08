@@ -46,10 +46,10 @@
               <input type="text" id="txtSearch" class="txtSearch" placeholder="Ingresa un parámetro de búsqueda" />
             </div>
 			<div class="large-6 columns end rowBtnSearch">
-				<ul class="button-group radius groupBtnSearch">
-					<li><a id="btnSearch" class="tiny button btnSearch">Buscar</a></li>
-					<li><a id="btnCleanSearch" class="tiny button btnSearch">Limpiar</a></li>
-				</ul>
+				<div class="small button-group radius groupBtnSearch">
+					<a id="btnSearch" class="button btnSearch">Buscar</a>
+					<a id="btnCleanSearch" class="button btnSearch">Limpiar</a>
+				</div>
 			</div>
         </div>
     </div>
@@ -80,16 +80,7 @@
 	
 </div>
 
-<div class="row table-section">
-	<div class="divLoadingTable">
-		<div class="bgLoadingTable" ></div>
-		<div class="loadingTable" >
-			<div class="subLoadingTable">
-				<label>Cargando..</label>
-				<div id="progressbar"></div>
-			</div>
-		</div>
-	</div>
+<div class="row table-section" id="divTablePeople">
 	<table id="tablePeople" width="100%">
 	<thead>
 		<tr>
@@ -118,44 +109,31 @@
 	<!--<button id="downloadButton">Start Download</button>-->
 </div>
 
-<div class="alertScreen" id="alertPeople">
-	<div class="bgAlertScreen" ></div>
-	<div class="alertMessage" >
-		<div class="headerAlertMessage">
-			<p>307TI</p>
-		</div>
-		<div class="bodyAlertMessage">
-			<label>Datos guardados</label>
-			<div id="progressbarAlert"></div>
-			<button class="tiny button radius btnAlertMessage cancel" id="btnCancelAlertPeople">Cancelar</button>
-			<button class="tiny button radius btnAlertMessage success" id="btnSuccessAlertPeople">Aceptar</button>
-		</div>
-	</div>
-</div>
-
 <div id="dialog-User" title="Alta de usuarios">
 	<div class="tabsModal" id="tabsModalPeople">
-		<ul class="tabs" data-tab="people" role="tablist">
-			<li class="tab-title active" attr-screen="tab-PGeneral">
+		<ul class="tabs" data-tabs>
+			<li class="tabs-title active" attr-screen="tab-PGeneral">
 				<a>General</a>
 			</li>
-			<li class="tab-title" attr-screen="tab-PReservaciones">
+			<li class="tabs-title" attr-screen="tab-PReservaciones">
 				<a>Reservaciones</a>
 			</li>
-			<li class="tab-title" attr-screen="tab-PContratos">
+			<li class="tabs-title" attr-screen="tab-PContratos">
 				<a>Contratos</a>
 			</li>
-			<li class="tab-title" attr-screen="tab-PEmpleados">
+			<li class="tabs-title" attr-screen="tab-PEmpleados">
 				<a>Empleados</a>
 			</li>
 		</ul>
 	</div>
 	<div class="contentModal" id="contentModalPeople">
+	
 		<div id="tab-PGeneral" class="tab-modal" style="display:inline;">
 			<!-- Datos personales -->
-			<div class="row" id="alertValPeopleGeneral" style="display:none;">
+			<div class="row" id="alertValPeopleGeneral" style="display:inline;">
 				<div class="small-12 columns">
-					<div data-alert class="alert-box alert" >
+					<!--<div data-alert class="alert-box alert" >-->
+					<div class="callout alert">
 						Por favor rellene los campos Obligatorios(rojo)
 					</div>
 				</div>
@@ -228,7 +206,7 @@
 				<div class="row">
 					<!-- Nacionalidad-->
 					<div class="small-12 large-6 columns">
-						<label id="alertNationality" for="textNationality" class="text-right">Nacionalidad
+						<label id="alertNationality" for="textNationality" class="text-left">Nacionalidad
 							<select id="textNationality" class="round">
 								<option value="husker">Mexicano</option>
 							</select>
@@ -236,7 +214,7 @@
 					</div>
 					<!-- Calificacion-->
 					<div class="small-12 large-6 columns">
-						<label for="textQualification" class="text-right">Calificación
+						<label for="textQualification" class="text-left">Calificación
 							<input type="number" id="textQualification" class="round general">
 						</label>
 					</div>
@@ -245,14 +223,14 @@
 			<!-- Datos del domicilio -->
 			<div class="row" id="alertValPeopleAddress" style="display:none;">
 				<div class="small-12 columns">
-					<div data-alert class="alert-box alert" >
+					<div class="callout alert">
 						Por favor rellene los campos Obligatorios(rojo)
 					</div>
 				</div>
 			</div>
 			<fieldset class="fieldset">
 				<legend class="btnAddressData"><img id="imgCoppapseAddress" class="imgCollapseFieldset down" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>Datos del domicilio</legend>
-				<div class="containerAddress" style="display:none;">
+				<div id="containerAddress" style="display:none;">
 					<!-- calle, numero-->
 					<div class="row">
 						<div class="small-3 columns">
@@ -326,7 +304,7 @@
 			<!-- Datos del contacto -->
 			<div class="row" id="alertValPeopleContact" style="display:none;">
 				<div class="small-12 columns">
-					<div data-alert class="alert-box alert" >
+					<div class="callout alert">
 						Por favor rellene los campos Obligatorios(rojo)
 					</div>
 				</div>
@@ -337,7 +315,7 @@
 					<!-- Telefono 1-->
 					<div class="row">
 						<div class="small-3 columns">
-							<label id="alertPhone1" for="textPhone1" class="text-right">Telefono 1</label>
+							<label id="alertPhone1" for="textPhone1" class="text-left">Telefono 1</label>
 						</div>
 						<div class="small-9 columns">
 							<input type="tel" class="phonePeople round general" id="textPhone1" maxlength="7" placeholder="xxx-xxx-xxxx">
@@ -346,7 +324,7 @@
 					<!-- Telefono 2 -->
 					<div class="row">
 						<div class="small-3 columns">
-							<label id="alertPhone2" for="textPhone2" class="text-right">Telefono 2</label>
+							<label id="alertPhone2" for="textPhone2" class="text-left">Telefono 2</label>
 						</div>
 						<div class="small-9 columns">
 							<input type="tel" class="phonePeople round general" id="textPhone2" maxlength="7" placeholder="xxx-xxx-xxxx">
@@ -355,7 +333,7 @@
 					<!-- Telefono 3 -->
 					<div class="row">
 						<div class="small-3 columns">
-							<label id="alertPhone3" for="textPhone3" class="text-right">Telefono 3</label>
+							<label id="alertPhone3" for="textPhone3" class="text-left">Telefono 3</label>
 						</div>
 						<div class="small-9 columns">
 							<input type="tel" class="phonePeople round general" id="textPhone3" maxlength="7" placeholder="xxx-xxx-xxxx">
@@ -364,7 +342,7 @@
 					<!-- Email 1 -->
 					<div class="row">
 						<div class="small-3 columns">
-							<label id="alertEmail1" for="textEmail1" class="text-right">Email 1</label>
+							<label id="alertEmail1" for="textEmail1" class="text-left">Email 1</label>
 						</div>
 						<div class="small-9 columns">
 							<input type="email" class="emailPeople round general" id="textEmail1">
@@ -373,7 +351,7 @@
 					<!-- Email 2 -->
 					<div class="row">
 						<div class="small-3 columns">
-							<label id="alertEmail2" for="textEmail2" class="text-right">Email 2</label>
+							<label id="alertEmail2" for="textEmail2" class="text-left">Email 2</label>
 						</div>
 						<div class="small-9 columns">
 							<input type="email" class="emailPeople round general" id="textEmail2">
@@ -383,25 +361,20 @@
 			</fieldset>
 		</div>
 		<div id="tab-PReservaciones" class="tab-modal">
-			<table id="tablePeople" width="100%">
+			<table id="tableReservationsPeople" width="100%">
 				<thead>
 					<tr>
-						<th class="cellEdit" ></th>
-						<th class="cellEdit" >codigo</th>
-						<th class="cellGeneral" >Nombre</th>
-						<th class="cellGeneral">Apellidos</th>
-						<th class="cellGeneral">Genero</th>
-						<th class="cellDate" >Fecha Nacimiento</th>
-						<th class="cellAddress" >Calle, Numero, colonia</th>
-						<th class="cellGeneral" >Ciudad</th>
-						<th class="cellGeneral" >Estado</th>
-						<th class="cellGeneral" >Pais</th>
-						<th class="cellGeneral" >CP</th>
-						<th class="cellPhone" >Telefono 1</th>
-						<th class="cellPhone" >Telefono 2</th>
-						<th class="cellPhone" >Telefono 3</th>
-						<th class="cellEmail" >Email</th>
-						<th class="cellEmail" >Email 2</th>
+						<th class="cellGeneral" >Res. codigo</th>
+						<th class="cellSmall" >ResId</th>
+						<th class="cellMedium">Res. tipo</th>
+						<th class="cellGeneral">Año</th>
+						<th class="cellGeneral" >Noches</th>
+						<th class="cellBig" >Tipo de unidad</th>
+						<th class="cellMedium" >Temporada</th>
+						<th class="cellMedium" >Occ Type</th>
+						<th class="cellBig" >Fecha</th>
+						<th class="cellSmall" >Intervalos</th>
+						<th class="cellSmall" >Unidad Asignada</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -410,10 +383,89 @@
 			</table>
 		</div>
 		<div id="tab-PContratos" class="tab-modal">
-			
+			<table id="tableContractPeople" width="100%">
+				<thead>
+					<tr>
+						<th> </th>
+						<th class="cellGeneral" >No. Contrato</th>
+						<th class="cellSmall" >ContratoId</th>
+						<th class="cellMedium">Primer año de ocupacion</th>
+						<th class="cellMedium">Tipo de unidad</th>
+						<th class="cellMedium" >Temporada</th>
+						<th class="cellMedium" >Frecuencia</th>
+						<th class="cellBig" >Fecha de venta</th>
+						<th class="cellSmall" >Intervalos</th>
+						<th class="cellGeneral" >Unidad</th>
+						<th class="cellMedium" >Balance CSF</th>
+						<th class="cellMedium" >Préstamo Bal</th>
+						<th class="cellMedium" >Status</th>
+					</tr>
+				</thead>
+				<tbody>
+		
+				</tbody>
+			</table>
 		</div>
 		<div id="tab-PEmpleados" class="tab-modal">
-			
+			<!-- Datos del contacto -->
+			<div class="row" id="alertValPeopleEmployee" style="display:none;">
+				<div class="small-12 columns">
+					<div class="callout alert">
+						Por favor rellene los campos Obligatorios(rojo)
+					</div>
+				</div>
+			</div>
+				<legend><input type="checkbox" id="checkPeopleEmployee" class="checkModalPeople">&nbsp;&nbsp;Asignar como empleado</legend>
+				<div id="containerPeopleEmployee">
+					<!-- Código del colaborador:-->
+					<div class="row">
+						<div class="small-3 columns">
+							<label id="alertCodeCollaborator" for="textCodeCollaborator" class="text-left">Código del colaborador</label>
+						</div>
+						<div class="small-9 columns">
+							<input type="text" class="round general" id="textCodeCollaborator">
+						</div>
+					</div>
+					<div class="row">
+						<!-- Iniciales-->
+						<div class="small-12 large-6 columns" style="float:right">
+							<label id="alertInitials" for="textInitials" class="text-left">Iniciales</label>
+								<input type="text" id="textInitials" class="round general" >
+							
+						</div>
+						<!-- Código numérico -->
+						<div class="small-12 large-6 columns">
+							<label for="textCodeNumber" id="alertCodeNumber" class="text-left">Código numérico</label>
+								<input type="number" id="textCodeNumber" class="round general">
+							
+						</div>
+					</div>
+					<!-- tipo de vendedor -->
+					<div class="row">
+						<div class="small-3 columns">
+							<label id="alertTypeSeller" for="textTypeSeller" class="text-left">Tipo de vendedor</label>
+						</div>
+						<div class="small-9 columns">
+							<select id="textTypeSeller" class="round">
+								<option value="0" code="0">Seleccione un tipo de vendedor</option>
+							</select>
+						</div>
+					</div>
+					<!-- Nómina-->
+					<div class="row">
+						<div class="small-3 columns">
+							<label id="alertRoster" for="textRoster" class="text-left">Nómina</label>
+						</div>
+						<div class="small-9 columns">
+							<select id="textRoster" class="round">
+								<option value="0" code="0">Seleccione la nómina</option>
+								<option value="1" code="0">Ventas</option>
+								<option value="2" code="0">Administrador</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</fieldset>
 		</div>
 	</div>
 	<input type="hidden" value="0" id="idPeople" />
