@@ -9,6 +9,12 @@ setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
  */
 class Contract extends CI_Controller {
 
+	public function __construct() {
+		parent::__construct();
+		$this->load->helper('url');
+		$this->load->database('default');
+		$this->load->model('contract_db');
+	}
     
 	public function index(){
         $this->load->view('vwContract_pruebas.php');
@@ -40,6 +46,13 @@ class Contract extends CI_Controller {
 
 	public function insertContrat($Contract){
 		return $this->contract_db->insertReturnId($Contract,"tblContract");;
+	}
+
+
+	public function getContratos(){
+		$contratos = $this->contract_db->getContratos();
+		$total = count($contratos);
+		echo json_encode($contratos);
 	}
 }
 

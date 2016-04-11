@@ -89,7 +89,7 @@
 </div>
 
 <div class="row table-section">
-	<div class="divLoadingTable">
+<!-- 	<div class="divLoadingTable">
 		<div class="bgLoadingTable" ></div>
 		<div class="loadingTable" >
 			<div class="subLoadingTable">
@@ -97,7 +97,7 @@
 				<div id="progressbar"></div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<table id="tablecontract" width="100%">
 	<thead>
 		<tr>
@@ -485,7 +485,7 @@
 
 		<div class="containerPeople">
 		<div class="row">
-				<div class="divLoadingTable">
+				<!-- <div class="divLoadingTable">
 				<div class="bgLoadingTable"></div>
 				<div class="loadingTable" >
 					<div class="subLoadingTable">
@@ -493,7 +493,7 @@
 						<div id="progressbar"></div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<div class="small-12 columns">
 				<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>
 			</div>
@@ -522,7 +522,7 @@
 	<fieldset class="fieldset">
 		<legend class="btnAddressData">Unidades</legend>
 		<div class="containerPeople">
-			<div class="row">
+<!-- 			<div class="row">
 				<div class="divLoadingTable">
 					<div class="bgLoadingTable"></div>
 					<div class="loadingTable" >
@@ -531,7 +531,7 @@
 							<div id="progressbar"></div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 		<div class="small-12 columns">
 			<a id="btnAddUnidades" href="#" class="button tiny"><i class="fa fa-home"></i></a>
 		</div>

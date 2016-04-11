@@ -1,93 +1,121 @@
 
 $(document).foundation();
-$('#newContract').click(function(){ showModalContracto(0); });
+$('#newContract').click(function(){ showModals('dialog-Contract', cleanAddPeople); });
 $('#btnTourID').click(function(){ dialogTourID.dialog('open'); });
 $('#btnAddPeople').click(function(){showModals('dialog-Personas', cleanAddPeople);});
 $('#btnAddUnidades').click(function(){showModals('dialog-Unidades', cleanAddUnidades);});
 
 
 
-function showModalContracto(){
-	dialogContract.dialog('open');
-}
+(function($) {
+    "use strict";
+
+    $("[data-widget='collapse']").click(function() {
+        //Find the box parent        
+        var box = $(this).parents(".box").first();
+        //Find the body and the footer
+        var bf = box.find(".box-body, .box-footer");
+        if (!box.hasClass("collapsed-box")) {
+            box.addClass("collapsed-box");
+            bf.slideUp();
+        } else {
+            box.removeClass("collapsed-box");
+            bf.slideDown();
+        }
+    });
+
+})(jQuery);
+
+
+
+(function($) {
+    "use strict";
+    $("[data-widget='remove']").click(function() {
+        var box = $(this).parents(".box").first();
+        box.slideUp();
+    });
+})(jQuery);
+
 
 $(function(){
+$("#busquedaAvanazada").click(function(){
+        $("#avanzada").slideToggle("slow");
+    });
 
 
 
 
+	// maxHeight = screen.height * .25;
+	// maxHeight = screen.height - maxHeight;
 
-	maxHeight = screen.height * .25;
-	maxHeight = screen.height - maxHeight;
+	// dialogContract = $( "#dialog-Contract" ).dialog({
+	// 	autoOpen: false,
+	// 	height: maxHeight,
+	// 	width: "50%",
+	// 	modal: true,
+	// 	dialogClass: 'dialogModal',
+	// 	buttons: [
+	// 		{
+	// 			text: "Cancelar",
+	// 			"class": 'dialogModalButtonCancel',
+	// 			click: function() {
+	// 				dialogContract.dialog('close');
+	// 				cleanContractFields("contract");
+	// 			}
+	// 		},
+	// 		{
+	// 			text: "Guardar y cerrar",
+	// 			"class": 'dialogModalButtonAccept',
+	// 			click: function() {
+	// 				createNewContract("contract",false)
+	// 			}
+	// 		},
+	// 		{
+	// 			text: "Guardar",
+	// 			"class": 'dialogModalButtonAccept',
+	// 			click: function() {
+	// 				createNewContract("contract", true)
+	// 			}
+	// 		},
+	// 	],
+	// 	close: function() {
+	// 		cleanContractFields("contract");
+	// 	}
+	// });
 
-	dialogContract = $( "#dialog-Contract" ).dialog({
-		autoOpen: false,
-		height: maxHeight,
-		width: "50%",
-		modal: true,
-		dialogClass: 'dialogModal',
-		buttons: [
-			{
-				text: "Cancelar",
-				"class": 'dialogModalButtonCancel',
-				click: function() {
-					dialogContract.dialog('close');
-					cleanContractFields("contract");
-				}
-			},
-			{
-				text: "Guardar y cerrar",
-				"class": 'dialogModalButtonAccept',
-				click: function() {
-					createNewContract("contract",false)
-				}
-			},
-			{
-				text: "Guardar",
-				"class": 'dialogModalButtonAccept',
-				click: function() {
-					createNewContract("contract", true)
-				}
-			},
-		],
-		close: function() {
-			cleanContractFields("contract");
-		}
-	});
-
-	dialogTourID = $( "#dialog-tourID" ).dialog({
-		autoOpen: false,
-		height: maxHeight,
-		width: "40%",
-		modal: true,
-		dialogClass: 'dialogModal',
-		buttons: [
-			{
-				text: "Cancelar",
-				"class": 'dialogModalButtonCancel',
-				click: function() {
-					dialogTourID.dialog('close');
-				}
-			},
-			{
-				text: "Guardar y cerrar",
-				"class": 'dialogModalButtonAccept',
-				click: function() {
+	// dialogTourID = $( "#dialog-tourID" ).dialog({
+	// 	autoOpen: false,
+	// 	height: maxHeight,
+	// 	width: "40%",
+	// 	modal: true,
+	// 	dialogClass: 'dialogModal',
+	// 	buttons: [
+	// 		{
+	// 			text: "Cancelar",
+	// 			"class": 'dialogModalButtonCancel',
+	// 			click: function() {
+	// 				dialogTourID.dialog('close');
+	// 			}
+	// 		},
+	// 		{
+	// 			text: "Guardar y cerrar",
+	// 			"class": 'dialogModalButtonAccept',
+	// 			click: function() {
 					
-				}
-			},
-			{
-				text: "Guardar",
-				"class": 'dialogModalButtonAccept',
-				click: function() {
+	// 			}
+	// 		},
+	// 		{
+	// 			text: "Guardar",
+	// 			"class": 'dialogModalButtonAccept',
+	// 			click: function() {
 					
-				}
-			},
-		],
-		close: function() {
-			//cleanContractFields("contract");
-		}
-	});	
+	// 			}
+	// 		},
+	// 	],
+	// 	close: function() {
+	// 		//cleanContractFields("contract");
+	// 	}
+	// });	
 });
 
 
@@ -179,6 +207,22 @@ function EnviaFormularioCliente(id){
 		
 		success: function(data){
 			//console.log("dta"+data);
+		},
+		error: function(){
+
+		}
+	});	
+}
+
+
+function getContratos(){
+	$.ajax({
+		data:{},
+   		type: "POST",
+       	url: "contract/getContratos",
+		dataType:'json',
+		success: function(data){
+			console.log(data.length);
 		},
 		error: function(){
 
