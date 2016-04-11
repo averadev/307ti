@@ -40,8 +40,6 @@ input.round, select.round{
 select.round{
 }
 
-
-
 /**
 * @section top menu
 * @todo menu principal
@@ -889,4 +887,60 @@ label.error{
 	overflow:auto;
 	padding-left:0;
 	margin-left:0;
+}
+
+/**
+* @medias query
+* @media query para la resolucion de tamaños
+*/
+@media only screen and (min-width: 40.063em) and (max-width: 64em) {
+	
+	.general-section{
+		padding: 0 20px 0 240px;
+		padding:0;
+	}
+	.menu-section{
+		z-index: 1000;
+		float: left;
+		position: fixed;
+		height: auto;
+		width: 100%;
+	}
+	.menu-content{
+		height: 100%;
+		width: 100%;
+		overflow-y: auto;
+		padding-top:10px;
+		padding-bottom:10px;
+	}
+	.menu-sel{
+		cursor: pointer;
+		padding-top: 12px;
+		margin-bottom: 5px;
+		margin:0;
+		height: 40px;
+		width: 180px;
+		color: #3b3b3b;
+		font-size: 14px;
+		text-align: center;
+		background-color: #aaaaaa;
+		float:left;
+		margin-right:15px;
+	}
+	
+	.menu-fix{
+		height:auto;
+	}
+	.general-section{
+		padding: 240px 20px 0 240px;
+	}
+	
+	/*.menu-sel:hover{
+		color: #ffffff;
+		background-color: #183a59;
+	}
+	.menu-fix{
+		height: 80px;
+	}*/
+	
 }

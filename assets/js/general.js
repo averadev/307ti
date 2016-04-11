@@ -1,4 +1,7 @@
 // Init events
+
+var dialogUser = null;
+
 $(function() {
     // Button Dropdown Menu
     $('.btn-menu').on('click', function() {

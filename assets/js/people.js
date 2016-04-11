@@ -4,7 +4,7 @@
 * @author Alfredo Chi
 * @version 0.1
 */
-var dialogUser = null;
+
 var maxHeight = 400;
 isSearch = true;
 var xhrPeople
@@ -13,22 +13,22 @@ var idPeople = 0;
 /**************Index****************/
 
 //muestra el modal de usuarios
-$('#newUser').click(function(){ showModal(0); });
+$('#newUser').off();
+$('#newUser').on('click', function() {  showModal(0); });
 //esconde el modal de usuarios
-//$('.imgCloseModal').click(function(){ hideModal(); });
-//$(".imgCloseModal").button().on( "click", function() { hideModal(); });
-$(document).on('click','.imgCloseModal', function(){ hideModal(); });
+//$(document).on('click','.imgCloseModal', function(){ hideModal(); });
 
 //muestra o oculta los datos del domicilio
-//$(document).on('click','.btnAddressData', function(){ showDivModal('address'); });
+$('.btnAddressData').off();
 $('.btnAddressData').on('click', function(){ showDivModal('address'); });
 //muestra o oculta la informacion de contacto
-//$(document).on('click','.btnContactData', function(){ showDivModal('contact'); });
+$('.btnContactData').off();
 $('.btnContactData').on('click', function(){ showDivModal('contact'); });
 
 
 //busqueda de usuarios
-$('#btnSearch').click(function(){ searchPeople(0); });
+$('#btnSearch').off();
+$('#btnSearch').on('click', function() {  searchPeople(0); });
 //busqueda de usuarios mediante enter
 $('#txtSearch').keyup(function(e){
     if(e.keyCode ==13){
@@ -36,18 +36,16 @@ $('#txtSearch').keyup(function(e){
     }
 });
 //limpia el campo busqueda
-$('#btnCleanSearch').click(function(){ CleandFieldSearch(); });
+$('#btnCleanSearch').off();
+$('#btnCleanSearch').on('click', function() {  CleandFieldSearch(); });
 //muestra u oculta la busqueda avanzada
-$('#checkFilterAdvance').click(function(){ searchAdvanced(); });
+$('#checkFilterAdvance').off();
+$('#checkFilterAdvance').on('click', function() {  searchAdvanced(); });
 
 //editar persomas
-// revisar busqueda de personas :)
-
-
-//$(document).off( "click", ".iconEdit" );
 
 //activa los tap del modal
-//$('#tabsModalPeople .tabs .tabs-title').unbind( "click" );
+$('#tabsModalPeople .tabs .tabs-title').off();
 $('#tabsModalPeople .tabs .tabs-title').on('click', function() { changeTabsModalPeople($(this).attr('attr-screen')) });
 
 //busqueda de contrado por folio
@@ -69,6 +67,12 @@ $(function() {
 	//maxHeight
 	maxHeight = screen.height * .25;
 	maxHeight = screen.height - maxHeight;
+	
+	console.log(dialogUser)
+	
+	if(dialogUser != null){
+		dialogUser.dialog( "destroy" );
+	}
 	
 	dialogUser = $( "#dialog-User" ).dialog({
 		autoOpen: false,
@@ -136,6 +140,8 @@ $(function() {
 		}
 	});
 	
+	console.log(dialogUser)
+	
 	$( "#textBirthdate" ).datepicker({
 		changeMonth: true,
 		changeYear: true
@@ -166,6 +172,8 @@ function showModal(id){
 		$('.ui-dialog-titlebar').append(
 			'<div class="ui-dialog-titlebar2"><label>Alta de personas</label></div><img class="imgCloseModal" src="' + BASE_URL+'assets/img/common/iconClose2.png">'
 		)
+		$('#imgCloseModal').off();
+		$('.imgCloseModal').on('click', function() {  hideModal(); });
 	}else{
 		$('.dialogModalButtonSecondary').show();
 		$("#tabsModalPeople").show();
@@ -821,6 +829,8 @@ function getInfoPeople(id){
 			$('.ui-dialog-titlebar').append(
 				'<div class="ui-dialog-titlebar2"><label>Alta de personas</label></div><img class="imgCloseModal" src="' + BASE_URL+	'assets/img/common/iconClose2.png">'
 			)
+			$('#imgCloseModal').off();
+			$('.imgCloseModal').on('click', function() {  hideModal(); });
 			dialogUser.dialog( 'open' )
 			showLoading('#divTablePeople',false);
 		},

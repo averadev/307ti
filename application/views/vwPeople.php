@@ -367,28 +367,30 @@
 				</div>
 			</fieldset>
 		</div>
-		<div id="tab-PReservaciones" class="tab-modal">
-			<div class="row table-section" id="divTableReservationsPeople">
-				<table id="tableReservationsPeople" width="100%">
-					<thead>
-						<tr>
-							<th class="cellGeneral" >Res. codigo</th>
-							<th class="cellSmall" >ResId</th>
-							<th class="cellMedium">Res. tipo</th>
-							<th class="cellGeneral">Año</th>
-							<th class="cellGeneral" >Noches</th>
-							<th class="cellBig" >Tipo de unidad</th>
-							<th class="cellMedium" >Temporada</th>
-							<th class="cellMedium" >Occ Type</th>
-							<th class="cellBig" >Fecha</th>
-							<th class="cellSmall" >Intervalos</th>
-							<th class="cellSmall" >Unidad Asignada</th>
-						</tr>
-					</thead>
-					<tbody>
+		<div id="tab-PReservaciones" class="large-12 columns tab-modal">
+			<div class="row" id="divTableReservationsPeople">
+				<div class="large-12 columns table-section2">
+					<table id="tableReservationsPeople">
+						<thead>
+							<tr>
+								<th class="cellGeneral" >Res. codigo</th>
+								<th class="cellSmall" >ResId</th>
+								<th class="cellMedium">Res. tipo</th>
+								<th class="cellGeneral">Año</th>
+								<th class="cellGeneral" >Noches</th>
+								<th class="cellBig" >Tipo de unidad</th>
+								<th class="cellMedium" >Temporada</th>
+								<th class="cellMedium" >Occ Type</th>
+								<th class="cellBig" >Fecha</th>
+								<th class="cellSmall" >Intervalos</th>
+								<th class="cellSmall" >Unidad Asignada</th>
+							</tr>
+						</thead>
+						<tbody>
 			
-					</tbody>
-				</table>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 		<div id="tab-PContratos" class="large-12 columns tab-modal">
