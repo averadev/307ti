@@ -220,7 +220,7 @@ Class people_db extends CI_MODEL
 	/**
 	 *
 	 **/
-	public function getContractByPeople($id){
+	public function getContractByPeople($id,$search){
 		$this->db->select('tblRes.Folio, tblRes.pkResId');
 		$this->db->select('tblResOcc.OccYear,tblResOcc.CrDt');
 		$this->db->select('tblResInvt.Intv');
@@ -241,6 +241,9 @@ Class people_db extends CI_MODEL
 		$this->db->where('tblResPeopleAcc.fkPeopleId = ', $id);
 		$this->db->where('tblRes.fkResTypeId = 5');
 		$this->db->where('tblResPeopleAcc.ynActive = 1');
+		if($search != ""){
+			$this->db->where('tblRes.Folio =', $search);
+		}
 		return  $this->db->get()->result();
 	}
 	
@@ -250,6 +253,21 @@ Class people_db extends CI_MODEL
 		if($condicion != null){
 			$this->db->where($condicion);
 		}
+		return  $this->db->get()->result();
+	}
+	
+	/**
+	* valida que los correos no existan en la tabla persona
+	* @param email direccion de correo electronico
+	**/
+	public function validateEmailPeople($email,$id = null){
+		$this->db->select('tblEmail.pkEmail');
+		$this->db->from('tblEmail');
+		if($id != null){
+			$this->db->join('tblPeopleEmail', 'tblPeopleEmail.fkEmailId = tblEmail.pkEmail', 'left');
+			$this->db->where('tblPeopleEmail.fkPeopleId != ',$id);
+		}
+		$this->db->where('tblEmail.EmailDesc = ',$email);
 		return  $this->db->get()->result();
 	}
 	

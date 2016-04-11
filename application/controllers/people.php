@@ -29,6 +29,7 @@ class People extends CI_Controller {
 	public function savePeople(){
 		if($this->input->is_ajax_request()){
 			
+			$idPeople = 0;
 			$hoy = getdate();
 			$strHoy = $hoy["year"]."-".$hoy["mon"]."-".$hoy["mday"] . " " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
 				
@@ -37,7 +38,26 @@ class People extends CI_Controller {
 			$BirthDayMonth = date('n', ($birthDate_at_unix));
 			$BirthDayYear =	date('Y', ($birthDate_at_unix));
 			
-			if($_POST['id'] == 0){
+			//comprueba si los correos existen
+			$email = json_decode(stripslashes($_POST['email']));
+			$existingEmail = false;
+			foreach($email as $item){
+				if($_POST['id'] == 0){
+					$isEmail = $this->people_db->validateEmailPeople($item);
+				}else{
+					$isEmail = $this->people_db->validateEmailPeople($item,$_POST['id']);
+				}
+				
+				if(count($isEmail) > 0){
+					$existingEmail = true;
+				}
+			}
+			$message = "";
+			if($existingEmail){
+				$message = array('success' => false, 'message' => "Correo existente, escriba otro porfavor");
+			}else{
+			
+				if($_POST['id'] == 0){
 				
 				$insert = array(
 					'fkPeopleTypeId'	=> 18,
@@ -138,6 +158,9 @@ class People extends CI_Controller {
 				
 				$data = "Datos guardados";
 			}else{
+				
+				$idPeople = $_POST['id'];
+				
 				$typePeople;
 				if($_POST['employee'] == true){
 					$typePeople = $_POST['typeSeller'];
@@ -295,9 +318,11 @@ class People extends CI_Controller {
 				}
 				
 				$data = "Datos editados";
-			}
+				}
 			
-			echo json_encode($data);	
+				$message = array('success' => true, 'message' => $data, 'pkPeopleId' => $idPeople);
+			}
+			echo json_encode($message);
 		}
 	}
 	
@@ -408,7 +433,7 @@ class People extends CI_Controller {
 			$condicion = "ynEmp = 1";
 			$PeopleType = $this->people_db->getPeopleType($condicion);
 			foreach($data as $item){
-				$item->birthdate = $item->BirthDayDay . "-" . $months[$item->BirthDayMonth] . "-" . $item->BirthDayYear;
+				$item->birthdate = $item->BirthDayMonth . "/" .  $item->BirthDayDay . "/" . $item->BirthDayYear;
 				
 				if(is_null($item->Street1)){
 					$item->Street1 = "";
@@ -514,7 +539,7 @@ class People extends CI_Controller {
 		if($this->input->is_ajax_request()){
 			
 			$months = array('', 'Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic');
-			$data = $this->people_db->getContractByPeople($_POST['id']);
+			$data = $this->people_db->getContractByPeople($_POST['id'],$_POST['search']);
 			foreach($data as $item){
 				$item->BalanceCSF = "";
 				$item->LoanBa = "";

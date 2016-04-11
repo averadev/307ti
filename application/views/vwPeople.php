@@ -1,5 +1,6 @@
 
 <div class="row fiter-section" id="section-people">
+	
     <div class="section-bar">Consultas<div class="collapseFilter"></div></div>
 	<div class="section-bar" id="newUser">Nuevo</div>
     <div class="medium-12 columns">
@@ -126,9 +127,9 @@
 			</li>
 		</ul>
 	</div>
-	<div class="contentModal" id="contentModalPeople">
+	<div class="row contentModal" id="contentModalPeople">
 	
-		<div id="tab-PGeneral" class="tab-modal" style="display:inline;">
+		<div id="tab-PGeneral" class="large-12 columns tab-modal" style="display:inline;">
 			<!-- Datos personales -->
 			<div class="row" id="alertValPeopleGeneral" style="display:inline;">
 				<div class="small-12 columns">
@@ -143,10 +144,16 @@
 				<legend>Datos personales</legend>
 				<!-- nombre-->
 				<div class="row">
+				
 					<div class="small-3 columns">
-						<label id="alertName" for="right-label" class="text-left">Nombre</label>
+						
+						<label id="alertName" for="right-label" class="text-left">
+							Nombre
+						</label>
+						
 					</div>
 					<div class="small-9 columns">
+						
 						<input type="text" id="textName" class="round general">
 					</div>
 				</div>
@@ -192,13 +199,13 @@
 					<!-- fecha de nacimiento-->
 					<div class="small-12 large-6 columns" for="alertBirthdate" style="float:right">
 						<label id="alertBirthdate" for="alertBirthdate" class="text-left">Fecha de nacimiento
-							<input type="date" id="textBirthdate" class="round general" >
+							<input type="text" id="textBirthdate" class="round general" >
 						</label>
 					</div>
 					<!-- aniversario boda-->
 					<div class="small-12 large-6 columns">
-						<label for="textWeddingAnniversary" class="text-left">Aniversario boda
-							<input type="date" id="textWeddingAnniversary" class="round general">
+						<label id="alertWeddingAnniversary" for="textWeddingAnniversary" class="text-left">Aniversario boda
+							<input type="text" id="textWeddingAnniversary" class="round general">
 						</label>
 					</div>
 				</div>
@@ -361,50 +368,69 @@
 			</fieldset>
 		</div>
 		<div id="tab-PReservaciones" class="tab-modal">
-			<table id="tableReservationsPeople" width="100%">
-				<thead>
-					<tr>
-						<th class="cellGeneral" >Res. codigo</th>
-						<th class="cellSmall" >ResId</th>
-						<th class="cellMedium">Res. tipo</th>
-						<th class="cellGeneral">Año</th>
-						<th class="cellGeneral" >Noches</th>
-						<th class="cellBig" >Tipo de unidad</th>
-						<th class="cellMedium" >Temporada</th>
-						<th class="cellMedium" >Occ Type</th>
-						<th class="cellBig" >Fecha</th>
-						<th class="cellSmall" >Intervalos</th>
-						<th class="cellSmall" >Unidad Asignada</th>
-					</tr>
-				</thead>
-				<tbody>
-		
-				</tbody>
-			</table>
+			<div class="row table-section" id="divTableReservationsPeople">
+				<table id="tableReservationsPeople" width="100%">
+					<thead>
+						<tr>
+							<th class="cellGeneral" >Res. codigo</th>
+							<th class="cellSmall" >ResId</th>
+							<th class="cellMedium">Res. tipo</th>
+							<th class="cellGeneral">Año</th>
+							<th class="cellGeneral" >Noches</th>
+							<th class="cellBig" >Tipo de unidad</th>
+							<th class="cellMedium" >Temporada</th>
+							<th class="cellMedium" >Occ Type</th>
+							<th class="cellBig" >Fecha</th>
+							<th class="cellSmall" >Intervalos</th>
+							<th class="cellSmall" >Unidad Asignada</th>
+						</tr>
+					</thead>
+					<tbody>
+			
+					</tbody>
+				</table>
+			</div>
 		</div>
-		<div id="tab-PContratos" class="tab-modal">
-			<table id="tableContractPeople" width="100%">
-				<thead>
-					<tr>
-						<th> </th>
-						<th class="cellGeneral" >No. Contrato</th>
-						<th class="cellSmall" >ContratoId</th>
-						<th class="cellMedium">Primer año de ocupacion</th>
-						<th class="cellMedium">Tipo de unidad</th>
-						<th class="cellMedium" >Temporada</th>
-						<th class="cellMedium" >Frecuencia</th>
-						<th class="cellBig" >Fecha de venta</th>
-						<th class="cellSmall" >Intervalos</th>
-						<th class="cellGeneral" >Unidad</th>
-						<th class="cellMedium" >Balance CSF</th>
-						<th class="cellMedium" >Préstamo Bal</th>
-						<th class="cellMedium" >Status</th>
-					</tr>
-				</thead>
-				<tbody>
+		<div id="tab-PContratos" class="large-12 columns tab-modal">
+			
+			<div class="row search-section">
+				<div class="large-12 columns search">
+					<input type="text" id="textSearchContractPeople" class="fieldSearch" placeholder="Id del folio" />
+				</div>
+				<div class="large-12 columns end rowBtnSearch">
+					<div class="button-group radius groupBtnSearch">
+						<a id="btnSearchContractPeople" class="button btnSearch">Buscar</a>
+						<a id="btnCleanSearchContractPeople" class="button btnSearch">Limpiar</a>
+					</div>
+				</div>
+			</div>
 		
-				</tbody>
-			</table>
+			<div class="row" id="divTableContractPeople">
+				<div class="large-12 columns table-section2">
+					<table id="tableContractPeople">
+						<thead>
+							<tr>
+								<th> </th>
+								<th class="cellGeneral" >No. Contrato</th>
+								<th class="cellSmall" >ContratoId</th>
+								<th class="cellMedium">Primer año de ocupacion</th>
+								<th class="cellMedium">Tipo de unidad</th>
+								<th class="cellMedium" >Temporada</th>
+								<th class="cellMedium" >Frecuencia</th>
+								<th class="cellBig" >Fecha de venta</th>
+								<th class="cellSmall" >Intervalos</th>
+								<th class="cellGeneral" >Unidad</th>
+								<th class="cellMedium" >Balance CSF</th>
+								<th class="cellMedium" >Préstamo Bal</th>
+								<th class="cellMedium" >Status</th>
+							</tr>
+						</thead>
+						<tbody>
+		
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 		<div id="tab-PEmpleados" class="tab-modal">
 			<!-- Datos del contacto -->
@@ -470,6 +496,5 @@
 	</div>
 	<input type="hidden" value="0" id="idPeople" />
 </div>
-
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>people.js"></script>

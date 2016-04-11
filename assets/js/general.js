@@ -88,7 +88,7 @@ function loadModule(screen){
 
 //menu pegajoso
 $(document).ready(function(){
-	/*var altura = $('.menu-section').offset().top;
+	var altura = $('.menu-section').offset().top;
 	$(window).on('scroll', function(){
 		if ( $(window).scrollTop() < 91 ){
 			var currentTop = altura - $(window).scrollTop()
@@ -96,7 +96,7 @@ $(document).ready(function(){
 		}else{
 			$('.menu-section').css('top', "0px");
 		}
-	});*/
+	});
  
 });
 

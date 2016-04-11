@@ -82,6 +82,7 @@ select.round{
 .top-title{
     background-color: #ffffff;
     border-bottom: solid 4px #183a59;
+	height:39px;
 }
 .top-title h6{
     color: #ffffff;
@@ -139,19 +140,33 @@ select.round{
     background: #183a59;
 }
 
-li.tabs-title.active{
-	background:FFFFFF;
+.tabs .tabs-title.active > a  {
+    color: #000000;
+    background: #FFFFFF;
 }
+
 .iconCloseTab{
-    top: -30px;
+	/*display:none;*/
+}
+
+.iconCloseTab{
+	top: -30px;
     right: 10px;
     float: right;
     cursor: pointer;
+	margin-top:-20px;
+	margin-right:10px;
     position: inherit;
+	background-color:rgba(255,255,255,.2)
 }
 .iconCloseTab:hover{
     background-color: #265580;
 }
+
+.active .iconCloseTab{
+	background:none;
+}
+
 .active .iconCloseTab:hover{
     background-color: #e8e8e8;
 }
@@ -487,6 +502,21 @@ table thead tr th, table tbody tr td{
 	padding: .6em 1em;
 }
 
+.dialogModalButtonSecondary{
+	float:left;
+}
+.dialogModalButtonSecondary .ui-button-text{
+	color:#FFF;	
+	background:#183a59;
+	border-color:#183a59;
+	box-shadow: 0 1px 2px 1px rgba(0,0,0,.08), 0 3px 6px rgba(0,0,0,.08);
+	font-family: Arimo;
+	font-size:14px;
+	font-weight:normal;
+	width:150px;
+	padding: .6em 1em;
+}
+
 .ui-dialog .ui-dialog-content {
 	padding-left:0;
 	padding-right:0;
@@ -511,13 +541,11 @@ table thead tr th, table tbody tr td{
 
 .tab-modal{
 	display:none;
-	overflow:auto;
+	/*overflow:auto;*/
 	height:400px;
 }
 
 .contentModal{
-	float:left;
-	width:100%;
 	height:auto;
 	border-top:1px solid #aaaaaa;
 	padding: .5em 1em;
@@ -533,6 +561,7 @@ table thead tr th, table tbody tr td{
 	float:left;
 	width:100%;
 	height:100%;
+	z-index:10px;
 }
 
 
@@ -813,4 +842,51 @@ label.error{
 }
 .blue_divina{
 	background-color: #225b88;
+}
+
+/**
+* @section search
+* @todo form de busqueda
+*/
+.search-section{
+	/*margin-left:0;
+	padding-left:0;*/
+}
+
+.search-section .search{
+	/*margin:10px 15px 10px 15px;
+	margin-left:0;
+	padding-left:0;*/
+	margin-top:10px;
+	margin-bottom:5px;
+}
+
+.search-section .search .fieldSearch{
+    background: url("../img/common/iconSearch.png") no-repeat right;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+	font-size:16px;
+	font-size: .9rem;
+}
+
+.search-section .rowBtnSearch{
+	margin-top:0px;
+	margin-bottom:10px;
+}
+
+.search-section .rowBtnSearch .groupBtnSearch .btnSearch{
+	border-color:#FFFFFF;
+	background:#183a59;
+	font-size:0.8rem;
+	color:#FFFFFF;
+	 -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 3px;
+}
+
+.table-section2{
+	overflow:auto;
+	padding-left:0;
+	margin-left:0;
 }

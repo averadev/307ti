@@ -6,19 +6,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>307TI</title>
         <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+		 <link rel="stylesheet" href="<?php echo base_url().CSS; ?>foundation.css" />
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-        <link rel="stylesheet" href="<?php echo base_url().CSS; ?>foundation.css" />
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>paginacion/jqpagination.css" />
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>general.css" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">-->
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script type="text/javascript" src="<?php echo base_url().JS; ?>foundation.min.js"></script>
+		
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>responsive-tables.js"></script>
         <script type="text/javascript" src="<?php echo base_url().JS; ?>general.js"></script>
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>paginacion/jquery.jqpagination.js"></script>
     </head>
     <body>
+	
         <nav class="top-bar top-menu" data-topbar>
             <div class="menu-opt">
                 <div href="#" class="btn-menu btn-menu-sel"></div>
@@ -33,6 +35,8 @@
 			<ul class="tabs" data-tabs>
 			</ul>
         </nav>
+		
+		
         
         <div class="menu-section">
             <div class="menu-content">
@@ -70,7 +74,7 @@
 			</div>
 		</div>
 	</div>-->
-		
+	<!--<span data-tooltip aria-haspopup="true" class="has-tip" data-disable-hover="false" tabindex="1" title="Fancy word for a beetle.">scarabaeus</span>-->
 	</body>
 </html>
 <?php if(!isset($screen)){ ?>

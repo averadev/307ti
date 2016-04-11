@@ -50,8 +50,14 @@ $('#checkFilterAdvance').click(function(){ searchAdvanced(); });
 //$('#tabsModalPeople .tabs .tabs-title').unbind( "click" );
 $('#tabsModalPeople .tabs .tabs-title').on('click', function() { changeTabsModalPeople($(this).attr('attr-screen')) });
 
-//muestra el formulario de asignar a una persona como empleado
-$('#checkPeopleEmployee').click(function(){ modalTabPeople(); });
+//busqueda de contrado por folio
+$('#btnSearchContractPeople').off();
+$('#btnSearchContractPeople').on('click', function() { getInfoTabsPeople( "tab-PContratos", "people/getContractByPeople" );  });
+
+//borra la busqueda
+$('#btnCleanSearchContractPeople').off();
+$('#btnCleanSearchContractPeople').on('click', function() {  CleandFieldSearchPContract(); });
+
 
 /************Funciones**************/
 
@@ -72,20 +78,26 @@ $(function() {
 		dialogClass: 'dialogModal',
 		buttons: [
 			{
+				text: "Clonar Persona",
+				"class": 'dialogModalButtonSecondary',
+				click: function() {
+					clonePeople();
+				}
+			},
+			{
 				text: "Cancelar",
 				"class": 'dialogModalButtonCancel',
 				click: function() {
 					dialogUser.dialog('close');
 					cleanUserFields();
-					//$('.ui-dialog-titlebar').empty();
-					//dialogUser.dialog('destroy');
+					$("#idPeople").removeData("pkPeopleId");
 				}
 			},
 			{
 				text: "Guardar y cerrar",
 				"class": 'dialogModalButtonAccept',
 				click: function() {
-					if($("#idPeople").data("pkPeopleId") == undefined || $("#idPeople").data("pkPeopleId") == 0 ){
+					if($("#idPeople").data("pkPeopleId") == undefined ){
 						CreateNewUser(false)
 					}else{
 						EditUser(false, $("#idPeople").data("pkPeopleId") )
@@ -97,7 +109,7 @@ $(function() {
 				"class": 'dialogModalButtonAccept',
 				click: function() {
 					//$("#idPeople").data("pkPeopleId",item.pkPeopleId);
-					if($("#idPeople").data("pkPeopleId") == undefined || $("#idPeople").data("pkPeopleId") == 0 ){
+					if($("#idPeople").data("pkPeopleId") == undefined){
 						CreateNewUser(true)
 					}else{
 						EditUser(true, $("#idPeople").data("pkPeopleId") )
@@ -107,6 +119,7 @@ $(function() {
 			},
 		],
 		close: function() {
+			$("#idPeople").removeData("pkPeopleId");
 			cleanUserFields();
 			//$('.ui-dialog-titlebar').empty();
 		}
@@ -123,6 +136,16 @@ $(function() {
 		}
 	});
 	
+	$( "#textBirthdate" ).datepicker({
+		changeMonth: true,
+		changeYear: true
+    });
+	
+	$( "#textWeddingAnniversary" ).datepicker({
+		changeMonth: true,
+		changeYear: true
+    });
+	
 	//$( "#tabs" ).tabs();
 	
 });
@@ -137,12 +160,14 @@ function showModal(id){
 	$('.tab-modal').hide();
 	$('#tab-PGeneral').show();
 	if(id == 0){
+		$('.dialogModalButtonSecondary').hide();
 		$("#tabsModalPeople").hide();
 		dialogUser.dialog('open');
 		$('.ui-dialog-titlebar').append(
 			'<div class="ui-dialog-titlebar2"><label>Alta de personas</label></div><img class="imgCloseModal" src="' + BASE_URL+'assets/img/common/iconClose2.png">'
 		)
 	}else{
+		$('.dialogModalButtonSecondary').show();
 		$("#tabsModalPeople").show();
 		getInfoPeople(id);
 	}
@@ -283,15 +308,20 @@ function saveUserData(id, isClosed){
 			roster:$('#textRoster').val().trim(),
 		},
 		success: function(data){
-			showAlert(true,data,'button',showAlert);
-			if(!isClosed){
-				dialogUser.dialog('close');
-				cleanUserFields();
-				$("#idPeople").removeData("pkPeopleId");
-			}
-			if($('#tablePeople >tbody >tr').length != 0){
-				var currentPage = $('#paginationPeople').jqPagination('option', 'current_page');
-				searchPeople(currentPage);
+			showAlert(true,data.message,'button',showAlert);
+			if(data.success == true){
+				if(!isClosed){
+					dialogUser.dialog('close');
+					cleanUserFields();
+					$("#idPeople").removeData("pkPeopleId");
+				}else{
+					$("#idPeople").data("pkPeopleId",data.pkPeopleId);
+					$('.dialogModalButtonSecondary').show();
+				}
+				if($('#tablePeople >tbody >tr').length != 0){
+					var currentPage = $('#paginationPeople').jqPagination('option', 'current_page');
+					searchPeople(currentPage);
+				}
 			}
 			
 		},
@@ -465,10 +495,33 @@ function validateUserFields(){
 	
 	errorText = "";
 	
+	//validate fecha
+	var regex = /([1-9]|1[012])[- /.]([1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d/;
+	
+	//aniversario
+	if($('#textWeddingAnniversary').val().trim().length > 0){
+		if(!regex.test($('#textWeddingAnniversary').val().trim())){
+			$('#alertWeddingAnniversary').addClass('error');
+			//$('#textWeddingAnniversary').focus();
+			errorText = "Selecione una fecha de aniversario correcta>"  + errorText;
+			infoPeople = false;
+		}
+	}
+	
+	//fecha
+	if($('#textBirthdate').val().trim().length > 0){
+		if(!regex.test($('#textBirthdate').val().trim())){
+			$('#alertBirthdate').addClass('error');
+			//$('#textBirthdate').focus();
+			errorText = "Selecione una fecha correctabr>"  + errorText;
+			infoPeople = false;
+		}
+	}
+	
 	//fecha de nacimiento
 	if($('#textBirthdate').val().trim().length == 0){
 		$('#alertBirthdate').addClass('error');
-		$('#textBirthdate').focus();
+		//$('#textBirthdate').focus();
 		errorText = "Fecha de nacimiento<br>"  + errorText;
 		infoPeople = false;
 	}
@@ -481,7 +534,6 @@ function validateUserFields(){
 	});
 	
 	if(gender != 1){
-		console.log(gender)
 		$('#alertGender').addClass('error');
 		errorText = "Genero<br>"  + errorText;
 		infoPeople = false;
@@ -524,6 +576,7 @@ function hideAlertUserFields(){
 	$('#alertLastName').removeClass('error');
 	$('#alertBirthdate').removeClass('error');
 	$('#alertGender').removeClass('error');
+	$('#alertWeddingAnniversary').removeClass('error');
 	
 	$('#alertStreet').removeClass('error');
 	$('#alertColony').removeClass('error');
@@ -580,7 +633,6 @@ function cleanUserFields(){
 	$('#textTypeSeller').val(0);
 	$('#textRoster').val(0);
 	$('#checkPeopleEmployee').prop( "checked", false );
-	modalTabPeople();
 	
 	$('#containerAddress').hide();
 	$('#containerContact').hide();
@@ -602,7 +654,6 @@ function searchPeople(page){
 	}*/
 	
 	//if($('#checkFilterAdvance').val())
-	//console.log($('.RadioSearchPeople:checked').val());
 	opcionAdvanced = "";
 	if($('#checkFilterAdvance').is(':checked')){
 		opcionAdvanced = $('.RadioSearchPeople:checked').val();
@@ -663,7 +714,6 @@ function searchPeople(page){
 			//$('.divLoadingTable').hide();
 		},
 		error: function(error){
-			console.log(error)
 			showLoading('#divTablePeople',false);
 			showAlert(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlert);
 		}
@@ -723,7 +773,8 @@ function getInfoPeople(id){
 			}else if(item.Gender == "F"){
 				$("#RadioFemale").prop("checked", true);
 			}
-			$('#textBirthdate').val(convertToDateFormat(item.BirthDayDay, item.BirthDayMonth, item.BirthDayYear ));
+			//$('#textBirthdate').val(convertToDateFormat(item.BirthDayDay, item.BirthDayMonth, item.BirthDayYear ));
+			$('#textBirthdate').val(item.birthdate);
 			$('#textStreet').val(item.Street1.trim());
 			$('#textColony').val(item.Street2.trim());
 			$('#textCity').val(item.City.trim());
@@ -762,7 +813,6 @@ function getInfoPeople(id){
 			}else{
 				$("#checkPeopleEmployee").prop( "checked", false );
 			}
-			modalTabPeople();
 			
 			//$('#idPeople').val(item.pkPeopleId);
 			$("#idPeople").data("pkPeopleId",item.pkPeopleId);
@@ -775,7 +825,6 @@ function getInfoPeople(id){
 			showLoading('#divTablePeople',false);
 		},
 		error: function(error){
-			console.log(error)
 			showLoading('#divTablePeople',false);
 			showAlert(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlert);
 		}
@@ -808,23 +857,32 @@ function changeTabsModalPeople(screen){
 	//muestra la pantalla selecionada
 	$('#contentModalPeople .tab-modal').hide();
 	$('#' + screen).show();
-	if(screen == "tab-PReservaciones"){
-		getInfoTabsPeople(screen, "people/getReservationsByPeople");
-	}else if(screen == "tab-PContratos"){
-		getInfoTabsPeople(screen, "people/getContractByPeople");
-	}else if(screen == "tab-PEmpleados"){
-		//getInfoTabsPeople(screen, "people/getEmployeeByPeople");
+	if($("#idPeople").data("pkPeopleId") != undefined ){
+		if(screen == "tab-PReservaciones"){
+			getInfoTabsPeople(screen, "people/getReservationsByPeople");
+		}else if(screen == "tab-PContratos"){
+			getInfoTabsPeople(screen, "people/getContractByPeople");
+		}else if(screen == "tab-PEmpleados"){
+			//getInfoTabsPeople(screen, "people/getEmployeeByPeople");
+		}
 	}
 }
 
 /**
 * Obtiene las reservaciones de una persona
+* @param screen pantalla en la cual se buscara la info
+* @param url direccion de la consulta
 */
 function getInfoTabsPeople(screen, url){
 	
-	showLoading('#contentModalPeople',true);
+	var search = "";
 	if(screen == "tab-PReservaciones"){
+		showLoading('#divTableReservationsPeople',true);
 		$('#tableReservationsPeople tbody').empty();
+	}else{
+		showLoading('#divTableContractPeople',true);
+		$('#tableContractPeople tbody').empty();
+		search = $('#textSearchContractPeople').val();
 	}
 	$.ajax({
    		type: "POST",
@@ -832,9 +890,9 @@ function getInfoTabsPeople(screen, url){
 		dataType:'json',
 		data: {
 			id:$("#idPeople").data("pkPeopleId"),
+			search:search
 		},
 		success: function(data){
-			console.log(data)
 			/*var total = data.total;
 			if( parseInt(total) == 0 ){ total = 1; }
 			total = parseInt( total/10 );
@@ -898,21 +956,53 @@ function getInfoTabsPeople(screen, url){
 			/*//$('.iconEdit').on()
 			$("#tablePeople tbody tr .cellEdit .iconEdit").off( "click", ".iconEdit" );
 			$("#tablePeople tbody tr .cellEdit .iconEdit").on("click", function(){ showModal($(this).attr('value')); });*/
-			showLoading('#contentModalPeople',false);
+			if(screen == "tab-PReservaciones"){
+				showLoading('#divTableReservationsPeople',false);
+			}else{
+				showLoading('#divTableContractPeople',false);
+			}
 		},
 		error: function(error){
-			console.log(error)
-			showLoading('#contentModalPeople',false);
+			if(screen == "tab-PReservaciones"){
+				showLoading('#divTableReservationsPeople',false);
+			}else{
+				showLoading('#divTableContractPeople',false);
+			}
 			showAlert(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlert);
 		}
 	});
 	
 }
 
-function modalTabPeople(){
-	if($("#checkPeopleEmployee").is(':checked')) {
-		//$('#containerPeopleEmployee').show(1000);
-	}else{
-		//$('#containerPeopleEmployee').hide(1000);
-	}
+/**
+ * limpia el campo de busqueda de contactos-persona
+ */
+function CleandFieldSearchPContract(){
+	$('#textSearchContractPeople').val("");
+}
+
+/**
+ * Clona los datos del usuario selecionado
+ */
+function clonePeople(){
+	$("#idPeople").removeData("pkPeopleId");
+	$('#textName').val("");
+	$('#textLastName').val("");
+	$('#textBirthdate').val("");
+	
+	$('#textEmail1').val("");
+	$('#textEmail2').val("");
+	
+	$('#textCodeCollaborator').val("");
+	$('#textInitials').val("");
+	$('#textCodeNumber').val("");
+	$('#textTypeSeller').val(0);
+	$('#textRoster').val(0);
+	$('#checkPeopleEmployee').prop( "checked", false );
+	
+	$('#tableReservationsPeople tbody').empty();
+	$('#tableContractPeople tbody').empty();
+	
+	validateUserFields();
+	
 }
