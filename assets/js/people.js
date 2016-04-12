@@ -84,14 +84,14 @@ $(function() {
 		dialogClass: 'dialogModal',
 		buttons: [
 			{
-				text: "Clonar Persona",
+				text: "Clone person",
 				"class": 'dialogModalButtonSecondary',
 				click: function() {
 					clonePeople();
 				}
 			},
 			{
-				text: "Cancelar",
+				text: "Cancel",
 				"class": 'dialogModalButtonCancel',
 				click: function() {
 					dialogUser.dialog('close');
@@ -100,7 +100,7 @@ $(function() {
 				}
 			},
 			{
-				text: "Guardar y cerrar",
+				text: "Save and close",
 				"class": 'dialogModalButtonAccept',
 				click: function() {
 					if($("#idPeople").data("pkPeopleId") == undefined ){
@@ -111,7 +111,7 @@ $(function() {
 				}
 			},
 			{
-				text: "Guardar",
+				text: "Save",
 				"class": 'dialogModalButtonAccept',
 				click: function() {
 					//$("#idPeople").data("pkPeopleId",item.pkPeopleId);
@@ -186,7 +186,7 @@ function showModal(id){
 		
 		dialogUser.dialog('open');
 		$('.ui-dialog-titlebar').append(
-			'<div class="ui-dialog-titlebar2"><label>Alta de personas</label></div><img class="imgCloseModal" src="' + BASE_URL+'assets/img/common/iconClose2.png">'
+			'<div class="ui-dialog-titlebar2"><label>Add person</label></div><img class="imgCloseModal" src="' + BASE_URL+'assets/img/common/iconClose2.png">'
 		)
 		$('#imgCloseModal').off();
 		$('.imgCloseModal').on('click', function() {  hideModal(); });
@@ -268,7 +268,7 @@ function EditUser(isClosed, idPeople){
 */
 function saveUserData(id, isClosed){
 	
-	showAlert(true,"Guardando cambios, porfavor espere....",'progressbar');
+	showAlert(true,"Saving changes, please wait ....",'progressbar');
 	
 	var phoneArray = new Array();
 	$(".phonePeople").each(function (index){
@@ -317,8 +317,8 @@ function saveUserData(id, isClosed){
 			street:$('#textStreet').val().trim(),
 			colony:$('#textColony').val().trim(),
 			city:$('#textCity').val().trim(),
-			state:$('#textState').val().trim(),
-			country:$('#textCountry').val().trim(),
+			state:$('#textState').val(),
+			country:$('#textCountry').val(),
 			postalCode:$('#textPostalCode').val().trim(),
 			stateCode:$('#textState option:selected').attr('code'),
 			countryCode:$('#textCountry option:selected').attr('code'),
@@ -350,7 +350,7 @@ function saveUserData(id, isClosed){
 			
 		},
 		error: function(){
-			showAlert(true,"error al insertar los datos, intentelo mas tarde.",'button',showAlert);
+			showAlert(true,"Error inserting data, try again later. ",'button',showAlert);
 			dialogUser.dialog('close');
 			cleanUserFields();
 			$("#idPeople").removeData("pkPeopleId");
@@ -411,7 +411,7 @@ function validateUserFields(){
 		}*/
 		
 		if(infoEmployee == false){
-			$('#alertValPeopleEmployee .alert-box').html("<label>Por favor rellene los campos Obligatorios(rojo)</label>" );
+			$('#alertValPeopleEmployee .alert-box').html("<label>Please complete fields in red</label>" );
 			$('#alertValPeopleEmployee').show(100);
 			result = false;
 		}
@@ -474,7 +474,7 @@ function validateUserFields(){
 	if(infoContact == false){
 		
 		result = false;
-		$('#alertValPeopleContact .alert-box').html("<label>Por favor rellene los campos Obligatorios(rojo)</label>" + errorText );
+		$('#alertValPeopleContact .alert-box').html("<label>Please complete fields in red</label>" + errorText );
 		$('#alertValPeopleContact').show(100);
 		$('#containerContact').show();
 	}
@@ -529,7 +529,7 @@ function validateUserFields(){
 	}
 	if(infoAddress == false){
 		result = false;
-		$('#alertValPeopleAddress .alert-box').html("<label>Por favor rellene los campos Obligatorios(rojo)</label>" + errorText );
+		$('#alertValPeopleAddress .alert-box').html("<label>Please complete fields in red</label>" + errorText );
 		$('#alertValPeopleAddress').show(100);
 		$('#containerAddress').show();
 	}
@@ -596,7 +596,7 @@ function validateUserFields(){
 	}
 	
 	if(infoPeople == false){
-		$('#alertValPeopleGeneral .alert-box').html("<label>Por favor rellene los campos Obligatorios(rojo)</label>" + errorText );
+		$('#alertValPeopleGeneral .alert-box').html("<label>Please complete fields in red</label>" + errorText );
 		$('#alertValPeopleGeneral').show(100);
 		result = false;
 	}
@@ -773,7 +773,7 @@ function searchPeople(page){
 		},
 		error: function(error){
 			showLoading('#divTablePeople',false);
-			showAlert(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlert);
+			showAlert(true,"Error in the search, try again later.",'button',showAlert);
 		}
 	});	
 }
@@ -820,6 +820,7 @@ function getInfoPeople(id){
 			id:id,
 		},
 		success: function(data){
+			console.log(data)
 			var item = data.item[0];
 			$('#textName').val(item.Name.trim());
 			$('#textMiddleName').val(item.SecondName.trim());
@@ -837,10 +838,19 @@ function getInfoPeople(id){
 			$('#textColony').val(item.Street2.trim());
 			$('#textCity').val(item.City.trim());
 			$('#textPostalCode').val(item.ZipCode.trim());
+			console.log(item.pkStateId)
 			if(item.pkCountryId != null || item.pkCountryId == ""){
 				$("select#textCountry").val(item.pkCountryId);
 			}else{
 				$("select#textCountry").val(0);
+			}
+			$('#textState').empty();
+			$('#textState').append('<option value="0" code="0">Select your state</option>');
+			if(data.states.length > 0){
+				for(i=0;i<data.states.length;i++){
+					var state = data.states[i];
+					$('#textState').append('<option value="' + state.pkStateId + '" code="' + state.StateCode + '">' + state.StateDesc + '</option>');
+				}
 			}
 			if(item.pkStateId != null || item.pkStateId == ""){
 				$("select#textState").val(item.pkStateId);
@@ -855,7 +865,7 @@ function getInfoPeople(id){
 			$('#textEmail2').val(item.email2.trim());
 			
 			$('#textTypeSeller').empty();
-			$('#textTypeSeller').append('<option value="0" code="0">Seleccione un tipo de vendedor</option>');
+			$('#textTypeSeller').append('<option value="0" code="0">Select a type of seller</option>');
 			for(i=0;i<data.peopleType.length;i++){
 				var peopleType = data.peopleType[i];
 				$('#textTypeSeller').append('<option value="' + peopleType.pkPeopleTypeId + '" code="' + peopleType.PeopleTypeCode + '">' + peopleType.PeopleTypeDesc + '</option>');
@@ -879,7 +889,7 @@ function getInfoPeople(id){
 			//$('#textState').val("");
 			//$('#textCountry').val("");
 			$('.ui-dialog-titlebar').append(
-				'<div class="ui-dialog-titlebar2"><label>Alta de personas</label></div><img class="imgCloseModal" src="' + BASE_URL+	'assets/img/common/iconClose2.png">'
+				'<div class="ui-dialog-titlebar2"><label>Edit person</label></div><img class="imgCloseModal" src="' + BASE_URL+	'assets/img/common/iconClose2.png">'
 			)
 			$('#imgCloseModal').off();
 			$('.imgCloseModal').on('click', function() {  hideModal(); });
@@ -888,7 +898,7 @@ function getInfoPeople(id){
 		},
 		error: function(error){
 			showLoading('#divTablePeople',false);
-			showAlert(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlert);
+			showAlert(true,"Error in the search, try again later",'button',showAlert);
 		}
 	});	
 	
@@ -1008,7 +1018,7 @@ function getInfoTabsPeople(screen, url){
 				}
 			}else if(screen == "tab-PEmpleados"){
 				$('#textTypeSeller').empty();
-				$('#textTypeSeller').append('<option value="0" code="0">Seleccione un tipo de vendedor</option>');
+				$('#textTypeSeller').append('<option value="0" code="0">Select a type of seller</option>');
 				for(i=0;i<data.items.length;i++){
 					var item = data.items[i];
 					$('#textTypeSeller').append('<option value="' + item.pkPeopleTypeId + '" code="' + item.PeopleTypeCode + '">' + item.PeopleTypeDesc + '</option>');
@@ -1030,7 +1040,7 @@ function getInfoTabsPeople(screen, url){
 			}else{
 				showLoading('#divTableContractPeople',false);
 			}
-			showAlert(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlert);
+			showAlert(true,"Error in the search, try again later.",'button',showAlert);
 		}
 	});
 	
@@ -1079,7 +1089,7 @@ function clonePeople(){
 */
 function changeState(idCountry){
 	$('#textState').empty();
-	$('#textState').append('<option value="0" code="0">Seleccione su estado</option>');
+	$('#textState').append('<option value="0" code="0">Select your state</option>');
 	$('#textState').attr('disabled',true);
 	$.ajax({
    		type: "POST",
@@ -1102,9 +1112,9 @@ function changeState(idCountry){
 		},
 		error: function(error){
 			$('#textState').empty();
-			$('#textState').append('<option value="0" code="0">Seleccione su estado</option>');
+			$('#textState').append('<option value="0" code="0">Select your state</option>');
 			$('#textState').attr('false',false);
-			showAlert(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlert);
+			showAlert(true,"Error in the search, try again later.",'button',showAlert);
 		}
 	});
 }

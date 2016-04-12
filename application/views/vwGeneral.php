@@ -44,9 +44,9 @@
         
         <div class="menu-section">
             <div class="menu-content">
-                <div class="menu-sel" attr-screen="people">Persona</div>
-                <div class="menu-sel" attr-screen="contract">Contrato</div>
-                <div class="menu-sel" attr-screen="catalog">Catalogo</div>
+                <div class="menu-sel" attr-screen="people">People</div>
+                <div class="menu-sel" attr-screen="contract">Contract</div>
+                <div class="menu-sel" attr-screen="catalog">Catalog</div>
                 <div class="menu-fix">&nbsp;</div>
             </div>
         </div>

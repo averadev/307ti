@@ -54,7 +54,7 @@ class People extends CI_Controller {
 			}
 			$message = "";
 			if($existingEmail){
-				$message = array('success' => false, 'message' => "Correo existente, escriba otro porfavor");
+				$message = array('success' => false, 'message' => "existing mail, write another please");
 			}else{
 			
 				if($_POST['id'] == 0){
@@ -317,7 +317,7 @@ class People extends CI_Controller {
 					$cont = $cont + 1;
 				}
 				
-				$data = "Datos editados";
+				$data = "Saved data";
 				}
 			
 				$message = array('success' => true, 'message' => $data, 'pkPeopleId' => $idPeople);
@@ -432,7 +432,9 @@ class People extends CI_Controller {
 			$data = $this->people_db->getPeopleById($_POST['id']);
 			$condicion = "ynEmp = 1";
 			$PeopleType = $this->people_db->getPeopleType($condicion);
+			$states = array();
 			foreach($data as $item){
+				
 				$item->birthdate = $item->BirthDayMonth . "/" .  $item->BirthDayDay . "/" . $item->BirthDayYear;
 				
 				if(is_null($item->Street1)){
@@ -448,14 +450,14 @@ class People extends CI_Controller {
 				if(is_null($item->ZipCode)){
 					$item->ZipCode = "";
 				}
-				if(is_null($item->StateDesc)){
-					$item->StateDesc = "";
+				if(is_null($item->pkStateId)){
+					$item->pkStateId = "";
 				}
 				if(is_null($item->StateCode)){
 					$item->StateCode = "";
 				}
-				if(is_null($item->CountryDesc)){
-					$item->CountryDesc = "";
+				if(is_null($item->pkCountryId)){
+					$item->pkCountryId = "";
 				}
 				if(is_null($item->CountryCode)){
 					$item->CountryCode = "";
@@ -463,6 +465,10 @@ class People extends CI_Controller {
 				
 				if(is_null($item->Initials)){
 					$item->Initials = "";
+				}
+				
+				if($item->pkCountryId != ""){
+					$states = $this->people_db->getStateByCountry($item->pkCountryId);
 				}
 				
 				$phone = $this->people_db->getPeoplePhone($item->pkPeopleId);
@@ -494,7 +500,7 @@ class People extends CI_Controller {
 				}
 				
 			}
-			echo json_encode(array( 'item' => $data, 'peopleType' => $PeopleType));
+			echo json_encode(array( 'item' => $data, 'peopleType' => $PeopleType, 'states' => $states));
 		}
 	}
 	
@@ -590,7 +596,7 @@ class People extends CI_Controller {
 			if(count($data) > 0){
 				$message = array('success' => true, 'items' => $data);
 			}else{
-				$message = array('success' => false, 'message' => "No se encontro estados");
+				$message = array('success' => false, 'message' => "No states found");
 			}
 			echo json_encode($message);
 		}

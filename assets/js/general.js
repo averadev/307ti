@@ -167,7 +167,7 @@ function showLoading(parentElement, isOpen = false,message = null, success = nul
 	//indica si la alerta se muestra o escond
 	if(isOpen){
 		
-		var messageLoading = "Cargando...";
+		var messageLoading = "Loading...";
 		if(message != null){ messageLoading = message }
 		var widthLoading = $(parentElement).css('width')
 		var loandingElements = '<div class="divLoadingTable">' +
