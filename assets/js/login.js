@@ -10,6 +10,13 @@ var progressbar;
 $('#btnLogin').click(function(){ login(); });
 $('#btnCloseModal').click(function(){ hideModal(); });
 
+$('#txtUser,#txtPassword').keyup(function(e){
+    if(e.keyCode ==13){
+		login();	
+    }
+});
+
+
 function login(){
 	
 	if ($('#txtUser').val().trim().length == 0

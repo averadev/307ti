@@ -349,6 +349,14 @@ select.round{
     height: 400px;
 	overflow-y:auto;
 	width:100%;
+	
+}
+
+.table{
+	overflow:auto;
+	padding-left:0;
+	margin-left:0;
+	height: 400px;
 }
 
 
@@ -572,13 +580,17 @@ table thead tr th, table tbody tr td{
 
 .loadingTable{
 	position:absolute;
-	left:40%;
-	top:40%;
+	/*left:40%;
+	top:40%;*/
 	height:90px;
 	width:150px;
 	background:#183a59;
 	border-radius:5px;
 	box-shadow:0 0 10px #e6e6e6;
+	left:50%; 
+    margin-left: -75px;
+	top:50%;
+	margin-top:-50px;
 }
 
 .subLoadingTable{
@@ -633,15 +645,19 @@ table thead tr th, table tbody tr td{
 	position:fixed;
 	/*background:#183a59;*/
 	width: 250px;
-    min-height: 110px;
-    left: 558px;
-    top: 179px;
+    min-height: 150px;
+    /*left: 558px;
+    top: 179px;*/
 	border-radius:4px;
 	border:5px solid rgba(24, 58, 89, 0.8);
 	/*border-color:#rgba(24, 58, 89, .8);*/
 	background:#FFFFFF;
 	box-shadow:0 0 10px #E0DBDB;
 	text-align:center;
+	left:50%; 
+    margin-left: -125px;
+	top:50%;
+	margin-top:-85px;
 }
 
 .headerAlertMessage{
@@ -932,7 +948,7 @@ label.error{
 		height:auto;
 	}
 	.general-section{
-		padding: 240px 20px 0 240px;
+		padding: 50px 5px 5px 5px;
 	}
 	
 	/*.menu-sel:hover{
@@ -941,6 +957,13 @@ label.error{
 	}
 	.menu-fix{
 		height: 80px;
-	}*/
-	
+	}*/	
+}
+
+th.prev {
+	background:url("../img/common/triangleLeft.png") no-repeat;
+}
+
+th.next{
+	background:url("../img/common/triangleRight.png") no-repeat;
 }

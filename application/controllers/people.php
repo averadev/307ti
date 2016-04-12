@@ -19,7 +19,7 @@ class People extends CI_Controller {
 	public function index(){
 		//$a = $this->people_db->selectUser();
 		$data['country'] = $this->people_db->getCountry();
-		$data['state'] = $this->people_db->getState();
+		//$data['state'] = $this->people_db->getState();
         $this->load->view('vwPeople',$data);
 	}
 	
@@ -580,6 +580,19 @@ class People extends CI_Controller {
 			$condicion = "ynEmp = 1";
 			$data = $this->people_db->getPeopleType($condicion);
 			echo json_encode(array('items' => $data));
+		}
+	}
+	
+	public function getStateByCountry(){
+		if($this->input->is_ajax_request()){
+			$data = $this->people_db->getStateByCountry($_POST['idCountry']);
+			$message = "";
+			if(count($data) > 0){
+				$message = array('success' => true, 'items' => $data);
+			}else{
+				$message = array('success' => false, 'message' => "No se encontro estados");
+			}
+			echo json_encode($message);
 		}
 	}
 }

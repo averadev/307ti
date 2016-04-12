@@ -81,32 +81,36 @@
 	
 </div>
 
-<div class="row table-section" id="divTablePeople">
-	<table id="tablePeople" width="100%">
-	<thead>
-		<tr>
-			<th class="cellEdit" ></th>
-			<th class="cellEdit" >id</th>
-			<th class="cellGeneral" >Nombre</th>
-			<th class="cellGeneral">Apellidos</th>
-			<th class="cellGeneral">Genero</th>
-			<th class="cellDate" >Fecha Nacimiento</th>
-			<th class="cellAddress" >Calle, Numero, colonia</th>
-			<th class="cellGeneral" >Ciudad</th>
-			<th class="cellGeneral" >Estado</th>
-			<th class="cellGeneral" >Pais</th>
-			<th class="cellGeneral" >CP</th>
-			<th class="cellPhone" >Telefono 1</th>
-			<th class="cellPhone" >Telefono 2</th>
-			<th class="cellPhone" >Telefono 3</th>
-			<th class="cellEmail" >Email</th>
-			<th class="cellEmail" >Email 2</th>
-		</tr>
-	</thead>
-	<tbody>
+<div class="row table-section" >
+	<div class="large-12 columns table" >
+		<div id="divTablePeople">
+			<table id="tablePeople">
+				<thead>
+					<tr>
+						<th class="cellEdit" ></th>
+						<th class="cellEdit" >id</th>
+						<th class="cellGeneral" >Nombre</th>
+						<th class="cellGeneral">Apellidos</th>
+						<th class="cellGeneral">Genero</th>
+						<th class="cellDate" >Fecha Nacimiento</th>
+						<th class="cellAddress" >Calle, Numero, colonia</th>
+						<th class="cellGeneral" >Ciudad</th>
+						<th class="cellGeneral" >Estado</th>
+						<th class="cellGeneral" >Pais</th>
+						<th class="cellGeneral" >CP</th>
+						<th class="cellPhone" >Telefono 1</th>
+						<th class="cellPhone" >Telefono 2</th>
+						<th class="cellPhone" >Telefono 3</th>
+						<th class="cellEmail" >Email</th>
+						<th class="cellEmail" >Email 2</th>
+					</tr>
+				</thead>
+				<tbody>
 		
-	</tbody>
-	</table>
+				</tbody>
+			</table>
+		</div>
+	</div>
 	<!--<button id="downloadButton">Start Download</button>-->
 </div>
 
@@ -279,13 +283,6 @@
 							<label id="alertState" for="textState" class="text-left">Estado
 								<select id="textState" class="round">
 									<option value="0" code="0">Seleccione su estado</option>
-									<?php
-									foreach($state as $item){
-									?>
-										<option value="<?php echo $item->pkStateId ?>" code="<?php echo $item->StateCode; ?>"><?php echo $item->StateDesc ?></option>
-									<?php
-									}
-									?>
 								</select>
 							</label>
 						</div>
@@ -434,7 +431,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="tab-PEmpleados" class="tab-modal">
+		<div id="tab-PEmpleados" class="large-12 columns tab-modal">
 			<!-- Datos del contacto -->
 			<div class="row" id="alertValPeopleEmployee" style="display:none;">
 				<div class="small-12 columns">
@@ -443,8 +440,10 @@
 					</div>
 				</div>
 			</div>
+			<fieldset class="fieldset">
 				<legend><input type="checkbox" id="checkPeopleEmployee" class="checkModalPeople">&nbsp;&nbsp;Asignar como empleado</legend>
-				<div id="containerPeopleEmployee">
+				<div class="row" id="containerPeopleEmployee">
+					<div class="small-12 large-12 columns">
 					<!-- Código del colaborador:-->
 					<div class="row">
 						<div class="small-3 columns">
@@ -491,6 +490,7 @@
 								<option value="2" code="0">Administrador</option>
 							</select>
 						</div>
+					</div>
 					</div>
 				</div>
 			</fieldset>

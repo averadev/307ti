@@ -56,6 +56,10 @@ $('#btnSearchContractPeople').on('click', function() { getInfoTabsPeople( "tab-P
 $('#btnCleanSearchContractPeople').off();
 $('#btnCleanSearchContractPeople').on('click', function() {  CleandFieldSearchPContract(); });
 
+//detecta cuando se cambia el valor del select de pais(country)
+	
+$('#textCountry').change(function(){ changeState($(this).val()) });
+
 
 /************Funciones**************/
 
@@ -67,8 +71,6 @@ $(function() {
 	//maxHeight
 	maxHeight = screen.height * .25;
 	maxHeight = screen.height - maxHeight;
-	
-	console.log(dialogUser)
 	
 	if(dialogUser != null){
 		dialogUser.dialog( "destroy" );
@@ -140,9 +142,7 @@ $(function() {
 		}
 	});
 	
-	console.log(dialogUser)
-	
-	$( "#textBirthdate" ).datepicker({
+	/*$( "#textBirthdate" ).datepicker({
 		changeMonth: true,
 		changeYear: true
     });
@@ -150,7 +150,21 @@ $(function() {
 	$( "#textWeddingAnniversary" ).datepicker({
 		changeMonth: true,
 		changeYear: true
-    });
+    });*/
+	
+	//$(document).foundation();
+
+
+	window.prettyPrint && prettyPrint();
+	$('#textBirthdate').fdatepicker({
+		//format: 'mm-dd-yyyy',
+		disableDblClickSelection: true,
+	});
+	
+	$('#textWeddingAnniversary').fdatepicker({
+		//format: 'mm-dd-yyyy',
+		disableDblClickSelection: true,
+	});
 	
 	//$( "#tabs" ).tabs();
 	
@@ -161,6 +175,7 @@ $(function() {
 * @param id id de la persona
 */
 function showModal(id){
+	dialogUser.dialog('option', 'position', { my: "center", at: "center", of: window });
 	$("#idPeople").removeData("pkPeopleId");
 	cleanUserFields();
 	$('.tab-modal').hide();
@@ -168,6 +183,7 @@ function showModal(id){
 	if(id == 0){
 		$('.dialogModalButtonSecondary').hide();
 		$("#tabsModalPeople").hide();
+		
 		dialogUser.dialog('open');
 		$('.ui-dialog-titlebar').append(
 			'<div class="ui-dialog-titlebar2"><label>Alta de personas</label></div><img class="imgCloseModal" src="' + BASE_URL+'assets/img/common/iconClose2.png">'
@@ -480,6 +496,23 @@ function validateUserFields(){
 		errorText = "Ciudad<br>"  + errorText;
 		infoAddress = false;
 	}
+	
+	//country
+	if($('#textCountry').val() == 0){
+		$('#alertCountry').addClass('error');
+		$('#textCountry').focus();
+		errorText = "Pais<br>"  + errorText;
+		infoAddress = false;
+	}
+	
+	//estado
+	if($('#textState').val() == 0){
+		$('#alertState').addClass('error');
+		$('#textState').focus();
+		errorText = "Estado<br>"  + errorText;
+		infoAddress = false;
+	}
+	
 	//colonia
 	if($('#textColony').val().trim().length == 0){
 		$('#alertColony').addClass('error');
@@ -589,6 +622,7 @@ function hideAlertUserFields(){
 	$('#alertStreet').removeClass('error');
 	$('#alertColony').removeClass('error');
 	$('#alertCity').removeClass('error');
+	$('#alertState').removeClass('error');
 	$('#alertCountry').removeClass('error');
 	$('#alertPostalCode').removeClass('error');
 	
@@ -644,6 +678,22 @@ function cleanUserFields(){
 	
 	$('#containerAddress').hide();
 	$('#containerContact').hide();
+	
+	$("#idPeople").removeData("pkPeopleId");
+	
+	$('#textCodeCollaborator').val("");
+	$('#textInitials').val("");
+	$('#textCodeNumber').val("");
+	$('#textTypeSeller').val(0);
+	$('#textRoster').val(0);
+	$('#checkPeopleEmployee').prop( "checked", false );
+	
+	$('#tableReservationsPeople tbody').empty();
+	$('#tableContractPeople tbody').empty();
+	
+	$('#textSearchContractPeople').val("");
+	
+	changeTabsModalPeople("tab-PGeneral")
 	
 }
 
@@ -817,9 +867,11 @@ function getInfoPeople(id){
 			$('#textTypeSeller').val(item.fkPeopleTypeId);
 			$('#textRoster').val(0);
 			if(item.ynEmp == 1){
+				$('#textTypeSeller').val(item.fkPeopleTypeId);
 				$("#checkPeopleEmployee").prop( "checked", true );
 			}else{
 				$("#checkPeopleEmployee").prop( "checked", false );
+				$('#textTypeSeller').val(0);
 			}
 			
 			//$('#idPeople').val(item.pkPeopleId);
@@ -1013,6 +1065,56 @@ function clonePeople(){
 	$('#tableReservationsPeople tbody').empty();
 	$('#tableContractPeople tbody').empty();
 	
+	$('#textSearchContractPeople').val("");
+	
+	changeTabsModalPeople("tab-PGeneral")
+	
 	validateUserFields();
 	
 }
+
+/**
+* Cambia el cotenido del select estado dependiendo de lo selecionado en country
+* @param idCountry identificador del pais
+*/
+function changeState(idCountry){
+	$('#textState').empty();
+	$('#textState').append('<option value="0" code="0">Seleccione su estado</option>');
+	$('#textState').attr('disabled',true);
+	$.ajax({
+   		type: "POST",
+       	url: "people/getStateByCountry",
+		dataType:'json',
+		data: {
+			idCountry:idCountry
+		},
+		success: function(data){
+			if(data.success == true){
+				for(i=0;i<data.items.length;i++){
+					var item = data.items[i];
+					$('#textState').append('<option value="' + item.pkStateId + '" code="' + item.StateCode + '">' + item.StateDesc + '</option>');
+				}
+			}else{
+				$('#textState').empty();
+				$('#textState').append('<option value="0" code="0">' + data.message + '</option>');
+			}
+			$('#textState').attr('disabled',false);
+		},
+		error: function(error){
+			$('#textState').empty();
+			$('#textState').append('<option value="0" code="0">Seleccione su estado</option>');
+			$('#textState').attr('false',false);
+			showAlert(true,"Error en la busqueda, intentelo mas tarde.",'button',showAlert);
+		}
+	});
+}
+
+$(document).ready(function(){
+	$(window).on('scroll', function(){
+		var isOpen = $( dialogUser ).dialog( "isOpen" );
+		if(isOpen == true){
+			dialogUser.dialog('option', 'position', { my: "center", at: "center", of: window });
+		}
+	});
+ 
+});

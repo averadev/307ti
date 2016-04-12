@@ -144,8 +144,12 @@ function showAlert(isOpen = false,message = null,typeForm = null, success = null
 		}
 		$('.alertScreen .alertMessage .bodyAlertMessage label').html(message);
 		$('.alertScreen').show();
+		/*var heightAlert = $('.alertMessage').css('height')
+		alert(heightAlert)
+		$('.alertMessage').css('margin-top', - heightAlert )*/
 	}else{
 		$('.alertScreen').hide();
+		//$('.alertMessage').css('margin-top', "-55px" )
 		progressBarAlert.progressbar( "option", "value", 0 );
 	}
 }
@@ -162,6 +166,7 @@ function showAlert(isOpen = false,message = null,typeForm = null, success = null
 function showLoading(parentElement, isOpen = false,message = null, success = null ){
 	//indica si la alerta se muestra o escond
 	if(isOpen){
+		
 		var messageLoading = "Cargando...";
 		if(message != null){ messageLoading = message }
 		var widthLoading = $(parentElement).css('width')

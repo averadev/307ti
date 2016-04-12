@@ -139,9 +139,13 @@ body {
 	padding-right:6px;
 	width: 250px;
     height: 110px;
-    left: 558px;
-    top: 179px;
+    /*left: 50%;
+    top: 50%;*/
 	border-radius:3px;
+	left:50%; 
+    margin-left: -125px;
+	top:50%;
+	margin-top:-55px;
 }
 
 #subModal{
@@ -152,9 +156,11 @@ body {
 	padding-right:6px;
 	width: 246px;
     height: 106px;
-    left: 560px;
-    top: 181px;
 	border-radius:3px;
+	left:50%; 
+    margin-left: -123px;
+	top:50%;
+	margin-top:-53px;
 }
 #subModal label{
 	text-align:center;

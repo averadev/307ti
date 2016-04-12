@@ -248,7 +248,7 @@ Class people_db extends CI_MODEL
 	}
 	
 	public function getPeopleType($condicion = null){
-		$this->db->select('tblPeopleType.pkPeopleTypeId, tblPeopleType.PeopleTypeCode, tblPeopleType.PeopleTypeDesc');
+		$this->db->select('tblPeopleType.pkPeopleTypeId, tblPeopleType.PeopleTypeCode, tblPeopleType.PeopleTypeDesc,tblPeopleType.ynEmp');
 		$this->db->from('tblPeopleType');
 		if($condicion != null){
 			$this->db->where($condicion);
@@ -268,6 +268,17 @@ Class people_db extends CI_MODEL
 			$this->db->where('tblPeopleEmail.fkPeopleId != ',$id);
 		}
 		$this->db->where('tblEmail.EmailDesc = ',$email);
+		return  $this->db->get()->result();
+	}
+	
+	/**
+	* obtiene la lista de estados por pais
+	* @param idCountry direccion de correo electronico
+	**/
+	public function getStateByCountry($idCountry){
+		$this->db->select('tblState.pkStateId, tblState.StateCode, tblState.StateDesc');
+		$this->db->from('tblState');
+		$this->db->where('tblState.fkCountryId = ', $idCountry);
 		return  $this->db->get()->result();
 	}
 	
