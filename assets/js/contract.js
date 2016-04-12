@@ -1,9 +1,13 @@
+getContratos();
 
 $(document).foundation();
 $('#newContract').click(function(){ showModals('dialog-Contract', cleanAddPeople); });
-$('#btnTourID').click(function(){ dialogTourID.dialog('open'); });
+$('#btnAddTourID').click(function(){ showModals('dialog-casa', cleanAddPeople); });
 $('#btnAddPeople').click(function(){showModals('dialog-Personas', cleanAddPeople);});
 $('#btnAddUnidades').click(function(){showModals('dialog-Unidades', cleanAddUnidades);});
+$('#btnfind').click(function(){
+	getContratos();
+});
 
 
 
@@ -222,12 +226,41 @@ function getContratos(){
        	url: "contract/getContratos",
 		dataType:'json',
 		success: function(data){
-			console.log(data.length);
+			tableContratos(data);
 		},
 		error: function(){
 
 		}
 	});	
+}
+
+function tableContratos(data){
+
+	var datos = data;
+    var headHTML = "<th>Detalles</th>";
+    var bodyHTML = '';
+    //creación de la cabecera
+	for (var j in datos[0]) {
+        headHTML+="<th>"+j+"</th>";
+    }
+    //creación del body
+    for (var i = 0; i < datos.length; i++) {
+        bodyHTML += "<tr>";
+       	bodyHTML += '<td onclick="getDetalleContratoByID('+datos[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
+        for (var j in datos[i]) {
+            bodyHTML+="<td>" + datos[i][j] + "</td>";
+        };
+        bodyHTML+="</tr>";
+    }
+    //añadiendo los componentes a la tabla
+     var body = document.getElementById("tblContratosbody");
+     var head = document.getElementById("tblContratoshead");
+     head.innerHTML = headHTML;
+     body.innerHTML  = bodyHTML;
+}
+
+function getDetalleContratoByID(i){
+	console.log(i);
 }
 
 function getInputsByID(formData, divs){
