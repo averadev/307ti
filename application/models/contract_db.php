@@ -7,12 +7,16 @@ class Contract_db extends CI_Model {
         parent::__construct();
     }
 
-    function getContratos(){
+    function getContratos($id){
 		
-		$this->db->select('C.pkResId AS ID, C.Folio, C.LegalName as NombreLegal, C.FirstOccYear, C.LastOccYear, S.StatusDesc', false);
+		$this->db->select('C.pkResId AS ID, C.Folio, C.LegalName, C.FirstOccYear as FirtsYear, C.LastOccYear as LastYear, S.StatusDesc as Status', false);
         $this->db->from('tblRes as C');
         $this->db->join('tblStatus as S', 'C.fkStatusId = S.pkStatusId', 'left');
+        //$this->db->where('C.pkResID = ', $id);
         $query = $this->db->get();
+        //$sql.=" and Fecha between '$fecha' and dateadd(day, 6,'$fecha') ";
+        //'%".$articulo."%'
+        //$cadena = $cadena . 'tblPeople.pkPeopleId LIKE \'%'.$text.'%\'';
         if($query->num_rows() > 0 )
         {
             return $query->result();

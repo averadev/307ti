@@ -199,3 +199,27 @@ function showLoading(parentElement, isOpen = false,message = null, success = nul
 	}
 }
 
+
+function drawTable(data, funcion, cadena){
+
+    var headHTML = "<th>"+cadena+"</th>";
+    var bodyHTML = '';
+    //creación de la cabecera
+	for (var j in data[0]) {
+        headHTML+="<th>"+j+"</th>";
+    }
+    //creación del body
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+       	bodyHTML += '<td onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        };
+        bodyHTML+="</tr>";
+    }
+    //añadiendo los componentes a la tabla
+     var body = document.getElementById("tblContratosbody");
+     var head = document.getElementById("tblContratoshead");
+     head.innerHTML = headHTML;
+     body.innerHTML  = bodyHTML;
+}

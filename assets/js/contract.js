@@ -220,13 +220,25 @@ function EnviaFormularioCliente(id){
 
 
 function getContratos(){
+
+	var arrayFilters = ["filtro_contrato"];
+	var filters = getFilters(arrayFilters);
+	var arrayDate = ["startDate", "endDate"];
+	var dates = getDates(arrayDate);
+	var arrayWords = ["stringContrat"];
+	var words = getWords(arrayWords);
+	showLoading("#tblContratosbody", true);
 	$.ajax({
-		data:{},
+		data:{
+			filters: filters,
+			dates: dates,
+			words: words
+		},
    		type: "POST",
        	url: "contract/getContratos",
 		dataType:'json',
 		success: function(data){
-			tableContratos(data);
+			drawTable(data, 'getDetalleContratoByID', "details");
 		},
 		error: function(){
 
@@ -234,30 +246,29 @@ function getContratos(){
 	});	
 }
 
-function tableContratos(data){
-
-	var datos = data;
-    var headHTML = "<th>Detalles</th>";
-    var bodyHTML = '';
-    //creación de la cabecera
-	for (var j in datos[0]) {
-        headHTML+="<th>"+j+"</th>";
-    }
-    //creación del body
-    for (var i = 0; i < datos.length; i++) {
-        bodyHTML += "<tr>";
-       	bodyHTML += '<td onclick="getDetalleContratoByID('+datos[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
-        for (var j in datos[i]) {
-            bodyHTML+="<td>" + datos[i][j] + "</td>";
-        };
-        bodyHTML+="</tr>";
-    }
-    //añadiendo los componentes a la tabla
-     var body = document.getElementById("tblContratosbody");
-     var head = document.getElementById("tblContratoshead");
-     head.innerHTML = headHTML;
-     body.innerHTML  = bodyHTML;
+function getWords(divs){
+	words ={};
+	for (var i = 0; i < divs.length; i++) {
+		 words[divs[i]] =  $("#"+divs[i]).val().trim();
+	}
+	return words;	
 }
+function getDates(divs){
+	dates ={};
+	for (var i = 0; i < divs.length; i++) {
+		 dates[divs[i]] =  $("#"+divs[i]).val().trim();
+	}
+	return dates;	
+}
+
+function getFilters(divs){
+	filters = {};
+	for (var i = 0; i < divs.length; i++) {
+		 filters[divs[i]] =  $('input[name='+divs[i]+']:checked').val();
+	}
+	return filters;
+}
+
 
 function getDetalleContratoByID(i){
 	console.log(i);
@@ -270,33 +281,33 @@ function getInputsByID(formData, divs){
 	return formData;	
 }
 
-function verifyInputsByID(divs){
+// function verifyInputsByID(divs){
 
-	var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
-
-
-	for (var i = 0; i < divs.length; i++) {
-		 if($('#'+divs[i]).val().trim().length > 0){
-		 	if(!regex.test($('#'+divs[i]).val().trim())){
-		 		return true;
-		 	}else{
-		 		//$('#alertValidateContrato').show(100);
-		 		addClassTime(divs[i]);
-		 	}
-		 }else{
-		 	addClassTime(divs[i]);
-		 	$('#alertValidateContrato').show(100);
-		 	//addClassTime(divs[i]);
-		 	return false;
-		 }
-	}
-}
+// 	var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
 
 
-function addClassTime(div){
-	$("#"+div).addClass("alertInput").delay(5000).queue(function(next){
-    	$(this).removeClass("error");
-    	next();
-	});
-}
+// 	for (var i = 0; i < divs.length; i++) {
+// 		 if($('#'+divs[i]).val().trim().length > 0){
+// 		 	if(!regex.test($('#'+divs[i]).val().trim())){
+// 		 		return true;
+// 		 	}else{
+// 		 		//$('#alertValidateContrato').show(100);
+// 		 		addClassTime(divs[i]);
+// 		 	}
+// 		 }else{
+// 		 	addClassTime(divs[i]);
+// 		 	$('#alertValidateContrato').show(100);
+// 		 	//addClassTime(divs[i]);
+// 		 	return false;
+// 		 }
+// 	}
+// }
+
+
+// function addClassTime(div){
+// 	$("#"+div).addClass("alertInput").delay(5000).queue(function(next){
+//     	$(this).removeClass("error");
+//     	next();
+// 	});
+// }
 

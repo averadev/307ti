@@ -50,9 +50,33 @@ class Contract extends CI_Controller {
 
 
 	public function getContratos(){
-		$contratos = $this->contract_db->getContratos();
+		//var_dump($_POST["words"]);
+		$id = 4;
+		$contratos = $this->contract_db->getContratos($id);
 		$total = count($contratos);
 		echo json_encode($contratos);
+	}
+
+
+	public function recibirFiltros(){
+
+	}
+
+
+	public function recibirDates($arrayDates) {
+		$fechas = "";
+		// $dates["startDate"] = $arrayDates["startDate"];
+		// $dates["endDate"] = $arrayDates["endDate"];
+	
+		if (!empty($arrayDates[$i])) {
+			$dates[$i] = $arrayDates[$i];
+		}
+
+		//and Fecha between '$fecha' and dateadd(day, 6,'$fecha')
+		// if (isset($dates['palabra']) && !empty($_POST['palabra'])) {
+		// 	$filtros = array('palabra' => $_POST['palabra']);
+		// }
+		return $dates;
 	}
 }
 

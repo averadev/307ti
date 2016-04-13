@@ -13,7 +13,7 @@
                </div>
                <h3 class="box-title">
                	<i id="newContract" class="fa fa-file-text-o"></i>
-               	<span>Busqueda de Contratos</span>
+               	<span>Contract Search</span>
                </h3>
 			</div>
 			<div class="box-body" style="display: block;">
@@ -21,12 +21,12 @@
 					  <fieldset class="large-6 columns">
 					    <legend>Elige un filtro</legend>
 					    <input type="radio" name="filtro_contrato" value="personaId" id="personaId" required><label for="personaId">Persona ID</label>
-					    <input type="radio" name="filtro_contrato" value="nombre" id="nombre"><label for="nombre">Nombre</label>
+					    <input checked type="radio" name="filtro_contrato" value="nombre" id="nombre"><label for="nombre">Nombre</label>
 					    <input type="radio" name="filtro_contrato" value="apellido" id="apellido"><label for="apellido">Apellido</label>
 					    <input type="radio" name="filtro_contrato" value="reservacionId" id="reservacionId"><label for="reservacionId">Reservación ID</label>
 					  </fieldset>
 					  <fieldset class="large-6 columns">
-					  	<legend>Elige un Periodo</legend>
+					  	<legend>Select Period</legend>
 					    <div class="row">
 							<div class="medium-6 columns">
 						        <input id="startDate" type="date" placeholder="Fecha Inicial">
@@ -57,7 +57,7 @@
 						    <div class="large-12 columns">
 						      <div class="row collapse">
 						        <div class="small-10 columns">
-						          <input type="text" placeholder="Campo de Búsqueda" name="search"  required="">
+						          <input id="stringContrat" type="text" placeholder="Search Field" name="search"  required="">
 						        </div>
 						        <div class="small-1 columns">
 						          <a  id="btnfind" href="#" class="button postfix"><i class="fa fa-search"></i></a>
@@ -88,11 +88,11 @@
                </div>
                <h3 class="box-title">
                	<i class="fa fa-file-text-o"></i>
-               	<span>Relación de Contratos</span>
+               	<span>Contracts Relation</span>
                </h3>
 			</div>
 			<div class="box-body" style="display: block;">
-				<table style="width:100%;">
+				<table id="tblContrat" style="width:100%;">
 					<thead id="tblContratoshead">
 					</thead>
 					<tbody id="tblContratosbody"></tbody>
@@ -117,12 +117,12 @@
 	<form id="saveDataContract" data-abide novalidate>
 		<fieldset class="fieldset">
 			<legend>
-				Datos Contrato
+				Contract Data
 			</legend>
 		<!-- nombre legal-->
 		<div class="row">
 			<div class="small-3 columns">
-				<label for="legalName" class="text-left">Nombre legal</label>
+				<label for="legalName" class="text-left">Legal Name</label>
 			</div>
 			<div class="small-9 columns">
 				<input name="legalName" type="text" id="legalName" name="legalName" class="general" required>
@@ -131,10 +131,10 @@
 		<!-- Idioma-->
 		<div class="row">
 			<div class="small-3 columns">
-				<label id="alertLastName" for="right-label" class="text-left">Idioma</label>
+				<label id="alertLastName" for="right-label" class="text-left">Language</label>
 			</div>
 			<div class="small-9 columns">
-				<select id="idiomaContract" form="saveDataContract" required="">
+				<select id="selectLanguage" form="saveDataContract" required="">
       			<option></option>
 					<option value="espanol">Español</option>
 					<option value="ingles">Ingles</option>
@@ -154,7 +154,7 @@
 	          <small class="error">verifica los datos</small>
 	        </div>
 	        <div class="small-2 columns">
-	          <a id="btnAddTourID" href="#" class="button postfix">Agregara</a>
+	          <a id="btnAddTourID" href="#" class="button postfix">Add</a>
 	        </div>
 	      </div>
 	    </div>
@@ -401,7 +401,7 @@
 	</div>
 	</fieldset>
 	<div data-abide-error class="alert callout" style="display: none;">
-    <p><i class="fi-alert"></i> Por favor rellene los campos Obligatorios(rojo).</p>
+    <p><i class="fi-alert"></i> please fill required fields (red).</p>
   </div>
 	  <div class="row">
     <fieldset class="large-6 columns">
@@ -418,14 +418,14 @@
 </div>
 
 
-<div id="dialog-casa" title="Alta de Contratos" style="display: none;">
+<div id="dialog-casa" title="Add TourID" style="display: none;">
 	<div class="contentModal">
 		<div id="tabs-1">
 		<!-- Mensaje Error -->
 			<div class="row" id="alertValidateContrato" style="display:none;">
 				<div class="small-12 columns">
 					<div data-alert class="alert-box alert " >
-						Por favor rellene los campos Obligatorios(rojo)
+						please fill required fields (red)
 					</div>
 				</div>
 			</div>
