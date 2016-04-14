@@ -25,6 +25,8 @@ $('.btnAddressData').on('click', function(){ showDivModal('address'); });
 $('.btnContactData').off();
 $('.btnContactData').on('click', function(){ showDivModal('contact'); });
 
+//$('#minusPeople').click(function(){ $(".fiter-section .box").toggle(); });
+
 
 //busqueda de usuarios
 $('#btnSearch').off();
@@ -705,7 +707,7 @@ function cleanUserFields(){
 function searchPeople(page){
 	$('#tablePeople tbody').empty();
 	//$('.divLoadingTable').show();
-	showLoading('#divTablePeople',true);
+	showLoading('#section-table-people',true);
 	/*if(xhrPeople && xhrPeople.readyState != 4) { 
 		xhrPeople.abort();
 		xhrPeople = null;
@@ -768,11 +770,11 @@ function searchPeople(page){
 			//$('.iconEdit').on()
 			$("#tablePeople tbody tr .cellEdit .iconEdit").off( "click", ".iconEdit" );
 			$("#tablePeople tbody tr .cellEdit .iconEdit").on("click", function(){ showModal($(this).attr('value')); });
-			showLoading('#divTablePeople',false);
+			showLoading('#section-table-people',false);
 			//$('.divLoadingTable').hide();
 		},
 		error: function(error){
-			showLoading('#divTablePeople',false);
+			showLoading('#section-table-people',false);
 			showAlert(true,"Error in the search, try again later.",'button',showAlert);
 		}
 	});	
@@ -811,7 +813,7 @@ function loadPaginatorPeople(maxPage){
  * @param id identificador de persona a buscar
  */
 function getInfoPeople(id){
-	showLoading('#divTablePeople',true);
+	showLoading('#section-table-people',true);
 	$.ajax({
    		type: "POST",
        	url: "people/getPeopleById",
@@ -894,10 +896,10 @@ function getInfoPeople(id){
 			$('#imgCloseModal').off();
 			$('.imgCloseModal').on('click', function() {  hideModal(); });
 			dialogUser.dialog( 'open' )
-			showLoading('#divTablePeople',false);
+			showLoading('#section-table-people',false);
 		},
 		error: function(error){
-			showLoading('#divTablePeople',false);
+			showLoading('#section-table-people',false);
 			showAlert(true,"Error in the search, try again later",'button',showAlert);
 		}
 	});	

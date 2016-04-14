@@ -49,7 +49,7 @@
             <div class="menu-content">
                 <div class="menu-sel" attr-screen="people">People</div>
                 <div class="menu-sel" attr-screen="contract">Contract</div>
-                <div class="menu-sel" attr-screen="catalog">Catalog</div>
+                <!--<div class="menu-sel" attr-screen="inventory">Inventary</div>-->
                 <div class="menu-fix">&nbsp;</div>
             </div>
         </div>

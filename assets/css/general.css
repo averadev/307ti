@@ -182,7 +182,7 @@ select.round{
     margin-left: inherit;
     margin-right: inherit;
     max-width: none;
-    padding: 10px 0;
+    /*padding: 10px 0;*/
     background-color: #ffffff;
 }
 .section-bar{
@@ -211,7 +211,8 @@ select.round{
     margin-top: 20px !important;
 }
 .rdoField{
-    padding: 10px 0 0 40px;
+    /*padding: 10px 0 0 40px;*/
+	padding-left:5px;
     float: left;
 }
 .rowSearch{
@@ -231,10 +232,12 @@ select.round{
 
 .txtSearch{
     max-width: 500px;
-    background: url("../img/common/iconSearch.png") no-repeat right;
+   /* background: url("../img/common/iconSearch.png") no-repeat right;
     -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
+    -moz-border-radius: 8px;*/
+   /* border-radius: 8px;*/
+   border-top-left-radius:5px;
+   border-bottom-left-radius:5px;
 }
 
 /**
@@ -809,7 +812,7 @@ label.error{
       position: relative;
       left: 5px;
       color: white;
-      font-family: "Montserrat", sans-serif;
+      font-family: Arimo;
       font-size: 1.5em;
       font-weight: lighter; 
   }
