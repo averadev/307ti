@@ -5,6 +5,9 @@ $('#newContract').click(function(){ showModals('dialog-Contract', cleanAddPeople
 $('#btnAddTourID').click(function(){ showModals('dialog-casa', cleanAddPeople); });
 $('#btnAddPeople').click(function(){showModals('dialog-Personas', cleanAddPeople);});
 $('#btnAddUnidades').click(function(){showModals('dialog-Unidades', cleanAddUnidades);});
+$('#btnCleanWord').click(function () {
+	document.getElementById("stringContrat").value = "";
+});
 $('#btnfind').click(function(){
 	getContratos();
 });
@@ -133,14 +136,31 @@ function showModals(div, funcion){
       width: "50%",
       modal: true,
       dialogClass: 'dialogModal',
-      buttons: {
-        Cancel: function() {
-          dialog.dialog( "close" );
-        }
-      },
-      close: function() {
-      	funcion();
-      }
+      buttons: [
+		  {
+		  text: "Cancel",
+		  "class": 'dialogModalButtonCancel',
+		  click: function() {
+			  dialog.dialog('close');
+		  }
+		  },
+		  {
+			  text: "Save and close",
+			  "class": 'dialogModalButtonAccept',
+			  click: function() {
+
+			  }
+		  },
+		  {
+			  text: "Save",
+			  "class": 'dialogModalButtonAccept',
+			  click: function() {
+			  }
+		  }
+	  ],
+		close: function() {
+
+		}
     });
 
     dialog.dialog('open');
@@ -238,7 +258,14 @@ function getContratos(){
        	url: "contract/getContratos",
 		dataType:'json',
 		success: function(data){
-			drawTable(data, 'getDetalleContratoByID', "details");
+			if(data != null){
+				alertify.success("Found "+ data.length);
+				drawTable(data, 'getDetalleContratoByID', "details");
+			}else{
+				alertify.error("No data found");
+				showLoading("#tblContratosbody", false);
+			}
+
 		},
 		error: function(){
 

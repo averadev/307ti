@@ -373,7 +373,7 @@ table thead tr th, table tbody tr td{
 	min-width:50px;
 }
 
-.cellSmall = {
+.cellSmall  {
 	min-width:50px;
 }
 
@@ -567,7 +567,7 @@ table thead tr th, table tbody tr td{
 	float:left;
 	width:100%;
 	height:100%;
-	z-index:10px;
+	z-index:10;
 }
 
 
@@ -671,7 +671,6 @@ table thead tr th, table tbody tr td{
 }
 
 .headerAlertMessage p {
-	font-size:Arimo;
 	font-size:15px;
 	font-weight:bold;
 	color:#FFFFFF;
@@ -966,4 +965,7 @@ th.prev {
 
 th.next{
 	background:url("../img/common/triangleRight.png") no-repeat;
+}
+#newContract{
+	width: 90px;
 }

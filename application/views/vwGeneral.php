@@ -10,6 +10,8 @@
 		 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/foundation-datepicker/1.5.0/css/foundation-datepicker.min.css'>
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>paginacion/jqpagination.css" />
+        <link rel="stylesheet" href="<?php echo base_url().CSS; ?>alertify/alertify.core.css" />
+        <link rel="stylesheet" href="<?php echo base_url().CSS; ?>alertify/alertify.default.css" />
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>general.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
@@ -18,6 +20,7 @@
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation-datepicker/1.5.0/js/foundation-datepicker.min.js'></script>
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>responsive-tables.js"></script>
         <script type="text/javascript" src="<?php echo base_url().JS; ?>general.js"></script>
+        <script type="text/javascript" src="<?php echo base_url().JS; ?>/alertify/alertify.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>paginacion/jquery.jqpagination.js"></script>
 		
 		

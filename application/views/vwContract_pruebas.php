@@ -7,14 +7,17 @@
 					<span class="box-btn" data-widget="collapse">
 						<i class="fa fa-minus"></i>
 					</span>
-	                 <span class="box-btn" data-widget="remove">
-	               		<i class="fa fa-times"></i>
-	               </span>
                </div>
                <h3 class="box-title">
-               	<i id="newContract" class="fa fa-file-text-o"></i>
                	<span>Contract Search</span>
                </h3>
+				<div class="pull-left box-tools">
+					<span data-widget="newContrat" id="newContract">
+						<img src="http://www.pms.307ti.com/Scripts/ext/images/icons/contract.png" alt="">
+						<span>New</span>
+					</span>
+				</div>
+<!--				<i id="newContract" class="fa fa-file-text-o"></i>-->
 			</div>
 			<div class="box-body" style="display: block;">
 				<div class="row">
@@ -63,7 +66,7 @@
 						          <a  id="btnfind" href="#" class="button postfix"><i class="fa fa-search"></i></a>
 						        </div>
 						         <div class="small-1 columns">
-						          <a id="btnTourID"  href="#" class="button postfix"><i class="fa fa-trash"></i></a>
+						          <a id="btnCleanWord"  href="#" class="button postfix"><i class="fa fa-trash"></i></a>
 						        </div>
 						      </div>
 						    </div>
@@ -79,15 +82,8 @@
 		<div class="box">
 			<div class="box-header blue_divina">
 				<div class="pull-right box-tools">
-					<span class="box-btn" data-widget="collapse">
-						<i class="fa fa-minus"></i>
-					</span>
-	               <span class="box-btn" data-widget="remove">
-	               		<i class="fa fa-times"></i>
-	               </span>
                </div>
                <h3 class="box-title">
-               	<i class="fa fa-file-text-o"></i>
                	<span>Contracts Relation</span>
                </h3>
 			</div>
@@ -151,7 +147,6 @@
 	      <div class="row collapse">
 	        <div class="small-10 columns">
 	          <input type="text" placeholder="ID" name="TourID" id="TourID" required>
-	          <small class="error">verifica los datos</small>
 	        </div>
 	        <div class="small-2 columns">
 	          <a id="btnAddTourID" href="#" class="button postfix">Add</a>
@@ -403,14 +398,14 @@
 	<div data-abide-error class="alert callout" style="display: none;">
     <p><i class="fi-alert"></i> please fill required fields (red).</p>
   </div>
-	  <div class="row">
-    <fieldset class="large-6 columns">
-      <button class="button" type="submit" value="Submit">Submit</button>
-    </fieldset>
-    <fieldset class="large-6 columns">
-      <button class="button" type="reset" value="Reset">Reset</button>
-    </fieldset>
-  </div>
+<!--	  <div class="row">-->
+<!--    <fieldset class="large-6 columns">-->
+<!--      <button class="button" type="submit" value="Submit">Submit</button>-->
+<!--    </fieldset>-->
+<!--    <fieldset class="large-6 columns">-->
+<!--      <button class="button" type="reset" value="Reset">Reset</button>-->
+<!--    </fieldset>-->
+<!--  </div>-->
 
 </form>
 	</div>

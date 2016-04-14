@@ -50,33 +50,59 @@ class Contract extends CI_Controller {
 
 
 	public function getContratos(){
-		//var_dump($_POST["words"]);
-		$id = 4;
-		$contratos = $this->contract_db->getContratos($id);
-		$total = count($contratos);
-		echo json_encode($contratos);
-	}
-
-
-	public function recibirFiltros(){
-
-	}
-
-
-	public function recibirDates($arrayDates) {
-		$fechas = "";
-		// $dates["startDate"] = $arrayDates["startDate"];
-		// $dates["endDate"] = $arrayDates["endDate"];
 	
-		if (!empty($arrayDates[$i])) {
-			$dates[$i] = $arrayDates[$i];
-		}
+		 $sql = [
+			'checks'	=>	$this->receiveFilter($_POST['filters']),
+			'dates' 	=>	$this->receiveDates($_POST['dates']),
+			'words' 	=>	$this->receiveWords($_POST['words'])
+		];
+		$contratos = $this->contract_db->getContratos($sql);
+		echo json_encode($contratos);
 
-		//and Fecha between '$fecha' and dateadd(day, 6,'$fecha')
-		// if (isset($dates['palabra']) && !empty($_POST['palabra'])) {
-		// 	$filtros = array('palabra' => $_POST['palabra']);
-		// }
-		return $dates;
+	}
+
+
+	public function receiveFilter($filters){
+
+		$ArrayFilters = [];
+		foreach ($filters as $key => $value) {
+			if(!empty($value)){
+				$ArrayFilters[$value] = true;
+			}
+		}
+		if (!empty($ArrayFilters)){
+			return $ArrayFilters;
+		}else{
+			return false;
+		}
+	}
+
+	public function receiveWords($words){
+
+		$ArrayWords = [];
+		foreach ($words as $key => $value) {
+			if(!empty($value)){
+				$ArrayWords[$key] = $value;
+			}
+		}
+		if (!empty($ArrayWords)){
+			return $ArrayWords;
+		}else{
+			return false;
+		}
+	}
+
+	public function receiveDates($dates) {
+
+		if (!empty($dates['startDate']) && !empty($dates['endDate'])) {
+			$dates = [
+	        	'startDate'=> $dates['startDate'],
+	            'endDate'  => $dates['endDate']
+        	];
+        	return $dates;
+		}else{
+			return false;
+		}
 	}
 }
 
