@@ -43,7 +43,7 @@
 				<div class="row">
 					<div class="medium-6 columns">
 					<fieldset>
-						<legend><input id="busquedaAvanazada" type="checkbox">Busqueda Avanzada</legend>
+						<legend><input id="busquedaAvanazada" type="checkbox">Advanced search</legend>
 						<div class="row" id="avanzada" style="display: none;">
 							<div class="large-12 columns slide">
 							  	<input type="radio" name="filtro_contrato" value="codEmpleado" id="codEmpleado" required><label for="codEmpleado">Codigo de Empleado</label>

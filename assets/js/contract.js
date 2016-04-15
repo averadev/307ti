@@ -241,14 +241,15 @@ function EnviaFormularioCliente(id){
 
 function getContratos(){
 
-	var arrayFilters = ["filtro_contrato"];
-	var filters = getFilters(arrayFilters);
-	var arrayDate = ["startDate", "endDate"];
-	var dates = getDates(arrayDate);
-	var arrayWords = ["stringContrat"];
-	var words = getWords(arrayWords);
-	showLoading("#tblContratosbody", true);
-	$.ajax({
+    var arrayFilters = ["filtro_contrato"];
+    var filters = getFilters(arrayFilters);
+    var arrayDate = ["startDate", "endDate"];
+    var dates = getDates(arrayDate);
+    var arrayWords = ["stringContrat"];
+    var words = getWords(arrayWords);
+    showLoading("#tblContratosbody", true);
+
+    $.ajax({
 		data:{
 			filters: filters,
 			dates: dates,
@@ -261,17 +262,26 @@ function getContratos(){
 			if(data != null){
 				alertify.success("Found "+ data.length);
 				drawTable(data, 'getDetalleContratoByID', "details");
+                $("#tblContrat").DataTable();
+                //tablas("tblContrat");
 			}else{
 				alertify.error("No data found");
 				showLoading("#tblContratosbody", false);
 			}
-
 		},
 		error: function(){
 
 		}
-	});	
+    });
 }
+
+function tablas(tabla){
+    $('#'+tabla).DataTable({
+        "dom": 'T<"clear">lfrtip',
+        keys: true
+    } );
+}
+
 
 function getWords(divs){
 	words ={};

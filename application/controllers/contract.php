@@ -53,7 +53,7 @@ class Contract extends CI_Controller {
 	
 		 $sql = [
 			'checks'	=>	$this->receiveFilter($_POST['filters']),
-			'dates' 	=>	$this->receiveDates($_POST['dates']),
+			'dates' 	=>	$this->receiveDates($_POST['dates'], 'Date'),
 			'words' 	=>	$this->receiveWords($_POST['words'])
 		];
 		$contratos = $this->contract_db->getContratos($sql);
@@ -92,14 +92,14 @@ class Contract extends CI_Controller {
 		}
 	}
 
-	public function receiveDates($dates) {
-
+	public function receiveDates($dates, $table) {
 		if (!empty($dates['startDate']) && !empty($dates['endDate'])) {
 			$dates = [
 	        	'startDate'=> $dates['startDate'],
 	            'endDate'  => $dates['endDate']
         	];
-        	return $dates;
+			return $table." between '".$dates['startDate']."' and '". $dates['endDate']."'";
+
 		}else{
 			return false;
 		}
