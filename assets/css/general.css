@@ -23,6 +23,7 @@ body {
 input.general {
 	/*background:#000000;*/
 	border-color:rgb(230, 230, 230);
+	font-size: 0.875rem;
 }
 
 input.general:hover{
@@ -32,7 +33,7 @@ input.general:hover{
 }
 
 input.round, select.round{
-	border-radius:8px;
+	border-radius:5px;
 	font-family: Arimo;
 	font-size: 0.875rem;
 }
@@ -182,7 +183,7 @@ select.round{
     margin-left: inherit;
     margin-right: inherit;
     max-width: none;
-    padding: 10px 0;
+    /*padding: 10px 0;*/
     background-color: #ffffff;
 }
 .section-bar{
@@ -211,7 +212,8 @@ select.round{
     margin-top: 20px !important;
 }
 .rdoField{
-    padding: 10px 0 0 40px;
+    /*padding: 10px 0 0 40px;*/
+	padding-left:5px;
     float: left;
 }
 .rowSearch{
@@ -231,10 +233,13 @@ select.round{
 
 .txtSearch{
     max-width: 500px;
-    background: url("../img/common/iconSearch.png") no-repeat right;
+   /* background: url("../img/common/iconSearch.png") no-repeat right;
     -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
+    -moz-border-radius: 8px;*/
+   /* border-radius: 8px;*/
+   border-top-left-radius:5px;
+   border-bottom-left-radius:5px;
+   font-size: 0.875rem;
 }
 
 /**
@@ -307,6 +312,9 @@ select.round{
 	margin-top:0;*/
 }
 
+.pagination input{
+	height:24px;
+}
 
 /*.pages div{
     float: left;
@@ -357,6 +365,12 @@ select.round{
 	padding-left:0;
 	margin-left:0;
 	height: 400px;
+}
+
+.pagina{
+	padding-left:0;
+	margin-left:0;
+	height: 35px;
 }
 
 
@@ -564,10 +578,11 @@ table thead tr th, table tbody tr td{
 
 .divLoadingTable{
 	position:absolute;
-	float:left;
 	width:100%;
 	height:100%;
 	z-index:10;
+	top:0;
+	left:0;
 }
 
 
@@ -765,11 +780,17 @@ label.error{
 }
 .box .box-header > .box-tools {
     padding: 15px 15px 5px 5px;
+	padding-top:10px;
+	/*padding-left:5px;*/
+}
+
+.box-tools img{
+	margin-top:-3px;
 }
 
 .box-tools span {
   /* background: #D5DAE6; */
-  width: 30px;
+  /*width: 30px;*/
   height: 20px;
   display: inline-block;
   line-height: 28px;
@@ -777,17 +798,19 @@ label.error{
   border-radius: 50%;
   color: white;
   cursor: pointer; 
+  margin-left:5px;
 }
 
 .box .box-header .box-title {
     display: inline-block;
-    padding: 10px 0px 10px 0;
+    padding: 3px 0px 12px 0;
     margin: 0 0 0 5px;
     font-size: 14px;
     float: left;
     cursor: default;
     font-weight: bold;
-    color: #8c92a3; }
+    color: #8c92a3; 
+}
     .box .box-header .box-title i {
       height: 35px;
       width: 35px;
@@ -809,7 +832,7 @@ label.error{
       position: relative;
       left: 5px;
       color: white;
-      font-family: "Montserrat", sans-serif;
+      font-family: Arimo;
       font-size: 1.5em;
       font-weight: lighter; 
   }

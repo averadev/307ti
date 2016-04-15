@@ -6,9 +6,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>307TI</title>
         <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-		 <link rel="stylesheet" href="<?php echo base_url().CSS; ?>foundation.css" />
-		 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/foundation-datepicker/1.5.0/css/foundation-datepicker.min.css'>
+		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>foundation.css" />
+		<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/foundation-datepicker/1.5.0/css/foundation-datepicker.min.css'>
+		<link rel='stylesheet prefetch' href='https://cdn.datatables.net/1.10.11/css/dataTables.foundation.min.css'>
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+		<link rel='stylesheet prefetch' href='https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css'>
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>paginacion/jqpagination.css" />
         <link rel="stylesheet" href="<?php echo base_url().CSS; ?>alertify/alertify.core.css" />
         <link rel="stylesheet" href="<?php echo base_url().CSS; ?>alertify/alertify.default.css" />
@@ -24,9 +26,7 @@
         <script type="text/javascript" src="<?php echo base_url().JS; ?>general.js"></script>
         <script type="text/javascript" src="<?php echo base_url().JS; ?>/alertify/alertify.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>paginacion/jquery.jqpagination.js"></script>
-		
-		
-		
+		<script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
     </head>
     <body>
 		
@@ -51,7 +51,7 @@
             <div class="menu-content">
                 <div class="menu-sel" attr-screen="people">People</div>
                 <div class="menu-sel" attr-screen="contract">Contract</div>
-                <div class="menu-sel" attr-screen="catalog">Catalog</div>
+                <div class="menu-sel" attr-screen="inventory">Inventary</div>
                 <div class="menu-fix">&nbsp;</div>
             </div>
         </div>
@@ -113,4 +113,3 @@ $( document ).ready(function() {
 	getScript('people.js')
 });*/
 </script>
-<script type="text/javascript" src="<?php echo base_url().JS; ?>datePicker.js"></script>
