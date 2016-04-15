@@ -21,12 +21,12 @@
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script type="text/javascript" src="<?php echo base_url().JS; ?>foundation.min.js"></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation-datepicker/1.5.0/js/foundation-datepicker.min.js'></script>
-        <script src='//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js'></script>
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>responsive-tables.js"></script>
         <script type="text/javascript" src="<?php echo base_url().JS; ?>general.js"></script>
         <script type="text/javascript" src="<?php echo base_url().JS; ?>/alertify/alertify.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>paginacion/jquery.jqpagination.js"></script>
 		<script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+        
     </head>
     <body>
 		

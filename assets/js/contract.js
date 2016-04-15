@@ -257,8 +257,8 @@ function getContratos(){
 			if(data != null){
 				alertify.success("Found "+ data.length);
 				drawTable(data, 'getDetalleContratoByID', "details");
-                $("#tblContrat").DataTable();
-                //tablas("tblContrat");
+                tablas("tblContrat");
+
 			}else{
 				alertify.error("No data found");
 				showLoading("#tblContratosbody", false);
@@ -270,11 +270,15 @@ function getContratos(){
     });
 }
 
-function tablas(tabla){
-    $('#'+tabla).DataTable({
-        "dom": 'T<"clear">lfrtip',
-        keys: true
-    } );
+function tablas(div){
+    if ( $.fn.dataTable.isDataTable( '#'+div ) ) {
+        table = $('#'+div).dataTable();
+    }
+    else {
+        table = $('#'+div).dataTable( {
+            paging: false
+        } );
+    }
 }
 
 
