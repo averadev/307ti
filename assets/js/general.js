@@ -184,7 +184,7 @@ function showLoading(parentElement, isOpen = false,message = null, success = nul
 		
 		var loading = $(parentElement).children('.divLoadingTable');
 		
-		$(loading).css('width',"100%");
+		/*$(loading).css('width',"100%");*/
 		
 		$(loading).find("#progressbar").progressbar({
 			value: false
@@ -223,3 +223,47 @@ function drawTable(data, funcion, cadena){
      head.innerHTML = headHTML;
      body.innerHTML  = bodyHTML;
 }
+
+function drawTable2(data, funcion, cadena){
+
+    var headHTML = "<th>"+cadena+"</th>";
+    var bodyHTML = '';
+    //creación de la cabecera
+	/*for (var j in data[0]) {
+        headHTML+="<th>"+j+"</th>";
+    }*/
+    //creación del body
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+       	bodyHTML += '<td onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        };
+        bodyHTML+="</tr>";
+    }
+    //añadiendo los componentes a la tabla
+     var body = document.getElementById("bodyInvDetailed");
+    // var head = document.getElementById("headInvDetailed");
+   //  head.innerHTML = headHTML;
+     body.innerHTML  = bodyHTML;
+}
+
+(function($) {
+    "use strict";
+
+    //$("[data-widget='collapse']").click(function() {
+	$(document).on("click","[data-widget='collapse']", function() {
+        //Find the box parent        
+        var box = $(this).parents(".box").first();
+        //Find the body and the footer
+        var bf = box.find(".box-body, .box-footer");
+        if (!box.hasClass("collapsed-box")) {
+            box.addClass("collapsed-box");
+            bf.slideUp();
+        } else {
+            box.removeClass("collapsed-box");
+            bf.slideDown();
+        }
+    });
+
+})(jQuery);

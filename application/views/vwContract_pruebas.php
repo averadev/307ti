@@ -32,10 +32,10 @@
 					  	<legend>Select Period</legend>
 					    <div class="row">
 							<div class="medium-6 columns">
-						        <input id="startDate" type="date" placeholder="Fecha Inicial">
+						        <input id="startDate" class="round" type="date" placeholder="Fecha Inicial">
 						    </div>
 						    <div class="medium-6 columns">
-						    <input id="endDate" type="date" placeholder="Fecha final">
+						    <input id="endDate" class="round" type="date"  placeholder="Fecha final">
 						    </div>
   						</div>
 					  </fieldset>
@@ -43,7 +43,7 @@
 				<div class="row">
 					<div class="medium-6 columns">
 					<fieldset>
-						<legend><input id="busquedaAvanazada" type="checkbox">Busqueda Avanzada</legend>
+						<legend><input id="busquedaAvanazada" type="checkbox">&nbsp;&nbsp;Busqueda Avanzada</legend>
 						<div class="row" id="avanzada" style="display: none;">
 							<div class="large-12 columns slide">
 							  	<input type="radio" name="filtro_contrato" value="codEmpleado" id="codEmpleado" required><label for="codEmpleado">Codigo de Empleado</label>
@@ -60,7 +60,7 @@
 						    <div class="large-12 columns">
 						      <div class="row collapse">
 						        <div class="small-10 columns">
-						          <input id="stringContrat" type="text" placeholder="Search Field" name="search"  required="">
+						          <input id="stringContrat" type="text" class="txtSearch" placeholder="Search Field" name="search"  required="">
 						        </div>
 						        <div class="small-1 columns">
 						          <a  id="btnfind" href="#" class="button postfix"><i class="fa fa-search"></i></a>
@@ -78,7 +78,7 @@
 	</div>
 
 
-		<div class="large-12 columns">
+	<div class="large-12 columns">
 		<div class="box">
 			<div class="box-header blue_divina">
 				<div class="pull-right box-tools">
@@ -88,11 +88,25 @@
                </h3>
 			</div>
 			<div class="box-body" style="display: block;">
-				<table id="tblContrat" style="width:100%;">
-					<thead id="tblContratoshead">
-					</thead>
-					<tbody id="tblContratosbody"></tbody>
-               </table>
+				<div class=" table" >
+					<table id="tblContrat" style="width:100%;">
+						<thead id="tblContratoshead">
+						</thead>
+						<tbody id="tblContratosbody"></tbody>
+					</table>
+				</div>
+				<div class="pagina" >
+					<div class="pages">
+						<div class="pagination" id="paginationPeople">
+							<a href="#" class="first" data-action="first">&laquo;</a>
+							<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+							<input type="text" class="general" readonly="readonly" />
+							<a href="#" class="next" data-action="next">&rsaquo;</a>
+							<a href="#" class="last" data-action="last">&raquo;</a>
+						</div>
+						<input type="hidden" id="paginationPeople" value="true" />
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

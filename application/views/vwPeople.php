@@ -1,7 +1,7 @@
 
 <div class="row section" id="section-people">
 	<div class="large-12 columns fiter-section">
-		<div class="box" >
+		<div class="box" id="boxPeopleSearch" >
 			<div class="box-header blue_divina">
 				<div class="pull-right box-tools">
 					<span id="minusPeople" class="box-btn" data-widget="collapse">
@@ -12,7 +12,7 @@
 					<span>People Search</span>
 				</h3>
 				<div class="pull-left box-tools">
-					<span data-widget="newContrat" id="newContract">
+					<span data-widget="newContrat" id="newUser">
 						<img src="http://www.pms.307ti.com/Scripts/ext/images/icons/user_add.gif" alt="" />
 						<span>New</span>
 					</span>
@@ -22,7 +22,7 @@
 				<div class="row">
 					<div class="small-12 medium-12 large-5 columns">
 						<fieldset class="large-12 columns">
-							<legend>Elige un filtro</legend>
+							<legend>Choose a filter</legend>
 							<div class="rdoField">
 								<input type="checkbox" id="checkFilter1" class="checkFilter" value="peopleId">
 								<label for="checkFilter1">People Id</label>
@@ -55,23 +55,27 @@
 					</div>
 					<div class="small-12 medium-12 large-12 columns">
 						<fieldset class="large-12 columns">
-							<!--<fieldset class="fieldset fieldsetFilter-advanced-hide" id="fieldsetFilterAdvanced">-->
 							<legend><input type="checkbox" id="checkFilterAdvance" class="checkFilter">&nbsp;&nbsp;Advanced search</legend>
 							<div class="row" id="containerFilterAdv" style="display:none;">
 								<div class="rdoField">
-									<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="initials" id="RadioInitials" checked><label for="RadioInitials">initials / Employee code</label>
+									<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="initials" id="RadioInitials" checked>
+									<label for="RadioInitials">initials / Employee code</label>
 								</div>
 								<div class="rdoField">
-									<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="EmailDesc" id="RadioEmail"><label for="RadioEmail">Email</label>
+									<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="EmailDesc" id="RadioEmail">
+									<label for="RadioEmail">Email</label>
 								</div>
 								<div class="rdoField">
-									<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="Folio" id="RadioFolio"><label for="RadioFolio">Folio</label>
+									<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="Folio" id="RadioFolio">
+									<label for="RadioFolio">Folio</label>
 								</div>
 								<div class="rdoField">
-									<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="ResCode" id="RadioCode"><label for="RadioCode">Contract Id</label>
+									<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="ResCode" id="RadioCode">
+									<label for="RadioCode">Contract Id</label>
 								</div>
 								<div class="rdoField">
-									<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="FloorPlanDesc" id="RadioFloorPlan"><label for="RadioFloorPlan">Foor Plan</label>
+									<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="FloorPlanDesc" id="RadioFloorPlan">
+									<label for="RadioFloorPlan">Foor Plan</label>
 								</div>
 							</div>
 						</fieldset>
@@ -118,6 +122,18 @@
 		
 							</tbody>
 						</table>
+					</div>
+				</div>
+				<div class="pagina" >
+					<div class="pages">
+						<div class="pagination" id="paginationPeople">
+							<a href="#" class="first" data-action="first">&laquo;</a>
+							<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+							<input type="text" class="general" readonly="readonly" />
+							<a href="#" class="next" data-action="next">&rsaquo;</a>
+							<a href="#" class="last" data-action="last">&raquo;</a>
+						</div>
+						<input type="hidden" id="paginationPeople" value="true" />
 					</div>
 				</div>
 			</div>

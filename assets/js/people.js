@@ -70,6 +70,8 @@ $('#textCountry').change(function(){ changeState($(this).val()) });
 */
 $(function() {
 	
+	$(document).foundation();
+	
 	//maxHeight
 	maxHeight = screen.height * .25;
 	maxHeight = screen.height - maxHeight;
@@ -143,19 +145,6 @@ $(function() {
 			}
 		}
 	});
-	
-	/*$( "#textBirthdate" ).datepicker({
-		changeMonth: true,
-		changeYear: true
-    });
-	
-	$( "#textWeddingAnniversary" ).datepicker({
-		changeMonth: true,
-		changeYear: true
-    });*/
-	
-	//$(document).foundation();
-
 
 	window.prettyPrint && prettyPrint();
 	$('#textBirthdate').fdatepicker({
@@ -167,6 +156,17 @@ $(function() {
 		//format: 'mm-dd-yyyy',
 		disableDblClickSelection: true,
 	});
+	
+	$('#tablePeople').DataTable({
+		"scrollY": 350,
+        "scrollX": true,
+        "scrollX": true,
+		"paging":   false,
+        "ordering": false,
+        "info":     false,
+		"filter": 	false,
+		/*"paging": false,*/
+    });
 	
 	//$( "#tabs" ).tabs();
 	
@@ -733,6 +733,7 @@ function searchPeople(page){
 		},
 		success: function(data){
 			var total = data.total;
+			alertify.success("Found "+ total + " People");
 			if( parseInt(total) == 0 ){ total = 1; }
 			total = parseInt( total/10 );
 			if(data.total%10 == 0){

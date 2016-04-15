@@ -41,7 +41,7 @@ $(document).ready(function() {
 	});
 	
 	$('#tableInvDetailed').DataTable({
-		"scrollY": 200,
+		"scrollY": 350,
         "scrollX": true,
         "scrollX": true,
 		"paging":   false,
@@ -78,7 +78,7 @@ function searchInvDetailed(page){
 		},
 		success: function(data){
 			console.log(data);
-			drawTable(data.items,disableOtherCombo,"tabla");
+			drawTable2(data.items,disableOtherCombo,"tabla");
 			/*var total = data.total;
 			if( parseInt(total) == 0 ){ total = 1; }
 			total = parseInt( total/10 );

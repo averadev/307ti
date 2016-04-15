@@ -12,9 +12,7 @@ $('#btnfind').click(function(){
 	getContratos();
 });
 
-
-
-(function($) {
+/*(function($) {
     "use strict";
 
     $("[data-widget='collapse']").click(function() {
@@ -31,9 +29,7 @@ $('#btnfind').click(function(){
         }
     });
 
-})(jQuery);
-
-
+})(jQuery);*/
 
 (function($) {
     "use strict";
@@ -49,7 +45,7 @@ $("#busquedaAvanazada").click(function(){
         $("#avanzada").slideToggle("slow");
     });
 
-
+	
 
 
 	// maxHeight = screen.height * .25;
@@ -124,7 +120,6 @@ $("#busquedaAvanazada").click(function(){
 	// 	}
 	// });	
 });
-
 
 function showModals(div, funcion){
 
