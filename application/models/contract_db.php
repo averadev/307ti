@@ -48,10 +48,31 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
 
-
     }
 
-    public function filter($filters){
+    public function getLanguages(){
+        $this->db->select('pkLanguageId as ID, LanguageDesc');
+        $this->db->from('tblLanguage');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+
+    public function getSaleTypes(){
+        $this->db->select('pkSaletypeId as ID, SaleTypeDesc');
+        $this->db->from('tblSaleType');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+
+    private function filter($filters){
 
         if (!empty($filters['checks']['personaId']) && $filters['checks']['personaId'] == true ){
             $this->db->like('pkPeopleId', $filters['words']['stringContrat']);

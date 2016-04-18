@@ -29,19 +29,8 @@ class Contract extends CI_Controller {
 				"tourID"      => $_POST['TourID']
 			];
 
-			//$idC = insertContrat($Contract);
-			var_dump($_POST);
-		}else{
-
-			$Contract = [
-				"nombreLegal" => $_POST["nombreLegal"],
-				"idioma"      => "español",
-				"tourID"      => "123456"
-			];
-			var_dump($Contract);
-			echo "Asyn";
+			//var_dump($_POST);
 		}
-
 	}
 
 	public function insertContrat($Contract){
@@ -60,9 +49,23 @@ class Contract extends CI_Controller {
 		echo json_encode($contratos);
 
 	}
+	public function getLanguages(){
+		if($this->input->is_ajax_request()){
+			$languages = $this->contract_db->getLanguages();
+			echo json_encode($languages);
+		}
+
+	}
+
+	public function getSaleTypes(){
+		if($this->input->is_ajax_request()){
+			$types = $this->contract_db->getSaleTypes();
+			echo json_encode($types);
+		}
+	}
 
 
-	public function receiveFilter($filters){
+	private function receiveFilter($filters){
 
 		$ArrayFilters = [];
 		foreach ($filters as $key => $value) {
@@ -77,7 +80,7 @@ class Contract extends CI_Controller {
 		}
 	}
 
-	public function receiveWords($words){
+	private function receiveWords($words){
 
 		$ArrayWords = [];
 		foreach ($words as $key => $value) {

@@ -1,8 +1,12 @@
 getContratos();
 
 $(document).foundation();
-$('#newContract').click(function(){ showModals('dialog-Contract', cleanAddPeople); });
-$('#btnAddTourID').click(function(){ showModals('dialog-casa', cleanAddPeople); });
+$('#newContract').click(function(){
+    showModals('dialog-Contract', cleanAddPeople);
+    getLanguages();
+	getSaleTypes();
+});
+$('#btnAddTourID').click(function(){ showModals('dialog-tourID', cleanAddPeople); });
 $('#btnAddPeople').click(function(){showModals('dialog-Personas', cleanAddPeople);});
 $('#btnAddUnidades').click(function(){showModals('dialog-Unidades', cleanAddUnidades);});
 $('#btnCleanWord').click(function () {
@@ -12,24 +16,6 @@ $('#btnfind').click(function(){
 	getContratos();
 });
 
-/*(function($) {
-    "use strict";
-
-    $("[data-widget='collapse']").click(function() {
-        //Find the box parent        
-        var box = $(this).parents(".box").first();
-        //Find the body and the footer
-        var bf = box.find(".box-body, .box-footer");
-        if (!box.hasClass("collapsed-box")) {
-            box.addClass("collapsed-box");
-            bf.slideUp();
-        } else {
-            box.removeClass("collapsed-box");
-            bf.slideDown();
-        }
-    });
-
-})(jQuery);*/
 
 (function($) {
     "use strict";
@@ -44,7 +30,7 @@ $(function(){
 $("#busquedaAvanazada").click(function(){
         $("#avanzada").slideToggle("slow");
     });
-
+});
 	
 
 
@@ -119,7 +105,7 @@ $("#busquedaAvanazada").click(function(){
 	// 		//cleanContractFields("contract");
 	// 	}
 	// });	
-});
+
 
 function showModals(div, funcion){
 
@@ -154,7 +140,7 @@ function showModals(div, funcion){
 		  }
 	  ],
 		close: function() {
-
+			dialog.dialog('close');
 		}
     });
 
@@ -182,6 +168,7 @@ function cleanContractFields(id){
 
 function createNewContract(id){
 
+
 	var formData = new FormData(document.getElementById("saveDataContract"));
 	//legalName
 	var idioma = $("#idiomaContract").val().trim();
@@ -205,6 +192,16 @@ function createNewContract(id){
             //alertify.error("Ocurrio un error vuelve a intentarlo");
         });
 }
+
+function getDataFormContract(){
+
+	var idsContract = ['legalName', 'TourID'];
+	var dataContact = getWords(dataContract);
+	data.selectLanguage = $( "#selectLanguage" ).val();
+
+
+}
+
 
 function EnviaFormularioCliente(id){
 	//var formData = new FormData(document.getElementById("contract"));
@@ -346,4 +343,51 @@ function getInputsByID(formData, divs){
 //     	next();
 // 	});
 // }
+
+
+function getLanguages(){
+    $.ajax({
+        type: "POST",
+        url: "contract/getLanguages",
+        dataType:'json',
+        success: function(data){
+            if(data != null){
+                var select = "";
+                for(var i = 0; i < data.length; i++){
+                    select += '<option value="'+data[i].ID+'">'+data[i].LanguageDesc+'</option>';
+                }
+                $("#selectLanguage").html(select);
+            }else{
+                alertify.error("Error Searching Languages");
+            }
+        },
+        error: function(){
+            alertify.error("Error Searching Languages");
+        }
+    });
+}
+function getSaleTypes(){
+	$.ajax({
+		type: "POST",
+		url: "contract/getSaleTypes",
+		dataType:'json',
+		success: function(data){
+			if(data != null){
+				var select = "";
+				for(var i = 0; i < data.length; i++){
+					select += '<option value="'+data[i].ID+'">'+data[i].SaleTypeDesc+'</option>';
+				}
+				$("#typeSales").html(select);
+			}else{
+				alertify.error("Error Searching Languages");
+			}
+		},
+		error: function(){
+			alertify.error("Error Searching Languages");
+		}
+	});
+}
+
+
+
 
