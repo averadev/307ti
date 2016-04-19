@@ -17,7 +17,7 @@ class Contract extends CI_Controller {
 	}
     
 	public function index(){
-        $this->load->view('vwContract_pruebas.php');
+        $this->load->view('vwContract.php');
 	}
 
 	public function saveContract(){
@@ -28,8 +28,6 @@ class Contract extends CI_Controller {
 				"idioma"      => $_POST['IDpersona'],
 				"tourID"      => $_POST['TourID']
 			];
-
-			//var_dump($_POST);
 		}
 	}
 
@@ -39,22 +37,27 @@ class Contract extends CI_Controller {
 
 
 	public function getContratos(){
-	
-		 $sql = [
-			'checks'	=>	$this->receiveFilter($_POST['filters']),
-			'dates' 	=>	$this->receiveDates($_POST['dates'], 'Date'),
-			'words' 	=>	$this->receiveWords($_POST['words'])
-		];
-		$contratos = $this->contract_db->getContratos($sql);
-		echo json_encode($contratos);
+		if($this->input->is_ajax_request()) {
+			$sql = $this->getFilters($_POST, 'Date', 'Contract');
+			$contratos = $this->contract_db->getContratos($sql);
+			echo json_encode($contratos);
+		}
 
 	}
+
+	public function getTours(){
+		if($this->input->is_ajax_request()) {
+			$sql = $this->getFilters($_POST, 'TourDate', 'Tour');
+			$tours = $this->contract_db->getTours($sql);
+			echo json_encode($tours);
+		}
+	}
+
 	public function getLanguages(){
 		if($this->input->is_ajax_request()){
 			$languages = $this->contract_db->getLanguages();
 			echo json_encode($languages);
 		}
-
 	}
 
 	public function getSaleTypes(){
@@ -64,6 +67,24 @@ class Contract extends CI_Controller {
 		}
 	}
 
+	private function getFilters($array, $dateTable, $section){
+		if(isset($array['filters'])){
+			$sql['checks'] = $this->receiveFilter($array['filters']);
+		}else{
+			$sql['checks'] = false;
+		}
+		if(isset($array['dates'])){
+			$sql['dates'] = $this->receiveDates($array['dates'], $dateTable, $section);
+		}else{
+			$sql['dates'] = false;
+		}
+		if(isset($array['words'])){
+			$sql['words'] = $this->receiveWords($array['words']);
+		}else{
+			$sql['words'] = false;
+		}
+		return $sql;
+	}
 
 	private function receiveFilter($filters){
 
@@ -94,12 +115,11 @@ class Contract extends CI_Controller {
 			return false;
 		}
 	}
-
-	public function receiveDates($dates, $table) {
-		if (!empty($dates['startDate']) && !empty($dates['endDate'])) {
+	private function receiveDates($dates, $table, $section) {
+		if (!empty($dates['startDate'.$section]) && !empty($dates['endDate'.$section])) {
 			$dates = [
-	        	'startDate'=> $dates['startDate'],
-	            'endDate'  => $dates['endDate']
+	        	'startDate'=> $dates['startDate'.$section],
+	            'endDate'  => $dates['endDate'.$section]
         	];
 			return $table." between '".$dates['startDate']."' and '". $dates['endDate']."'";
 

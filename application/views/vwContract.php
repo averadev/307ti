@@ -1,435 +1,122 @@
-<div class="row fiter-section" id="section-contract">
-    <div class="section-bar">Consultas<div class="collapseFilter"></div></div>
-	<div class="section-bar" id="newContract">Nuevo</div>
-
-	<div class="small-12  columns">
-		<fieldset class="large-6 columns">
-		    <input type="radio" name="filtroC" value="true" id="personaID" required><label for="personaID">Persona ID</label>
-		    <input type="radio" name="filtroC" value="true" id="nombreC"><label for="nombreC">Nombre</label>
-		    <input type="radio" name="filtroC" value="true" id="ApelidoC"><label for="ApelidoC">Apellido</label>
-		    <input type="radio" name="filtroC" value="true" id="ApelidoC"><label for="ApelidoC">Reservación ID</label>
-  		</fieldset>
-	</div>
-<!--     <div class="medium-12 columns">
-        <div class="row filter-fields">
-			<div class="large-12 columns">
-				<div class="rdoField">
-				<input type="checkbox" id="checkFilter1" class="checkFilter" value="contractId">
-					<label for="checkFilter1">Persona Id</label>
+<div class="row section">
+	<div class="large-12 columns">
+		<div class="box">
+			<div class="box-header blue_divina">
+				<div class="pull-right box-tools">
+					<span class="box-btn" data-widget="collapse">
+						<i class="fa fa-minus"></i>
+					</span>
+               </div>
+               <h3 class="box-title">
+               	<span>Contract Search</span>
+               </h3>
+				<div class="pull-left box-tools">
+					<span data-widget="newContrat" id="newContract">
+						<img src="http://www.pms.307ti.com/Scripts/ext/images/icons/contract.png" alt="">
+						<span>New</span>
+					</span>
 				</div>
-				<div class="rdoField">
-				<input type="checkbox" id="checkFilter2" class="checkFilter" value="lastName" checked>
-					<label for="checkFilter2">Apellido</label>
+<!--				<i id="newContract" class="fa fa-file-text-o"></i>-->
+			</div>
+			<div class="box-body" style="display: block;">
+				<div class="row">
+					  <fieldset class="large-6 columns">
+					    <legend>Choose a filter</legend>
+					    <input type="radio" name="filtro_contrato" value="personaId" id="personaId" required><label for="personaId">People ID</label>
+					    <input checked type="radio" name="filtro_contrato" value="nombre" id="nombre"><label for="nombre">Name</label>
+					    <input type="radio" name="filtro_contrato" value="apellido" id="apellido"><label for="apellido">Last name</label>
+					    <input type="radio" name="filtro_contrato" value="reservacionId" id="reservacionId"><label for="reservacionId">Reservation ID</label>
+					  </fieldset>
+					  <fieldset class="large-6 columns">
+					  	<legend>Select Period</legend>
+					    <div class="row">
+							<div class="medium-6 columns">
+						        <input id="startDateContract" class="round" type="date" placeholder="Fecha Inicial">
+						    </div>
+						    <div class="medium-6 columns">
+						    <input id="endDateContract" class="round" type="date"  placeholder="Fecha final">
+						    </div>
+  						</div>
+					  </fieldset>
 				</div>
-				<div class="rdoField">
-				<input type="checkbox" id="checkFilter3" class="checkFilter" value="Name" checked>
-					<label for="checkFilter3">Nombre</label>
-				</div>
-				<div class="rdoField">
-					<input type="checkbox" id="checkFilter3" class="checkFilter" value="Name" checked>
-					<label for="checkFilter3">Reservacion ID</label>
-				</div>
-			</div> -->
+				<div class="row">
+					<div class="medium-6 columns">
+					<fieldset>
+						<legend><input id="busquedaAvanazada" type="checkbox">Advanced search</legend>
 
-
-			<!-- <div class="small-12 medium-10 large-7 columns end">
-				<fieldset class="fieldset fieldsetFilter-advanced-hide" id="fieldsetFilterAdvanced">
-					<legend><input type="checkbox" id="checkFilterAdvance" class="checkFilter">&nbsp;&nbsp;Busqueda Avanzada</legend>
-					<div class="row" id="containerFilterAdvContract" style="display:none;">
-						<div class="large-6 columns">
-							<input id="checkbox1" type="checkbox"><label for="checkbox1">Iniciales / Codigo Empleado</label>
+						<div class="row" id="avanzada" style="display: none;">
+							<div class="large-12 columns slide">
+							  	<input type="radio" name="filtro_contrato" value="codEmpleado" id="codEmpleado" required><label for="codEmpleado">Codigo de Empleado</label>
+					    		<input type="radio" name="filtro_contrato" value="folio" id="folio"><label for="folio">Folio</label>
+					    		<input type="radio" name="filtro_contrato" value="unidad" id="unidad"><label for="unidad">Unidad ID</label>
+					    		<input type="radio" name="filtro_contrato" value="email" id="email"><label for="email">Email</label>
+					    		<input type="radio" name="filtro_contrato" value="contrato" id="contrato"><label for="contrato">Contrato ID</label>
+							</div>
 						</div>
-						<div class="large-6 columns">
-							<input id="checkbox2" type="checkbox"><label for="checkbox2">Direccion Email</label>
-						</div>
-						<div class="large-6 columns">
-							<input id="checkbox1" type="checkbox"><label for="checkbox1">Folio</label>
-						</div>
-						<div class="large-6 columns">
-							<input id="checkbox2" type="checkbox"><label for="checkbox2">Contrato ID</label>
-						</div>
-						<div class="large-12 columns">
-							<input id="checkbox1" type="checkbox"><label for="checkbox1">Unidad</label>
-						</div>
-					</div>
-				</fieldset>
-			</div> -->
-			        <div class="row">
-			    <div class="large-9 columns">
-			      <div class="row collapse">
-			        <div class="small-10 columns">
-			          <input id="contractR" name="contractR" type="text" placeholder="palabra a buscar">
-			        </div>
-			        <div class="small-2 columns">
-			          <a href="#" class="button postfix"><i class="fa fa-search"></i></a>
-			        </div>
-			      </div>
-			    </div>
-
-        </div>
-        </div>
-
-    </div>
-    <div class="medium-2 columns">&nbsp;</div>
-</div>
-
-<div class="row pagination-section">
-    <div class="medium-2 columns section-bar"><span>Resultados</span></div>
-    <div class="pages">
-		<div class="pagination" id="paginationcontract">
-			<a href="#" class="first" data-action="first">&laquo;</a>
-			<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-			<input type="text" readonly="readonly" />
-			<a href="#" class="next" data-action="next">&rsaquo;</a>
-			<a href="#" class="last" data-action="last">&raquo;</a>
+					</fieldset>
+				    </div>
+				    <div class="medium-6 columns">
+				     	<div class="row">
+						    <div class="large-12 columns">
+						      <div class="row collapse">
+						        <div class="small-10 columns">
+						          <input id="stringContrat" type="text" class="txtSearch" placeholder="Search Field" name="search"  required="">
+						        </div>
+						        <div class="small-1 columns">
+						          <a  id="btnfind" href="#" class="button postfix"><i class="fa fa-search"></i></a>
+						        </div>
+						         <div class="small-1 columns">
+						          <a id="btnCleanWord"  href="#" class="button postfix"><i class="fa fa-trash"></i></a>
+						        </div>
+						      </div>
+						    </div>
+						  </div>
+				    </div>
+  				</div>
+			</div>
 		</div>
-		<input type="hidden" id="paginationcontract" value="true" />
-    </div>
+	</div>
+
+
+	<div class="large-12 columns">
+		<div class="box">
+			<div class="box-header blue_divina">
+				<div class="pull-right box-tools">
+               </div>
+               <h3 class="box-title">
+               	<span>Contracts Relation</span>
+               </h3>
+			</div>
+			<div class="box-body" style="display: block;">
+				<div class=" table" >
+					<table id="tblContrat" style="width:100%;">
+						<thead id="tblContratoshead">
+						</thead>
+						<tbody id="tblContratosbody"></tbody>
+					</table>
+				</div>
+				<div class="pagina" >
+					<div class="pages">
+						<div class="pagination" id="paginationPeople">
+							<a href="#" class="first" data-action="first">&laquo;</a>
+							<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+							<input type="text" class="general" readonly="readonly" />
+							<a href="#" class="next" data-action="next">&rsaquo;</a>
+							<a href="#" class="last" data-action="last">&raquo;</a>
+						</div>
+						<input type="hidden" id="paginationPeople" value="true" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	
 </div>
 
-<div class="row table-section">
-<!-- 	<div class="divLoadingTable">
-		<div class="bgLoadingTable" ></div>
-		<div class="loadingTable" >
-			<div class="subLoadingTable">
-				<label>Cargando..</label>
-				<div id="progressbar"></div>
-			</div>
-		</div>
-	</div> -->
-	<table id="tablecontract" width="100%">
-	<thead>
-		<tr>
-			<th class="cellEdit" ></th>
-			<th class="cellEdit" >ContratoId</th>
-			<th class="cellGeneral" >Folio</th>
-			<th class="cellGeneral">Nombre Legal</th>
-			<th class="cellGeneral">Tipo Unidad</th>
-			<th class="cellGeneral" >Fecruencia</th>
-			<th class="cellGeneral" >status</th>
-			<th class="cellDate" >Fecha Creación</th>
-			<th class="cellGeneral" >Primer año ocupación</th>
-			<th class="cellGeneral" >Ultimo año ocupación</th>
-			<th class="cellGeneral" >Precio Unidad</th>
-			<th class="cellGeneral" >Precio Venta</th>
-
-		</tr>
-	</thead>
-	<tbody>
-		
-	</tbody>
-	</table>
-</div>
-
-<div id="dialog-tourID" title="busqueda ID Tour">
-	<div class="contentModal">
-	        <div class="row filter-fields">
-			<div class="large-12 columns">
-				<div class="rdoField">
-				<input type="checkbox" id="checkFilter1" class="checkFilter" value="contractId">
-					<label for="checkFilter1">Persona Id</label>
-				</div>
-				<div class="rdoField">
-				<input type="checkbox" id="checkFilter2" class="checkFilter" value="lastName" checked>
-					<label for="checkFilter2">Apellido</label>
-				</div>
-				<div class="rdoField">
-				<input type="checkbox" id="checkFilter3" class="checkFilter" value="Name" checked>
-					<label for="checkFilter3">Nombre</label>
-				</div>
-			</div>
-					<div class="small-12 ">
-				<fieldset class="fieldset fieldsetFilter-advanced-hide" id="fieldsetFilterAdvanced">
-					<legend>
-						<input type="checkbox" id="checkFilterAdvance" class="checkFilter">Busqueda Avanzada
-					</legend>
-					<div class="row" id="containerFilterAdv" >
-						<div class="large-6 columns">
-							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="initials" id="RadioInitials" checked><label for="RadioInitials">OPC</label>
-						</div>
-						<div class="large-6 columns">
-							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="EmailDesc" id="RadioEmail"><label for="RadioEmail">Direccion Email</label>
-						</div>
-						<div class="large-6 columns">
-							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="Folio" id="RadioFolio"><label for="RadioFolio">Folio</label>
-						</div>
-						<div class="large-6 columns">
-							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="ResCode" id="RadioCode"><label for="RadioCode">Contrato ID</label>
-						</div>
-						<div class="large-12 columns">
-							<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="FloorPlanDesc" id="RadioFloorPlan"><label for="RadioFloorPlan">Unidad</label>
-						</div>
-					</div>
-				</fieldset>
-			</div>
-        </div>
-       <div class="row">
-					<!-- fecha Inicial-->
-					<div class="small-12 large-6 columns">
-						<label id="alertBirthdate" for="alertBirthdate" class="text-left">De
-							<input type="date" id="" class="general" >
-						</label>
-					</div>
-					<!-- Fecha final-->
-					<div class="small-12 large-6 columns">
-						<label for="textWeddingAnniversary" class="text-left">A:
-							<input type="date" id="" class="general">
-						</label>
-					</div>
-		</div>
-		
-
-	<div class="row">
-	  <div class="small-2 columns">
-				<label id="alertLastName" for="right-label" class="text-left">Buscar</label>
-		</div>
-	    <div class="large-10 columns">
-	      <div class="row collapse">
-	        <div class="small-8 columns">
-	          <input type="text" placeholder="Campo de busqueda">
-	        </div>
-	        <div class="small-2 columns">
-	          <a id="btn" data-reveal-id="btn" href="#" class="button postfix">Limpiar</a>
-	        </div>
-	        <div class="small-2 columns">
-	          <a id="btn" data-reveal-id="btn" href="#" class="button postfix">Agregar</a>
-	        </div>
-	      </div>
-	    </div>
-		</div>
-		<div class="row">
-			<fieldset>
-				<legend>Relacion de tours</legend>
-				<div class="row">
-					<table>
-						<thead>
-				<tr>
-					<th class="cellEdit" >Tour ID</th>
-					<th class="cellGeneral">Persona ID</th>
-					<th class="cellGeneral">Nombre</th>
-					<th class="cellGeneral" >Apellidos</th>
-					<th class="cellGeneral" >Fecha Tour</th>
-					<th class="cellGeneral" >Locación Contacto</th>
-					<th class="cellGeneral" >OPC</th>
-					<th class="cellGeneral" >Adultos Mayores</th>
-					<th class="cellGeneral" >Menores</th>
-					<th class="cellGeneral" >Nacionalidad</th>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-					</table>
-				</div>
-			</fieldset>
-		</div>
-
- </div>
-</div>
-
-
-
-
-<div id="dialog-Personas" title="Personas" style="display: none;">
-	<div class="contentModal">
-	        <div class="row filter-fields">
-			<div class="large-12 columns">
-				<div class="rdoField">
-				<input type="checkbox" id="checkFilter1" class="checkFilter" value="contractId">
-					<label for="checkFilter1">Persona Id</label>
-				</div>
-				<div class="rdoField">
-				<input type="checkbox" id="checkFilter2" class="checkFilter" value="lastName" checked>
-					<label for="checkFilter2">Apellido</label>
-				</div>
-				<div class="rdoField">
-				<input type="checkbox" id="checkFilter3" class="checkFilter" value="Name" checked>
-					<label for="checkFilter3">Nombre</label>
-				</div>
-			</div>
-			<div class="small-12 medium-10 large-7 columns end">
-				<fieldset class="fieldset fieldsetFilter-advanced-hide" id="fieldsetFilterAdvanced">
-					<legend><input type="checkbox" id="checkFilterAdvance" class="checkFilter">&nbsp;&nbsp;Busqueda Avanzada</legend>
-					<div class="row" id="containerFilterAdvContract" >
-						<div class="large-6 columns">
-							<input id="checkbox1" type="checkbox"><label for="checkbox1">Iniciales / Codigo Empleado</label>
-						</div>
-						<div class="large-6 columns">
-							<input id="checkbox2" type="checkbox"><label for="checkbox2">Direccion Email</label>
-						</div>
-						<div class="large-6 columns">
-							<input id="checkbox1" type="checkbox"><label for="checkbox1">Folio</label>
-						</div>
-						<div class="large-6 columns">
-							<input id="checkbox2" type="checkbox"><label for="checkbox2">Contrato ID</label>
-						</div>
-						<div class="large-12 columns">
-							<input id="checkbox1" type="checkbox"><label for="checkbox1">Unidad</label>
-						</div>
-					</div>
-				</fieldset>
-			</div>
-        </div>
-       <div class="row">
-					<!-- fecha Inicial-->
-					<div class="small-12 large-6 columns">
-						<label id="alertBirthdate" for="alertBirthdate" class="text-left">De
-							<input type="date" id="" class="general" >
-						</label>
-					</div>
-					<!-- Fecha final-->
-					<div class="small-12 large-6 columns">
-						<label for="textWeddingAnniversary" class="text-left">A:
-							<input type="date" id="" class="general">
-						</label>
-					</div>
-		</div>
-	<div class="row">
-	  <div class="small-2 columns">
-				<label id="alertLastName" for="right-label" class="text-left">Buscar</label>
-		</div>
-	    <div class="large-10 columns">
-	      <div class="row collapse">
-	        <div class="small-8 columns">
-	          <input type="text" placeholder="Campo de busqueda">
-	        </div>
-	        <div class="small-2 columns">
-	          <a id="btn" data-reveal-id="btn" href="#" class="button postfix">Limpiar</a>
-	        </div>
-	        <div class="small-2 columns">
-	          <a id="btn" data-reveal-id="btn" href="#" class="button postfix">Agregar</a>
-	        </div>
-	      </div>
-	    </div>
-		</div>
-		<div class="row">
-			<fieldset>
-				<legend>Relacion de tours</legend>
-				<div class="row">
-					<table class="smal-12 columns">
-						<thead>
-				<tr>
-					<th class="cellEdit" > <input type="checkbox"></th>
-					<th class="cellGeneral" >ID</th>
-					<th class="cellGeneral">Nombre</th>
-					<th class="cellGeneral">Apellido</th>
-					<th class="cellGeneral" >Dirección</th>
-					<th class="cellGeneral" ></th>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-					</table>
-				</div>
-			</fieldset>
-		</div>
-
- </div>
-</div>
-
-
-<div id="dialog-Unidades" title="Unidades" style="display: none;">
-	<div class="contentModal">
-	        <div class="row filter-fields">
-			<div class="large-12 columns">
-				<div class="rdoField">
-				<input type="checkbox" id="checkFilter1" class="checkFilter" value="contractId">
-					<label for="checkFilter1">Persona Id</label>
-				</div>
-				<div class="rdoField">
-				<input type="checkbox" id="checkFilter2" class="checkFilter" value="lastName" checked>
-					<label for="checkFilter2">Apellido</label>
-				</div>
-				<div class="rdoField">
-				<input type="checkbox" id="checkFilter3" class="checkFilter" value="Name" checked>
-					<label for="checkFilter3">Nombre</label>
-				</div>
-			</div>
-			<div class="small-12 medium-10 large-7 columns end">
-				<fieldset class="fieldset fieldsetFilter-advanced-hide" id="fieldsetFilterAdvanced">
-					<legend><input type="checkbox" id="checkFilterAdvance" class="checkFilter">Busqueda Avanzada</legend>
-					<div class="row" id="containerFilterAdvContract" >
-						<div class="large-6 columns">
-							<input id="checkbox1" type="checkbox"><label for="checkbox1">Iniciales / Codigo Empleado</label>
-						</div>
-						<div class="large-6 columns">
-							<input id="checkbox2" type="checkbox"><label for="checkbox2">Direccion Email</label>
-						</div>
-						<div class="large-6 columns">
-							<input id="checkbox1" type="checkbox"><label for="checkbox1">Folio</label>
-						</div>
-						<div class="large-6 columns">
-							<input id="checkbox2" type="checkbox"><label for="checkbox2">Contrato ID</label>
-						</div>
-						<div class="large-12 columns">
-							<input id="checkbox1" type="checkbox"><label for="checkbox1">Unidad</label>
-						</div>
-					</div>
-				</fieldset>
-			</div>
-        </div>
-       <div class="row">
-					<!-- fecha Inicial-->
-					<div class="small-12 large-6 columns">
-						<label id="alertBirthdate" for="alertBirthdate" class="text-left">De
-							<input type="date" id="" class="general" >
-						</label>
-					</div>
-					<!-- Fecha final-->
-					<div class="small-12 large-6 columns">
-						<label for="textWeddingAnniversary" class="text-left">A:
-							<input type="date" id="" class="general">
-						</label>
-					</div>
-		</div>
-	<div class="row">
-	  <div class="small-2 columns">
-				<label id="alertLastName" for="right-label" class="text-left">Buscar</label>
-		</div>
-	    <div class="large-10 columns">
-	      <div class="row collapse">
-	        <div class="small-8 columns">
-	          <input type="text" placeholder="Campo de busqueda">
-	        </div>
-	        <div class="small-2 columns">
-	          <a id="btn" data-reveal-id="btn" href="#" class="button postfix">Limpiar</a>
-	        </div>
-	        <div class="small-2 columns">
-	          <a id="btn" data-reveal-id="btn" href="#" class="button postfix">Agregar</a>
-	        </div>
-	      </div>
-	    </div>
-		</div>
-		<div class="row">
-			<fieldset>
-				<legend>Relacion de tours</legend>
-				<div class="row">
-					<table class="smal-12 columns">
-						<thead>
-				<tr>
-					<th class="cellEdit" > <input type="checkbox"></th>
-					<th class="cellGeneral" >ID</th>
-					<th class="cellGeneral">Nombre</th>
-					<th class="cellGeneral">Apellido</th>
-					<th class="cellGeneral" >Dirección</th>
-					<th class="cellGeneral" ></th>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-					</table>
-				</div>
-			</fieldset>
-		</div>
-
- </div>
-</div>
-
-
-<div id="dialog-Contract" title="Alta de Contratos">
+<div id="dialog-Contract" title="Create Contract" style="display: none;">
 	<div class="contentModal">
 		<div id="tabs-1">
-		<!-- Mensaje Error -->
+		<!-- Error Message -->
 			<div class="row" id="alertValidateContrato" style="display:none;">
 				<div class="small-12 columns">
 					<div data-alert class="alert-box alert " >
@@ -440,27 +127,27 @@
 	<form id="saveDataContract" data-abide novalidate>
 		<fieldset class="fieldset">
 			<legend>
-				Datos Contrato
+				Contract Data
 			</legend>
-		<!-- nombre legal-->
+		<!-- Legal name-->
 		<div class="row">
 			<div class="small-3 columns">
-				<label for="legalName" class="text-left">Nombre legal</label>
+					<label for="legalName" class="text-left">Legal Name</label>
 			</div>
 			<div class="small-9 columns">
-				<input name="legalName" type="text" id="legalName" name="legalName" class="general" required>
+				<input type="text" id="legalName" name="legalName" class="general" required>
 			</div>
 		</div>
-		<!-- Idioma-->
+		<!-- Language-->
 		<div class="row">
 			<div class="small-3 columns">
-				<label id="alertLastName" for="right-label" class="text-left">Idioma</label>
+				<label id="alertLastName" for="right-label" class="text-left">Language</label>
 			</div>
 			<div class="small-9 columns">
-				<select id="idiomaContract" form="saveDataContract" required="">
-      			<option></option>
-					<option value="espanol">Español</option>
-					<option value="ingles">Ingles</option>
+				<select id="selectLanguage" form="saveDataContract" required="">
+<!--      			<option></option>-->
+<!--					<option value="espanol">Español</option>-->
+<!--					<option value="ingles">Ingles</option>-->
 				</select>
 
 			</div>
@@ -468,16 +155,15 @@
 		<!-- Tour ID-->
 	  <div class="row">
 	  <div class="small-3 columns">
-				<label id="tourID" for="right-label" class="text-left">Tour ID</label>
+				<label for="right-label" class="text-left">Tour ID</label>
 		</div>
 	    <div class="large-9 columns">
 	      <div class="row collapse">
 	        <div class="small-10 columns">
 	          <input type="text" placeholder="ID" name="TourID" id="TourID" required>
-	          <small class="error">verifica los datos</small>
 	        </div>
 	        <div class="small-2 columns">
-	          <a id="btnTourID" data-reveal-id="btnTourID" href="#" class="button postfix">Agregar</a>
+	          <a id="btnAddTourID" href="#" class="button postfix">Add</a>
 	        </div>
 	      </div>
 	    </div>
@@ -485,15 +171,6 @@
 
 		<div class="containerPeople">
 		<div class="row">
-				<!-- <div class="divLoadingTable">
-				<div class="bgLoadingTable"></div>
-				<div class="loadingTable" >
-					<div class="subLoadingTable">
-						<label>Cargando..</label>
-						<div id="progressbar"></div>
-					</div>
-				</div>
-			</div> -->
 			<div class="small-12 columns">
 				<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>
 			</div>
@@ -507,9 +184,20 @@
 					<th class="cellGeneral" >Persona Principal</th>
 					<th class="cellGeneral" >Persona Secundaria</th>
 					<th class="cellGeneral" >Beneficiario</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
+                <tr>
+                    <td>23</td>
+                    <td>Faustino</td>
+                    <td>Loeza</td>
+                    <td>Cancun</td>
+                    <td><input type="radio" name="peopleContract" value="1"></td>
+                    <td><input type="radio" name="peopleContract" value="2"></td>
+                    <td><input type="radio" name="peopleContract" value="3"></td>
+                    <td><button type="button" class="alert button"><i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i></button></td>
+                </tr>
 			</tbody>
 			</table>
 	</div>
@@ -522,16 +210,7 @@
 	<fieldset class="fieldset">
 		<legend class="btnAddressData">Unidades</legend>
 		<div class="containerPeople">
-<!-- 			<div class="row">
-				<div class="divLoadingTable">
-					<div class="bgLoadingTable"></div>
-					<div class="loadingTable" >
-						<div class="subLoadingTable">
-							<label>Cargando..</label>
-							<div id="progressbar"></div>
-						</div>
-					</div>
-				</div> -->
+			<div class="row">
 		<div class="small-12 columns">
 			<a id="btnAddUnidades" href="#" class="button tiny"><i class="fa fa-home"></i></a>
 		</div>
@@ -545,9 +224,20 @@
 					<th class="cellGeneral" >Primer año OCC</th>
 					<th class="cellGeneral" >Ultimo año OCC</th>
 					<th class="cellGeneral" >Frecuencia</th>
+                    <th></th>
 				</tr>
 			</thead>
 			<tbody>
+            <tr>
+                <td>sds5d5</td>
+                <td>PArgo 1 3Rec</td>
+                <td>$38,000.00</td>
+                <td>#1</td>
+                <td>2016</td>
+                <td><input type="radio" name="people" value="2"></td>
+                <td><input type="radio" name="people" value="3"></td>
+                <td><button type="button" class="alert button"><i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i></button></td>
+            </tr>
 			</tbody>
 		</table>
 		</div>
@@ -564,12 +254,8 @@
 					<label  class="text-left">Tipo de venta</label>
 				</div>
 				<div class="small-9 columns">
-					<select>
-	      			<option selected disabled>Seleccione un tipo</option>
-						<option>Unidad de Compañia</option>
-						<option>Reventa</option>
-						<option>Upgrade</option>
-						<option>Downgrade</option>
+					<select id="typeSales">
+	      			
 					</select>
 				</div>
 			</div>
@@ -660,7 +346,7 @@
       </div>
     </div>
   </div>
-  <!--Pagos progrmados-->
+  <!--Pagos programados-->
   <div class="row">
 	<div class="small-3 columns">
 		<label id="alertLastName" for="right-label" class="text-left">Pagos programados</label>
@@ -724,20 +410,338 @@
 	</div>
 	</fieldset>
 	<div data-abide-error class="alert callout" style="display: none;">
-    <p><i class="fi-alert"></i> Por favor rellene los campos Obligatorios(rojo).</p>
-  </div>
-	  <div class="row">
-    <fieldset class="large-6 columns">
-      <button class="button" type="submit" value="Submit">Submit</button>
-    </fieldset>
-    <fieldset class="large-6 columns">
-      <button class="button" type="reset" value="Reset">Reset</button>
-    </fieldset>
+    <p><i class="fi-alert"></i> please fill required fields (red).</p>
   </div>
 
 </form>
 	</div>
 </div>
+</div>
+
+
+<div id="dialog-tourID" title="Tour ID" style="display: none;">
+    <div class="large-12 columns">
+        <div class="box">
+            <div class="box-header green">
+                <div class="pull-right box-tools">
+					<span class="box-btn" data-widget="collapse">
+						<i class="fa fa-minus"></i>
+					</span>
+                </div>
+                <h3 class="box-title">
+                    <span>Add Tour ID</span>
+                </h3>
+                <div class="pull-left box-tools">
+					<span data-widget="newContrat" id="newContract">
+						<img src="http://www.pms.307ti.com/Scripts/ext/images/icons/contract.png" alt="">
+						<span>New</span>
+					</span>
+                </div>
+            </div>
+            <div class="box-body" style="display: block;">
+                <div class="row">
+                    <fieldset class="large-6 columns">
+                        <legend>Choose a filter</legend>
+                        <input type="checkbox" name="filter_tourID" value="personaId" id="personaIdTour" required><label for="personaIdTour">Persona ID</label>
+                        <input checked type="checkbox" name="filter_tourID" value="nombre" id="nombreTour"><label for="nombreTour">Nombre</label>
+                        <input type="checkbox" name="filter_tourID" value="apellido" id="apellidoTour"><label for="apellidoTour">Apellido</label>
+                        <input type="checkbox" name="filter_tourID" value="reservacionIdTour" id="reservacionId"><label for="reservacionIdTour">Reservación ID</label>
+                    </fieldset>
+                    <fieldset class="large-6 columns">
+                        <legend>Select Period</legend>
+                        <div class="row">
+                            <div class="medium-6 columns">
+                                <input id="startDateTour" class="round" type="date" placeholder="Start Date">
+                            </div>
+                            <div class="medium-6 columns">
+                                <input id="endDateTour" class="round" type="date"  placeholder="End Date">
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <div class="medium-6 columns">
+                        <fieldset>
+                            <legend><input id="advanceSearchTour" type="checkbox">Advanced search</legend>
+
+                            <div class="row" id="advanceTour" style="display: none;">
+                                <div class="large-12 columns slide">
+                                    <input type="checkbox" name="filter_tourID" value="codEmpleadoTour" id="codEmpleadoTour" required><label for="codEmpleadoTour">Codigo de Empleado</label>
+                                    <input type="checkbox" name="filter_tourID" value="folioTour" id="folioTour"><label for="folioTour">Folio</label>
+                                    <input type="checkbox" name="filter_tourID" value="unidadTour" id="unidadTour"><label for="unidadTour">Unidad ID</label>
+                                    <input type="checkbox" name="filter_tourID" value="emailTour" id="emailTour"><label for="email">Email</label>
+                                    <input type="checkbox" name="filter_tourID" value="contratoTour" id="contratoTour"><label for="contratoTour">Contrato ID</label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="medium-6 columns">
+                        <div class="row">
+                            <div class="large-12 columns">
+                                <div class="row collapse">
+                                    <div class="small-10 columns">
+                                        <input id="stringTour" type="text" class="txtSearch" placeholder="Search Field" name="search"  required="">
+                                    </div>
+                                    <div class="small-1 columns">
+                                        <a  id="btnfindTour" href="#" class="button postfix"><i class="fa fa-search"></i></a>
+                                    </div>
+                                    <div class="small-1 columns">
+                                        <a id="btnCleanWordTour"  href="#" class="button postfix"><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="large-12 columns">
+        <div class="box">
+            <div class="box-header green">
+                <div class="pull-right box-tools">
+                </div>
+                <h3 class="box-title">
+                    <span>Tours Relation</span>
+                </h3>
+            </div>
+            <div class="box-body" style="display: block;">
+                <div class=" table" >
+                    <table id="tblTours" style="width:100%;">
+                        <thead id="tblTourshead">
+                        </thead>
+                        <tbody id="tblToursbody"></tbody>
+                    </table>
+                </div>
+                <div class="pagina" >
+                    <div class="pages">
+                        <div class="pagination" id="paginationPeople">
+                            <a href="#" class="first" data-action="first">&laquo;</a>
+                            <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+                            <input type="text" class="general" readonly="readonly" />
+                            <a href="#" class="next" data-action="next">&rsaquo;</a>
+                            <a href="#" class="last" data-action="last">&raquo;</a>
+                        </div>
+                        <input type="hidden" id="paginationPeople" value="true" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dialog-People" title="People" style="display: none;">
+    <div class="large-12 columns">
+        <div class="box">
+            <div class="box-header green">
+                <div class="pull-right box-tools">
+					<span class="box-btn" data-widget="collapse">
+						<i class="fa fa-minus"></i>
+					</span>
+                </div>
+                <h3 class="box-title">
+                    <span>Add People</span>
+                </h3>
+                <div class="pull-left box-tools">
+					<span data-widget="newContrat" id="newContract">
+						<img src="http://www.pms.307ti.com/Scripts/ext/images/icons/user_add.gif" alt="">
+						<span>New</span>
+					</span>
+                </div>
+            </div>
+            <div class="box-body" style="display: block;">
+                <div class="row">
+                    <fieldset class="large-6 columns">
+                        <legend>Elige un filtro</legend>
+                        <input type="radio" name="filter_people" value="personaId" id="personaId" required><label for="personaId">Persona ID</label>
+                        <input checked type="radio" name="filter_people" value="nombre" id="nombre"><label for="nombre">Nombre</label>
+                        <input type="radio" name="filter_people" value="apellido" id="apellido"><label for="apellido">Apellido</label>
+                        <input type="radio" name="filter_people" value="reservacionId" id="reservacionId"><label for="reservacionId">Reservación ID</label>
+                    </fieldset>
+                    <fieldset class="large-6 columns">
+                        <legend>Select Period</legend>
+                        <div class="row">
+                            <div class="medium-6 columns">
+                                <input id="startDate" class="round" type="date" placeholder="Fecha Inicial">
+                            </div>
+                            <div class="medium-6 columns">
+                                <input id="endDate" class="round" type="date"  placeholder="Fecha final">
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <div class="medium-6 columns">
+                        <fieldset>
+                            <legend><input id="busquedaAvanazada" type="checkbox">Advanced search</legend>
+
+                            <div class="row" id="avanzada" style="display: none;">
+                                <div class="large-12 columns slide">
+                                    <input type="radio" name="filter_people" value="codEmpleado" id="codEmpleado" required><label for="codEmpleado">Codigo de Empleado</label>
+                                    <input type="radio" name="filter_people" value="folio" id="folio"><label for="folio">Folio</label>
+                                    <input type="radio" name="filter_people" value="unidad" id="unidad"><label for="unidad">Unidad ID</label>
+                                    <input type="radio" name="filter_people" value="email" id="email"><label for="email">Email</label>
+                                    <input type="radio" name="filter_people" value="contrato" id="contrato"><label for="contrato">Contrato ID</label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="medium-6 columns">
+                        <div class="row">
+                            <div class="large-12 columns">
+                                <div class="row collapse">
+                                    <div class="small-10 columns">
+                                        <input id="stringContrat" type="text" class="txtSearch" placeholder="Search Field" name="search"  required="">
+                                    </div>
+                                    <div class="small-1 columns">
+                                        <a  id="btnfind" href="#" class="button postfix"><i class="fa fa-search"></i></a>
+                                    </div>
+                                    <div class="small-1 columns">
+                                        <a id="btnCleanWord"  href="#" class="button postfix"><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="large-12 columns">
+        <div class="box">
+            <div class="box-header blue_divina">
+
+            </div>
+            <div class="box-body" style="display: block;">
+                <div class="table" >
+                    <table id="tblContrat" style="width:100%;">
+                        <thead id="tblContratoshead">
+                        </thead>
+                        <tbody id="tblContratosbody"></tbody>
+                    </table>
+                </div>
+                <div class="pagina" >
+                    <div class="pages">
+                        <div class="pagination" id="paginationPeople">
+                            <a href="#" class="first" data-action="first">&laquo;</a>
+                            <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+                            <input type="text" class="general" readonly="readonly" />
+                            <a href="#" class="next" data-action="next">&rsaquo;</a>
+                            <a href="#" class="last" data-action="last">&raquo;</a>
+                        </div>
+                        <input type="hidden" id="paginationPeople" value="true" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dialog-Unidades" title="Unidades" style="display: none;">
+    <div class="large-12 columns">
+        <div class="box">
+            <div class="box-header green">
+                <div class="pull-right box-tools">
+					<span class="box-btn" data-widget="collapse">
+						<i class="fa fa-minus"></i>
+					</span>
+                </div>
+                <h3 class="box-title">
+                    <span>Add Unidades</span>
+                </h3>
+            </div>
+            <div class="box-body" style="display: block;">
+                <div class="row">
+                    <fieldset class="large-6 columns">
+                        <legend>Elige un filtro</legend>
+                        <input type="radio" name="filter_unities" value="personaId" id="personaId" required><label for="personaId">Persona ID</label>
+                        <input checked type="radio" name="filter_unities" value="nombre" id="nombre"><label for="nombre">Nombre</label>
+                        <input type="radio" name="filter_unities" value="apellido" id="apellido"><label for="apellido">Apellido</label>
+                        <input type="radio" name="filter_unities" value="reservacionId" id="reservacionId"><label for="reservacionId">Reservación ID</label>
+                    </fieldset>
+                    <fieldset class="large-6 columns">
+                        <legend>Select Period</legend>
+                        <div class="row">
+                            <div class="medium-6 columns">
+                                <input id="startDate" class="round" type="date" placeholder="Fecha Inicial">
+                            </div>
+                            <div class="medium-6 columns">
+                                <input id="endDate" class="round" type="date"  placeholder="Fecha final">
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <div class="medium-6 columns">
+                        <fieldset>
+                            <legend><input id="busquedaAvanazada" type="checkbox">Advanced search</legend>
+
+                            <div class="row" id="avanzada" style="display: none;">
+                                <div class="large-12 columns slide">
+                                    <input type="radio" name="filter_unities" value="codEmpleado" id="codEmpleado" required><label for="codEmpleado">Codigo de Empleado</label>
+                                    <input type="radio" name="filter_unities" value="folio" id="folio"><label for="folio">Folio</label>
+                                    <input type="radio" name="filter_unities" value="unidad" id="unidad"><label for="unidad">Unidad ID</label>
+                                    <input type="radio" name="filter_unities" value="email" id="email"><label for="email">Email</label>
+                                    <input type="radio" name="filter_unities" value="contrato" id="contrato"><label for="contrato">Contrato ID</label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="medium-6 columns">
+                        <div class="row">
+                            <div class="large-12 columns">
+                                <div class="row collapse">
+                                    <div class="small-10 columns">
+                                        <input id="stringContrat" type="text" class="txtSearch" placeholder="Search Field" name="search"  required="">
+                                    </div>
+                                    <div class="small-1 columns">
+                                        <a  id="btnfind" href="#" class="button postfix"><i class="fa fa-search"></i></a>
+                                    </div>
+                                    <div class="small-1 columns">
+                                        <a id="btnCleanWord"  href="#" class="button postfix"><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="large-12 columns">
+        <div class="box">
+            <div class="box-header blue_divina">
+
+            </div>
+            <div class="box-body" style="display: block;">
+                <div class=" table" >
+                    <table id="tblContrat" style="width:100%;">
+                        <thead id="tblContratoshead">
+                        </thead>
+                        <tbody id="tblContratosbody"></tbody>
+                    </table>
+                </div>
+                <div class="pagina" >
+                    <div class="pages">
+                        <div class="pagination" id="paginationPeople">
+                            <a href="#" class="first" data-action="first">&laquo;</a>
+                            <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+                            <input type="text" class="general" readonly="readonly" />
+                            <a href="#" class="next" data-action="next">&rsaquo;</a>
+                            <a href="#" class="last" data-action="last">&raquo;</a>
+                        </div>
+                        <input type="hidden" id="paginationPeople" value="true" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>contract.js"></script>

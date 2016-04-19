@@ -1,20 +1,26 @@
 getContratos();
 
 $(document).foundation();
+
 $('#newContract').click(function(){
     showModals('dialog-Contract', cleanAddPeople);
     getLanguages();
 	getSaleTypes();
 });
+
+//modules
 $('#btnAddTourID').click(function(){ showModals('dialog-tourID', cleanAddPeople); });
-$('#btnAddPeople').click(function(){showModals('dialog-Personas', cleanAddPeople);});
+$('#btnAddPeople').click(function(){showModals('dialog-People', cleanAddPeople);});
 $('#btnAddUnidades').click(function(){showModals('dialog-Unidades', cleanAddUnidades);});
-$('#btnCleanWord').click(function () {
-	document.getElementById("stringContrat").value = "";
-});
-$('#btnfind').click(function(){
-	getContratos();
-});
+//contracts
+$('#btnCleanWord').click(function (){ document.getElementById("stringContrat").value = "";});
+$('#btnfind').click(function(){getContratos();});
+//Tours
+$('#btnCleanWordTour').click(function (){ document.getElementById("stringTourID").value = "";});
+$('#btnfindTour').click(function(){getTours();});
+//Advance Search
+$("#busquedaAvanazada").click(function(){ $("#avanzada").slideToggle("slow");});
+$("#advanceSearchTour").click(function() {$("#advanceTour").slideToggle("slow");});
 
 
 (function($) {
@@ -24,15 +30,6 @@ $('#btnfind').click(function(){
         box.slideUp();
     });
 })(jQuery);
-
-
-$(function(){
-$("#busquedaAvanazada").click(function(){
-        $("#avanzada").slideToggle("slow");
-    });
-});
-	
-
 
 	// maxHeight = screen.height * .25;
 	// maxHeight = screen.height - maxHeight;
@@ -233,9 +230,9 @@ function EnviaFormularioCliente(id){
 
 function getContratos(){
 
-    var arrayFilters = ["filtro_contrato"];
-    var filters = getFilters(arrayFilters);
-    var arrayDate = ["startDate", "endDate"];
+    //var arrayFilters = ["filtro_contrato"];
+    var filters = getFiltersCheckboxs('filtro_contrato');
+    var arrayDate = ["startDateContract", "endDateContract"];
     var dates = getDates(arrayDate);
     var arrayWords = ["stringContrat"];
     var words = getWords(arrayWords);
@@ -253,7 +250,7 @@ function getContratos(){
 		success: function(data){
 			if(data != null){
 				alertify.success("Found "+ data.length);
-				drawTable(data, 'getDetalleContratoByID', "details");
+				drawTable(data, 'getDetalleContratoByID', "details", "tblContratosbody", "tblContratoshead");
                 tablas("tblContrat");
 
 			}else{
@@ -278,6 +275,41 @@ function tablas(div){
     }
 }
 
+function getTours(){
+
+	//var arrayFilters = ["filter_tourID"];
+	var filters = getFiltersCheckboxs("filter_tourID");
+	var arrayDate = ["startDateTour", "endDateTour"];
+	var dates = getDates(arrayDate);
+	var arrayWords = ["stringTour"];
+	var words = getWords(arrayWords);
+	showLoading("#tblToursbody", true);
+
+	$.ajax({
+		data:{
+			filters: filters,
+			dates: dates,
+			words: words
+		},
+		type: "POST",
+		url: "contract/getTours",
+		dataType:'json',
+		success: function(data){
+			if(data != null){
+				alertify.success("Found "+ data.length);
+				drawTable(data, 'getDetalleContratoByID', "details", "tblToursbody", "tblTourshead");
+				//tablas("tblTours");
+
+			}else{
+				alertify.error("No data found");
+				showLoading("#tblToursbody", false);
+			}
+		},
+		error: function(){
+			alertify.error("Conection Error");
+		}
+	});
+}
 
 function getWords(divs){
 	words ={};
@@ -299,6 +331,16 @@ function getFilters(divs){
 	for (var i = 0; i < divs.length; i++) {
 		 filters[divs[i]] =  $('input[name='+divs[i]+']:checked').val();
 	}
+	return filters;
+}
+
+function getFiltersCheckboxs(name) {
+	filters = {};
+	$('input[name='+name+']:checked').each(
+		function() {
+			filters[$(this).val()] = $(this).val()
+		}
+	);
 	return filters;
 }
 

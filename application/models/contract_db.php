@@ -33,7 +33,7 @@ class Contract_db extends CI_Model {
 
             if ($filters['checks'] != false){
 
-                $this->filter($filters);
+                $this->filterContracts($filters);
             }
 
         }
@@ -72,34 +72,81 @@ class Contract_db extends CI_Model {
         }
     }
 
-    private function filter($filters){
+    public function getTours($filters){
+        $sql = "";
+        $this->db->select('t.pkTourId, p.pkPeopleId, p.Name, p.LName,  CONVERT(VARCHAR(11),t.TourDate,106) as date');
+        $this->db->from('tblTour t');
+        $this->db->join('tblTourLocation tl', 'tl.pkTourLcationId = t.fkTourLocationId', 'left');
+        $this->db->join('tblPeople p', 'p.pkPeopleId = tl.fkPeopleId', 'left');
+        $this->db->join('tblPeopleAddress pa', 'pa.pkPeopleAddressId = tl.fkPeopleAddressId', 'left');
+        if($filters['dates'] != false) {
+            $sql = $filters['dates'];
+        }
+        if($sql!=""){
+            $this->db->where($sql, NULL);
+        }
+        if($filters['words'] != false){
 
-        if (!empty($filters['checks']['personaId']) && $filters['checks']['personaId'] == true ){
-            $this->db->like('pkPeopleId', $filters['words']['stringContrat']);
+            if ($filters['checks'] != false){
+
+                $this->filterTours($filters);
+            }
+
         }
-        if (!empty($filters['checks']['contrato']) && $filters['checks']['contrato'] == true ){
-            $this->db->like('pkResId', $filters['words']['stringContrat']);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
         }
-        if (!empty($filters['checks']['nombre']) && $filters['checks']['nombre'] == true){
-            $this->db->like('LegalName', $filters['words']['stringContrat']);
+    }
+
+
+    //
+    private function filterContracts($filters){
+
+        $string = $filters['words']['stringContrat'];
+
+        if (isset($filters['checks']['personaId'])){
+            $this->db->like('pkPeopleId', $string);
         }
-        if (!empty($filters['checks']['apellido']) && $filters['checks']['apellido'] == true ){
-            $this->db->like('Lname', $filters['words']['stringContrat']);
+        if (isset($filters['checks']['contrato'])){
+            $this->db->like('pkResId', $string);
         }
-        if (!empty($filters['checks']['reservacionId']) && $filters['checks']['reservacionId'] == true ){
-            $this->db->like('Lname', $filters['words']['stringContrat']);
+        if (isset($filters['checks']['nombre'])){
+            $this->db->like('LegalName', $string);
         }
-        if (!empty($filters['checks']['codEmpleado']) && $filters['checks']['codEmpleado'] == true ){
-            $this->db->like('Lname', $filters['words']['stringContrat']);
+        if (isset($filters['checks']['apellido'])){
+            $this->db->like('Lname', $string);
         }
-        if (!empty($filters['checks']['folio']) && $filters['checks']['folio'] == true ){
-            $this->db->like('Folio', $filters['words']['stringContrat']);
+        if (isset($filters['checks']['reservacionId'])){
+            $this->db->like('Lname', $string);
         }
-        if (!empty($filters['checks']['unidad']) && $filters['checks']['unidad'] == true ){
-            $this->db->like('pkUnitId', $filters['words']['stringContrat']);
+        if (isset($filters['checks']['codEmpleado'])){
+            $this->db->like('Lname', $string);
         }
-        if (!empty($filters['checks']['email']) && $filters['checks']['email'] == true ){
-            $this->db->like('EmailDesc', $filters['words']['stringContrat']);
+        if (isset($filters['checks']['folio'])){
+            $this->db->like('Folio', $string);
+        }
+        if (isset($filters['checks']['unidad']) ){
+            $this->db->like('pkUnitId', $string);
+        }
+        if (isset($filters['checks']['email'])){
+            $this->db->like('EmailDesc', $string);
+        }
+    }
+
+    private function filterTours($filters){
+
+        $string = $filters['words']['stringTour'];
+
+        if (isset($filters['checks']['personaId'])){
+            $this->db->where('pkPeopleId', $string);
+        }
+        if (isset($filters['checks']['nombre'])){
+            $this->db->where('Name', $string);
+        }
+        if (isset($filters['checks']['apellido'])){
+            $this->db->where('LName', $string);
         }
     }
 

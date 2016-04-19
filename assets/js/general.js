@@ -200,7 +200,7 @@ function showLoading(parentElement, isOpen = false,message = null, success = nul
 }
 
 
-function drawTable(data, funcion, cadena){
+function drawTable(data, funcion, cadena, body, head){
 
     var headHTML = "<th>"+cadena+"</th>";
     var bodyHTML = '';
@@ -218,8 +218,8 @@ function drawTable(data, funcion, cadena){
         bodyHTML+="</tr>";
     }
     //añadiendo los componentes a la tabla
-     var body = document.getElementById("tblContratosbody");
-     var head = document.getElementById("tblContratoshead");
+     var body = document.getElementById(body);
+     var head = document.getElementById(head);
      head.innerHTML = headHTML;
      body.innerHTML  = bodyHTML;
 }
