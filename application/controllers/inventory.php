@@ -28,7 +28,7 @@ class Inventory extends CI_Controller {
 	/**
 	* Busqueda de Detailed Availability
 	**/
-	public function getInvDetailedBySearch(){
+	public function getInvDetailedAvailability(){
 		if($this->input->is_ajax_request()){
 			$total = 0;
 			/*$date = date_create($_POST['date']);
@@ -40,8 +40,82 @@ class Inventory extends CI_Controller {
 			$nonDeducted = filter_var($_POST['nonDeducted'], FILTER_VALIDATE_BOOLEAN);
 			$Overbooking = filter_var($_POST['Overbooking'], FILTER_VALIDATE_BOOLEAN);
 			$OOO = filter_var($_POST['OOO'], FILTER_VALIDATE_BOOLEAN);
-			$data = $this->inventory_db->getInvDetailedBySearch( $date, $floorPlan, $property, $availability , $nonDeducted, $Overbooking, $OOO );
-			//$data = ($_POST['nonDeducted']);
+			//$data = $this->inventory_db->getDateofCalendar($date);
+			$data = $this->inventory_db->getDetailedAvailability($date, $floorPlan, $property, $availability, $nonDeducted, $Overbooking, $OOO);
+			
+			
+			foreach($data as $item){
+				$item->Date = $item->Date2;
+				if($availability == "Availability"){
+					$item->total = $item->total - $item->total2;
+				}else{
+					if($Overbooking == 0){
+						if( $item->total2 < 0 ){
+							$item->total = 0; 
+						}
+					}else if($Overbooking == 1){
+						if($item->total2 > $item->total){
+							$item->total = $item->total2;
+						}
+					}
+				}
+				unset($item->pkCalendarId,$item->Date2,$item->total2);
+			}
+			
+			if($property == 1){
+				$floorPlans = $this->inventory_db->getfloorPlans( $property );
+				foreach($floorPlans as $fp){
+					$fpName = $fp->FloorPlanDesc;
+					$data2 = $this->inventory_db->getDetailedAvailability($date, $fp->fkFloorPlanId, 0, $availability, $nonDeducted, $Overbooking, $OOO);
+					$cont = 0;
+					foreach($data2 as $item){
+						
+						if($availability == "Availability"){
+							$item->total = $item->total - $item->total2;
+						}else{
+							if($Overbooking == 0){
+								if( $item->total2 < 0 ){
+									$item->total = 0; 
+								}
+							}else if($Overbooking == 1){
+								if($item->total2 > $item->total){
+									$item->total = $item->total2;
+								}
+							}
+						}
+						
+						$data[$cont]->$fpName = $item->total;
+						$cont = $cont + 1;
+					}
+				}
+			}
+			echo json_encode(array('items' => $data, 'total' => $total));
+		}
+	}
+	
+	public function getInvRoomsControl(){
+		if($this->input->is_ajax_request()){
+			$total = 0;
+			$date = $_POST['date'];
+			$property = $_POST['property'];
+			
+			$data = $this->inventory_db->getRoomsControl($date, $property);
+			
+			foreach($data as $item){
+				$item->Date = $item->Date2;
+				$item->InventoryRooms = $item->physicalRooms - $item->OutofOrder;
+				if($item->DeductedRooms > 1){
+					$item->DeductedRooms  = 0;
+				}
+				$item->AvailablePhysicalRooms = $item->InventoryRooms - $item->DeductedRooms - $item->OutofService;
+				if($item->InventoryRooms != 0){
+					$item->Occupancy = ($item->DeductedRooms / $item->InventoryRooms) . "%" ;
+				}else{
+					$item->Occupancy = "0%" ;
+				}
+				
+				unset($item->pkCalendarId,$item->Date2);
+			}
 			echo json_encode(array('items' => $data, 'total' => $total));
 		}
 	}

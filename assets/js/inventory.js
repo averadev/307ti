@@ -8,7 +8,7 @@
 var maxHeight = 400;
 isSearch = true;
 var xhrPeople
-var idPeople = 0;
+var dataTableInventary = null;
 
 /**************Index****************/
 
@@ -27,6 +27,9 @@ $('#btnCleanSearch').on('click', function() {  CleandFieldSearch(); });
 
 $('.comboBoxInvDetailed').change(function(){ disableOtherCombo(this)});
 
+//seleciona el tipo de busqueda de inventario
+$('.RadioSearchInventary').on('click',function(){ choseTypeSearchInv(this); });
+
 
 /************Funciones**************/
 
@@ -40,31 +43,32 @@ $(document).ready(function() {
 		disableDblClickSelection: true,
 	});
 	
-	$('#tableInvDetailed').DataTable({
-		"scrollY": 350,
-        "scrollX": true,
-        "scrollX": true,
-		"paging":   false,
-        "ordering": false,
-        "info":     false,
-		"filter": 	false,
-		/*"paging": false,*/
-    });
+	/*$('#tableInvDetailed').DataTable({
+					"scrollY": 350,
+					"scrollX": true,
+					"paging":   false,
+					"ordering": false,
+					"info":     false,
+					"filter": 	false,
+				});*/
+	
+	/**/
 	
 });
 
 function searchInvDetailed(page){
-	//$('#divTableInvDetailed tbody').empty();
-	//$('.divLoadingTable').show();
+	var url = "";
+	if($("#RadioDetailedAvailability").is(':checked')){
+		url = "inventory/getInvDetailedAvailability"
+	}else if($("#RadioRoomsControl").is(':checked')){
+		url = "inventory/getInvRoomsControl"
+	}
+	
 	showLoading('#divTableInvDetailed',true);
-	/*if(xhrPeople && xhrPeople.readyState != 4) { 
-		xhrPeople.abort();
-		xhrPeople = null;
-	}*/
 	
 	$.ajax({
    		type: "POST",
-       	url: "inventory/getInvDetailedBySearch",
+       	url: url,
 		dataType:'json',
 		data:{
 			date:$("#textInvStartDate").val().trim(),
@@ -77,46 +81,9 @@ function searchInvDetailed(page){
 			page:page,
 		},
 		success: function(data){
-			console.log(data);
-			drawTable2(data.items,disableOtherCombo,"tabla");
-			/*var total = data.total;
-			if( parseInt(total) == 0 ){ total = 1; }
-			total = parseInt( total/10 );
-			if(data.total%10 == 0){
-				total = total - 1;		
-			}
-			total = total + 1
-			if(page == 0){
-				$('#paginationPeople').val(true);
-				loadPaginatorPeople( total );
-			}*/
-			/*for(i=0;i<data.items.length;i++){
-				var item = data.items[i];
-				$('#tablePeople tbody').append(
-					'<tr>' +
-						'<td class="cellEdit"><img class="iconEdit" value="' + item.pkPeopleId +'" src="' + BASE_URL+ 'assets/img/common/editIcon2.png"/></td>' +
-						'<td>' + item.pkPeopleId + '</td>' +
-						'<td>' + item.Name + '</td>' +
-						'<td>' + item.LName + " " + item.LName2 + '</td>' +
-						'<td>' + item.Gender + '</td>' +
-						'<td>' + item.birthdate + '</td>' +
-						'<td>' + item.Street1 + '</td>' +
-						'<td>' + item.City + '</td>' +
-						'<td>' + item.StateDesc + '</td>' +
-						'<td>' + item.CountryDesc + '</td>' +
-						'<td>' + item.ZipCode + '</td>' +
-						'<td>' + item.phone1 + '</td>' +
-						'<td>' + item.phone2 + '</td>' +
-						'<td>' + item.phone3 + '</td>' +
-						'<td>' + item.email1 + '</td>' +
-						'<td>' + item.email2 + '</td>' +
-					'</tr>'
-				);
-			}*/
 			
-			//$('.iconEdit').on()
-			/*$("#tablePeople tbody tr .cellEdit .iconEdit").off( "click", ".iconEdit" );
-			$("#tablePeople tbody tr .cellEdit .iconEdit").on("click", function(){ showModal($(this).attr('value')); });*/
+			drawTable2(data.items,"tableInvDetailed",false,"tabla");
+			
 			showLoading('#divTableInvDetailed',false);
 			//$('.divLoadingTable').hide();
 		},
@@ -127,11 +94,21 @@ function searchInvDetailed(page){
 	});	
 }
 
-
 function disableOtherCombo( selector ){
 	var value = $(selector).val();
 	$('.comboBoxInvDetailed').val(0);
 	$(selector).val(value);
+}
+
+/**
+* cambia el tipo de busquedad de inventario
+*/
+function choseTypeSearchInv(selector){
+	if($(selector).attr('value') == "detailedAvailability"){
+		$('.filterDetailedAvailability').show(500);
+	}else if($(selector).attr('value') == "roomsControl"){
+		$('.filterDetailedAvailability').hide(500);
+	}
 }
 
 /**

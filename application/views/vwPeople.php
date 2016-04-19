@@ -97,9 +97,9 @@
 			<div class="box-body" id="section-table-people" style="display: block;">
 				<div class=" table" >
 					<div class="" id="divTablePeople">
-						<table id="tablePeople" style="width:100%;">
+						<table id="tablePeople" class="display hover" cellspacing="0" width="100%">
 							<thead>
-								<tr>
+								<!--<tr>
 									<th class="cellEdit" >Edit</th>
 									<th class="cellEdit" >Id</th>
 									<th class="cellGeneral" >Name</th>
@@ -116,7 +116,7 @@
 									<th class="cellPhone" >Phone number 3</th>
 									<th class="cellEmail" >Email</th>
 									<th class="cellEmail" >Email 2</th>
-								</tr>
+								</tr>-->
 							</thead>
 							<tbody>
 		
@@ -513,60 +513,61 @@
 					</div>
 				</div>
 			</div>
-			<fieldset class="fieldset">
-				<legend><input type="checkbox" id="checkPeopleEmployee" class="checkModalPeople">&nbsp;&nbsp;Assign employee</legend>
+			<!--<fieldset class="fieldset">-->
 				<div class="row" id="containerPeopleEmployee">
 					<div class="small-12 large-12 columns">
-					<!-- Código del colaborador:-->
-					<div class="row">
-						<div class="small-3 columns">
-							<label id="alertCodeCollaborator" for="textCodeCollaborator" class="text-left">Employee code</label>
+						<!-- Código del colaborador:-->
+						<div class="row">
+							<div class="small-3 columns">
+								<label id="alertCodeCollaborator" for="textCodeCollaborator" class="text-left">Employee code</label>
+							</div>
+							<div class="small-9 columns">
+								<input type="text" class="round general" id="textCodeCollaborator">
+							</div>
 						</div>
-						<div class="small-9 columns">
-							<input type="text" class="round general" id="textCodeCollaborator">
+						<div class="row">
+							<!-- Iniciales-->
+							<div class="small-12 large-6 columns" style="float:right">
+								<label id="alertInitials" for="textInitials" class="text-left">Initials</label>
+									<input type="text" id="textInitials" class="round general" >
+							</div>
+							<!-- Código numérico -->
+							<div class="small-12 large-6 columns">
+								<label for="textCodeNumber" id="alertCodeNumber" class="text-left">Numeric code</label>
+									<input type="number" id="textCodeNumber" class="round general">
+							</div>
 						</div>
-					</div>
-					<div class="row">
-						<!-- Iniciales-->
-						<div class="small-12 large-6 columns" style="float:right">
-							<label id="alertInitials" for="textInitials" class="text-left">Initials</label>
-								<input type="text" id="textInitials" class="round general" >
-							
+						<!-- tipo de vendedor -->
+						<div class="row">
+							<div class="small-3 columns">
+								<label id="alertTypeSeller" for="textTypeSeller" class="text-left">Payroll account</label>
+							</div>
+							<div class="small-9 columns">
+								<select id="textTypeSeller" class="round">
+									<option value="0" code="0">Select a type of seller</option>
+								</select>
+							</div>
 						</div>
-						<!-- Código numérico -->
-						<div class="small-12 large-6 columns">
-							<label for="textCodeNumber" id="alertCodeNumber" class="text-left">Numeric code</label>
-								<input type="number" id="textCodeNumber" class="round general">
-							
+						<!-- Nómina-->
+						<div class="row">
+							<div class="small-3 columns">
+								<label id="alertRoster" for="textRoster" class="text-left">Payroll type</label>
+							</div>
+							<div class="small-9 columns">
+								<select id="textRoster" class="round">
+									<option value="0" code="0">Select the payroll</option>
+									<option value="1" code="0">Sales</option>
+									<option value="2" code="0">Administrator</option>
+								</select>
+							</div>
 						</div>
-					</div>
-					<!-- tipo de vendedor -->
-					<div class="row">
-						<div class="small-3 columns">
-							<label id="alertTypeSeller" for="textTypeSeller" class="text-left">Payroll account</label>
+						<div class="rdoField">
+							<input type="checkbox" class="checkModalPeople" value="initials" id="checkPeopleEmployee">
+							<label for="RadioInitials">Activo</label>
 						</div>
-						<div class="small-9 columns">
-							<select id="textTypeSeller" class="round">
-								<option value="0" code="0">Select a type of seller</option>
-							</select>
-						</div>
-					</div>
-					<!-- Nómina-->
-					<div class="row">
-						<div class="small-3 columns">
-							<label id="alertRoster" for="textRoster" class="text-left">Payroll type</label>
-						</div>
-						<div class="small-9 columns">
-							<select id="textRoster" class="round">
-								<option value="0" code="0">Select the payroll</option>
-								<option value="1" code="0">Sales</option>
-								<option value="2" code="0">Administrator</option>
-							</select>
-						</div>
-					</div>
 					</div>
 				</div>
-			</fieldset>
+			<!--</fieldset>-->
 		</div>
 	</div>
 	<input type="hidden" value="0" id="idPeople" />

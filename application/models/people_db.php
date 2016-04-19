@@ -29,7 +29,7 @@ Class people_db extends CI_MODEL
 		WHERE RowNumber BETWEEN 5 AND 10;');		
 		return  $consulta->result();*/
 		$this->db->distinct('tblPeople.pkPeopleId');
-        $this->db->select('tblPeople.pkPeopleId, tblPeople.Name, tblPeople.SecondName, tblPeople.LName, tblPeople.LName2');
+        $this->db->select('tblPeople.pkPeopleId as ID, tblPeople.Name, tblPeople.SecondName, tblPeople.LName, tblPeople.LName2');
 		$this->db->select('tblPeople.Gender, tblPeople.BirthDayMonth, tblPeople.BirthDayDay, tblPeople.BirthDayYear');
 		//$this->db->select('tblPeopleAddress.fkAddressId');
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');

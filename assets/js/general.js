@@ -224,28 +224,47 @@ function drawTable(data, funcion, cadena, body, head){
      body.innerHTML  = bodyHTML;
 }
 
-function drawTable2(data, funcion, cadena){
-
-    var headHTML = "<th>"+cadena+"</th>";
+function drawTable2(data, table ,funcion, cadena){
+	
+	if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
+		var tabla = $('#' + table).DataTable();
+		tabla.destroy();
+	}
+	
+	var headHTML = "<tr>";
+	if(funcion != false){
+		headHTML += "<th>"+cadena+"</th>";
+	}
     var bodyHTML = '';
+	
     //creación de la cabecera
-	/*for (var j in data[0]) {
+	for (var j in data[0]) {
         headHTML+="<th>"+j+"</th>";
-    }*/
+    }
+	headHTML += "</tr>";
     //creación del body
     for (var i = 0; i < data.length; i++) {
         bodyHTML += "<tr>";
-       	bodyHTML += '<td onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
+		if(funcion != false){
+			bodyHTML += '<td nowrap onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
+		}
         for (var j in data[i]) {
-            bodyHTML+="<td>" + data[i][j] + "</td>";
+            bodyHTML+="<td nowrap>" + data[i][j] + "</td>";
         };
         bodyHTML+="</tr>";
     }
-    //añadiendo los componentes a la tabla
-     var body = document.getElementById("bodyInvDetailed");
-    // var head = document.getElementById("headInvDetailed");
-   //  head.innerHTML = headHTML;
-     body.innerHTML  = bodyHTML;
+	$('#' + table + " thead" ).html(headHTML);
+	$('#' + table + " tbody" ).html(bodyHTML);
+	
+	$('#' + table ).DataTable({
+		"scrollY": 350,
+		"scrollX": true,
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		"filter": 	false,
+	});
+	
 }
 
 (function($) {

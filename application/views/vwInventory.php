@@ -10,7 +10,7 @@
 					</span>
 				</div>
 				<h3 class="box-title">
-					<span>Detailed Availability Search</span>
+					<span>Inventary Search</span>
 				</h3>
 			</div>
 			<!-- body search-->
@@ -20,7 +20,20 @@
 					<!-- text Field date and select -->
 					<div class="small-12 medium-12 large-12 columns">
 						<fieldset class="large-12 columns">
-							<legend>Choose the date and type of unit</legend>
+							<legend>Choose the type search</legend>
+							<!-- Type of Availability -->
+							<div class="rdoField">
+								<input type="radio" name="SearchInventary" class="RadioSearchInventary" value="detailedAvailability" id="RadioDetailedAvailability" checked >
+								<label for="RadioDetailedAvailability" >Detailed Availability</label>
+							</div>
+							<!-- Type of Availability -->
+							<div class="rdoField">
+								<input type="radio" name="SearchInventary" class="RadioSearchInventary" value="roomsControl" id="RadioRoomsControl">
+								<label for="RadioRoomsControl">Rooms Control</label>
+							</div>
+						</fieldset>
+						<fieldset class="large-12 columns">
+							<legend>Choose the date and unit</legend>
 							<div class="small-12 large-5 columns">
 								<div class="row collapse">
 									<div class="small-10 large-10 columns">
@@ -35,7 +48,7 @@
 								</div>
 							</div>
 							<!-- Tipo de Habitación -->
-							<div class="small-12 large-3 columns">
+							<div class="small-12 large-3 columns filterDetailedAvailability">
 									<select id="textInvFloorPlan" class="round comboBoxInvDetailed">
 										<option value="0">select a Floor Plan</option>
 										<?php
@@ -64,7 +77,7 @@
 						</fieldset>
 					</div>
 					<div class="small-12 medium-12 large-12 columns">
-						<fieldset class="large-12 columns">
+						<fieldset class="large-12 columns filterDetailedAvailability">
 							<legend>Choose the availability</legend>
 							<!-- Type of Availability -->
 							<div class="rdoField">
@@ -77,7 +90,7 @@
 								<label for="RadioInvOccupancy">Occupancy </label>
 							</div>
 						</fieldset>
-						<fieldset class=" small-12 large-12 columns">
+						<fieldset class=" small-12 large-12 columns filterDetailedAvailability">
 							<legend>Choose the filters</legend>
 							<!-- Include Non Deducted -->
 							<div class="rdoField">
@@ -105,30 +118,16 @@
 		<div class="box">
 			<div class="box-header blue_divina">
 				<div class="pull-right box-tools">
-               </div>
-               <h3 class="box-title">
-               	<span>Results</span>
-               </h3>
+				</div>
+				<h3 class="box-title">
+					<span>Results</span>
+				</h3>
 			</div>
 			<div class="box-body" id="section-table-InvDetailed" style="display: block;">
 				<div class="table" >
 					<div class="" id="divTableInvDetailed">
 						<table id="tableInvDetailed" style="width:100%;">
 							<thead id="headInvDetailed">
-								<tr>
-									<th class="" >Date</th>
-									<th class="" >Total</th>
-									<th class="" >RVK</th>
-									<th class="" >RVD</th>
-									<th class="" >JRK</th>
-									<th class="" >GVD</th>
-									<th class="" >GVK</th>
-									<th class="" >OVK</th>
-									<th class="" >OVD</th>
-									<th class="" >CNK</th>
-									<th class="" >F1K</th>
-									<th class="" >F2D</th>
-								</tr>
 							</thead>
 							<tbody id="bodyInvDetailed">
 		
@@ -137,8 +136,8 @@
 					</div>
 				</div>
 				<div class="pagina" >
-					<div class="pages">
-						<div class="pagination" id="paginationPeople">
+					<!--<div class="pages">
+						<div class="pagination" id="paginationInv">
 							<a href="#" class="first" data-action="first">&laquo;</a>
 							<a href="#" class="previous" data-action="previous">&lsaquo;</a>
 							<input type="text" class="general" readonly="readonly" />
@@ -146,7 +145,7 @@
 							<a href="#" class="last" data-action="last">&raquo;</a>
 						</div>
 						<input type="hidden" id="paginationPeople" value="true" />
-					</div>
+					</div>-->
 				</div>
 			</div>
 		</div>

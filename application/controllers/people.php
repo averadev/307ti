@@ -162,9 +162,9 @@ class People extends CI_Controller {
 				$idPeople = $_POST['id'];
 				
 				$typePeople;
-				if($_POST['employee'] == true){
+				if($_POST['typeSeller'] != 0){
 					$typePeople = $_POST['typeSeller'];
-				}else if($_POST['employee'] == false){
+				}else{
 					$typePeople = 17;
 				}
 				
@@ -358,41 +358,100 @@ class People extends CI_Controller {
 			//$total = $this->people_db->getTotalPeople($_POST['search'],$peopleId,$lastName,$name);
 		}
 		
+		$arrayData = array();
+		$cont = 0;
+		
 		foreach($data as $item){
-			if($item->Gender == "M"){
-				$item->Gender = "Hombre";
-			}else if($item->Gender == "F"){
-				$item->Gender = "Mujer";
-			}
-			$item->birthdate = $item->BirthDayDay . "-" . $months[$item->BirthDayMonth] . "-" . $item->BirthDayYear;
-			$phone = $this->people_db->getPeoplePhone($item->pkPeopleId);
 			
+			$arrayData[$cont]['ID'] = $item->ID;
+			$arrayData[$cont]['Name'] = $item->Name;
 			if(is_null(!$item->SecondName) or $item->SecondName != "                         " ){
-				$item->Name = $item->Name . " " . $item->SecondName;
+				$arrayData[$cont]['Name'] = $arrayData[$cont]['Name'] . " " . $item->SecondName;
+			}
+			$arrayData[$cont]['LastName'] = $item->LName;
+			if(is_null(!$item->LName2) or $item->LName2 != "                         " ){
+				$arrayData[$cont]['LastName'] = $arrayData[$cont]['LastName'] . " " . $item->LName2;
+			}
+			if($item->Gender == "M"){
+				$arrayData[$cont]['Gender'] = "Male";
+			}else if($item->Gender == "F"){
+				$arrayData[$cont]['Gender'] = "Famale";
+			}else{
+				$arrayData[$cont]['Gender'] = "unknown";
 			}
 			
+			$arrayData[$cont]['birthdate'] = $item->BirthDayDay . "-" . $months[$item->BirthDayMonth] . "-" . $item->BirthDayYear;
+			
+			$arrayData[$cont]['Street'] = $item->Street1;
 			if(is_null($item->Street1) && is_null($item->Street2)){
-				$item->Street1 = "";
+				$arrayData[$cont]['Street']= "";
 			}else if(is_null($item->Street1) && is_null(!$item->Street2)){
-				$item->Street2 = "";
+				$arrayData[$cont]['Street'] = $item->Street2;
 			}else if(is_null(!$item->Street1) && is_null($item->Street2)){
-				$item->Street1 = "";
+				$arrayData[$cont]['Street'] = $item->Street1;
 			}else{
-				$item->Street1 = $item->Street1 . ", " . $item->Street2;
+				$arrayData[$cont]['Street'] = $item->Street1 . ", " . $item->Street2;
 			}
 			
 			if(is_null($item->City)){
-				$item->City = "";
+				$arrayData[$cont]['City'] = "";
+			}else{
+				$arrayData[$cont]['City'] = $item->City;
 			}
-			if(is_null($item->ZipCode)){
-				$item->ZipCode = "";
-			}
+			
 			if(is_null($item->StateDesc)){
-				$item->StateDesc = "";
+				$arrayData[$cont]['State'] = "";
+			}else{
+				$arrayData[$cont]['State'] = $item->StateDesc;
 			}
+			
 			if(is_null($item->CountryDesc)){
-				$item->CountryDesc = "";
+				$arrayData[$cont]['Country'] = "";
+			}else{
+				$arrayData[$cont]['Country'] = $item->CountryDesc;
 			}
+			
+			if(is_null($item->ZipCode)){
+				$arrayData[$cont]['ZipCode'] = "";
+			}else{
+				$arrayData[$cont]['ZipCode'] = $item->ZipCode;
+			}
+			
+			$phone = $this->people_db->getPeoplePhone($item->ID);
+			
+			if(isset($phone[0]->PhoneDesc)) {
+				$arrayData[$cont]['phone1'] = $phone[0]->PhoneDesc;
+			}else{
+				$arrayData[$cont]['phone1'] = "";
+			}
+			if(isset($phone[1]->PhoneDesc)) {
+				$arrayData[$cont]['phone2'] = $phone[1]->PhoneDesc;
+			}else{
+				$arrayData[$cont]['phone2'] = "";
+			}
+			if(isset($phone[2]->PhoneDesc)) {
+				$arrayData[$cont]['phone3'] = $phone[2]->PhoneDesc;
+			}else{
+				$arrayData[$cont]['phone3'] = "";
+			}
+			
+			$email = $this->people_db->getPeopleEmail($item->ID);
+			if(isset($email[0]->EmailDesc)) {
+				$arrayData[$cont]['email'] = $email[0]->EmailDesc;
+			}else{
+				$arrayData[$cont]['email'] = "";
+			}
+			if(isset($email[1]->EmailDesc)) {
+				$arrayData[$cont]['email2'] = $email[1]->EmailDesc;
+			}else{
+				$arrayData[$cont]['email2'] = "";
+			}
+			
+			$cont = $cont + 1;
+			
+			
+			/*
+			
 			if(isset($phone[0]->PhoneDesc)) {
 				$item->phone1 = $phone[0]->PhoneDesc;
 			}else{
@@ -408,7 +467,7 @@ class People extends CI_Controller {
 			}else{
 				$item->phone3 = "";
 			}
-			$email = $this->people_db->getPeopleEmail($item->pkPeopleId);
+			$email = $this->people_db->getPeopleEmail($item->ID);
 			if(isset($email[0]->EmailDesc)) {
 				$item->email1 = $email[0]->EmailDesc;
 			}else{
@@ -418,9 +477,9 @@ class People extends CI_Controller {
 				$item->email2 = $email[1]->EmailDesc;
 			}else{
 				$item->email2 = "";
-			}
+			}*/
 		}
-		echo json_encode(array('items' => $data, 'total' => $total));
+		echo json_encode(array('items' => $arrayData, 'total' => $total));
 	}
 	
 	/**
