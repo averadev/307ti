@@ -200,7 +200,8 @@ function showLoading(parentElement, isOpen = false,message = null, success = nul
 }
 
 
-function drawTable(data, funcion, cadena, body, head){
+function drawTable(data, funcion, cadena, table){
+
 
     var headHTML = "<th>"+cadena+"</th>";
     var bodyHTML = '';
@@ -217,15 +218,28 @@ function drawTable(data, funcion, cadena, body, head){
         };
         bodyHTML+="</tr>";
     }
-    //añadiendo los componentes a la tabla
-     var body = document.getElementById(body);
-     var head = document.getElementById(head);
-     head.innerHTML = headHTML;
-     body.innerHTML  = bodyHTML;
+    $('#' + table + "thead" ).html(headHTML);
+    $('#' + table + "tbody" ).html(bodyHTML);
+    //pluginTables(table);
+}
+
+function pluginTables(table) {
+    if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
+        var tabla = $('#' + table).DataTable();
+        tabla.destroy();
+    }
+    $('#' + table ).DataTable({
+        "scrollY": 350,
+        "scrollX": true,
+        "paging":   true,
+        "ordering": false,
+        "info":     false,
+        "filter": 	false,
+    });
 }
 
 function drawTable2(data, table ,funcion, cadena){
-	
+
 	if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
 		var tabla = $('#' + table).DataTable();
 		tabla.destroy();
@@ -286,3 +300,43 @@ function drawTable2(data, table ,funcion, cadena){
     });
 
 })(jQuery);
+
+
+function getWords(divs){
+    words ={};
+    for (var i = 0; i < divs.length; i++) {
+        words[divs[i]] =  $("#"+divs[i]).val().trim();
+    }
+    return words;
+}
+function getDates(divs){
+    dates ={};
+    for (var i = 0; i < divs.length; i++) {
+        dates[divs[i]] =  $("#"+divs[i]).val().trim();
+    }
+    return dates;
+}
+
+function getFiltersCheckboxs(name) {
+    filters = {};
+    $('input[name='+name+']:checked').each(
+        function() {
+            filters[$(this).val()] = $(this).val()
+        }
+    );
+    return filters;
+}
+
+function generalSelects(data, div){
+    var select = '';
+    for (var i = 0; i < data.length; i++) {
+        select += '<option value="'+data[i].ID+'">';
+        for (var j in data[i]) {
+            if(data[i][j] != data[i].ID){
+                select+= data[i][j].trim();
+            }
+        };
+        select+='</option>';
+    }
+    $("#"+div).html(select);
+}

@@ -23,14 +23,21 @@ class Contract extends CI_Controller {
 	public function saveContract(){
 		if($this->input->is_ajax_request()){
 
-			$Contract = [
-				"nombreLegal" => $_POST['legalName'],
-				"idioma"      => $_POST['IDpersona'],
-				"tourID"      => $_POST['TourID']
-			];
+//			$Contract = [
+//				"nombreLegal" => $_POST['legalName'],
+//				"idioma"      => $_POST['IDpersona'],
+//				"tourID"      => $_POST['TourID']
+//			];
+			var_dump($_POST);
 		}
 	}
 
+	public function modal(){
+		$this->load->view('contracts/contractDialog.php');
+	}
+	public function modalUnidades(){
+		$this->load->view('unities/unitiesDialog.php');
+	}
 	public function insertContrat($Contract){
 		return $this->contract_db->insertReturnId($Contract,"tblContract");;
 	}

@@ -660,4 +660,7 @@ class People extends CI_Controller {
 			echo json_encode($message);
 		}
 	}
+	public function modalPeople(){
+		$this->load->view('people/peopleDialog.php');
+	}
 }

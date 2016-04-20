@@ -1,27 +1,18 @@
-getContratos();
 
 $(document).foundation();
-
 $('#newContract').click(function(){
+	ajaxHTML('dialog-Contract', 'contract/modal');
     showModals('dialog-Contract', cleanAddPeople);
-    getLanguages();
-	getSaleTypes();
+	ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
+	ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
 });
 
-//modules
-$('#btnAddTourID').click(function(){ showModals('dialog-tourID', cleanAddPeople); });
-$('#btnAddPeople').click(function(){showModals('dialog-People', cleanAddPeople);});
-$('#btnAddUnidades').click(function(){showModals('dialog-Unidades', cleanAddUnidades);});
 //contracts
 $('#btnCleanWord').click(function (){ document.getElementById("stringContrat").value = "";});
 $('#btnfind').click(function(){getContratos();});
-//Tours
-$('#btnCleanWordTour').click(function (){ document.getElementById("stringTourID").value = "";});
-$('#btnfindTour').click(function(){getTours();});
+
 //Advance Search
 $("#busquedaAvanazada").click(function(){ $("#avanzada").slideToggle("slow");});
-$("#advanceSearchTour").click(function() {$("#advanceTour").slideToggle("slow");});
-
 
 (function($) {
     "use strict";
@@ -104,6 +95,19 @@ $("#advanceSearchTour").click(function() {$("#advanceTour").slideToggle("slow");
 	// });	
 
 
+function ajaxHTML(div, url){
+	if ($('#'+div).html().trim() == ""){
+		$.ajax({
+			url: url,
+			success: function(result)
+			{
+				$('#'+div).html(result);
+			}
+		});
+	}
+
+}
+
 function showModals(div, funcion){
 
 	maxHeight = screen.height * .75;
@@ -163,80 +167,14 @@ function cleanContractFields(id){
 }
 
 
-function createNewContract(id){
-
-
-	var formData = new FormData(document.getElementById("saveDataContract"));
-	//legalName
-	var idioma = $("#idiomaContract").val().trim();
-
-	var formData = new FormData(document.getElementById(id));
-    formData.append("peticion", "agregarServicio");
-
-    $.ajax({
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false,
-        type: "POST",
-        dataType: "JSON",
-        url: ""
-    })
-        .done(function( data, textStatus, jqXHR ) {
-            //alertify.success(data.message);
-        })
-        .fail(function( jqXHR, textStatus, errorThrown ) {
-            //alertify.error("Ocurrio un error vuelve a intentarlo");
-        });
-}
-
-function getDataFormContract(){
-
-	var idsContract = ['legalName', 'TourID'];
-	var dataContact = getWords(dataContract);
-	data.selectLanguage = $( "#selectLanguage" ).val();
-
-
-}
-
-
-function EnviaFormularioCliente(id){
-	//var formData = new FormData(document.getElementById("contract"));
-    //formData.append("peticion", "agregarServicio");
-
-    var formData = new FormData(document.getElementById("saveDataContract"));
-
-    //formData.append("IDpersona", 12345);
-    //var divs = ["contractR", "precioUNITY"];
-    //form = getInputsByID(formData, divs)
-	$.ajax({
-		data:formData,
-   		type: "POST",
-   		cache: false,
-   		processData: false,
-       	url: "contract/saveContract",
-		dataType:'json',
-		contentType: false,
-		
-		success: function(data){
-			//console.log("dta"+data);
-		},
-		error: function(){
-
-		}
-	});	
-}
-
-
 function getContratos(){
 
-    //var arrayFilters = ["filtro_contrato"];
+	showLoading('#contracts',true);
     var filters = getFiltersCheckboxs('filtro_contrato');
     var arrayDate = ["startDateContract", "endDateContract"];
     var dates = getDates(arrayDate);
     var arrayWords = ["stringContrat"];
     var words = getWords(arrayWords);
-    showLoading("#tblContratosbody", true);
 
     $.ajax({
 		data:{
@@ -248,102 +186,20 @@ function getContratos(){
        	url: "contract/getContratos",
 		dataType:'json',
 		success: function(data){
+			showLoading('#contracts',false);
 			if(data != null){
 				alertify.success("Found "+ data.length);
-				drawTable(data, 'getDetalleContratoByID', "details", "tblContratosbody", "tblContratoshead");
-                tablas("tblContrat");
-
+				drawTable(data, 'getDetalleContratoByID', "details", "contracts");
 			}else{
+				$('#contractstbody').empty();
 				alertify.error("No data found");
-				showLoading("#tblContratosbody", false);
 			}
 		},
 		error: function(){
-
+			alertify.error("Try again");
 		}
     });
 }
-
-function tablas(div){
-    if ( $.fn.dataTable.isDataTable( '#'+div ) ) {
-        table = $('#'+div).dataTable();
-    }
-    else {
-        table = $('#'+div).dataTable( {
-            paging: false
-        } );
-    }
-}
-
-function getTours(){
-
-	//var arrayFilters = ["filter_tourID"];
-	var filters = getFiltersCheckboxs("filter_tourID");
-	var arrayDate = ["startDateTour", "endDateTour"];
-	var dates = getDates(arrayDate);
-	var arrayWords = ["stringTour"];
-	var words = getWords(arrayWords);
-	showLoading("#tblToursbody", true);
-
-	$.ajax({
-		data:{
-			filters: filters,
-			dates: dates,
-			words: words
-		},
-		type: "POST",
-		url: "contract/getTours",
-		dataType:'json',
-		success: function(data){
-			if(data != null){
-				alertify.success("Found "+ data.length);
-				drawTable(data, 'getDetalleContratoByID', "details", "tblToursbody", "tblTourshead");
-				//tablas("tblTours");
-
-			}else{
-				alertify.error("No data found");
-				showLoading("#tblToursbody", false);
-			}
-		},
-		error: function(){
-			alertify.error("Conection Error");
-		}
-	});
-}
-
-function getWords(divs){
-	words ={};
-	for (var i = 0; i < divs.length; i++) {
-		 words[divs[i]] =  $("#"+divs[i]).val().trim();
-	}
-	return words;	
-}
-function getDates(divs){
-	dates ={};
-	for (var i = 0; i < divs.length; i++) {
-		 dates[divs[i]] =  $("#"+divs[i]).val().trim();
-	}
-	return dates;	
-}
-
-function getFilters(divs){
-	filters = {};
-	for (var i = 0; i < divs.length; i++) {
-		 filters[divs[i]] =  $('input[name='+divs[i]+']:checked').val();
-	}
-	return filters;
-}
-
-function getFiltersCheckboxs(name) {
-	filters = {};
-	$('input[name='+name+']:checked').each(
-		function() {
-			filters[$(this).val()] = $(this).val()
-		}
-	);
-	return filters;
-}
-
 
 function getDetalleContratoByID(i){
 	console.log(i);
@@ -356,80 +212,85 @@ function getInputsByID(formData, divs){
 	return formData;	
 }
 
-// function verifyInputsByID(divs){
+function verifyInputsByID(divs){
 
-// 	var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
-
-
-// 	for (var i = 0; i < divs.length; i++) {
-// 		 if($('#'+divs[i]).val().trim().length > 0){
-// 		 	if(!regex.test($('#'+divs[i]).val().trim())){
-// 		 		return true;
-// 		 	}else{
-// 		 		//$('#alertValidateContrato').show(100);
-// 		 		addClassTime(divs[i]);
-// 		 	}
-// 		 }else{
-// 		 	addClassTime(divs[i]);
-// 		 	$('#alertValidateContrato').show(100);
-// 		 	//addClassTime(divs[i]);
-// 		 	return false;
-// 		 }
-// 	}
-// }
-
-
-// function addClassTime(div){
-// 	$("#"+div).addClass("alertInput").delay(5000).queue(function(next){
-//     	$(this).removeClass("error");
-//     	next();
-// 	});
-// }
-
-
-function getLanguages(){
-    $.ajax({
-        type: "POST",
-        url: "contract/getLanguages",
-        dataType:'json',
-        success: function(data){
-            if(data != null){
-                var select = "";
-                for(var i = 0; i < data.length; i++){
-                    select += '<option value="'+data[i].ID+'">'+data[i].LanguageDesc+'</option>';
-                }
-                $("#selectLanguage").html(select);
-            }else{
-                alertify.error("Error Searching Languages");
-            }
-        },
-        error: function(){
-            alertify.error("Error Searching Languages");
-        }
-    });
+	var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
+	for (var i = 0; i < divs.length; i++) {
+		 if($('#'+divs[i]).val().trim().length > 0){
+			 $('#'+divs[i]).removeClass('is-invalid-input');
+		 	if(!regex.test($('#'+divs[i]).val().trim())) {
+				return true;
+			}
+		 }else{
+			 $('#'+divs[i]).addClass('is-invalid-input');
+		 	return false;
+		 }
+	}
 }
-function getSaleTypes(){
+
+
+function addClassTime(div){
+	$("#"+div).addClass("alertInput").delay(5000).queue(function(next){
+    	$(this).removeClass("error");
+    	next();
+	});
+}
+
+function ajaxSelects(url,errorMsj, funcion, divSelect) {
 	$.ajax({
 		type: "POST",
-		url: "contract/getSaleTypes",
+		url: url,
 		dataType:'json',
 		success: function(data){
-			if(data != null){
-				var select = "";
-				for(var i = 0; i < data.length; i++){
-					select += '<option value="'+data[i].ID+'">'+data[i].SaleTypeDesc+'</option>';
-				}
-				$("#typeSales").html(select);
-			}else{
-				alertify.error("Error Searching Languages");
-			}
+			funcion(data, divSelect);
 		},
 		error: function(){
-			alertify.error("Error Searching Languages");
+			alertify.error(errorMsj);
 		}
 	});
 }
 
+function createNewContract(id){
 
 
+	var form = $("#saveDataContract");
+	var elem = new Foundation.Abide(form, {});
+	$('#saveDataContract').foundation('validateForm');
+	$('#saveDataContract').foundation('destroy');
+
+	var formData = new FormData(document.getElementById("saveDataContract"));
+	//legalName
+	//var idioma = $("#idiomaContract").val().trim();
+
+	var formData = new FormData(document.getElementById(id));
+	formData.append("peticion", "agregarServicio");
+
+	$.ajax({
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			type: "POST",
+			dataType: "JSON",
+			url: 'contract/saveContract'
+		})
+		.done(function( data, textStatus, jqXHR ) {
+			//alertify.success(data.message);
+		})
+		.fail(function( jqXHR, textStatus, errorThrown ) {
+			//alertify.error("Ocurrio un error vuelve a intentarlo");
+		});
+}
+$('.tk-contact').on('submit', function () {
+	$(this).on('valid', function () {});
+	$(this).on('invalid', function () {});
+});
+function getDataFormContract(){
+
+	var idsContract = ['legalName', 'TourID'];
+	var dataContact = getWords(dataContract);
+	data.selectLanguage = $( "#selectLanguage" ).val();
+
+
+}
 
