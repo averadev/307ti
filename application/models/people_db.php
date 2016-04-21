@@ -30,7 +30,9 @@ Class people_db extends CI_MODEL
 		return  $consulta->result();*/
 		$this->db->distinct('tblPeople.pkPeopleId');
         $this->db->select('tblPeople.pkPeopleId as ID, tblPeople.Name, tblPeople.SecondName, tblPeople.LName, tblPeople.LName2');
+		
 		$this->db->select('tblPeople.Gender, tblPeople.BirthDayMonth, tblPeople.BirthDayDay, tblPeople.BirthDayYear');
+		$this->db->select('CONVERT(VARCHAR(11),tblPeople.Anniversary,106) as Anniversary, Qualification, tblPeople.Nationality');
 		//$this->db->select('tblPeopleAddress.fkAddressId');
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');
 		$this->db->select('tblState.StateDesc, tblCountry.CountryDesc');
@@ -90,7 +92,7 @@ Class people_db extends CI_MODEL
     */
 	public function getCountry(){
 		$this->db->distinct('tblCountry.pkCountryId');
-		$this->db->select('tblCountry.pkCountryId, tblCountry.CountryCode, tblCountry.CountryDesc');
+		$this->db->select('tblCountry.pkCountryId, tblCountry.CountryCode, tblCountry.CountryDesc, tblCountry.Nationality');
 		$this->db->from('tblCountry');
 		$this->db->join('tblState', 'tblState.fkCountryId = tblCountry.pkCountryId', 'inner');
 		//$this->db->where('tblCountry.YnActive = ', 1);
@@ -137,9 +139,10 @@ Class people_db extends CI_MODEL
 	public function getPeopleById($id){
 		$this->db->select('tblPeople.pkPeopleId, tblPeople.fkPeopleTypeId, tblPeople.Name, tblPeople.SecondName, tblPeople.LName, tblPeople.LName2');
 		$this->db->select('tblPeople.Gender, tblPeople.BirthDayMonth, tblPeople.BirthDayDay, tblPeople.BirthDayYear, tblPeople.Initials');
+		$this->db->select('CONVERT(VARCHAR(11),tblPeople.Anniversary,101) as Anniversary, tblPeople.Qualification, tblPeople.Nationality');
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');
 		$this->db->select('tblState.pkStateId, tblState.StateCode, tblState.StateDesc');
-		$this->db->select('tblCountry.pkCountryId, tblCountry.CountryCode, tblCountry.CountryDesc');
+		$this->db->select('tblCountry.pkCountryId, tblCountry.CountryCode, tblCountry.CountryDesc, tblCountry.Nationality as CountryNac');
 		$this->db->select('tblPeopleType.ynEmp');
         $this->db->from('tblPeople');
 		$this->db->join('tblPeopleAddress', 'tblPeopleAddress.fkPeopleId = tblPeople.pkPeopleId', 'left');
@@ -194,25 +197,28 @@ Class people_db extends CI_MODEL
 	* @param id identificador de la persona
     */
 	public function getReservationsByPeople($id){
-		$this->db->select('tblRes.pkResId,tblRes.ResCode');
-		$this->db->select('tblResType.ResTypeDesc');
-		$this->db->select('tblResOcc.OccYear,tblResOcc.NightId,tblResOcc.CrDt');
-		$this->db->select('tblResInvt.Intv');
-		$this->db->select('tblFloorPlan.FloorPlanDesc');
-		$this->db->select('tblSeason.SeasonDesc');
-		$this->db->select('tblOccType.OccTypeDesc');
-		$this->db->select('tblUnit.UnitCode');
+		$this->db->select('tblRes.ResCode, tblRes.pkResId as ResId');
+		$this->db->select('tblResType.ResTypeDesc as ResType');
+		$this->db->select('tblResOcc.OccYear as Year,tblResOcc.NightId');
+		$this->db->select('tblFloorPlan.FloorPlanDesc as FloorPlan');
+		$this->db->select('tblSeason.SeasonDesc as Season');
+		$this->db->select('tblOccType.OccTypeDesc as OccupancyType');
+		$this->db->select('CONVERT(VARCHAR(19),tblCalendar.Date) as Date');
+		$this->db->select('tblResInvt.Intv as Interval');
+		$this->db->select('tblUnit.UnitCode as Unit');
 		$this->db->from('tblResPeopleAcc');
-		$this->db->join('tblRes', 'tblResPeopleAcc.fkResId = tblRes.pkResId', 'left');
-		$this->db->join('tblResType', 'tblResType.pkResTypeId = tblRes.fkResTypeId', 'left');
-		$this->db->join('tblResOcc', 'tblResOcc.fkResId = tblRes.pkResId', 'left');
-		$this->db->join('tblResInvt', 'tblResInvt.pkResInvtId = tblResOcc.fkResInvtId', 'left');
+		$this->db->join('tblRes', 'tblResPeopleAcc.fkResId = tblRes.pkResId', 'inner');
+		$this->db->join('tblResType', 'tblResType.pkResTypeId = tblRes.fkResTypeId', 'inner');
+		$this->db->join('tblResOcc', 'tblResOcc.fkResId = tblRes.pkResId', 'inner');
+		$this->db->join('tblResInvt', 'tblResInvt.pkResInvtId = tblResOcc.fkResInvtId', 'inner');
 		$this->db->join('tblFloorPlan', 'tblFloorPlan.pkFloorPlanID = tblResInvt.fkFloorPlanId', 'left');
 		$this->db->join('tblSeason', 'tblSeason.pkSeasonId = tblResInvt.fkSeassonId', 'left');
 		$this->db->join('tblOccType', 'tblOccType.pkOccTypeId = tblResOcc.fkOccTypeId', 'left');
+		$this->db->join('tblCalendar', 'tblCalendar.pkCalendarId = tblResOcc.fkCalendarId', 'left');
 		$this->db->join('tblUnit', 'tblUnit.pkUnitId = tblResInvt.fkUnitId', 'left');
 		$this->db->where('tblResPeopleAcc.fkPeopleId = ', $id);
 		$this->db->where('tblResPeopleAcc.ynActive = 1');
+		$this->db->where('(tblRes.fkResTypeId = 6 or tblRes.fkResTypeId = 9)');
 		$this->db->where('tblRes.ynActive = 1');
 		return  $this->db->get()->result();
 	}
@@ -221,18 +227,20 @@ Class people_db extends CI_MODEL
 	 *
 	 **/
 	public function getContractByPeople($id,$search){
-		$this->db->select('tblRes.Folio, tblRes.pkResId');
-		$this->db->select('tblResOcc.OccYear,tblResOcc.CrDt');
-		$this->db->select('tblResInvt.Intv');
-		$this->db->select('tblFloorPlan.FloorPlanDesc');
-		$this->db->select('tblSeason.SeasonDesc');
-		$this->db->select('tblFrequency.FrequencyDesc');
-		$this->db->select('tblUnit.UnitCode');
-		$this->db->select('tblStatus.StatusDesc');
+		$this->db->select('tblRes.Folio as ContractNo, tblRes.pkResId as ContractID');
+		$this->db->select('tblResOcc.OccYear as FirstOccYear');
+		$this->db->select('tblFloorPlan.FloorPlanDesc as FloorPlan');
+		$this->db->select('tblSeason.SeasonDesc as Season');
+		$this->db->select('tblFrequency.FrequencyDesc as Frequency');
+		$this->db->select('CONVERT(VARCHAR(19),tblResOcc.CrDt) as Date');
+		$this->db->select('tblResInvt.Intv as Interval');
+		$this->db->select('tblUnit.UnitCode as Unit');
+		$this->db->select('0 as BalanceCSF, 0 as LoanBa');
+		$this->db->select('tblStatus.StatusDesc as Status');
 		$this->db->from('tblResPeopleAcc');
-		$this->db->join('tblRes', 'tblResPeopleAcc.fkResId = tblRes.pkResId', 'left');
-		$this->db->join('tblResOcc', 'tblResOcc.fkResId = tblRes.pkResId', 'left');
-		$this->db->join('tblResInvt', 'tblResInvt.pkResInvtId = tblResOcc.fkResInvtId', 'left');
+		$this->db->join('tblRes', 'tblResPeopleAcc.fkResId = tblRes.pkResId', 'inner');
+		$this->db->join('tblResOcc', 'tblResOcc.fkResId = tblRes.pkResId', 'inner');
+		$this->db->join('tblResInvt', 'tblResInvt.pkResInvtId = tblResOcc.fkResInvtId', 'inner');
 		$this->db->join('tblFloorPlan', 'tblFloorPlan.pkFloorPlanID = tblResInvt.fkFloorPlanId', 'left');
 		$this->db->join('tblSeason', 'tblSeason.pkSeasonId = tblResInvt.fkSeassonId', 'left');
 		$this->db->join('tblFrequency', 'tblFrequency.pkFrequencyId = tblResInvt.fkFrequencyId', 'left');

@@ -32,6 +32,11 @@
 								<label for="RadioRoomsControl">Rooms Control</label>
 							</div>
 						</fieldset>
+						<fieldset class="large-12 columns" id="alertInventaryUnit" style="display:none">
+							<div class="callout small alert">
+								<p>Select a unit, please.</p>
+							</div>
+						</fieldset>
 						<fieldset class="large-12 columns">
 							<legend>Choose the date and unit</legend>
 							<div class="small-12 large-5 columns">
@@ -47,7 +52,10 @@
 									</div>
 								</div>
 							</div>
+							
 							<!-- Tipo de Habitación -->
+							
+							
 							<div class="small-12 large-3 columns filterDetailedAvailability">
 									<select id="textInvFloorPlan" class="round comboBoxInvDetailed">
 										<option value="0">select a Floor Plan</option>
@@ -152,34 +160,5 @@
 	</div>
 
 </div>
-
-<!--<div class="row pagination-section">
-    <div class="medium-2 columns section-bar"><span>Results</span></div>
-    <div class="pages">
-		<div class="pagination" id="paginationInv">
-			<a href="#" class="first" data-action="first">&laquo;</a>
-			<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-			<input type="text" readonly="readonly" />
-			<a href="#" class="next" data-action="next">&rsaquo;</a>
-			<a href="#" class="last" data-action="last">&raquo;</a>
-		</div>
-		<input type="hidden" id="paginationPeople" value="true" />
-    </div>
-	
-</div>-->
-
-<!--<div class="row table-section" >
-	<div class="large-12 columns table" >
-		<div id="divTableInvDetailed">
-			<table id="tableInvDetailed" class="display" cellspacing="0" width="100%">
-				<thead id="tableHeadnventario">
-				</thead>
-				<tbody id="tableBodynventario">
-		
-				</tbody>
-			</table>
-		</div>
-	</div>
-</div>-->
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>inventory.js"></script>

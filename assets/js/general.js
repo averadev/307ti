@@ -86,7 +86,11 @@ function showMenu(){
 // Load Module
 function loadModule(screen){
     $( ".general-section" ).append('<div class="module" id="module-'+screen+'"></div>');
-    $( "#module-"+screen ).load( BASE_URL+screen );
+	showLoading('#module-'+screen,true);
+	$( "#module-"+screen ).load( BASE_URL+screen, function() {
+		showLoading('.general-section',false);
+		
+	});
 }
 
 //menu pegajoso

@@ -17,9 +17,7 @@ class People extends CI_Controller {
 	}
 
 	public function index(){
-		//$a = $this->people_db->selectUser();
 		$data['country'] = $this->people_db->getCountry();
-		//$data['state'] = $this->people_db->getState();
         $this->load->view('vwPeople',$data);
 	}
 	
@@ -69,6 +67,9 @@ class People extends CI_Controller {
 					'BirthDayMonth'		=> $BirthDayMonth,
 					'BirthDayDay'		=> $BirthDayDay,
 					'BirthDayYear'		=> $BirthDayYear,
+					'Anniversary'		=> $_POST['WeddingAnniversary'],
+					'Nationality'		=> $_POST['nationality'],
+					'Qualification'		=> $_POST['qualification'],
 					'YnActive'			=> 1,
 					'CrBy'				=> 1,
 					'CrDt'				=> $strHoy,
@@ -178,6 +179,9 @@ class People extends CI_Controller {
 					'BirthDayMonth'		=> $BirthDayMonth,
 					'BirthDayDay'		=> $BirthDayDay,
 					'BirthDayYear'		=> $BirthDayYear,
+					'Anniversary'		=> $_POST['WeddingAnniversary'],
+					'Nationality'		=> $_POST['nationality'],
+					'Qualification'		=> $_POST['qualification'],
 					'fkPeopleTypeId'	=> $typePeople,
 					'Initials'			=> $_POST['initials'],
 					'MdBy'				=> 1,
@@ -330,7 +334,7 @@ class People extends CI_Controller {
 	* Obtiene la lista de usuario de la busqueda
 	**/
 	public function getPeopleBySearch(){
-		$months = array('', 'Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic');
+		$months = array('', 'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
 		$peopleId = $_POST['peopleId'];
 		$lastName = $_POST['lastName'];
 		$name = $_POST['name'];
@@ -380,7 +384,25 @@ class People extends CI_Controller {
 				$arrayData[$cont]['Gender'] = "unknown";
 			}
 			
-			$arrayData[$cont]['birthdate'] = $item->BirthDayDay . "-" . $months[$item->BirthDayMonth] . "-" . $item->BirthDayYear;
+			$arrayData[$cont]['Birthdate'] = $item->BirthDayDay . " " . $months[$item->BirthDayMonth] . " " . $item->BirthDayYear;
+			
+			if(is_null($item->Anniversary)){
+				$arrayData[$cont]['Anniversary'] = "";
+			}else{
+				$arrayData[$cont]['Anniversary'] = $item->Anniversary;
+			}
+			
+			if(is_null($item->Nationality)){
+				$arrayData[$cont]['Nationality'] = "";
+			}else{
+				$arrayData[$cont]['Nationality'] = $item->Nationality;;
+			}
+			
+			if(is_null($item->Qualification)){
+				$arrayData[$cont]['Qualification'] = "";
+			}else{
+				$arrayData[$cont]['Qualification'] = $item->Qualification;;
+			}
 			
 			$arrayData[$cont]['Street'] = $item->Street1;
 			if(is_null($item->Street1) && is_null($item->Street2)){
@@ -449,35 +471,6 @@ class People extends CI_Controller {
 			
 			$cont = $cont + 1;
 			
-			
-			/*
-			
-			if(isset($phone[0]->PhoneDesc)) {
-				$item->phone1 = $phone[0]->PhoneDesc;
-			}else{
-				$item->phone1 = "";
-			}
-			if(isset($phone[1]->PhoneDesc)) {
-				$item->phone2 = $phone[1]->PhoneDesc;
-			}else{
-				$item->phone2 = "";
-			}
-			if(isset($phone[2]->PhoneDesc)) {
-				$item->phone3 = $phone[2]->PhoneDesc;
-			}else{
-				$item->phone3 = "";
-			}
-			$email = $this->people_db->getPeopleEmail($item->ID);
-			if(isset($email[0]->EmailDesc)) {
-				$item->email1 = $email[0]->EmailDesc;
-			}else{
-				$item->email1 = "";
-			}
-			if(isset($email[1]->EmailDesc)) {
-				$item->email2 = $email[1]->EmailDesc;
-			}else{
-				$item->email2 = "";
-			}*/
 		}
 		echo json_encode(array('items' => $arrayData, 'total' => $total));
 	}
@@ -496,6 +489,18 @@ class People extends CI_Controller {
 				
 				$item->birthdate = $item->BirthDayMonth . "/" .  $item->BirthDayDay . "/" . $item->BirthDayYear;
 				
+				if(is_null($item->Qualification)){
+					$item->Qualification = "";
+				}
+				
+				if(is_null($item->Nationality)){
+					if(is_null($item->CountryNac)){
+						$item->Nationality = "";
+					}else{
+						$item->Nationality = $item->CountryNac;
+					}
+				}
+				
 				if(is_null($item->Street1)){
 					$item->Street1 = "";
 				}
@@ -510,17 +515,18 @@ class People extends CI_Controller {
 					$item->ZipCode = "";
 				}
 				if(is_null($item->pkStateId)){
-					$item->pkStateId = "";
+					$item->pkStateId = 0;
 				}
 				if(is_null($item->StateCode)){
-					$item->StateCode = "";
+					$item->StateCode = 0;
 				}
 				if(is_null($item->pkCountryId)){
-					$item->pkCountryId = "";
+					$item->pkCountryId = 0;
 				}
 				if(is_null($item->CountryCode)){
-					$item->CountryCode = "";
+					$item->CountryCode = 0;
 				}
+				
 				
 				if(is_null($item->Initials)){
 					$item->Initials = "";
@@ -570,31 +576,30 @@ class People extends CI_Controller {
 			$data = $this->people_db->getReservationsByPeople($_POST['id']);
 			foreach($data as $item){
 				
-				$date = date_create($item->CrDt);
-				$item->hora = date_format($date, 'g:i A');
+				/*$date = date_create($item->CrDt);
+				//$item->hora = date_format($date, 'g:i A');
 				$item->date = date('d', strtotime($item->CrDt)) . ' de ' . 
 					$months[date('n', strtotime($item->CrDt))] . ' del ' . 
 					date('Y', strtotime($item->CrDt)) . " " .
 					date('h', strtotime($item->CrDt)) . " " .
 					date('i', strtotime($item->CrDt)) . ":" .
-					date('s', strtotime($item->CrDt));
+					date('s', strtotime($item->CrDt));*/
 				
-				if(is_null($item->UnitCode)){
-					$item->UnitCode = "";
+				if(is_null($item->Unit)){
+					$item->Unit = "";
 				}
-				if(is_null($item->FloorPlanDesc)){
-					$item->FloorPlanDesc = "";
+				if(is_null($item->FloorPlan)){
+					$item->FloorPlan = "";
 				}
-				if(is_null($item->SeasonDesc)){
-					$item->SeasonDesc = "";
+				if(is_null($item->Season)){
+					$item->Season = "";
 				}
-				if(is_null($item->CrDt)){
-					$item->CrDt = "";
+				if(is_null($item->Date)){
+					$item->Date = "";
 				}
-				if(is_null($item->Intv)){
-					$item->Intv = "";
+				if(is_null($item->Interval)){
+					$item->Interval = "";
 				}
-				
 			}
 			echo json_encode(array('items' => $data));
 		}
@@ -606,34 +611,35 @@ class People extends CI_Controller {
 			$months = array('', 'Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic');
 			$data = $this->people_db->getContractByPeople($_POST['id'],$_POST['search']);
 			foreach($data as $item){
-				$item->BalanceCSF = "";
-				$item->LoanBa = "";
-				$date = date_create($item->CrDt);
+				//quitar
+				/*$item->BalanceCSF = 0;
+				$item->LoanBa = 0;*/
+				/*$date = date_create($item->CrDt);
 				$item->hora = date_format($date, 'g:i A');
 				$item->date = date('d', strtotime($item->CrDt)) . ' de ' . 
 					$months[date('n', strtotime($item->CrDt))] . ' del ' . 
 					date('Y', strtotime($item->CrDt)) . " " .
 					date('h', strtotime($item->CrDt)) . " " .
 					date('i', strtotime($item->CrDt)) . ":" .
-					date('s', strtotime($item->CrDt));
+					date('s', strtotime($item->CrDt));*/
 				
-				if(is_null($item->FloorPlanDesc)){
-					$item->FloorPlanDesc = "";
+				if(is_null($item->FloorPlan)){
+					$item->FloorPlan = "";
 				}
-				if(is_null($item->SeasonDesc)){
-					$item->SeasonDesc = "";
+				if(is_null($item->Season)){
+					$item->Season = "";
 				}
-				if(is_null($item->CrDt)){
-					$item->CrDt = "";
+				if(is_null($item->Date)){
+					$item->Date = "";
 				}
-				if(is_null($item->Intv)){
-					$item->Intv = "";
+				if(is_null($item->Interval)){
+					$item->Interval = "";
 				}
-				if(is_null($item->FrequencyDesc)){
-					$item->FrequencyDesc = "";
+				if(is_null($item->Frequency)){
+					$item->Frequency = "";
 				}
-				if(is_null($item->UnitCode)){
-					$item->UnitCode = "";
+				if(is_null($item->Unit)){
+					$item->Unit = "";
 				}
 			}
 			echo json_encode(array('items' => $data));
@@ -660,7 +666,9 @@ class People extends CI_Controller {
 			echo json_encode($message);
 		}
 	}
+	
 	public function modalPeople(){
 		$this->load->view('people/peopleDialog.php');
 	}
+	
 }

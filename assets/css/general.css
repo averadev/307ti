@@ -38,7 +38,9 @@ input.round, select.round{
 	font-size: 0.875rem;
 }
 
-select.round{
+input.roundRight{
+	border-top-right-radius:5px;
+	border-bottom-right-radius:5px;
 }
 
 /**
@@ -174,6 +176,11 @@ select.round{
     display: none;
 }
 
+.module{
+	position:relative;
+	height:564px;
+}
+
 /**
 * @section filter
 * @todo filtros de busqueda y formularios de busqueda
@@ -233,13 +240,9 @@ select.round{
 
 .txtSearch{
     max-width: 500px;
-   /* background: url("../img/common/iconSearch.png") no-repeat right;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;*/
-   /* border-radius: 8px;*/
-   border-top-left-radius:5px;
-   border-bottom-left-radius:5px;
-   font-size: 0.875rem;
+	border-radius:0;
+	border-top-left-radius:5px;
+	border-bottom-left-radius:5px;
 }
 
 /**
@@ -569,6 +572,10 @@ table thead tr th, table tbody tr td{
 	height:auto;
 	border-top:1px solid #aaaaaa;
 	padding: .5em 1em;
+}
+
+.tab-modal-top{
+	margin-top: 1.25rem;
 }
 
 /**

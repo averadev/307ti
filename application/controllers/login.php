@@ -28,7 +28,7 @@ class Login extends CI_Controller {
 	 */
 	public function checkLogin(){
         if($this->input->is_ajax_request()){
-			$data = $this->admin_user_db->get(array("UserLogin" => $_POST['email'], "fkUserTypeId" => 1 ));
+			$data = $this->admin_user_db->get(array("UserLogin" => $_POST['email'], "Password" => md5($_POST['password']), "fkUserTypeId" => 1 ));
 			
 			if(count($data)>0){
 				/*$this->session->set_userdata(array(

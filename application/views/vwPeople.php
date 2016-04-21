@@ -99,7 +99,7 @@
 					<div class="" id="divTablePeople">
 						<table id="tablePeople" class="display hover" cellspacing="0" width="100%">
 							<thead>
-								<!--<tr>
+								<tr>
 									<th class="cellEdit" >Edit</th>
 									<th class="cellEdit" >Id</th>
 									<th class="cellGeneral" >Name</th>
@@ -116,7 +116,7 @@
 									<th class="cellPhone" >Phone number 3</th>
 									<th class="cellEmail" >Email</th>
 									<th class="cellEmail" >Email 2</th>
-								</tr>-->
+								</tr>
 							</thead>
 							<tbody>
 		
@@ -141,53 +141,6 @@
 	</div>
 
 </div>
-
-<!--<div class="row pagination-section">
-    <div class="medium-2 columns section-bar"><span>Results</span></div>
-    <div class="pages">
-		<div class="pagination" id="paginationPeople">
-			<a href="#" class="first" data-action="first">&laquo;</a>
-			<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-			<input type="text" readonly="readonly" />
-			<a href="#" class="next" data-action="next">&rsaquo;</a>
-			<a href="#" class="last" data-action="last">&raquo;</a>
-		</div>
-		<input type="hidden" id="paginationPeople" value="true" />
-    </div>
-	
-</div>-->
-
-<!--<div class="row table-section" >
-	<div class="large-12 columns table" >
-		<div id="divTablePeople">
-			<table id="tablePeople">
-				<thead>
-					<tr>
-						<th class="cellEdit" >Edit</th>
-						<th class="cellEdit" >Id</th>
-						<th class="cellGeneral" >Name</th>
-						<th class="cellGeneral">Last name</th>
-						<th class="cellGeneral">Gender</th>
-						<th class="cellDate" >Birth date</th>
-						<th class="cellAddress" >Street, number, colonia</th>
-						<th class="cellGeneral" >City</th>
-						<th class="cellGeneral" >State</th>
-						<th class="cellGeneral" >Country</th>
-						<th class="cellGeneral" >Zip code</th>
-						<th class="cellPhone" >Phone number 1</th>
-						<th class="cellPhone" >Phone number 2</th>
-						<th class="cellPhone" >Phone number 3</th>
-						<th class="cellEmail" >Email</th>
-						<th class="cellEmail" >Email 2</th>
-					</tr>
-				</thead>
-				<tbody>
-		
-				</tbody>
-			</table>
-		</div>
-	</div>
-</div>-->
 
 <div id="dialog-User" title="People">
 	<div class="tabsModal" id="tabsModalPeople">
@@ -274,15 +227,22 @@
 		
 				<div class="row">
 					<!-- fecha de nacimiento-->
-					<div class="small-12 large-6 columns" for="alertBirthdate" style="float:right">
-						<label id="alertBirthdate" for="alertBirthdate" class="text-left">Birth date
-							<input type="text" id="textBirthdate" class="round general" >
+					<div class="small-12 large-6 columns" style="float:right">
+						<label id="alertBirthdate" class="text-left">Birth date
+							<div class="input-group date" id="dateBirthdate" >
+								<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+								<input type="text" id="textBirthdate" class="input-group-field roundRight" readonly/>
+							</div>
 						</label>
 					</div>
+					
 					<!-- aniversario boda-->
 					<div class="small-12 large-6 columns">
 						<label id="alertWeddingAnniversary" for="textWeddingAnniversary" class="text-left">Wedding anniversary
-							<input type="text" id="textWeddingAnniversary" class="round general">
+							<div class="input-group date" id="dateAnniversary" >
+								<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+								<input type="text" id="textWeddingAnniversary" class="input-group-field roundRight" readonly/>
+							</div>
 						</label>
 					</div>
 				</div>
@@ -291,9 +251,7 @@
 					<!-- Nacionalidad-->
 					<div class="small-12 large-6 columns">
 						<label id="alertNationality" for="textNationality" class="text-left">Nationality
-							<select id="textNationality" class="round">
-								<option value="husker">Mexican</option>
-							</select>
+							<input type="text" id="textNationality" class="round general" readonly/>
 						</label>
 					</div>
 					<!-- Calificacion-->
@@ -344,7 +302,7 @@
 									foreach($country as $item){
 								
 									?>
-									<option value="<?php echo $item->pkCountryId; ?>" code="<?php echo $item->CountryCode; ?>"><?php echo $item->CountryDesc; ?></option>
+									<option value="<?php echo $item->pkCountryId; ?>" code="<?php echo $item->CountryCode; ?>" nationality="<?php echo $item->Nationality; ?>"><?php echo $item->CountryDesc; ?></option>
 									<?php
 									}
 									?>
@@ -438,7 +396,7 @@
 			</fieldset>
 		</div>
 		<div id="tab-PReservaciones" class="large-12 columns tab-modal">
-			<div class="row" id="divTableReservationsPeople">
+			<div class="row tab-modal-top" id="divTableReservationsPeople">
 				<div class="large-12 columns table-section2">
 					<table id="tableReservationsPeople">
 						<thead>
@@ -465,15 +423,21 @@
 		</div>
 		<div id="tab-PContratos" class="large-12 columns tab-modal">
 			
-			<div class="row search-section">
-				<div class="large-12 columns search">
-					<input type="text" id="textSearchContractPeople" class="fieldSearch" placeholder="Id folio" />
-				</div>
-				<div class="large-12 columns end rowBtnSearch">
-					<div class="button-group radius groupBtnSearch">
-						<a id="btnSearchContractPeople" class="button btnSearch">Search</a>
-						<a id="btnCleanSearchContractPeople" class="button btnSearch">Clean</a>
-					</div>
+			<div class="row tab-modal-top">
+				<div class="small-10 large-centered columns">
+					<fieldset class="large-12 columns">
+						<div class="row collapse">
+							<div class="large-10 columns">
+								<input type="text" id="textSearchContractPeople" class="general txtSearch" placeholder="Id folio" />
+							</div>
+							<div class="small-1 columns">
+								<a  id="btnSearchContractPeople" class="button postfix"><i class="fa fa-search"></i></a>
+							</div>
+							<div class="small-1 columns">
+								<a id="btnCleanSearchContractPeople" class="button postfix"><i class="fa fa-trash"></i></a>
+							</div>
+						</div>
+					</fieldset>
 				</div>
 			</div>
 		
@@ -514,8 +478,8 @@
 				</div>
 			</div>
 			<!--<fieldset class="fieldset">-->
-				<div class="row" id="containerPeopleEmployee">
-					<div class="small-12 large-12 columns">
+				<div class="row tab-modal-top" id="containerPeopleEmployee">
+					<div class="small-10 large-centered columns">
 						<!-- Código del colaborador:-->
 						<div class="row">
 							<div class="small-3 columns">

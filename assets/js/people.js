@@ -56,13 +56,19 @@ $('#tabsModalPeople .tabs .tabs-title').on('click', function() { changeTabsModal
 $('#btnSearchContractPeople').off();
 $('#btnSearchContractPeople').on('click', function() { getInfoTabsPeople( "tab-PContratos", "people/getContractByPeople" );  });
 
+$('#textSearchContractPeople').keyup(function(e){
+    if(e.keyCode ==13){
+		getInfoTabsPeople( "tab-PContratos", "people/getContractByPeople" ); 	
+    }
+});
+
 //borra la busqueda
 $('#btnCleanSearchContractPeople').off();
 $('#btnCleanSearchContractPeople').on('click', function() {  CleandFieldSearchPContract(); });
 
 //detecta cuando se cambia el valor del select de pais(country)
 	
-$('#textCountry').change(function(){ changeState($(this).val()) });
+$('#textCountry').change(function(){ changeState(this) });
 
 
 /************Funciones**************/
@@ -70,13 +76,37 @@ $('#textCountry').change(function(){ changeState($(this).val()) });
 /**
 * Carga el modal
 */
-$(function() {
+$(document).ready(function(){
 	
-	$(document).foundation();
-	
+	//$(document).foundation();
+	alertify.error("Found");
 	//maxHeight
 	maxHeight = screen.height * .25;
 	maxHeight = screen.height - maxHeight;
+	
+	createModalDialog();
+	
+	$('#paginationPeople').jqPagination({
+		max_page: 1,
+		paged: function(page) {
+			if($('#paginationPeople').val() == true){
+				$('#paginationPeople').val(false);
+			}else{
+				searchPeople(page);
+			}
+		}
+	});
+	
+	$( "#textBirthdate" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+	});
+	
+	$( "#textWeddingAnniversary" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+	});
+});
+
+function createModalDialog(){
 	
 	if(dialogUser != null){
 		dialogUser.dialog( "destroy" );
@@ -139,29 +169,7 @@ $(function() {
 		}
 	});
 	
-	$('#paginationPeople').jqPagination({
-		max_page: 1,
-		paged: function(page) {
-			if($('#paginationPeople').val() == true){
-				$('#paginationPeople').val(false);
-			}else{
-				searchPeople(page);
-			}
-		}
-	});
-
-	window.prettyPrint && prettyPrint();
-	$('#textBirthdate').fdatepicker({
-		//format: 'mm-dd-yyyy',
-		disableDblClickSelection: true,
-	});
-	
-	$('#textWeddingAnniversary').fdatepicker({
-		//format: 'mm-dd-yyyy',
-		disableDblClickSelection: true,
-	});
-	
-});
+}
 
 /**
 * muestra el modal de personas
@@ -307,6 +315,7 @@ function saveUserData(id, isClosed){
 			gender:gender,
 			WeddingAnniversary:$('#textWeddingAnniversary').val().trim(),
 			nationality:$('#textNationality').val().trim(),
+			qualification:$('#textQualification').val().trim(),
 			street:$('#textStreet').val().trim(),
 			colony:$('#textColony').val().trim(),
 			city:$('#textCity').val().trim(),
@@ -736,45 +745,9 @@ function searchPeople(page){
 				$('#paginationPeople').val(true);
 				loadPaginatorPeople( total );
 			}
-			/*if( dataTablePeople != null ){
-				dataTablePeople.destroy();
-			}*/
-			
-			
-			
-			drawTable2(data.items,"tablePeople","showModal","tabla");
+			drawTable2(data.items,"tablePeople","showModal","editar");
 
-			
-			
-			/*for(i=0;i<data.items.length;i++){
-				var item = data.items[i];
-				$('#tablePeople tbody').append(
-					'<tr>' +
-						'<td class="cellEdit"><img class="iconEdit" value="' + item.pkPeopleId +'" src="' + BASE_URL+ 'assets/img/common/editIcon2.png"/></td>' +
-						'<td>' + item.pkPeopleId + '</td>' +
-						'<td>' + item.Name + '</td>' +
-						'<td>' + item.LName + " " + item.LName2 + '</td>' +
-						'<td>' + item.Gender + '</td>' +
-						'<td>' + item.birthdate + '</td>' +
-						'<td>' + item.Street1 + '</td>' +
-						'<td>' + item.City + '</td>' +
-						'<td>' + item.StateDesc + '</td>' +
-						'<td>' + item.CountryDesc + '</td>' +
-						'<td>' + item.ZipCode + '</td>' +
-						'<td>' + item.phone1 + '</td>' +
-						'<td>' + item.phone2 + '</td>' +
-						'<td>' + item.phone3 + '</td>' +
-						'<td>' + item.email1 + '</td>' +
-						'<td>' + item.email2 + '</td>' +
-					'</tr>'
-				);
-			}*/
-			
-			//$('.iconEdit').on()
-			$("#tablePeople tbody tr .cellEdit .iconEdit").off( "click", ".iconEdit" );
-			$("#tablePeople tbody tr .cellEdit .iconEdit").on("click", function(){ showModal($(this).attr('value')); });
 			showLoading('#section-table-people',false);
-			//$('.divLoadingTable').hide();
 		},
 		error: function(error){
 			showLoading('#section-table-people',false);
@@ -839,6 +812,9 @@ function getInfoPeople(id){
 			}
 			//$('#textBirthdate').val(convertToDateFormat(item.BirthDayDay, item.BirthDayMonth, item.BirthDayYear ));
 			$('#textBirthdate').val(item.birthdate);
+			$('#textWeddingAnniversary').val(item.Anniversary);
+			$('#textNationality').val(item.Nationality.trim())
+			$('#textQualification').val(item.Qualification.trim());
 			$('#textStreet').val(item.Street1.trim());
 			$('#textColony').val(item.Street2.trim());
 			$('#textCity').val(item.City.trim());
@@ -975,61 +951,19 @@ function getInfoTabsPeople(screen, url){
 		},
 		success: function(data){
 			
-			if( dataTableReservationsPeople != null ){
-				dataTableReservationsPeople.destroy();
-			}
-			
-			drawTable2(data.items,"tableReservationsPeople",false,"tabla");
-
-			dataTableReservationsPeople = $('#tableReservationsPeople').DataTable({
-				"scrollY": 350,
-				"scrollX": true,
-				"paging":   false,
-				"ordering": false,
-				"info":     false,
-				"filter": 	false,
-			});
-			
 			if(screen == "tab-PReservaciones"){
-				/*for(i=0;i<data.items.length;i++){
-					var item = data.items[i];
-					$('#tableReservationsPeople tbody').append(
-						'<tr>' +
-							'<td>' + item.ResCode + '</td>' +
-							'<td>' + item.pkResId + '</td>' +
-							'<td>' + item.ResTypeDesc + '</td>' +
-							'<td>' + item.OccYear + '</td>' +
-							'<td>' + item.NightId + '</td>' +
-							'<td>' + item.FloorPlanDesc + '</td>' +
-							'<td>' + item.SeasonDesc + '</td>' +
-							'<td>' + item.OccTypeDesc + '</td>' +
-							'<td>' + item.date + '</td>' +
-							'<td>' + item.Intv + '</td>' +
-							'<td>' + item.UnitCode + '</td>' +
-						'</tr>'
-					);
-				}*/
+				if(data.items.length > 0){
+					drawTable2(data.items,"tableReservationsPeople",false,"tabla");
+				}else{
+					$('#tableReservationsPeople tbody').empty();
+				}
+				
 			}else if(screen == "tab-PContratos"){
-				/*for(i=0;i<data.items.length;i++){
-					var item = data.items[i];
-					$('#tableContractPeople tbody').append(
-						'<tr>' +
-							'<td></td>' +
-							'<td>' + item.Folio + '</td>' +
-							'<td>' + item.pkResId + '</td>' +
-							'<td>' + item.OccYear + '</td>' +
-							'<td>' + item.FloorPlanDesc + '</td>' +
-							'<td>' + item.SeasonDesc + '</td>' +
-							'<td>' + item.FrequencyDesc + '</td>' +
-							'<td>' + item.date + '</td>' +
-							'<td>' + item.Intv + '</td>' +
-							'<td>' + item.UnitCode + '</td>' +
-							'<td>' + item.BalanceCSF + '</td>' +
-							'<td>' + item.LoanBa + '</td>' +
-							'<td>' + item.StatusDesc + '</td>' +
-						'</tr>'
-					);
-				}*/
+				if(data.items.length > 0){
+					drawTable2(data.items,"tableContractPeople",false,"tabla");
+				}else{
+					$('#tableContractPeople tbody').empty();
+				}
 			}else if(screen == "tab-PEmpleados"){
 				$('#textTypeSeller').empty();
 				$('#textTypeSeller').append('<option value="0" code="0">Select a type of seller</option>');
@@ -1101,7 +1035,9 @@ function clonePeople(){
 * Cambia el cotenido del select estado dependiendo de lo selecionado en country
 * @param idCountry identificador del pais
 */
-function changeState(idCountry){
+function changeState(selector){
+	var idCountry = $(selector).val();
+	$("#textNationality").val( $("#textCountry option:selected").attr('nationality') );
 	$('#textState').empty();
 	$('#textState').append('<option value="0" code="0">Select your state</option>');
 	$('#textState').attr('disabled',true);
@@ -1134,7 +1070,7 @@ function changeState(idCountry){
 }
 
 $(document).ready(function(){
-	$(window).on('scroll', function(){
+	/*$(window).on('scroll', function(){
 		var isOpen = $( dialogUser ).dialog( "isOpen" );
 		if(isOpen == true){
 			dialogUser.dialog('option', 'position', { my: "center", at: "center", of: window });
@@ -1150,7 +1086,7 @@ $(document).ready(function(){
 			$('#tabsModalPeople').css('width',$("#dialog-User").css('width'))
 		}
 	});
-	
+	*/
 	
  
 });
