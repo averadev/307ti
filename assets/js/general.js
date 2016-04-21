@@ -26,7 +26,7 @@ $(function() {
             var screen = $(this).attr('attr-screen');
             var iconClose = '<img class="iconCloseTab" src="'+BASE_URL+'assets/img/common/iconClose.png" />'
             $('.tabs').append( '<li class="tabs-title active" attr-screen="'+screen+'"><a>'+$(this).html()+'</a>'+iconClose+'</li>' );
-            $(".module").addClass("moduleHide")
+            $(".module").addClass("moduleHide");
             addTabEvent();
             loadModule(screen);
         }
@@ -339,4 +339,16 @@ function generalSelects(data, div){
         select+='</option>';
     }
     $("#"+div).html(select);
+}
+
+function ajaxHTML(div, url){
+    if ($('#'+div).html().trim() == ""){
+        $.ajax({
+            url: url,
+            success: function(result)
+            {
+                $('#'+div).html(result);
+            }
+        });
+    }
 }

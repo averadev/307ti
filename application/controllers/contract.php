@@ -17,7 +17,9 @@ class Contract extends CI_Controller {
 	}
     
 	public function index(){
-        $this->load->view('vwContract.php');
+		if($this->input->is_ajax_request()) {
+			$this->load->view('vwContract.php');
+		}
 	}
 
 	public function saveContract(){
@@ -33,10 +35,14 @@ class Contract extends CI_Controller {
 	}
 
 	public function modal(){
-		$this->load->view('contracts/contractDialog.php');
+		if($this->input->is_ajax_request()) {
+			$this->load->view('contracts/contractDialog.php');
+		}
 	}
 	public function modalUnidades(){
-		$this->load->view('unities/unitiesDialog.php');
+		if($this->input->is_ajax_request()) {
+			$this->load->view('unities/unitiesDialog.php');
+		}
 	}
 	public function insertContrat($Contract){
 		return $this->contract_db->insertReturnId($Contract,"tblContract");;

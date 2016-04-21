@@ -50,6 +50,30 @@ class Contract_db extends CI_Model {
 
     }
 
+
+    public function createContract(){
+//        select pkRestypeId from tblResType where ResTypeCode = 'Cont' --X--Tipo
+//        select pkPaymentProcessTypeId  from tblPaymentProcessType where PaymentProcessCode ='RG' --X--Tipo de proceso de pago
+//        select pklanguageId from tblLanguage where LanguageCode ='EN' --X--Idioma
+//        select pkLocationId from tblLocation where LocationCode ='CUN' --X-- Lugar
+//                --ResRelated NULL
+//                --FirstOCCYear
+//                --LastOCCYear
+//                --ResCode = ''
+//                --ResConf = ''
+//        select top 1 (pkExchangeRateId)  from tblexchangerate order by pkExchangeRateId desc --X-- ExchangeRateId = 2
+//                --LegalName  = $_POST['nombreLegal']
+//                --Folio = 1003
+//                --MonthlyPayAmt = 0
+//                --BalanceActual = $_POST['balance']
+//                --fkTourId = $_POST['tourID']
+//        select pksaleTypeId from tblSaleType where SaleTypeCode = 'CU' --SaleType
+//        pkinvtTypeId from tblInvtType where InvtTypeCode = 'CU' --invtType
+//                --fkestatus ??
+//                --ynActive = 1
+//                --CrBy
+    }
+
     public function getLanguages(){
         $this->db->select('pkLanguageId as ID, LanguageDesc');
         $this->db->from('tblLanguage');

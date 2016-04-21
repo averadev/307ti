@@ -1,5 +1,6 @@
 
-$(document).foundation();
+//$(document).foundation();
+
 $('#newContract').click(function(){
 	ajaxHTML('dialog-Contract', 'contract/modal');
     showModals('dialog-Contract', cleanAddPeople);
@@ -95,18 +96,7 @@ $("#busquedaAvanazada").click(function(){ $("#avanzada").slideToggle("slow");});
 	// });	
 
 
-function ajaxHTML(div, url){
-	if ($('#'+div).html().trim() == ""){
-		$.ajax({
-			url: url,
-			success: function(result)
-			{
-				$('#'+div).html(result);
-			}
-		});
-	}
 
-}
 
 function showModals(div, funcion){
 
@@ -214,7 +204,7 @@ function getInputsByID(formData, divs){
 
 function verifyInputsByID(divs){
 
-	var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
+	//var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
 	for (var i = 0; i < divs.length; i++) {
 		 if($('#'+divs[i]).val().trim().length > 0){
 			 $('#'+divs[i]).removeClass('is-invalid-input');
@@ -253,12 +243,16 @@ function ajaxSelects(url,errorMsj, funcion, divSelect) {
 function createNewContract(id){
 
 
-	var form = $("#saveDataContract");
+	var form = $("#"+id);
 	var elem = new Foundation.Abide(form, {});
-	$('#saveDataContract').foundation('validateForm');
-	$('#saveDataContract').foundation('destroy');
+	$('#'+id).foundation('validateForm');
 
-	var formData = new FormData(document.getElementById("saveDataContract"));
+	var tourId = $("#TourID").val().trim();
+	var nombreLegal = $("#legalName").val().trim();
+	var idiomaId = $( "#selectLanguage" ).val();
+	
+	//$('#'+id).foundation('destroy');
+	//var formData = new FormData(document.getElementById(""+id));
 	//legalName
 	//var idioma = $("#idiomaContract").val().trim();
 
@@ -285,6 +279,7 @@ $('.tk-contact').on('submit', function () {
 	$(this).on('valid', function () {});
 	$(this).on('invalid', function () {});
 });
+
 function getDataFormContract(){
 
 	var idsContract = ['legalName', 'TourID'];
