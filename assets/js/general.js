@@ -349,9 +349,8 @@ function ajaxHTML(div, url){
     if ($('#'+div).html().trim() == ""){
         $.ajax({
             url: url,
-            success: function(result)
-            {
-                $('#'+div).html(result);
+            success: function(result) {
+                $('#'+div).html(result);    
             }
         });
     }

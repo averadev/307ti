@@ -52,6 +52,12 @@ class Contract_db extends CI_Model {
 
 
     public function createContract(){
+
+        $restTypeId = $this->selectRestType();
+        $paymentProcessTypeId = $this->selectPaymentProcessTypeId();
+        $languageId = $this->selectlanguageId();
+        $resRelated = NUll;
+        //echo($restTypeId["pkRestypeId"]);
 //        select pkRestypeId from tblResType where ResTypeCode = 'Cont' --X--Tipo
 //        select pkPaymentProcessTypeId  from tblPaymentProcessType where PaymentProcessCode ='RG' --X--Tipo de proceso de pago
 //        select pklanguageId from tblLanguage where LanguageCode ='EN' --X--Idioma
@@ -73,6 +79,54 @@ class Contract_db extends CI_Model {
 //                --ynActive = 1
 //                --CrBy
     }
+    public function selectRestType(){
+        $this->db->select('pkRestypeId');
+        $this->db->from('tblResType');
+        $this->db->where('ResTypeCode', 'Cont');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkRestypeId;
+        }
+    }
+    public function selectPaymentProcessTypeId(){
+        $this->db->select('pkPaymentProcessTypeId');
+        $this->db->from('tblPaymentProcessType');
+        $this->db->where('PaymentProcessCode', 'RG');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkPaymentProcessTypeId;
+        }
+    }
+    public function selectlanguageId(){
+        $this->db->select('pklanguageId');
+        $this->db->from('tblLanguage');
+        $this->db->where('LanguageCode', 'EN');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pklanguageId;
+        }
+    }
+    public function selectLocationId(){
+        $this->db->select('pkLocationId');
+        $this->db->from('tblLocation');
+        $this->db->where('LocationCode', 'CUN');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkLocationId;
+        }
+    }
 
     public function getLanguages(){
         $this->db->select('pkLanguageId as ID, LanguageDesc');
@@ -93,6 +147,43 @@ class Contract_db extends CI_Model {
         if($query->num_rows() > 0 )
         {
             return $query->result();
+        }
+    }
+
+    public function selectExchangeRateId(){
+        $this->db->select('top 1 (pkExchangeRateId)');
+        $this->db->from('tblexchangerate');
+        $this->db->order_by('pkExchangeRateId', 'DESC');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkExchangeRateId;
+        }
+    }
+
+    public function selectSaleTypeId(){
+        $this->db->select('pksaleTypeId');
+        $this->db->from('tblSaleType');
+        $this->db->where('SaleTypeCode', 'CU');
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            $row = $query->row();
+            return $row->pksaleTypeId;
+        }
+    }
+    public function selectInvtTypeId(){
+        $this->db->select('pkinvtTypeId');
+        $this->db->from('tblInvtType');
+        $this->db->where('InvtTypeCode', 'CU');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkinvtTypeId;
         }
     }
 
@@ -172,6 +263,11 @@ class Contract_db extends CI_Model {
         if (isset($filters['checks']['apellido'])){
             $this->db->where('LName', $string);
         }
+    }
+
+    public function insertReturnId($data, $table){
+        $this->db->insert($table, $data);
+        return $this->db->insert_id();
     }
 
 }

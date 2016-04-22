@@ -250,6 +250,7 @@ function createNewContract(id){
 	var tourId = $("#TourID").val().trim();
 	var nombreLegal = $("#legalName").val().trim();
 	var idiomaId = $( "#selectLanguage" ).val();
+
 	
 	//$('#'+id).foundation('destroy');
 	//var formData = new FormData(document.getElementById(""+id));

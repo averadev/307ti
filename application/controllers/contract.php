@@ -25,12 +25,29 @@ class Contract extends CI_Controller {
 	public function saveContract(){
 		if($this->input->is_ajax_request()){
 
-//			$Contract = [
-//				"nombreLegal" => $_POST['legalName'],
-//				"idioma"      => $_POST['IDpersona'],
-//				"tourID"      => $_POST['TourID']
-//			];
-			var_dump($_POST);
+			$Contract = [
+				"fkResTypeId"               => $this->contract_db->selectRestType(),
+				"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId(),
+				"fkLanguageId"              => $this->contract_db->selectlanguageId(),
+                "fkLocationId"              => $this->contract_db->selectLocationId(),
+                "pkResRelatedId"            => null,
+                "FirstOccYear"              => $_POST['firstYear'],
+                "LastOccYear"               => $_POST['lastYear'],
+                "ResCode"                   => "",
+                "ResConf"                   => "",
+                "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
+                "LegalName"                 => $_POST['legalName'],
+                "Folio"                     => $_POST['folio'],
+                "fkTourId"                  => $_POST['tourID'],
+                "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId(),
+                "selectInvtTypeId"          => $this->contract_db->selectInvtTypeId(),
+                "ynActive"                  => 1,
+                "CrBy"                      => 123
+			];
+            //$idContrato = $this->contract_db->insertReturnId('tblRes', $Contract);
+
+			//echo json_encode($create);
+			//var_dump($_POST);
 		}
 	}
 
