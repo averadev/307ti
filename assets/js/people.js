@@ -67,9 +67,7 @@ $('#btnCleanSearchContractPeople').off();
 $('#btnCleanSearchContractPeople').on('click', function() {  CleandFieldSearchPContract(); });
 
 //detecta cuando se cambia el valor del select de pais(country)
-	
 $('#textCountry').change(function(){ changeState(this) });
-
 
 /************Funciones**************/
 
@@ -79,7 +77,6 @@ $('#textCountry').change(function(){ changeState(this) });
 $(document).ready(function(){
 	
 	//$(document).foundation();
-	alertify.error("Found");
 	//maxHeight
 	maxHeight = screen.height * .25;
 	maxHeight = screen.height - maxHeight;
@@ -99,10 +96,12 @@ $(document).ready(function(){
 	
 	$( "#textBirthdate" ).Zebra_DatePicker({
 		format: 'm/d/Y',
+		show_icon: false,
 	});
 	
 	$( "#textWeddingAnniversary" ).Zebra_DatePicker({
 		format: 'm/d/Y',
+		show_icon: false,
 	});
 });
 
@@ -133,6 +132,7 @@ function createModalDialog(){
 					dialogUser.dialog('close');
 					cleanUserFields();
 					$("#idPeople").removeData("pkPeopleId");
+					$("#idPeople").removeData("pkEmployeeId");
 				}
 			},
 			{
@@ -163,6 +163,7 @@ function createModalDialog(){
 		],
 		close: function() {
 			$("#idPeople").removeData("pkPeopleId");
+			$("#idPeople").removeData("pkEmployeeId");
 			cleanUserFields();
 			
 			//$('.ui-dialog-titlebar').empty();
@@ -176,8 +177,9 @@ function createModalDialog(){
 * @param id id de la persona
 */
 function showModal(id){
-	dialogUser.dialog('option', 'position', { my: "center", at: "center", of: window });
+	//dialogUser.dialog('option', 'position', { my: "center", at: "center", of: window });
 	$("#idPeople").removeData("pkPeopleId");
+	$("#idPeople").removeData("pkEmployeeId");
 	cleanUserFields();
 	$('.tab-modal').hide();
 	$('#tab-PGeneral').show();
@@ -294,11 +296,23 @@ function saveUserData(id, isClosed){
 		gender = "F";
 	}
 	
-	var employee;
+	/*var employee;
+	var pkEmployeeId = 0;
 	if($("#checkPeopleEmployee").is(':checked')) {
 		employee = 1;
+		pkEmployeeId = $('#idPeople').data("pkEmployeeId");
 	}else{
 		employee = 0;
+	}*/
+	var employee = 0;
+	var pkEmployeeId = 0;
+	//si se estan editando los datos
+	if( id > 0 ){
+		//si esta activado la opcion de empleado
+		if($("#checkPeopleEmployee").is(':checked')) {
+			employee = 1;
+			pkEmployeeId = $('#idPeople').data("pkEmployeeId");
+		}
 	}
 	
 	$.ajax({
@@ -326,12 +340,13 @@ function saveUserData(id, isClosed){
 			countryCode:$('#textCountry option:selected').attr('code'),
 			phone:jsonPhone,
 			email:jsonEmail,
+			pkEmployeeId:pkEmployeeId,
 			employee:employee,
 			codeCollaborator:$('#textCodeCollaborator').val().trim(),
 			initials:$('#textInitials').val().trim(),
 			codeNumber:$('#textCodeNumber').val().trim(),
 			typeSeller:$('#textTypeSeller').val(),
-			roster:$('#textRoster').val().trim(),
+			roster:$('#textRoster').val(),
 		},
 		success: function(data){
 			showAlert(true,data.message,'button',showAlert);
@@ -340,6 +355,7 @@ function saveUserData(id, isClosed){
 					dialogUser.dialog('close');
 					cleanUserFields();
 					$("#idPeople").removeData("pkPeopleId");
+					$("#idPeople").removeData("pkEmployeeId");
 				}else{
 					$("#idPeople").data("pkPeopleId",data.pkPeopleId);
 					$('.dialogModalButtonSecondary').show();
@@ -356,6 +372,7 @@ function saveUserData(id, isClosed){
 			dialogUser.dialog('close');
 			cleanUserFields();
 			$("#idPeople").removeData("pkPeopleId");
+			$("#idPeople").removeData("pkEmployeeId");
 		}
 	});	
 }
@@ -375,49 +392,49 @@ function validateUserFields(){
 	
 //	alert($("#checkPeopleEmployee").is(':checked'))
 	
-	/*if($("#checkPeopleEmployee").is(':checked')){
+	if($("#checkPeopleEmployee").is(':checked')){
 		
-		/*if($('#textCodeCollaborator').val().trim().length == 0 ){
+		if($('#textCodeCollaborator').val().trim().length == 0 ){
 			$('#alertCodeCollaborator').addClass('error');
 			$('#textCodeCollaborator').focus();
 			errorText = "Código del colaborador<br>" + errorText;
 			infoEmployee = false;
-		}*/
+		}
 		
-		/*if($('#textInitials').val().trim().length == 0 ){
+		if($('#textInitials').val().trim().length == 0 ){
 			$('#alertInitials').addClass('error');
 			$('#textInitials').focus();
 			errorText = "Iniciales<br>" + errorText;
 			infoEmployee = false;
 		}
 		
-		/*if($('#textCodeNumber').val().trim().length == 0 ){
+		if($('#textCodeNumber').val().trim().length == 0 ){
 			$('#alertCodeNumber').addClass('error');
 			$('#textCodeNumber').focus();
 			errorText = "Código numérico<br>" + errorText;
 			infoEmployee = false;
-		}*/
+		}
 		
-		/*if($('#textTypeSeller').val() == null || $('#textTypeSeller').val() == 0){
+		if($('#textTypeSeller').val() == null || $('#textTypeSeller').val() == 0){
 			$('#alertTypeSeller').addClass('error');
 			$('#textTypeSeller').focus();
 			errorText = "Tipo de vendedor<br>" + errorText;
 			infoEmployee = false;
 		}
 		
-		/*if($('#textRoster').val() == null || $('#textRoster').val() == 0){
+		if($('#textRoster').val() == null || $('#textRoster').val() == 0){
 			$('#alertRoster').addClass('error');
 			$('#textRoster').focus();
 			errorText = "Nómina<br>" + errorText;
 			infoEmployee = false;
-		}*/
+		}
 		
-		/*if(infoEmployee == false){
+		if(infoEmployee == false){
 			$('#alertValPeopleEmployee .alert-box').html("<label>Please complete fields in red</label>" );
 			$('#alertValPeopleEmployee').show(100);
 			result = false;
 		}
-	}*/
+	}
 	
 	var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
 	//email 2
@@ -474,7 +491,6 @@ function validateUserFields(){
 	}
 	
 	if(infoContact == false){
-		
 		result = false;
 		$('#alertValPeopleContact .alert-box').html("<label>Please complete fields in red</label>" + errorText );
 		$('#alertValPeopleContact').show(100);
@@ -683,21 +699,14 @@ function cleanUserFields(){
 	$('#containerContact').hide();
 	
 	$("#idPeople").removeData("pkPeopleId");
-	
-	$('#textCodeCollaborator').val("");
-	$('#textInitials').val("");
-	$('#textCodeNumber').val("");
-	$('#textTypeSeller').val(0);
-	$('#textRoster').val(0);
-	$('#checkPeopleEmployee').prop( "checked", false );
+	$("#idPeople").removeData("pkEmployeeId");
 	
 	$('#tableReservationsPeople tbody').empty();
 	$('#tableContractPeople tbody').empty();
 	
 	$('#textSearchContractPeople').val("");
 	
-	changeTabsModalPeople("tab-PGeneral")
-	
+	changeTabsModalPeople("tab-PGeneral");
 }
 
 //////
@@ -819,7 +828,6 @@ function getInfoPeople(id){
 			$('#textColony').val(item.Street2.trim());
 			$('#textCity').val(item.City.trim());
 			$('#textPostalCode').val(item.ZipCode.trim());
-			console.log(item.pkStateId)
 			if(item.pkCountryId != null || item.pkCountryId == ""){
 				$("select#textCountry").val(item.pkCountryId);
 			}else{
@@ -852,23 +860,19 @@ function getInfoPeople(id){
 				$('#textTypeSeller').append('<option value="' + peopleType.pkPeopleTypeId + '" code="' + peopleType.PeopleTypeCode + '">' + peopleType.PeopleTypeDesc + '</option>');
 			}
 			
-			$('#textCodeCollaborator').val("");
-			$('#textInitials').val(item.Initials.trim());
-			$('#textCodeNumber').val("");
-			$('#textTypeSeller').val(item.fkPeopleTypeId);
-			$('#textRoster').val(0);
-			if(item.ynEmp == 1){
-				$('#textTypeSeller').val(item.fkPeopleTypeId);
+			if(item.pkEmployeeId > 0){
 				$("#checkPeopleEmployee").prop( "checked", true );
-			}else{
-				$("#checkPeopleEmployee").prop( "checked", false );
-				$('#textTypeSeller').val(0);
+				$('#textCodeCollaborator').val(item.EmployeeCode.trim());
+				$('#textInitials').val(item.InitialsEmplo.trim());
+				$('#textCodeNumber').val(item.NumericCode);
+				$('#textTypeSeller').val(item.fkPeopleTypeId);
+				$('#textRoster').val(0);
+				$('#textTypeSeller').val(item.fkPeopleTypeId);
+				$('#textRoster').val(item.fkVendorTypeId);
 			}
 			
-			//$('#idPeople').val(item.pkPeopleId);
 			$("#idPeople").data("pkPeopleId",item.pkPeopleId);
-			//$('#textState').val("");
-			//$('#textCountry').val("");
+			$("#idPeople").data("pkEmployeeId",item.pkEmployeeId);
 			$('.ui-dialog-titlebar').append(
 				'<div class="ui-dialog-titlebar2"><label>Edit person</label></div><img class="imgCloseModal" src="' + BASE_URL+	'assets/img/common/iconClose2.png">'
 			)
@@ -1006,6 +1010,7 @@ function CleandFieldSearchPContract(){
  */
 function clonePeople(){
 	$("#idPeople").removeData("pkPeopleId");
+	$("#idPeople").removeData("pkEmployeeId");
 	$('#textName').val("");
 	$('#textLastName').val("");
 	$('#textBirthdate').val("");
@@ -1089,8 +1094,7 @@ $(document).ready(function(){
 	*/
 });
 
-
-	$("#tablePeople").on("click", "tr", function() {
+$("#tablePeople").on("click", "tr", function() {
 		console.log($( this ));
 		//typeof($( this ).nodeValue(1).text());
 	});

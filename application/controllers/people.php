@@ -158,7 +158,7 @@ class People extends CI_Controller {
 				}
 				
 				$data = "Datos guardados";
-			}else{
+				}else{
 				
 				$idPeople = $_POST['id'];
 				
@@ -321,6 +321,37 @@ class People extends CI_Controller {
 					$cont = $cont + 1;
 				}
 				
+				if($_POST['employee']){
+					if($_POST['pkEmployeeId'] > 0){
+						$updatetEmployee = array(
+							'fkVendorTypeId'	=> $_POST['roster'],
+							'Initials'			=> $_POST['initials'],
+							'EmployeeCode'		=> $_POST['codeCollaborator'],
+							'NumericCode'		=> $_POST['codeNumber'],
+							'md_by'				=> 1,
+							'md_dt'				=> $strHoy,
+						);
+						$condicion = "pkEmployeeId = " . $_POST['pkEmployeeId'];
+						$this->people_db->update($updatetEmployee,"tblEmployee", $condicion);
+					}else{
+						$lastEmployeeId = $this->people_db->getLastIdEmployee();
+						$lastEmployeeId = $lastEmployeeId[0]->pkEmployeeId + 1;
+						$insertEmployee = array(
+							'pkEmployeeId'		=> $lastEmployeeId,
+							'fkPeopleId'		=> $_POST['id'],
+							'fkVendorTypeId'	=> $_POST['roster'],
+							'Initials'			=> $_POST['initials'],
+							'EmployeeCode'		=> $_POST['codeCollaborator'],
+							'NumericCode'		=> $_POST['codeNumber'],
+							'cr_by'				=> 1,
+							'cr_dt'				=> $strHoy,
+							'md_by'				=> 1,
+							'md_dt'				=> $strHoy,
+						);
+						$this->people_db->insert($insertEmployee,"tblEmployee");
+					}
+				}
+				
 				$data = "Saved data";
 				}
 			
@@ -480,13 +511,11 @@ class People extends CI_Controller {
 	**/
 	public function getPeopleById(){
 		if($this->input->is_ajax_request()){
-			$months = array('', 'Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic');
 			$data = $this->people_db->getPeopleById($_POST['id']);
 			$condicion = "ynEmp = 1";
 			$PeopleType = $this->people_db->getPeopleType($condicion);
 			$states = array();
 			foreach($data as $item){
-				
 				$item->birthdate = $item->BirthDayMonth . "/" .  $item->BirthDayDay . "/" . $item->BirthDayYear;
 				
 				if(is_null($item->Qualification)){
@@ -530,6 +559,9 @@ class People extends CI_Controller {
 				
 				if(is_null($item->Initials)){
 					$item->Initials = "";
+				}
+				if(is_null($item->pkEmployeeId)){
+					$item->pkEmployeeId = 0;
 				}
 				
 				if($item->pkCountryId != ""){

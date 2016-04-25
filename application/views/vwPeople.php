@@ -176,14 +176,10 @@
 				<legend>Personal information</legend>
 				<!-- nombre-->
 				<div class="row">
-				
 					<div class="small-12 large-3 columns">
-						
 						<label id="alertName" for="right-label" class="text-left">Name</label>
-						
 					</div>
 					<div class="small-12 large-9 columns">
-						
 						<input type="text" id="textName" class="round general">
 					</div>
 				</div>
@@ -526,8 +522,8 @@
 							</div>
 						</div>
 						<div class="rdoField">
-							<input type="checkbox" class="checkModalPeople" value="initials" id="checkPeopleEmployee">
-							<label for="RadioInitials">Activo</label>
+							<input type="checkbox" class="EmployeePeople" value="active" id="checkPeopleEmployee" />
+							<label for="checkPeopleEmployee">Active</label>
 						</div>
 					</div>
 				</div>
