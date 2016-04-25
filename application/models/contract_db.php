@@ -187,6 +187,45 @@ class Contract_db extends CI_Model {
         }
     }
 
+
+    public function getUnidades($filters){
+//        select
+//r.Folio,
+//r.ResConf,
+//s.StatusDesc,
+//f.FlagDesc,
+//r.Legalname,
+//p.Name, p.Lname, p.gender,r.FirstOccYear,Fp.FloorPlanDesc,u.UnitCode as FixedUnitCode, r.lastOccYear,rt.resTypeDesc,PaymentProcessDesc, r.pkResRelatedId,fi.FinMethodDesc
+//,l.languageDesc, loc.LocationDesc,rfi.listPrice,rfi.Specialdiscount,rfi.CashDiscount,rfi.NetSalePrice,rfi.Deposit,rfi.TransferAmt,rfi.PackPrice,
+//rfi.FinanceBalance, rfi.TotalFinanceAmt, rfi.DownPmtAmt,  rfi.MonthlyPmtAmt,rfi.BalanceActual,rfi.ynClosingFee,rfi.ClosingFeeAmt,rfi.OtherFeeAmt,rt.ResTypeDesc,
+//ro.OccYear,ro.NightId,u2.UnitCode,cal.Date,vw.ViewDesc,ss.SeasonDesc, oty.OccTypeDesc,r.Resconf
+//from tblres r
+//Join tblResStatus rs with(nolock) on rs.fkResid = r.pkResId
+//Join tblStatus s with(nolock) on s.pkStatusid = rs.fkStatusId
+//Join tblResType rt with(nolock) on rt.pkResTypeid = r.fkResTypeId
+//left Join tblResinvt ri with(nolock) on ri.fkResid = r.pkResId
+//left Join tblFloorPlan fp with(nolock) on fp.pkFloorPlanid = ri.fkFloorPlanId
+//left Join tblResTypeUnitType ru with(nolock) on ru.fkResTypeid = rt.pkResTypeId
+//left Join tblResfin rfi with(nolock) on rfi.fkResid = r.pkResId
+//left Join tbllocation loc with(nolock) on Loc.pkLocationid = r.fkLocationId
+//left join tblfinMethod fi with(nolock) on fi.pkFinMethodid = rfi.fkfinMethodId
+//Left Join tblResPeopleAcc rp with(nolock) on rp.fkResid = r.pkResId and rp.ynPrimaryPeople =1
+//left join tblPeople p with(nolock) on p.pkPeopleid = rp.fkPeopleId
+//left Join tblResOcc ro with(nolock) on ro.fkResid = r.pkResId
+//left join tblOccType oty with(nolock) on oty.pkOccTypeId = ro.fkOccTypeId
+//left join tblUnit u with(nolock) on u.pkUnitId = ri.fkUnitId
+//left join tblResType rty with(nolock) on  rty.pkResTypeId = ro.fkResTypeId
+//left Join tblView  vw with(nolock) on vw.pkViewid = ri.fkViewId
+//left join tblSeason ss with(nolock) on ss.pkSeasonid = ri.fkSeassonId
+//left join tblUnit u2 with(nolock) on u2.pkUnitid = ri.fkUnitId
+//left join tblCalendar cal with(nolock) on cal.pkCalendarid = ro.fkCalendarId
+//left Join tblResflag rf with(nolock) on rf.fkResid = r.pkResId and rf.ynActive= 1
+//left Join tblFlag f with(nolock) on f.pkflagId = rf.fkFlagId
+//left Join tblLanguage l with(nolock) on r.fkLanguageid = l.pkLanguageId
+//left Join tblPaymentProcessType  ppt with(nolock) on ppt.pkPaymentProcessTypeid = r.fkPaymentProcessTypeId
+//where r.pkresId =8
+    }
+
     public function getTours($filters){
         $sql = "";
         $this->db->select('t.pkTourId, p.pkPeopleId, p.Name, p.LName,  CONVERT(VARCHAR(11),t.TourDate,106) as date');

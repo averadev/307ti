@@ -98,3 +98,38 @@
         </div>
     </div>
 </div>
+<script>
+    function getUnidades(){
+
+        showLoading('#contracts',true);
+        var filters = getFiltersCheckboxs('filtro_contrato');
+        var arrayDate = ["startDateContract", "endDateContract"];
+        var dates = getDates(arrayDate);
+        var arrayWords = ["stringContrat"];
+        var words = getWords(arrayWords);
+
+        $.ajax({
+            data:{
+                filters: filters,
+                dates: dates,
+                words: words
+            },
+            type: "POST",
+            url: "contract/getContratos",
+            dataType:'json',
+            success: function(data){
+                showLoading('#contracts',false);
+                if(data != null){
+                    alertify.success("Found "+ data.length);
+                    drawTable(data, 'getDetalleContratoByID', "details", "contracts");
+                }else{
+                    $('#contractstbody').empty();
+                    alertify.error("No data found");
+                }
+            },
+            error: function(){
+                alertify.error("Try again");
+            }
+        });
+    }
+</script>

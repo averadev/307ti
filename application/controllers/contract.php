@@ -23,7 +23,7 @@ class Contract extends CI_Controller {
 	}
 
 	public function saveContract(){
-		if($this->input->is_ajax_request()){
+//		if($this->input->is_ajax_request()){
 
 			$Contract = [
 				"fkResTypeId"               => $this->contract_db->selectRestType(),
@@ -41,15 +41,19 @@ class Contract extends CI_Controller {
                 "fkTourId"                  => $_POST['tourID'],
                 "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId(),
                 "selectInvtTypeId"          => $this->contract_db->selectInvtTypeId(),
+				"fkStatusId"				=> 1,
                 "ynActive"                  => 1,
                 "CrBy"                      => 123
 			];
+
+			var_dump($Contract);
             //$idContrato = $this->contract_db->insertReturnId('tblRes', $Contract);
 
 			//echo json_encode($create);
 			//var_dump($_POST);
-		}
+//		}
 	}
+
 
 	public function modal(){
 		if($this->input->is_ajax_request()) {
@@ -61,6 +65,15 @@ class Contract extends CI_Controller {
 			$this->load->view('unities/unitiesDialog.php');
 		}
 	}
+
+	public function getUnidades(){
+		if($this->input->is_ajax_request()) {
+			$sql = $this->getFilters($_POST, 'Date', 'Contract');
+			$unidades = $this->contract_db->getUnidades($sql);
+			echo json_encode($unidades);
+		}
+	}
+
 	public function insertContrat($Contract){
 		return $this->contract_db->insertReturnId($Contract,"tblContract");;
 	}

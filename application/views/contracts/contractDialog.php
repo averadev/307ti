@@ -53,7 +53,7 @@
                         <div class="small-12 columns">
                             <a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>
                         </div>
-                        <table id="tablePeople" width="100%">
+                        <table id="tablePeopleSelected" width="100%">
                             <thead>
                             <tr>
                                 <th class="cellEdit" >ID</th>
@@ -96,8 +96,8 @@
                         <table id="tableUnidades" width="100%">
                             <thead>
                             <tr>
-                                <th class="cellEdit" >Codigo</th>
-                                <th class="cellGeneral">Descripcion</th>
+                                <th class="cellEdit" >Code</th>
+                                <th class="cellGeneral">Description</th>
                                 <th class="cellGeneral">Precio</th>
                                 <th class="cellGeneral" ># de Semana</th>
                                 <th class="cellGeneral" >Primer año OCC</th>
@@ -113,7 +113,7 @@
                                 <td>$38,000.00</td>
                                 <td>#1</td>
                                 <td>2016</td>
-                                <td><input type="radio" name="people" value="2"></td>
+                                <td>2017</td>
                                 <td><input type="radio" name="people" value="3"></td>
                                 <td><button type="button" class="alert button"><i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i></button></td>
                             </tr>
@@ -300,11 +300,13 @@
         showModals('dialog-tourID', cleanAddPeople);
     });
     $('#btnAddPeople').click(function(){
-        ajaxHTML('dialog-People', 'people/modalPeople');
+        $('#dialog-People').empty();
+        ajaxHTML('dialog-People', 'people/');
         showModals('dialog-People', cleanAddPeople);
     });
     $('#btnAddUnidades').click(function(){
         ajaxHTML('dialog-Unidades', 'contract/modalUnidades');
         showModals('dialog-Unidades', cleanAddUnidades);
     });
+
 </script>

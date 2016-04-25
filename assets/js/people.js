@@ -1087,6 +1087,19 @@ $(document).ready(function(){
 		}
 	});
 	*/
-	
- 
 });
+
+
+	$("#tablePeople").on("click", "tr", function() {
+		console.log($( this ));
+		//typeof($( this ).nodeValue(1).text());
+	});
+
+//
+// $("table tr:first").clone().find("input").each(function() {
+// 	$(this).attr({
+// 		'id': function(_, id) { return id + i },
+// 		'name': function(_, name) { return name + i },
+// 		'value': ''
+// 	});
+// }).end().appendTo("table");
