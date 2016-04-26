@@ -224,7 +224,7 @@ function drawTable(data, funcion, cadena, table){
     }
     $('#' + table + "thead" ).html(headHTML);
     $('#' + table + "tbody" ).html(bodyHTML);
-    //pluginTables(table);
+    pluginTables(table);
 }
 
 function pluginTables(table) {

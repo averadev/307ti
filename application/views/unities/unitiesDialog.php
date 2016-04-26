@@ -12,53 +12,54 @@
         </div>
         <div class="box-body" style="display: block;">
             <div class="row">
-                <fieldset class="large-6 columns">
-                    <legend>Elige un filtro</legend>
-                    <input type="radio" name="filter_unities" value="personaId" id="personaId" required><label for="personaId">Persona ID</label>
-                    <input checked type="radio" name="filter_unities" value="nombre" id="nombre"><label for="nombre">Nombre</label>
-                    <input type="radio" name="filter_unities" value="apellido" id="apellido"><label for="apellido">Apellido</label>
-                    <input type="radio" name="filter_unities" value="reservacionId" id="reservacionId"><label for="reservacionId">Reservación ID</label>
-                </fieldset>
-                <fieldset class="large-6 columns">
-                    <legend>Select Period</legend>
-                    <div class="row">
-                        <div class="medium-6 columns">
-                            <input id="startDate" class="round" type="date" placeholder="Fecha Inicial">
-                        </div>
-                        <div class="medium-6 columns">
-                            <input id="endDate" class="round" type="date"  placeholder="Fecha final">
-                        </div>
+                <!-- Property-->
+                <div class="row">
+                    <div class="small-3 columns">
+                        <label for="property" class="text-left">Property</label>
                     </div>
-                </fieldset>
+                    <div class="small-9 columns">
+                        <select type="text" id="property" name="property" class="general" required></select>
+                    </div>
+                </div>
+                <!-- Unit Type-->
+                <div class="row">
+                    <div class="small-3 columns">
+                        <label for="unitType" class="text-left">Unit Type</label>
+                    </div>
+                    <div class="small-9 columns">
+                        <select type="text" id="unitType" name="unitType" class="general" required></select>
+                    </div>
+                </div>
+                <!-- Frequency-->
+                <div class="row">
+                    <div class="small-3 columns">
+                        <label for="frequency" class="text-left">Frequency</label>
+                    </div>
+                    <div class="small-9 columns">
+                        <select type="text" id="frequency" name="frequency" class="general" required></select>
+                    </div>
+                </div>
+                <!-- Season-->
+                <div class="row">
+                    <div class="small-3 columns">
+                        <label for="season" class="text-left">Season</label>
+                    </div>
+                    <div class="small-9 columns">
+                        <select type="text" id="season" name="season" class="general" required></select>
+                    </div>
+                </div>
             </div>
             <div class="row">
-                <div class="medium-6 columns">
-                    <fieldset>
-                        <legend><input id="busquedaAvanazada" type="checkbox">Advanced search</legend>
-
-                        <div class="row" id="avanzada" style="display: none;">
-                            <div class="large-12 columns slide">
-                                <input type="radio" name="filter_unities" value="codEmpleado" id="codEmpleado" required><label for="codEmpleado">Codigo de Empleado</label>
-                                <input type="radio" name="filter_unities" value="folio" id="folio"><label for="folio">Folio</label>
-                                <input type="radio" name="filter_unities" value="unidad" id="unidad"><label for="unidad">Unidad ID</label>
-                                <input type="radio" name="filter_unities" value="email" id="email"><label for="email">Email</label>
-                                <input type="radio" name="filter_unities" value="contrato" id="contrato"><label for="contrato">Contrato ID</label>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="medium-6 columns">
+                <div class="medium-12columns">
                     <div class="row">
                         <div class="large-12 columns">
-                            <div class="row collapse">
-                                <div class="small-10 columns">
-                                    <input id="stringContrat" type="text" class="txtSearch" placeholder="Search Field" name="search"  required="">
+                            <div class="row">
+                                <div class="small-6 columns">
+
                                 </div>
-                                <div class="small-1 columns">
-                                    <a  id="btnfind" href="#" class="button postfix"><i class="fa fa-search"></i></a>
-                                </div>
-                                <div class="small-1 columns">
-                                    <a id="btnCleanWord"  href="#" class="button postfix"><i class="fa fa-trash"></i></a>
+                                <div class="small-6 columns">
+                                    <a  id="btngetUnidades" href="#" class="button postfix"><i class="fa fa-search"></i></a>
+<!--                                    <a id="btnClearSelects"  href="#" class="button postfix"><i class="fa fa-trash"></i></a>-->
                                 </div>
                             </div>
                         </div>
@@ -77,10 +78,9 @@
         </div>
         <div class="box-body" style="display: block;">
             <div class=" table" >
-                <table id="tblContrat" style="width:100%;">
-                    <thead id="tblContratoshead">
-                    </thead>
-                    <tbody id="tblContratosbody"></tbody>
+                <table id="tblUnidades" style="width:100%;">
+                    <thead id="Unidadesthead"></thead>
+                    <tbody id="Unidadestbody"></tbody>
                 </table>
             </div>
             <div class="pagina" >
@@ -99,29 +99,44 @@
     </div>
 </div>
 <script>
-    function getUnidades(){
 
-        showLoading('#contracts',true);
-        var filters = getFiltersCheckboxs('filtro_contrato');
-        var arrayDate = ["startDateContract", "endDateContract"];
-        var dates = getDates(arrayDate);
-        var arrayWords = ["stringContrat"];
-        var words = getWords(arrayWords);
+    ajaxSelects('contract/getProperties','try again', generalSelects, 'property');
+    ajaxSelects('contract/getUnitTypes','try again', generalSelects, 'unitType');
+    ajaxSelects('contract/getFrequencies','try again', generalSelects, 'frequency');
+    ajaxSelects('contract/getSeasons','try again', generalSelects, 'season');
+
+    $('#btnClearSelects').click(function () {
+        $('#property').empty();
+        $('#unitType').empty();
+        $('#frequency').empty();
+        $('#season').empty();
+    });
+
+
+    $('#btngetUnidades').click(function(){
+        getUnidades();
+    });
+
+    $('#busquedaAvanazadaUnidades').click(function(){
+        $("#avanzadaUnidades").slideToggle("slow");
+    });
+
+
+
+    function getUnidades(){
 
         $.ajax({
             data:{
-                filters: filters,
-                dates: dates,
-                words: words
+                words: "1"
             },
             type: "POST",
-            url: "contract/getContratos",
+            url: "contract/getUnidades",
             dataType:'json',
             success: function(data){
-                showLoading('#contracts',false);
                 if(data != null){
+                    showLoading('#Unidades',false);
                     alertify.success("Found "+ data.length);
-                    drawTable(data, 'getDetalleContratoByID', "details", "contracts");
+                    drawTable(data, 'add', "details", "Unidades");
                 }else{
                     $('#contractstbody').empty();
                     alertify.error("No data found");
@@ -132,4 +147,24 @@
             }
         });
     }
+
+    $("#tblUnidades").on("click", "tr", function() {
+        var valores = [];
+        var fullArray = $(this).find("td");
+        valores.push(fullArray.eq(1).html());
+        valores.push(fullArray.eq(2).html());
+        valores.push(fullArray.eq(3).html());
+        valores.push(fullArray.eq(4).html());
+        console.log(valores);
+        createTable(valores);
+    });
+
+    function createTable(array) {
+        table = "";
+        for(var i = 0; i<array.length; i++){
+            table +='<td>'+array[i]+'</td>';
+        }
+        document.getElementById("tableUnidades").innerHTML += table;
+    }
+
 </script>

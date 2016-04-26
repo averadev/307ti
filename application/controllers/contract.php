@@ -14,6 +14,7 @@ class Contract extends CI_Controller {
 		$this->load->helper('url');
 		$this->load->database('default');
 		$this->load->model('contract_db');
+		//$this->load->library('nativesessions');
 	}
     
 	public function index(){
@@ -53,8 +54,41 @@ class Contract extends CI_Controller {
 			//var_dump($_POST);
 //		}
 	}
+//////////////////////////////////////////////////////
+	//busqueda de Unidades
+	public function getProperties(){
+		if($this->input->is_ajax_request()) {
+			$properties = $this->contract_db->selectProperties();
+			echo json_encode($properties);
+		}
+	}
+	public function getUnitTypes(){
+		if($this->input->is_ajax_request()) {
+			$properties = $this->contract_db->selectUnitypes();
+			echo json_encode($properties);
+		}
+	}
+	public function getFrequencies(){
+		if($this->input->is_ajax_request()) {
+			$properties = $this->contract_db->selectFrequencies();
+			echo json_encode($properties);
+		}
+	}
+	public function getSeasons(){
+		if($this->input->is_ajax_request()) {
+			$properties = $this->contract_db->selectSeasons();
+			echo json_encode($properties);
+		}
+	}
+	public function getUnidades(){
+		if($this->input->is_ajax_request()) {
+			//$sql = $this->getFilters($_POST, 'Date', 'Contract');
+			$unidades = $this->contract_db->getUnidades();
+			echo json_encode($unidades);
+		}
+	}
 
-
+//////////////////////////////////////////////////////
 	public function modal(){
 		if($this->input->is_ajax_request()) {
 			$this->load->view('contracts/contractDialog.php');
@@ -66,13 +100,6 @@ class Contract extends CI_Controller {
 		}
 	}
 
-	public function getUnidades(){
-		if($this->input->is_ajax_request()) {
-			$sql = $this->getFilters($_POST, 'Date', 'Contract');
-			$unidades = $this->contract_db->getUnidades($sql);
-			echo json_encode($unidades);
-		}
-	}
 
 	public function insertContrat($Contract){
 		return $this->contract_db->insertReturnId($Contract,"tblContract");;
