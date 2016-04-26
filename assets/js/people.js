@@ -1094,8 +1094,6 @@ $(document).ready(function(){
 	*/
 });
 
-<<<<<<< HEAD
-
 	$("#tablePeople").on("click", "tr", function() {
 		var valores = [];
 		var fullArray = $(this).find("td");
@@ -1108,11 +1106,9 @@ $(document).ready(function(){
 			createTable(valores);
 		}
 
-=======
 $("#tablePeople").on("click", "tr", function() {
 		console.log($( this ));
 		//typeof($( this ).nodeValue(1).text());
->>>>>>> origin/master
 	});
 	function createTable(array) {
 		table = "";
