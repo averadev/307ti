@@ -143,6 +143,8 @@ Class people_db extends CI_MODEL
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');
 		$this->db->select('tblState.pkStateId, tblState.StateCode, tblState.StateDesc');
 		$this->db->select('tblCountry.pkCountryId, tblCountry.CountryCode, tblCountry.CountryDesc, tblCountry.Nationality as CountryNac');
+		$this->db->select('tblEmployee.pkEmployeeId, tblEmployee.fkVendorTypeId, tblEmployee.Initials as InitialsEmplo');
+		$this->db->select('tblEmployee.EmployeeCode, tblEmployee.NumericCode, tblEmployee.fkVendorTypeId');
 		$this->db->select('tblPeopleType.ynEmp');
         $this->db->from('tblPeople');
 		$this->db->join('tblPeopleAddress', 'tblPeopleAddress.fkPeopleId = tblPeople.pkPeopleId', 'left');
@@ -150,6 +152,7 @@ Class people_db extends CI_MODEL
 		$this->db->join('tblState', 'tblState.pkStateId = tblAddress.FkStateId', 'left');
 		$this->db->join('tblCountry', 'tblCountry.pkCountryId = tblAddress.fkCountryId', 'left');
 		$this->db->join('tblPeopleType', 'tblPeopleType.pkPeopleTypeId = tblPeople.fkPeopleTypeId', 'left');
+		$this->db->join('tblEmployee', 'tblEmployee.fkPeopleId = tblPeople.pkPeopleId', 'left');
 		$this->db->where('tblPeople.pkPeopleId = ', $id);
 		return  $this->db->get()->result();
 		
@@ -288,6 +291,14 @@ Class people_db extends CI_MODEL
 		$this->db->from('tblState');
 		$this->db->where('tblState.fkCountryId = ', $idCountry);
 		return  $this->db->get()->result();
+	}
+	
+	/**
+	*	obtiene la id de una tabla employee
+	**/
+	public function getLastIdEmployee(){
+		$query = $this->db->query("SELECT TOP 1 tblEmployee.pkEmployeeId FROM tblEmployee ORDER BY tblEmployee.pkEmployeeId DESC");
+		return  $query->result();
 	}
 	
 	/**

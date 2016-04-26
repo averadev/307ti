@@ -126,6 +126,73 @@ input.roundRight{
     height: 80px;
 }
 
+.menu-config{
+	float:right;
+	/*width:100px;*/
+	height:40px;
+	background:#EFEFEF;
+	margin-top:2px;
+	margin-right:10px;
+	border:#A1ACB2 solid 1px;
+	border-radius:3px;
+}
+
+.menu-config img{
+	margin-top:2px;
+	margin-left:5px;
+	margin-right:5px;
+	height:35px;
+	float:left;
+}
+
+.menu-config p{
+	line-height: 37px;
+	float:left;
+	font-size:14px;
+	margin-left:5px;
+	margin-right:10px;
+}
+
+.menu-config span{
+	line-height: 30px;
+	float:left;
+	font-size:20px;
+	margin-left:5px;
+	margin-right:10px;
+	padding-left:5px;
+	padding-right:5px;
+	cursor:pointer;
+}
+
+.menu-config-dropdown{
+	position:absolute;
+	width:200px;
+	top:42px;
+	z-index:1001;
+	right:17px;
+	display:none;
+}
+
+.menu-config-dropdown ul{
+	list-style:none;
+	border:#c7c7c7 solid 1px;
+}
+
+.menu-config-dropdown ul a{
+	color:black;
+}
+
+.menu-config-dropdown ul li{
+	padding-left:10px;
+	padding-top:4px;
+	padding-bottom:4px;
+	border-bottom:#c7c7c7 solid 1px;
+}
+
+.menu-config-dropdown ul li:hover{
+	background:#c7c7c7;
+}
+
 .tabs dd > a, .tabs .tabs-title > a{
     font-size: 14px;
     margin: 8px 5px 0 0;

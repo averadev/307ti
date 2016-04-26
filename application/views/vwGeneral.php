@@ -22,6 +22,7 @@
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script type="text/javascript" src="<?php echo base_url().JS; ?>foundation.min.js"></script>
+		
         <script type="text/javascript" src="<?php echo base_url().JS; ?>general.js"></script>
         <script type="text/javascript" src="<?php echo base_url().JS; ?>/alertify/alertify.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>paginacion/jquery.jqpagination.js"></script>
@@ -39,6 +40,21 @@
                 <div href="#" class="btn-menu btn-menu-sel"></div>
             </div>
             <div class="menu-opt logo"><img src="<?php echo base_url().IMG; ?>logo/demo.png"/></div>
+			<!--<a  href="<?php echo base_url(); ?>login/logout"></a>-->
+			<div class="menu-config">
+				<img src="<?php echo base_url().IMG; ?>common/userUnknown.png" />
+				<p><?php echo $this->nativesessions->get('username'); ?></p>
+				<span id="btnDropdownMenu">
+					<i class="fa fa-sort-desc"></i>
+				</span>
+				
+			</div>
+			<div class="menu-config-dropdown">
+				<ul>
+					<a  href="<?php echo base_url(); ?>login/logout"><li>logout</li></a>
+				</ul>
+				
+			</div>
         </nav>
         
         <nav class="top-title" data-topbar>
@@ -88,5 +104,18 @@
 <?php } ?>
 
 <script>
+//muestra o esconde el menu de configuraciones
+//$(document).on('click', '#btnDropdownMenu', function(e) {
+$('#btnDropdownMenu').on('click', function(e) {
+	if ($('.menu-config-dropdown').is(':hidden')){	
+		$('.menu-config-dropdown').show();
+	}else{
+		$('.menu-config-dropdown').hide();
+	}
+	e.stopPropagation();
+});
 
+$('html').on('click', function() {
+	$('.menu-config-dropdown').hide();
+});
 </script>
