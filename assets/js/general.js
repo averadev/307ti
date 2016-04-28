@@ -29,8 +29,9 @@ $(function() {
         if(isNew){
             $('.tabs-title').removeClass('active');
             var screen = $(this).attr('attr-screen');
+			console.log($(this).text().trim())
             var iconClose = '<img class="iconCloseTab" src="'+BASE_URL+'assets/img/common/iconClose.png" />'
-            $('.tabs').append( '<li class="tabs-title active" attr-screen="'+screen+'"><a>'+$(this).html()+'</a>'+iconClose+'</li>' );
+            $('.tabs').append( '<li class="tabs-title active" attr-screen="'+screen+'"><a>'+$(this).text().trim()+'</a>'+iconClose+'</li>' );
             $(".module").addClass("moduleHide");
             addTabEvent();
             loadModule(screen);

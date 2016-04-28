@@ -69,9 +69,18 @@
         
         <div class="menu-section">
             <div class="menu-content">
-                <div class="menu-sel" attr-screen="people">People</div>
-                <div class="menu-sel" attr-screen="contract">Contract</div>
-                <div class="menu-sel" attr-screen="inventory">Inventary</div>
+                <div class="menu-sel" attr-screen="people">
+					<span class="icon-menu-sel"><i class="fa fa-male"></i></span>
+					<div class="label-menu-sel">People</div>
+				</div>
+                <div class="menu-sel" attr-screen="contract">
+					<span class="icon-menu-sel"><i class="fa fa-file-excel-o"></i></span>
+					<div class="label-menu-sel">Contract</div>
+				</div>
+                <div class="menu-sel" attr-screen="inventory">
+					<span class="icon-menu-sel"><i class="fa fa-money"></i></span>
+					<div class="label-menu-sel">Inventary</div>
+				</div>
                 <div class="menu-fix">&nbsp;</div>
             </div>
         </div>

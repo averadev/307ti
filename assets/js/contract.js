@@ -95,9 +95,6 @@ $("#busquedaAvanazada").click(function(){ $("#avanzada").slideToggle("slow");});
 	// 	}
 	// });	
 
-
-
-
 function showModals(div, funcion){
 
 	maxHeight = screen.height * .75;

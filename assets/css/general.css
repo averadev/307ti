@@ -97,7 +97,7 @@ input.roundRight{
     padding: 0 20px 0 240px;
 }
 .menu-section{
-    z-index: 1000;
+    z-index: 100;
     float: left;
     position: fixed;
     height: 100%;
@@ -108,7 +108,7 @@ input.roundRight{
     height: 100%;
     width: 220px;
     overflow-y: auto;
-    padding: 20px 0 0 20px;
+    padding: 20px 20px 0 20px;
     /*background-color: #c7c7c7;*/
 	background-color: #FFFFFF;
 	border-right: solid 4px #183a59;
@@ -116,15 +116,36 @@ input.roundRight{
 }
 .menu-sel{
     cursor: pointer;
-    padding-top: 12px;
+    padding: 6px 0px;
     margin-bottom: 20px;
     height: 40px;
-    width: 180px;
-    color: #3b3b3b;
-    font-size: 14px;
-    text-align: center;
+    width: 100%;
+	 font-size: 16px;
+	font-weight:bold;
+	
+   /* text-align: center;*/
     background-color: #aaaaaa;
+	background: #EDEDED;
+   border: 1px solid rgba(20,53,80,0.14);
 }
+
+.icon-menu-sel{
+	float:left;
+	font-size:22px;
+	margin-top:-3px;
+	margin-left:10px;
+	width:30px;
+}
+
+.label-menu-sel{
+	float:left;
+	/*width:100%;*/
+	text-align:center;
+	
+	margin-top:2px;
+	margin-left:15px;
+}
+
 .menu-sel:hover{
     color: #ffffff;
     background-color: #183a59;
