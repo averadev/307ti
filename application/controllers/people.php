@@ -18,6 +18,7 @@ class People extends CI_Controller {
 
 	public function index(){
 		$data['country'] = $this->people_db->getCountry();
+		$data['nationality'] = $this->people_db->getNationality();
         $this->load->view('vwPeople',$data);
 	}
 	
@@ -132,11 +133,15 @@ class People extends CI_Controller {
 				$phone = json_decode(stripslashes($_POST['phone']));
 				$isPrimary = 1;
 				foreach($phone as $item){
+					
+					$AreaCode = substr($item, 0, 4);
+					$PhoneDesc = substr($item, 4);
+					
 					$insertPhone = array(
 						'fkPhoneTypeId'		=> 1,
 						'CountryCode'		=> $_POST['country'],
-						'AreaCode'			=> $_POST['state'],
-						'PhoneDesc'			=> $item,
+						'AreaCode'			=> $AreaCode,
+						'PhoneDesc'			=> $PhoneDesc,
 						'ynActive'			=> 1,
 						'CrBy'				=> 1,
 						'CrDt'				=> $strHoy,
@@ -284,11 +289,15 @@ class People extends CI_Controller {
 				$isPrimary = 1;
 				$cont = 0;
 				foreach($phone as $item){
+					
+					$AreaCode = substr($item, 0, 4);
+					$PhoneDesc = substr($item, 4);
+					
 					if(isset($isTrue[$cont]->pkPhoneId)){
 						$updatePhone = array(
 							'CountryCode'		=> $_POST['country'],
-							'AreaCode'			=> $_POST['state'],
-							'PhoneDesc'			=> $item,
+							'AreaCode'			=> $AreaCode,
+							'PhoneDesc'			=> $PhoneDesc,
 							'MdBy'				=> 1,
 							'MdDt'				=> $strHoy,
 						);
@@ -298,8 +307,8 @@ class People extends CI_Controller {
 						$insertPhone = array(
 							'fkPhoneTypeId'		=> 1,
 							'CountryCode'		=> $_POST['country'],
-							'AreaCode'			=> $_POST['state'],
-							'PhoneDesc'			=> $item,
+							'AreaCode'			=> $AreaCode,
+							'PhoneDesc'			=> $PhoneDesc,
 							'ynActive'			=> 1,
 							'CrBy'				=> 1,
 							'CrDt'				=> $strHoy,
@@ -324,7 +333,7 @@ class People extends CI_Controller {
 				if($_POST['employee']){
 					if($_POST['pkEmployeeId'] > 0){
 						$updatetEmployee = array(
-							'fkVendorTypeId'	=> $_POST['roster'],
+							'fkVendorTypeId'	=> $typePeople,
 							'Initials'			=> $_POST['initials'],
 							'EmployeeCode'		=> $_POST['codeCollaborator'],
 							'NumericCode'		=> $_POST['codeNumber'],
@@ -339,7 +348,7 @@ class People extends CI_Controller {
 						$insertEmployee = array(
 							'pkEmployeeId'		=> $lastEmployeeId,
 							'fkPeopleId'		=> $_POST['id'],
-							'fkVendorTypeId'	=> $_POST['roster'],
+							'fkVendorTypeId'	=> $typePeople,
 							'Initials'			=> $_POST['initials'],
 							'EmployeeCode'		=> $_POST['codeCollaborator'],
 							'NumericCode'		=> $_POST['codeNumber'],
@@ -435,15 +444,16 @@ class People extends CI_Controller {
 				$arrayData[$cont]['Qualification'] = $item->Qualification;;
 			}
 			
-			$arrayData[$cont]['Street'] = $item->Street1;
-			if(is_null($item->Street1) && is_null($item->Street2)){
-				$arrayData[$cont]['Street']= "";
-			}else if(is_null($item->Street1) && is_null(!$item->Street2)){
-				$arrayData[$cont]['Street'] = $item->Street2;
-			}else if(is_null(!$item->Street1) && is_null($item->Street2)){
-				$arrayData[$cont]['Street'] = $item->Street1;
+			if(is_null($item->Street1)){
+				$arrayData[$cont]['Street'] = "";
 			}else{
-				$arrayData[$cont]['Street'] = $item->Street1 . ", " . $item->Street2;
+				$arrayData[$cont]['Street'] = $item->Street1;
+			}
+			
+			if(is_null($item->Street2)){
+				$arrayData[$cont]['Street2'] = "";
+			}else{
+				$arrayData[$cont]['Street2'] = $item->Street2;
 			}
 			
 			if(is_null($item->City)){
@@ -472,32 +482,27 @@ class People extends CI_Controller {
 			
 			$phone = $this->people_db->getPeoplePhone($item->ID);
 			
-			if(isset($phone[0]->PhoneDesc)) {
-				$arrayData[$cont]['phone1'] = $phone[0]->PhoneDesc;
-			}else{
-				$arrayData[$cont]['phone1'] = "";
-			}
-			if(isset($phone[1]->PhoneDesc)) {
-				$arrayData[$cont]['phone2'] = $phone[1]->PhoneDesc;
-			}else{
-				$arrayData[$cont]['phone2'] = "";
-			}
-			if(isset($phone[2]->PhoneDesc)) {
-				$arrayData[$cont]['phone3'] = $phone[2]->PhoneDesc;
-			}else{
-				$arrayData[$cont]['phone3'] = "";
+			for($i = 0;$i<3;$i++){
+				$numPhone = "phone" . ($i + 1);
+				$phoneDesc = "";
+				$areaCode = "";
+				if(isset($phone[$i]->AreaCode)) {
+					$areaCode = $phone[$i]->AreaCode;
+				}
+				if(isset($phone[$i]->PhoneDesc)) {
+					$phoneDesc = $phone[$i]->PhoneDesc;
+				}
+				$arrayData[$cont][$numPhone] = $areaCode . $phoneDesc;
 			}
 			
 			$email = $this->people_db->getPeopleEmail($item->ID);
-			if(isset($email[0]->EmailDesc)) {
-				$arrayData[$cont]['email'] = $email[0]->EmailDesc;
-			}else{
-				$arrayData[$cont]['email'] = "";
-			}
-			if(isset($email[1]->EmailDesc)) {
-				$arrayData[$cont]['email2'] = $email[1]->EmailDesc;
-			}else{
-				$arrayData[$cont]['email2'] = "";
+			for($i = 0;$i<2;$i++){
+				$numEmail = "email" . ($i + 1);
+				$emailDesc = "";
+				if(isset($email[$i]->EmailDesc)) {
+					$emailDesc = $email[$i]->EmailDesc;
+				}
+				$arrayData[$cont][$numEmail] = $emailDesc;
 			}
 			
 			$cont = $cont + 1;
@@ -516,6 +521,28 @@ class People extends CI_Controller {
 			$PeopleType = $this->people_db->getPeopleType($condicion);
 			$states = array();
 			foreach($data as $item){
+				
+				
+				/*foreach($item as $subItem){
+					echo $subItem;
+					echo "</br>";
+					if(is_null($subItem)){
+						//echo "hola";
+						//echo "</br>";
+						$subItem = "";
+					}
+				}*/
+				
+				/*foreach($item as $subItem){
+					if(is_null($subItem)){
+						echo "hola";
+						echo "</br>";
+						//$subItem = "";
+					}
+				}*/
+				
+				//$item->Nationality = "";
+				
 				$item->birthdate = $item->BirthDayMonth . "/" .  $item->BirthDayDay . "/" . $item->BirthDayYear;
 				
 				if(is_null($item->Qualification)){
@@ -523,11 +550,7 @@ class People extends CI_Controller {
 				}
 				
 				if(is_null($item->Nationality)){
-					if(is_null($item->CountryNac)){
-						$item->Nationality = "";
-					}else{
-						$item->Nationality = $item->CountryNac;
-					}
+					$item->Nationality = "";
 				}
 				
 				if(is_null($item->Street1)){
@@ -569,33 +592,28 @@ class People extends CI_Controller {
 				}
 				
 				$phone = $this->people_db->getPeoplePhone($item->pkPeopleId);
-				if(isset($phone[0]->PhoneDesc)) {
-					$item->phone1 = $phone[0]->PhoneDesc;
-				}else{
-					$item->phone1 = "";
-				}
-				if(isset($phone[1]->PhoneDesc)) {
-					$item->phone2 = $phone[1]->PhoneDesc;
-				}else{
-					$item->phone2 = "";
-				}
-				if(isset($phone[2]->PhoneDesc)) {
-					$item->phone3 = $phone[2]->PhoneDesc;
-				}else{
-					$item->phone3 = "";
-				}
-				$email = $this->people_db->getPeopleEmail($item->pkPeopleId);
-				if(isset($email[0]->EmailDesc)) {
-					$item->email1 = $email[0]->EmailDesc;
-				}else{
-					$item->email1 = "";
-				}
-				if(isset($email[1]->EmailDesc)) {
-					$item->email2 = $email[1]->EmailDesc;
-				}else{
-					$item->email2 = "";
+				for($i = 0;$i<3;$i++){
+					$numPhone = "phone" . ($i + 1);
+					$phoneDesc = "";
+					$areaCode = "";
+					if(isset($phone[$i]->AreaCode)) {
+						$areaCode = $phone[$i]->AreaCode;
+					}
+					if(isset($phone[$i]->PhoneDesc)) {
+						$phoneDesc = $phone[$i]->PhoneDesc;
+					}
+					$item->$numPhone = $areaCode . $phoneDesc;
 				}
 				
+				$email = $this->people_db->getPeopleEmail($item->pkPeopleId);
+				for($i = 0;$i<2;$i++){
+					$numEmail = "email" . ($i + 1);
+					$emailDesc = "";
+					if(isset($email[$i]->EmailDesc)) {
+						$emailDesc = $email[$i]->EmailDesc;
+					}
+					$item->$numEmail = $emailDesc;
+				}
 			}
 			echo json_encode(array( 'item' => $data, 'peopleType' => $PeopleType, 'states' => $states));
 		}

@@ -41,6 +41,8 @@ input.round, select.round{
 input.roundRight{
 	border-top-right-radius:5px;
 	border-bottom-right-radius:5px;
+	background: #EDEDED;
+    border-bottom: 1px solid #D9DEE4;
 }
 
 /**
@@ -53,6 +55,8 @@ input.roundRight{
 	padding-bottom:0;
 	padding-left:0;
     background-color: #c7c7c7;
+	background: #EDEDED;
+    border-bottom: 1px solid #D9DEE4;
 }
 .menu-opt{
     float: left;
@@ -105,7 +109,10 @@ input.roundRight{
     width: 220px;
     overflow-y: auto;
     padding: 20px 0 0 20px;
-    background-color: #c7c7c7;
+    /*background-color: #c7c7c7;*/
+	background-color: #FFFFFF;
+	border-right: solid 4px #183a59;
+	border-right: 1px solid rgba(20,53,80,0.14);
 }
 .menu-sel{
     cursor: pointer;
@@ -289,10 +296,29 @@ input.roundRight{
     /*padding: 10px 0 0 40px;*/
 	padding-left:5px;
     float: left;
+	margin-bottom:0;
+	padding-bottom:0;
 }
 .rowSearch{
     margin: 0 0 20px 20px;
 	margin-bottom:0;
+}
+
+.rdoField input[type=radio], .rdoField input[type=checkbox]{
+	margin-bottom:0;
+}
+
+.checkFilter{
+	margin-bottom:0;
+}
+
+.rowSearch{
+    margin: 0 0 20px 20px;
+	margin-bottom:0;
+}
+
+.legendSearch{
+	margin:0;
 }
 
 .groupBtnSearch{
@@ -300,9 +326,7 @@ input.roundRight{
 }
 
 .btnSearch{
-	border-color:#FFFFFF;
-	background:#183a59;
-	font-size:0.8rem;
+	margin-bottom:0;
 }
 
 .txtSearch{
@@ -310,6 +334,7 @@ input.roundRight{
 	border-radius:0;
 	border-top-left-radius:5px;
 	border-bottom-left-radius:5px;
+	margin-bottom:0
 }
 
 /**
@@ -837,6 +862,12 @@ label.error{
   	border: 1px solid #808080;
   	border-top: 0px; 
 }
+
+.box .box-filter{
+  	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
 .box .box-body p {
     font-size: 13px !important; 
 }

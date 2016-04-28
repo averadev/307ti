@@ -14,13 +14,13 @@
 				</h3>
 			</div>
 			<!-- body search-->
-			<div class="box-body" style="display: block;">
+			<div class="box-body box-filter" style="display: block;">
 				<!--filter-->
 				<div class="row">
 					<!-- text Field date and select -->
 					<div class="small-12 medium-12 large-12 columns">
 						<fieldset class="large-12 columns">
-							<legend>Choose the type search</legend>
+							<legend class="legendSearch">Choose the type search</legend>
 							<!-- Type of Availability -->
 							<div class="rdoField">
 								<input type="radio" name="SearchInventary" class="RadioSearchInventary" value="detailedAvailability" id="RadioDetailedAvailability" checked >
@@ -38,17 +38,17 @@
 							</div>
 						</fieldset>
 						<fieldset class="large-12 columns">
-							<legend>Choose the date and unit</legend>
+							<legend class="legendSearch">Choose the date and unit</legend>
 							<div class="small-12 large-5 columns">
 								<div class="row collapse">
 									<div class="small-10 large-10 columns">
 											<input type="text" id="textInvStartDate" class="txtSearch" placeholder="Enter a date" >
 									</div>
 									<div class="small-1 large-1 columns">
-										<a  id="btnInvSearch" class="button postfix"><i class="fa fa-search"></i></a>
+										<a  id="btnInvSearch" class=" button postfix btnSearch"><i class="fa fa-search"></i></a>
 									</div>
 									<div class="small-1 large-1 columns">
-										<a id="btnInvCleanSearch" class="button postfix"><i class="fa fa-trash"></i></a>
+										<a id="btnInvCleanSearch" class="button postfix btnSearch"><i class="fa fa-trash"></i></a>
 									</div>
 								</div>
 							</div>
@@ -57,7 +57,7 @@
 							
 							
 							<div class="small-12 large-3 columns filterDetailedAvailability">
-									<select id="textInvFloorPlan" class="round comboBoxInvDetailed">
+									<select id="textInvFloorPlan" class="round comboBoxInvDetailed selectSearch">
 										<option value="0">select a Floor Plan</option>
 										<?php
 										foreach($floorPlan as $item){
@@ -70,7 +70,7 @@
 							</div>
 							<!-- Propiedad -->
 							<div class="small-12 large-3 columns">
-								<select id="textInvProperty" class="round comboBoxInvDetailed">
+								<select id="textInvProperty" class="round comboBoxInvDetailed selectSearch">
 									<option value="0">select a Property</option>
 									<?php
 									foreach($property as $item){
@@ -86,7 +86,7 @@
 					</div>
 					<div class="small-12 medium-12 large-12 columns">
 						<fieldset class="large-12 columns filterDetailedAvailability">
-							<legend>Choose the availability</legend>
+							<legend class="legendSearch">Choose the availability</legend>
 							<!-- Type of Availability -->
 							<div class="rdoField">
 								<input type="radio" name="InvTypeAvailability" class="RadioSearchInv" value="Availability" id="RadioInvAvailability" checked >
@@ -99,7 +99,7 @@
 							</div>
 						</fieldset>
 						<fieldset class=" small-12 large-12 columns filterDetailedAvailability">
-							<legend>Choose the filters</legend>
+							<legend class="legendSearch">Choose the filters</legend>
 							<!-- Include Non Deducted -->
 							<div class="rdoField">
 								<input type="checkbox" id="CheckInvNonDeducted" class="CheckSearchInv" value="Non Deducted">

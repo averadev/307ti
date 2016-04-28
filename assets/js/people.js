@@ -296,14 +296,6 @@ function saveUserData(id, isClosed){
 		gender = "F";
 	}
 	
-	/*var employee;
-	var pkEmployeeId = 0;
-	if($("#checkPeopleEmployee").is(':checked')) {
-		employee = 1;
-		pkEmployeeId = $('#idPeople').data("pkEmployeeId");
-	}else{
-		employee = 0;
-	}*/
 	var employee = 0;
 	var pkEmployeeId = 0;
 	//si se estan editando los datos
@@ -328,7 +320,7 @@ function saveUserData(id, isClosed){
 			birthDate:$('#textBirthdate').val().trim(),
 			gender:gender,
 			WeddingAnniversary:$('#textWeddingAnniversary').val().trim(),
-			nationality:$('#textNationality').val().trim(),
+			nationality:$('#textNationality').val(),
 			qualification:$('#textQualification').val().trim(),
 			street:$('#textStreet').val().trim(),
 			colony:$('#textColony').val().trim(),
@@ -422,12 +414,12 @@ function validateUserFields(){
 			infoEmployee = false;
 		}
 		
-		if($('#textRoster').val() == null || $('#textRoster').val() == 0){
+		/*if($('#textRoster').val() == null || $('#textRoster').val() == 0){
 			$('#alertRoster').addClass('error');
 			$('#textRoster').focus();
 			errorText = "Nómina<br>" + errorText;
 			infoEmployee = false;
-		}
+		}*/
 		
 		if(infoEmployee == false){
 			$('#alertValPeopleEmployee .alert-box').html("<label>Please complete fields in red</label>" );
@@ -461,18 +453,18 @@ function validateUserFields(){
     }
 	
 	//Telefono 3
-	if($('#textPhone3').val().trim().length > 0 && $('#textPhone3').val().trim().length > 7 ){
+	if($('#textPhone3').val().trim().length > 0 && $('#textPhone3').val().trim().length > 11 ){
 		$('#alertPhone3').addClass('error');
 		$('#textPhone3').focus();
-		errorText = "El telefono 3 debe tener maximo 7 caracteres<br>"  + errorText;
+		errorText = "El telefono 3 debe tener maximo 11 caracteres<br>"  + errorText;
 		infoContact = false;
 	}
 	
 	//Telefono 2
-	if($('#textPhone2').val().trim().length > 0 && $('#textPhone2').val().trim().length > 7 ){
+	if($('#textPhone2').val().trim().length > 0 && $('#textPhone2').val().trim().length > 11 ){
 		$('#alertPhone2').addClass('error');
 		$('#textPhone2').focus();
-		errorText = "El telefono 2 debe tener maximo 7 caracteres<br>"  + errorText;
+		errorText = "El telefono 2 debe tener maximo 11 caracteres<br>"  + errorText;
 		infoContact = false;
 	}
 	
@@ -483,10 +475,10 @@ function validateUserFields(){
 		errorText = "Telefono<br>"  + errorText;
 		infoContact = false;
 	}
-	if($('#textPhone1').val().trim().length > 7){
+	if($('#textPhone1').val().trim().length > 11){
 		$('#alertPhone1').addClass('error');
 		$('#textPhone1').focus();
-		errorText = "El telefono debe tener maximo 7 caracteres<br>"  + errorText;
+		errorText = "El telefono debe tener maximo 11 caracteres<br>"  + errorText;
 		infoContact = false;
 	}
 	
@@ -1042,7 +1034,6 @@ function clonePeople(){
 */
 function changeState(selector){
 	var idCountry = $(selector).val();
-	$("#textNationality").val( $("#textCountry option:selected").attr('nationality') );
 	$('#textState').empty();
 	$('#textState').append('<option value="0" code="0">Select your state</option>');
 	$('#textState').attr('disabled',true);
@@ -1105,6 +1096,7 @@ $(document).ready(function(){
 		if($('#tablePeopleSelected').length == 1){
 			createTable(valores);
 		}
+	});
 
 $("#tablePeople").on("click", "tr", function() {
 		console.log($( this ));

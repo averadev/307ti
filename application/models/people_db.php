@@ -92,10 +92,20 @@ Class people_db extends CI_MODEL
     */
 	public function getCountry(){
 		$this->db->distinct('tblCountry.pkCountryId');
-		$this->db->select('tblCountry.pkCountryId, tblCountry.CountryCode, tblCountry.CountryDesc, tblCountry.Nationality');
+		$this->db->select('tblCountry.pkCountryId, tblCountry.CountryCode, tblCountry.CountryDesc');
 		$this->db->from('tblCountry');
 		$this->db->join('tblState', 'tblState.fkCountryId = tblCountry.pkCountryId', 'inner');
-		//$this->db->where('tblCountry.YnActive = ', 1);
+		$this->db->where('tblCountry.YnActive = ', 1);
+		return  $this->db->get()->result();
+	}
+	
+	/**
+    * Obtiene los paises
+    */
+	public function getNationality(){
+		$this->db->select('LTRIM(RTRIM(tblCountry.Nationality)) as Nationality');
+		$this->db->from('tblCountry');
+		$this->db->where('tblCountry.YnActive = ', 1);
 		return  $this->db->get()->result();
 	}
 	
@@ -114,7 +124,7 @@ Class people_db extends CI_MODEL
 	* @param id identificador de la persona
     */
 	public function getPeoplePhone($id){
-		$this->db->select('tblPhone.PhoneDesc');
+		$this->db->select('tblPhone.AreaCode, tblPhone.PhoneDesc');
 		$this->db->from('tblPhone');
 		$this->db->join('tblPeoplePhone', 'tblPeoplePhone.fkPhoneId = tblPhone.pkPhoneId', 'left');
 		$this->db->where('tblPeoplePhone.fkPeopleId = ', $id);
@@ -142,7 +152,7 @@ Class people_db extends CI_MODEL
 		$this->db->select('CONVERT(VARCHAR(11),tblPeople.Anniversary,101) as Anniversary, tblPeople.Qualification, tblPeople.Nationality');
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');
 		$this->db->select('tblState.pkStateId, tblState.StateCode, tblState.StateDesc');
-		$this->db->select('tblCountry.pkCountryId, tblCountry.CountryCode, tblCountry.CountryDesc, tblCountry.Nationality as CountryNac');
+		$this->db->select('tblCountry.pkCountryId, tblCountry.CountryCode, tblCountry.CountryDesc');
 		$this->db->select('tblEmployee.pkEmployeeId, tblEmployee.fkVendorTypeId, tblEmployee.Initials as InitialsEmplo');
 		$this->db->select('tblEmployee.EmployeeCode, tblEmployee.NumericCode, tblEmployee.fkVendorTypeId');
 		$this->db->select('tblPeopleType.ynEmp');

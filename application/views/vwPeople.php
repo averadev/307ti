@@ -18,11 +18,11 @@
 					</span>
 				</div>
 			</div>
-			<div class="box-body" style="display: block;">
+			<div class="box-body box-filter" style="display: block;">
 				<div class="row">
 					<div class="small-12 medium-12 large-5 columns">
 						<fieldset class="large-12 columns">
-							<legend>Choose a filter</legend>
+							<legend class="legendSearch">Choose a filter</legend>
 							<div class="rdoField">
 								<input type="checkbox" id="checkFilter1" class="checkFilter" value="peopleId">
 								<label for="checkFilter1">People Id</label>
@@ -39,23 +39,23 @@
 					</div>
 					<div class="small-12 medium-12 large-6 columns">
 						<fieldset class="large-12 columns">
-							<legend>Enter the filter</legend>
+							<legend class="legendSearch">Enter the filter</legend>
 							<div class="row collapse">
 								<div class="large-10 columns">
 									<input type="text" id="txtSearch" class="txtSearch" placeholder="Enter a search parameter" />
 								</div>
 								<div class="small-1 columns">
-									<a  id="btnSearch" class="button postfix"><i class="fa fa-search"></i></a>
+									<a  id="btnSearch" class="button postfix btnSearch"><i class="fa fa-search"></i></a>
 						        </div>
 								<div class="small-1 columns">
-									<a id="btnCleanSearch" class="button postfix"><i class="fa fa-trash"></i></a>
+									<a id="btnCleanSearch" class="button postfix btnSearch"><i class="fa fa-trash"></i></a>
 						        </div>
 							</div>
 						</fieldset>
 					</div>
 					<div class="small-12 medium-12 large-12 columns">
 						<fieldset class="large-12 columns">
-							<legend><input type="checkbox" id="checkFilterAdvance" class="checkFilter">&nbsp;&nbsp;Advanced search</legend>
+							<legend class="legendSearch" ><input type="checkbox" id="checkFilterAdvance" class="checkFilter">&nbsp;&nbsp;Advanced search</legend>
 							<div class="row" id="containerFilterAdv" style="display:none;">
 								<div class="rdoField">
 									<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="initials" id="RadioInitials" checked>
@@ -247,7 +247,16 @@
 					<!-- Nacionalidad-->
 					<div class="small-12 large-6 columns">
 						<label id="alertNationality" for="textNationality" class="text-left">Nationality
-							<input type="text" id="textNationality" class="round general" readonly/>
+							<select id="textNationality" class="round">
+								<option value="">Select your nationality</option>
+								<?php
+								foreach($nationality as $item){
+									?>
+									<option value="<?php echo $item->Nationality; ?>"><?php echo $item->Nationality; ?></option>
+									<?php
+								}
+								?>
+							</select>
 						</label>
 					</div>
 					<!-- Calificacion-->
@@ -272,7 +281,7 @@
 					<!-- calle, numero-->
 					<div class="row">
 						<div class="small-12 large-3 columns">
-							<label id="alertStreet" for="textStreet" class="text-left">Street number</label>
+							<label id="alertStreet" for="textStreet" class="text-left">Street</label>
 						</div>
 						<div class="small-12 large-9 columns">
 							<input id="textStreet" type="text" class="round general">
@@ -281,7 +290,7 @@
 					<!-- Colonia -->
 					<div class="row">
 						<div class="small-12 large-3 columns">
-							<label id="alertColony" for="textColony" class="text-left">Colony</label>
+							<label id="alertColony" for="textColony" class="text-left">Street 2</label>
 						</div>
 						<div class="small-12 large-9 columns">
 							<input id="textColony" type="text" class="round general">
@@ -349,7 +358,7 @@
 							<label id="alertPhone1" for="textPhone1" class="text-left">Phone number 1</label>
 						</div>
 						<div class="small-12 large-9 columns">
-							<input type="tel" class="phonePeople round general" id="textPhone1" maxlength="7" placeholder="xxx-xxxx">
+							<input type="tel" class="phonePeople round general" id="textPhone1" maxlength="11" placeholder="xxxx-xxx-xxxx">
 						</div>
 					</div>
 					<!-- Telefono 2 -->
@@ -358,7 +367,7 @@
 							<label id="alertPhone2" for="textPhone2" class="text-left">Phone number 2</label>
 						</div>
 						<div class="small-12 large-9 columns">
-							<input type="tel" class="phonePeople round general" id="textPhone2" maxlength="7" placeholder="xxx-xxxx">
+							<input type="tel" class="phonePeople round general" id="textPhone2" maxlength="11" placeholder="xxxx-xxx-xxxx">
 						</div>
 					</div>
 					<!-- Telefono 3 -->
@@ -367,7 +376,7 @@
 							<label id="alertPhone3" for="textPhone3" class="text-left">Phone number 3</label>
 						</div>
 						<div class="small-12 large-9 columns">
-							<input type="tel" class="phonePeople round general" id="textPhone3" maxlength="7" placeholder="xxx-xxxx">
+							<input type="tel" class="phonePeople round general" id="textPhone3" maxlength="11" placeholder="xxxx-xxx-xxxx">
 						</div>
 					</div>
 					<!-- Email 1 -->
