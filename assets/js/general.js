@@ -18,6 +18,11 @@ $(function() {
                 $('.tabs-title').removeClass('active');
                 $(x[i]).addClass('active');
                 isNew = false;
+				//cambia las opciones si el tap ya existe
+				$('.tabs-title').removeClass('active');
+				 $(x[i]).addClass('active');
+				$(".module").addClass("moduleHide")
+				$("#module-"+ $(x[i]).attr("attr-screen")).removeClass("moduleHide")
             }
         }
         // Add new tab
