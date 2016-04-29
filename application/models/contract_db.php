@@ -144,8 +144,7 @@ class Contract_db extends CI_Model {
         $this->db->from('tblSaleType');
         $query = $this->db->get();
 
-        if($query->num_rows() > 0 )
-        {
+        if($query->num_rows() > 0 ) {
             return $query->result();
         }
     }
