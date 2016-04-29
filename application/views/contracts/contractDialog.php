@@ -8,7 +8,7 @@
                 </div>
             </div>
         </div>
-        <form id="saveDataContract" data-abide='ajax'>
+        <form id="saveDataContract" data-parsley-validate>
             <fieldset class="fieldset">
                 <legend>
                     Contract Data
@@ -295,18 +295,31 @@
     </div>
 </div>
 <script>
+
+    var unidadDialog = addUnidadDialog();
+    var peopleDialog = addPeopleDialog();
+
     $('#btnAddTourID').click(function(){
         ajaxHTML('dialog-tourID', 'tours/modal');
         showModals('dialog-tourID', cleanAddPeople);
     });
+
     $('#btnAddPeople').click(function(){
-        $('#dialog-People').empty();
-        ajaxHTML('dialog-People', 'people/');
-        showModals('dialog-People', cleanAddPeople);
+         showLoading('#dialog-People',true);
+         $( "#dialog-People" ).load( 'people/index', function() {
+            showLoading('#dialog-People',false);
+        });
+         peopleDialog.dialog( "open" );
     });
+
     $('#btnAddUnidades').click(function(){
-        ajaxHTML('dialog-Unidades', 'contract/modalUnidades');
-        showModals('dialog-Unidades', cleanAddUnidades);
+        showLoading('#dialog-Unidades',true);
+        $( "#dialog-Unidades" ).load( 'contract/modalUnidades', function() {
+            showLoading('#dialog-Unidades',false);
+        });
+        unidadDialog.dialog( "open" );
     });
+
+
 
 </script>

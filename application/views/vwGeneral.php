@@ -16,7 +16,7 @@
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>general.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 		
-		<!-------- Zebra_Datepicker --------->
+		<!-- Zebra_Datepicker -->
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>zebra/bootstrap.css" />
 		
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
@@ -29,9 +29,9 @@
 		<script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>validateDate.js"></script>
         
-		<!-------- Zebra_Datepicker --------->
+		<!-- Zebra_Datepicker -->
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>zebra/zebra_datepicker.js"></script>
-		
+		<script type="text/javascript" src="<?php echo base_url().JS; ?>parsley/parsley.min.js"></script>
     </head>
     <body>
 		
@@ -87,7 +87,7 @@
         <div class="general-section">
         </div>
        
-	<!--- meesssage alert ---->
+	<!--- meesssage alert -->
 	<div class="alertScreen" id="alertPeople">
 		<div class="bgAlertScreen" ></div>
 		<div class="alertMessage" >

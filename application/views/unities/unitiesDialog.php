@@ -124,7 +124,7 @@
 
 
     function getUnidades(){
-
+        showLoading('#Unidades',true);
         $.ajax({
             data:{
                 words: "1"
@@ -166,5 +166,7 @@
         }
         document.getElementById("tableUnidades").innerHTML += table;
     }
+
+
 
 </script>

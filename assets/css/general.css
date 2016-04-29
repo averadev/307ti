@@ -568,7 +568,13 @@ table thead tr th, table tbody tr td{
 .dialogModal .ui-dialog-titlebar-close{
 	display:none;
 }
-
+.ui-dialog-titlebar{
+	color:#FFF;
+	background:#183a59;
+	border-radius:0;
+	margin:0;
+	background-color:#225b88;
+}
 .dialogModal .ui-dialog-titlebar{
 	color:#FFF;	
 	background:#183a59;
@@ -1117,4 +1123,8 @@ th.next{
 }
 #newContract{
 	width: 90px;
+}
+
+.tabs{
+	margin-left: 239px;
 }
