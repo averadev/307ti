@@ -99,6 +99,11 @@ class Contract extends CI_Controller {
 			$this->load->view('unities/unitiesDialog.php');
 		}
 	}
+	public function modalEdit(){
+		if($this->input->is_ajax_request()) {
+			$this->load->view('contracts/contractDialogEdit.php');
+		}
+	}
 
 
 	public function insertContrat($Contract){

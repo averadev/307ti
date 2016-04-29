@@ -14,7 +14,7 @@ $(function() {
         //var x = document.getElementsByClassName("tabs-title");
 		var x = $('.top-title .tabs .tabs-title');
         for (var i = 0; i < x.length; i++) {
-            if ($(x[i]).children().html() == $(this).html()) {
+            if ($(x[i]).children().text().trim() == $(this).text().trim()) {
                 $('.tabs-title').removeClass('active');
                 $(x[i]).addClass('active');
                 isNew = false;
@@ -22,14 +22,13 @@ $(function() {
 				$('.tabs-title').removeClass('active');
 				 $(x[i]).addClass('active');
 				$(".module").addClass("moduleHide")
-				$("#module-"+ $(x[i]).attr("attr-screen")).removeClass("moduleHide")
+				$("#module-"+ $(x[i]).attr("attr-screen")).removeClass("moduleHide");
             }
         }
         // Add new tab
         if(isNew){
             $('.tabs-title').removeClass('active');
             var screen = $(this).attr('attr-screen');
-			console.log($(this).text().trim())
             var iconClose = '<img class="iconCloseTab" src="'+BASE_URL+'assets/img/common/iconClose.png" />'
             $('.tabs').append( '<li class="tabs-title active" attr-screen="'+screen+'"><a>'+$(this).text().trim()+'</a>'+iconClose+'</li>' );
             $(".module").addClass("moduleHide");
@@ -207,8 +206,7 @@ function showLoading(parentElement, isOpen = false,message = null, success = nul
 			success();
 		}
 	}
-}
-
+} 
 
 function drawTable(data, funcion, cadena, table){
 
@@ -356,8 +354,42 @@ function ajaxHTML(div, url){
         $.ajax({
             url: url,
             success: function(result) {
-                $('#'+div).html(result);    
+                $('#'+div).html(result);
             }
         });
     }
+}
+
+/**
+* screen collapse fieldset
+* @param selector elemento el cual se quiere colapsar
+* todo mustra u oculta los fieldset
+*/
+$(document).on('click', '.btnCollapseField', function(){ collapsableFieldset(this); });
+function collapsableFieldset(selector){
+	var screen = $(selector).attr('attr-screen');
+	if($('#' + screen).is(':hidden')){
+		$(selector).find('img').attr('src', BASE_URL + 'assets/img/common/iconCollapseUp.png');
+	}else{
+		$(selector).find('img').attr('src', BASE_URL + 'assets/img/common/iconCollapseDown.png');
+	}
+	$('#' + screen).toggle(400);
+}
+
+
+/**
+* cambia el contenido de los modales dependiendo del tabs
+* @param selector elemento el cual se va a mostrar
+*/
+$(document).on('click', '.tabsModal .tabs .tabs-title', function(){ changeTabs(this); });
+function changeTabs(selector){
+	var screen = $(selector).attr('attr-screen');
+	var parentTabs = $(selector).parent().attr('id');
+	$('#' + parentTabs + " .tabs-title").removeClass('active');
+	$(selector).addClass('active');
+	var parent = $('#' + screen).parent().attr('class');
+	//$('.' + parent + ' .tab-modal').hide();
+	//$('.' + parent + ' #' + screen).show();
+	$('.' + parent).children('.tab-modal').hide();
+	$('.' + parent).children('#' + screen).show();
 }

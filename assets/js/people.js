@@ -799,7 +799,6 @@ function getInfoPeople(id){
 			id:id,
 		},
 		success: function(data){
-			console.log(data)
 			var item = data.item[0];
 			$('#textName').val(item.Name.trim());
 			$('#textMiddleName').val(item.SecondName.trim());
