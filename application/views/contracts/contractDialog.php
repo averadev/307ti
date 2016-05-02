@@ -8,7 +8,7 @@
                 </div>
             </div>
         </div>
-        <form id="saveDataContract" data-parsley-validate>
+        <form id="saveDataContract">
             <fieldset class="fieldset">
                 <legend>
                     Contract Data
@@ -114,7 +114,7 @@
                                 <td>#1</td>
                                 <td>2016</td>
                                 <td>2017</td>
-                                <td><input type="radio" name="people" value="3"></td>
+                                <td>Odd years</td>
                                 <td><button type="button" class="alert button"><i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i></button></td>
                             </tr>
                             </tbody>
@@ -148,7 +148,7 @@
                             <div class="large-9 columns">
                                 <div class="row collapse">
                                     <div class="small-10 columns">
-                                        <input required id="contractR" name="contractR" type="text" placeholder="Folio">
+                                        <input id="contractR" name="contractR" type="text" placeholder="Folio">
                                     </div>
                                     <div class="small-2 columns">
                                         <a href="#" class="button postfix"><i class="fa fa-search"></i></a>
@@ -176,7 +176,7 @@
                 <div class="row">
                     <div class="large-4 columns">
                         <label>Unit Price
-                            <input readonly required id="precioUnidad" name="precioUNIDAD" type="text" placeholder="$0.00" />
+                            <input readonly required type="text" id="precioUnidad" name="precioUNIDAD" placeholder="$0.00" value="29,714.00" />
                         </label>
                     </div>
                     <div class="large-4 columns">
@@ -186,7 +186,7 @@
                     </div>
                     <div class="large-4 columns">
                         <label>Sell Price
-                            <input required type="text" name="precioVENTA" placeholder="$0.00" />
+                            <input required type="text" id="precioVenta" name="precioVENTA" placeholder="$0.00" value="29,714.00" />
                         </label>
                     </div>
                 </div>
@@ -195,7 +195,7 @@
                 <div class="row">
                     <div class="large-4 columns">
                         <label>Downpayment
-                            <input required type="text" placeholder="$0.00" />
+                            <input required type="text" placeholder="$0.00" value="1,500.00" />
                         </label>
                     </div>
                     <div class="large-4 columns">
@@ -217,7 +217,7 @@
                     <div class="large-9 columns">
                         <div class="row collapse">
                             <div class="small-10 columns">
-                                <input required name="depositoEnganche" type="text" placeholder="$0.00">
+                                <input required name="depositoEnganche" id="deposito" type="text" placeholder="$0.00">
                             </div>
                             <div class="small-2 columns">
                                 <a href="#" class="button postfix">Capture</a>
@@ -294,32 +294,3 @@
         </form>
     </div>
 </div>
-<script>
-
-    var unidadDialog = addUnidadDialog();
-    var peopleDialog = addPeopleDialog();
-
-    $('#btnAddTourID').click(function(){
-        ajaxHTML('dialog-tourID', 'tours/modal');
-        showModals('dialog-tourID', cleanAddPeople);
-    });
-
-    $('#btnAddPeople').click(function(){
-         showLoading('#dialog-People',true);
-         $( "#dialog-People" ).load( 'people/index', function() {
-            showLoading('#dialog-People',false);
-        });
-         peopleDialog.dialog( "open" );
-    });
-
-    $('#btnAddUnidades').click(function(){
-        showLoading('#dialog-Unidades',true);
-        $( "#dialog-Unidades" ).load( 'contract/modalUnidades', function() {
-            showLoading('#dialog-Unidades',false);
-        });
-        unidadDialog.dialog( "open" );
-    });
-
-
-
-</script>

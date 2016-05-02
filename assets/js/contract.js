@@ -2,49 +2,48 @@ $(document).ready(function(){
 
 	maxHeight = screen.height * .25;
 	maxHeight = screen.height - maxHeight;
-	//var dialog, form;
+
 	
     var unidadDialog = addUnidadDialog();
     var peopleDialog = addPeopleDialog();
 	var addContract = createDialogContract();
+	//var tourDialog = 
 
-    $('#btnAddTourID').click(function(){
-        ajaxHTML('dialog-tourID', 'tours/modal');
-        showModals('dialog-tourID', cleanAddPeople);
-    });
-
-    $('#btnAddPeople').click(function(){
-         showLoading('#dialog-People',true);
-         $( "#dialog-People" ).load( 'people/index', function() {
-            showLoading('#dialog-People',false);
-        });
-         peopleDialog.dialog( "open" );
-    });
-
-    $('#btnAddUnidades').click(function(){
-        //showLoading('#dialog-Unidades',true);
-        // $( "#dialog-Unidades" ).load( 'contract/modalUnidades', function() {
-        //     showLoading('#dialog-Unidades',false);
-        // });
-        unidadDialog.dialog( "open" );
-    });
-
-
-	// form = dialog.find( "form" ).on( "submit", function( event ) {
-	// 	event.preventDefault();
-	// 	console.log("ok");
-	// });
-
-	$('#newContract').click(function(){
-		//showLoading('#dialog-Contract',true);
-		// $( "#dialog-Contract" ).load( 'contract/modal', function() {
-		// 	showLoading('#dialog-Contract',false);
-		// });
+	$(document).on( 'click', '#newContract', function () {
+		showLoading('#dialog-Contract',true);
+		$( "#dialog-Contract" ).load( 'contract/modal', function() {
+			showLoading('#dialog-Contract',false);
+		});
 		ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
 		ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
 		addContract.dialog("open");
 	});
 
+
+	$(document).on( 'click', '#btnAddPeople', function () {
+	     showLoading('#dialog-People',true);
+         $( "#dialog-People" ).load( 'people/index', function() {
+            showLoading('#dialog-People',false);
+        });
+         peopleDialog.dialog( "open" );
+	});
+
+	 $(document).on( 'click', '#btnAddUnidades', function () {
+	        showLoading('#dialog-Unidades',true);
+	        $( "#dialog-Unidades" ).load( 'contract/modalUnidades', function() {
+	            showLoading('#dialog-Unidades',false);
+	        });
+	        unidadDialog.dialog( "open" );
+	    });
+
+
+	// $(document).on( 'click', '#btnAddTourID', function () {
+	//      showLoading('#dialog-tourID',true);
+ //         $("#dialog-tourID").load( 'tours/modal', function() {
+ //            showLoading('#dialog-tourID',false);
+ //        });
+ //        peopleDialog.dialog( "open" );
+	// });
 
 	$('#btnCleanWord').click(function (){
 		btnCleanWord.val('');
@@ -52,11 +51,13 @@ $(document).ready(function(){
 	$('#btnfind').click(function(){
 		getContratos();
 	});
-	//Advance Search
+
 	$("#busquedaAvanazada").click(function(){
 		$("#avanzada").slideToggle("slow");
 	});
+
 });
+
 
 function createDialogContract() {
 
@@ -75,13 +76,14 @@ function createDialogContract() {
 			text: "Save and close",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
+
 			}
 		},
 			{
 				text: "Save",
 				"class": 'dialogModalButtonAccept',
 				click: function() {
-					saveContract();
+					createNewContract();
 				}
 			}],
 		close: function() {
@@ -101,7 +103,7 @@ function addUnidadDialog() {
 			text: "Cancel",
 			"class": 'dialogModalButtonCancel',
 			click: function() {
-				dialog.dialog( "close" );
+				$(this).dialog('close');
 			}
 		},{
 			text: "Save and close",
@@ -133,7 +135,7 @@ function addPeopleDialog() {
 			text: "Cancel",
 			"class": 'dialogModalButtonCancel',
 			click: function() {
-				dialog.dialog("close");
+				$(this).dialog('close');
 			}
 		},{
 			text: "Save and close",
@@ -155,76 +157,6 @@ function addPeopleDialog() {
 	return dialog;
 }
 
-function ejemplo() {
-	
-	dialog = $( "#dialog-Contract" ).dialog({
-		autoOpen: false,
-		height: 300,
-		width: 350,
-		modal: true,
-		buttons: {
-			Cancel: function() {
-				dialog.dialog( "close" );
-			}
-		},
-		close: function() {
-
-		}
-	});
-	return dialog;
-}
-
-function saveContract() {
-	console.log("ok esto es genial");
-}
-
-function showModals(div, funcion){
-
-	maxHeight = screen.height * .75;
-
-	dialog = $( "#"+div ).dialog({
-      autoOpen: false,
-      height: maxHeight,
-      width: "80%",
-      modal: true,
-      dialogClass: 'dialogModal',
-      buttons: [
-		  {
-		  text: "Cancel",
-		  "class": 'dialogModalButtonCancel',
-		  click: function() {
-			  dialog.dialog('close');
-		  }
-		  },
-		  {
-			  text: "Save and close",
-			  "class": 'dialogModalButtonAccept',
-			  click: function() {
-
-			  }
-		  },
-		  {
-			  text: "Save",
-			  "class": 'dialogModalButtonAccept',
-			  click: function() {
-			  }
-		  }
-	  ],
-		close: function() {
-			dialog.dialog('close');
-		}
-    });
-
-    dialog.dialog('open');
-}
-
-// function cleanAddPeople(){
-// 	console.log("clean form Add people");
-// }
-
-function cleanAddUnidades(){
-	console.log("clean form Add people");
-}
 
 
 // function goodBye(){
@@ -272,7 +204,6 @@ function getContratos(){
 }
 
 function getDetalleContratoByID(i){
-	//console.log(i);
 	showLoading('#contracts',true);
 	ajaxHTML('dialog-Edit-Contract', 'contract/modalEdit');
     showModals('dialog-Edit-Contract', cleanAddPeople);
@@ -288,19 +219,13 @@ function getInputsByID(formData, divs){
 }
 
 function verifyInputsByID(divs){
-
-	//var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
+	var v = true;
 	for (var i = 0; i < divs.length; i++) {
-		 if($('#'+divs[i]).val().trim().length > 0){
-			 $('#'+divs[i]).removeClass('is-invalid-input');
-		 	if(!regex.test($('#'+divs[i]).val().trim())) {
-				return true;
-			}
-		 }else{
-			 $('#'+divs[i]).addClass('is-invalid-input');
-		 	return false;
+		 if($('#'+divs[i]).val().trim().length <= 0){
+		 	v = false;
 		 }
 	}
+	return v;
 }
 
 
@@ -325,33 +250,51 @@ function ajaxSelects(url,errorMsj, funcion, divSelect) {
 	});
 }
 
-function createNewContract(id){
+function saveContract() {
+	console.log("ok esto es genial");
+}
 
+function createNewContract(){
 
+	var id = "saveDataContract";
+	var arrayWords = ["legalName", "selectLanguage", "TourID", "deposito", "precioUnidad", "precioVenta"];
 	var form = $("#"+id);
 	var elem = new Foundation.Abide(form, {});
-	$('#'+id).foundation('validateForm');
 
-	var tourId = $("#TourID").val().trim();
-	var nombreLegal = $("#legalName").val().trim();
-	var idiomaId = $( "#selectLanguage" ).val();
-
-
-	//$('#'+id).foundation('destroy');
-	//var formData = new FormData(document.getElementById(""+id));
-	//legalName
-	//var idioma = $("#idiomaContract").val().trim();
-
-	var formData = new FormData(document.getElementById(id));
-	formData.append("peticion", "agregarServicio");
+	// if(!verifyInputsByID(arrayWords)){
+	// 	$('#'+id).foundation('validateForm');
+	// }else{
 
 	$.ajax({
-			data: formData,
-			cache: false,
-			contentType: false,
-			processData: false,
+			data: {
+				ID : 0,
+				Folio : 0,
+				tourId : $("#TourID").val().trim(),
+				nombreLegal : $("#legalName").val().trim(),
+				idiomaId : $( "#selectLanguage" ).val(),
+				peoples : [33,34,35],
+				unidades : [{
+					"propiedadId": 1,
+					"frecuenciaId": 2,
+					"temporadaId": 1,
+					"weeks": 3,
+				}],
+				firstYear : 2016,
+				lastYear : 2017,
+				tipoVentaId : 1,
+				contratoRelacionadoId : 0,
+				precioUnidad : 29714,
+				descuentoTotal :  0,
+				precioVenta :  29714,
+				deposito :  1500,
+				totalEnganche : 1500,
+				totalPagosProg : 1500,
+				depClosingFee : 1295,
+				montoTransfer : 6000,
+				balance : 42711.8
+			},
 			type: "POST",
-			dataType: "JSON",
+			dataType:'json',
 			url: 'contract/saveContract'
 		})
 		.done(function( data, textStatus, jqXHR ) {
@@ -360,11 +303,46 @@ function createNewContract(id){
 		.fail(function( jqXHR, textStatus, errorThrown ) {
 			//alertify.error("Ocurrio un error vuelve a intentarlo");
 		});
+		// ID = 0;
+		// Folio = 0;
+		// tourId = $("#TourID").val().trim();
+		// nombreLegal = $("#legalName").val().trim();
+		// idiomaId = $( "#selectLanguage" ).val();
+		// peoples = [33,34,35];
+		// unidades = [{
+		// 	"propiedadId": 1,
+		// 	"frecuenciaId": 2,
+		// 	"temporadaId": 1,
+		// 	"weeks": 3,
+		// }];
+		// tipoVentaId = 1;
+		// contratoRelacionadoId = 0;
+		// precioUnidad = 29714;
+		// descuentoTotal =  0;
+		// precioVenta =  29714;
+		// deposito =  1500;
+		// totalEnganche = 1500
+		// totalPagosProg = 1500
+		// depClosingFee = 1295
+		// montoTransfer = 6000;
+		// balance = 42711.8;
+	// }
+	
+	// var tourId = $("#TourID").val().trim();
+	// var nombreLegal = $("#legalName").val().trim();
+	// var idiomaId = $( "#selectLanguage" ).val();
+
+
+	//$('#'+id).foundation('destroy');
+	//var formData = new FormData(document.getElementById(""+id));
+	//legalName
+	//var idioma = $("#idiomaContract").val().trim();
+
+	// var formData = new FormData(document.getElementById(id));
+	// formData.append("peticion", "agregarServicio");
+
 }
-$('.tk-contact').on('submit', function () {
-	$(this).on('valid', function () {});
-	$(this).on('invalid', function () {});
-});
+
 
 function getDataFormContract(){
 

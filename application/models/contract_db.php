@@ -79,10 +79,10 @@ class Contract_db extends CI_Model {
 //                --ynActive = 1
 //                --CrBy
     }
-    public function selectRestType(){
+    public function selectRestType($string){
         $this->db->select('pkRestypeId');
         $this->db->from('tblResType');
-        $this->db->where('ResTypeCode', 'Cont');
+        $this->db->where('ResTypeCode', $string);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )
@@ -91,10 +91,10 @@ class Contract_db extends CI_Model {
             return $row->pkRestypeId;
         }
     }
-    public function selectPaymentProcessTypeId(){
+    public function selectPaymentProcessTypeId($string){
         $this->db->select('pkPaymentProcessTypeId');
         $this->db->from('tblPaymentProcessType');
-        $this->db->where('PaymentProcessCode', 'RG');
+        $this->db->where('PaymentProcessCode', $string);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )
@@ -103,10 +103,10 @@ class Contract_db extends CI_Model {
             return $row->pkPaymentProcessTypeId;
         }
     }
-    public function selectlanguageId(){
+    public function selectlanguageId($string){
         $this->db->select('pklanguageId');
         $this->db->from('tblLanguage');
-        $this->db->where('LanguageCode', 'EN');
+        $this->db->where('LanguageCode', $string);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )
@@ -115,10 +115,10 @@ class Contract_db extends CI_Model {
             return $row->pklanguageId;
         }
     }
-    public function selectLocationId(){
+    public function selectLocationId($string){
         $this->db->select('pkLocationId');
         $this->db->from('tblLocation');
-        $this->db->where('LocationCode', 'CUN');
+        $this->db->where('LocationCode', $string);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )
@@ -162,10 +162,10 @@ class Contract_db extends CI_Model {
         }
     }
 
-    public function selectSaleTypeId(){
+    public function selectSaleTypeId($string){
         $this->db->select('pksaleTypeId');
         $this->db->from('tblSaleType');
-        $this->db->where('SaleTypeCode', 'CU');
+        $this->db->where('SaleTypeCode', $string);
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
@@ -173,10 +173,10 @@ class Contract_db extends CI_Model {
             return $row->pksaleTypeId;
         }
     }
-    public function selectInvtTypeId(){
+    public function selectInvtTypeId($string){
         $this->db->select('pkinvtTypeId');
         $this->db->from('tblInvtType');
-        $this->db->where('InvtTypeCode', 'CU');
+        $this->db->where('InvtTypeCode', $string);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )

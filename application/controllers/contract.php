@@ -24,13 +24,16 @@ class Contract extends CI_Controller {
 	}
 
 	public function saveContract(){
-//		if($this->input->is_ajax_request()){
+		
+		if($this->input->is_ajax_request()){
+			var_dump($_POST);
+			$folio = $this->contract_db->select_Folio();
 
 			$Contract = [
-				"fkResTypeId"               => $this->contract_db->selectRestType(),
-				"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId(),
-				"fkLanguageId"              => $this->contract_db->selectlanguageId(),
-                "fkLocationId"              => $this->contract_db->selectLocationId(),
+				"fkResTypeId"               => $this->contract_db->selectRestType('Cont'),
+				"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('RG'),
+				"fkLanguageId"              => $_POST['idiomaId'],
+                "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
                 "pkResRelatedId"            => null,
                 "FirstOccYear"              => $_POST['firstYear'],
                 "LastOccYear"               => $_POST['lastYear'],
@@ -38,22 +41,63 @@ class Contract extends CI_Controller {
                 "ResConf"                   => "",
                 "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
                 "LegalName"                 => $_POST['legalName'],
-                "Folio"                     => $_POST['folio'],
+                "Folio"                     => $folio,
                 "fkTourId"                  => $_POST['tourID'],
-                "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId(),
-                "selectInvtTypeId"          => $this->contract_db->selectInvtTypeId(),
+                "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
+                "selectInvtTypeId"          => $this->contract_db->selectInvtTypeId('CU'),
 				"fkStatusId"				=> 1,
                 "ynActive"                  => 1,
-                "CrBy"                      => 123
+                "CrBy"                      => 123,
+                "CrDt"						=> getdate()
 			];
 
-			var_dump($Contract);
-            //$idContrato = $this->contract_db->insertReturnId('tblRes', $Contract);
+			$idContrato = $this->contract_db->insertReturnId('tblRes', $Contract);
 
-			//echo json_encode($create);
-			//var_dump($_POST);
-//		}
+			$Ocupacion = [
+				"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
+				"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
+				"fkLanguageId"              => $_POST['idiomaId'],
+                "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
+                "pkResRelatedId"            => null,
+                "FirstOccYear"              => $_POST['firstYear'],
+                "LastOccYear"               => $_POST['lastYear'],
+                "ResCode"                   => "",
+                "ResConf"                   => "",
+                "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
+                "LegalName"                 => $_POST['legalName'],
+                "Folio"                     => $folio,
+                "fkTourId"                  => $_POST['tourID'],
+                "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
+                "selectInvtTypeId"          => $this->contract_db->selectInvtTypeId('CU'),
+				"fkStatusId"				=> 1,
+                "ynActive"                  => 1,
+                "CrBy"                      => 123,
+                "CrDt"						=> getdate()
+			];
+
+			$idOcupacion = $this->contract_db->insertReturnId('tblResInvt', $Ocupacion);
+			
+			$Unidades = [
+		        "fkResId"                   => $idContrato,
+		        "fkUnitId"    				=> $_POST['propiedadId'],
+		        "Intv"              		=> $_POST['idiomaId'],
+		        "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
+		        "pkResRelatedId"            => null,
+		        "fkFloorPlanId"             => $_POST['firstYear'],
+		        "fkViewId"               	=> $_POST['lastYear'],
+		        "fkSeassonId"               => "",
+		        "fkFrequencyId"             => "",
+		        "WeeksNumber"         		=> $this->contract_db->selectExchangeRateId(),
+		        "NightsNumber"              => $_POST['legalName'],
+		        "FirstOccYear"              => $folio,
+		        "LastOccYear"               => $_POST['tourID'],
+		        "ynActive"                  => 1,
+		        "CrBy"                      => 123,
+		        "CrDt"						=> getdate()
+        ];
+
 	}
+}
 //////////////////////////////////////////////////////
 	//busqueda de Unidades
 	public function getProperties(){
