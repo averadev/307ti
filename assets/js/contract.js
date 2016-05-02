@@ -14,10 +14,10 @@ $(document).ready(function(){
     });
 
     $('#btnAddPeople').click(function(){
-         //showLoading('#dialog-People',true);
-        //  $( "#dialog-People" ).load( 'people/index', function() {
-        //     showLoading('#dialog-People',false);
-        // });
+         showLoading('#dialog-People',true);
+         $( "#dialog-People" ).load( 'people/index', function() {
+            showLoading('#dialog-People',false);
+        });
          peopleDialog.dialog( "open" );
     });
 
