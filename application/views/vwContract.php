@@ -86,7 +86,7 @@
                	<span>Contracts Relation</span>
                </h3>
 			</div>
-			<div class="box-body" style="display: block;">
+			<div class="box-body"  style="display: block;">
 				<div class="table" >
 					<table id="contracts" style="width:100%;">
 						<thead id="contractsthead">
@@ -112,6 +112,7 @@
 	
 </div>
 
+<<<<<<< HEAD
 <div id="dialog-Contract"  title="Create Contract" style="display: none;">
 	<div class="contentModal">
     <div id="tabs-1">
@@ -410,6 +411,10 @@
     </div>
 </div>
 </div>
+=======
+<div id="dialog-Contract" title="Create Contract" style="display: none;"></div>
+<div id="dialog-Edit-Contract" title="Edit Contract" style="display: none;"></div>
+>>>>>>> origin/master
 <div id="dialog-tourID" title="Tour ID" style="display: none;"></div>
 <div id="dialog-People" title="People" style="display: none;"></div>
 <div id="dialog-Unidades" title="Unidades" style="display: none;">

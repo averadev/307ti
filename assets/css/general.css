@@ -668,12 +668,11 @@ table thead tr th, table tbody tr td{
 .tabsModal{
 	float:left;
 	width:100%;
-	background:rgba(170,170,170,.2);
-	height:41px;
+	background:#FFFFFF;
 	padding-top:0;
 	margin-top:0;
 	margin-bottom:0;
-	padding-left:5px;
+	padding-left:0;
 }
 
 .tabsModal .tabs .tabs-title a{
@@ -691,6 +690,11 @@ table thead tr th, table tbody tr td{
 	height:auto;
 	border-top:1px solid #aaaaaa;
 	padding: .5em 1em;
+}
+
+.contentModalEdit{
+	height:auto;
+	border-top:1px solid #aaaaaa;
 }
 
 .tab-modal-top{
@@ -1125,6 +1129,68 @@ th.next{
 	width: 90px;
 }
 
+<<<<<<< HEAD
 .tabs{
 	margin-left: 239px;
+=======
+.trColspan{
+	background:#cacaca;
+	font-size:1rem;
+	font-weight:bold;
+	border:#AAAAAA solid 1px;
+}
+
+.trColspan th{
+	font-size:.8rem;
+	font-weight:bold;
+}
+
+.tableAccountResult tbody tr td:nth-of-type(odd) {
+	background:#F3F3F3;
+	font-size:.8rem;
+	font-weight:bold;
+	border:#DCDCDC solid 1px;
+}
+
+.tableAccountResult tbody tr td:nth-of-type(even) {
+	background:#FFFFFF;
+	font-size:.7rem;
+	font-weight:normal;
+	border:#DCDCDC solid 1px;
+}
+
+.tableAccountResult .trColspan th{
+	line-height: 12px;
+}
+
+.tableAccountResult tbody tr td{
+	line-height: 8px;
+}
+
+.headerModalBtn{
+	margin-left:2px;
+}
+
+.headerModalBtn a{
+	margin-bottom:1px;
+}
+
+.headerDescription{
+	margin-bottom:0;
+	padding-bottom:0;
+}
+
+.headerDescriptionTitle{
+	font-weight:bold;
+	font-size:1rem;
+	padding-bottom:0;
+	margin-bottom:0;
+	line-height:16px;
+}
+
+.headerGeneral{
+	padding-bottom:0;
+	margin-bottom:2px;
+	line-height:16px;
+>>>>>>> origin/master
 }

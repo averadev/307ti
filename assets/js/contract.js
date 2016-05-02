@@ -185,7 +185,7 @@ function showModals(div, funcion){
 	dialog = $( "#"+div ).dialog({
       autoOpen: false,
       height: maxHeight,
-      width: "50%",
+      width: "80%",
       modal: true,
       dialogClass: 'dialogModal',
       buttons: [
@@ -272,7 +272,12 @@ function getContratos(){
 }
 
 function getDetalleContratoByID(i){
-	console.log(i);
+	//console.log(i);
+	showLoading('#contracts',true);
+	ajaxHTML('dialog-Edit-Contract', 'contract/modalEdit');
+    showModals('dialog-Edit-Contract', cleanAddPeople);
+	//ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
+	//ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
 }
 
 function getInputsByID(formData, divs){
