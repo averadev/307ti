@@ -282,6 +282,7 @@ function createNewContract(){
 				firstYear : 2016,
 				lastYear : 2017,
 				tipoVentaId : 1,
+				viewId: 1,
 				contratoRelacionadoId : 0,
 				precioUnidad : 29714,
 				descuentoTotal :  0,

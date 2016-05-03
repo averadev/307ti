@@ -27,6 +27,7 @@ class Contract extends CI_Controller {
 		
 		if($this->input->is_ajax_request()){
 			var_dump($_POST);
+
 			$folio = $this->contract_db->select_Folio();
 
 			$Contract = [
@@ -53,6 +54,8 @@ class Contract extends CI_Controller {
 
 			$idContrato = $this->contract_db->insertReturnId('tblRes', $Contract);
 
+			$folio = $this->contract_db->select_Folio();
+
 			$Ocupacion = [
 				"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
 				"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
@@ -75,18 +78,16 @@ class Contract extends CI_Controller {
                 "CrDt"						=> getdate()
 			];
 
-			$idOcupacion = $this->contract_db->insertReturnId('tblResInvt', $Ocupacion);
+			$idOcupacion = $this->contract_db->insertReturnId('tblRes', $Ocupacion);
 			
 			$Unidades = [
 		        "fkResId"                   => $idContrato,
-		        "fkUnitId"    				=> $_POST['propiedadId'],
-		        "Intv"              		=> $_POST['idiomaId'],
-		        "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
-		        "pkResRelatedId"            => null,
-		        "fkFloorPlanId"             => $_POST['firstYear'],
-		        "fkViewId"               	=> $_POST['lastYear'],
-		        "fkSeassonId"               => "",
-		        "fkFrequencyId"             => "",
+		        "fkUnitId"    				=> $_POST['unitID'],
+		        "Intv"              		=> $_POST['tipoVentaId'],
+		        "fkFloorPlanId"             => $_POST['floorPlanId'],
+		        "fkViewId"               	=> $_POST['viewId'],
+		        "fkSeassonId"               => $_POST['SeassonId'],
+		        "fkFrequencyId"             => $_POST['FrequencyId'],
 		        "WeeksNumber"         		=> $this->contract_db->selectExchangeRateId(),
 		        "NightsNumber"              => $_POST['legalName'],
 		        "FirstOccYear"              => $folio,
@@ -96,6 +97,64 @@ class Contract extends CI_Controller {
 		        "CrDt"						=> getdate()
         ];
 
+        $idUnidadesInv = $this->contract_db->insertReturnId('tblResInvt', $Unidades);
+
+		$personas = [
+				"pkResPeopleAccId"          => $_POST[''],
+				"fkResId"    				=> $_POST[''],
+				"fkPeopleId"              	=> $_POST[''],
+				"fkAccId"             		=> $_POST['precioUnidad'],
+				"ynPrimaryPeople"           => $_POST[''],
+				"ynActive"          		=> $_POST[''],
+				"CrBy"             			=> 123,
+				"CrDt"						=> getdate()
+			];
+
+		$idPeopleAcc = $this->contract_db->insertReturnId('tblResPeopleAcc ', $personas);
+
+		$financiamiento = [
+				"fkResId"                   => $idContrato,
+				"fkFinMethodId"    			=> $_POST[''],
+				"fkFactorId"              	=> $_POST[''],
+				"ListPrice"             	=> $_POST['precioUnidad'],
+				"SpecialDiscount"           => $_POST[''],
+				"SpecialDiscount%"          => $_POST[''],
+				"CashDiscount"             	=> $_POST[''],
+				"CashDiscount%"         	=> $_POST[''],
+				"NetSalePrice"              => $_POST[''],
+				"Deposit"              		=> $_POST[''],
+				"TransferAmt"               => $_POST[''],
+				"PackPrice"                 => $_POST[''],
+				"FinanceBalance"            => $_POST[''],
+				"TotalFinanceAmt"           => $_POST[''],
+				"DownPmtAmt"            	=> $_POST[''],
+				"DownPmt%"           		=> $_POST[''],
+				"MonthlyPmtAmt"            	=> $_POST[''],
+				"BalanceActual"           	=> $_POST[''],
+				"ynClosingfee"            	=> $_POST[''],
+				"ClosingFeeAmt"           	=> $_POST[''],
+				"OtherFeeAmt"           	=> $_POST[''],
+				"ynReFin"           		=> $_POST[''],
+				"ynAvailable"           	=> $_POST[''],
+				"CrBy"                      => 123,
+				"CrDt"						=> getdate()
+			];
+
+		$idFinanciamiento = $this->contract_db->insertReturnId('tblResfin', $financiamiento);
+
+		$OcupacionTable = [
+				"fkResId"    	=> $idOcupacion,
+				"fkPeopleId"    => $_POST[''],
+				"fkResInvtId"   => $_POST['precioUnidad'],
+				"OccYear"       => $_POST[''],
+				"NightId"       => $_POST[''],
+				"fkResTypeId"   => $_POST[''],
+				"fkOccTypeId"   => 1,
+				"fkCalendarId" 	=> $_POST[''],
+				"ynActive"   	=> $_POST[''],
+				"CrBy"          => 123,
+				"CrDt"			=> getdate()
+			];
 	}
 }
 //////////////////////////////////////////////////////

@@ -57,27 +57,6 @@ class Contract_db extends CI_Model {
         $paymentProcessTypeId = $this->selectPaymentProcessTypeId();
         $languageId = $this->selectlanguageId();
         $resRelated = NUll;
-        //echo($restTypeId["pkRestypeId"]);
-//        select pkRestypeId from tblResType where ResTypeCode = 'Cont' --X--Tipo
-//        select pkPaymentProcessTypeId  from tblPaymentProcessType where PaymentProcessCode ='RG' --X--Tipo de proceso de pago
-//        select pklanguageId from tblLanguage where LanguageCode ='EN' --X--Idioma
-//        select pkLocationId from tblLocation where LocationCode ='CUN' --X-- Lugar
-//                --ResRelated NULL
-//                --FirstOCCYear
-//                --LastOCCYear
-//                --ResCode = ''
-//                --ResConf = ''
-//        select top 1 (pkExchangeRateId)  from tblexchangerate order by pkExchangeRateId desc --X-- ExchangeRateId = 2
-//                --LegalName  = $_POST['nombreLegal']
-//                --Folio = 1003
-//                --MonthlyPayAmt = 0
-//                --BalanceActual = $_POST['balance']
-//                --fkTourId = $_POST['tourID']
-//        select pksaleTypeId from tblSaleType where SaleTypeCode = 'CU' --SaleType
-//        pkinvtTypeId from tblInvtType where InvtTypeCode = 'CU' --invtType
-//                --fkestatus ??
-//                --ynActive = 1
-//                --CrBy
     }
     public function selectRestType($string){
         $this->db->select('pkRestypeId');
@@ -197,8 +176,8 @@ class Contract_db extends CI_Model {
     }
 
     public function selectUnitypes(){
-        $this->db->select("pkUnitTypeId as ID, UnitTypeDesc");
-        $this->db->from('tblUnitType');
+        $this->db->select("pkFloorPlanID as ID,  FloorPlanDesc");
+        $this->db->from('tblFloorPlan');
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {

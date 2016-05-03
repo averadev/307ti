@@ -48,6 +48,15 @@
                         <select type="text" id="season" name="season" class="general" required></select>
                     </div>
                 </div>
+                <!-- interval-->
+                <div class="row">
+                    <div class="small-3 columns">
+                        <label for="interval" class="text-left">Interval</label>
+                    </div>
+                    <div class="small-9 columns">
+                        <select type="text" id="interval" name="interval" class="general" required></select>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="medium-12columns">
