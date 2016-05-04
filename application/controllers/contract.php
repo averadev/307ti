@@ -26,136 +26,151 @@ class Contract extends CI_Controller {
 	public function saveContract(){
 		
 		if($this->input->is_ajax_request()){
-			var_dump($_POST);
-
-			$folio = $this->contract_db->select_Folio();
-
-			$Contract = [
-				"fkResTypeId"               => $this->contract_db->selectRestType('Cont'),
-				"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('RG'),
-				"fkLanguageId"              => $_POST['idiomaId'],
-                "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
-                "pkResRelatedId"            => null,
-                "FirstOccYear"              => $_POST['firstYear'],
-                "LastOccYear"               => $_POST['lastYear'],
-                "ResCode"                   => "",
-                "ResConf"                   => "",
-                "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
-                "LegalName"                 => $_POST['legalName'],
-                "Folio"                     => $folio,
-                "fkTourId"                  => $_POST['tourID'],
-                "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
-                "selectInvtTypeId"          => $this->contract_db->selectInvtTypeId('CU'),
-				"fkStatusId"				=> 1,
-                "ynActive"                  => 1,
-                "CrBy"                      => 123,
-                "CrDt"						=> getdate()
-			];
-
-			$idContrato = $this->contract_db->insertReturnId('tblRes', $Contract);
-
-			$folio = $this->contract_db->select_Folio();
-
-			$Ocupacion = [
-				"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
-				"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
-				"fkLanguageId"              => $_POST['idiomaId'],
-                "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
-                "pkResRelatedId"            => null,
-                "FirstOccYear"              => $_POST['firstYear'],
-                "LastOccYear"               => $_POST['lastYear'],
-                "ResCode"                   => "",
-                "ResConf"                   => "",
-                "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
-                "LegalName"                 => $_POST['legalName'],
-                "Folio"                     => $folio,
-                "fkTourId"                  => $_POST['tourID'],
-                "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
-                "selectInvtTypeId"          => $this->contract_db->selectInvtTypeId('CU'),
-				"fkStatusId"				=> 1,
-                "ynActive"                  => 1,
-                "CrBy"                      => 123,
-                "CrDt"						=> getdate()
-			];
-
-			$idOcupacion = $this->contract_db->insertReturnId('tblRes', $Ocupacion);
-			
-			$Unidades = [
-		        "fkResId"                   => $idContrato,
-		        "fkUnitId"    				=> $_POST['unitID'],
-		        "Intv"              		=> $_POST['tipoVentaId'],
-		        "fkFloorPlanId"             => $_POST['floorPlanId'],
-		        "fkViewId"               	=> $_POST['viewId'],
-		        "fkSeassonId"               => $_POST['SeassonId'],
-		        "fkFrequencyId"             => $_POST['FrequencyId'],
-		        "WeeksNumber"         		=> $this->contract_db->selectExchangeRateId(),
-		        "NightsNumber"              => $_POST['legalName'],
-		        "FirstOccYear"              => $folio,
-		        "LastOccYear"               => $_POST['tourID'],
-		        "ynActive"                  => 1,
-		        "CrBy"                      => 123,
-		        "CrDt"						=> getdate()
-        ];
-
-        $idUnidadesInv = $this->contract_db->insertReturnId('tblResInvt', $Unidades);
-
-		$personas = [
-				"pkResPeopleAccId"          => $_POST[''],
-				"fkResId"    				=> $_POST[''],
-				"fkPeopleId"              	=> $_POST[''],
-				"fkAccId"             		=> $_POST['precioUnidad'],
-				"ynPrimaryPeople"           => $_POST[''],
-				"ynActive"          		=> $_POST[''],
-				"CrBy"             			=> 123,
-				"CrDt"						=> getdate()
-			];
-
-		$idPeopleAcc = $this->contract_db->insertReturnId('tblResPeopleAcc ', $personas);
-
-		$financiamiento = [
-				"fkResId"                   => $idContrato,
-				"fkFinMethodId"    			=> $_POST[''],
-				"fkFactorId"              	=> $_POST[''],
-				"ListPrice"             	=> $_POST['precioUnidad'],
-				"SpecialDiscount"           => $_POST[''],
-				"SpecialDiscount%"          => $_POST[''],
-				"CashDiscount"             	=> $_POST[''],
-				"CashDiscount%"         	=> $_POST[''],
-				"NetSalePrice"              => $_POST[''],
-				"Deposit"              		=> $_POST[''],
-				"TransferAmt"               => $_POST[''],
-				"PackPrice"                 => $_POST[''],
-				"FinanceBalance"            => $_POST[''],
-				"TotalFinanceAmt"           => $_POST[''],
-				"DownPmtAmt"            	=> $_POST[''],
-				"DownPmt%"           		=> $_POST[''],
-				"MonthlyPmtAmt"            	=> $_POST[''],
-				"BalanceActual"           	=> $_POST[''],
-				"ynClosingfee"            	=> $_POST[''],
-				"ClosingFeeAmt"           	=> $_POST[''],
-				"OtherFeeAmt"           	=> $_POST[''],
-				"ynReFin"           		=> $_POST[''],
-				"ynAvailable"           	=> $_POST[''],
-				"CrBy"                      => 123,
-				"CrDt"						=> getdate()
-			];
-
-		$idFinanciamiento = $this->contract_db->insertReturnId('tblResfin', $financiamiento);
-
-		$OcupacionTable = [
-				"fkResId"    	=> $idOcupacion,
-				"fkPeopleId"    => $_POST[''],
-				"fkResInvtId"   => $_POST['precioUnidad'],
-				"OccYear"       => $_POST[''],
-				"NightId"       => $_POST[''],
-				"fkResTypeId"   => $_POST[''],
-				"fkOccTypeId"   => 1,
-				"fkCalendarId" 	=> $_POST[''],
-				"ynActive"   	=> $_POST[''],
-				"CrBy"          => 123,
-				"CrDt"			=> getdate()
-			];
+		
+			$idContrato = $this->createContract();
+			$idOcupacion = $this->insertOcupacion($idContrato);
+			$idUnidadesInv = $this->createUnidades($idContrato);
+			$idPeopleAcc = $this->createPeople();
+			$idFinanciamiento = $this->createFinanciamiento($idContrato);
+			$idSemanaOcupacion = $this->createSemanaOcupacion($idContrato);
 	}
+}
+
+private function createContract(){
+	$Contract = [
+		"fkResTypeId"               => $this->contract_db->selectRestType('Cont'),
+		"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('RG'),
+		"fkLanguageId"              => $_POST['idiomaID'],
+        "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
+        "pkResRelatedId"            => null,
+        "FirstOccYear"              => $_POST['firstYear'],
+        "LastOccYear"               => $_POST['lastYear'],
+        "ResCode"                   => "",
+        "ResConf"                   => "",
+        "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
+        "LegalName"                 => $_POST['legalName'],
+        "Folio"                     => $this->contract_db->select_Folio(),
+        "fkTourId"                  => $_POST['tourID'],
+        "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
+        "selectInvtTypeId"          => $this->contract_db->selectInvtTypeId('CU'),
+		"fkStatusId"				=> 1,
+        "ynActive"                  => 1,
+        "CrBy"                      => 123,
+        "CrDt"						=> getdate()
+	];
+			
+		return $this->contract_db->insertReturnId('tblRes', $Contract);
+}
+
+private function insertOcupacion($idContrato){
+	$Ocupacion = [
+		"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
+		"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
+		"fkLanguageId"              => $_POST['idiomaID'],
+        "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
+        "pkResRelatedId"            => $idContrato,
+        "FirstOccYear"              => $_POST['firstYear'],
+        "LastOccYear"               => $_POST['lastYear'],
+        "ResCode"                   => "",
+        "ResConf"                   => "",
+        "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
+        "LegalName"                 => $_POST['legalName'],
+        "Folio"                     => $this->contract_db->select_Folio(),
+        "fkTourId"                  => $_POST['tourID'],
+        "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
+        "selectInvtTypeId"          => $this->contract_db->selectInvtTypeId('CU'),
+		"fkStatusId"				=> 1,
+        "ynActive"                  => 1,
+        "CrBy"                      => 123,
+        "CrDt"						=> getdate()
+	];
+
+		return $this->contract_db->insertReturnId('tblRes', $Ocupacion);
+}
+
+private function createUnidades($idContrato){
+	$Unidades = [
+		"fkResId"                   => $idContrato,
+		"fkUnitId"    				=> $_POST['unitID'],
+		"Intv"              		=> $_POST['tipoVentaId'],
+		"fkFloorPlanId"             => $_POST['floorPlanId'],
+		"fkViewId"               	=> $_POST['viewId'],
+		"fkSeassonId"               => $_POST['SeassonId'],
+		"fkFrequencyId"             => $_POST['FrequencyId'],
+		"WeeksNumber"         		=> $this->contract_db->selectExchangeRateId(),
+		"NightsNumber"              => $_POST['legalName'],
+		"FirstOccYear"              => $folio,
+		"LastOccYear"               => $_POST['tourID'],
+		"ynActive"                  => 1,
+		"CrBy"                      => 123,
+		"CrDt"						=> getdate()
+	];
+
+		return  $this->contract_db->insertReturnId('tblResInvt', $Unidades);
+}
+
+private function createPeople(){
+	$personas = [
+		"pkResPeopleAccId"          => $_POST[''],
+		"fkResId"    				=> $_POST[''],
+		"fkPeopleId"              	=> $_POST[''],
+		"fkAccId"             		=> $_POST['precioUnidad'],
+		"ynPrimaryPeople"           => $_POST[''],
+		"ynActive"          		=> $_POST[''],
+		"CrBy"             			=> 123,
+		"CrDt"						=> getdate()
+	];
+
+		return $this->contract_db->insertReturnId('tblResPeopleAcc ', $personas);
+}
+
+private function createFinanciamiento($idContrato){
+	$financiamiento = [
+		"fkResId"                   => $idContrato,
+		"fkFinMethodId"    			=> $_POST[''],
+		"fkFactorId"              	=> $_POST[''],
+		"ListPrice"             	=> $_POST['precioUnidad'],
+		"SpecialDiscount"           => $_POST[''],
+		"SpecialDiscount%"          => $_POST[''],
+		"CashDiscount"             	=> $_POST[''],
+		"CashDiscount%"         	=> $_POST[''],
+		"NetSalePrice"              => $_POST[''],
+		"Deposit"              		=> $_POST[''],
+		"TransferAmt"               => $_POST[''],
+		"PackPrice"                 => $_POST[''],
+		"FinanceBalance"            => $_POST[''],
+		"TotalFinanceAmt"           => $_POST[''],
+		"DownPmtAmt"            	=> $_POST[''],
+		"DownPmt%"           		=> $_POST[''],
+		"MonthlyPmtAmt"            	=> $_POST[''],
+		"BalanceActual"           	=> $_POST[''],
+		"ynClosingfee"            	=> $_POST[''],
+		"ClosingFeeAmt"           	=> $_POST[''],
+		"OtherFeeAmt"           	=> $_POST[''],
+		"ynReFin"           		=> $_POST[''],
+		"ynAvailable"           	=> $_POST[''],
+		"CrBy"                      => 123,
+		"CrDt"						=> getdate()
+	];
+
+		return $this->contract_db->insertReturnId('tblResfin', $financiamiento);
+}
+
+private function createSemanaOcupacion($idContrato){
+	$OcupacionTable = [
+		"fkResId"    	=> $idContrato,
+		"fkPeopleId"    => $_POST[''],
+		"fkResInvtId"   => $_POST['precioUnidad'],
+		"OccYear"       => $_POST[''],
+		"NightId"       => $_POST[''],
+		"fkResTypeId"   => $_POST[''],
+		"fkOccTypeId"   => 1,
+		"fkCalendarId" 	=> $_POST[''],
+		"ynActive"   	=> $_POST[''],
+		"CrBy"          => 123,
+		"CrDt"			=> getdate()
+	];
+		return $this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
 }
 //////////////////////////////////////////////////////
 	//busqueda de Unidades

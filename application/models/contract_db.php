@@ -128,6 +128,7 @@ class Contract_db extends CI_Model {
         }
     }
 
+
     public function selectExchangeRateId(){
         $this->db->select('top 1 (pkExchangeRateId)');
         $this->db->from('tblexchangerate');
@@ -204,8 +205,10 @@ class Contract_db extends CI_Model {
     }
 
     public function getUnidades(){
-        $this->db->select('*');
-        $this->db->from('tblResInvt');
+        $this->db->select('u.UnitCode, fp.FloorPlanDesc, p.PriceFixedWk');
+        $this->db->from('tblUnit u');
+        $this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = u.fkFloorPlanId');
+        $this->db->join('tblPrice p', 'p.fkUnitId = u.pkUnitId');
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {
@@ -213,6 +216,17 @@ class Contract_db extends CI_Model {
         }
     }
 
+    public function select_Folio(){
+        $this->db->select('MAX(Folio)+1 as Folio');
+        $this->db->from('tblREs');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->Folio;
+        }
+    }
 
     public function getTours($filters){
         $sql = "";

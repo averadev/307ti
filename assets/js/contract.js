@@ -267,12 +267,14 @@ function createNewContract(){
 
 	$.ajax({
 			data: {
-				ID : 0,
-				Folio : 0,
-				tourId : $("#TourID").val().trim(),
-				nombreLegal : $("#legalName").val().trim(),
-				idiomaId : $( "#selectLanguage" ).val(),
-				peoples : [33,34,35],
+				legalName : $("#legalName").val().trim(),
+				tourID : $("#TourID").val().trim(),
+				idiomaID : $( "#selectLanguage" ).val(),
+				
+				peoples : {
+					"idPeople": 3,
+					"type":2,
+				},
 				unidades : [{
 					"propiedadId": 1,
 					"frecuenciaId": 2,
