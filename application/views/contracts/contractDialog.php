@@ -67,7 +67,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
+                            <!-- <tr>
                                 <td>23</td>
                                 <td>Faustino</td>
                                 <td>Loeza</td>
@@ -76,7 +76,7 @@
                                 <td><input type="radio" name="peopleContract" value="2"></td>
                                 <td><input type="radio" name="peopleContract" value="3"></td>
                                 <td><button type="button" class="alert button"><i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i></button></td>
-                            </tr>
+                            </tr> -->
                             </tbody>
                         </table>
                     </div>
@@ -93,7 +93,7 @@
                         <div class="small-12 columns">
                             <a id="btnAddUnidades" href="#" class="button tiny"><i class="fa fa-home"></i></a>
                         </div>
-                        <table id="tableUnidades" width="100%">
+                        <table id="tableUnidadesSelected" width="100%">
                             <thead>
                             <tr>
                                 <th class="cellEdit" >Code</th>
@@ -107,7 +107,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
+                            <!-- <tr>
                                 <td>sds5d5</td>
                                 <td>PArgo 1 3Rec</td>
                                 <td>$38,000.00</td>
@@ -116,7 +116,7 @@
                                 <td>2017</td>
                                 <td>Odd years</td>
                                 <td><button type="button" class="alert button"><i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i></button></td>
-                            </tr>
+                            </tr> -->
                             </tbody>
                         </table>
                     </div>

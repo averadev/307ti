@@ -982,7 +982,7 @@ label.error{
 }
 
 .blue {
-    background-color: #2980b9;
+    background-color: #2980b9 ;
 }
 
 .orange {
@@ -994,7 +994,7 @@ label.error{
 }
 
 .purple {
-    background-color: #8e44ad;
+    background-color: #8e44ad !important;
 }
 
 .dark-gray {
@@ -1129,10 +1129,10 @@ th.next{
 	width: 90px;
 }
 
-<<<<<<< HEAD
+
 .tabs{
 	margin-left: 239px;
-=======
+}
 .trColspan{
 	background:#cacaca;
 	font-size:1rem;
@@ -1192,5 +1192,4 @@ th.next{
 	padding-bottom:0;
 	margin-bottom:2px;
 	line-height:16px;
->>>>>>> origin/master
 }

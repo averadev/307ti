@@ -7,7 +7,8 @@ $(document).ready(function(){
     var unidadDialog = addUnidadDialog();
     var peopleDialog = addPeopleDialog();
 	var addContract = createDialogContract();
-	//var tourDialog = 
+	//var addUnidadDialogYears = addUnidadYears();
+
 
 	$(document).on( 'click', '#newContract', function () {
 		showLoading('#dialog-Contract',true);
@@ -24,6 +25,8 @@ $(document).ready(function(){
 	     showLoading('#dialog-People',true);
          $( "#dialog-People" ).load( 'people/index', function() {
             showLoading('#dialog-People',false);
+            $("#dialog-User").hide();
+            selectTable("tablePeople");
         });
          peopleDialog.dialog( "open" );
 	});
@@ -32,6 +35,7 @@ $(document).ready(function(){
 	        showLoading('#dialog-Unidades',true);
 	        $( "#dialog-Unidades" ).load( 'contract/modalUnidades', function() {
 	            showLoading('#dialog-Unidades',false);
+	            selectTableUnico("tblUnidades");
 	        });
 	        unidadDialog.dialog( "open" );
 	    });
@@ -106,18 +110,15 @@ function addUnidadDialog() {
 				$(this).dialog('close');
 			}
 		},{
-			text: "Save and close",
+			text: "add",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
+				if(selectAllUnities()){
+					$(this).dialog('close');
+					//addUnidadDialogYears.dialog("open");
+				};
 			}
-		},
-			{
-				text: "Save",
-				"class": 'dialogModalButtonAccept',
-				click: function() {
-					saveContract();
-				}
-			}],
+		}],
 		close: function() {
 		
 		}
@@ -138,18 +139,14 @@ function addPeopleDialog() {
 				$(this).dialog('close');
 			}
 		},{
-			text: "Save and close",
+			text: "add",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
+				if(selectAllPeople()){
+					$(this).dialog('close');
+				};
 			}
-		},
-			{
-				text: "Save",
-				"class": 'dialogModalButtonAccept',
-				click: function() {
-					saveContract();
-				}
-			}],
+		}],
 		close: function() {
 		
 		}
@@ -157,6 +154,34 @@ function addPeopleDialog() {
 	return dialog;
 }
 
+function addUnidadYears() {
+
+	dialog = $( "#dialog-People" ).dialog({
+		autoOpen: false,
+		height: maxHeight/4,
+		width: "10%",
+		modal: true,
+		buttons: [{
+			text: "Cancel",
+			"class": 'dialogModalButtonCancel',
+			click: function() {
+				$(this).dialog('close');
+			}
+		},{
+			text: "add",
+			"class": 'dialogModalButtonAccept',
+			click: function() {
+				if(selectAllPeople()){
+					$(this).dialog('close');
+				};
+			}
+		}],
+		close: function() {
+		
+		}
+	});
+	return dialog;
+}
 
 
 // function goodBye(){
@@ -352,7 +377,155 @@ function getDataFormContract(){
 	var idsContract = ['legalName', 'TourID'];
 	var dataContact = getWords(dataContract);
 	data.selectLanguage = $( "#selectLanguage" ).val();
-
-
 }
 
+function addUsuarios(){
+	$("#dialog-User").hide();
+    $("#tablePeople").on("click", "tr", function(){
+		//var fullArray = $(this).find("td");
+		$(this).find("td").toggleClass("blue");
+	});
+}
+function addUsuarios2(){
+	$("#dialog-User").hide();
+    $("#tablePeople").on("click", "tr", function(){
+		$(this).find("td").toggleClass("blue");
+		// console.log($(this));
+		// algo = $(this);
+		$(this).toggleClass("purple");
+	});
+}
+
+function addUsuarios3(){
+	$("#tablePeople tr" ).on( "click", function( event ) {
+
+          //$("#fillname").val($(this).find("td").eq(1).html());
+          $( this ).css( "background-color", "red" );
+
+    });
+}
+
+
+function selectAllPeople(){
+	var personas = [];
+
+	var array = $("#tablePeople .purple");
+	for (var i = 0; i < array.length; i++) {
+		// var persona = {
+		// 	id:array[i].childNodes[1].textContent,
+		// 	name:array[i].childNodes[2].textContent,
+		// 	lastName:array[i].childNodes[3].textContent,
+		// 	address:array[i].childNodes[4].textContent
+		// };
+		persona = [
+			array[i].childNodes[1].textContent.trim(),
+			array[i].childNodes[2].textContent.trim(),
+			array[i].childNodes[3].textContent.trim(),
+			array[i].childNodes[4].textContent.trim()
+		];
+		personas.push(persona);
+	}
+	if (personas.length <= 0) {
+		alertify.error("Click over for choose one");
+		return false;
+	}else{
+		tablaPersonas(personas);
+		return true;
+	}
+	
+}
+
+function tablaPersonas(personas){
+	var bodyHTML = '';
+	    //creación del body
+    for (var i = 0; i < personas.length; i++) {
+        bodyHTML += "<tr>";
+        for (var j in personas[i]) {
+            bodyHTML+="<td>" + personas[i][j] + "</td>";
+        };
+        bodyHTML += "<td><input class='radiocheckbox' type='radio' name='principal'></td>";
+        bodyHTML += "<td><input class='radiocheckbox' type='radio' name='secundaria'></td>";
+        bodyHTML += "<td><input class='radiocheckbox' type='radio' name='baneficiario'></td>";
+        bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
+        bodyHTML+="</tr>";
+    }
+    $('#tablePeopleSelected tbody').append(bodyHTML);
+    deleteElementTable("tablePeopleSelected");
+    //checkBoxes();
+}
+
+function deleteElementTable(div){
+	$("#"+div+" tr").on("click", "button", function(){
+		$(this).closest("tr").remove();
+	});
+}
+
+function checkBoxes(){
+	var radioButtons = $('input[name="principal"]');
+	var selectedIndex = radioButtons.index(radioButtons.filter(':checked'));
+	radioButtons.checked(0);
+
+	$('#tablePeopleSelected tbody .radiocheckbox').click(function() {
+    	this.checked && $(this).siblings('input[name="' + this.name + '"]:checked.' + this.className).prop('checked', false);
+	});
+}
+
+function selectTable(div){
+	$("#"+div).on("click", "tr", function(){
+		$(this).find("td").toggleClass("blue");
+		$(this).toggleClass("purple");
+	});
+}
+function selectTableUnico(div){
+	var pickedup;
+	$("#"+div).on("click", "tr", function(){
+		// $(this).find("td").toggleClass("blue");
+		// $(this).toggleClass("purple");
+
+          if (pickedup != null) {
+              pickedup.removeClass("purple");
+          }
+          $( this ).addClass("purple");
+          pickedup = $(this);
+	});
+}
+
+function selectAllUnities(){
+	var unidades = [];
+
+	var array = $("#tblUnidades .purple");
+	for (var i = 0; i < array.length; i++) {
+		unidad = [
+			array[i].childNodes[1].textContent.trim(),
+			array[i].childNodes[2].textContent.trim(),
+			array[i].childNodes[3].textContent.trim(),
+		];
+		unidades.push(unidad);
+	}
+	if (unidades.length <= 0) {
+		alertify.error("Click over for choose one");
+		return false;
+	}else{
+		tablUnidadades(unidades);
+		return true;
+	}
+}
+
+function tablUnidadades(unidades){
+	var bodyHTML = '';
+	    //creación del body
+    for (var i = 0; i < unidades.length; i++) {
+        bodyHTML += "<tr>";
+        for (var j in unidades[i]) {
+            bodyHTML+="<td>" + unidades[i][j] + "</td>";
+        };
+        bodyHTML += "<td>1</td>";
+        bodyHTML += "<td>2016</td>";
+        bodyHTML += "<td>2017</td>";
+        bodyHTML += "<td>Odd years</td>";
+        bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
+        bodyHTML+="</tr>";
+    }
+    $('#tableUnidadesSelected tbody').html(bodyHTML);
+    deleteElementTable("tableUnidadesSelected");
+}

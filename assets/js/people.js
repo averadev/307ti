@@ -1084,30 +1084,30 @@ $(document).ready(function(){
 	*/
 });
 
-	$("#tablePeople").on("click", "tr", function() {
-		var valores = [];
-		var fullArray = $(this).find("td");
-		valores.push(fullArray.eq(1).html());
-		valores.push(fullArray.eq(2).html());
-		valores.push(fullArray.eq(3).html());
-		valores.push(fullArray.eq(4).html());
-		console.log(valores);
-		if($('#tablePeopleSelected').length == 1){
-			createTable(valores);
-		}
-	});
+// 	$("#tablePeople").on("click", "tr", function() {
+// 		var valores = [];
+// 		var fullArray = $(this).find("td");
+// 		valores.push(fullArray.eq(1).html());
+// 		valores.push(fullArray.eq(2).html());
+// 		valores.push(fullArray.eq(3).html());
+// 		valores.push(fullArray.eq(4).html());
+// 		console.log(valores);
+// 		if($('#tablePeopleSelected').length == 1){
+// 			createTable(valores);
+// 		}
+// 	});
 
-$("#tablePeople").on("click", "tr", function() {
-		console.log($( this ));
-		//typeof($( this ).nodeValue(1).text());
-	});
-	function createTable(array) {
-		table = "";
-		for(var i = 0; i<array.length; i++){
-			table +='<td>'+array[i]+'</td>';
-		}
-		document.getElementById("tablePeopleSelected").innerHTML += table;
-	}
+// $("#tablePeople").on("click", "tr", function() {
+// 		console.log($( this ));
+// 		//typeof($( this ).nodeValue(1).text());
+// 	});
+// 	function createTable(array) {
+// 		table = "";
+// 		for(var i = 0; i<array.length; i++){
+// 			table +='<td>'+array[i]+'</td>';
+// 		}
+// 		document.getElementById("tablePeopleSelected").innerHTML += table;
+// 	}
 
 //
 // $("table tr:first").clone().find("input").each(function() {
