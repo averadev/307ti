@@ -38,7 +38,7 @@
 							</div>
 						</fieldset>
 						<fieldset class="large-12 columns">
-							<legend class="legendSearch">Choose the date and unit</legend>
+							
 							<div class="small-12 large-5 columns">
 								<div class="row collapse">
 									<div class="small-10 large-10 columns">

@@ -18,6 +18,8 @@
 		
 		<!-- Zebra_Datepicker -->
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>zebra/bootstrap.css" />
+		<!-------- gantt ------->
+		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>gantt/gantt.css" />
 		
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
@@ -31,6 +33,7 @@
         
 		<!-- Zebra_Datepicker -->
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>zebra/zebra_datepicker.js"></script>
+		<!-------- gantt -------->
     </head>
     <body>
 		
@@ -79,6 +82,10 @@
                 <div class="menu-sel" attr-screen="inventory">
 					<span class="icon-menu-sel"><i class="fa fa-money"></i></span>
 					<div class="label-menu-sel">Inventary</div>
+				</div>
+				<div class="menu-sel" attr-screen="frontDesk">
+					<span class="icon-menu-sel"><i class="fa fa-desktop"></i></span>
+					<div class="label-menu-sel">FrontDesk</div>
 				</div>
                 <div class="menu-fix">&nbsp;</div>
             </div>

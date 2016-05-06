@@ -153,7 +153,7 @@ Class inventory_db extends CI_MODEL
 		if($date != ""){
 			$this->db->where("tblCalendar.Date >= '" . $date . "' and tblCalendar.Date <= DATEADD(day,20,'" . $date . "')");
 		}else{
-			$this->db->where("tblCalendar.Date >= GETDATE() and tblCalendar.Date <= DATEADD(day,20,GETDATE())");
+			$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),GETDATE(),101) and tblCalendar.Date <= DATEADD(day,20,CONVERT(VARCHAR(10),GETDATE(),101))");
 		}
 		return  $this->db->get()->result();
 	}
@@ -197,7 +197,7 @@ Class inventory_db extends CI_MODEL
 		if($date != ""){
 			$this->db->where("tblCalendar.Date >= '" . $date . "' and tblCalendar.Date <= DATEADD(day,10,'" . $date . "')");
 		}else{
-			$this->db->where("tblCalendar.Date >= GETDATE() and tblCalendar.Date <= DATEADD(day,10,GETDATE())");
+			$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),GETDATE(),101) and tblCalendar.Date <= DATEADD(day,10,CONVERT(VARCHAR(10),GETDATE(),101))");
 		}
 		return  $this->db->get()->result();
 	}

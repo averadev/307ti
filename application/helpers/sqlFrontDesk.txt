@@ -1,0 +1,144 @@
+*Arrival Date
+SELECT * from tblResOcc ro
+INNER JOIN  tblCalendar c on c.pkCalendarId = ro.fkCalendarId
+where ro.NightId = 1 
+and c.date = CONVERT(VARCHAR(10),'2016-04-13 00:00:00.000',101);
+
+or 
+SELECT * from tblResOcc 
+INNER JOIN tblCalendar on tblCalendar.date = '2016-04-13'
+where tblResOcc.fkCalendarId = tblCalendar.pkCalendarId and tblResOcc.NightId = 1;
+
+or
+SELECT ro.pkResOccId, c.pkCalendarId 
+from tblResOcc ro
+INNER JOIN tblCalendar c on c.pkCalendarId = ro.fkCalendarId  
+where ro.NightId = 1 and c.date = CONVERT(VARCHAR(10),GETDATE(),101)
+
+* Departure Date
+SELECT *
+from tblResOcc ro
+INNER JOIN tblCalendar c on c.pkCalendarId = ro.fkCalendarId
+where  ro.NightId = (SELECT top 1 ro2.NightId from tblResOcc ro2 where ro2.fkResId = ro.fkResId ORDER BY ro2.NightId DESC )
+and c.date = CONVERT(VARCHAR(10),'2016-04-19 00:00:00.000',101);
+
+*unitcode
+select * from tblResOcc ro
+INNER JOIN tblResInvt ri on ri.pkResInvtId = ro.fkResInvtId
+INNER JOIN tblUnit u on u.pkUnitId = ri.fkUnitId
+where u.UnitCode = '101';
+
+or
+select ro.pkResOccId, ri.pkResInvtId, u.pkUnitId, u.UnitCode from tblResOcc ro
+INNER JOIN tblResInvt ri on ri.pkResInvtId = ro.fkResInvtId
+INNER JOIN tblUnit u on u.pkUnitId = ri.fkUnitId
+where u.UnitCode LIKE '%101%';
+
+*Confirmation Code
+select * from tblResOcc ro
+INNER JOIN tblRes r on r.pkResId = ro.fkResId
+where r.ResConf = 'OW00000001';
+
+or
+select * from tblResOcc ro
+INNER JOIN tblRes r on r.pkResId = ro.fkResId
+where r.ResConf LIKE '%OW00000001%';
+
+*status
+select ro.pkResOccId, r.pkResId, ro.NightId, ro.fkCalendarId, r.ResConf, r.fkStatusId
+from tblResOcc ro
+INNER JOIN tblRes r on r.pkResId = ro.fkResId
+INNER JOIN tblStatusTypeStatus sts on sts.fkStatusId = r.fkStatusId
+where sts.fkStatusTypeId = 2
+
+or
+select ro.pkResOccId, r.pkResId, ro.NightId, ro.fkCalendarId, r.ResConf, r.fkStatusId, s.StatusDesc
+from tblResOcc ro
+INNER JOIN tblRes r on r.pkResId = ro.fkResId
+INNER JOIN tblStatus s on s.pkStatusId = r.fkStatusId
+INNER JOIN tblStatusTypeStatus sts on sts.fkStatusId = s.pkStatusId 
+where sts.fkStatusTypeId = 2
+
+* Departure Date
+SELECT *
+from tblResOcc ro
+INNER JOIN tblCalendar c on c.pkCalendarId = ro.fkCalendarId
+where  ro.NightId = (SELECT top 1 ro2.NightId from tblResOcc ro2 where ro2.fkResId = ro.fkResId ORDER BY ro2.NightId DESC )
+
+or
+SELECT *
+from tblResOcc ro
+INNER JOIN tblCalendar c on c.pkCalendarId = ro.fkCalendarId
+where  ro.NightId = (SELECT top 1 ro2.NightId from tblResOcc ro2 where ro2.fkResId = ro.fkResId ORDER BY ro2.NightId DESC ) 
+and c.Date = CONVERT(VARCHAR(10),GETDATE(),101)
+
+*view
+select ro.pkResOccId, ri.pkResInvtId, u.pkUnitId, u.UnitCode, v.ViewDesc from tblResOcc ro
+INNER JOIN tblResInvt ri on ri.pkResInvtId = ro.fkResInvtId
+INNER JOIN tblUnit u on u.pkUnitId = ri.fkUnitId
+INNER JOIN tblView v on v.pkViewId = u.fkViewId
+where v.pkViewId = 2
+
+
+arriva date and departure date
+SELECT *
+from tblResOcc ro
+INNER JOIN tblCalendar c on c.pkCalendarId = ro.fkCalendarId
+where (ro.NightId = 1 
+and c.date = CONVERT(VARCHAR(10),'2016-04-13 00:00:00.000',101)) or 
+(ro.NightId = (SELECT top 1 ro2.NightId from tblResOcc ro2 where ro2.fkResId = ro.fkResId ORDER BY ro2.NightId DESC )
+and c.date = CONVERT(VARCHAR(10),'2020-03-13 00:00:00.000',101));
+
+select c.pkCalendarId,CONVERT(VARCHAR(11),c.Date,106) as Date2,
+rpa.pkResPeopleAccId,
+p.Name, p.LName,
+ro.pkResOccId, ro.fkResId, ro.fkResInvtId, ro.NightId,
+fpi.FloorPlanDesc as type,
+u.pkUnitId, u.UnitCode, u.fkPropertyId,
+fp.pkFloorPlanID, fp.FloorPlanDesc,
+v.pkViewId, v.ViewDesc,
+uhks.pkHKStatusId, uhks.fkUnitId, hks.HKStatusDesc
+from tblCalendar c
+INNER JOIN tblDayOfWeek dw on dw.pkDayOfWeekId = c.fkDayOfWeekId
+LEFT JOIN tblResOcc ro on ro.fkCalendarId = c.pkCalendarId
+LEFT JOIN tblResInvt ri on ri.pkResInvtId = ro.fkResInvtId
+LEFT JOIN tblFloorPlan fpi on fpi.pkFloorPlanID = ri.fkFloorPlanId
+LEFT JOIN tblUnit u on u.pkUnitId = ri.fkUnitId
+LEFT JOIN tblView v on v.pkViewId = ri.fkViewId
+LEFT JOIN tblFloorPlan fp on fp.pkFloorPlanID = u.fkFloorPlanId
+LEFT JOIN tblUnitHKStatus uhks on uhks.fkUnitId = u.pkUnitId and (uhks.fkCalendarID = 106 or uhks.fkCalendarID = (SELECT MAX( uhks2.fkCalendarID ) FROM tblUnitHKStatus uhks2 WHERE uhks2.fkUnitId = u.pkUnitId ) )
+LEFT JOIN tblHKStatus hks on hks.pkHKStatusId = uhks.fkHkStatusId
+LEFT JOIN tblResPeopleAcc rpa on rpa.fkPeopleId = ro.fkResId
+LEFT JOIN tblPeople p on p.pkPeopleId = rpa.fkPeopleId
+where 
+(c.date >= '2016-04-13 00:00:00.000' and c.[Date] <= DATEADD(day,10,CONVERT(VARCHAR(10),'2016-04-13 00:00:00.000',101)));
+
+
+select c.pkCalendarId,--CONVERT(VARCHAR(11),c.Date,106) as Date2,
+rpa.pkResPeopleAccId,
+--p.Name, p.LName,
+fpi.FloorPlanDesc as type,
+u.pkUnitId, u.UnitCode, u.fkPropertyId,
+ro.pkResOccId, ro.fkResId, ro.fkResInvtId, ro.NightId,
+--fpi.FloorPlanDesc as type,
+fpi.fkPropertyId as type,
+u.pkUnitId, --u.UnitCode, u.fkPropertyId,
+fp.pkFloorPlanID, --fp.FloorPlanDesc,
+v.pkViewId, --v.ViewDesc,
+uhks.pkHKStatusId, uhks.fkUnitId, hks.HKStatusDesc
+from tblCalendar c
+INNER JOIN tblDayOfWeek dw on dw.pkDayOfWeekId = c.fkDayOfWeekId
+LEFT JOIN tblResOcc ro on ro.fkCalendarId = c.pkCalendarId
+LEFT JOIN tblRes r on r.pkResId = ro.fkResId
+LEFT JOIN tblResInvt ri on ri.fkResId = r.pkResId
+LEFT JOIN tblFloorPlan fpi on fpi.pkFloorPlanID = ri.fkFloorPlanId
+LEFT JOIN tblUnit u on u.pkUnitId = ri.fkUnitId
+LEFT JOIN tblView v on v.pkViewId = ri.fkViewId
+LEFT JOIN tblFloorPlan fp on fp.pkFloorPlanID = u.fkFloorPlanId
+LEFT JOIN tblUnitHKStatus uhks on uhks.fkUnitId = u.pkUnitId and (uhks.fkCalendarID = 106 or uhks.fkCalendarID = (SELECT MAX( uhks2.fkCalendarID ) FROM tblUnitHKStatus uhks2 WHERE uhks2.fkUnitId = u.pkUnitId ) )
+LEFT JOIN tblHKStatus hks on hks.pkHKStatusId = uhks.fkHkStatusId
+LEFT JOIN tblResPeopleAcc rpa on rpa.fkResId = ro.fkResId and rpa.ynPrimaryPeople = 1
+LEFT JOIN tblPeople p on p.pkPeopleId = rpa.fkPeopleId 
+where 
+--ro.NightId = 1 and
+(c.date >= '2016-04-13 00:00:00.000' and c.[Date] <= DATEADD(day,10,CONVERT(VARCHAR(10),'2016-04-13 00:00:00.000',101)));

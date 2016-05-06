@@ -1,0 +1,47 @@
+*Arrival Date
+SELECT * from tblResOcc 
+INNER JOIN tblCalendar on tblCalendar.date = CONVERT(VARCHAR(10),GETDATE(),101) 
+and tblCalendar.pkCalendarId =tblResOcc.fkCalendarId 
+and tblResOcc.NightId = 1;
+
+or 
+SELECT * from tblResOcc 
+INNER JOIN tblCalendar on tblCalendar.date = '2016-04-13'
+where tblResOcc.fkCalendarId = tblCalendar.pkCalendarId and tblResOcc.NightId = 1;
+
+*unitcode
+select * from tblResOcc ro
+INNER JOIN tblResInvt ri on ri.pkResInvtId = ro.fkResInvtId
+INNER JOIN tblUnit u on u.pkUnitId = ri.fkUnitId
+where u.UnitCode = '101';
+
+or
+select ro.pkResOccId, ri.pkResInvtId, u.pkUnitId, u.UnitCode from tblResOcc ro
+INNER JOIN tblResInvt ri on ri.pkResInvtId = ro.fkResInvtId
+INNER JOIN tblUnit u on u.pkUnitId = ri.fkUnitId
+where u.UnitCode LIKE '%101%';
+
+*Confirmation Code
+select * from tblResOcc ro
+INNER JOIN tblRes r on r.pkResId = ro.fkResId
+where r.ResConf = 'OW00000001';
+
+or
+select * from tblResOcc ro
+INNER JOIN tblRes r on r.pkResId = ro.fkResId
+where r.ResConf LIKE '%OW00000001%';
+
+*status
+select ro.pkResOccId, r.pkResId, ro.NightId, ro.fkCalendarId, r.ResConf, r.fkStatusId
+from tblResOcc ro
+INNER JOIN tblRes r on r.pkResId = ro.fkResId
+INNER JOIN tblStatusTypeStatus sts on sts.fkStatusId = r.fkStatusId
+where sts.fkStatusTypeId = 2
+
+or
+select ro.pkResOccId, r.pkResId, ro.NightId, ro.fkCalendarId, r.ResConf, r.fkStatusId, s.StatusDesc
+from tblResOcc ro
+INNER JOIN tblRes r on r.pkResId = ro.fkResId
+INNER JOIN tblStatus s on s.pkStatusId = r.fkStatusId
+INNER JOIN tblStatusTypeStatus sts on sts.fkStatusId = s.pkStatusId 
+where sts.fkStatusTypeId = 2

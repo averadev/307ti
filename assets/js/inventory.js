@@ -38,23 +38,10 @@ $(document).ready(function() {
 	//alertify.success("Found "+ 50);
 	$( "#textInvStartDate" ).Zebra_DatePicker({
 		format: 'm/d/Y',
+		show_icon: false,
 	});
 	
-	var today = new Date();
-	var dd = today.getDate();
-	var mm = today.getMonth()+1; //January is 0!
-	var yyyy = today.getFullYear();
-	
-	if(dd<10) {
-		dd='0'+dd
-	} 
-
-	if(mm<10) {
-		mm='0'+mm
-	} 
-	
-	today = mm+'/'+dd+'/'+yyyy;
-	$('#textInvStartDate').val(today)
+	$('#textInvStartDate').val(getCurrentDate())
 });
 
 function searchInventary(page){

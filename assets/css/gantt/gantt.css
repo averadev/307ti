@@ -1,0 +1,82 @@
+/* border-collapse:collapse;
+    border-spacing:0;
+	font-weight: normal;
+	EDEDED
+	D9DEE4
+*/
+
+	
+	
+table.ganttTable{
+	/*border:2px solid rgba(34, 91, 136, .5);*/
+	border:2px solid #D9DEE4;
+	border-radius:15px;
+}
+
+.ganttTable thead tr {
+	background:#EDEDED;
+	border-bottom:2px solid #D9DEE4;
+}
+
+.ganttTable tbody tr {
+	background:#fbfbfb;
+	border-bottom:1px solid #D9DEE4;
+}
+
+
+.ganttTable tbody tr:nth-child(even) {
+	background:#fbfbfb;
+}
+	
+.headelGantt{
+	
+}
+
+.ganttTable tbody tr .panelLeft{
+	background:#f4f4f4;
+	
+}
+
+.panelLeft.last{
+	border-right: 2px solid #D9DEE4;
+}
+
+.ganttTable thead tr.gHeaderYear{
+	border-bottom: none;
+}
+
+.ganttTable thead  th.rightPanel{
+	text-align:center;
+	border:1px solid #D9DEE4;
+}
+
+.ganttTable tbody td{
+	padding-left:0;
+	padding-right:0;
+}
+
+.ganttTable tbody td.rightPanel{
+	color:#000000;
+	text-align:center;
+	border:1px solid #D9DEE4;
+}
+
+.ganttTable td.cellOwners.rightPanel{
+	background:#0392cf;
+	border-right: 4px solid #FFFFFF;
+}
+
+.ganttTable td.cellRentals.rightPanel{
+	background:#9ad3eb;
+	border-right: 4px solid #FFFFFF;
+}
+
+.ganttTable td.cellOwnersLoan.rightPanel{
+	background:#fcec4d;
+	border-right: 4px solid #FFFFFF;
+}
+
+.ganttTable td.cellNoChange.rightPanel{
+	background:#7bc043;
+	border-right: 4px solid #FFFFFF;
+}
