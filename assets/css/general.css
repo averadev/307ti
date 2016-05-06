@@ -1095,7 +1095,7 @@ label.error{
 }
 
 .yellow {
-    background-color: #f1c40f;
+    background-color: #f1c40f !important;
 }
 .blue_divina{
 	background-color: #225b88;

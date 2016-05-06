@@ -63,92 +63,99 @@ private function createContract(){
 }
 
 private function insertOcupacion($idContrato){
-	$Ocupacion = [
-		"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
-		"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
-		"fkLanguageId"              => $_POST['idiomaID'],
-        "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
-        "pkResRelatedId"            => $idContrato,
-        "FirstOccYear"              => $_POST['firstYear'],
-        "LastOccYear"               => $_POST['lastYear'],
-        "ResCode"                   => "",
-        "ResConf"                   => "",
-        "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
-        "LegalName"                 => $_POST['legalName'],
-        "Folio"                     => $this->contract_db->select_Folio(),
-        "fkTourId"                  => $_POST['tourID'],
-        "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
-        "selectInvtTypeId"          => $this->contract_db->selectInvtTypeId('CU'),
-		"fkStatusId"				=> 1,
-        "ynActive"                  => 1,
-        "CrBy"                      => 123,
-        "CrDt"						=> getdate()
-	];
+	for($i =0; $< intval($_POST['weeks']); $i++){
+			$Ocupacion = [
+			"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
+			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
+			"fkLanguageId"              => $_POST['idiomaID'],
+	        "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
+	        "pkResRelatedId"            => $idContrato,
+	        "FirstOccYear"              => $_POST['firstYear'],
+	        "LastOccYear"               => $_POST['lastYear'],
+	        "ResCode"                   => "",
+	        "ResConf"                   => "",
+	        "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
+	        "LegalName"                 => $_POST['legalName'],
+	        "Folio"                     => $this->contract_db->select_Folio(),
+	        "fkTourId"                  => $_POST['tourID'],
+	        "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
+	        "selectInvtTypeId"          => $this->contract_db->selectInvtTypeId('CU'),
+			"fkStatusId"				=> 1,
+	        "ynActive"                  => 1,
+	        "CrBy"                      => 123,
+	        "CrDt"						=> getdate()
+		];
 
-		return $this->contract_db->insertReturnId('tblRes', $Ocupacion);
+			return $this->contract_db->insertReturnId('tblRes', $Ocupacion);
+	}
+	
 }
 
 private function createUnidades($idContrato){
-	$Unidades = [
-		"fkResId"                   => $idContrato,
-		"fkUnitId"    				=> $_POST['unitID'],
-		"Intv"              		=> $_POST['tipoVentaId'],
-		"fkFloorPlanId"             => $_POST['floorPlanId'],
-		"fkViewId"               	=> $_POST['viewId'],
-		"fkSeassonId"               => $_POST['SeassonId'],
-		"fkFrequencyId"             => $_POST['FrequencyId'],
-		"WeeksNumber"         		=> $this->contract_db->selectExchangeRateId(),
-		"NightsNumber"              => $_POST['legalName'],
-		"FirstOccYear"              => $folio,
-		"LastOccYear"               => $_POST['tourID'],
-		"ynActive"                  => 1,
-		"CrBy"                      => 123,
-		"CrDt"						=> getdate()
-	];
+	for($i =0; $< intval($_POST['weeks']); $i++){
+		$Unidades = [
+			"fkResId"                   => $idContrato,
+			"fkUnitId"    				=> $_POST['unidades'][$i],
+			"Intv"              		=> $_POST['tipoVentaId'],
+			"fkFloorPlanId"             => $_POST['floorPlanId'],
+			"fkViewId"               	=> $_POST['viewId'],
+			"fkSeassonId"               => $_POST['SeassonId'],
+			"fkFrequencyId"             => $_POST['FrequencyId'],
+			"WeeksNumber"         		=> $this->contract_db->selectExchangeRateId(),
+			"NightsNumber"              => $_POST['legalName'],
+			"FirstOccYear"              => $folio,
+			"LastOccYear"               => $_POST['tourID'],
+			"ynActive"                  => 1,
+			"CrBy"                      => 123,
+			"CrDt"						=> getdate()
+		];
 
-		return  $this->contract_db->insertReturnId('tblResInvt', $Unidades);
+			return  $this->contract_db->insertReturnId('tblResInvt', $Unidades);
+	}
 }
 
-private function createPeople(){
-	$personas = [
-		"pkResPeopleAccId"          => $_POST[''],
-		"fkResId"    				=> $_POST[''],
-		"fkPeopleId"              	=> $_POST[''],
-		"fkAccId"             		=> $_POST['precioUnidad'],
-		"ynPrimaryPeople"           => $_POST[''],
-		"ynActive"          		=> $_POST[''],
-		"CrBy"             			=> 123,
-		"CrDt"						=> getdate()
-	];
+private function createPeople($idContrato){
+	for($i =0; $< intval($_POST['peoples']); $i++){
+		$personas = [
+			"pkResPeopleAccId"          => $_POST['pkResPeopleAccId'],
+			"fkResId"    				=> $idContrato,
+			"fkPeopleId"              	=> $_POST['peoples'][$i],
+			"fkAccId"             		=> $_POST['fkAccId'],
+			"ynPrimaryPeople"           => $_POST['peoples'][$_POST["primario"]],
+			"ynActive"          		=> 1,
+			"CrBy"             			=> 123,
+			"CrDt"						=> getdate()
+		];
 
-		return $this->contract_db->insertReturnId('tblResPeopleAcc ', $personas);
+			return $this->contract_db->insertReturnId('tblResPeopleAcc ', $personas);
+	}
 }
 
 private function createFinanciamiento($idContrato){
 	$financiamiento = [
 		"fkResId"                   => $idContrato,
-		"fkFinMethodId"    			=> $_POST[''],
-		"fkFactorId"              	=> $_POST[''],
-		"ListPrice"             	=> $_POST['precioUnidad'],
-		"SpecialDiscount"           => $_POST[''],
-		"SpecialDiscount%"          => $_POST[''],
-		"CashDiscount"             	=> $_POST[''],
-		"CashDiscount%"         	=> $_POST[''],
-		"NetSalePrice"              => $_POST[''],
-		"Deposit"              		=> $_POST[''],
-		"TransferAmt"               => $_POST[''],
-		"PackPrice"                 => $_POST[''],
-		"FinanceBalance"            => $_POST[''],
-		"TotalFinanceAmt"           => $_POST[''],
-		"DownPmtAmt"            	=> $_POST[''],
-		"DownPmt%"           		=> $_POST[''],
-		"MonthlyPmtAmt"            	=> $_POST[''],
-		"BalanceActual"           	=> $_POST[''],
-		"ynClosingfee"            	=> $_POST[''],
-		"ClosingFeeAmt"           	=> $_POST[''],
-		"OtherFeeAmt"           	=> $_POST[''],
-		"ynReFin"           		=> $_POST[''],
-		"ynAvailable"           	=> $_POST[''],
+		"fkFinMethodId"    			=> 2,
+		"fkFactorId"              	=> 2,
+		"ListPrice"             	=> 30000,
+		"SpecialDiscount"           => 5000,
+		"SpecialDiscount%"          => 2000,
+		"CashDiscount"             	=> 1000,
+		"CashDiscount%"         	=> 10,
+		"NetSalePrice"              => 20000,
+		"Deposit"              		=> 2000,
+		"TransferAmt"               => 0,
+		"PackPrice"                 => 0,
+		"FinanceBalance"            => 15000,
+		"TotalFinanceAmt"           => 100,
+		"DownPmtAmt"            	=> 200,
+		"DownPmt%"           		=> 5,
+		"MonthlyPmtAmt"            	=> 500,
+		"BalanceActual"           	=> 11000,
+		"ynClosingfee"            	=> 1,
+		"ClosingFeeAmt"           	=> 2,
+		"OtherFeeAmt"           	=> 0,
+		"ynReFin"           		=> 1,
+		"ynAvailable"           	=> 1,
 		"CrBy"                      => 123,
 		"CrDt"						=> getdate()
 	];

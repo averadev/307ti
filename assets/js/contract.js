@@ -296,21 +296,28 @@ function createNewContract(){
 				tourID : $("#TourID").val().trim(),
 				idiomaID : $( "#selectLanguage" ).val(),
 				
-				peoples : {
-					"idPeople": 3,
-					"type":2,
-				},
-				unidades : [{
-					"propiedadId": 1,
-					"frecuenciaId": 2,
-					"temporadaId": 1,
-					"weeks": 3,
-				}],
+				peoples : getValoresTablas("tablePeopleSelected"),
+				primario : selectTypePeople("primario"),
+				secundaria: selectTypePeople("secundaria"),
+				baneficiario: selectTypePeople("baneficiario"),
+				// peoples : {
+				// 	"idPeople": 3,
+				// 	"type":2,
+				// },
+				unidades : getValoresTablas("tableUnidadesSelected"),
+				// "frecuenciaId": 2,
+				// "temporadaId": 1,
+				"weeks": 1,
 				firstYear : 2016,
 				lastYear : 2017,
 				tipoVentaId : 1,
 				viewId: 1,
+				floorPlanId: 1,
+				SeassonId: 10,
+				FrequencyId: 2
 				contratoRelacionadoId : 0,
+				pkResPeopleAccId: 2,
+				fkAccId: 3,
 				precioUnidad : 29714,
 				descuentoTotal :  0,
 				precioVenta :  29714,
@@ -379,37 +386,10 @@ function getDataFormContract(){
 	data.selectLanguage = $( "#selectLanguage" ).val();
 }
 
-function addUsuarios(){
-	$("#dialog-User").hide();
-    $("#tablePeople").on("click", "tr", function(){
-		//var fullArray = $(this).find("td");
-		$(this).find("td").toggleClass("blue");
-	});
-}
-function addUsuarios2(){
-	$("#dialog-User").hide();
-    $("#tablePeople").on("click", "tr", function(){
-		$(this).find("td").toggleClass("blue");
-		// console.log($(this));
-		// algo = $(this);
-		$(this).toggleClass("purple");
-	});
-}
-
-function addUsuarios3(){
-	$("#tablePeople tr" ).on( "click", function( event ) {
-
-          //$("#fillname").val($(this).find("td").eq(1).html());
-          $( this ).css( "background-color", "red" );
-
-    });
-}
-
-
 function selectAllPeople(){
 	var personas = [];
 
-	var array = $("#tablePeople .purple");
+	var array = $("#tablePeople .yellow");
 	for (var i = 0; i < array.length; i++) {
 		// var persona = {
 		// 	id:array[i].childNodes[1].textContent,
@@ -418,10 +398,10 @@ function selectAllPeople(){
 		// 	address:array[i].childNodes[4].textContent
 		// };
 		persona = [
-			array[i].childNodes[1].textContent.trim(),
-			array[i].childNodes[2].textContent.trim(),
-			array[i].childNodes[3].textContent.trim(),
-			array[i].childNodes[4].textContent.trim()
+			array[i].childNodes[1].textContent.replace(/\s+/g, " "),
+			array[i].childNodes[2].textContent.replace(/\s+/g, " "),
+			array[i].childNodes[3].textContent.replace(/\s+/g, " "),
+			array[i].childNodes[8].textContent.replace(/\s+/g, " ")
 		];
 		personas.push(persona);
 	}
@@ -443,9 +423,9 @@ function tablaPersonas(personas){
         for (var j in personas[i]) {
             bodyHTML+="<td>" + personas[i][j] + "</td>";
         };
-        bodyHTML += "<td><input class='radiocheckbox' type='radio' name='principal'></td>";
-        bodyHTML += "<td><input class='radiocheckbox' type='radio' name='secundaria'></td>";
-        bodyHTML += "<td><input class='radiocheckbox' type='radio' name='baneficiario'></td>";
+        bodyHTML += "<td><input  type='checkbox' name='principal'></td>";
+        bodyHTML += "<td><input  type='checkbox' name='secundaria'></td>";
+        bodyHTML += "<td><input  type='checkbox' name='baneficiario'></td>";
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
         bodyHTML+="</tr>";
     }
@@ -472,20 +452,16 @@ function checkBoxes(){
 
 function selectTable(div){
 	$("#"+div).on("click", "tr", function(){
-		$(this).find("td").toggleClass("blue");
-		$(this).toggleClass("purple");
+		$(this).toggleClass("yellow");
 	});
 }
 function selectTableUnico(div){
 	var pickedup;
 	$("#"+div).on("click", "tr", function(){
-		// $(this).find("td").toggleClass("blue");
-		// $(this).toggleClass("purple");
-
           if (pickedup != null) {
-              pickedup.removeClass("purple");
+              pickedup.removeClass("yellow");
           }
-          $( this ).addClass("purple");
+          $( this ).addClass("yellow");
           pickedup = $(this);
 	});
 }
@@ -493,12 +469,12 @@ function selectTableUnico(div){
 function selectAllUnities(){
 	var unidades = [];
 
-	var array = $("#tblUnidades .purple");
+	var array = $("#tblUnidades .yellow");
 	for (var i = 0; i < array.length; i++) {
 		unidad = [
-			array[i].childNodes[1].textContent.trim(),
-			array[i].childNodes[2].textContent.trim(),
-			array[i].childNodes[3].textContent.trim(),
+			array[i].childNodes[1].textContent.replace(/\s+/g, " "),
+			array[i].childNodes[2].textContent.replace(/\s+/g, " "),
+			array[i].childNodes[3].textContent.replace(/\s+/g, " ")
 		];
 		unidades.push(unidad);
 	}
@@ -528,4 +504,37 @@ function tablUnidadades(unidades){
     }
     $('#tableUnidadesSelected tbody').html(bodyHTML);
     deleteElementTable("tableUnidadesSelected");
+}
+
+function verificarTablas(div){
+	var array = $("#"+div+" tbody tr");
+	if (array.length>0) {
+		return true;
+	}else{
+		return false;
+	}
+	//tablePeopleSelected
+	//tableUnidadesSelected
+}
+//tablePeopleSelected
+//tableUnidadesSelected
+function getValoresTablas(div){
+	var personas = [];
+	var array = $("#"+div+" tbody tr");
+	for (var i = 0; i < array.length; i++) {
+		var fullArray = $(array[i]).find("td");
+		// persona = [
+		// 	fullArray.eq(0).text().trim()
+		// ];
+		personas.push(fullArray.eq(0).text().trim());
+	}
+
+	return personas;
+}
+
+//secundaria
+function selectTypePeople(tipo){
+	var radioButtons = $('input[name="'+tipo+'"]');
+	var selectedIndex = radioButtons.index(radioButtons.filter(':checked'));
+	return selectedIndex;
 }
