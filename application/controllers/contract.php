@@ -63,7 +63,7 @@ private function createContract(){
 }
 
 private function insertOcupacion($idContrato){
-	for($i =0; $< intval($_POST['weeks']); $i++){
+	for($i =0; $i< intval($_POST['weeks']); $i++){
 			$Ocupacion = [
 			"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
 			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
@@ -92,7 +92,7 @@ private function insertOcupacion($idContrato){
 }
 
 private function createUnidades($idContrato){
-	for($i =0; $< intval($_POST['weeks']); $i++){
+	for($i =0; $i< intval($_POST['weeks']); $i++){
 		$Unidades = [
 			"fkResId"                   => $idContrato,
 			"fkUnitId"    				=> $_POST['unidades'][$i],
@@ -115,7 +115,7 @@ private function createUnidades($idContrato){
 }
 
 private function createPeople($idContrato){
-	for($i =0; $< intval($_POST['peoples']); $i++){
+	for($i =0; $i< intval($_POST['peoples']); $i++){
 		$personas = [
 			"pkResPeopleAccId"          => $_POST['pkResPeopleAccId'],
 			"fkResId"    				=> $idContrato,
@@ -219,6 +219,36 @@ private function createSemanaOcupacion($idContrato){
 			$this->load->view('contracts/contractDialog.php');
 		}
 	}
+
+	public function modalWeeks(){
+		if($this->input->is_ajax_request()) {
+			$this->load->view('contracts/contractDialogWeeks.php');
+		}
+	}
+
+	public function modalPack(){
+		if($this->input->is_ajax_request()) {
+			$this->load->view('contracts/dialogPackReference.php');
+		}
+	}
+
+	public function modalDepositDownpayment(){
+		if($this->input->is_ajax_request()) {
+			$this->load->view('contracts/dialogDepositDownpayment.php');
+		}
+	}
+	public function modalDiscountAmount(){
+		if($this->input->is_ajax_request()) {
+			$this->load->view('contracts/dialogDiscountAmount.php');
+		}
+	}
+
+	public function ScheduledPayments(){
+		if($this->input->is_ajax_request()) {
+			$this->load->view('contracts/dialogScheduledPayments.php');
+		}
+	}
+
 	public function modalUnidades(){
 		if($this->input->is_ajax_request()) {
 			$this->load->view('unities/unitiesDialog.php');

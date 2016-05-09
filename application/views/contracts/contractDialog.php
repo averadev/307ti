@@ -66,18 +66,7 @@
                                 <th></th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <!-- <tr>
-                                <td>23</td>
-                                <td>Faustino</td>
-                                <td>Loeza</td>
-                                <td>Cancun</td>
-                                <td><input type="radio" name="peopleContract" value="1"></td>
-                                <td><input type="radio" name="peopleContract" value="2"></td>
-                                <td><input type="radio" name="peopleContract" value="3"></td>
-                                <td><button type="button" class="alert button"><i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i></button></td>
-                            </tr> -->
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -98,26 +87,16 @@
                             <tr>
                                 <th class="cellEdit" >Code</th>
                                 <th class="cellGeneral">Description</th>
-                                <th class="cellGeneral">Precio</th>
-                                <th class="cellGeneral" ># de Semana</th>
-                                <th class="cellGeneral" >Primer año OCC</th>
-                                <th class="cellGeneral" >Ultimo año OCC</th>
-                                <th class="cellGeneral" >Frecuencia</th>
-                                <th></th>
+                                <th class="cellGeneral">Price</th>
+                                <th class="cellGeneral">Frequency</th>
+                                <th class="cellGeneral">Season</th>
+                                <th class="cellGeneral"># de Semana</th>
+                                <th class="cellGeneral">First Year OCC</th>
+                                <th class="cellGeneral">Last Year OCC</th>
+                                <th class="cellGeneral"></th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <!-- <tr>
-                                <td>sds5d5</td>
-                                <td>PArgo 1 3Rec</td>
-                                <td>$38,000.00</td>
-                                <td>#1</td>
-                                <td>2016</td>
-                                <td>2017</td>
-                                <td>Odd years</td>
-                                <td><button type="button" class="alert button"><i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i></button></td>
-                            </tr> -->
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -176,17 +155,20 @@
                 <div class="row">
                     <div class="large-4 columns">
                         <label>Unit Price
-                            <input readonly required type="text" id="precioUnidad" name="precioUNIDAD" placeholder="$0.00" value="29,714.00" />
+                            <input readonly required type="text" id="precioUnidad" name="precioUNIDAD" placeholder="$0.00"/>
                         </label>
                     </div>
                     <div class="large-4 columns">
                         <label>Pack Reference
-                            <input type="text" name="referenciaPACK" placeholder="$0.00" />
+                            <input id="packReference" type="text" name="referenciaPACK" placeholder="$0.00" />
+                              <div class="small-2 columns">
+                                <a id="btnPackReference" href="#" class="button postfix">Add</a>
+                            </div>
                         </label>
                     </div>
                     <div class="large-4 columns">
                         <label>Sell Price
-                            <input required type="text" id="precioVenta" name="precioVENTA" placeholder="$0.00" value="29,714.00" />
+                            <input readonly required type="text" id="precioVenta" name="precioVENTA" placeholder="$0.00" />
                         </label>
                     </div>
                 </div>
@@ -220,7 +202,7 @@
                                 <input required name="depositoEnganche" id="deposito" type="text" placeholder="$0.00">
                             </div>
                             <div class="small-2 columns">
-                                <a href="#" class="button postfix">Capture</a>
+                                <a id="btnDownpayment" href="#" class="button postfix">Capture</a>
                             </div>
                         </div>
                     </div>
@@ -236,7 +218,7 @@
                                 <input type="text" placeholder="$0.00">
                             </div>
                             <div class="small-2 columns">
-                                <a href="#" class="button postfix">Capture</a>
+                                <a id="btnScheduledPayments" href="#" class="button postfix">Capture</a>
                             </div>
                         </div>
                     </div>
@@ -252,7 +234,7 @@
                                 <input type="text" placeholder="$0.00">
                             </div>
                             <div class="small-2 columns">
-                                <a href="#" class="button postfix">Capture</a>
+                                <a id="btnDiscountAmount" href="#" class="button postfix">Capture</a>
                             </div>
                         </div>
                     </div>

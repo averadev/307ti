@@ -7,8 +7,11 @@ $(document).ready(function(){
     var unidadDialog = addUnidadDialog();
     var peopleDialog = addPeopleDialog();
 	var addContract = createDialogContract();
-	//var addUnidadDialogYears = addUnidadYears();
-
+	var dialogWeeks = getWeeksDialog();
+	var dialogPack = PackReference();
+	var dialogEnganche = modalDepositDownpayment();
+	var dialogScheduledPayments = modalScheduledPayments();
+	var dialogDiscountAmount = modalDiscountAmount();
 
 	$(document).on( 'click', '#newContract', function () {
 		showLoading('#dialog-Contract',true);
@@ -38,16 +41,29 @@ $(document).ready(function(){
 	            selectTableUnico("tblUnidades");
 	        });
 	        unidadDialog.dialog( "open" );
+	        
 	    });
 
 
-	// $(document).on( 'click', '#btnAddTourID', function () {
-	//      showLoading('#dialog-tourID',true);
- //         $("#dialog-tourID").load( 'tours/modal', function() {
- //            showLoading('#dialog-tourID',false);
- //        });
- //        peopleDialog.dialog( "open" );
-	// });
+	$(document).on( 'click', '#btnPackReference', function () {
+		var dialogPack = PackReference();
+		dialogPack.dialog("open");
+	});
+
+	$(document).on( 'click', '#btnDownpayment', function () {
+		var dialogEnganche = modalDepositDownpayment();
+		dialogEnganche.dialog("open");
+	});
+	
+	$(document).on( 'click', '#btnScheduledPayments', function () {
+		var dialogScheduledPayments = modalScheduledPayments();
+		dialogScheduledPayments.dialog("open");
+	});
+
+	$(document).on( 'click', '#btnDiscountAmount', function () {
+		var dialogDiscountAmount = modalDiscountAmount();
+		dialogDiscountAmount.dialog("open");
+	});
 
 	$('#btnCleanWord').click(function (){
 		btnCleanWord.val('');
@@ -113,10 +129,15 @@ function addUnidadDialog() {
 			text: "add",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
-				if(selectAllUnities()){
-					$(this).dialog('close');
-					//addUnidadDialogYears.dialog("open");
-				};
+				var unidades = selectAllUnities();
+				$(this).dialog('close');
+				var dialogWeeks = getWeeksDialog(unidades);
+				dialogWeeks.dialog("open");
+				// tablUnidadades(unidades);
+				// if(selectAllUnities()){
+				// 	$(this).dialog('close');
+				// 	//addUnidadDialogYears.dialog("open");
+				// };
 			}
 		}],
 		close: function() {
@@ -153,45 +174,6 @@ function addPeopleDialog() {
 	});
 	return dialog;
 }
-
-function addUnidadYears() {
-
-	dialog = $( "#dialog-People" ).dialog({
-		autoOpen: false,
-		height: maxHeight/4,
-		width: "10%",
-		modal: true,
-		buttons: [{
-			text: "Cancel",
-			"class": 'dialogModalButtonCancel',
-			click: function() {
-				$(this).dialog('close');
-			}
-		},{
-			text: "add",
-			"class": 'dialogModalButtonAccept',
-			click: function() {
-				if(selectAllPeople()){
-					$(this).dialog('close');
-				};
-			}
-		}],
-		close: function() {
-		
-		}
-	});
-	return dialog;
-}
-
-
-// function goodBye(){
-// 	console.log("BYE");
-// }
-
-// function cleanContractFields(id){
-// 	// var formData = document.getElementById(id);
-//  //    formData.reset();
-// }
 
 
 function getContratos(){
@@ -314,7 +296,7 @@ function createNewContract(){
 				viewId: 1,
 				floorPlanId: 1,
 				SeassonId: 10,
-				FrequencyId: 2
+				FrequencyId: 2,
 				contratoRelacionadoId : 0,
 				pkResPeopleAccId: 2,
 				fkAccId: 3,
@@ -338,44 +320,6 @@ function createNewContract(){
 		.fail(function( jqXHR, textStatus, errorThrown ) {
 			//alertify.error("Ocurrio un error vuelve a intentarlo");
 		});
-		// ID = 0;
-		// Folio = 0;
-		// tourId = $("#TourID").val().trim();
-		// nombreLegal = $("#legalName").val().trim();
-		// idiomaId = $( "#selectLanguage" ).val();
-		// peoples = [33,34,35];
-		// unidades = [{
-		// 	"propiedadId": 1,
-		// 	"frecuenciaId": 2,
-		// 	"temporadaId": 1,
-		// 	"weeks": 3,
-		// }];
-		// tipoVentaId = 1;
-		// contratoRelacionadoId = 0;
-		// precioUnidad = 29714;
-		// descuentoTotal =  0;
-		// precioVenta =  29714;
-		// deposito =  1500;
-		// totalEnganche = 1500
-		// totalPagosProg = 1500
-		// depClosingFee = 1295
-		// montoTransfer = 6000;
-		// balance = 42711.8;
-	// }
-	
-	// var tourId = $("#TourID").val().trim();
-	// var nombreLegal = $("#legalName").val().trim();
-	// var idiomaId = $( "#selectLanguage" ).val();
-
-
-	//$('#'+id).foundation('destroy');
-	//var formData = new FormData(document.getElementById(""+id));
-	//legalName
-	//var idioma = $("#idiomaContract").val().trim();
-
-	// var formData = new FormData(document.getElementById(id));
-	// formData.append("peticion", "agregarServicio");
-
 }
 
 
@@ -391,12 +335,6 @@ function selectAllPeople(){
 
 	var array = $("#tablePeople .yellow");
 	for (var i = 0; i < array.length; i++) {
-		// var persona = {
-		// 	id:array[i].childNodes[1].textContent,
-		// 	name:array[i].childNodes[2].textContent,
-		// 	lastName:array[i].childNodes[3].textContent,
-		// 	address:array[i].childNodes[4].textContent
-		// };
 		persona = [
 			array[i].childNodes[1].textContent.replace(/\s+/g, " "),
 			array[i].childNodes[2].textContent.replace(/\s+/g, " "),
@@ -471,37 +409,208 @@ function selectAllUnities(){
 
 	var array = $("#tblUnidades .yellow");
 	for (var i = 0; i < array.length; i++) {
+		var fullArray = $(array[i]).find("td");
+		//personas.push(fullArray.eq(0).text().trim());
 		unidad = [
-			array[i].childNodes[1].textContent.replace(/\s+/g, " "),
-			array[i].childNodes[2].textContent.replace(/\s+/g, " "),
-			array[i].childNodes[3].textContent.replace(/\s+/g, " ")
+			fullArray.eq(1).text().replace(/\s+/g, " "),
+			fullArray.eq(2).text().replace(/\s+/g, " "),
+			fullArray.eq(3).text().replace(/\s+/g, " "),
+			fullArray.eq(4).text().replace(/\s+/g, " "),
+			fullArray.eq(5).text().replace(/\s+/g, " "),
+
 		];
 		unidades.push(unidad);
 	}
 	if (unidades.length <= 0) {
 		alertify.error("Click over for choose one");
-		return false;
+		//return false;
 	}else{
-		tablUnidadades(unidades);
-		return true;
+		
+		return unidades;
 	}
 }
 
-function tablUnidadades(unidades){
+
+function getWeeksDialog(unidades){
+	var unidades = unidades;
+	dialogo = $("#dialog-Weeks").dialog ({
+  		open : function (event){
+	    	$(this).load ("contract/modalWeeks");
+		},
+		autoOpen: false,
+     	height: maxHeight/2,
+     	width: "25%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       			var weeks = $("#weeksNumber").val();
+       			var primero = $("#firstYearWeeks").val();
+       			var ultimo = $("#lastYearWeeks").val();
+       			tablUnidadades(unidades, weeks, primero, ultimo);	
+       			$(this).dialog('close');
+       			setValueUnitPrice();
+       		}
+     	}],
+     close: function() {
+    
+     }
+	});
+	return dialogo;
+}
+
+function PackReference(){
+
+	dialogo = $("#dialog-Pack").dialog ({
+  		open : function (event){
+	    	$(this).load ("contract/modalPack" , function(){
+	    		var precioUnidad = $("#precioUnidad").val();
+				var precioUnidadPack = $("#unitPricePack").val(precioUnidad);
+	    	});
+		},
+		autoOpen: false,
+     	height: maxHeight/2,
+     	width: "25%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+
+       		}
+     	}],
+     close: function() {
+    
+     }
+	});
+	return dialogo;
+}
+function modalDepositDownpayment(){
+
+	dialogo = $("#dialog-Downpayment").dialog ({
+  		open : function (event){
+	    	$(this).load ("contract/modalDepositDownpayment" , function(){
+	   //  		var precioUnidad = $("#precioUnidad").val();
+				// var precioUnidadPack = $("#unitPricePack").val(precioUnidad);
+	    	});
+		},
+		autoOpen: false,
+     	height: maxHeight/2,
+     	width: "25%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+
+       		}
+     	}],
+     close: function() {
+    
+     }
+	});
+	return dialogo;
+}
+function modalScheduledPayments(){
+
+	dialogo = $("#dialog-ScheduledPayments").dialog ({
+  		open : function (event){
+	    	$(this).load ("contract/ScheduledPayments" , function(){
+	 
+	    	});
+		},
+		autoOpen: false,
+     	height: maxHeight/2,
+     	width: "25%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+
+       		}
+     	}],
+     close: function() {
+    
+     }
+	});
+	return dialogo;
+}
+function modalDiscountAmount(){
+
+	dialogo = $("#dialog-DiscountAmount").dialog ({
+  		open : function (event){
+	    	$(this).load ("contract/modalDiscountAmount" , function(){
+	 
+	    	});
+		},
+		autoOpen: false,
+     	height: maxHeight/2,
+     	width: "25%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+
+       		}
+     	}],
+     close: function() {
+    
+     }
+	});
+	return dialogo;
+}
+
+
+function tablUnidadades(unidades, weeks, primero, ultimo){
+	var weeks = parseInt(weeks);
 	var bodyHTML = '';
-	    //creación del body
-    for (var i = 0; i < unidades.length; i++) {
+	for (var k = 1; k<weeks+1; k++) {
+		 for (var i = 0; i < unidades.length; i++) {
         bodyHTML += "<tr>";
         for (var j in unidades[i]) {
             bodyHTML+="<td>" + unidades[i][j] + "</td>";
         };
-        bodyHTML += "<td>1</td>";
-        bodyHTML += "<td>2016</td>";
-        bodyHTML += "<td>2017</td>";
-        bodyHTML += "<td>Odd years</td>";
+        bodyHTML += "<td>"+k+"</td>";
+        bodyHTML += "<td>"+primero+"</td>";
+        bodyHTML += "<td>"+ultimo+"</td>";
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
         bodyHTML+="</tr>";
     }
+	}
+   
     $('#tableUnidadesSelected tbody').html(bodyHTML);
     deleteElementTable("tableUnidadesSelected");
 }
@@ -523,9 +632,6 @@ function getValoresTablas(div){
 	var array = $("#"+div+" tbody tr");
 	for (var i = 0; i < array.length; i++) {
 		var fullArray = $(array[i]).find("td");
-		// persona = [
-		// 	fullArray.eq(0).text().trim()
-		// ];
 		personas.push(fullArray.eq(0).text().trim());
 	}
 
@@ -537,4 +643,21 @@ function selectTypePeople(tipo){
 	var radioButtons = $('input[name="'+tipo+'"]');
 	var selectedIndex = radioButtons.index(radioButtons.filter(':checked'));
 	return selectedIndex;
+}
+
+function setValueInput(id, value){
+	var elemento = document.getElementById("precioUnidad");
+	elemento.value = value;
+}
+
+function getValueFromTable(id, posicion){
+	var fullArray = $("#"+id).find("td");
+	return fullArray.eq(posicion).text().trim();
+}
+function setValueUnitPrice(){
+	var precio = parseFloat(getValueFromTable("tableUnidadesSelected", 2));
+	precio.toFixed(2);
+	var multiplicador = $("#tableUnidadesSelected").find("tr").length - 1;
+	$("#precioUnidad").val(precio.toFixed(2) * multiplicador);
+	$("#precioVenta").val(precio.toFixed(2) * multiplicador);
 }

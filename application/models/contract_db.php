@@ -205,10 +205,20 @@ class Contract_db extends CI_Model {
     }
 
     public function getUnidades(){
-        $this->db->select('u.UnitCode, fp.FloorPlanDesc, p.PriceFixedWk');
-        $this->db->from('tblUnit u');
-        $this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = u.fkFloorPlanId');
-        $this->db->join('tblPrice p', 'p.fkUnitId = u.pkUnitId');
+
+       
+        //inner join tblUnit unit on unit.pkUnitId = invt.fkUnitId
+        //inner join tblFloorPlan flp on flp.pkFloorPlanID = unit.fkFloorPlanId
+        //inner join tblPrice price on price.fkUnitId = unit.pkUnitId
+        //inner join tblFrequency freq on freq.pkFrequencyId = invt.fkFrequencyId
+        //inner join tblSeason season on season.pkSeasonId = invt.fkSeassonId
+        $this->db->select('unit.UnitCode as Code, flp.FloorPlanDesc as Description, price.PriceFixedWk as Price, freq.FrequencyDesc Frequency, season.SeasonDesc as Season');
+        $this->db->from('tblResInvt invt');
+        $this->db->join('tblUnit unit', 'unit.pkUnitId = invt.fkUnitId', 'inner');
+        $this->db->join('tblFloorPlan flp', 'flp.pkFloorPlanID = unit.fkFloorPlanId', 'inner');
+        $this->db->join('tblPrice price', 'price.fkUnitId = unit.pkUnitId', 'inner');
+        $this->db->join('tblFrequency freq', 'freq.pkFrequencyId = invt.fkFrequencyId', 'inner');
+        $this->db->join('tblSeason season', 'season.pkSeasonId = invt.fkSeassonId', 'inner');
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {

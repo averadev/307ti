@@ -119,7 +119,9 @@
 <div id="dialog-tourID" title="Tour ID" style="display: none;"></div>
 <div id="dialog-People" title="People" style="display: none;"></div>
 <div id="dialog-Unidades" title="Unidades" style="display: none;">
-
-</div>
-
+<div id="dialog-Weeks" title="Weeks" style="display: none;"></div>
+<div id="dialog-Pack" title="Pack Reference" style="display: none;"></div>
+<div id="dialog-Downpayment" title="Downpayment" style="display: none;"></div>
+<div id="dialog-ScheduledPayments" title="Scheduled Payments" style="display: none;"></div>
+<div id="dialog-DiscountAmount" title="Discount Amount" style="display: none;"></div>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>contract.js"></script>

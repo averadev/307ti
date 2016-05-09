@@ -281,7 +281,7 @@
 		</div>
 		<!-- contenido del modal -->
 		<div class="ModalContractAccounts">
-			<!-- ventas--->
+			<!-- ventas-->
 			<div id="tab-CASales" class="large-12 columns tab-modal" style="display:inline;">
 				
 				<fieldset class="fieldset">
@@ -349,7 +349,7 @@
 					</div>
 				</fieldset>
 			</div>
-			<!-- mantenimiento --->
+			<!-- mantenimiento -->
 			<div id="tab-CAMaintenance" class="large-12 columns tab-modal" style="display:none;">
 				<fieldset class="fieldset">
 					<div class="row" id="editTermsOfSale">
@@ -404,7 +404,7 @@
 					</div>
 				</fieldset>
 			</div>
-			<!-- Misceláneos --->
+			<!-- Misceláneos -->
 			<div id="tab-CAMiscellaneous" class="large-12 columns tab-modal" style="display:none;">
 				<fieldset class="fieldset">
 					<div class="row" id="editTermsOfSale">
