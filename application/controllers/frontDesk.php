@@ -41,36 +41,34 @@ class FrontDesk extends CI_Controller {
 			$lastResId = 0;
 			$p = 0;
 			foreach($data as $item){
-				
 				if($lastResId != $item->fkResId){
 					$p = count($res);
 					$res[$p]['type'] = $item->type;
 					$res[$p]['unit'] = $item->UnitCode;
-					$res[$p]['view'] = $item->ViewDesc;
+					$res[$p]['status'] = $item->HKStatusDesc;
+					$res[$p]['view'] = $item->ViewCode;
+					$res[$p]['viewDesc'] = $item->ViewDesc;
 					$res[$p]['values']['from'] = $item->pkCalendarId;
 					$res[$p]['values']['to'] = $item->pkCalendarId;
 					$res[$p]['values']['people'] = $item->Name . " " . $item->LName . " " . $item->LName2;
 					$res[$p]['values']['occType'] =$color[$item->fkOccTypeId];
-					
+					$res[$p]['values']['ResConf'] = $item->ResConf;
+					$res[$p]['values']['dateFrom'] = $item->Date2;
+					$res[$p]['values']['dateTo'] = $item->Date2;
 				}
 				$res[$p]['values']['to'] = $item->pkCalendarId;
+				$res[$p]['values']['dateTo'] = $item->Date2;
 				
 				$lastResId = $item->fkResId;
-				/*if(!is_null($item->fkResId)){
-					$exist = false;
-					foreach($res as $item2){
-						if($item2 == $item->fkResId){
-							$exist = true;
-							break;
-						}
-					}
-					if(!$exist){
-						$res[count($res)] = $item->fkResId;
-					}
-				}*/
 			}
-			
 			echo json_encode(array('items' => $res, 'dates' => $calendary));
+		}
+	}
+	
+	public function getWeekByYear(){
+		if($this->input->is_ajax_request()){
+			$data = $this->frontDesk_db->getWeekByYear($_POST['year']);
+			echo json_encode(array('items' => $data,));
 		}
 	}
 	
@@ -131,18 +129,4 @@ class FrontDesk extends CI_Controller {
 			return false;
 		}
 	}
-	/*private function receiveDates($dates, $table, $section) {
-		if (!empty($dates['startDate'.$section]) && !empty($dates['endDate'.$section])) {
-			$dates = [
-	        	'startDate'=> $dates['startDate'.$section],
-	            'endDate'  => $dates['endDate'.$section]
-        	];
-			return $table." between '".$dates['startDate']."' and '". $dates['endDate']."'";
-
-		}else{
-			return false;
-		}
-	}*/
-	
-	
 }

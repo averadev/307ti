@@ -43,6 +43,7 @@ table.ganttTable{
 
 .ganttTable thead tr.gHeaderYear{
 	border-bottom: none;
+	color:black;
 }
 
 .ganttTable thead  th.rightPanel{

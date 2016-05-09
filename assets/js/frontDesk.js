@@ -16,6 +16,7 @@ $('#btnSearchFrontDesk').on('click', function(){ getFrontDesk(); });
 */
 var dateArrival = null
 var dateDeparture = null
+var dateYear = null
 
 $(function() {
 	//dateField
@@ -23,24 +24,30 @@ $(function() {
 		format: 'm/d/Y',
 		show_icon: false,
 		onSelect: function(date1, date2, date3, elements) {
-			/*if($(elements).attr('id') == "dateArrivalFront"){
-				dateDeparture.clear_date();
-			}else if($(elements).attr('id') == "dateDepartureFront"){
-				dateArrival.clear_date();
-			}*/
+			dateYear.clear_date();
+			$('#textIntervalFront').html("<option value=''>Select a interval</option>");
 		},
 	});
 	
-	dateArrival = $("#dateArrivalFront").data('Zebra_DatePicker');
-	dateDeparture = $("#dateDepartureFront").data('Zebra_DatePicker');
+
 	
 	$( "#dateYearFront" ).Zebra_DatePicker({
 		format: 'Y',
 		view: 'years',
 		show_icon: false,
+		onSelect: function(year, elements) {
+			dateDeparture.clear_date();
+			dateArrival.clear_date();
+			getWeekByYear(year);
+		},
 	});
 	
-	$('#dateArrivalFront').val(getCurrentDate())
+	dateArrival = $("#dateArrivalFront").data('Zebra_DatePicker');
+	dateDeparture = $("#dateDepartureFront").data('Zebra_DatePicker');
+	dateYear = $("#dateYearFront").data('Zebra_DatePicker');
+	
+	//$('#dateArrivalFront').val(getCurrentDate());
+	$('#dateArrivalFront').val("04/13/2016")
 	
 });
 
@@ -51,7 +58,7 @@ function getFrontDesk(){
 	showLoading( '#table-frontDesk', true );
 	
 	var filters = getFiltersCheckboxs('FilterFrontDesk');
-	var dates = getDates(["dateArrivalFront", "dateDepartureFront", "dateYearFront"]);
+	var dates = getDates(["dateArrivalFront", "dateDepartureFront", "textIntervalFront"]);
 	var words = getWords(["textUnitCodeFront","textConfirmationFront","textViewFront"]);
 	var options = getWords(["textIntervalFront"]);
 	$.ajax({
@@ -65,9 +72,7 @@ function getFrontDesk(){
        	url: "frontDesk/getFrontDesk",
 		dataType:'json',
 		success: function(data){
-			
 			$('.rightPanel').remove();
-			
 			console.log(data);
 			var headYearHTML = "";
 			var headMonthHTML = "";
@@ -78,7 +83,6 @@ function getFrontDesk(){
 			var existMoth = "";
 			var existYear = "";
 			for (var j in dates) {
-				
 				
 				if(existYear != dates[j].year ){
 					headYearHTML = "<th colspan='1' id='thYear" + dates[j].year + "' class='rightPanel'>"+dates[j].year+"</th>";
@@ -101,59 +105,41 @@ function getFrontDesk(){
 				headHTML+="<th id='"+dates[j].pkCalendarId+"' class='rightPanel'>"+dates[j].day+"</th>";
 			}
 			
-			
 			$('#tableFrontDesk .gHeaderDay').append(headHTML);
 			
 			var bodyHTML = "<tr>";
 			
-			//console.log(items[0].values.from)
-			
 			for(i=0;i<items.length;i++){
-				bodyHTML+="<td class='panelLeft'>"+items[i].type+"</th>";
-				bodyHTML+="<td class='panelLeft' >"+items[i].unit+"</th>";
-				bodyHTML+="<td class='panelLeft last'>"+items[i].view+"</th>";
+				var item = items[i]
+				bodyHTML+="<td class='panelLeft'>"+item.type+"</th>";
+				bodyHTML+="<td class='panelLeft' >"+item.unit+"</th>";
+				bodyHTML+="<td class='panelLeft' >"+item.status+"</th>";
+				bodyHTML+="<td title='" + item.viewDesc + "' class='panelLeft last Tooltips'>"+item.view+"</th>";
 				
 				var values = items[i].values
+				var valueToolTip = {Confirmation:values.ResConf, Room:item.unit, Guest:values.people, Arrival:values.dateFrom, Departure:values.dateTo};
+				var vToolTip = JSON.stringify(valueToolTip);
 				var exist = false;
 				for(j = 0;j<dates.length;j++){
 					var totaltd = (values.to - values.from) + 1;
 					if(dates[j].pkCalendarId >= values.from && dates[j].pkCalendarId <= values.to){
 						if(exist == false){
-							bodyHTML+="<td colspan='" + totaltd + "' class='" + values.occType + " rightPanel'>" + values.people + "</td>";
+							bodyHTML+="<td titleCustom='" +vToolTip +"' colspan='" + totaltd + "' class='" + values.occType + " rightPanel Tooltips'>" + values.people + "</td>";
 							exist = true;
 						}
 					}else{
 						bodyHTML+="<td class='rightPanel'></td>";
 					}
-					
 				}
-				
 				bodyHTML += "</tr>";
 			}
 			
-			/*for (var j in items) {
-				bodyHTML+="<th>"+items[j].type+"</th>";
-				bodyHTML+="<th>"+items[j].unit+"</th>";
-				bodyHTML+="<th class='panelLeft last'>"+items[j].view+"</th>";
-				console.log(items[j].values.length);
-				for (var k in items[j].values.length) {
-					console.log(k);
-				}
-				 bodyHTML += "</tr>";
-			}*/
-			
 			$('#tableFrontDesk tbody').html(bodyHTML);
 			
-			/*$( '#tableFrontDesk' ).DataTable({
-				"scrollY": 350,
-				"scrollX": true,
-				"paging":   false,
-				"ordering": false,
-				"info":     false,
-				"filter": 	false,
-			});*/
+			initializeTooltips('.Tooltips');
 			
 			showLoading('#table-frontDesk',false);
+			
 		},
 		error: function(){
 			alertify.error("Try again");
@@ -162,7 +148,30 @@ function getFrontDesk(){
     });
 }
 
-
-$(function() {
-	//console.log(ganttData);
-});
+function getWeekByYear(year){
+	$.ajax({
+		type: "POST",
+		url: "frontDesk/getWeekByYear",
+		dataType:'json',
+		data:{
+			year: year,
+		},
+		success: function(data){
+			var items = data.items
+			if(items.length > 0){
+				var optionWeek = ""
+				for(i=0;i<items.length;i++){
+					var item = items[i];
+					optionWeek += "<option value='" + item.date + "'>" + item.Week + "</option>";
+				}
+				$('#textIntervalFront').html(optionWeek);
+				optionWeek = null;
+			}else{
+				$('#textIntervalFront').html("<option value=''>intervals he not found</option>");
+			}
+		},
+		error: function(){
+			alertify.error("try again");
+		}
+	});
+}

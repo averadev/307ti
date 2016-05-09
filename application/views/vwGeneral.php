@@ -20,6 +20,8 @@
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>zebra/bootstrap.css" />
 		<!-------- gantt ------->
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>gantt/gantt.css" />
+		<!-------- Tooltip ------->
+		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>tooltip/tooltip.css" />
 		
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>

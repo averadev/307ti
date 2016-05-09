@@ -67,11 +67,13 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->select("fpi.FloorPlanDesc as type");
 		$this->db->select("u.pkUnitId, u.UnitCode, u.fkPropertyId");
 		$this->db->select("fp.pkFloorPlanID, fp.FloorPlanDesc");
-		$this->db->select("v.pkViewId, v.ViewDesc");
+		$this->db->select("v.pkViewId, v.ViewDesc, v.ViewCode");
+		$this->db->select("r.ResConf");
 		$this->db->select("rpa.pkResPeopleAccId");
 		$this->db->select('LTRIM(RTRIM(p.Name)) as Name');
 		$this->db->select('LTRIM(RTRIM(p.LName)) as LName');
 		$this->db->select('LTRIM(RTRIM(p.LName2)) as LName2');
+		$this->db->select('hks.HKStatusDesc');
 		$this->db->from("tblCalendar");
 		$this->db->join('tblDayOfWeek dw', 'pkDayOfWeekId = tblCalendar.fkDayOfWeekId', 'INNER');
 		$this->db->join('tblResOcc ro', 'ro.fkCalendarId = tblCalendar.pkCalendarId', 'INNER');
@@ -81,7 +83,7 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId', 'LEFT');
 		$this->db->join('tblView v', 'v.pkViewId = ri.fkViewId', 'LEFT');
 		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = u.fkFloorPlanId', 'LEFT');
-		$this->db->join('tblUnitHKStatus uhks', 'uhks.fkUnitId = u.pkUnitId and (uhks.fkCalendarID = 106 or uhks.fkCalendarID = (SELECT MAX( uhks2.fkCalendarID ) FROM tblUnitHKStatus uhks2 WHERE uhks2.fkUnitId = u.pkUnitId ) )', 'LEFT');
+		$this->db->join('tblUnitHKStatus uhks', 'uhks.fkUnitId = u.pkUnitId and (uhks.fkCalendarID = tblCalendar.pkCalendarId or uhks.fkCalendarID = (SELECT MAX( uhks2.fkCalendarID ) FROM tblUnitHKStatus uhks2 WHERE uhks2.fkUnitId = u.pkUnitId ) )', 'LEFT');
 		$this->db->join('tblHKStatus hks', 'hks.pkHKStatusId = uhks.fkHkStatusId', 'LEFT');
 		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkPeopleId = ro.fkResId and rpa.ynPrimaryPeople = 1', 'LEFT');
 		$this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId', 'LEFT');
@@ -105,6 +107,9 @@ Class frontDesk_db extends CI_MODEL
 				$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),'" . $date . "',101) and tblCalendar.Date <= DATEADD(day,10,CONVERT(VARCHAR(10),'" . $date . "',101))");
 			}else if (!isset($filters['dates']['dateArrivalFront']) && isset($filters['dates']['dateDepartureFront']) ){
 				$date = $filters['dates']['dateDepartureFront'];
+				$this->db->where("tblCalendar.Date >= DATEADD(day,-10,CONVERT(VARCHAR(10),'" . $date . "',101)) and tblCalendar.Date <= CONVERT(VARCHAR(10),'" . $date . "',101)");
+			}else if (isset($filters['dates']['textIntervalFront'])){
+				$date = $filters['dates']['textIntervalFront'];
 				$this->db->where("tblCalendar.Date >= DATEADD(day,-10,CONVERT(VARCHAR(10),'" . $date . "',101)) and tblCalendar.Date <= CONVERT(VARCHAR(10),'" . $date . "',101)");
 			}else{
 				$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),GETDATE(),101) and tblCalendar.Date <= DATEADD(day,10,CONVERT(VARCHAR(10),GETDATE(),101))");
@@ -131,6 +136,9 @@ Class frontDesk_db extends CI_MODEL
 			}else if (!isset($filters['dates']['dateArrivalFront']) && isset($filters['dates']['dateDepartureFront']) ){
 				$date = $filters['dates']['dateDepartureFront'];
 				$this->db->where("tblCalendar.Date >= DATEADD(day,-10,CONVERT(VARCHAR(10),'" . $date . "',101)) and tblCalendar.Date <= CONVERT(VARCHAR(10),'" . $date . "',101)");
+			}else if (isset($filters['dates']['textIntervalFront'])){
+				$date = $filters['dates']['textIntervalFront'];
+				$this->db->where("tblCalendar.Date >= DATEADD(day,-10,CONVERT(VARCHAR(10),'" . $date . "',101)) and tblCalendar.Date <= CONVERT(VARCHAR(10),'" . $date . "',101)");
 			}else{
 				$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),GETDATE(),101) and tblCalendar.Date <= DATEADD(day,10,CONVERT(VARCHAR(10),GETDATE(),101))");
 			}
@@ -152,7 +160,13 @@ Class frontDesk_db extends CI_MODEL
 		return  $this->db->get()->result();
 	}
 	
-	
+	public function getWeekByYear($year){
+		$this->db->select("c.Week, CONVERT(VARCHAR(10), c.Date,101) as date");
+		$this->db->from("tblCalendar c");
+		$this->db->where("c.Year = ", $year);
+		$this->db->where("c.fkDayOfWeekId = 1");
+		return  $this->db->get()->result();
+	}
 	
 }
 //end model

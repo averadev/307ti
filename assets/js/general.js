@@ -417,3 +417,39 @@ function getCurrentDate(){
 $(document).on('click', '.spanSelect', function(){ 
 	$('#textViewFront').click();
 });
+
+/**
+* cambia el contenido de los modales dependiendo del tabs
+* @param selector elemento el cual se va a mostrar
+*/
+function initializeTooltips(tooltips){
+	$( tooltips ).tooltip({
+		track: true,
+		items: "[titleCustom], [title]",
+		content: function() {
+			var element = $( this );
+			if ( element.is( "[data-geo]" ) ) {
+				var text = element.text();
+				return "<img class='map' alt='" + text +
+				"' src='http://maps.google.com/maps/api/staticmap?" +
+				"zoom=11&size=350x350&maptype=terrain&sensor=false&center=" +
+				text + "'>";
+			}
+			if ( element.is( "[title]" ) ) {
+				return element.attr( "title" );
+			}
+			if ( element.is( "[titleCustom]" ) ) {
+				var tips = element.attr( "titleCustom" )
+				tips = JSON.parse(tips);
+				var divReturn = "<div class='boxTips'>";
+				divReturn += "<div class='boxTitleTips'>Information</div>";
+				for (var j in tips) {
+					divReturn += "<div class='boxInfoTips'>" + j + ": " + tips[j] +"</div>"
+					console.log()
+				}
+				divReturn += "</div>";
+				return divReturn;
+			}
+		}
+	});
+}

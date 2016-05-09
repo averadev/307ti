@@ -138,15 +138,34 @@
 						<table id="tableFrontDesk" class="ganttTable" style="width:100%; float:left;">
 							<thead>
 								<tr class="gHeaderYear">
-									<th colspan="3" class="panelLeft last"></th>
+									<th colspan="4" class="panelLeft last"></th>
 								</tr>
 								<tr class="gHeaderMonth">
-									<th colspan="3" class="panelLeft last"></th>
+									<th colspan="4" class="panelLeft last"></th>
 								</tr>
 								<tr class="gHeaderDay" id="day">
-									<th class="panelLeft">Type</th>
-									<th class="panelLeft">Num</th>
-									<th class="panelLeft last">View</th>
+									<th class="panelLeft">
+										Type
+										<div>
+											<span><i class="fa fa-caret-up"></i></span>
+											<span><i class="fa fa-caret-down"></i></span>
+										</div>
+									</th>
+									<th class="panelLeft">
+										Num
+										<span><i class="fa fa-caret-up"></i></span>
+										<span><i class="fa fa-caret-down"></i></span>
+									</th>
+									<th class="panelLeft">
+										status
+										<span><i class="fa fa-caret-up"></i></span>
+										<span><i class="fa fa-caret-down"></i></span>
+									</th>
+									<th class="panelLeft last Tooltips">
+										View
+										<span><i class="fa fa-caret-up"></i></span>
+										<span><i class="fa fa-caret-down"></i></span>
+									</th>
 								</tr>
 							</thead>
 							
