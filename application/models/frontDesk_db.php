@@ -118,7 +118,11 @@ Class frontDesk_db extends CI_MODEL
 			$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),GETDATE(),101) and tblCalendar.Date <= DATEADD(day,10,CONVERT(VARCHAR(10),GETDATE(),101))");
 		}
 		//$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),'04/13/2016',101) and tblCalendar.Date <= DATEADD(day,10,CONVERT(VARCHAR(10),'04/13/2016',101))");
-		$this->db->order_by('ro.fkResId asc, tblCalendar.pkCalendarId asc');
+		if($filters['order'] != false){
+			$this->db->order_by($filters['order']);
+		}
+		$this->db->order_by('ro.fkResId ASC');
+		$this->db->order_by('tblCalendar.pkCalendarId ASC');
 		return  $this->db->get()->result();
 	}
 	

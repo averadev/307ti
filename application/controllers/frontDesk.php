@@ -93,6 +93,11 @@ class FrontDesk extends CI_Controller {
 		}else{
 			$sql['options'] = false;
 		}
+		if(isset($array['order'])){
+			$sql['order'] = $this->receiveOrder($array['order']);
+		}else{
+			$sql['order'] = false;
+		}
 		return $sql;
 	}
 	
@@ -125,6 +130,18 @@ class FrontDesk extends CI_Controller {
 		}
 		if (!empty($ArrayWords)){
 			return $ArrayWords;
+		}else{
+			return false;
+		}
+	}
+	
+	private function receiveOrder($order){
+		if(isset($order)){
+			if($order != ""){
+				return $order;
+			}else{
+				return false;
+			}
 		}else{
 			return false;
 		}

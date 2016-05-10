@@ -34,7 +34,7 @@ table.ganttTable{
 
 .ganttTable tbody tr .panelLeft{
 	background:#f4f4f4;
-	
+	padding-left:10px;
 }
 
 .panelLeft.last{
@@ -80,4 +80,26 @@ table.ganttTable{
 .ganttTable td.cellNoChange.rightPanel{
 	background:#7bc043;
 	border-right: 4px solid #FFFFFF;
+	padding-left:5px;
+}
+
+.gHeaderDay .panelLeft{
+	line-height:2;
+}
+
+.orderField{
+	float:right;
+	line-height: 0;
+}
+
+.orderRow{
+	cursor:pointer;
+	display:table-row;
+	font-size:.8rem;
+	line-height: 0;
+	color:#979b9f;
+}
+
+.orderRow.active{
+	color:#000000;
 }

@@ -57,7 +57,8 @@
 							
 							
 							<div class="small-12 large-3 columns filterDetailedAvailability">
-									<select id="textInvFloorPlan" class="round comboBoxInvDetailed selectSearch">
+								<div class="caja" >
+									<select id="textInvFloorPlan" class="comboBoxInvDetailed selectSearch input-group-field round">
 										<option value="0">select a Floor Plan</option>
 										<?php
 										foreach($floorPlan as $item){
@@ -67,10 +68,12 @@
 										}
 										?>
 									</select>
+								</div>
 							</div>
 							<!-- Propiedad -->
 							<div class="small-12 large-3 columns">
-								<select id="textInvProperty" class="round comboBoxInvDetailed selectSearch">
+								<div class="caja" >
+								<select id="textInvProperty" class="comboBoxInvDetailed selectSearch input-group-field round">
 									<option value="0">select a Property</option>
 									<?php
 									foreach($property as $item){
@@ -80,6 +83,7 @@
 									}
 									?>
 								</select>
+								</div>
 							</div>
 							<div class="small-12 large-1 columns">&nbsp;</div>
 						</fieldset>

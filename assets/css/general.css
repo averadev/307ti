@@ -11,6 +11,7 @@
 /**
 * @section body
 * @todo cuerpo del html
+* 183a59
 */
 
 *{
@@ -91,6 +92,16 @@ select {
 	border: 1px solid #dbdbdb;
 	border-top-right-radius:3px;
 	border-bottom-right-radius:3px;
+}
+
+.button {
+	color: #fff;
+    background-color: #225b88;
+}
+
+.button:hover {
+	color: #e8edf1;
+    background-color: #1D4D74;
 }
 
 .btn{
@@ -193,7 +204,7 @@ select {
     height: 100%;
     width: 220px;
     overflow-y: auto;
-    padding: 20px 20px 0 20px;
+    padding: 10px 20px 0 20px;
     /*background-color: #c7c7c7;*/
 	background-color: #FFFFFF;
 	border-right: solid 4px #183a59;
@@ -202,16 +213,15 @@ select {
 .menu-sel{
     cursor: pointer;
     padding: 6px 0px;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     height: 40px;
     width: 100%;
-	 font-size: 16px;
+	font-size: 16px;
 	font-weight:bold;
-	
-   /* text-align: center;*/
+	color:#183a59;
     background-color: #aaaaaa;
 	background: #EDEDED;
-   border: 1px solid rgba(20,53,80,0.14);
+	border: 1px solid rgba(20,53,80,0.14);
 }
 
 .icon-menu-sel{
@@ -224,16 +234,14 @@ select {
 
 .label-menu-sel{
 	float:left;
-	/*width:100%;*/
 	text-align:center;
-	
 	margin-top:2px;
-	margin-left:15px;
+	margin-left:5px;
 }
 
 .menu-sel:hover{
-    color: #ffffff;
     background-color: #183a59;
+	color:#FFFFFF;
 }
 .menu-fix{
     height: 80px;
@@ -251,10 +259,10 @@ select {
 }
 
 .menu-config img{
-	margin-top:2px;
-	margin-left:5px;
+	margin-top:6px;
+	margin-left:7px;
 	margin-right:5px;
-	height:35px;
+	height:25px;
 	float:left;
 }
 
@@ -306,8 +314,25 @@ select {
 	background:#c7c7c7;
 }
 
+.tabs{
+	margin-left: 239px;
+	background: none;
+    border: none;
+	list-style:none;
+}
+
+.tabs .tabs-title{
+	border: 1px solid rgba(20,53,80,0.14);
+	padding:0;
+	margin:0;
+	margin:2px 0;
+	margin-right:2px;
+	float:left;
+	width:auto;
+}
+
 .tabs dd > a, .tabs .tabs-title > a{
-    font-size: 14px;
+   /* font-size: 14px;
     margin: 8px 5px 0 0;
     padding: 5px 30px;
     border-radius: 10px 10px 0px 0px;
@@ -315,15 +340,26 @@ select {
     -webkit-border-radius: 10px 10px 0px 0px;
     border: 1px solid #000000;
     border-bottom: 0px;
+	/*background:#222222;
+	border:0;*/
+	/*border:1px solid #222222;*/
+	/*font-size: 14px;
+	margin: 4px 5px 0 0;
+    padding: 5px 30px;
+	float:left;*/
+	float:left;
+	padding: 8px 20px;
 }
+
+
 .tabs dd > a, .tabs .tabs-title > a {
-    color: #ffffff;
-    background: #183a59;
+    color: #000000;
+    background: #B3B3B3;
 }
 
 .tabs .tabs-title.active > a  {
-    color: #000000;
-    background: #FFFFFF;
+    color: #ffffff;
+    background: #183a59;
 }
 
 .iconCloseTab{
@@ -331,25 +367,38 @@ select {
 }
 
 .iconCloseTab{
-	top: -30px;
+	/*top: -15px;
     right: 10px;
     float: right;
     cursor: pointer;
-	margin-top:-20px;
+	margin-top:-21px;
 	margin-right:10px;
     position: inherit;
-	background-color:rgba(255,255,255,.2)
+	background-color:rgba(255,255,255,.2);
+	background:#000000;*/
+	font-size:11px;
+	float:right;
+	cursor: pointer;
+	padding: 5px 8px;
+	padding-bottom:6px;
+	background:#9f9f9f;
+	color:FFFFFF;
+	border-left:1px solid #bababa;
 }
 .iconCloseTab:hover{
-    background-color: #265580;
+    background-color: #FFFFFF;
 }
 
 .active .iconCloseTab{
-	background:none;
+	/*background:none;*/
+	background:#132e47;
+	border-left:1px solid #2f4d69;
+	color:#FFFFFF;
 }
 
 .active .iconCloseTab:hover{
-    background-color: #e8e8e8;
+    background-color: #FFFFFF;
+	color:#000000;
 }
 
 .moduleHide{
@@ -823,6 +872,32 @@ table thead tr th, table tbody tr td{
 	margin-top:-50px;
 }
 
+.loadingScreen{
+	position:absolute;
+	height:200px;
+	width:300px;
+	background:none;
+	left:50%; 
+    margin-left: -150px;
+	top:50%;
+	margin-top:-100px;
+}
+
+.loadingScreen label{
+	width:100%;
+	float:left;
+	font-size:1.2rem;
+	color:#225b88;
+	text-align:center;
+	font-weight:bold;
+}
+
+.imgLoadingScreen{
+	width:100%;
+	float:left;
+	text-align:center;
+}
+
 .subLoadingTable{
 	position:relative;
 	height:86px;
@@ -1020,6 +1095,7 @@ label.error{
   color: white;
   cursor: pointer; 
   margin-left:5px;
+  font-style:italic;
 }
 
 .box .box-header .box-title {
@@ -1033,30 +1109,31 @@ label.error{
     color: #8c92a3; 
 }
     .box .box-header .box-title i {
-      height: 35px;
       width: 35px;
       display: block;
       text-align: center;
-      line-height: 35px;
+      /*line-height: 35px;*/
       color: white;
       cursor: pointer;
-      margin: 0 5px;
+      margin: 3px 5px;
       position: relative;
       padding: 0;
       border-radius: 50%;
       float: left; 
-      border: 1px solid;
+      border:none;
  	}
 
-	.box .box-header .box-title span {
-      top: 5px;
-      position: relative;
-      left: 5px;
-      color: white;
-      font-family: Arimo;
-      font-size: 1.5em;
-      font-weight: lighter; 
-  }
+.box .box-header .box-title span {
+	top: 5px;
+	position: relative;
+	left: 5px;
+	color: white;
+	font-family: Arimo;
+	font-size: 1.5em;
+	font-weight: lighter;
+	float:left:	  
+}
+
 
 .dark-blue {
     background-color: #34495e;
@@ -1095,7 +1172,7 @@ label.error{
 }
 
 .yellow {
-    background-color: #f1c40f !important;
+    background-color: #f1c40f;
 }
 .blue_divina{
 	background-color: #225b88;
@@ -1214,10 +1291,10 @@ th.next{
 	width: 90px;
 }
 
-
 .espacio{
 	margin-left: 239px;
 }
+
 .trColspan{
 	background:#cacaca;
 	font-size:1rem;
@@ -1277,4 +1354,29 @@ th.next{
 	padding-bottom:0;
 	margin-bottom:2px;
 	line-height:16px;
+}
+
+input[type=checkbox]:not(old),
+input[type=radio]:not(old){
+  width   : 28px;
+  margin  : 0;
+  padding : 0;
+  opacity : 0;
+}
+
+input[type=checkbox]:not(old) + label,
+input[type=radio   ]:not(old) + label{
+  display      : inline-block;
+  margin-left  : -28px;
+  padding-left : 28px;
+  background   : url('../img/common/checks.png') no-repeat 0 0;
+  line-height  : 24px;
+}
+
+input[type=checkbox]:not(old):checked + label{
+  background-position : 0 -24px;
+}
+
+input[type=radio]:not(old):checked + label{
+  background-position : 0 -48px;
 }

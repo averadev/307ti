@@ -7,7 +7,9 @@
 
 /**************Index****************/
 
-$('#btnSearchFrontDesk').on('click', function(){ getFrontDesk(); });
+$('#btnSearchFrontDesk').on('click', function(){ $('.orderRow').removeClass("active"); getFrontDesk("");  });
+
+$('.orderRow').on('click', function(){ orderRowFront(this); });
 
 /************Funciones**************/
 
@@ -28,9 +30,7 @@ $(function() {
 			$('#textIntervalFront').html("<option value=''>Select a interval</option>");
 		},
 	});
-	
-
-	
+		
 	$( "#dateYearFront" ).Zebra_DatePicker({
 		format: 'Y',
 		view: 'years',
@@ -54,19 +54,21 @@ $(function() {
 /**
 * Muestra la lista de front desk
 */
-function getFrontDesk(){
+function getFrontDesk(order){
 	showLoading( '#table-frontDesk', true );
 	
 	var filters = getFiltersCheckboxs('FilterFrontDesk');
 	var dates = getDates(["dateArrivalFront", "dateDepartureFront", "textIntervalFront"]);
 	var words = getWords(["textUnitCodeFront","textConfirmationFront","textViewFront"]);
 	var options = getWords(["textIntervalFront"]);
+	
 	$.ajax({
 		data:{
 			filters:filters,
 			dates: dates,
 			words: words,
 			options: options,
+			order:order,
 		},
    		type: "POST",
        	url: "frontDesk/getFrontDesk",
@@ -111,10 +113,10 @@ function getFrontDesk(){
 			
 			for(i=0;i<items.length;i++){
 				var item = items[i]
-				bodyHTML+="<td class='panelLeft'>"+item.type+"</th>";
-				bodyHTML+="<td class='panelLeft' >"+item.unit+"</th>";
-				bodyHTML+="<td class='panelLeft' >"+item.status+"</th>";
-				bodyHTML+="<td title='" + item.viewDesc + "' class='panelLeft last Tooltips'>"+item.view+"</th>";
+				bodyHTML+="<td nowrap class='panelLeft'>"+item.type+"</th>";
+				bodyHTML+="<td nowrap class='panelLeft' >"+item.unit+"</th>";
+				bodyHTML+="<td nowrap class='panelLeft' >"+item.status+"</th>";
+				bodyHTML+="<td nowrap title='" + item.viewDesc + "' class='panelLeft last Tooltips'>"+item.view+"</th>";
 				
 				var values = items[i].values
 				var valueToolTip = {Confirmation:values.ResConf, Room:item.unit, Guest:values.people, Arrival:values.dateFrom, Departure:values.dateTo};
@@ -175,3 +177,13 @@ function getWeekByYear(year){
 		}
 	});
 }
+
+function orderRowFront(selector){
+	var field = $(selector).parent().attr('attr-field');
+	var order = $(selector).attr('attr-order');
+	$('.orderRow').removeClass("active");
+	$(selector).addClass("active");
+	getFrontDesk(field + " " + order);
+}
+
+//function create

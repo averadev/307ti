@@ -74,7 +74,7 @@
         <div class="menu-section">
             <div class="menu-content">
                 <div class="menu-sel" attr-screen="people">
-					<span class="icon-menu-sel"><i class="fa fa-male"></i></span>
+					<span class="icon-menu-sel"><i class="fa fa fa-users"></i></span>
 					<div class="label-menu-sel">People</div>
 				</div>
                 <div class="menu-sel" attr-screen="contract">

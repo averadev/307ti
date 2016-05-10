@@ -9,12 +9,12 @@
 					</span>
 				</div>
 				<h3 class="box-title">
+					<span class="img-box-title"><i class="fa fa-users"></i></span>
 					<span>People Search</span>
 				</h3>
 				<div class="pull-left box-tools">
-					<span data-widget="newContrat" id="newUser">
-						<img src="http://www.pms.307ti.com/Scripts/ext/images/icons/user_add.gif" alt="" />
-						<span>New</span>
+					<span data-widget="newUser" id="newUser">
+						<span>( New )</span>
 					</span>
 				</div>
 			</div>
@@ -55,7 +55,10 @@
 					</div>
 					<div class="small-12 medium-12 large-12 columns">
 						<fieldset class="large-12 columns">
-							<legend class="legendSearch" ><input type="checkbox" id="checkFilterAdvance" class="checkFilter">&nbsp;&nbsp;Advanced search</legend>
+							<legend class="legendSearch" >
+								<input type="checkbox" id="checkFilterAdvance" class="checkFilter">
+								<label for="checkFilterAdvance">&nbsp;&nbsp;Advanced search</label>
+							</legend>
 							<div class="row" id="containerFilterAdv" style="display:none;">
 								<div class="rdoField">
 									<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="initials" id="RadioInitials" checked>

@@ -30,6 +30,7 @@ $(function() {
             $('.tabs-title').removeClass('active');
             var screen = $(this).attr('attr-screen');
             var iconClose = '<img class="iconCloseTab" src="'+BASE_URL+'assets/img/common/iconClose.png" />'
+			iconClose = '<span class="iconCloseTab"><i class="fa fa-close"><i></span>'
             $('.tabs').append( '<li class="tabs-title active" attr-screen="'+screen+'"><a>'+$(this).text().trim()+'</a>'+iconClose+'</li>' );
             $(".module").addClass("moduleHide");
             addTabEvent();
@@ -91,9 +92,9 @@ function showMenu(){
 // Load Module
 function loadModule(screen){
     $( ".general-section" ).append('<div class="module" id="module-'+screen+'"></div>');
-	showLoading('#module-'+screen,true);
+	showLoadingScreen('#module-'+screen,true);
 	$( "#module-"+screen ).load( BASE_URL+screen, function() {
-		showLoading('.general-section',false);
+		showLoadingScreen('.general-section',false);
 	});
 }
 
@@ -174,7 +175,6 @@ function showAlert(isOpen = false,message = null,typeForm = null, success = null
 function showLoading(parentElement, isOpen = false,message = null, success = null ){
 	//indica si la alerta se muestra o escond
 	if(isOpen){
-		
 		var messageLoading = "Loading...";
 		if(message != null){ messageLoading = message }
 		var widthLoading = $(parentElement).css('width')
@@ -187,17 +187,12 @@ function showLoading(parentElement, isOpen = false,message = null, success = nul
 					'</div>' +
 				'</div>' +
 			'</div>';
-		
 		$(parentElement).prepend(loandingElements);
-		
 		var loading = $(parentElement).children('.divLoadingTable');
-		
-		/*$(loading).css('width',"100%");*/
 		
 		$(loading).find("#progressbar").progressbar({
 			value: false
 		});
-		
 	}else{
 		var loading = $(parentElement).children('.divLoadingTable');
 		$(loading).remove();
@@ -206,6 +201,34 @@ function showLoading(parentElement, isOpen = false,message = null, success = nul
 		}
 	}
 } 
+
+function showLoadingScreen(parentElement, isOpen = false,message = null, success = null ){
+	//indica si la alerta se muestra o escond
+	if(isOpen){
+		var messageLoading = "LOADIGN";
+		if(message != null){ messageLoading = message }
+		var widthLoading = $(parentElement).css('width')
+		var loandingElements = '<div class="divLoadingTable">' +
+				'<div class="loadingScreen" >' +
+					'<div class="imgLoadingScreen"><img src="' + BASE_URL + 'assets/img/common/712.gif' + '" /></div> ' +
+					'<label>' + messageLoading + '</label>' +
+				'</div>' +
+			'</div>';
+		$(parentElement).prepend(loandingElements);
+		var loading = $(parentElement).children('.divLoadingTable');
+		
+		$(loading).find("#progressbar").progressbar({
+			value: false
+		});
+	}else{
+		var loading = $(parentElement).children('.divLoadingTable');
+		$(loading).remove();
+		if(success != null){
+			success();
+		}
+	}
+} 
+
 
 function drawTable(data, funcion, cadena, table){
 
@@ -453,10 +476,7 @@ function initializeTooltips(tooltips){
 	});
 }
 
-
 function drawTable3(data,titulo, table){
-
-
     var headHTML = "<td>"+titulo+"</td>";
     var bodyHTML = "";
     //creación de la cabecera

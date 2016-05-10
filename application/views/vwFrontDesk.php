@@ -146,25 +146,31 @@
 								<tr class="gHeaderDay" id="day">
 									<th class="panelLeft">
 										Type
-										<div>
-											<span><i class="fa fa-caret-up"></i></span>
-											<span><i class="fa fa-caret-down"></i></span>
+										<div class="orderField" attr-field="fpi.FloorPlanDesc">
+											<span class="orderRow" attr-order="asc" ><i class="fa fa-caret-up"></i></span>
+											<span class="orderRow" attr-order="desc"><i class="fa fa-caret-down"></i></span>
 										</div>
 									</th>
 									<th class="panelLeft">
 										Num
-										<span><i class="fa fa-caret-up"></i></span>
-										<span><i class="fa fa-caret-down"></i></span>
+										<div class="orderField" attr-field="u.UnitCode">
+											<span class="orderRow" attr-order="asc" ><i class="fa fa-caret-up"></i></span>
+											<span class="orderRow" attr-order="desc"><i class="fa fa-caret-down"></i></span>
+										</div>
 									</th>
 									<th class="panelLeft">
 										status
-										<span><i class="fa fa-caret-up"></i></span>
-										<span><i class="fa fa-caret-down"></i></span>
+										<div class="orderField" attr-field="hks.HKStatusDesc">
+											<span class="orderRow" attr-order="asc" ><i class="fa fa-caret-up"></i></span>
+											<span class="orderRow" attr-order="desc"><i class="fa fa-caret-down"></i></span>
+										</div>
 									</th>
 									<th class="panelLeft last Tooltips">
 										View
-										<span><i class="fa fa-caret-up"></i></span>
-										<span><i class="fa fa-caret-down"></i></span>
+										<div class="orderField" attr-field="v.ViewDesc">
+											<span class="orderRow" attr-order="asc" ><i class="fa fa-caret-up"></i></span>
+											<span class="orderRow" attr-order="desc"><i class="fa fa-caret-down"></i></span>
+										</div>
 									</th>
 								</tr>
 							</thead>

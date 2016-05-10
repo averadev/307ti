@@ -41,15 +41,25 @@
 				<div class="row">
 					<div class="medium-6 columns">
 					<fieldset>
-						<legend><input id="busquedaAvanazada" type="checkbox">Advanced search</legend>
-
+						<legend><input id="busquedaAvanazada" type="checkbox">
+						<label for="busquedaAvanazada">&nbsp;&nbsp;Advanced search</label>
 						<div class="row" id="avanzada" style="display: none;">
-							<div class="large-12 columns slide">
+							<div class="large-12 columns">
+								<div class="rdoField">
 							  	<input type="radio" name="filtro_contrato" value="codEmpleado" id="codEmpleado" required><label for="codEmpleado">Codigo de Empleado</label>
-					    		<input type="radio" name="filtro_contrato" value="folio" id="folio"><label for="folio">Folio</label>
-					    		<input type="radio" name="filtro_contrato" value="unidad" id="unidad"><label for="unidad">Unidad ID</label>
-					    		<input type="radio" name="filtro_contrato" value="email" id="email"><label for="email">Email</label>
-					    		<input type="radio" name="filtro_contrato" value="contrato" id="contrato"><label for="contrato">Contrato ID</label>
+					    		</div>
+								<div class="rdoField">
+								<input type="radio" name="filtro_contrato" value="folio" id="folio"><label for="folio">Folio</label>
+					    		</div>
+								<div class="rdoField">
+								<input type="radio" name="filtro_contrato" value="unidad" id="unidad"><label for="unidad">Unidad ID</label>
+					    		</div>
+								<div class="rdoField">
+								<input type="radio" name="filtro_contrato" value="email" id="email"><label for="email">Email</label>
+					    		</div>
+								<div class="rdoField">
+								<input type="radio" name="filtro_contrato" value="contrato" id="contrato"><label for="contrato">Contrato ID</label>
+								</div>
 							</div>
 						</div>
 					</fieldset>
