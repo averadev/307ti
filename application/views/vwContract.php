@@ -12,12 +12,12 @@
                </h3>
 				<div class="pull-left box-tools">
 					<span data-widget="newContrat" id="newContract">
-						<img src="http://www.pms.307ti.com/Scripts/ext/images/icons/contract.png" alt="">
+						<img src="assets/img/common/contract.png" alt="">
 						<span>New</span>
 					</span>
 				</div>
 			</div>
-			<div class="box-body" style="display: block;">
+			<div class="box-body">
 				<div class="row">
 					  <fieldset class="large-6 columns">
 					    <legend>Choose a filter</legend>

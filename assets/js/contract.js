@@ -12,6 +12,9 @@ $(document).ready(function(){
 	var dialogEnganche = modalDepositDownpayment();
 	var dialogScheduledPayments = modalScheduledPayments();
 	var dialogDiscountAmount = modalDiscountAmount();
+	var dialogEditContract = modalEditContract();
+	var dialogAddTour = addTourContract();
+
 
 	$(document).on( 'click', '#newContract', function () {
 		showLoading('#dialog-Contract',true);
@@ -65,6 +68,10 @@ $(document).ready(function(){
 		dialogDiscountAmount.dialog("open");
 	});
 
+	$(document).on( 'click', '#btnAddTourID', function () {
+		var dialogAddTour = addTourContract();
+		dialogAddTour.dialog("open");
+	});
 	$('#btnCleanWord').click(function (){
 		btnCleanWord.val('');
 	});
@@ -76,6 +83,7 @@ $(document).ready(function(){
 		$("#avanzada").slideToggle("slow");
 	});
 
+	getDatailByID("contractstbody");
 });
 
 
@@ -111,6 +119,42 @@ function createDialogContract() {
 		}
 	});
 	return dialog;
+}
+function addTourContract(unidades){
+	var unidades = unidades;
+	dialogo = $("#dialog-tourID").dialog ({
+  		open : function (event){
+	    	$(this).load ("tours/index" , function(){
+	    		selectTableUnico("tours");
+	    	});
+		},
+		autoOpen: false,
+     	height: maxHeight/1.5,
+     	width: "40%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       			// var weeks = $("#weeksNumber").val();
+       			// var primero = $("#firstYearWeeks").val();
+       			// var ultimo = $("#lastYearWeeks").val();
+       			// tablUnidadades(unidades, weeks, primero, ultimo);	
+       			// $(this).dialog('close');
+       			// setValueUnitPrice();
+       		}
+     	}],
+     close: function() {
+    
+     }
+	});
+	return dialogo;
 }
 function addUnidadDialog() {
 
@@ -198,7 +242,8 @@ function getContratos(){
 			showLoading('#contracts',false);
 			if(data != null){
 				alertify.success("Found "+ data.length);
-				drawTable(data, 'getDetalleContratoByID', "details", "contracts");
+				//drawTable(data, 'getDetalleContratoByID', "details", "contracts");
+				drawTable3(data, "details", "contracts");
 			}else{
 				$('#contractstbody').empty();
 				alertify.error("No data found");
@@ -335,11 +380,12 @@ function selectAllPeople(){
 
 	var array = $("#tablePeople .yellow");
 	for (var i = 0; i < array.length; i++) {
+		var fullArray = $(array[i]).find("td");
 		persona = [
-			array[i].childNodes[1].textContent.replace(/\s+/g, " "),
-			array[i].childNodes[2].textContent.replace(/\s+/g, " "),
-			array[i].childNodes[3].textContent.replace(/\s+/g, " "),
-			array[i].childNodes[8].textContent.replace(/\s+/g, " ")
+			fullArray.eq(1).text().replace(/\s+/g, " "),
+			fullArray.eq(2).text().replace(/\s+/g, " "),
+			fullArray.eq(3).text().replace(/\s+/g, " "),
+			fullArray.eq(9).text().replace(/\s+/g, " "),
 		];
 		personas.push(persona);
 	}
@@ -369,14 +415,22 @@ function tablaPersonas(personas){
     }
     $('#tablePeopleSelected tbody').append(bodyHTML);
     deleteElementTable("tablePeopleSelected");
-    //checkBoxes();
 }
 
+//reducir a una funcion
 function deleteElementTable(div){
 	$("#"+div+" tr").on("click", "button", function(){
 		$(this).closest("tr").remove();
 	});
 }
+
+function deleteElementTableUnidades(div){
+	$("#"+div+" tr").on("click", "button", function(){
+		$(this).closest("tr").remove();
+		setValueUnitPrice();
+	});
+}
+
 
 function checkBoxes(){
 	var radioButtons = $('input[name="principal"]');
@@ -471,8 +525,9 @@ function PackReference(){
 	dialogo = $("#dialog-Pack").dialog ({
   		open : function (event){
 	    	$(this).load ("contract/modalPack" , function(){
-	    		var precioUnidad = $("#precioUnidad").val();
+	    		var precioUnidad = $("#precioVenta").val();
 				var precioUnidadPack = $("#unitPricePack").val(precioUnidad);
+				calcularPack();
 	    	});
 		},
 		autoOpen: false,
@@ -489,7 +544,8 @@ function PackReference(){
        		text: "ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-
+       			$("#precioVenta").val($("#finalPricePack").val());
+       			$(this).dialog('close');
        		}
      	}],
      close: function() {
@@ -503,8 +559,8 @@ function modalDepositDownpayment(){
 	dialogo = $("#dialog-Downpayment").dialog ({
   		open : function (event){
 	    	$(this).load ("contract/modalDepositDownpayment" , function(){
-	   //  		var precioUnidad = $("#precioUnidad").val();
-				// var precioUnidadPack = $("#unitPricePack").val(precioUnidad);
+	    		var precioUnidad = $("#downpayment").val();
+				var precioUnidadPack = $("#downpaymentPrice").val(precioUnidad);
 	    	});
 		},
 		autoOpen: false,
@@ -594,6 +650,8 @@ function modalDiscountAmount(){
 }
 
 
+
+
 function tablUnidadades(unidades, weeks, primero, ultimo){
 	var weeks = parseInt(weeks);
 	var bodyHTML = '';
@@ -612,7 +670,7 @@ function tablUnidadades(unidades, weeks, primero, ultimo){
 	}
    
     $('#tableUnidadesSelected tbody').html(bodyHTML);
-    deleteElementTable("tableUnidadesSelected");
+    deleteElementTableUnidades("tableUnidadesSelected");
 }
 
 function verificarTablas(div){
@@ -661,3 +719,93 @@ function setValueUnitPrice(){
 	$("#precioUnidad").val(precio.toFixed(2) * multiplicador);
 	$("#precioVenta").val(precio.toFixed(2) * multiplicador);
 }
+
+
+function getDatailByID(id){
+	var pickedup;
+	$("#"+id).on("click", "tr", function(){
+		if (pickedup != null) {
+        	pickedup.removeClass("yellow");
+			var id = $(this).find("td").eq(1).text().trim();
+			console.log(id);
+            var dialogEditContract = modalEditContract();
+            dialogEditContract.dialog("open");
+          }
+          $( this ).addClass("yellow");
+          pickedup = $(this);
+	});
+}
+
+function modalEditContract(){
+
+	dialogo = $("#dialog-Edit-Contract").dialog ({
+  		open : function (event){
+	    	$(this).load ("contract/modalEdit" , function(){
+	 
+	    	});
+		},
+		autoOpen: false,
+     	height: maxHeight,
+     	width: "50%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+
+       		}
+     	}],
+     close: function() {
+    
+     }
+	});
+	return dialogo;
+}
+
+function calcularPack(){
+	var value = $("#porcentajePack").val();
+	var valueQ =parseFloat($("#quantityPack").val());
+	var precioFinal = $("#finalPricePack").val();
+	var precioInicial = parseFloat($("#unitPricePack").val());
+	$("#porcentajePack").on('keyup change click', function () {
+	    if(this.value !== value) {
+	    	value = this.value;
+	       var p = porcentajePack(this.value,precioInicial);
+	       $("#quantityPack").val(p);
+	       $("#finalPricePack").val(p+precioInicial);
+	    }        
+	});
+
+	$("#quantityPack").on('keyup change click', function () {
+	    if(this.value !== valueQ) {
+	    	 valueQ = parseFloat(this.value);
+	    	 var porcentaje = cantidad(valueQ, precioInicial);
+	    	 $("#porcentajePack").val(porcentaje.toFixed(3));
+	       $("#finalPricePack").val(valueQ+precioInicial);
+	    }        
+	});
+}
+function porcentajePack(porcentaje, cantidad){
+	return parseFloat(porcentaje/100)*cantidad;
+}
+
+function cantidad(cantidad, precio){
+	return (cantidad / precio)*100;
+}
+
+
+// $(document).ready(function(){
+//     $("#myTable td").click(function() {     
+ 
+//         var column_num = parseInt( $(this).index() ) + 1;
+//         var row_num = parseInt( $(this).parent().index() )+1;    
+ 
+//         $("#result").html( "Row_num =" + row_num + "  ,  Rolumn_num ="+ column_num );   
+//     });
+// });

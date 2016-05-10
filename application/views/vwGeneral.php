@@ -18,9 +18,9 @@
 		
 		<!-- Zebra_Datepicker -->
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>zebra/bootstrap.css" />
-		<!-------- gantt ------->
+		<!-- gantt -->
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>gantt/gantt.css" />
-		<!-------- Tooltip ------->
+		<!-- Tooltip-->
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>tooltip/tooltip.css" />
 		
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
@@ -35,7 +35,7 @@
         
 		<!-- Zebra_Datepicker -->
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>zebra/zebra_datepicker.js"></script>
-		<!-------- gantt -------->
+		<!-- gantt -->
     </head>
     <body>
 		
@@ -65,7 +65,7 @@
             <!--<ul class="tabs" data-tabs role="tablist">
                 
             </ul>-->
-			<ul class="tabs" data-tabs>
+			<ul class="tabs espacio" data-tabs>
 			</ul>
         </nav>
 		
@@ -80,6 +80,10 @@
                 <div class="menu-sel" attr-screen="contract">
 					<span class="icon-menu-sel"><i class="fa fa-file-excel-o"></i></span>
 					<div class="label-menu-sel">Contract</div>
+				</div>
+				<div class="menu-sel" attr-screen="tours">
+					<span class="icon-menu-sel"><i class="fa fa-rocket"></i></span>
+					<div class="label-menu-sel">Tour</div>
 				</div>
                 <div class="menu-sel" attr-screen="inventory">
 					<span class="icon-menu-sel"><i class="fa fa-money"></i></span>

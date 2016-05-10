@@ -4,7 +4,7 @@
       <label for="legalName" class="text-left">Down payment</label>
     </div>
     <div class="small-9 columns">
-       <input readonly id="unitPricePack" type="number" name="quantity" min="1" max="480">
+       <input readonly id="downpaymentPrice" type="number" name="quantity" min="1" max="480">
     </div>
   </div>
   <div class="row">
@@ -12,15 +12,15 @@
       <label for="legalName" class="text-left">contract expenditure</label>
     </div>
     <div class="small-9 columns">
-       <input id="porcentajePack" type="number" name="quantity" min="2016" max="2099">
+       <input id="downpaymentGastos" type="number" name="quantity" min="0" value="999">
     </div>
   </div>
   <div class="row">
     <div class="small-3 columns">
-      <label for="legalName" class="text-left">Total pay</label>
+      <label for="legalName" class="text-left">Total to pay</label>
     </div>
     <div class="small-9 columns">
-       <input id="quantityPack" type="number" name="quantity" min="2016" max="2099">
+       <input readonly id="downpaymentTotal" type="number" name="quantity">
     </div>
   </div>
   <div class="row">

@@ -17,9 +17,9 @@ class Tours extends CI_Controller {
     }
 
     public function index(){
-        $this->load->view('vwtours.php');
-    }
-    public function modal(){
         $this->load->view('tours/toursDialog.php');
     }
+    // public function modal(){
+    //     $this->load->view('tours/toursDialog.php');
+    // }
 }

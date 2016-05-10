@@ -1,6 +1,6 @@
 <div class="large-12 columns">
         <div class="box">
-            <div class="box-header green">
+            <div class="box-header blue_divina">
                 <div class="pull-right box-tools">
 					<span class="box-btn" data-widget="collapse">
 						<i class="fa fa-minus"></i>
@@ -11,12 +11,12 @@
                 </h3>
                 <div class="pull-left box-tools">
 					<span data-widget="newContrat" id="newContract">
-						<img src="http://www.pms.307ti.com/Scripts/ext/images/icons/contract.png" alt="">
+						<img src="assets/img/common/tour.png" alt="">
 						<span>New</span>
 					</span>
                 </div>
             </div>
-            <div class="box-body" style="display: block;">
+            <div class="box-body">
                 <div class="row">
                     <fieldset class="large-6 columns">
                         <legend>Choose a filter</legend>
@@ -78,7 +78,7 @@
 
     <div class="large-12 columns">
         <div class="box">
-            <div class="box-header green">
+            <div class="box-header blue_divina">
                 <div class="pull-right box-tools">
                 </div>
                 <h3 class="box-title">

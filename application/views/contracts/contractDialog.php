@@ -160,11 +160,20 @@
                     </div>
                     <div class="large-4 columns">
                         <label>Pack Reference
+                            <div class="row collapse">
+                                <div class="small-8 columns">
+                                    <input required name="depositoEnganche" id="deposito" type="text" placeholder="$0.00">
+                                </div>
+                                <div class="small-4 columns">
+                                    <a id="btnPackReference" href="#" class="button postfix">Capture</a>
+                                </div>
+                            </div>
+                       <!--  <label>Pack Reference
                             <input id="packReference" type="text" name="referenciaPACK" placeholder="$0.00" />
                               <div class="small-2 columns">
                                 <a id="btnPackReference" href="#" class="button postfix">Add</a>
                             </div>
-                        </label>
+                        </label> -->
                     </div>
                     <div class="large-4 columns">
                         <label>Sell Price
@@ -177,7 +186,7 @@
                 <div class="row">
                     <div class="large-4 columns">
                         <label>Downpayment
-                            <input required type="text" placeholder="$0.00" value="1,500.00" />
+                            <input id="downpayment" required type="text" placeholder="$0.00"/>
                         </label>
                     </div>
                     <div class="large-4 columns">

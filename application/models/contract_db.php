@@ -206,12 +206,6 @@ class Contract_db extends CI_Model {
 
     public function getUnidades(){
 
-       
-        //inner join tblUnit unit on unit.pkUnitId = invt.fkUnitId
-        //inner join tblFloorPlan flp on flp.pkFloorPlanID = unit.fkFloorPlanId
-        //inner join tblPrice price on price.fkUnitId = unit.pkUnitId
-        //inner join tblFrequency freq on freq.pkFrequencyId = invt.fkFrequencyId
-        //inner join tblSeason season on season.pkSeasonId = invt.fkSeassonId
         $this->db->select('unit.UnitCode as Code, flp.FloorPlanDesc as Description, price.PriceFixedWk as Price, freq.FrequencyDesc Frequency, season.SeasonDesc as Season');
         $this->db->from('tblResInvt invt');
         $this->db->join('tblUnit unit', 'unit.pkUnitId = invt.fkUnitId', 'inner');

@@ -94,7 +94,6 @@ function loadModule(screen){
 	showLoading('#module-'+screen,true);
 	$( "#module-"+screen ).load( BASE_URL+screen, function() {
 		showLoading('.general-section',false);
-		
 	});
 }
 
@@ -452,4 +451,27 @@ function initializeTooltips(tooltips){
 			}
 		}
 	});
+}
+
+
+function drawTable3(data,titulo, table){
+
+
+    var headHTML = "<td>"+titulo+"</td>";
+    var bodyHTML = "";
+    //creación de la cabecera
+	for (var j in data[0]) {
+        headHTML+="<th>"+j+"</th>";
+    }
+    //creación del body
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+        bodyHTML += '<td><i class="fa fa-info-circle"></i></td>';
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        };
+        bodyHTML+="</tr>";
+    }
+    $('#' + table + "thead" ).html(headHTML);
+    $('#' + table + "tbody" ).html(bodyHTML);
 }
