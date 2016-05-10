@@ -10,6 +10,7 @@
 					</span>
 				</div>
 				<h3 class="box-title">
+					<span class="img-box-title"><i class="fa fa-desktop"></i></span>
 					<span>FrontDesk Search</span>
 				</h3>
 			</div>

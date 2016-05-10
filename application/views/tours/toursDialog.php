@@ -7,12 +7,12 @@
 					</span>
                 </div>
                 <h3 class="box-title">
+					<span class="img-box-title"><i class="fa fa-rocket"></i></span>
                     <span>Add Tour ID</span>
                 </h3>
                 <div class="pull-left box-tools">
 					<span data-widget="newContrat" id="newContract">
-						<img src="assets/img/common/tour.png" alt="">
-						<span>New</span>
+						<span>( New )</span>
 					</span>
                 </div>
             </div>
@@ -40,7 +40,9 @@
                 <div class="row">
                     <div class="medium-6 columns">
                         <fieldset>
-                            <legend><input id="advanceSearchTour" type="checkbox">Advanced search</legend>
+                            <legend><input id="advanceSearchTour" type="checkbox">
+							<label for="advanceSearchTour">&nbsp;&nbsp;Advanced search</label>
+							</legend>
 
                             <div class="row" id="advanceTour" style="display: none;">
                                 <div class="large-12 columns slide">

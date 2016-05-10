@@ -10,6 +10,7 @@
 					</span>
 				</div>
 				<h3 class="box-title">
+					<span class="img-box-title"><i class="fa fa-money"></i></span>
 					<span>Inventary Search</span>
 				</h3>
 			</div>
@@ -89,7 +90,7 @@
 						</fieldset>
 					</div>
 					<div class="small-12 medium-12 large-12 columns">
-						<fieldset class="large-12 columns filterDetailedAvailability">
+						<fieldset class="large-5 columns filterDetailedAvailability">
 							<legend class="legendSearch">Choose the availability</legend>
 							<!-- Type of Availability -->
 							<div class="rdoField">
@@ -102,7 +103,7 @@
 								<label for="RadioInvOccupancy">Occupancy </label>
 							</div>
 						</fieldset>
-						<fieldset class=" small-12 large-12 columns filterDetailedAvailability">
+						<fieldset class=" small-12 large-7 columns filterDetailedAvailability">
 							<legend class="legendSearch">Choose the filters</legend>
 							<!-- Include Non Deducted -->
 							<div class="rdoField">

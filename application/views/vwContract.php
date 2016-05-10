@@ -8,12 +8,12 @@
 					</span>
                </div>
                <h3 class="box-title">
+				<span class="img-box-title"><i class="fa fa-file-excel-o"></i></span>
                	<span>Contract Search</span>
                </h3>
 				<div class="pull-left box-tools">
 					<span data-widget="newContrat" id="newContract">
-						<img src="assets/img/common/contract.png" alt="">
-						<span>New</span>
+						<span>( New )</span>
 					</span>
 				</div>
 			</div>
