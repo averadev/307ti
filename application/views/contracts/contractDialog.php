@@ -36,7 +36,20 @@
                     <div class="small-3 columns">
                         <label  for="TourID" class="text-left">Tour ID</label>
                     </div>
-                    <div class="large-9 columns">
+                            <div class="large-9 columns">
+                                <div class="row collapse">
+                                    <div class="small-10 columns">
+                                        <input value="0" readonly type="text" placeholder="ID" name="TourID" id="TourID" required>
+                                    </div>
+                                    <div class="small-1 columns">
+                                        <a id="btnAddTourID" href="#" class="button postfix"><i class="fa fa-plus"></i></a>
+                                    </div>
+                                     <div class="small-1 columns">
+                                        <a id="btnDeleteTourID" href="#" class="button postfix"><i class="fa fa-trash-o"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                   <!--  <div class="large-9 columns">
                         <div class="row collapse">
                             <div class="small-10 columns">
                                 <input value="0" readonly type="text" placeholder="ID" name="TourID" id="TourID" required>
@@ -45,7 +58,7 @@
                                 <a id="btnAddTourID" href="#" class="button postfix">Add</a>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="containerPeople">
@@ -192,7 +205,7 @@
                     <div class="large-4 columns">
                         <label>Choose</label>
                         <input type="radio" name="engancheR" value="porcentaje" id="porcentaje"><label for="porcentaje">Porcentaje</label>
-                        <input type="radio" name="engancheR" value="cantidad" id="cantidad"><label for="cantidad">Cantidad</label>
+                        <input checked type="radio" name="engancheR" value="cantidad" id="cantidad"><label for="cantidad">Cantidad</label>
                     </div>
                     <div class="large-4 columns">
                         <label>Amount

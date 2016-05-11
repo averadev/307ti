@@ -2,11 +2,9 @@ $(document).ready(function(){
 
 	maxHeight = screen.height * .25;
 	maxHeight = screen.height - maxHeight;
-
-	
+	var addContract = null;
     var unidadDialog = addUnidadDialog();
     var peopleDialog = addPeopleDialog();
-	var addContract = createDialogContract();
 	var dialogWeeks = getWeeksDialog();
 	var dialogPack = PackReference();
 	var dialogEnganche = modalDepositDownpayment();
@@ -23,6 +21,10 @@ $(document).ready(function(){
 		});
 		ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
 		ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
+		if (addContract!=null) {
+	    	addContract.dialog( "destroy" );
+	    }
+	    addContract = createDialogContract();
 		addContract.dialog("open");
 	});
 
@@ -34,6 +36,10 @@ $(document).ready(function(){
             $("#dialog-User").hide();
             selectTable("tablePeople");
         });
+         if(peopleDialog != null){
+         	peopleDialog.dialog("destroy")
+         }
+         peopleDialog = addPeopleDialog();
          peopleDialog.dialog( "open" );
 	});
 
@@ -43,6 +49,10 @@ $(document).ready(function(){
 	            showLoading('#dialog-Unidades',false);
 	            selectTableUnico("tblUnidades");
 	        });
+	        if (unidadDialog!=null) {
+	    		unidadDialog.dialog( "destroy" );
+	    	}
+	    	unidadDialog = addUnidadDialog();
 	        unidadDialog.dialog( "open" );
 	        
 	    });
@@ -72,9 +82,13 @@ $(document).ready(function(){
 		var dialogAddTour = addTourContract();
 		dialogAddTour.dialog("open");
 	});
-	$('#btnCleanWord').click(function (){
-		btnCleanWord.val('');
+	$(document).on( 'click', '#btnDeleteTourID', function () {
+		$('#TourID').val('0');
 	});
+	$('#btnCleanWord').click(function (){
+		$('#stringContrat').val('');
+	});
+	
 	$('#btnfind').click(function(){
 		getContratos();
 	});
@@ -88,7 +102,7 @@ $(document).ready(function(){
 
 
 function createDialogContract() {
-
+	
 	dialog = $("#dialog-Contract").dialog({
 		autoOpen: false,
 		height: maxHeight,
@@ -98,7 +112,7 @@ function createDialogContract() {
 			text: "Cancel",
 			"class": 'dialogModalButtonCancel',
 			click: function() {
-				dialog.dialog("close");
+				$(this).dialog('close');
 			}
 		},{
 			text: "Save and close",
@@ -142,6 +156,9 @@ function addTourContract(unidades){
        		text: "ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
+       			var tourID = getValueFromTableSelected("tours", 1);
+       			$("#TourID").val(tourID);
+       			$(this).dialog('close');
        			// var weeks = $("#weeksNumber").val();
        			// var primero = $("#firstYearWeeks").val();
        			// var ultimo = $("#lastYearWeeks").val();
@@ -385,7 +402,7 @@ function selectAllPeople(){
 			fullArray.eq(1).text().replace(/\s+/g, " "),
 			fullArray.eq(2).text().replace(/\s+/g, " "),
 			fullArray.eq(3).text().replace(/\s+/g, " "),
-			fullArray.eq(9).text().replace(/\s+/g, " "),
+			fullArray.eq(9).text().replace(/\s+/g, " ")
 		];
 		personas.push(persona);
 	}
@@ -397,6 +414,29 @@ function selectAllPeople(){
 		return true;
 	}
 	
+}
+function selectAllUnities(){
+	var unidades = [];
+
+	var array = $("#tblUnidades .yellow");
+	for (var i = 0; i < array.length; i++) {
+		var fullArray = $(array[i]).find("td");
+		unidad = [
+			fullArray.eq(1).text().replace(/\s+/g, " "),
+			fullArray.eq(2).text().replace(/\s+/g, " "),
+			fullArray.eq(3).text().replace(/\s+/g, " "),
+			fullArray.eq(4).text().replace(/\s+/g, " "),
+			fullArray.eq(5).text().replace(/\s+/g, " ")
+		];
+		unidades.push(unidad);
+	}
+	if (unidades.length <= 0) {
+		alertify.error("Click over for choose one");
+		//return false;
+	}else{
+		
+		return unidades;
+	}
 }
 
 function tablaPersonas(personas){
@@ -458,38 +498,16 @@ function selectTableUnico(div){
 	});
 }
 
-function selectAllUnities(){
-	var unidades = [];
-
-	var array = $("#tblUnidades .yellow");
-	for (var i = 0; i < array.length; i++) {
-		var fullArray = $(array[i]).find("td");
-		//personas.push(fullArray.eq(0).text().trim());
-		unidad = [
-			fullArray.eq(1).text().replace(/\s+/g, " "),
-			fullArray.eq(2).text().replace(/\s+/g, " "),
-			fullArray.eq(3).text().replace(/\s+/g, " "),
-			fullArray.eq(4).text().replace(/\s+/g, " "),
-			fullArray.eq(5).text().replace(/\s+/g, " "),
-
-		];
-		unidades.push(unidad);
-	}
-	if (unidades.length <= 0) {
-		alertify.error("Click over for choose one");
-		//return false;
-	}else{
-		
-		return unidades;
-	}
-}
-
 
 function getWeeksDialog(unidades){
 	var unidades = unidades;
 	dialogo = $("#dialog-Weeks").dialog ({
   		open : function (event){
-	    	$(this).load ("contract/modalWeeks");
+	    	$(this).load ("contract/modalWeeks", function(){
+	    		$("#weeksNumber").val(1);
+	    		setDate("firstYearWeeks", 0);
+	    		setDate("lastYearWeeks", 1);
+	    	});
 		},
 		autoOpen: false,
      	height: maxHeight/2,
@@ -520,12 +538,18 @@ function getWeeksDialog(unidades){
 	return dialogo;
 }
 
+function setDate(id, n){
+	var d = new Date().getFullYear();
+	$("#"+id).val(d + n);
+}
+
+
 function PackReference(){
 
 	dialogo = $("#dialog-Pack").dialog ({
   		open : function (event){
 	    	$(this).load ("contract/modalPack" , function(){
-	    		var precioUnidad = $("#precioVenta").val();
+	    		var precioUnidad = $("#precioUnidad").val();
 				var precioUnidadPack = $("#unitPricePack").val(precioUnidad);
 				calcularPack();
 	    	});
@@ -712,6 +736,12 @@ function getValueFromTable(id, posicion){
 	var fullArray = $("#"+id).find("td");
 	return fullArray.eq(posicion).text().trim();
 }
+
+function getValueFromTableSelected(id, posicion){
+	var array = $("#"+id+" .yellow").find("td");
+	return array.eq(posicion).text().trim();
+}
+
 function setValueUnitPrice(){
 	var precio = parseFloat(getValueFromTable("tableUnidadesSelected", 2));
 	precio.toFixed(2);
@@ -778,16 +808,24 @@ function calcularPack(){
 	    	value = this.value;
 	       var p = porcentajePack(this.value,precioInicial);
 	       $("#quantityPack").val(p);
-	       $("#finalPricePack").val(p+precioInicial);
+	       if(p+precioInicial>0){
+	       		$("#finalPricePack").val(p+precioInicial>0);
+	       }else{
+	       		$("#finalPricePack").val(precioInicial);
+	       }
 	    }        
 	});
-
 	$("#quantityPack").on('keyup change click', function () {
 	    if(this.value !== valueQ) {
 	    	 valueQ = parseFloat(this.value);
 	    	 var porcentaje = cantidad(valueQ, precioInicial);
 	    	 $("#porcentajePack").val(porcentaje.toFixed(3));
-	       $("#finalPricePack").val(valueQ+precioInicial);
+	    	 if(eval(valueQ+precioInicial>0)){
+	    	 	$("#finalPricePack").val(valueQ+precioInicial>0);
+	    	 }else{
+	    	 	$("#finalPricePack").val(precioInicial);
+	    	 }
+	       
 	    }        
 	});
 }
@@ -798,8 +836,6 @@ function porcentajePack(porcentaje, cantidad){
 function cantidad(cantidad, precio){
 	return (cantidad / precio)*100;
 }
-
-
 // $(document).ready(function(){
 //     $("#myTable td").click(function() {     
  
@@ -809,3 +845,16 @@ function cantidad(cantidad, precio){
 //         $("#result").html( "Row_num =" + row_num + "  ,  Rolumn_num ="+ column_num );   
 //     });
 // });
+
+function porcetajeDownpayment(){
+	var unitPrice = $("#downpayment").val();
+	var downpayment =  $("#downpayment").val();
+	$("input[name='engancheR']").on( 'change', function() {
+    if( $(this).is(':checked') && $(this).val() == 'porcentaje' ) {
+        alert("El checkbox con valor " + $(this).val() + " porcentaje ha sido seleccionado");
+    }
+    else if ($(this).is(':checked') && $(this).val() == 'cantidad') {
+	 	alert("El checkbox con valor " + $(this).val() + " porcentaje ha sido seleccionado");
+	}
+});
+}
