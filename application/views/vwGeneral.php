@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="<?php echo base_url().CSS; ?>alertify/alertify.default.css" />
         <link rel="stylesheet" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" />
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>general.css" />
+		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>inventary.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 		
 		<!-- Zebra_Datepicker -->
@@ -41,10 +42,9 @@
 		
         <nav class="top-bar top-menu" data-topbar>
             <div class="menu-opt">
-                <div href="#" class="btn-menu btn-menu-sel"></div>
+                <div href="#" class="btn-menu pr-color"></div>
             </div>
             <div class="menu-opt logo"><img src="<?php echo base_url().IMG; ?>logo/demo.png"/></div>
-			<!--<a  href="<?php echo base_url(); ?>login/logout"></a>-->
 			<div class="menu-config">
 				<img src="<?php echo base_url().IMG; ?>common/userUnknown.png" />
 				<p><?php echo $this->nativesessions->get('username'); ?></p>
@@ -62,16 +62,12 @@
         </nav>
         
         <nav class="top-title" data-topbar>
-            <!--<ul class="tabs" data-tabs role="tablist">
-                
-            </ul>-->
-			<ul class="tabs espacio" data-tabs>
+            <!--<ul class="tabs" data-tabs role="tablist"></ul>-->
+			<ul class="tabs espacio" data-tabs id="tab-general">
 			</ul>
         </nav>
 		
-		
-        
-        <div class="menu-section">
+      <div class="menu-section">
             <div class="menu-content">
                 <div class="menu-sel" attr-screen="people">
 					<span class="icon-menu-sel"><i class="fa fa fa-users"></i></span>

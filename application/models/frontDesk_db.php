@@ -34,34 +34,12 @@ Class frontDesk_db extends CI_MODEL
 	* obtiene la lista de tblStatusType
 	**/
 	public function getFrontDesk($filters){
-		/*$this->db->select('ro.pkResOccId, ro.fkResId, ro.fkResInvtId, ro.NightId, ro.fkCalendarId');
-		$this->db->select('r.fkStatusId');
-		$this->db->select('ri.pkResInvtId');
-		$this->db->select('u.pkUnitId, u.UnitCode');
-		$this->db->select('v.pkViewId, v.ViewDesc');
-		$this->db->from('tblResOcc ro');
-		$this->db->join('tblResInvt ri', 'ri.pkResInvtId = ro.fkResInvtId', 'inner');
-		$this->db->join('tblRes r', 'r.pkResId = ro.fkResId', 'inner');
-		$this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId', 'inner');
-		$this->db->join('tblView v', 'v.pkViewId = u.fkViewId', 'inner');
-		if($filters['words'] != false){
-			if (isset($filters['words']['textUnitCodeFront'])){
-				$this->db->where('u.UnitCode = ', $filters['words']['textUnitCodeFront']);
-			}
-			if (isset($filters['words']['textConfirmationFront'])){
-				$this->db->where('r.ResConf = ', $filters['words']['textConfirmationFront']);
-			}
-			if (isset($filters['words']['textViewFront'])){
-				$this->db->where('v.pkViewId = ', $filters['words']['textViewFront']);
-			}
-		}
-		if($filters['checks'] != false){
-			$this->db->where("( " . $filters['checks'] . ")");
-		}
-		$this->db->where('ro.ynActive = 1');
-		return  $this->db->get()->result();*/
-		
-		$this->db->select("tblCalendar.pkCalendarId,CONVERT(VARCHAR(11),tblCalendar.Date,101) as Date2");
+		$endDate = "(SELECT top 1 CONVERT(VARCHAR(11),c2.Date,106)";
+		$endDate = $endDate . " from tblResOcc ro2";
+		$endDate = $endDate . " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId";
+		$endDate = $endDate . " where ro2.fkResId = ro.fkResId ORDER By ro2.fkCalendarId desc) as DateEnd";
+		$this->db->select("tblCalendar.pkCalendarId,CONVERT(VARCHAR(11),tblCalendar.Date,106) as Date2");
+		$this->db->select($endDate);
 		$this->db->select("DATEPART(day, tblCalendar.Date) as day");
 		$this->db->select("ro.pkResOccId, ro.fkResId, ro.fkResInvtId, ro.NightId, ro.fkOccTypeId");
 		$this->db->select("fpi.FloorPlanDesc as type");
@@ -85,7 +63,7 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = u.fkFloorPlanId', 'LEFT');
 		$this->db->join('tblUnitHKStatus uhks', 'uhks.fkUnitId = u.pkUnitId and (uhks.fkCalendarID = tblCalendar.pkCalendarId or uhks.fkCalendarID = (SELECT MAX( uhks2.fkCalendarID ) FROM tblUnitHKStatus uhks2 WHERE uhks2.fkUnitId = u.pkUnitId ) )', 'LEFT');
 		$this->db->join('tblHKStatus hks', 'hks.pkHKStatusId = uhks.fkHkStatusId', 'LEFT');
-		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkPeopleId = ro.fkResId and rpa.ynPrimaryPeople = 1', 'LEFT');
+		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = ro.fkResId and rpa.ynPrimaryPeople = 1', 'LEFT');
 		$this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId', 'LEFT');
 		if($filters['words'] != false){
 			if (isset($filters['words']['textUnitCodeFront'])){

@@ -3,14 +3,13 @@
 	<div class="large-12 columns fiter-section">
 		<div class="box" id="boxInvDetailedSearch" >
 			<!-- header search -->
-			<div class="box-header blue_divina">
+			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
 					<span id="minusPeople" class="box-btn" data-widget="collapse">
 						<i class="fa fa-minus"></i>
 					</span>
 				</div>
 				<h3 class="box-title">
-					<span class="img-box-title"><i class="fa fa-money"></i></span>
 					<span>Inventary Search</span>
 				</h3>
 			</div>
@@ -18,9 +17,14 @@
 			<div class="box-body box-filter" style="display: block;">
 				<!--filter-->
 				<div class="row">
+					<fieldset class="large-12 columns" id="alertInventaryUnit" style="display:none">
+							<div class="callout small alert">
+								<p>Select a unit, please.</p>
+							</div>
+					</fieldset>
 					<!-- text Field date and select -->
 					<div class="small-12 medium-12 large-12 columns">
-						<fieldset class="large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
 							<legend class="legendSearch">Choose the type search</legend>
 							<!-- Type of Availability -->
 							<div class="rdoField">
@@ -33,64 +37,9 @@
 								<label for="RadioRoomsControl">Rooms Control</label>
 							</div>
 						</fieldset>
-						<fieldset class="large-12 columns" id="alertInventaryUnit" style="display:none">
-							<div class="callout small alert">
-								<p>Select a unit, please.</p>
-							</div>
-						</fieldset>
-						<fieldset class="large-12 columns">
-							
-							<div class="small-12 large-5 columns">
-								<div class="row collapse">
-									<div class="small-10 large-10 columns">
-											<input type="text" id="textInvStartDate" class="txtSearch" placeholder="Enter a date" >
-									</div>
-									<div class="small-1 large-1 columns">
-										<a  id="btnInvSearch" class=" button postfix btnSearch"><i class="fa fa-search"></i></a>
-									</div>
-									<div class="small-1 large-1 columns">
-										<a id="btnInvCleanSearch" class="button postfix btnSearch"><i class="fa fa-trash"></i></a>
-									</div>
-								</div>
-							</div>
-							
-							<!-- Tipo de Habitación -->
-							
-							
-							<div class="small-12 large-3 columns filterDetailedAvailability">
-								<div class="caja" >
-									<select id="textInvFloorPlan" class="comboBoxInvDetailed selectSearch input-group-field round">
-										<option value="0">select a Floor Plan</option>
-										<?php
-										foreach($floorPlan as $item){
-										?>
-											<option value="<?php echo $item->pkFloorPlanID; ?>" code="<?php echo $item->FloorPlanCode; ?>"><?php echo $item->		FloorPlanDesc; ?></option>
-										<?php
-										}
-										?>
-									</select>
-								</div>
-							</div>
-							<!-- Propiedad -->
-							<div class="small-12 large-3 columns">
-								<div class="caja" >
-								<select id="textInvProperty" class="comboBoxInvDetailed selectSearch input-group-field round">
-									<option value="0">select a Property</option>
-									<?php
-									foreach($property as $item){
-									?>
-										<option value="<?php echo $item->pkPropertyId; ?>" code="<?php echo $item->PropertyCode; ?>"><?php echo $item->PropertyName; ?></option>
-									<?php
-									}
-									?>
-								</select>
-								</div>
-							</div>
-							<div class="small-12 large-1 columns">&nbsp;</div>
-						</fieldset>
 					</div>
 					<div class="small-12 medium-12 large-12 columns">
-						<fieldset class="large-5 columns filterDetailedAvailability">
+						<fieldset class="small-12 medium-12 large-3 columns fieldsetFilter filterDetailedAvailability">
 							<legend class="legendSearch">Choose the availability</legend>
 							<!-- Type of Availability -->
 							<div class="rdoField">
@@ -103,7 +52,7 @@
 								<label for="RadioInvOccupancy">Occupancy </label>
 							</div>
 						</fieldset>
-						<fieldset class=" small-12 large-7 columns filterDetailedAvailability">
+						<fieldset class="small-12 medium-12 large-9 columns fieldsetFilter filterDetailedAvailability" style="padding-left:7px;">
 							<legend class="legendSearch">Choose the filters</legend>
 							<!-- Include Non Deducted -->
 							<div class="rdoField">
@@ -122,6 +71,50 @@
 							</div>
 						</fieldset>
 					</div>
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
+							<legend class="legendSearch">Enter the filter</legend>
+							<div class="row">
+								<div class="small-10 large-3 columns">
+									<input type="text" id="textInvStartDate" class="txtSearch" placeholder="Enter a date" >
+								</div>
+								<!-- Tipo de Habitación -->
+								<div class="small-12 large-3 columns filterDetailedAvailability">
+									<div class="caja" >
+										<select id="textInvFloorPlan" class="comboBoxInvDetailed selectSearch input-group-field round">
+											<option value="0">select a Floor Plan</option>
+											<?php
+											foreach($floorPlan as $item){
+											?>
+												<option value="<?php echo $item->pkFloorPlanID; ?>" code="<?php echo $item->FloorPlanCode; ?>"><?php echo $item->		FloorPlanDesc; ?></option>
+											<?php
+											}
+											?>
+										</select>
+									</div>
+								</div>
+								<!-- Propiedad -->
+								<div class="small-12 large-3 columns">
+									<div class="caja" >
+										<select id="textInvProperty" class="comboBoxInvDetailed selectSearch input-group-field round">
+											<option value="0">select a Property</option>
+											<?php
+											foreach($property as $item){
+											?>
+												<option value="<?php //echo $item->pkPropertyId; ?>" code="<?php echo $item->PropertyCode; ?>"><?php echo $item->PropertyName; ?></option>
+											<?php
+											}
+											?>
+										</select>
+									</div>
+								</div>
+								<div class="small-12 large-3 columns">
+									<a id="btnInvSearch" class="btn btn-primary"><i class="fa fa-search">&nbsp;&nbsp;Buscar</i></a>
+									<a id="btnInvCleanSearch" class="btn btn-primary spanSelect"><i class="fa fa-trash">&nbsp;&nbsp;Limpiar</i></a>
+								</div>
+							</div>
+						</fieldset>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -129,11 +122,11 @@
 	
 	<div class="large-12 columns">
 		<div class="box">
-			<div class="box-header blue_divina">
+			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
 				</div>
 				<h3 class="box-title">
-					<span>Results</span>
+					<span>Inventory found</span>
 				</h3>
 			</div>
 			<div class="box-body" id="section-table-InvDetailed" style="display: block;">

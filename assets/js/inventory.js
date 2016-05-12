@@ -20,8 +20,8 @@ $('#textInvStartDate').keyup(function(e){
     }
 });
 //limpia el campo busqueda Detailed Availability
-$('#btnCleanSearch').off();
-$('#btnCleanSearch').on('click', function() {  CleandFieldSearch(); });
+$('#btnInvCleanSearch').off();
+$('#btnInvCleanSearch').on('click', function() { CleandFilterInventary(); });
 
 $('.comboBoxInvDetailed').change(function(){ disableOtherCombo(this)});
 
@@ -44,6 +44,10 @@ $(document).ready(function() {
 	$('#textInvStartDate').val(getCurrentDate())
 });
 
+/**
+* Hace la busqueda de inventario
+* @param page numero del paginador
+*/
 function searchInventary(page){
 	
 	var result = validateFieldInventary()
@@ -98,6 +102,9 @@ function searchInventary(page){
 	
 }
 
+/**
+* valida que este seleccionado una unidad
+*/
 function validateFieldInventary(){
 	var resultc = true;
 	$('#alertInventaryUnit').hide()
@@ -115,7 +122,11 @@ function validateFieldInventary(){
 	
 }
 
+/**
+* cambia la opcion de los combobox cuando se selecciona uno
+*/
 function disableOtherCombo( selector ){
+	console.log("entro")
 	var value = $(selector).val();
 	$('.comboBoxInvDetailed').val(0);
 	$(selector).val(value);
@@ -125,12 +136,23 @@ function disableOtherCombo( selector ){
 * cambia el tipo de busquedad de inventario
 */
 function choseTypeSearchInv(selector){
-	
 	if($(selector).attr('value') == "detailedAvailability"){
 		$('.filterDetailedAvailability').show(500);
 	}else if($(selector).attr('value') == "roomsControl"){
 		$('.filterDetailedAvailability').hide(500);
 	}
+}
+
+/**
+* limpia los filtros de busqueda
+*/
+function CleandFilterInventary(){
+	$('#textInvStartDate').val(getCurrentDate());
+	$('.comboBoxInvDetailed ').val(0);
+	$('.CheckSearchInv').attr('checked',false);
+	$('#RadioDetailedAvailability').prop("checked", true);
+	$('#RadioInvAvailability').prop("checked", true);
+	$('.filterDetailedAvailability').show(500);
 }
 
 /**

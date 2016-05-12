@@ -82,7 +82,7 @@
 
 <div class="large-12 columns">
     <div class="box">
-        <div class="box-header blue_divina">
+        <div class="box-header pr-color">
 
         </div>
         <div class="box-body" style="display: block;">

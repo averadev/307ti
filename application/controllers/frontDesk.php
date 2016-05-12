@@ -40,24 +40,40 @@ class FrontDesk extends CI_Controller {
 			$res = array();
 			$lastResId = 0;
 			$p = 0;
+			$p2 = 0;
 			foreach($data as $item){
 				if($lastResId != $item->fkResId){
 					$p = count($res);
-					$res[$p]['type'] = $item->type;
-					$res[$p]['unit'] = $item->UnitCode;
-					$res[$p]['status'] = $item->HKStatusDesc;
-					$res[$p]['view'] = $item->ViewCode;
-					$res[$p]['viewDesc'] = $item->ViewDesc;
-					$res[$p]['values']['from'] = $item->pkCalendarId;
-					$res[$p]['values']['to'] = $item->pkCalendarId;
-					$res[$p]['values']['people'] = $item->Name . " " . $item->LName . " " . $item->LName2;
-					$res[$p]['values']['occType'] =$color[$item->fkOccTypeId];
-					$res[$p]['values']['ResConf'] = $item->ResConf;
-					$res[$p]['values']['dateFrom'] = $item->Date2;
-					$res[$p]['values']['dateTo'] = $item->Date2;
+					$exist = false;
+					foreach($res as $key => $item2){
+						if($item2['unit'] == $item->UnitCode && $item2['type'] == $item->type){
+							$p = $key;
+							$exist = true;
+							break;
+						}
+					}
+					if(!$exist){
+						$res[$p]['resId'] = $item->fkResId;
+						$res[$p]['type'] = $item->type;
+						$res[$p]['unit'] = $item->UnitCode;
+						$res[$p]['status'] = $item->HKStatusDesc;
+						$res[$p]['view'] = $item->ViewCode;
+						$res[$p]['viewDesc'] = $item->ViewDesc;
+					}
+					if (isset($res[$p]['values'])){
+						$p2 = count($res[$p]['values']);
+					}else{
+						$p2 = 0;
+					}
+					$res[$p]['values'][$p2]['from'] = $item->pkCalendarId;
+					$res[$p]['values'][$p2]['to'] = $item->pkCalendarId;
+					$res[$p]['values'][$p2]['people'] = $item->Name . " " . $item->LName . " " . $item->LName2;
+					$res[$p]['values'][$p2]['occType'] =$color[$item->fkOccTypeId];
+					$res[$p]['values'][$p2]['ResConf'] = $item->ResConf;
+					$res[$p]['values'][$p2]['dateFrom'] = $item->Date2;
+					$res[$p]['values'][$p2]['dateTo'] = $item->DateEnd;
 				}
-				$res[$p]['values']['to'] = $item->pkCalendarId;
-				$res[$p]['values']['dateTo'] = $item->Date2;
+				$res[$p]['values'][$p2]['to'] = $item->pkCalendarId;
 				
 				$lastResId = $item->fkResId;
 			}

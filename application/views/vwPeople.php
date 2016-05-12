@@ -2,26 +2,26 @@
 <div class="row section" id="section-people">
 	<div class="large-12 columns fiter-section">
 		<div class="box" id="boxPeopleSearch" >
-			<div class="box-header blue_divina">
+			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
 					<span id="minusPeople" class="box-btn" data-widget="collapse">
 						<i class="fa fa-minus"></i>
 					</span>
 				</div>
 				<h3 class="box-title">
-					<span class="img-box-title"><i class="fa fa-users"></i></span>
+					<!--<span class="img-box-title"><i class="fa fa-users"></i></span>-->
 					<span>People Search</span>
 				</h3>
 				<div class="pull-left box-tools">
-					<span data-widget="newUser" id="newUser">
+					<span data-widget="newContrat" id="newUser">
 						<span>( New )</span>
 					</span>
 				</div>
 			</div>
-			<div class="box-body box-filter" style="display: block;">
+			<div class="box-body box-filter" style="">
 				<div class="row">
-					<div class="small-12 medium-12 large-5 columns">
-						<fieldset class="large-12 columns">
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
 							<legend class="legendSearch">Choose a filter</legend>
 							<div class="rdoField">
 								<input type="checkbox" id="checkFilter1" class="checkFilter" value="peopleId">
@@ -37,30 +37,18 @@
 							</div>
 						</fieldset>
 					</div>
-					<div class="small-12 medium-12 large-6 columns">
-						<fieldset class="large-12 columns">
-							<legend class="legendSearch">Enter the filter</legend>
-							<div class="row collapse">
-								<div class="large-10 columns">
-									<input type="text" id="txtSearch" class="txtSearch" placeholder="Enter a search parameter" />
-								</div>
-								<div class="small-1 columns">
-									<a  id="btnSearch" class="button postfix btnSearch"><i class="fa fa-search"></i></a>
-						        </div>
-								<div class="small-1 columns">
-									<a id="btnCleanSearch" class="button postfix btnSearch"><i class="fa fa-trash"></i></a>
-						        </div>
-							</div>
-						</fieldset>
-					</div>
 					<div class="small-12 medium-12 large-12 columns">
-						<fieldset class="large-12 columns">
-							<legend class="legendSearch" >
+						<fieldset class="large-12 columns fieldsetFilter">
+							<!--<legend class="legendSearch" >
 								<input type="checkbox" id="checkFilterAdvance" class="checkFilter">
 								<label for="checkFilterAdvance">&nbsp;&nbsp;Advanced search</label>
-							</legend>
-							<div class="row" id="containerFilterAdv" style="display:none;">
-								<div class="rdoField">
+							</legend>-->
+							<div class="rdoField">
+								<input type="checkbox" id="checkFilterAdvance" class="checkFilter">
+								<label for="checkFilterAdvance">Advanced search</label>
+							</div>
+							<div class="filtersAdvanced" id="containerFilterAdv" style="display:none;">
+								<div class="rdoField" style="margin-left:-1px;">
 									<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="initials" id="RadioInitials" checked>
 									<label for="RadioInitials">initials / Employee code</label>
 								</div>
@@ -83,6 +71,20 @@
 							</div>
 						</fieldset>
 					</div>
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
+							<legend class="legendSearch">Enter the filter</legend>
+							<div class="row">
+								<div class="large-6 columns">
+									<input type="text" id="txtSearch" class="txtSearch" placeholder="Enter a search parameter" />
+								</div>
+								<div class="small-12 large-6 columns">
+									<a id="btnSearch" class="btn btn-primary"><i class="fa fa-search">&nbsp;&nbsp;Buscar</i></a>
+									<a id="btnCleanSearch" class="btn btn-primary spanSelect"><i class="fa fa-trash">&nbsp;&nbsp;Limpiar</i></a>
+								</div>
+							</div>
+						</fieldset>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -90,11 +92,11 @@
 	
 	<div class="large-12 columns">
 		<div class="box">
-			<div class="box-header blue_divina">
+			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
                </div>
                <h3 class="box-title">
-               	<span>Results</span>
+               	<span>people found</span>
                </h3>
 			</div>
 			<div class="box-body" id="section-table-people" style="display: block;">

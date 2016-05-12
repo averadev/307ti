@@ -3,14 +3,13 @@
 	<div class="large-12 columns fiter-section">
 		<div class="box" id="boxInvDetailedSearch" >
 			<!-- header search -->
-			<div class="box-header blue_divina">
+			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
 					<span id="minusPeople" class="box-btn" data-widget="collapse">
 						<i class="fa fa-minus"></i>
 					</span>
 				</div>
 				<h3 class="box-title">
-					<span class="img-box-title"><i class="fa fa-desktop"></i></span>
 					<span>FrontDesk Search</span>
 				</h3>
 			</div>
@@ -18,92 +17,9 @@
 			<div class="box-body box-filter" style="display: block;">
 				<!--filter-->
 				<div class="row">
-					
-					<div class="small-12 medium-12 large-12 columns">
-						<!-- text Field dates -->
-						<fieldset class="large-12 columns">
-							<legend class="legendSearch">Choose the filters</legend>
-							<!-- Arrival Date -->
-							<div class="small-12 large-3 columns">
-								<label id="alertArrivalFront" class="text-left">Arrival Date
-									<div class="input-group date" id="frontArrivalDate" >
-										<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-										<input type="text" id="dateArrivalFront" class="input-group-field roundRight" readonly/>
-									</div>
-								</label>
-							</div>
-							<!-- Departure Date -->
-							<div class="small-12 large-3 columns">
-								<label id="alertDepartureFront" class="text-left">Departure Date
-									<div class="input-group date" >
-										<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-										<input type="text" id="dateDepartureFront" class="input-group-field roundRight" readonly/>
-									</div>
-								</label>
-							</div>
-							<!-- Year -->
-							<div class="small-12 large-3 columns">
-								<label id="alertYearFront" class="text-left">Year
-									<!--<select id="textNationality" class="round">
-										<option value="">Select a year</option>
-									</select>-->
-									<div class="input-group date" id="" >
-										<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-										<input type="text" id="dateYearFront" class="input-group-field roundRight" readonly/>
-									</div>
-								</label>
-							</div>
-							<!-- Interval -->
-							<div class="small-12 large-3 columns">
-								<label id="alertIntervalFront" class="text-left">Interval
-									<div class="caja" >
-										<select id="textIntervalFront" class="input-group-field round">
-											<option value="">Select a interval</option>
-										</select>
-									</div>
-								</label>
-							</div>
-							
-						</fieldset>
-					</div>
-					<div class="small-12 medium-12 large-12 columns">
-						<fieldset class="large-12 columns">
-							<div class="small-12 large-3 columns">
-								<label id="alertUnitCodeFront" class="text-left">Unit Code 
-									<input id="textUnitCodeFront" type="text" class="round general">
-								</label>
-							</div>
-							<div class="small-12 large-3 columns">
-								<label id="alertConfirmationFront" class="text-left">Confirmation Code 
-									<input id="textConfirmationFront" type="text" class="round general">
-								</label>
-							</div>
-							<div class="small-12 large-3 columns">
-								<label id="alertViewFront" class="text-left">View 
-									<div class="caja" >
-										<select id="textViewFront" class="input-group-field round">
-										<option value="">Select a view</option>
-										<?php
-										foreach($view as $item){
-											?>
-											<option value="<?php echo $item->pkViewId; ?>"><?php echo $item->ViewDesc; ?></option>
-											<?php
-										}
-										?>
-										</select>
-									</div>
-								</label>
-							</div>
-							<div class="small-12 large-3 columns" style="padding-top:30px;">
-								<a id="btnSearchFrontDesk" class="btn btn-primary"><i class="fa fa-search">&nbsp;&nbsp;Buscar</i></a>
-								<a id="btnCleanFrontDesk" class="btn btn-primary spanSelect"><i class="fa fa-trash">&nbsp;&nbsp;Limpiar</i></a>
-							</div>
-							
-						</fieldset>
-						
-					</div>
 					<div class="small-12 medium-8 large-12 columns"> 
-						<fieldset class="large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
+							<legend class="legendSearch">Choose the filters</legend>
 							<label>Status</label>
 							<?php
 							foreach($status as $item){
@@ -118,6 +34,88 @@
 							?>
 						</fieldset>
 					</div>
+					<div class="small-12 medium-12 large-12 columns">
+						<!-- text Field dates -->
+						<fieldset class="large-12 columns fieldsetFilter">
+							
+							<div class="row">
+								<!-- Arrival Date -->
+								<div class="small-12 large-3 columns">
+									<label id="alertArrivalFront" class="text-left">Arrival Date
+										<div class="input-group date" id="frontArrivalDate" >
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="dateArrivalFront" class="input-group-field roundRight" readonly/>
+										</div>
+									</label>
+								</div>
+								<!-- Departure Date -->
+								<div class="small-12 large-3 columns">
+									<label id="alertDepartureFront" class="text-left">Departure Date
+										<div class="input-group date" >
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="dateDepartureFront" class="txtSearch input-group-field roundRight" readonly/>
+										</div>
+									</label>
+								</div>
+								<!-- Year -->
+								<div class="small-12 large-3 columns">
+									<label id="alertYearFront" class="text-left">Year
+										<div class="input-group date" id="" >
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="dateYearFront" class="txtSearch input-group-field roundRight" readonly/>
+										</div>
+									</label>
+								</div>
+								<!-- Interval -->
+								<div class="small-12 large-3 columns">
+									<label id="alertIntervalFront" class="text-left">Interval
+										<div class="caja" >
+											<select id="textIntervalFront" class="txtSearch input-group-field round">
+												<option value="">Select a interval</option>
+											</select>
+										</div>
+									</label>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row">
+								<div class="small-12 large-3 columns">
+									<label id="alertUnitCodeFront" class="text-left">Unit Code 
+										<input id="textUnitCodeFront" type="text" class="txtSearch round general">
+									</label>
+								</div>
+								<div class="small-12 large-3 columns">
+									<label id="alertConfirmationFront" class="text-left">Confirmation Code 
+										<input id="textConfirmationFront" type="text" class="txtSearch round general">
+									</label>
+								</div>
+								<div class="small-12 large-3 columns">
+									<label id="alertViewFront" class="text-left">View 
+										<div class="caja" >
+											<select id="textViewFront" class="input-group-field round">
+												<option value="">Select a view</option>
+												<?php
+												foreach($view as $item){
+												?>
+												<option value="<?php echo $item->pkViewId; ?>"><?php echo $item->ViewDesc; ?></option>
+												<?php
+											}
+										?>
+											</select>
+										</div>
+									</label>
+								</div>
+								<div class="small-12 large-3 columns" style="padding-top:30px;">
+									<a id="btnSearchFrontDesk" class="btn btn-primary"><i class="fa fa-search">&nbsp;&nbsp;Buscar</i></a>
+									<a id="btnCleanFrontDesk" class="btn btn-primary spanSelect"><i class="fa fa-trash">&nbsp;&nbsp;Limpiar</i></a>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -125,11 +123,11 @@
 	
 	<div class="large-12 columns">
 		<div class="box">
-			<div class="box-header blue_divina">
+			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
 				</div>
 				<h3 class="box-title">
-					<span>Results</span>
+					<span>Reservations found</span>
 				</h3>
 			</div>
 			<div class="box-body" id="table-frontDesk" style="display: block;">

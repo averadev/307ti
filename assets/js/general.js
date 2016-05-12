@@ -33,6 +33,8 @@ $(function() {
 			iconClose = '<span class="iconCloseTab"><i class="fa fa-close"><i></span>'
             $('.tabs').append( '<li class="tabs-title active" attr-screen="'+screen+'"><a>'+$(this).text().trim()+'</a>'+iconClose+'</li>' );
             $(".module").addClass("moduleHide");
+			$('.menu-sel').removeClass('active');
+			$('.menu-content').find('div[attr-screen="' + screen + '"]').addClass('active');
             addTabEvent();
             loadModule(screen);
         }
@@ -56,6 +58,9 @@ function addTabEvent(){
             $(this).addClass('active');
             $(".module").addClass("moduleHide")
             $("#module-"+$(this).attr("attr-screen")).removeClass("moduleHide")
+			$('.menu-sel').removeClass('active');
+			var screen = $(this).attr("attr-screen");
+			$('.menu-content').find('div[attr-screen="' + screen + '"]').addClass('active');
         }
     });
     // Event Close Tab
@@ -63,8 +68,33 @@ function addTabEvent(){
     $('.iconCloseTab').on('click', function() {
         // Eliminos contenido 
         var tab = $(this).parent();
-		//dialogUser.dialog('destroy').remove()
-        $("#module-"+tab.attr("attr-screen")).remove();
+		var screen = tab.attr("attr-screen");
+		var tabParent = $(tab).parent();
+		var children = $(tabParent).children();
+		if(children.length > 1){
+			if($(tab).attr("class") == "tabs-title active"){
+				var screenBrother = null;
+				var tabBrother = null;
+				if($(tab).prev().attr("attr-screen") != undefined){
+					tabBrother = $(tab).prev();
+				}else{
+					tabBrother = $(tab).next();
+				}
+				screenBrother = $(tabBrother).attr("attr-screen");
+				$('.tabs-title').removeClass('active');
+				$(tabBrother).addClass('active');
+				$(".module").addClass("moduleHide")
+				$("#module-"+screenBrother).removeClass("moduleHide")
+				$('.menu-sel').removeClass('active');
+				$('.menu-content').find('div[attr-screen="' + screenBrother + '"]').addClass('active');
+			}
+			//
+			//console.log($($(tab)).prev().attr("attr-screen"));
+		}else{
+			$('.menu-sel').removeClass('active');
+		}
+		
+        $("#module-"+screen).remove();
         tab.remove();
 		
     });
@@ -74,10 +104,12 @@ function addTabEvent(){
 function toggeMenu(){
     if ($('.btn-menu').hasClass('btn-menu-sel')){
         $('.general-section').css('padding', '0 30px');
+		$('.espacio ').css('margin-left', '0px')
         $('.menu-section').hide('slow');
         $('.btn-menu').removeClass('btn-menu-sel');
     }else{
         $('.general-section').css('padding', '0 20px 0 240px');
+		$('.espacio ').css('margin-left', '220px');
         $('.menu-section').show('slow');
         $('.btn-menu').addClass('btn-menu-sel');
     }
@@ -92,9 +124,9 @@ function showMenu(){
 // Load Module
 function loadModule(screen){
     $( ".general-section" ).append('<div class="module" id="module-'+screen+'"></div>');
-	showLoadingScreen('#module-'+screen,true);
+	showLoading('#module-'+screen,true);
 	$( "#module-"+screen ).load( BASE_URL+screen, function() {
-		showLoadingScreen('.general-section',false);
+		showLoading('.general-section',false);
 	});
 }
 
@@ -175,37 +207,7 @@ function showAlert(isOpen = false,message = null,typeForm = null, success = null
 function showLoading(parentElement, isOpen = false,message = null, success = null ){
 	//indica si la alerta se muestra o escond
 	if(isOpen){
-		var messageLoading = "Loading...";
-		if(message != null){ messageLoading = message }
-		var widthLoading = $(parentElement).css('width')
-		var loandingElements = '<div class="divLoadingTable">' +
-			'<div class="bgLoadingTable" ></div>' +
-				'<div class="loadingTable" >' +
-					'<div class="subLoadingTable">' +
-						'<label>' + messageLoading + '</label>' +
-						'<div id="progressbar"></div>' +
-					'</div>' +
-				'</div>' +
-			'</div>';
-		$(parentElement).prepend(loandingElements);
-		var loading = $(parentElement).children('.divLoadingTable');
-		
-		$(loading).find("#progressbar").progressbar({
-			value: false
-		});
-	}else{
-		var loading = $(parentElement).children('.divLoadingTable');
-		$(loading).remove();
-		if(success != null){
-			success();
-		}
-	}
-} 
-
-function showLoadingScreen(parentElement, isOpen = false,message = null, success = null ){
-	//indica si la alerta se muestra o escond
-	if(isOpen){
-		var messageLoading = "LOADIGN";
+		var messageLoading = "LOADING";
 		if(message != null){ messageLoading = message }
 		var widthLoading = $(parentElement).css('width')
 		var loandingElements = '<div class="divLoadingTable">' +
@@ -494,4 +496,10 @@ function drawTable3(data,titulo, table){
     }
     $('#' + table + "thead" ).html(headHTML);
     $('#' + table + "tbody" ).html(bodyHTML);
+}
+
+changeColor("#000000");
+
+function changeColor(color, color2){
+	$(".pr-color").css('background-color', color);
 }

@@ -6,10 +6,14 @@
 */
 
 /**************Index****************/
+$('#btnSearchFrontDesk').off();
+$('#btnSearchFrontDesk').on('click', function(){ $('.orderRow').removeClass("active"); getFrontDesk(""); });
 
-$('#btnSearchFrontDesk').on('click', function(){ $('.orderRow').removeClass("active"); getFrontDesk("");  });
-
+$('#orderRow').off();
 $('.orderRow').on('click', function(){ orderRowFront(this); });
+
+$('#btnCleanFrontDesk').off();
+$('#btnCleanFrontDesk').on('click', function(){ cleanFilterFrontDesk(); })
 
 /************Funciones**************/
 
@@ -46,9 +50,8 @@ $(function() {
 	dateDeparture = $("#dateDepartureFront").data('Zebra_DatePicker');
 	dateYear = $("#dateYearFront").data('Zebra_DatePicker');
 	
-	//$('#dateArrivalFront').val(getCurrentDate());
+	//$('#dateArrivalFront').val(getCurrentDate())
 	$('#dateArrivalFront').val("04/13/2016")
-	
 });
 
 /**
@@ -74,8 +77,8 @@ function getFrontDesk(order){
        	url: "frontDesk/getFrontDesk",
 		dataType:'json',
 		success: function(data){
+			console.log(data)
 			$('.rightPanel').remove();
-			console.log(data);
 			var headYearHTML = "";
 			var headMonthHTML = "";
 			var headHTML = "";
@@ -109,32 +112,42 @@ function getFrontDesk(order){
 			
 			$('#tableFrontDesk .gHeaderDay').append(headHTML);
 			
-			var bodyHTML = "<tr>";
 			
+			var bodyHTML = "";
 			for(i=0;i<items.length;i++){
+				bodyHTML += "<tr>";
 				var item = items[i]
 				bodyHTML+="<td nowrap class='panelLeft'>"+item.type+"</th>";
 				bodyHTML+="<td nowrap class='panelLeft' >"+item.unit+"</th>";
 				bodyHTML+="<td nowrap class='panelLeft' >"+item.status+"</th>";
 				bodyHTML+="<td nowrap title='" + item.viewDesc + "' class='panelLeft last Tooltips'>"+item.view+"</th>";
 				
-				var values = items[i].values
-				var valueToolTip = {Confirmation:values.ResConf, Room:item.unit, Guest:values.people, Arrival:values.dateFrom, Departure:values.dateTo};
-				var vToolTip = JSON.stringify(valueToolTip);
-				var exist = false;
-				for(j = 0;j<dates.length;j++){
-					var totaltd = (values.to - values.from) + 1;
-					if(dates[j].pkCalendarId >= values.from && dates[j].pkCalendarId <= values.to){
-						if(exist == false){
-							bodyHTML+="<td titleCustom='" +vToolTip +"' colspan='" + totaltd + "' class='" + values.occType + " rightPanel Tooltips'>" + values.people + "</td>";
-							exist = true;
+				for(k = 0;k<items[i].values.length;k++){
+				
+					var values = items[i].values[k]
+					var valueToolTip = {Confirmation:values.ResConf, Room:item.unit, Guest:values.people, Arrival:values.dateFrom, Departure:values.dateTo};
+					var vToolTip = JSON.stringify(valueToolTip);
+					var exist = false;
+					$('.emptyCell').remove();
+					for(j = 0;j<dates.length;j++){
+						var totaltd = (values.to - values.from) + 1;
+						if(dates[j].pkCalendarId >= values.from && dates[j].pkCalendarId <= values.to){
+							if(exist == false){
+								
+								
+								bodyHTML+="<td titleCustom='" +vToolTip +"' colspan='" + totaltd + "' class='" + values.occType + " rightPanel Tooltips'>" + values.people + "</td>";
+								exist = true;
+							}
+						}else{
+							bodyHTML+="<td class='rightPanel emptyCell'></td>";
 						}
-					}else{
-						bodyHTML+="<td class='rightPanel'></td>";
 					}
 				}
 				bodyHTML += "</tr>";
 			}
+			
+			console.log(bodyHTML)
+			
 			
 			$('#tableFrontDesk tbody').html(bodyHTML);
 			
@@ -150,6 +163,9 @@ function getFrontDesk(order){
     });
 }
 
+/**
+* obtiene los semanas dependiendo del año seleccionado
+*/
 function getWeekByYear(year){
 	$.ajax({
 		type: "POST",
@@ -178,6 +194,9 @@ function getWeekByYear(year){
 	});
 }
 
+/**
+* ordena el grid
+*/
 function orderRowFront(selector){
 	var field = $(selector).parent().attr('attr-field');
 	var order = $(selector).attr('attr-order');
@@ -186,4 +205,17 @@ function orderRowFront(selector){
 	getFrontDesk(field + " " + order);
 }
 
-//function create
+/**
+* limpia los filtros de busqueda
+*/
+function cleanFilterFrontDesk(){
+	dateYear.clear_date();
+	dateDeparture.clear_date();
+	dateArrival.clear_date();
+	$('#textIntervalFront').html('<option value="">Select a interval</option>');
+	$('#textUnitCodeFront').val("");
+	$('#textConfirmationFront').val("");
+	$('#textViewFront').val("");
+	$('.checkFilterFrontDesk').attr('checked', false)
+	$('#dateArrivalFront').val(getCurrentDate())
+}

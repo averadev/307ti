@@ -82,11 +82,11 @@ function createDialogContract(addContract) {
 	if (addContract!=null) {
 	    	addContract.dialog( "destroy" );
 	    }
-	showLoadingScreen('#dialog-Contract',true);
+	showLoading('#dialog-Contract',true);
 	dialog = $("#dialog-Contract").dialog({
 		open : function (event){
 	    	$(this).load ("contract/modal" , function(){
-	    		showLoadingScreen('#dialog-Contract',false);
+	    		showLoading('#dialog-Contract',false);
 	 			ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
 				ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
 	    	});
@@ -155,12 +155,12 @@ function addTourContract(unidades){
 	return dialogo;
 }
 function addUnidadDialog() {
-	showLoadingScreen('#dialog-Unidades',true);
+	showLoading('#dialog-Unidades',true);
 	dialog = $( "#dialog-Unidades" ).dialog({
 		open : function (event){
 	    	$(this).load ("contract/modalUnidades" , function(){
-	    		showLoadingScreen('#dialog-Unidades',false);
-	    		showLoadingScreen('#dialog-Unidades',false);
+	    		showLoading('#dialog-Unidades',false);
+	    		showLoading('#dialog-Unidades',false);
 	            selectTableUnico("tblUnidades");
 	    	});
 		},
@@ -197,11 +197,11 @@ function addUnidadDialog() {
 }
 function addPeopleDialog() {
 
-	showLoadingScreen('#dialog-People', true);
+	showLoading('#dialog-People', true);
 	dialog = $( "#dialog-People" ).dialog({
 		open : function (event){
 	    	$(this).load ("people/index" , function(){
-	    		showLoadingScreen('#dialog-People', false);
+	    		showLoading('#dialog-People', false);
 	    		$("#dialog-User").hide();
             	selectTable("tablePeople");
 	    	});
@@ -234,7 +234,7 @@ function addPeopleDialog() {
 
 
 function getContratos(){
-	showLoadingScreen('#contracts',true);
+	showLoading('#contracts',true);
     var filters = getFiltersCheckboxs('filtro_contrato');
     var arrayDate = ["startDateContract", "endDateContract"];
     var dates = getDates(arrayDate);
@@ -251,7 +251,7 @@ function getContratos(){
        	url: "contract/getContratos",
 		dataType:'json',
 		success: function(data){
-			showLoadingScreen('#contracts',false);
+			showLoading('#contracts',false);
 			if(data != null){
 				alertify.success("Found "+ data.length);
 				drawTable3(data, "details", "contracts");
@@ -267,7 +267,7 @@ function getContratos(){
 }
 
 function getDetalleContratoByID(i){
-	showLoadingScreen('#contracts',true);
+	showLoading('#contracts',true);
 	ajaxHTML('dialog-Edit-Contract', 'contract/modalEdit');
     showModals('dialog-Edit-Contract', cleanAddPeople);
 	//ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
@@ -762,11 +762,11 @@ function getDatailByID(id){
 
 function modalEditContract(){
 
-	showLoadingScreen('#dialog-Edit-Contract',true);
+	showLoading('#dialog-Edit-Contract',true);
 	dialogo = $("#dialog-Edit-Contract").dialog ({
   		open : function (event){
 	    	$(this).load ("contract/modalEdit" , function(){
-	 			showLoadingScreen('#dialog-Edit-Contract',false);	
+	 			showLoading('#dialog-Edit-Contract',false);	
 	    	});
 		},
 		autoOpen: false,
