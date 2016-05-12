@@ -1,110 +1,103 @@
 <div class="row section">
 	<div class="large-12 columns">
 		<div class="box">
-			<div class="box-header blue_divina">
+			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
 					<span class="box-btn" data-widget="collapse">
 						<i class="fa fa-minus"></i>
 					</span>
-               </div>
-               		<h3 class="box-title">
-						<span class="img-box-title"><i class="fa fa-file-excel-o"></i></span>
-               			<span>Contract Search</span>
-               		</h3>
+				</div>
+				<h3 class="box-title">
+               		<span>Contract Search</span>
+               	</h3>
 				<div class="pull-left box-tools">
 					<span data-widget="newContrat" id="newContract">
 						<span>( New )</span>
 					</span>
 				</div>
 			</div>
-		<div class="box-body">
-			<div class="row">
-				<fieldset class="large-6 columns">
-					<legend>Choose a filter</legend>
-					<input type="radio" name="filtro_contrato" value="personaId" id="personaId" required><label for="personaId">People ID</label>
-					<input checked type="radio" name="filtro_contrato" value="nombre" id="nombre"><label for="nombre">Name</label>
-					<input type="radio" name="filtro_contrato" value="apellido" id="apellido"><label for="apellido">Last name</label>
-					<input type="radio" name="filtro_contrato" value="reservacionId" id="reservacionId"><label for="reservacionId">Reservation ID</label>
-				</fieldset>
-				<fieldset class="large-6 columns">
-					<legend>Select Period</legend>
-					<div class="row">
-						<div class="medium-6 columns">
-							<input id="startDateContract" class="round" type="date" placeholder="Fecha Inicial">
-						</div>
-						<div class="medium-6 columns">
-							<input id="endDateContract" class="round" type="date"  placeholder="Fecha final">
-						</div>
-  					</div>
-				</fieldset>
-			</div>
-			<div class="row">
-					<div class="medium-6 columns">
-					<fieldset>
-						<legend><input id="busquedaAvanazada" type="checkbox"></legend>	
-						<label for="busquedaAvanazada">Advanced search</label>
-						<div class="row" id="avanzada" style="display: none;">
-							<div class="large-12 columns">
+			<div class="box-body box-filter">
+				<div class="row">
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
+							<legend class="legendSearch">Choose a filter</legend>
+							<div class="rdoField">
+								<input type="radio" name="filtro_contrato" value="personaId" id="personaId" required>
+								<label for="personaId">People ID</label>
+							</div>
+							<div class="rdoField">
+								<input checked type="radio" name="filtro_contrato" value="nombre" id="nombre">
+								<label for="nombre">Name</label>
+							</div>
+							<div class="rdoField">
+								<input type="radio" name="filtro_contrato" value="apellido" id="apellido">
+								<label for="apellido">Last name</label>
+							</div>
+							<div class="rdoField">
+								<input type="radio" name="filtro_contrato" value="reservacionId" id="reservacionId">
+								<label for="reservacionId">Reservation ID</label>
+							</div>
+						</fieldset>
+					</div>
+					
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
+						<!--<legend><input id="busquedaAvanazada" type="checkbox"></legend>-->
+						<!--<label for="busquedaAvanazada">Advanced search</label>-->
+							<div class="rdoField">
+								<input type="checkbox" id="busquedaAvanazada" class="checkFilter">
+								<label for="busquedaAvanazada">Advanced search</label>
+							</div>
+							<div class="filtersAdvanced" id="avanzada" style="display:none;margin-left: 40px;float: left;">
 								<div class="rdoField">
-							  		<input type="radio" name="filtro_contrato" value="codEmpleado" id="codEmpleado" required><label for="codEmpleado">Codigo de Empleado</label>
-					    		</div>
+									<input type="radio" name="filtro_contrato" value="codEmpleado" id="codEmpleado" required><label for="codEmpleado">Codigo de Empleado</label>
+								</div>
 								<div class="rdoField">
 									<input type="radio" name="filtro_contrato" value="folio" id="folio"><label for="folio">Folio</label>
-					    		</div>
+								</div>
 								<div class="rdoField">
 									<input type="radio" name="filtro_contrato" value="unidad" id="unidad"><label for="unidad">Unidad ID</label>
-					    		</div>
+								</div>
 								<div class="rdoField">
 									<input type="radio" name="filtro_contrato" value="email" id="email"><label for="email">Email</label>
-					    		</div>
+								</div>
 								<div class="rdoField">
 									<input type="radio" name="filtro_contrato" value="contrato" id="contrato"><label for="contrato">Contrato ID</label>
 								</div>
 							</div>
-						</div>
-					</fieldset>
-				    </div>
-<!-- 				    <div class="large-6 columns">
-				     	<div class="row">
-						    <div class="small-12 columns">
-						    <legend class="legendSearch">Enter the filter</legend>
-						      <div class="row collapse">
-						        <div class="medium-6 columns">
-						          <input id="stringContrat" type="text" class="round" placeholder="Search Field" name="search"  required>
-						        </div>
-								<div class="medium-6 columns">
-									<div class="small-6 columns">
-						          		<a id="btnfind" class="btn btn-primary"> Buscar <i class="fa fa-search"></i></a>
-						        	</div>
-						         	<div class="small-6 columns">
-						          		<a id="btnCleanWord"  href="#" class="btn btn-primary">Eliminar<i class="fa fa-trash"></i></a>
-						        	</div>
+						</fieldset>
+					</div>
+					
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
+							<legend class="legendSearch" >Select Period</legend>
+							<div class="row">
+								<div class="medium-3 columns">
+									<input id="startDateContract" class="round" type="date" placeholder="Fecha Inicial">
 								</div>
-						      </div>
-						    </div>
-						  </div>
-				    </div> -->
-					<div class="medium-3 columns">
-						<input id="stringContrat" type="text" class="round" placeholder="Search Field" name="search"  required>
+								<div class="medium-3 columns">
+									<input id="endDateContract" class="round" type="date"  placeholder="Fecha final">
+								</div>
+								<div class="medium-3 columns">
+									<input id="stringContrat" type="text" class="round" placeholder="Search Field" name="search"  required>
+								</div>
+								<div class="medium-3 columns ">
+									<a id="btnfind" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;&nbsp;Buscar</a>
+									<a id="btnCleanWord"  href="#" class="btn btn-primary"><i class="fa fa-trash"></i>&nbsp;&nbsp;Eliminar</a>
+								</div>
+							</div>
+						</fieldset>
 					</div>
-
-					<div class="medium-3 columns ">
-						<a id="btnfind" class="btn btn-primary"> Buscar <i class="fa fa-search"></i></a>
-						<a id="btnCleanWord"  href="#" class="btn btn-primary">Eliminar<i class="fa fa-trash"></i></a>
-					</div>
-
-	
-
-					  	</div>
-					</div>
-					</div>
-				</div>
+				</div>	
+			</div>
+		</div>
+	</div>
 
 
 
 	<div class="large-12 columns">
 		<div class="box">
-			<div class="box-header blue_divina">
+			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
                </div>
                <h3 class="box-title">
