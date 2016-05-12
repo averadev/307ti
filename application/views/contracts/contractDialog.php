@@ -41,10 +41,8 @@
                                     <div class="small-10 columns">
                                         <input value="0" readonly type="text" placeholder="ID" name="TourID" id="TourID" required>
                                     </div>
-                                    <div class="small-1 columns">
+                                    <div class="small-2 columns">
                                         <a id="btnAddTourID" href="#" class="button postfix"><i class="fa fa-plus"></i></a>
-                                    </div>
-                                     <div class="small-1 columns">
                                         <a id="btnDeleteTourID" href="#" class="button postfix"><i class="fa fa-trash-o"></i></a>
                                     </div>
                                 </div>
@@ -66,28 +64,27 @@
                         <div class="small-12 columns">
                             <a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>
                         </div>
-                        <table id="tablePeopleSelected" width="100%">
-                            <thead>
-                            <tr>
-                                <th class="cellEdit" >ID</th>
-                                <th class="cellGeneral">Nombre</th>
-                                <th class="cellGeneral">Apellidos</th>
-                                <th class="cellGeneral" >Dirección</th>
-                                <th class="cellGeneral" >Persona Principal</th>
-                                <th class="cellGeneral" >Persona Secundaria</th>
-                                <th class="cellGeneral" >Beneficiario</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody></tbody>
+                        <div class="small-12 columns">
+                            <table id="tablePeopleSelected" width="100%">
+                                <thead>
+                                <tr>
+                                    <th class="cellEdit" >ID</th>
+                                    <th class="cellGeneral">Nombre</th>
+                                    <th class="cellGeneral">Apellidos</th>
+                                    <th class="cellGeneral" >Dirección</th>
+                                    <th class="cellGeneral" >Persona Principal</th>
+                                    <th class="cellGeneral" >Persona Secundaria</th>
+                                    <th class="cellGeneral" >Beneficiario</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
                         </table>
+                        </div>
                     </div>
                 </div>
             </fieldset>
-
-
             <!-- Unidades -->
-
             <fieldset class="fieldset">
                 <legend class="btnAddressData">Unidades</legend>
                 <div class="containerPeople">
@@ -95,22 +92,24 @@
                         <div class="small-12 columns">
                             <a id="btnAddUnidades" href="#" class="button tiny"><i class="fa fa-home"></i></a>
                         </div>
-                        <table id="tableUnidadesSelected" width="100%">
-                            <thead>
-                            <tr>
-                                <th class="cellEdit" >Code</th>
-                                <th class="cellGeneral">Description</th>
-                                <th class="cellGeneral">Price</th>
-                                <th class="cellGeneral">Frequency</th>
-                                <th class="cellGeneral">Season</th>
-                                <th class="cellGeneral"># de Semana</th>
-                                <th class="cellGeneral">First Year OCC</th>
-                                <th class="cellGeneral">Last Year OCC</th>
-                                <th class="cellGeneral"></th>
-                            </tr>
-                            </thead>
+                        <div class="small-12 columns">
+                            <table id="tableUnidadesSelected" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="cellEdit" >Code</th>
+                                        <th class="cellGeneral">Description</th>
+                                        <th class="cellGeneral">Price</th>
+                                        <th class="cellGeneral">Frequency</th>
+                                        <th class="cellGeneral">Season</th>
+                                        <th class="cellGeneral"># de Semana</th>
+                                        <th class="cellGeneral">First Year OCC</th>
+                                        <th class="cellGeneral">Last Year OCC</th>
+                                        <th class="cellGeneral"></th>
+                                    </tr>
+                                </thead>
                             <tbody></tbody>
-                        </table>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </fieldset>
@@ -131,7 +130,6 @@
                         </div>
 
                     </div>
-
                     <div class="small-6 columns">
                         <div class="row">
                             <div class="small-3 columns">
@@ -150,7 +148,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="small-12 columns">
                     <table id="tableFinanciamiento" class="small-12 columns">
                         <thead>
                         <tr>
@@ -181,12 +179,6 @@
                                     <a id="btnPackReference" href="#" class="button postfix">Capture</a>
                                 </div>
                             </div>
-                       <!--  <label>Pack Reference
-                            <input id="packReference" type="text" name="referenciaPACK" placeholder="$0.00" />
-                              <div class="small-2 columns">
-                                <a id="btnPackReference" href="#" class="button postfix">Add</a>
-                            </div>
-                        </label> -->
                     </div>
                     <div class="large-4 columns">
                         <label>Sell Price
@@ -250,23 +242,19 @@
                     <div class="small-3 columns">
                         <label id="alertLastName" for="right-label" class="text-left">Discount Amount</label>
                     </div>
-                    <div class="large-9 columns">
+                    <div class="small-9 columns">
                         <div class="row collapse">
-                            <div class="small-10 columns">
+                            <div class="large-10 columns">
                                 <input type="text" placeholder="$0.00">
                             </div>
-                            <div class="small-2 columns">
+                            <div class="large-2 columns">
                                 <a id="btnDiscountAmount" href="#" class="button postfix">Capture</a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <fieldset>
-                        <legend>
-                            <i class="fa fa-money"></i>
-                        </legend>
-                        <div class="row">
+                <div class="small-12 columns">
                             <p>Added Packs</p>
                             <table id="tableDescuentos" class="large-12 columns">
                                 <thead>
@@ -279,8 +267,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </fieldset>
-                </div>
+                    </div>
                 <div class="row">
                     <div class="small-6 columns">
                         <label>Amount Transferred</label>

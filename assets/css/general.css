@@ -103,7 +103,9 @@ select {
 	color: #e8edf1;
     background-color: #1D4D74;
 }
-
+.ui-widget-content a{
+	color: white;
+}
 .btn{
 	display: inline-block;
     padding: 6px 12px;
@@ -1172,7 +1174,7 @@ label.error{
 }
 
 .yellow {
-    background-color: #f1c40f;
+    background-color: #f1c40f !important;
 }
 .blue_divina{
 	background-color: #225b88;
@@ -1361,7 +1363,7 @@ input[type=radio]:not(old){
   width   : 28px;
   margin  : 0;
   padding : 0;
-  opacity : 0;
+/*  opacity : 0;*/
 }
 
 input[type=checkbox]:not(old) + label,
@@ -1380,3 +1382,4 @@ input[type=checkbox]:not(old):checked + label{
 input[type=radio]:not(old):checked + label{
   background-position : 0 -48px;
 }
+

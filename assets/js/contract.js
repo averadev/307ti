@@ -13,42 +13,18 @@ $(document).ready(function(){
 	var dialogEditContract = modalEditContract();
 	var dialogAddTour = addTourContract();
 
-
 	$(document).on( 'click', '#newContract', function () {
-		showLoading('#dialog-Contract',true);
-		$( "#dialog-Contract" ).load( 'contract/modal', function() {
-			showLoading('#dialog-Contract',false);
-		});
-		ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
-		ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
-		if (addContract!=null) {
-	    	addContract.dialog( "destroy" );
-	    }
-	    addContract = createDialogContract();
+		addContract = createDialogContract(addContract);
 		addContract.dialog("open");
 	});
 
-
 	$(document).on( 'click', '#btnAddPeople', function () {
-	     showLoading('#dialog-People',true);
-         $( "#dialog-People" ).load( 'people/index', function() {
-            showLoading('#dialog-People',false);
-            $("#dialog-User").hide();
-            selectTable("tablePeople");
-        });
-         if(peopleDialog != null){
-         	peopleDialog.dialog("destroy")
-         }
+		
          peopleDialog = addPeopleDialog();
          peopleDialog.dialog( "open" );
 	});
 
 	 $(document).on( 'click', '#btnAddUnidades', function () {
-	        showLoading('#dialog-Unidades',true);
-	        $( "#dialog-Unidades" ).load( 'contract/modalUnidades', function() {
-	            showLoading('#dialog-Unidades',false);
-	            selectTableUnico("tblUnidades");
-	        });
 	        if (unidadDialog!=null) {
 	    		unidadDialog.dialog( "destroy" );
 	    	}
@@ -90,6 +66,7 @@ $(document).ready(function(){
 	});
 	
 	$('#btnfind').click(function(){
+		$('#contractstbody').empty();
 		getContratos();
 	});
 
@@ -99,11 +76,21 @@ $(document).ready(function(){
 
 	getDatailByID("contractstbody");
 });
-
-
-function createDialogContract() {
 	
+function createDialogContract(addContract) {
+
+	if (addContract!=null) {
+	    	addContract.dialog( "destroy" );
+	    }
+	showLoadingScreen('#dialog-Contract',true);
 	dialog = $("#dialog-Contract").dialog({
+		open : function (event){
+	    	$(this).load ("contract/modal" , function(){
+	    		showLoadingScreen('#dialog-Contract',false);
+	 			ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
+				ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
+	    	});
+		},
 		autoOpen: false,
 		height: maxHeight,
 		width: "50%",
@@ -129,7 +116,7 @@ function createDialogContract() {
 				}
 			}],
 		close: function() {
-		
+			$('#dialog-Contract').empty();
 		}
 	});
 	return dialog;
@@ -159,23 +146,24 @@ function addTourContract(unidades){
        			var tourID = getValueFromTableSelected("tours", 1);
        			$("#TourID").val(tourID);
        			$(this).dialog('close');
-       			// var weeks = $("#weeksNumber").val();
-       			// var primero = $("#firstYearWeeks").val();
-       			// var ultimo = $("#lastYearWeeks").val();
-       			// tablUnidadades(unidades, weeks, primero, ultimo);	
-       			// $(this).dialog('close');
-       			// setValueUnitPrice();
        		}
      	}],
      close: function() {
-    
+    	$('#dialog-tourID').empty();
      }
 	});
 	return dialogo;
 }
 function addUnidadDialog() {
-
+	showLoadingScreen('#dialog-Unidades',true);
 	dialog = $( "#dialog-Unidades" ).dialog({
+		open : function (event){
+	    	$(this).load ("contract/modalUnidades" , function(){
+	    		showLoadingScreen('#dialog-Unidades',false);
+	    		showLoadingScreen('#dialog-Unidades',false);
+	            selectTableUnico("tblUnidades");
+	    	});
+		},
 		autoOpen: false,
 		height: maxHeight,
 		width: "50%",
@@ -202,14 +190,22 @@ function addUnidadDialog() {
 			}
 		}],
 		close: function() {
-		
+			$('#dialog-Unidades').empty();
 		}
 	});
 	return dialog;
 }
 function addPeopleDialog() {
 
+	showLoadingScreen('#dialog-People', true);
 	dialog = $( "#dialog-People" ).dialog({
+		open : function (event){
+	    	$(this).load ("people/index" , function(){
+	    		showLoadingScreen('#dialog-People', false);
+	    		$("#dialog-User").hide();
+            	selectTable("tablePeople");
+	    	});
+		},
 		autoOpen: false,
 		height: maxHeight,
 		width: "50%",
@@ -230,7 +226,7 @@ function addPeopleDialog() {
 			}
 		}],
 		close: function() {
-		
+			$('#dialog-People').empty();
 		}
 	});
 	return dialog;
@@ -238,8 +234,7 @@ function addPeopleDialog() {
 
 
 function getContratos(){
-
-	showLoading('#contracts',true);
+	showLoadingScreen('#contracts',true);
     var filters = getFiltersCheckboxs('filtro_contrato');
     var arrayDate = ["startDateContract", "endDateContract"];
     var dates = getDates(arrayDate);
@@ -256,10 +251,9 @@ function getContratos(){
        	url: "contract/getContratos",
 		dataType:'json',
 		success: function(data){
-			showLoading('#contracts',false);
+			showLoadingScreen('#contracts',false);
 			if(data != null){
 				alertify.success("Found "+ data.length);
-				//drawTable(data, 'getDetalleContratoByID', "details", "contracts");
 				drawTable3(data, "details", "contracts");
 			}else{
 				$('#contractstbody').empty();
@@ -273,7 +267,7 @@ function getContratos(){
 }
 
 function getDetalleContratoByID(i){
-	showLoading('#contracts',true);
+	showLoadingScreen('#contracts',true);
 	ajaxHTML('dialog-Edit-Contract', 'contract/modalEdit');
     showModals('dialog-Edit-Contract', cleanAddPeople);
 	//ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
@@ -532,7 +526,7 @@ function getWeeksDialog(unidades){
        		}
      	}],
      close: function() {
-    
+    	$('#dialog-Weeks').empty();
      }
 	});
 	return dialogo;
@@ -573,7 +567,7 @@ function PackReference(){
        		}
      	}],
      close: function() {
-    
+    	$('#dialog-Pack').empty();
      }
 	});
 	return dialogo;
@@ -605,7 +599,7 @@ function modalDepositDownpayment(){
        		}
      	}],
      close: function() {
-    
+    	$('#dialog-Downpayment').empty();
      }
 	});
 	return dialogo;
@@ -636,7 +630,7 @@ function modalScheduledPayments(){
        		}
      	}],
      close: function() {
-    
+    	$('#dialog-ScheduledPayments').empty();
      }
 	});
 	return dialogo;
@@ -667,7 +661,7 @@ function modalDiscountAmount(){
        		}
      	}],
      close: function() {
-    
+    	$('#dialog-DiscountAmount').empty();
      }
 	});
 	return dialogo;
@@ -768,10 +762,11 @@ function getDatailByID(id){
 
 function modalEditContract(){
 
+	showLoadingScreen('#dialog-Edit-Contract',true);
 	dialogo = $("#dialog-Edit-Contract").dialog ({
   		open : function (event){
 	    	$(this).load ("contract/modalEdit" , function(){
-	 
+	 			showLoadingScreen('#dialog-Edit-Contract',false);	
 	    	});
 		},
 		autoOpen: false,
@@ -792,7 +787,7 @@ function modalEditContract(){
        		}
      	}],
      close: function() {
-    
+    	$('#dialog-Edit-Contract').empty();
      }
 	});
 	return dialogo;
