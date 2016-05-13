@@ -39,7 +39,7 @@
 						</fieldset>
 					</div>
 					<div class="small-12 medium-12 large-12 columns">
-						<fieldset class="small-12 medium-12 large-3 columns fieldsetFilter filterDetailedAvailability">
+						<fieldset class="small-12 medium-12 large-12 columns fieldsetFilter filterDetailedAvailability">
 							<legend class="legendSearch">Choose the availability</legend>
 							<!-- Type of Availability -->
 							<div class="rdoField">
@@ -52,7 +52,9 @@
 								<label for="RadioInvOccupancy">Occupancy </label>
 							</div>
 						</fieldset>
-						<fieldset class="small-12 medium-12 large-9 columns fieldsetFilter filterDetailedAvailability" style="padding-left:7px;">
+					</div>
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="small-12 medium-12 large-12 columns fieldsetFilter filterDetailedAvailability">
 							<legend class="legendSearch">Choose the filters</legend>
 							<!-- Include Non Deducted -->
 							<div class="rdoField">

@@ -1,4 +1,4 @@
-<div class="row section">
+<div class="row section" id="section-contract">
 	<div class="large-12 columns">
 		<div class="box">
 			<div class="box-header pr-color">
@@ -48,21 +48,26 @@
 								<input type="checkbox" id="busquedaAvanazada" class="checkFilter">
 								<label for="busquedaAvanazada">Advanced search</label>
 							</div>
-							<div class="filtersAdvanced" id="avanzada" style="display:none;margin-left: 40px;float: left;">
+							<div class="filtersAdvanced" id="avanzada" style="display:none;">
 								<div class="rdoField">
-									<input type="radio" name="filtro_contrato" value="codEmpleado" id="codEmpleado" required><label for="codEmpleado">Codigo de Empleado</label>
+									<input type="radio" name="filtro_contrato" value="codEmpleado" id="codEmpleado" required>
+									<label for="codEmpleado">Codigo de Empleado</label>
 								</div>
 								<div class="rdoField">
-									<input type="radio" name="filtro_contrato" value="folio" id="folio"><label for="folio">Folio</label>
+									<input type="radio" name="filtro_contrato" value="folio" id="folio">
+									<label for="folio">Folio</label>
 								</div>
 								<div class="rdoField">
-									<input type="radio" name="filtro_contrato" value="unidad" id="unidad"><label for="unidad">Unidad ID</label>
+									<input type="radio" name="filtro_contrato" value="unidad" id="unidad">
+									<label for="unidad">Unidad ID</label>
 								</div>
 								<div class="rdoField">
-									<input type="radio" name="filtro_contrato" value="email" id="email"><label for="email">Email</label>
+									<input type="radio" name="filtro_contrato" value="email" id="email" />
+									<label for="email">Email</label>
 								</div>
 								<div class="rdoField">
-									<input type="radio" name="filtro_contrato" value="contrato" id="contrato"><label for="contrato">Contrato ID</label>
+									<input type="radio" name="filtro_contrato" value="contrato" id="contrato">
+									<label for="contrato">Contrato ID</label>
 								</div>
 							</div>
 						</fieldset>

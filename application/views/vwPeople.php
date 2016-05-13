@@ -48,7 +48,7 @@
 								<label for="checkFilterAdvance">Advanced search</label>
 							</div>
 							<div class="filtersAdvanced" id="containerFilterAdv" style="display:none;">
-								<div class="rdoField" style="margin-left:-1px;">
+								<div class="rdoField">
 									<input type="radio" name="advancedSearchPeople" class="RadioSearchPeople" value="initials" id="RadioInitials" checked>
 									<label for="RadioInitials">initials / Employee code</label>
 								</div>
@@ -78,9 +78,9 @@
 								<div class="large-6 columns">
 									<input type="text" id="txtSearch" class="txtSearch" placeholder="Enter a search parameter" />
 								</div>
-								<div class="small-12 large-6 columns">
-									<a id="btnSearch" class="btn btn-primary"><i class="fa fa-search">&nbsp;&nbsp;Buscar</i></a>
-									<a id="btnCleanSearch" class="btn btn-primary spanSelect"><i class="fa fa-trash">&nbsp;&nbsp;Limpiar</i></a>
+								<div class="small-12 large-6 columns" style="padding-left: 0;">
+									<a id="btnSearch" class="btn btn-primary btn-Search">Buscar<img src="<?php echo base_url().IMG; ?>common/7.png"/></a>
+									<a id="btnCleanSearch" class="btn btn-primary spanSelect">Limpiar<img src="<?php echo base_url().IMG; ?>common/9.png"/></a>
 								</div>
 							</div>
 						</fieldset>
@@ -100,27 +100,27 @@
                </h3>
 			</div>
 			<div class="box-body" id="section-table-people" style="display: block;">
-				<div class=" table" >
+				<div class="table" >
 					<div class="" id="divTablePeople">
-						<table id="tablePeople" class="display hover" cellspacing="0" width="100%">
+						<table id="tablePeople" class="display hover" cellspacing="0" width="100%" style="display:none;">
 							<thead>
 								<tr>
-									<th class="cellEdit" >Edit</th>
-									<th class="cellEdit" >Id</th>
-									<th class="cellGeneral" >Name</th>
-									<th class="cellGeneral">Last name</th>
-									<th class="cellGeneral">Gender</th>
-									<th class="cellDate" >Birth date</th>
-									<th class="cellAddress" >Street, number, colonia</th>
-									<th class="cellGeneral" >City</th>
-									<th class="cellGeneral" >State</th>
-									<th class="cellGeneral" >Country</th>
-									<th class="cellGeneral" >Zip code</th>
-									<th class="cellPhone" >Phone number 1</th>
-									<th class="cellPhone" >Phone number 2</th>
-									<th class="cellPhone" >Phone number 3</th>
-									<th class="cellEmail" >Email</th>
-									<th class="cellEmail" >Email 2</th>
+									<th>Edit</th>
+									<th>Id</th>
+									<th>Name</th>
+									<th>Last name</th>
+									<th>Gender</th>
+									<th>Birth date</th>
+									<th>Street, number, colonia</th>
+									<th>City</th>
+									<th>State</th>
+									<th>Country</th>
+									<th>Zip code</th>
+									<th>Phone number 1</th>
+									<th>Phone number 2</th>
+									<th>Phone number 3</th>
+									<th>Email</th>
+									<th>Email 2</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -141,6 +141,11 @@
 						<input type="hidden" id="paginationPeople" value="true" />
 					</div>
 				</div>
+					<!--<div class="divNoResults">
+						<div class="noResultsScreen" >
+							<img src="<?php echo base_url().IMG; ?>common/no-results.jpg"/>
+						</div>
+					</div>-->
 			</div>
 		</div>
 	</div>

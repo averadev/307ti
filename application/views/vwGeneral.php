@@ -46,7 +46,7 @@
             </div>
             <div class="menu-opt logo"><img src="<?php echo base_url().IMG; ?>logo/demo.png"/></div>
 			<div class="menu-config">
-				<img src="<?php echo base_url().IMG; ?>common/userUnknown.png" />
+				<img src="<?php echo base_url().IMG; ?>common/5.png" />
 				<p><?php echo $this->nativesessions->get('username'); ?></p>
 				<span id="btnDropdownMenu">
 					<i class="fa fa-sort-desc"></i>
@@ -70,23 +70,23 @@
       <div class="menu-section">
             <div class="menu-content">
                 <div class="menu-sel" attr-screen="people">
-					<span class="icon-menu-sel"><i class="fa fa fa-users"></i></span>
+					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/3.png"/></span>
 					<div class="label-menu-sel">People</div>
 				</div>
                 <div class="menu-sel" attr-screen="contract">
-					<span class="icon-menu-sel"><i class="fa fa-file-excel-o"></i></span>
+					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/4.png"/></span>
 					<div class="label-menu-sel">Contract</div>
 				</div>
 				<div class="menu-sel" attr-screen="tours">
-					<span class="icon-menu-sel"><i class="fa fa-rocket"></i></span>
+					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/4.png"/></span>
 					<div class="label-menu-sel">Tour</div>
 				</div>
                 <div class="menu-sel" attr-screen="inventory">
-					<span class="icon-menu-sel"><i class="fa fa-money"></i></span>
+					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/2.png"/></span>
 					<div class="label-menu-sel">Inventary</div>
 				</div>
 				<div class="menu-sel" attr-screen="frontDesk">
-					<span class="icon-menu-sel"><i class="fa fa-desktop"></i></span>
+					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/1.png"/></span>
 					<div class="label-menu-sel">FrontDesk</div>
 				</div>
                 <div class="menu-fix">&nbsp;</div>

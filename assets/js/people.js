@@ -76,6 +76,8 @@ $('#textCountry').change(function(){ changeState(this) });
 */
 $(document).ready(function(){
 	
+	noResults('#section-table-people',true);
+	
 	//$(document).foundation();
 	//maxHeight
 	maxHeight = screen.height * .25;
@@ -170,6 +172,8 @@ function createModalDialog(){
 		}
 	});
 	
+	//dialogUser.css('overflow', 'hidden');
+	
 }
 
 /**
@@ -188,9 +192,9 @@ function showModal(id){
 		$("#tabsModalPeople").hide();
 		
 		dialogUser.dialog('open');
-		$('.ui-dialog-titlebar').append(
+		/*$('.ui-dialog-titlebar').append(
 			'<div class="ui-dialog-titlebar2"><label>Add person</label></div><img class="imgCloseModal" src="' + BASE_URL+'assets/img/common/iconClose2.png">'
-		)
+		)*/
 		$('#imgCloseModal').off();
 		$('.imgCloseModal').on('click', function() {  hideModal(); });
 	}else{
@@ -716,11 +720,11 @@ function searchPeople(page){
 	}*/
 	
 	//if($('#checkFilterAdvance').val())
+	noResults('#section-table-people',false);
 	opcionAdvanced = "";
 	if($('#checkFilterAdvance').is(':checked')){
 		opcionAdvanced = $('.RadioSearchPeople:checked').val();
 	}
-	
 	$.ajax({
    		type: "POST",
        	url: "people/getPeopleBySearch",
@@ -734,25 +738,28 @@ function searchPeople(page){
 			page:page,
 		},
 		success: function(data){
-			var total = data.total;
-			alertify.success("Found "+ total + " People");
-			if( parseInt(total) == 0 ){ total = 1; }
-			total = parseInt( total/10 );
-			if(data.total%10 == 0){
-				total = total - 1;		
+			if(data.items.length > 0){
+				var total = data.total;
+				alertify.success("Found "+ total + " People");
+				if( parseInt(total) == 0 ){ total = 1; }
+				total = parseInt( total/10 );
+				if(data.total%10 == 0){
+					total = total - 1;		
+				}
+				total = total + 1
+				if(page == 0){
+					$('#paginationPeople').val(true);
+					loadPaginatorPeople( total );
+				}
+				drawTable2(data.items,"tablePeople","showModal","editar");
+			}else{
+				noResultsPeople("section-table-people", "tablePeople", "No results found");
 			}
-			total = total + 1
-			if(page == 0){
-				$('#paginationPeople').val(true);
-				loadPaginatorPeople( total );
-			}
-			drawTable2(data.items,"tablePeople","showModal","editar");
-
 			showLoading('#section-table-people',false);
 		},
 		error: function(error){
+			noResultsPeople("section-table-people", "tablePeople", "Try again");
 			showLoading('#section-table-people',false);
-			showAlert(true,"Error in the search, try again later.",'button',showAlert);
 		}
 	});	
 }
@@ -864,9 +871,9 @@ function getInfoPeople(id){
 			
 			$("#idPeople").data("pkPeopleId",item.pkPeopleId);
 			$("#idPeople").data("pkEmployeeId",item.pkEmployeeId);
-			$('.ui-dialog-titlebar').append(
+			/*$('.ui-dialog-titlebar').append(
 				'<div class="ui-dialog-titlebar2"><label>Edit person</label></div><img class="imgCloseModal" src="' + BASE_URL+	'assets/img/common/iconClose2.png">'
-			)
+			)*/
 			$('#imgCloseModal').off();
 			$('.imgCloseModal').on('click', function() {  hideModal(); });
 			document.getElementsByTagName("html")[0].style.overflow = "hidden";
@@ -929,12 +936,14 @@ function getInfoTabsPeople(screen, url){
 	
 	var search = "";
 	if(screen == "tab-PReservaciones"){
-		showLoading('#divTableReservationsPeople',true);
+		showLoading('#tab-PReservaciones',true);
 		$('#tableReservationsPeople tbody').empty();
+		noResults('#' + screen,false);
 	}else{
-		showLoading('#divTableContractPeople',true);
+		showLoading('#tab-PContratos',true);
 		$('#tableContractPeople tbody').empty();
 		search = $('#textSearchContractPeople').val();
+		noResults('#' + screen,false);
 	}
 	$.ajax({
    		type: "POST",
@@ -945,19 +954,19 @@ function getInfoTabsPeople(screen, url){
 			search:search
 		},
 		success: function(data){
-			
 			if(screen == "tab-PReservaciones"){
 				if(data.items.length > 0){
 					drawTable2(data.items,"tableReservationsPeople",false,"tabla");
 				}else{
-					$('#tableReservationsPeople tbody').empty();
+					//$('#tableReservationsPeople tbody').empty();
+					noResultsPeople("tab-PReservaciones", "tableReservationsPeople", "No results found");
 				}
 				
 			}else if(screen == "tab-PContratos"){
 				if(data.items.length > 0){
 					drawTable2(data.items,"tableContractPeople",false,"tabla");
 				}else{
-					$('#tableContractPeople tbody').empty();
+					noResultsPeople("tab-PContratos", "tableContractPeople", "No results found");
 				}
 			}else if(screen == "tab-PEmpleados"){
 				$('#textTypeSeller').empty();
@@ -967,26 +976,23 @@ function getInfoTabsPeople(screen, url){
 					$('#textTypeSeller').append('<option value="' + item.pkPeopleTypeId + '" code="' + item.PeopleTypeCode + '">' + item.PeopleTypeDesc + '</option>');
 				}
 			}
-			
-			/*//$('.iconEdit').on()
-			$("#tablePeople tbody tr .cellEdit .iconEdit").off( "click", ".iconEdit" );
-			$("#tablePeople tbody tr .cellEdit .iconEdit").on("click", function(){ showModal($(this).attr('value')); });*/
 			if(screen == "tab-PReservaciones"){
-				showLoading('#divTableReservationsPeople',false);
+				showLoading('#tab-PReservaciones',false);
 			}else{
-				showLoading('#divTableContractPeople',false);
+				showLoading('#tab-PContratos',false);
 			}
 		},
 		error: function(error){
 			if(screen == "tab-PReservaciones"){
-				showLoading('#divTableReservationsPeople',false);
+				showLoading('#tab-PReservaciones',false);
+				noResultsPeople("tab-PReservaciones", "tableReservationsPeople", "Try again");
 			}else{
-				showLoading('#divTableContractPeople',false);
+				showLoading('#tab-PContratos',false);
+				noResultsPeople("tab-PContratos", "tableReservationsPeople", "Try again");
 			}
 			showAlert(true,"Error in the search, try again later.",'button',showAlert);
 		}
 	});
-	
 }
 
 /**
@@ -1083,4 +1089,15 @@ $(document).ready(function(){
 	});
 	*/
 });
+
+
+function noResultsPeople(section, table, message){
+	alertify.error(message);
+	noResults('#' + section,true);
+	if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
+		var tabla = $( '#' + table ).DataTable();
+		tabla.destroy();
+	}
+	$('#' + table).hide();
+}
 

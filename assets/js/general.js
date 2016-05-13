@@ -302,6 +302,8 @@ function drawTable2(data, table ,funcion, cadena){
 	$('#' + table + " thead" ).html(headHTML);
 	$('#' + table + " tbody" ).html(bodyHTML);
 	
+	$('#' + table ).show();
+	
 	$('#' + table ).DataTable({
 		"scrollY": 350,
 		"scrollX": true,
@@ -310,7 +312,6 @@ function drawTable2(data, table ,funcion, cadena){
 		"info":     false,
 		"filter": 	false,
 	});
-	
 }
 
 (function($) {
@@ -502,4 +503,27 @@ changeColor("#000000");
 
 function changeColor(color, color2){
 	$(".pr-color").css('background-color', color);
+}
+
+function noResults(parentElement, isOpen = false ){
+	/*if(!isOpen){
+		isOpen = false;
+	}*/
+	//indica si la alerta se muestra o escond
+	if(isOpen){
+		var widthLoading = $(parentElement).css('width')
+		var loandingElements = '<div class="divNoResults">' +
+				'<div class="noResultsScreen" >' +
+					'<img src="' + BASE_URL + 'assets/img/common/no-results.jpg' + '" /> ' +
+				'</div>' +
+			'</div>';
+		$(parentElement).prepend(loandingElements);
+		var loading = $(parentElement).children('.divNoResults');
+		
+	}else{
+		var loading = $(parentElement).children('.divNoResults');
+		$(loading).remove();
+		
+	}
+
 }
