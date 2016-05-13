@@ -117,18 +117,18 @@
 </fieldset>
   <div class="row">
     <div class="small-3 columns">
-      <label for="legalName" class="text-left">total</label>
+      <label for="finalPriceDownpayment" class="text-left">total</label>
     </div>
     <div class="small-9 columns">
-       <input id="finalPricePack" type="number" name="quantity" min="2016" max="2099">
+       <input id="finalPriceDownpayment" type="number" name="finalPriceDownpayment" min="2016" max="2099">
     </div>
   </div>
     <div class="row">
     <div class="small-3 columns">
-      <label for="legalName" class="text-left">reference</label>
+      <label for="referenceDownpayment" class="text-left">reference</label>
     </div>
     <div class="small-9 columns">
-       <input id="finalPricePack" type="text" name="quantity" min="2016" max="2099">
+       <input id="referenceDownpayment" type="text" name="referenceDownpayment" min="2016" max="2099">
     </div>
   </div>
   </fieldset>

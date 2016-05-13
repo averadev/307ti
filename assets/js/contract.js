@@ -472,6 +472,12 @@ function deleteElementTableUnidades(div){
 		setValueUnitPrice();
 	});
 }
+function deleteElementTableFuncion(div, funcion){
+	$("#"+div+" tr").on("click", "button", function(){
+		$(this).closest("tr").remove();
+		funcion();
+	});
+}
 
 
 function checkBoxes(){
@@ -934,10 +940,16 @@ function initEventosDownpayment(){
 	calcularDepositDownpayment();
 	selectMetodoPago();
 	setDate("datePayment");
-	$("#montoDownpayment").val(0);
+	
 	$('#btnAddmontoDownpayment').click(function (){
 		tableDownpaymentSelected();
+		totalDownpayment();
 	});
+	$('#btnCleanmontoDownpayment').click(function (){
+		$("#montoDownpayment").val(0);
+	});
+	
+
 }
 
 function tableDownpaymentSelected(){
@@ -947,8 +959,24 @@ function tableDownpaymentSelected(){
 	var td = "<tr>";
 		td += "<td>"+fecha+"</td>";
 		td += "<td>"+tipoPago+"</td>";
-		td += "<td>"+monto+"</td>";
+		td += "<td class='montoDownpayment'>"+monto+"</td>";
 		td += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
 		td += "</tr>";
 	$("#tbodyPagosSelected").append(td);
+	deleteElementTableFuncion("tablePagosSelected", totalDownpayment);
+}
+
+function totalDownpayment(){
+	var pagos = [];
+	total = 0;
+	// var fullArray = $("#"+id).find("td");
+	// var fullArray = $("#tablePagosSelected").find("td").eq(2);
+	var array = $("#tablePagosSelected .montoDownpayment");
+	for (var i = 0; i < array.length; i++) {
+		var cantidad = parseFloat($(array[i]).text());
+		pagos.push(cantidad);
+		total += cantidad;
+	}
+	$("#finalPriceDownpayment").val(total);
+	//return fullArray.eq(posicion).text().trim();
 }
