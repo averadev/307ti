@@ -122,10 +122,12 @@ function createDialogContract(addContract) {
 	return dialog;
 }
 function addTourContract(unidades){
+	showLoading('#dialog-tourID',true);
 	var unidades = unidades;
 	dialogo = $("#dialog-tourID").dialog ({
   		open : function (event){
 	    	$(this).load ("tours/index" , function(){
+	    		showLoading('#dialog-tourID',false);
 	    		selectTableUnico("tours");
 	    	});
 		},
@@ -160,7 +162,13 @@ function addUnidadDialog() {
 		open : function (event){
 	    	$(this).load ("contract/modalUnidades" , function(){
 	    		showLoading('#dialog-Unidades',false);
-	    		showLoading('#dialog-Unidades',false);
+	    		ajaxSelects('contract/getProperties','try again', generalSelects, 'property');
+    			ajaxSelects('contract/getUnitTypes','try again', generalSelects, 'unitType');
+    			ajaxSelects('contract/getFrequencies','try again', generalSelects, 'frequency');
+    			ajaxSelects('contract/getSeasons','try again', generalSelects, 'season');
+				$('#btngetUnidades').click(function(){
+				        getUnidades();
+				});
 	            selectTableUnico("tblUnidades");
 	    	});
 		},
@@ -441,7 +449,7 @@ function tablaPersonas(personas){
         for (var j in personas[i]) {
             bodyHTML+="<td>" + personas[i][j] + "</td>";
         };
-        bodyHTML += "<td><input  type='checkbox' name='principal'></td>";
+        bodyHTML += "<td><div class='rdoField'><input  type='checkbox' name='principal'></div></td>";
         bodyHTML += "<td><input  type='checkbox' name='secundaria'></td>";
         bodyHTML += "<td><input  type='checkbox' name='baneficiario'></td>";
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
@@ -494,18 +502,20 @@ function selectTableUnico(div){
 
 
 function getWeeksDialog(unidades){
+	showLoading('#dialog-Weeks', true);
 	var unidades = unidades;
 	dialogo = $("#dialog-Weeks").dialog ({
   		open : function (event){
 	    	$(this).load ("contract/modalWeeks", function(){
+	    		showLoading('#dialog-Weeks', false);
 	    		$("#weeksNumber").val(1);
-	    		setDate("firstYearWeeks", 0);
-	    		setDate("lastYearWeeks", 1);
+	    		setYear("firstYearWeeks", 0);
+	    		setYear("lastYearWeeks", 1);
 	    	});
 		},
 		autoOpen: false,
      	height: maxHeight/2,
-     	width: "25%",
+     	width: "50%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -532,25 +542,27 @@ function getWeeksDialog(unidades){
 	return dialogo;
 }
 
-function setDate(id, n){
+function setYear(id, n){
 	var d = new Date().getFullYear();
 	$("#"+id).val(d + n);
 }
 
 
 function PackReference(){
-
+	showLoading('#dialog-Pack', true);
 	dialogo = $("#dialog-Pack").dialog ({
   		open : function (event){
 	    	$(this).load ("contract/modalPack" , function(){
+	    		showLoading('#dialog-Pack', false);
 	    		var precioUnidad = $("#precioUnidad").val();
 				var precioUnidadPack = $("#unitPricePack").val(precioUnidad);
+				$("#finalPricePack").val(precioUnidad);
 				calcularPack();
 	    	});
 		},
 		autoOpen: false,
      	height: maxHeight/2,
-     	width: "25%",
+     	width: "50%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -573,17 +585,17 @@ function PackReference(){
 	return dialogo;
 }
 function modalDepositDownpayment(){
-
+	showLoading('#dialog-Downpayment', true);
 	dialogo = $("#dialog-Downpayment").dialog ({
   		open : function (event){
 	    	$(this).load ("contract/modalDepositDownpayment" , function(){
-	    		var precioUnidad = $("#downpayment").val();
-				var precioUnidadPack = $("#downpaymentPrice").val(precioUnidad);
+	    		showLoading('#dialog-Downpayment', false);
+	    		initEventosDownpayment();
 	    	});
 		},
 		autoOpen: false,
-     	height: maxHeight/2,
-     	width: "25%",
+     	height: maxHeight,
+     	width: "50%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -605,11 +617,11 @@ function modalDepositDownpayment(){
 	return dialogo;
 }
 function modalScheduledPayments(){
-
+	showLoading('#dialog-ScheduledPayments', true);
 	dialogo = $("#dialog-ScheduledPayments").dialog ({
   		open : function (event){
 	    	$(this).load ("contract/ScheduledPayments" , function(){
-	 
+	 			showLoading('#dialog-ScheduledPayments', false);
 	    	});
 		},
 		autoOpen: false,
@@ -636,11 +648,11 @@ function modalScheduledPayments(){
 	return dialogo;
 }
 function modalDiscountAmount(){
-
+	showLoading('#dialog-DiscountAmount', true);
 	dialogo = $("#dialog-DiscountAmount").dialog ({
   		open : function (event){
 	    	$(this).load ("contract/modalDiscountAmount" , function(){
-	 
+	 			showLoading('#dialog-DiscountAmount', false);
 	    	});
 		},
 		autoOpen: false,
@@ -794,17 +806,19 @@ function modalEditContract(){
 }
 
 function calcularPack(){
-	var value = $("#porcentajePack").val();
-	var valueQ =parseFloat($("#quantityPack").val());
-	var precioFinal = $("#finalPricePack").val();
+
+	var value = parseFloat($("#porcentajePack").val());
+	var valueQ = parseFloat($("#quantityPack").val());
 	var precioInicial = parseFloat($("#unitPricePack").val());
+	var precioFinal = parseFloat($("#finalPricePack").val());
+
 	$("#porcentajePack").on('keyup change click', function () {
 	    if(this.value !== value) {
 	    	value = this.value;
 	       var p = porcentajePack(this.value,precioInicial);
 	       $("#quantityPack").val(p);
 	       if(p+precioInicial>0){
-	       		$("#finalPricePack").val(p+precioInicial>0);
+	       		$("#finalPricePack").val(p+precioInicial);
 	       }else{
 	       		$("#finalPricePack").val(precioInicial);
 	       }
@@ -815,8 +829,8 @@ function calcularPack(){
 	    	 valueQ = parseFloat(this.value);
 	    	 var porcentaje = cantidad(valueQ, precioInicial);
 	    	 $("#porcentajePack").val(porcentaje.toFixed(3));
-	    	 if(eval(valueQ+precioInicial>0)){
-	    	 	$("#finalPricePack").val(valueQ+precioInicial>0);
+	    	 if(valueQ+precioInicial>0){
+	    	 	$("#finalPricePack").val(precioInicial+valueQ);
 	    	 }else{
 	    	 	$("#finalPricePack").val(precioInicial);
 	    	 }
@@ -829,7 +843,7 @@ function porcentajePack(porcentaje, cantidad){
 }
 
 function cantidad(cantidad, precio){
-	return (cantidad / precio)*100;
+	return parseFloat((cantidad / precio)*100);
 }
 // $(document).ready(function(){
 //     $("#myTable td").click(function() {     
@@ -852,4 +866,89 @@ function porcetajeDownpayment(){
 	 	alert("El checkbox con valor " + $(this).val() + " porcentaje ha sido seleccionado");
 	}
 });
+}
+
+function calcularDepositDownpayment(){
+	var total = parseFloat($("#downpaymentPrice").val());
+	var value = parseFloat($("#downpaymentGastos").val());
+	$("#downpaymentTotal").val(value+total);
+	$("#downpaymentGastos").on('keyup change click', function () {
+	    if(this.value !== value) {
+	    	value = parseFloat(this.value);
+	       if(value+total>0){
+	       		$("#downpaymentTotal").val(value+total);
+	       }else{
+	       		$("#downpaymentTotal").val(total);
+	       }
+	    }        
+	});
+}
+
+
+function selectMetodoPago(){
+	$('#tiposPago').on('change', function() {
+  		if(this.value == 2){
+  			$("#datosTarjeta").show();
+  		}else{
+  			$("#datosTarjeta").hide();
+  		}
+  	});
+}
+
+ function getUnidades(){
+        showLoading('#tblUnidades',true);
+        $.ajax({
+            data:{
+                words: "1"
+            },
+            type: "POST",
+            url: "contract/getUnidades",
+            dataType:'json',
+            success: function(data){
+                if(data != null){
+                    showLoading('#tblUnidades',false);
+                    alertify.success("Found "+ data.length);
+                    drawTable(data, 'add', "details", "Unidades");
+                }else{
+                    $('#contractstbody').empty();
+                    alertify.error("No data found");
+                }
+            },
+            error: function(){
+                alertify.error("Try again");
+            }
+        });
+    }
+
+function setDate(id){
+	document.getElementById(id).valueAsDate = new Date();
+}
+
+function initEventosDownpayment(){
+	var precioUnidad = $("#downpayment").val();
+	if (precioUnidad>0) {
+		var precioUnidadPack = $("#downpaymentPrice").val(precioUnidad);
+	}else{
+		var precioUnidadPack = $("#downpaymentPrice").val(0);
+	}
+	calcularDepositDownpayment();
+	selectMetodoPago();
+	setDate("datePayment");
+	$("#montoDownpayment").val(0);
+	$('#btnAddmontoDownpayment').click(function (){
+		tableDownpaymentSelected();
+	});
+}
+
+function tableDownpaymentSelected(){
+	var tipoPago = $("#tiposPago option:selected").text();
+	var fecha = $("#datePayment").val();
+	var monto = $("#montoDownpayment").val();
+	var td = "<tr>";
+		td += "<td>"+fecha+"</td>";
+		td += "<td>"+tipoPago+"</td>";
+		td += "<td>"+monto+"</td>";
+		td += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
+		td += "</tr>";
+	$("#tbodyPagosSelected").append(td);
 }

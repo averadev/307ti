@@ -47,16 +47,6 @@
                                     </div>
                                 </div>
                             </div>
-                   <!--  <div class="large-9 columns">
-                        <div class="row collapse">
-                            <div class="small-10 columns">
-                                <input value="0" readonly type="text" placeholder="ID" name="TourID" id="TourID" required>
-                            </div>
-                            <div class="small-2 columns">
-                                <a id="btnAddTourID" href="#" class="button postfix">Add</a>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
 
                 <div class="containerPeople">
@@ -138,7 +128,7 @@
                             <div class="large-9 columns">
                                 <div class="row collapse">
                                     <div class="small-10 columns">
-                                        <input id="contractR" name="contractR" type="text" placeholder="Folio">
+                                        <input id="contractR" name="contractR" type="text" placeholder="Folio" value="0">
                                     </div>
                                     <div class="small-2 columns">
                                         <a href="#" class="button postfix"><i class="fa fa-search"></i></a>

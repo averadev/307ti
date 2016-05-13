@@ -1,3 +1,4 @@
+<fieldset class="fieldset">
 <form>
   <div class="row">
     <div class="small-3 columns">
@@ -32,3 +33,4 @@
     </div>
   </div>
 </form>
+</fieldset>
