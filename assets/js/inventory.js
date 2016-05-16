@@ -62,9 +62,9 @@ function searchInventary(page){
 	
 		var url = "";
 		if($("#RadioDetailedAvailability").is(':checked')){
-			url = "inventory/getInvDetailedAvailability"
+			url = "inventory/getInvDetailedAvailability";
 		}else if($("#RadioRoomsControl").is(':checked')){
-			url = "inventory/getInvRoomsControl"
+			url = "inventory/getInvRoomsControl";
 		}
 	
 		showLoading('#divTableInvDetailed',true);
@@ -84,15 +84,21 @@ function searchInventary(page){
 				page:page,
 			},
 			success: function(data){
-				//console.log(xhrInventary)
 				drawTable2(data.items,"tableInvDetailed",false,"tabla");
 				showLoading('#divTableInvDetailed',false);
-				//$('.divLoadingTable').hide();
+				$('#tableInvDetailed').show();
 			},
 			error: function(error){
 				if(error.statusText != "abort"){
 					showLoading('#divTableInvDetailed',false);
-					showAlert(true,"Error in the search, try again later.",'button',showAlert);
+					alertify.error(error.statusText);
+					noResults('#divTableInvDetailed',true);
+					if ( $.fn.dataTable.isDataTable( '#tableInvDetailed' ) ) {
+						var tabla = $( '#tableInvDetailed' ).DataTable();
+						tabla.destroy();
+					}
+					$('#tableInvDetailed').hide();
+					//showAlert(true,"$('#tableInvDetailed').hide();",'button',showAlert);
 				}
 			}
 		});
@@ -110,10 +116,12 @@ function validateFieldInventary(){
 	$('#alertInventaryUnit').hide()
 	if($('#RadioDetailedAvailability').is(":checked")){
 		if($('#textInvFloorPlan').val() == 0 && $('#textInvProperty').val() == 0 ){
+			console.log("entro")
 			resultc = false;
 		}
 	}else{
 		if($('#textInvProperty').val() == 0 ){
+			console.log("tambien aqui")
 			resultc = false;
 		}
 	}

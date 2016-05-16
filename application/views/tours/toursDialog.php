@@ -10,11 +10,15 @@
                 <h3 class="box-title">
                     <span>Add Tour ID</span>
                 </h3>
-                <div class="pull-left box-tools">
+				<a data-widget="newContrat" id="newContract" class="btn btn-new">
+					<div class="label">Nuevo</div>
+					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+				</a>
+                <!--<div class="pull-left box-tools">
 					<span data-widget="newContrat" id="newContract">
 						<span>( New )</span>
 					</span>
-                </div>
+                </div>-->
             </div>
             <div class="box-body box-filter">
                 <div class="row">
@@ -34,7 +38,7 @@
 								<label for="apellidoTour">Apellido</label>
 							</div>
 							<div class="rdoField">
-								<input type="checkbox" name="filter_tourID" value="reservacionIdTour" id="reservacionId">
+								<input type="checkbox" name="filter_tourID" value="reservacionIdTour" id="reservacionIdTour">
 								<label for="reservacionIdTour">Reservación ID</label>
 							</div>
 						</fieldset>
@@ -86,8 +90,14 @@
 									<input id="stringTour" type="text" class="txtSearch" placeholder="Search Field" name="search"  required="">
 								</div>
 								<div class="medium-3 columns ">
-									<a id="btnfindTour" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;&nbsp;Buscar</a>
-									<a id="btnCleanWordTour"  href="#" class="btn btn-primary"><i class="fa fa-trash"></i>&nbsp;&nbsp;Eliminar</a>
+									<a id="btnfindTour" class="btn btn-primary btn-Search">
+										<div class="label">Buscar</div>
+										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+									</a>
+									<a id="btnCleanWordTour" class="btn btn-primary spanSelect">
+										<div class="label">Limpiar</div>
+										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+									</a>
 								</div>
 							</div>
 						</fieldset>

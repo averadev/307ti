@@ -514,7 +514,8 @@ function noResults(parentElement, isOpen = false ){
 		var widthLoading = $(parentElement).css('width')
 		var loandingElements = '<div class="divNoResults">' +
 				'<div class="noResultsScreen" >' +
-					'<img src="' + BASE_URL + 'assets/img/common/no-results.jpg' + '" /> ' +
+					'<img src="' + BASE_URL + 'assets/img/common/SIN RESULTADOS-01.png' + '" /> ' +
+					'<label> Oh no! No Results. Try again. </label>' +
 				'</div>' +
 			'</div>';
 		$(parentElement).prepend(loandingElements);

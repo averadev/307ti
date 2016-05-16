@@ -103,7 +103,7 @@
 											<?php
 											foreach($property as $item){
 											?>
-												<option value="<?php //echo $item->pkPropertyId; ?>" code="<?php echo $item->PropertyCode; ?>"><?php echo $item->PropertyName; ?></option>
+												<option value="<?php echo $item->pkPropertyId; ?>" code="<?php echo $item->PropertyCode; ?>"><?php echo $item->PropertyName; ?></option>
 											<?php
 											}
 											?>
@@ -111,8 +111,14 @@
 									</div>
 								</div>
 								<div class="small-12 large-3 columns">
-									<a id="btnInvSearch" class="btn btn-primary"><i class="fa fa-search">&nbsp;&nbsp;Buscar</i></a>
-									<a id="btnInvCleanSearch" class="btn btn-primary spanSelect"><i class="fa fa-trash">&nbsp;&nbsp;Limpiar</i></a>
+									<a id="btnInvSearch" class="btn btn-primary btn-Search">
+										<div class="label">Buscar</div>
+										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+									</a>
+									<a id="btnInvCleanSearch" class="btn btn-primary spanSelect">
+										<div class="label">Limpiar</div>
+										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+									</a>
 								</div>
 							</div>
 						</fieldset>

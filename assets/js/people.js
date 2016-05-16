@@ -190,14 +190,12 @@ function showModal(id){
 	if(id == 0){
 		$('.dialogModalButtonSecondary').hide();
 		$("#tabsModalPeople").hide();
-		
+		dialogUser.dialog( "option", "title", "People > Create person" );
 		dialogUser.dialog('open');
-		/*$('.ui-dialog-titlebar').append(
-			'<div class="ui-dialog-titlebar2"><label>Add person</label></div><img class="imgCloseModal" src="' + BASE_URL+'assets/img/common/iconClose2.png">'
-		)*/
 		$('#imgCloseModal').off();
 		$('.imgCloseModal').on('click', function() {  hideModal(); });
 	}else{
+		dialogUser.dialog( "option", "title", "People > Edit person" );
 		$('.dialogModalButtonSecondary').show();
 		$("#tabsModalPeople").show();
 		getInfoPeople(id);

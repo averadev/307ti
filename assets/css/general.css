@@ -67,12 +67,19 @@ input[type=radio]:not(old){
   opacity : 0;
 }
 
-input[type=checkbox]:not(old) + label,
+input[type=checkbox]:not(old) + label{
+  display      : inline-block;
+  margin-left  : -28px;
+  padding-left : 28px;
+  background   : url('../img/common/checks3.png') no-repeat 0 0;
+  line-height  : 24px;
+}
+
 input[type=radio   ]:not(old) + label{
   display      : inline-block;
   margin-left  : -28px;
   padding-left : 28px;
-  background   : url('../img/common/checks2.png') no-repeat 0 0;
+  background   : url('../img/common/radio.png') no-repeat 0 0;
   line-height  : 24px;
 }
 
@@ -81,7 +88,7 @@ input[type=checkbox]:not(old):checked + label{
 }
 
 input[type=radio]:not(old):checked + label{
-  background-position : 0 -48px;
+  background-position : 0 -24px;
 }
 
 label {
@@ -142,26 +149,22 @@ label {
 
 .btn{
 	display: inline-block;
-    padding: 6px 12px;
+	/*padding: 6px 12px;*/
+	padding:0;
     font-size: 14px;
     font-weight: 400;
     line-height: 1.42857143;
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;
-    -ms-touch-action: manipulation;
     touch-action: manipulation;
     cursor: pointer;
     -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
     background-image: none;
-	border-radius: 3px;
-	/*margin-bottom: 5px;*/
     margin-right: 5px;
-	/*float:right;*/
 	margin-top:2px;
+	height:34px;
+	min-width:100px;
 }
 
 /**
@@ -246,7 +249,7 @@ label {
 }
 
 .menu-sel.active{
-	border-left:3px solid #183a59;
+	border-right:3px solid #00a89c;
 }
 
 .icon-menu-sel{
@@ -272,13 +275,13 @@ label {
 
 .menu-config{
 	float:right;
-	/*width:100px;*/
 	height:40px;
 	background:#EFEFEF;
 	margin-top:2px;
 	margin-right:10px;
 	border:#A1ACB2 solid 1px;
 	border-radius:3px;
+	border: 1px solid rgba(20,53,80,0.14)
 }
 
 .menu-config img{
@@ -364,9 +367,9 @@ label {
 }
 
 .tabs dd > a, .tabs .tabs-title > a {
-    /*color: #000000;
-    background: #B3B3B3;*/
-	background-color:#d5d5d5;
+	/*background-color:#d5d5d5;
+	color:#183a59;*/
+	background-color:#EDEDED;
 	color:#183a59;
 }
 
@@ -381,25 +384,20 @@ label {
 	cursor: pointer;
 	padding: 6px 10px;
 	padding-bottom:7px;
-	background:#bdbdbd;
-	color:FFFFFF;
+	background:#00a89c;
 	border-left:1px solid #bababa;
 	font-size:16px;
-}
-.iconCloseTab:hover{
-    background-color: #FFFFFF;
+	color:#FFFFFF;
 }
 
 .active .iconCloseTab{
-	/*background:none;*/
-	background:#132e47;
+	background:#00a89c;
 	border-left:1px solid #2f4d69;
 	color:#FFFFFF;
 }
 
-.active .iconCloseTab:hover{
-    background-color: #FFFFFF;
-	color:#000000;
+.iconCloseTab:hover{
+    background-color: #00837A;
 }
 
 .moduleHide{
@@ -946,7 +944,15 @@ table thead tr th, table tbody tr td{
 }
 
 .noResultsScreen img{
-	height:100%;
+	height:80%;
+}
+
+.noResultsScreen label{
+	margin-top:0;
+	padding-top:0;
+	width:100%;
+	text-align:center;
+	font-size:24px;
 }
 
 /*********/
@@ -1106,8 +1112,7 @@ label.error{
     /*color: #444; */
 }
 .box .box-header > .box-tools {
-    padding: 10px 10px 10px 10px;
-	padding-top:5px;
+    padding: 6px 15px 10px 10px;
 }
 
 .box-tools img{
@@ -1304,15 +1309,8 @@ label.error{
 	}*/	
 }
 
-th.prev {
-	background:url("../img/common/triangleLeft.png") no-repeat;
-}
-
-th.next{
-	background:url("../img/common/triangleRight.png") no-repeat;
-}
 #newContract{
-	width: 90px;
+	/*width: 90px;*/
 }
 
 .espacio{
@@ -1393,9 +1391,46 @@ th.next{
 	border: 1px solid rgba(20,53,80,0.14);
 }
 
+.btnNew{
+	display: inline-block;
+   /* padding: 6px 12px;*/
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+	
+	background:00a89c;
+	color:#FFFFFF;
+}
+
+.btn .label{
+	float:left;
+	margin:0;
+	padding:0;
+	background:none;
+	text-align:center;
+	padding: 9px 13px;
+	cursor:pointer;
+	font-size: 14px;
+}
+
 .btn img{
-	width:24px;
-	margin-left: 7px;
+	background:#00a89c;
+	float:right;
+	padding: 5px 4px;
+    margin-top: -1px;
+    margin-right: -1px;
+    padding-top: -5px;
 }
 
 .btn-primary{
@@ -1408,6 +1443,24 @@ th.next{
 	color: #fff;
     background-color: #225b88;
     border-color: #18405f;
+}
+
+.btn-new{
+	background:#00a89c;
+	color: #FFFFFF;
+	border: 1px solid rgba(20,53,80,0.14);
+	float:right;
+	margin:0;
+	height:40px;
+}
+
+.btn-new .label {
+    padding: 12px 25px;
+}
+
+.btn-new img{
+	background:#00837A;
+	padding: 8px 6px;
 }
 
 .table table thead tr th{

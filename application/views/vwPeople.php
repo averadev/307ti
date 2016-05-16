@@ -12,11 +12,15 @@
 					<!--<span class="img-box-title"><i class="fa fa-users"></i></span>-->
 					<span>People Search</span>
 				</h3>
-				<div class="pull-left box-tools">
+				<a data-widget="newContrat" id="newUser" class="btn btn-new">
+					<div class="label">Nuevo</div>
+					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+				</a>
+				<!--<div class="pull-left box-tools">
 					<span data-widget="newContrat" id="newUser">
 						<span>( New )</span>
 					</span>
-				</div>
+				</div>-->
 			</div>
 			<div class="box-body box-filter" style="">
 				<div class="row">
@@ -79,8 +83,14 @@
 									<input type="text" id="txtSearch" class="txtSearch" placeholder="Enter a search parameter" />
 								</div>
 								<div class="small-12 large-6 columns" style="padding-left: 0;">
-									<a id="btnSearch" class="btn btn-primary btn-Search">Buscar<img src="<?php echo base_url().IMG; ?>common/7.png"/></a>
-									<a id="btnCleanSearch" class="btn btn-primary spanSelect">Limpiar<img src="<?php echo base_url().IMG; ?>common/9.png"/></a>
+									<a id="btnSearch" class="btn btn-primary btn-Search">
+										<div class="label">Buscar</div>
+										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+									</a>
+									<a id="btnCleanSearch" class="btn btn-primary spanSelect">
+										<div class="label">Limpiar</div>
+										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+									</a>
 								</div>
 							</div>
 						</fieldset>
@@ -96,7 +106,7 @@
 				<div class="pull-right box-tools">
                </div>
                <h3 class="box-title">
-               	<span>people found</span>
+               	<span>People found</span>
                </h3>
 			</div>
 			<div class="box-body" id="section-table-people" style="display: block;">

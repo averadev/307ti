@@ -10,11 +10,15 @@
 				<h3 class="box-title">
                		<span>Contract Search</span>
                	</h3>
-				<div class="pull-left box-tools">
+				<a data-widget="newContrat" id="newContract" class="btn btn-new">
+					<div class="label">Nuevo</div>
+					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+				</a>
+				<!--<div class="pull-left box-tools">
 					<span data-widget="newContrat" id="newContract">
 						<span>( New )</span>
 					</span>
-				</div>
+				</div>-->
 			</div>
 			<div class="box-body box-filter">
 				<div class="row">
@@ -87,8 +91,14 @@
 									<input id="stringContrat" type="text" class="round" placeholder="Search Field" name="search"  required>
 								</div>
 								<div class="medium-3 columns ">
-									<a id="btnfind" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;&nbsp;Buscar</a>
-									<a id="btnCleanWord"  href="#" class="btn btn-primary"><i class="fa fa-trash"></i>&nbsp;&nbsp;Eliminar</a>
+									<a id="btnfind" class="btn btn-primary btn-Search">
+										<div class="label">Buscar</div>
+										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+									</a>
+									<a id="btnCleanWord" class="btn btn-primary spanSelect">
+										<div class="label">Limpiar</div>
+										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+									</a>
 								</div>
 							</div>
 						</fieldset>
