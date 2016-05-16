@@ -61,6 +61,12 @@ $(document).ready(function(){
 	$(document).on( 'click', '#btnDeleteTourID', function () {
 		$('#TourID').val('0');
 	});
+	$(document).on( 'click', '#btnAddmontoDownpaymentPrg', function () {
+		if($("#montoDownpaymentPrg").val()>0){
+			tableDownpaymentSelectedPrg();
+			totalDownpaymentPrg();
+		}
+	});
 	$('#btnCleanWord').click(function (){
 		$('#stringContrat').val('');
 	});
@@ -78,18 +84,24 @@ $(document).ready(function(){
 });
 	
 function createDialogContract(addContract) {
-
+	var div = "#dialog-Contract";
 	if (addContract!=null) {
 	    	addContract.dialog( "destroy" );
 	    }
-	showLoading('#dialog-Contract',true);
-	dialog = $("#dialog-Contract").dialog({
+	
+	dialog = $(div).dialog({
 		open : function (event){
-	    	$(this).load ("contract/modal" , function(){
-	    		showLoading('#dialog-Contract',false);
-	 			ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
-				ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
-	    	});
+			if ($(div).is(':empty')) {
+				showLoading(div,true);
+				$(this).load ("contract/modal" , function(){
+		    		showLoading(div,false);
+		 			ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
+					ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
+	    		});
+			}else{
+				$(this).dialog('open');
+			}
+	    	
 		},
 		autoOpen: false,
 		height: maxHeight,
@@ -116,24 +128,32 @@ function createDialogContract(addContract) {
 				}
 			}],
 		close: function() {
-			$('#dialog-Contract').empty();
+			//$('#dialog-Contract').empty();
+			$('#dialog-ScheduledPayments').empty();
+			$('#dialog-tourID').empty();
+			$('#dialog-People').empty();
+			$('#dialog-Unidades').empty();
 		}
 	});
 	return dialog;
 }
 function addTourContract(unidades){
-	showLoading('#dialog-tourID',true);
+	var div = '#dialog-tourID';
+	
 	var unidades = unidades;
 	dialogo = $("#dialog-tourID").dialog ({
   		open : function (event){
-	    	$(this).load ("tours/index" , function(){
-	    		showLoading('#dialog-tourID',false);
-	    		selectTableUnico("tours");
-	    	});
+  			if ($(div).is(':empty')) {
+  				showLoading(div,true);
+  				$(this).load ("tours/index" , function(){
+	    			showLoading(div,false);
+	    			selectTableUnico("tours");
+	    		});
+  			}
 		},
 		autoOpen: false,
-     	height: maxHeight/1.5,
-     	width: "40%",
+     	height: maxHeight,
+     	width: "50%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -151,26 +171,32 @@ function addTourContract(unidades){
        		}
      	}],
      close: function() {
-    	$('#dialog-tourID').empty();
+    	//$('#dialog-tourID').empty();
      }
 	});
 	return dialogo;
 }
 function addUnidadDialog() {
-	showLoading('#dialog-Unidades',true);
+	var div = "#dialog-Unidades";
 	dialog = $( "#dialog-Unidades" ).dialog({
 		open : function (event){
-	    	$(this).load ("contract/modalUnidades" , function(){
-	    		showLoading('#dialog-Unidades',false);
-	    		ajaxSelects('contract/getProperties','try again', generalSelects, 'property');
-    			ajaxSelects('contract/getUnitTypes','try again', generalSelects, 'unitType');
-    			ajaxSelects('contract/getFrequencies','try again', generalSelects, 'frequency');
-    			ajaxSelects('contract/getSeasons','try again', generalSelects, 'season');
-				$('#btngetUnidades').click(function(){
-				        getUnidades();
-				});
-	            selectTableUnico("tblUnidades");
-	    	});
+			if ($(div).is(':empty')) {
+				showLoading(div,true);
+				$(this).load ("contract/modalUnidades" , function(){
+		    		showLoading(div,false);
+		    		ajaxSelects('contract/getProperties','try again', generalSelects, 'property');
+	    			ajaxSelects('contract/getUnitTypes','try again', generalSelects, 'unitType');
+	    			ajaxSelects('contract/getFrequencies','try again', generalSelects, 'frequency');
+	    			ajaxSelects('contract/getSeasons','try again', generalSelects, 'season');
+					$('#btngetUnidades').click(function(){
+					        getUnidades();
+					});
+		            selectTableUnico("tblUnidades");
+	    		});
+			}else{
+				$(this).dialog('open');
+			}
+	    	
 		},
 		autoOpen: false,
 		height: maxHeight,
@@ -198,21 +224,23 @@ function addUnidadDialog() {
 			}
 		}],
 		close: function() {
-			$('#dialog-Unidades').empty();
+			//$('#dialog-Unidades').empty();
 		}
 	});
 	return dialog;
 }
 function addPeopleDialog() {
-
-	showLoading('#dialog-People', true);
-	dialog = $( "#dialog-People" ).dialog({
+	var div = "#dialog-People";	
+	dialog = $(div).dialog({
 		open : function (event){
-	    	$(this).load ("people/index" , function(){
-	    		showLoading('#dialog-People', false);
-	    		$("#dialog-User").hide();
-            	selectTable("tablePeople");
-	    	});
+			if ($(div).is(':empty')) {
+				showLoading(div, true);
+				$(this).load ("people/index" , function(){
+		    		showLoading(div, false);
+		    		$("#dialog-User").hide();
+	            	selectTable("tablePeople");
+	    		});
+			}	
 		},
 		autoOpen: false,
 		height: maxHeight,
@@ -234,7 +262,7 @@ function addPeopleDialog() {
 			}
 		}],
 		close: function() {
-			$('#dialog-People').empty();
+			//$('#dialog-People').empty();
 		}
 	});
 	return dialog;
@@ -412,7 +440,12 @@ function selectAllPeople(){
 		alertify.error("Click over for choose one");
 		return false;
 	}else{
-		tablaPersonas(personas);
+	// 		if(jQuery.inArray(2,array) == -1){
+	//    console.log("no esta")
+	// }else{console.log("si esta")};
+		if (personas.length>0) {
+			tablaPersonas(personas);
+		}
 		return true;
 	}
 	
@@ -449,9 +482,9 @@ function tablaPersonas(personas){
         for (var j in personas[i]) {
             bodyHTML+="<td>" + personas[i][j] + "</td>";
         };
-        bodyHTML += "<td><div class='rdoField'><input  type='checkbox' name='principal'></div></td>";
-        bodyHTML += "<td><input  type='checkbox' name='secundaria'></td>";
-        bodyHTML += "<td><input  type='checkbox' name='baneficiario'></td>";
+        bodyHTML += "<td><div class='rdoField'><input type='radio' name='tipoPersona'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><div class='rdoField'><input type='radio' name='tipoPersona'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><div class='rdoField'><input type='radio' name='tipoPersona'><label for='folio'>&nbsp;</label></div></td>";
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
         bodyHTML+="</tr>";
     }
@@ -520,7 +553,7 @@ function getWeeksDialog(unidades){
 	    	});
 		},
 		autoOpen: false,
-     	height: maxHeight/2,
+     	height: maxHeight,
      	width: "50%",
      	modal: true,
      	buttons: [{
@@ -567,7 +600,7 @@ function PackReference(){
 	    	});
 		},
 		autoOpen: false,
-     	height: maxHeight/2,
+     	height: maxHeight,
      	width: "50%",
      	modal: true,
      	buttons: [{
@@ -622,17 +655,24 @@ function modalDepositDownpayment(){
 	});
 	return dialogo;
 }
-function modalScheduledPayments(){
-	showLoading('#dialog-ScheduledPayments', true);
-	dialogo = $("#dialog-ScheduledPayments").dialog ({
+function modalScheduledPayments() {
+	var div = "#dialog-ScheduledPayments";
+	dialogo = $(div).dialog ({
   		open : function (event){
-	    	$(this).load ("contract/ScheduledPayments" , function(){
-	 			showLoading('#dialog-ScheduledPayments', false);
-	    	});
+  			if ($(div).is(':empty')) {
+  				showLoading(div, true);
+				$(this).load ("contract/ScheduledPayments" , function(){
+					showLoading(div, false);
+					initEventosDownpaymentProgramados();
+				});
+  			}else{
+				$(this).dialog('open');
+				initEventosDownpaymentProgramados();
+  			}
 		},
 		autoOpen: false,
-     	height: maxHeight/2,
-     	width: "25%",
+     	height: maxHeight,
+     	width: "50%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -644,26 +684,40 @@ function modalScheduledPayments(){
        		text: "ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-
+       			var totalProgramado = $("#totalProgramado").val();
+       			var totalInicial = $("#downpaymentProgramado").val();
+       			if (totalProgramado==totalInicial) {
+       				$("#scheduledPayments").val($("#totalProgramado").val());
+       				$(this).dialog('close');
+       			}else{
+       				alertify.error("verifica los pagos")
+       			}
+				
        		}
      	}],
      close: function() {
-    	$('#dialog-ScheduledPayments').empty();
+    	//$('#dialog-ScheduledPayments').empty();
      }
 	});
 	return dialogo;
 }
 function modalDiscountAmount(){
-	showLoading('#dialog-DiscountAmount', true);
+	var div = "#dialog-DiscountAmount";
 	dialogo = $("#dialog-DiscountAmount").dialog ({
   		open : function (event){
-	    	$(this).load ("contract/modalDiscountAmount" , function(){
-	 			showLoading('#dialog-DiscountAmount', false);
-	    	});
+  			if ($(div).is(':empty')) {
+  				showLoading(div, true);
+		    	$(this).load ("contract/modalDiscountAmount" , function(){
+		 			showLoading(div, false);
+		 			initEventosDiscount();
+		    	});
+		    }else{
+		    	$(this).dialog('open');
+		    }
 		},
 		autoOpen: false,
-     	height: maxHeight/2,
-     	width: "25%",
+     	height: maxHeight,
+     	width: "50%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -676,17 +730,19 @@ function modalDiscountAmount(){
        		"class": 'dialogModalButtonAccept',
        		click: function() {
 
+       			$("#totalDiscountPacks").val($("#totalDescPack").val());	
+       			var a = $('#tbodytablePackgSelected').html();
+				var b = $('#packSeleccionados').html(a);
+				deleteElementTableFuncion("tableDescuentos", totalDescPackMain);
+				$(this).dialog('close');
        		}
      	}],
      close: function() {
-    	$('#dialog-DiscountAmount').empty();
+    	//$('#dialog-DiscountAmount').empty();
      }
 	});
 	return dialogo;
 }
-
-
-
 
 function tablUnidadades(unidades, weeks, primero, ultimo){
 	var weeks = parseInt(weeks);
@@ -890,7 +946,7 @@ function calcularDepositDownpayment(){
 	});
 }
 
-
+////////////////////////////////////////////////////////////////
 function selectMetodoPago(){
 	$('#tiposPago').on('change', function() {
   		if(this.value == 2){
@@ -901,6 +957,16 @@ function selectMetodoPago(){
   	});
 }
 
+function selectMetodoPagoProgramados(){
+	$('#tiposPagoProgramados').on('change', function() {
+  		if(this.value == 2){
+  			$("#datosTarjetaProgramados").show();
+  		}else{
+  			$("#datosTarjetaProgramados").hide();
+  		}
+  	});
+}
+/////////////////////////////////////////////////////////////////
  function getUnidades(){
         showLoading('#tblUnidades',true);
         $.ajax({
@@ -942,14 +1008,60 @@ function initEventosDownpayment(){
 	setDate("datePayment");
 	
 	$('#btnAddmontoDownpayment').click(function (){
-		tableDownpaymentSelected();
-		totalDownpayment();
+		if($("#montoDownpayment").val()>0){
+			tableDownpaymentSelected();
+			totalDownpayment();
+		}
 	});
 	$('#btnCleanmontoDownpayment').click(function (){
 		$("#montoDownpayment").val(0);
 	});
 	
+}
 
+function initEventosDownpaymentProgramados(){
+	var downpayment = $("#downpayment").val();
+	$("#downpaymentProgramado").val(downpayment);
+	selectMetodoPagoProgramados();
+	setDate("datePaymentPrg");
+	$('#btnCleanmontoDownpaymentPrg').click(function (){
+		$("#montoDownpaymentPrg").val(0);
+	});
+}
+
+function initEventosDiscount(){
+	$("#btnAddmontoPack").click(function(){
+		PacksAdds();
+	});
+}
+
+function PacksAdds(){
+	var td = "";
+	var tipoPack = $("#tiposPakc option:selected").text();
+	var monto = $("#montoPack").val();
+		td = "<tr>";
+		td += "<td>"+tipoPack+"</td>";
+		td += "<td class='montoPacks'>"+monto+"</td>";
+		td += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
+		td += "</tr>";
+	$("#tbodytablePackgSelected").append(td);
+	totalDescPack();
+	deleteElementTableFuncion("tablePackgSelected", totalDescPack);
+}
+
+function tableDownpaymentSelectedPrg(){
+	var td = "";
+	var tipoPago = $("#tiposPagoProgramados option:selected").text();
+	var fecha = $("#datePaymentPrg").val();
+	var monto = $("#montoDownpaymentPrg").val();
+		td = "<tr>";
+		td += "<td>"+fecha+"</td>";
+		td += "<td>"+tipoPago+"</td>";
+		td += "<td class='montoDownpaymentPrg'>"+monto+"</td>";
+		td += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
+		td += "</tr>";
+	$("#tbodyPagosPrgSelected").append(td);
+	deleteElementTableFuncion("tablePagosPrgSelected", totalDownpaymentPrg);
 }
 
 function tableDownpaymentSelected(){
@@ -969,8 +1081,6 @@ function tableDownpaymentSelected(){
 function totalDownpayment(){
 	var pagos = [];
 	total = 0;
-	// var fullArray = $("#"+id).find("td");
-	// var fullArray = $("#tablePagosSelected").find("td").eq(2);
 	var array = $("#tablePagosSelected .montoDownpayment");
 	for (var i = 0; i < array.length; i++) {
 		var cantidad = parseFloat($(array[i]).text());
@@ -978,5 +1088,69 @@ function totalDownpayment(){
 		total += cantidad;
 	}
 	$("#finalPriceDownpayment").val(total);
-	//return fullArray.eq(posicion).text().trim();
+}
+
+function totalDownpaymentPrg(){
+	var pagos = [];
+	totalCp = 0;
+	var array = $("#tablePagosPrgSelected .montoDownpaymentPrg");
+	for (var i = 0; i < array.length; i++) {
+		var cantidad = parseFloat($(array[i]).text());
+		pagos.push(cantidad);
+		totalCp += cantidad;
+	}
+	var totalPrg = $("#downpaymentProgramado").val();
+	$("#totalProgramado").val(totalCp);
+	$("#pendiente").val(totalPrg-totalCp);
+}
+
+function totalDescPack(){
+	var packs = [];
+	totalCp = 0;
+	var array = $("#tablePackgSelected .montoPacks");
+	for (var i = 0; i < array.length; i++) {
+		var cantidad = parseFloat($(array[i]).text());
+		packs.push(cantidad);
+		totalCp += cantidad;
+	}
+	$("#totalDescPack").val(totalCp);
+}
+
+function totalDescPackMain(){
+	var packs = [];
+	totalCp = 0;
+	var array = $("#tableDescuentos .montoPacks");
+	for (var i = 0; i < array.length; i++) {
+		var cantidad = parseFloat($(array[i]).text());
+		packs.push(cantidad);
+		totalCp += cantidad;
+	}
+	$("#totalDiscountPacks").val(totalCp);
+}
+
+
+function getArrayValuesColumnTable(tabla, columna){
+	var items=[];
+	$('#'+tabla+' tbody tr td:nth-child('+columna+')').each( function(){
+	   items.push( $(this).text().replace(/\s+/g, " "));       
+	});
+	return items;
+	//restrict array to unique items
+	//var items = $.unique( items );
+
+	// //iterate unique array and build array of select options
+	// $.each( items, function(i, item){
+	//     options.push('<option value="' + item + '">' + item + '</option>');
+	// })
+
+	// //finally empty the select and append the items from the array
+	// $('#selectId').empty().append( options.join() );
+}
+
+function getArrayValuesSelectedColum(tabla, columna){
+	var items=[];
+	$('#'+tabla+' tbody tr.yellow td:nth-child('+columna+')').each( function(){
+	   items.push( $(this).text().replace(/\s+/g, " "));       
+	});
+	return items;
 }

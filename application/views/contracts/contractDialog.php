@@ -219,7 +219,7 @@
                     <div class="large-9 columns">
                         <div class="row collapse">
                             <div class="small-10 columns">
-                                <input type="text" placeholder="$0.00">
+                                <input id="scheduledPayments" type="text" placeholder="$0.00">
                             </div>
                             <div class="small-2 columns">
                                 <a id="btnScheduledPayments" href="#" class="button postfix">Capture</a>
@@ -235,7 +235,7 @@
                     <div class="small-9 columns">
                         <div class="row collapse">
                             <div class="large-10 columns">
-                                <input type="text" placeholder="$0.00">
+                                <input id="totalDiscountPacks" type="text" placeholder="$0.00">
                             </div>
                             <div class="large-2 columns">
                                 <a id="btnDiscountAmount" href="#" class="button postfix">Capture</a>
@@ -247,14 +247,14 @@
                 <div class="small-12 columns">
                             <p>Added Packs</p>
                             <table id="tableDescuentos" class="large-12 columns">
-                                <thead>
-                                <tr>
-                                    <th class="cellGeneral" >Pack Type</th>
-                                    <th class="cellGeneral">Amount</th>
-                                </tr>
+                               <thead>
+                                    <tr>
+                                        <th class="cellGeneral">pack type</th>
+                                        <th class="cellGeneral">amount</th>
+                                        <th class="cellGeneral">Delete</th>
+                                   </tr>
                                 </thead>
-                                <tbody>
-                                </tbody>
+                                <tbody id="packSeleccionados"></tbody>
                             </table>
                         </div>
                     </div>

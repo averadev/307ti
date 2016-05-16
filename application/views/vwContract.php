@@ -146,11 +146,11 @@
 </div>
 
 
-<div id="dialog-Contract"  title="Contract > Create Contract" style="display: none;">
+<div id="dialog-Contract"  title="Contract > Create Contract" style="display: none;"></div>
 <div id="dialog-Edit-Contract" title="Edit Contract" style="display: none;"></div>
 <div id="dialog-tourID" title="Tour ID" style="display: none;"></div>
 <div id="dialog-People" title="Contract > Create Contract > Add People" style="display: none;"></div>
-<div id="dialog-Unidades" title="Contract > Create Contract > Add Unidades" style="display: none;">
+<div id="dialog-Unidades" title="Contract > Create Contract > Add Unidades" style="display: none;"></div>
 <div id="dialog-Weeks" title="Weeks" style="display: none;"></div>
 <div id="dialog-Pack" title="Pack Reference" style="display: none;"></div>
 <div id="dialog-Downpayment" title="Downpayment" style="display: none;"></div>
