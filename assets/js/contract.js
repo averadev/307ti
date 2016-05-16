@@ -294,6 +294,8 @@ function getContratos(){
 			}else{
 				$('#contractstbody').empty();
 				alertify.error("No data found");
+				var img = '<div class="divNoResults"><div class="noResultsScreen"><img src="http://localhost/307ti/assets/img/common/SIN RESULTADOS-01.png"> <label> Oh no! No Results. Try again. </label></div></div>';
+				$('#contractstbody').html(img);
 			}
 		},
 		error: function(){
