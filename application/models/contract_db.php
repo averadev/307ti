@@ -9,23 +9,15 @@ class Contract_db extends CI_Model {
 
     function getContratos($filters){
 		$sql = "";
-        $this->db->select('C.pkResId AS ID, C.Folio, C.LegalName, C.FirstOccYear as FirtsYear, C.LastOccYear as LastYear, S.StatusDesc as Status,');
-        $this->db->select('Fp.FloorPlanDesc, fr.FrequencyDesc,rfi.listPrice, rfi.NetSalePrice,  cal.Date');
-        $this->db->from('tblRes as C');
-        $this->db->join('tblStatus S', 'C.fkStatusId = S.pkStatusId', 'left');
-        $this->db->join('tblResOcc ro', 'ro.fkResid = C.pkResId', 'left');
-        $this->db->join('tblCalendar cal', 'cal.pkCalendarId = ro.fkCalendarId', 'left');
-        $this->db->join('tblResinvt ri', 'ri.fkResid = C.pkResId', 'left');
-        $this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanid = ri.fkFloorPlanId', 'left');
-        $this->db->join('tblResfin rfi', 'rfi.fkResid = C.pkResId', 'left');
-        $this->db->join('tblResInvt iv', 'iv.fkResid = C.pkResId', 'left');
-        $this->db->join('tblFrequency fr', 'fr.pkFrequencyId = iv.fkfrequencyId', 'left');
-        $this->db->join('tblResPeopleAcc rp', 'on rp.fkResid = c.pkResId and rp.ynPrimaryPeople = 1', 'left');
-        $this->db->join('tblPeople p', 'p.pkPeopleid = rp.fkPeopleId', 'left');
-        $this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId', 'left');
-        $this->db->join('tblPeopleEmail pem', 'pem.fkPeopleId = p.pkPeopleId', 'left');
-        $this->db->join('tblEmail em', 'em.pkEmail = pem.fkEmailId', 'left');
-
+        $this->db->select('R.pkResId as ID, R.folio as Folio, R.LegalName as LegalName, UT.FloorPlanDesc, FR.FrequencyDesc');
+        $this->db->select('ES.StatusDesc, RI.CrDt, R.FirstOccYear, R.LastOccYear, RF.ListPrice, RF.NetSalePrice');
+        $this->db->from('tblRes R');
+        $this->db->join('tblResinvt RI', 'RI.fkResId = R.pkResId');
+        $this->db->join('tblFloorPlan UT', 'UT.pkFloorPlanID = RI.fkFloorPlanId');
+        $this->db->join('tblFrequency FR', 'FR.pkFrequencyId = RI.fkFrequencyId');
+        $this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId');
+        $this->db->join('tblResFin RF', 'RF.fkResId = R.pkResId');
+        $this->db->where('R.fkResTypeId', '5');
         if($filters['dates'] != false) {
             $sql = $filters['dates'];
         }
@@ -310,7 +302,7 @@ class Contract_db extends CI_Model {
         }
     }
 
-    public function insertReturnId($data, $table){
+    public function insertReturnId($table, $data){
         $this->db->insert($table, $data);
         return $this->db->insert_id();
     }

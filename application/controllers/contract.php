@@ -28,11 +28,12 @@ class Contract extends CI_Controller {
 		if($this->input->is_ajax_request()){
 		
 			$idContrato = $this->createContract();
-			$idOcupacion = $this->insertOcupacion($idContrato);
-			$idUnidadesInv = $this->createUnidades($idContrato);
-			$idPeopleAcc = $this->createPeople();
-			$idFinanciamiento = $this->createFinanciamiento($idContrato);
-			$idSemanaOcupacion = $this->createSemanaOcupacion($idContrato);
+			$this->insertOcupacion($idContrato);
+			$this->createUnidades($idContrato); //ciclo
+			// $idPeopleAcc = $this->createPeople();
+			// $idFinanciamiento = $this->createFinanciamiento($idContrato);
+			// $idSemanaOcupacion = $this->createSemanaOcupacion($idContrato);
+			//var_dump($idUnidadesInv);
 	}
 }
 
@@ -52,14 +53,14 @@ private function createContract(){
         "Folio"                     => $this->contract_db->select_Folio(),
         "fkTourId"                  => $_POST['tourID'],
         "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
-        "selectInvtTypeId"          => $this->contract_db->selectInvtTypeId('CU'),
+        "fkInvtTypeId"          	=> $this->contract_db->selectInvtTypeId('CU'),
 		"fkStatusId"				=> 1,
         "ynActive"                  => 1,
         "CrBy"                      => 123,
-        "CrDt"						=> getdate()
+        "CrDt"						=> $this->getToday()
 	];
-			
-		return $this->contract_db->insertReturnId('tblRes', $Contract);
+	//return $Contract;
+	return $this->contract_db->insertReturnId('tblRes', $Contract);
 }
 
 private function insertOcupacion($idContrato){
@@ -79,14 +80,13 @@ private function insertOcupacion($idContrato){
 	        "Folio"                     => $this->contract_db->select_Folio(),
 	        "fkTourId"                  => $_POST['tourID'],
 	        "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
-	        "selectInvtTypeId"          => $this->contract_db->selectInvtTypeId('CU'),
+	        "fkInvtTypeId"          	=> $this->contract_db->selectInvtTypeId('CU'),
 			"fkStatusId"				=> 1,
 	        "ynActive"                  => 1,
 	        "CrBy"                      => 123,
-	        "CrDt"						=> getdate()
+	        "CrDt"						=> $this->getToday()
 		];
-
-			return $this->contract_db->insertReturnId('tblRes', $Ocupacion);
+		$this->contract_db->insertReturnId('tblRes', $Ocupacion);
 	}
 	
 }
@@ -101,16 +101,16 @@ private function createUnidades($idContrato){
 			"fkViewId"               	=> $_POST['viewId'],
 			"fkSeassonId"               => $_POST['SeassonId'],
 			"fkFrequencyId"             => $_POST['FrequencyId'],
-			"WeeksNumber"         		=> $this->contract_db->selectExchangeRateId(),
-			"NightsNumber"              => $_POST['legalName'],
-			"FirstOccYear"              => $folio,
-			"LastOccYear"               => $_POST['tourID'],
+			"WeeksNumber"         		=> $_POST['weeks'],
+			"NightsNumber"              => intval($_POST['weeks']) * 7,
+			"FirstOccYear"              => $_POST['firstYear'],
+			"LastOccYear"               => $_POST['lastYear'],
 			"ynActive"                  => 1,
 			"CrBy"                      => 123,
-			"CrDt"						=> getdate()
+			"CrDt"						=> $this->getToday()
 		];
 
-			return  $this->contract_db->insertReturnId('tblResInvt', $Unidades);
+		$this->contract_db->insertReturnId('tblResInvt', $Unidades);
 	}
 }
 
@@ -124,7 +124,7 @@ private function createPeople($idContrato){
 			"ynPrimaryPeople"           => $_POST['peoples'][$_POST["primario"]],
 			"ynActive"          		=> 1,
 			"CrBy"             			=> 123,
-			"CrDt"						=> getdate()
+			"CrDt"						=> $this->getToday()
 		];
 
 			return $this->contract_db->insertReturnId('tblResPeopleAcc ', $personas);
@@ -260,7 +260,7 @@ private function createSemanaOcupacion($idContrato){
 		}
 	}
 
-
+//////////////////////////////////////////////////////
 	public function insertContrat($Contract){
 		return $this->contract_db->insertReturnId($Contract,"tblContract");;
 	}
@@ -268,7 +268,7 @@ private function createSemanaOcupacion($idContrato){
 
 	public function getContratos(){
 		if($this->input->is_ajax_request()) {
-			$sql = $this->getFilters($_POST, 'Date', 'Contract');
+			$sql = $this->getFilters($_POST, 'RI.CrDt', 'Contract');
 			$contratos = $this->contract_db->getContratos($sql);
 			echo json_encode($contratos);
 		}
@@ -344,6 +344,12 @@ private function createSemanaOcupacion($idContrato){
 		}else{
 			return false;
 		}
+	}
+
+	private function getToday(){
+		$hoy = getdate();
+		$strHoy = $hoy["year"]."-".$hoy["mon"]."-".$hoy["mday"] . " " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
+		return $strHoy;
 	}
 	private function receiveDates($dates, $table, $section) {
 		if (!empty($dates['startDate'.$section]) && !empty($dates['endDate'.$section])) {

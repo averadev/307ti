@@ -117,7 +117,9 @@ function createDialogContract(addContract) {
 			text: "Save and close",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
-
+				createNewContract();
+				$(this).dialog('close');
+				alertify.success("Se guardo correctamente");
 			}
 		},
 			{
@@ -372,21 +374,14 @@ function createNewContract(){
 				legalName : $("#legalName").val().trim(),
 				tourID : $("#TourID").val().trim(),
 				idiomaID : $( "#selectLanguage" ).val(),
-				
-				peoples : getValoresTablas("tablePeopleSelected"),
+				peoples : getArrayValuesColumnTable("tablePeopleSelected", 1),
 				primario : selectTypePeople("primario"),
-				secundaria: selectTypePeople("secundaria"),
-				baneficiario: selectTypePeople("baneficiario"),
-				// peoples : {
-				// 	"idPeople": 3,
-				// 	"type":2,
-				// },
-				unidades : getValoresTablas("tableUnidadesSelected"),
-				// "frecuenciaId": 2,
-				// "temporadaId": 1,
-				"weeks": 1,
-				firstYear : 2016,
-				lastYear : 2017,
+				// secundaria: selectTypePeople("secundaria"),
+				// baneficiario: selectTypePeople("baneficiario"),
+				unidades : getArrayValuesColumnTable("tableUnidadesSelected", 1),
+				weeks: $("#weeksNumber").val().trim(),
+				firstYear :$("#firstYearWeeks").val().trim(),
+				lastYear : $("#lastYearWeeks").val().trim(),
 				tipoVentaId : 1,
 				viewId: 1,
 				floorPlanId: 1,
@@ -410,7 +405,8 @@ function createNewContract(){
 			url: 'contract/saveContract'
 		})
 		.done(function( data, textStatus, jqXHR ) {
-			//alertify.success(data.message);
+			alertify.success(data);
+			return true;
 		})
 		.fail(function( jqXHR, textStatus, errorThrown ) {
 			//alertify.error("Ocurrio un error vuelve a intentarlo");
@@ -485,9 +481,9 @@ function tablaPersonas(personas){
         for (var j in personas[i]) {
             bodyHTML+="<td>" + personas[i][j] + "</td>";
         };
-        bodyHTML += "<td><div class='rdoField'><input type='radio' name='tipoPersona'><label for='folio'>&nbsp;</label></div></td>";
-        bodyHTML += "<td><div class='rdoField'><input type='radio' name='tipoPersona'><label for='folio'>&nbsp;</label></div></td>";
-        bodyHTML += "<td><div class='rdoField'><input type='radio' name='tipoPersona'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><div class='rdoField'><input type='radio' name='primario'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><div class='rdoField'><input type='radio' name='primario'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><div class='rdoField'><input type='radio' name='primario'><label for='folio'>&nbsp;</label></div></td>";
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
         bodyHTML+="</tr>";
     }
@@ -578,7 +574,7 @@ function getWeeksDialog(unidades){
        		}
      	}],
      close: function() {
-    	$('#dialog-Weeks').empty();
+    	//$('#dialog-Weeks').empty();
      }
 	});
 	return dialogo;
