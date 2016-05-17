@@ -1,7 +1,7 @@
 
 <div class="row section" id="section-frontDesk">
 	<div class="large-12 columns fiter-section">
-		<div class="box" id="boxInvDetailedSearch" >
+		<div class="box" id="boxInvDetailedSearch" relation-attr="box-frontDesk-relation" >
 			<!-- header search -->
 			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
@@ -108,7 +108,7 @@
 										</div>
 									</label>
 								</div>
-								<div class="small-12 large-3 columns" style="padding-top:30px;">
+								<div class="small-12 large-3 columns" style="padding-top:35px;">
 									<a id="btnSearchFrontDesk" class="btn btn-primary btn-Search">
 										<div class="label">Buscar</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
@@ -127,13 +127,13 @@
 		</div>
 	</div>
 	
-	<div class="large-12 columns">
+	<div class="large-12 columns" id="box-frontDesk-relation">
 		<div class="box">
 			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
 				</div>
 				<h3 class="box-title">
-					<span>Reservations found</span>
+					<span>Reservations Relation</span>
 				</h3>
 			</div>
 			<div class="box-body" id="table-frontDesk" style="display: block;">

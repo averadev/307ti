@@ -394,10 +394,10 @@ class People extends CI_Controller {
 		if($_POST['page'] == 0 || $_POST['page'] == "0"){
 			$page = 1;
 		}
-		$page = ($page - 1) * 10;
+		$page = ($page - 1) * 25;
 		$data = $this->people_db->getPeople($_POST['search'],$peopleId,$lastName,$name,$advanced,$page);
 		$total = count($data);
-		$data = array_slice($data, $page, 10);
+		$data = array_slice($data, $page, 25);
 		if($_POST['page'] == 0 || $_POST['page'] == "0"){
 			//$total = $this->people_db->getTotalPeople($_POST['search'],$peopleId,$lastName,$name);
 		}

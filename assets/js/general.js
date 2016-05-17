@@ -89,7 +89,6 @@ function addTabEvent(){
 				$('.menu-content').find('div[attr-screen="' + screenBrother + '"]').addClass('active');
 			}
 			//
-			//console.log($($(tab)).prev().attr("attr-screen"));
 		}else{
 			$('.menu-sel').removeClass('active');
 		}
@@ -104,12 +103,12 @@ function addTabEvent(){
 function toggeMenu(){
     if ($('.btn-menu').hasClass('btn-menu-sel')){
         $('.general-section').css('padding', '0 30px');
-		$('.espacio ').css('margin-left', '0px')
+		$('.espacio ').css('margin-left', '27px')
         $('.menu-section').hide('slow');
         $('.btn-menu').removeClass('btn-menu-sel');
     }else{
         $('.general-section').css('padding', '0 20px 0 240px');
-		$('.espacio ').css('margin-left', '220px');
+		$('.espacio ').css('margin-left', '236px');
         $('.menu-section').show('slow');
         $('.btn-menu').addClass('btn-menu-sel');
     }
@@ -330,19 +329,37 @@ function activeTable(table){
 	$(document).on("click","[data-widget='collapse']", function() {
         //Find the box parent        
         var box = $(this).parents(".box").first();
+		var section = $(this).parents(".section").attr('id');
+		var relation = $(box).attr('relation-attr');
+		console.log(section)
         //Find the body and the footer
         var bf = box.find(".box-body, .box-footer");
         if (!box.hasClass("collapsed-box")) {
             box.addClass("collapsed-box");
-            bf.slideUp();
+            bf.slideUp( function() {
+				expandBox(section,relation);
+			});
+			
         } else {
             box.removeClass("collapsed-box");
-            bf.slideDown();
+            bf.slideDown( function() {
+				expandBox(section,relation);
+			});
         }
     });
 
 })(jQuery);
 
+
+function expandBox(section,relation){
+	if(section != undefined && relation != undefined){
+		var position = $('#' + relation).position();
+		if(position.top != undefined){
+			var a = ($("#" + section).height() - (position.top + 130));
+			$('#' + relation + ' .table').css('height', a + "px" );
+		}
+	}
+}
 
 function getWords(divs){
     words ={};

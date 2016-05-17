@@ -1,7 +1,7 @@
 
 <div class="row section" id="section-InvDetailed">
 	<div class="large-12 columns fiter-section">
-		<div class="box" id="boxInvDetailedSearch" >
+		<div class="box" id="boxInvDetailedSearch" relation-attr="box-inventary-relation" >
 			<!-- header search -->
 			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
@@ -128,13 +128,13 @@
 		</div>
 	</div>
 	
-	<div class="large-12 columns">
+	<div class="large-12 columns" id="box-inventary-relation">
 		<div class="box">
 			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
 				</div>
 				<h3 class="box-title">
-					<span>Inventory found</span>
+					<span>Inventory Relation</span>
 				</h3>
 			</div>
 			<div class="box-body" id="section-table-InvDetailed" style="display: block;">

@@ -1,7 +1,7 @@
 
 <div class="row section" id="section-people">
 	<div class="large-12 columns fiter-section">
-		<div class="box" id="boxPeopleSearch" >
+		<div class="box" id="boxPeopleSearch" relation-attr="box-people-relation" >
 			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
 					<span id="minusPeople" class="box-btn" data-widget="collapse">
@@ -9,7 +9,6 @@
 					</span>
 				</div>
 				<h3 class="box-title">
-					<!--<span class="img-box-title"><i class="fa fa-users"></i></span>-->
 					<span>People Search</span>
 				</h3>
 				<a data-widget="newContrat" id="newUser" class="btn btn-new">
@@ -100,17 +99,17 @@
 		</div>
 	</div>
 	
-	<div class="large-12 columns">
+	<div class="large-12 columns" id="box-people-relation">
 		<div class="box">
 			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
                </div>
                <h3 class="box-title">
-               	<span>People found</span>
+               	<span>People Relation</span>
                </h3>
 			</div>
 			<div class="box-body" id="section-table-people" style="display: block;">
-				<div class="table" >
+				<div class="table" id="tb" >
 					<div class="" id="divTablePeople">
 						<table id="tablePeople" class="display hover" cellspacing="0" width="100%" style="display:none;">
 							<thead>

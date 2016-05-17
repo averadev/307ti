@@ -105,6 +105,7 @@ $(document).ready(function(){
 		format: 'm/d/Y',
 		show_icon: false,
 	});
+	expandBox("section-people","box-people-relation")
 });
 
 function createModalDialog(){
