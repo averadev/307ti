@@ -1,4 +1,4 @@
-<div class="contentModal">
+<div class="row contentModal" id="contentModalContract">
     <div id="tabs-1">
         <!-- Error Message -->
         <div class="row" id="alertValidateContrato" style="display:none;">
@@ -9,7 +9,7 @@
             </div>
         </div>
         <form id="saveDataContract">
-            <fieldset class="fieldset">
+            <div class="fieldset large-12 columns">
                 <legend>
                     Contract Data
                 </legend>
@@ -27,7 +27,7 @@
                     <div class="small-3 columns">
                         <label id="alertLastName" for="right-label" class="text-left">Language</label>
                     </div>
-                    <div class="small-9 columns" style="margin-bottom:10px;">
+                    <div class="small-9 columns">
 						<div class="caja" >
 							<select class="input-group-field round" id="selectLanguage" form="saveDataContract" required></select>
 						</div>
@@ -67,8 +67,7 @@
                             <!--<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>-->
 							<a id="btnAddPeople" class="btn btn-primary spanSelect">
 								<div class="label">Agregar</div>
-								<i class="fa fa-user-plus"></i>
-								<!--<img src="<?php echo base_url().IMG; ?>common/more.png"/>-->
+								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
                         </div>
                         <div class="small-12 columns">
@@ -92,21 +91,20 @@
                         </div>
                     </div>
                 </div>
-            </fieldset>
+            </div>
             <!-- Unidades -->
-            <fieldset class="fieldset">
+            <div class="fieldset large-12 columns">
                 <legend class="btnAddressData">Unidades</legend>
                 <div class="containerPeople">
                     <div class="row">
                         <div class="small-12 columns">
                             <!--<a id="btnAddUnidades" href="#" class="button tiny"><i class="fa fa-home"></i></a>-->
-							<a id="btnAddPeople" class="btn btn-primary spanSelect">
-								<div class="label">Agregar</div>
-								<i class="fa fa-home"></i>
-								<!--<img src="<?php echo base_url().IMG; ?>common/more.png"/>-->
+							<a id="btnAddUnidades" class="btn btn-primary spanSelect">
+								<div class="label">Add</div>
+								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
                         </div>
-                        <div class="small-12 columns">
+                        <div class="small-12 columns table-section2">
                             <table id="tableUnidadesSelected" width="100%">
                                 <thead>
                                     <tr>
@@ -128,9 +126,9 @@
                         </div>
                     </div>
                 </div>
-            </fieldset>
+            </div>
             <!-- Condiciones de financiamiento -->
-            <fieldset class="fieldset">
+             <div class="fieldset large-12 columns">
                 <legend>Sales Condition</legend>
                 <div class="row">
                     <div class="small-6 columns">
@@ -220,7 +218,7 @@
 						<label>Amount</label>
 					</div>
 					<div class="large-5 columns end">
-						<input type="text" placeholder="%" />
+						<input class="round general" type="text" placeholder="%" />
                     </div>
 				</div>
                 <!--Enganche-->
@@ -260,33 +258,33 @@
 					</div>
                 </div>
                 <div class="row">
-                <div class="small-12 columns">
-                            <p>Added Packs</p>
-                            <table id="tableDescuentos" class="large-12 columns">
-                               <thead>
-                                    <tr>
-                                        <th class="cellGeneral">pack type</th>
-                                        <th class="cellGeneral">amount</th>
-                                        <th class="cellGeneral">Delete</th>
-                                   </tr>
-                                </thead>
-                                <tbody id="packSeleccionados">
-									<tr><td colspan="10" ></td></tr>
-								</tbody>
-                            </table>
-                        </div>
-                    </div>
+					<div class="small-12 columns">
+						<p>Added Packs</p>
+						<table id="tableDescuentos" class="large-12 columns">
+							<thead>
+								<tr>
+									<th class="cellGeneral">pack type</th>
+									<th class="cellGeneral">amount</th>
+									<th class="cellGeneral">Delete</th>
+								</tr>
+							</thead>
+							<tbody id="packSeleccionados">
+								<tr><td colspan="10" ></td></tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
                 <div class="row">
                     <div class="small-6 columns">
                         <label>Amount Transferred</label>
-                        <input type="text" placeholder="$0.00">
+                        <input class="round general" type="text" placeholder="$0.00">
                     </div>
                     <div class="small-6 columns">
                         <label>Balance financed</label>
-                        <input type="text" placeholder="$0.00">
+                        <input class="round general" type="text" placeholder="$0.00">
                     </div>
                 </div>
-            </fieldset>
+            </div>
             <div data-abide-error class="alert callout" style="display: none;">
                 <p><i class="fi-alert"></i> please fill required fields (red).</p>
             </div>

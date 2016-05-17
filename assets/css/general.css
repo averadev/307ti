@@ -103,7 +103,7 @@ label {
 .caja {
 	overflow: hidden;
 	position:relative;
-	
+	margin-bottom:16px;
 }
 
 .caja select{
@@ -148,8 +148,8 @@ label {
 
 a.button.postfix.img {
     padding: 0;
-    padding: 6px 6px;
-    padding-bottom: 7px;
+    padding: 10px 10px;
+    padding-bottom: 11px;
 }
 
 
@@ -171,9 +171,10 @@ a.button.postfix.img {
     cursor: pointer;
     -webkit-user-select: none;
     background-image: none;
+	margin: 3px 0px;
     margin-right: 5px;
-	margin-top:2px;
-	height:34px;
+	/*margin-top:2px;*/
+	height:32px;
 	min-width:100px;
 }
 
@@ -240,7 +241,7 @@ a.button.postfix.img {
     height: 100%;
     width: 220px;
     overflow-y: auto;
-    padding: 29px 20px 0 20px;
+    padding: 30px 20px 10px 20px;
 	background-color: #FFFFFF;
 	border-right: solid 4px #183a59;
 	border-right: 1px solid rgba(20,53,80,0.14);
@@ -546,18 +547,24 @@ fieldset.fieldsetFilter legend label{
 */
 
 .fieldset{
+	position:relative;
+	float:left;
 	border:1px solid #999;
 	border-radius:1px;
 	box-shadow: 0 1px 2px 1px rgba(0,0,0,.08), 0 3px 6px rgba(0,0,0,.08);
 	width:100%;
-	position:relative;
-	float:left;
+	
 }
 .fieldset legend {
 	background:#fff;
 	font-size: 0.875rem;
 	font-weight:normal;
 	cursor:pointer;
+}
+
+div.fieldset legend {
+	margin-top: -30px;
+    margin-bottom: 15px;
 }
 
 .fieldsetFilter-advanced-hide{
@@ -664,7 +671,6 @@ fieldset.fieldsetFilter legend label{
 	overflow:auto;
 	padding-left:0;
 	margin-left:0;
-	height: 400px;
 }
 
 .pagina{
@@ -842,6 +848,11 @@ table thead tr th, table tbody tr td{
 	padding-left:0;
 	padding-right:0;
 	padding-top:0;
+}
+
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button{
+	font-size:14px;
+	font-family: Arimo;
 }
 
 .tabsModal{
@@ -1081,7 +1092,7 @@ label.error{
 }
 .box .box-header {
   	position: relative;
-	height: 42px;
+	height: 30px;
 	padding-left:5px;
 }
  .box .box-header:before {
@@ -1102,8 +1113,6 @@ label.error{
 }
 
 .box .box-filter{
-  	/*padding-top: 5px;
-	padding-bottom: 5px;*/
 	padding: 5px 15px;
 }
 
@@ -1117,13 +1126,14 @@ label.error{
     max-width: none;
     padding: 10px 0;
     background-color: #ffffff;
+	height:100%;
 }
 
 .box .box-header a {
     /*color: #444; */
 }
 .box .box-header > .box-tools {
-    padding: 6px 15px 10px 10px;
+    padding: 2px 10px;
 }
 
 .box-tools img{
@@ -1131,20 +1141,17 @@ label.error{
 }
 
 .box-tools span {
-  height: 20px;
+  /*height: 20px;
   display: inline-block;
   line-height: 28px;
   text-align: center;
-  /*border-radius: 50%;*/
   cursor: pointer; 
-  margin-left:5px;
-  /*font-style:italic;*/
+  margin-left:5px;*/
 }
 
 .box .box-header .box-title {
-    /*display: inline-block;*/
-    /*padding: 4px 0px 12px 0;*/
-	padding: 9px 12px;
+	padding: 2px 12px;
+	padding-top: 3px;
 	position:relative;
     margin: 0px;
     font-size: 1em;
@@ -1166,12 +1173,10 @@ label.error{
 }
 
 .box .box-header .box-title span {
-	/*top: 5px;
 	position: relative;
 	left: 5px;
 	font-family: Arimo;
-	font-weight: lighter;
-	float:left;*/
+	float:left;
 }
 
 
@@ -1327,7 +1332,7 @@ label.error{
 }
 
 .espacio{
-	margin-left: 215px;
+	margin-left: 236px;
 }
 
 .trColspan{
@@ -1432,7 +1437,7 @@ label.error{
 	padding:0;
 	background:none;
 	text-align:center;
-	padding: 9px 13px;
+	padding: 8px 13px;
 	cursor:pointer;
 	font-size: 14px;
 }
@@ -1440,14 +1445,14 @@ label.error{
 .btn img, .btn i{
 	background:#00a89c;
 	float:right;
-	padding: 5px 4px;
+	padding: 8px 8px;
     margin-top: -1px;
     margin-right: -1px;
     padding-top: -5px;
 }
 
 .btn i{
-	padding: 10px 8px;
+	padding: 9px 8px;
 }
 
 .btn-primary{
@@ -1467,17 +1472,23 @@ label.error{
 	color: #FFFFFF;
 	border: 1px solid rgba(20,53,80,0.14);
 	float:right;
-	margin:0;
-	height:40px;
+	margin:-2px;
+	height:32px;
 }
 
 .btn-new .label {
-    padding: 12px 25px;
+    /*padding: 12px 25px;*/
+	
 }
 
 .btn-new img{
 	background:#00837A;
-	padding: 8px 6px;
+	/*padding: 8px 6px;*/
+}
+
+.btn-right{
+	float:right;
+	margin-right:0px;
 }
 
 .table table thead tr th{
@@ -1487,6 +1498,13 @@ label.error{
 .border-bottom{
 	border-bottom:1px solid #183a59;
 	margin-bottom:10px;
+}
+
+.containerTable{
+	width:70%;
+	overflow:auto;
+	position:relative;
+	float:left;
 }
 
 /*********/
@@ -1512,6 +1530,16 @@ label.error{
 	width:25%;
 	margin-right: .8rem;
 }
+
+#dialog-tourID #section-tour .box-filter .rdoField{
+	width:40%;
+}
+
+#dialog-tourID #section-tour .columMedium{
+	width:50%;
+}
+
+
 
 #section-InvDetailed .box-filter .rdoField{
 	width:25%;

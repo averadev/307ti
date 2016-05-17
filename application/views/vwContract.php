@@ -1,6 +1,6 @@
 <div class="row section" id="section-contract">
 	<div class="large-12 columns">
-		<div class="box">
+		<div class="box" relation-attr="box-contract-relation">
 			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
 					<span class="box-btn" data-widget="collapse">
@@ -110,7 +110,7 @@
 
 
 
-	<div class="large-12 columns">
+	<div class="large-12 columns" id="box-contract-relation">
 		<div class="box">
 			<div class="box-header pr-color">
 				<div class="pull-right box-tools">

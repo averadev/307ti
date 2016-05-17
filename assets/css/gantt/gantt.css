@@ -83,10 +83,6 @@ table.ganttTable{
 	padding-left:5px;
 }
 
-.gHeaderDay .panelLeft{
-	line-height:2;
-}
-
 .orderField{
 	float:right;
 	line-height: 0;

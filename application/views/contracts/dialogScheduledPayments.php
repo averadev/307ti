@@ -5,7 +5,7 @@
       <label for="downpaymentProgramado" class="text-left">Scheduled payment</label>
     </div>
     <div class="small-9 columns">
-       <input readonly id="downpaymentProgramado" type="number" name="downpaymentProgramado" min="1" max="480">
+       <input class="round general" readonly id="downpaymentProgramado" type="number" name="downpaymentProgramado" min="1" max="480">
     </div>
   </div>
   <div class="row">
@@ -13,12 +13,14 @@
       <label for="legalName" class="text-left">payment type</label>
     </div>
     <div class="small-9 columns">
-       <select id="tiposPagoProgramados">
-        <option value="1">Contado</option>
-        <option value="2">Tarjeta de Credito</option>
-        <option value="3">Facturación</option>
-        <option value="4">Transferido</option>
-      </select>
+		<div class="caja">
+			<select id="tiposPagoProgramados" class="input-group-field round">
+				<option value="1">Contado</option>
+				<option value="2">Tarjeta de Credito</option>
+				<option value="3">Facturación</option>
+				<option value="4">Transferido</option>
+			</select>
+		</div>
     </div>
   </div>
    <fieldset id="datosTarjetaProgramados" class="fieldset" style="display: none;">
@@ -31,7 +33,7 @@
                         <label for="legalName" class="text-left">Numero de Tarjeta</label>
                     </div>
                     <div class="small-9 columns">
-                        <input type="text" id="legalName" name="legalName" class="general" required>
+                        <input class="round general" type="text" id="legalName" name="legalName" class="general" required>
                     </div>
                 </div>
                 <!-- Language-->
@@ -40,8 +42,10 @@
                         <label id="alertLastName" for="right-label" class="text-left">Fecha de Expiración</label>
                     </div>
                     <div class="small-9 columns">
-                        <select id="selectLanguage" form="saveDataContract" required></select>
-                    </div>
+						<div class="caja">
+							<select class="input-group-field round" id="selectLanguage" form="saveDataContract" required></select>
+						</div>
+					</div>
                 </div>
                 <!-- Codigo-->
                 <div class="row">
@@ -49,8 +53,10 @@
                         <label id="alertLastName" for="right-label" class="text-left">Código</label>
                     </div>
                     <div class="small-9 columns">
-                        <select id="selectLanguage" form="saveDataContract" required></select>
-                    </div>
+						<div class="caja">
+							<select class="input-group-field round" id="selectLanguage" form="saveDataContract" required></select>
+						</div>
+					</div>
                 </div>
     </fieldset>
 
@@ -59,7 +65,7 @@
       <label for="datePaymentPrg" class="text-left">payment date</label>
     </div>
     <div class="small-9 columns">
-       <input id="datePaymentPrg" type="date" name="datePaymentPrg" min="2016" max="2099">
+       <input class="round general" id="datePaymentPrg" type="date" name="datePaymentPrg" min="2016" max="2099">
     </div>
   </div>
    <div class="row">
@@ -67,7 +73,7 @@
       <label for="montoDownpaymentPrg" class="text-left">monto</label>
     </div>
     <div class="small-9 columns">
-       <input id="montoDownpaymentPrg" type="number" name="montoDownpaymentPrg" min="0" max="999999">
+       <input class="round general" id="montoDownpaymentPrg" type="number" name="montoDownpaymentPrg" min="0" max="999999">
     </div>
   </div>
    <div class="row">
@@ -75,8 +81,16 @@
       <label for="legalName" class="text-left"></label>
     </div>
     <div class="small-9 columns">
-    <a id="btnAddmontoDownpaymentPrg" href="#" class="button postfix">Add</a>
-     <a id="btnCleanmontoDownpaymentPrg" href="#" class="button postfix">clean</a>
+		<!--<a id="btnAddmontoDownpaymentPrg" href="#" class="button postfix">Add</a>
+		<a id="btnCleanmontoDownpaymentPrg" href="#" class="button postfix">clean</a>-->
+		<a id="btnAddmontoDownpaymentPrg" class="btn btn-primary btn-Search">
+			<div class="label">Add</div>
+			<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+		</a>
+		<a id="btnCleanmontoDownpaymentPrg" class="btn btn-primary spanSelect">
+			<div class="label">Clean</div>
+			<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+		</a>
     </div>
   </div>
 </form>
@@ -104,7 +118,7 @@
       <label for="totalProgramado" class="text-left">total</label>
     </div>
     <div class="small-9 columns">
-       <input id="totalProgramado" type="number" name="totalProgramado" min="2016" max="2099">
+       <input class="round general" id="totalProgramado" type="number" name="totalProgramado" min="2016" max="2099">
     </div>
   </div>
     <div class="row">
@@ -112,7 +126,7 @@
       <label for="pendiente" class="text-left">due</label>
     </div>
     <div class="small-9 columns">
-       <input id="pendiente" type="text" name="pendiente" min="2016" max="2099">
+       <input class="round general" id="pendiente" type="text" name="pendiente" min="2016" max="2099">
     </div>
   </div>
   </fieldset>

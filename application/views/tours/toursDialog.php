@@ -80,16 +80,16 @@
 						<fieldset class="large-12 columns">
 							<legend>Select Period</legend>
 							<div class="row">
-								<div class="medium-3 columns">
+								<div class="small-12 medium-6 large-3 columns columMedium">
 									<input id="startDateTour" class="round" type="date" placeholder="Start Date">
 								</div>
-								<div class="medium-3 columns">
+								<div class="small-12 medium-6 large-3 columns columMedium">
 									<input id="endDateTour" class="round" type="date"  placeholder="End Date">
 								</div>
-								<div class="medium-3 columns">
+								<div class="small-12 medium-6 large-3 columns columMedium">
 									<input id="stringTour" type="text" class="txtSearch" placeholder="Search Field" name="search"  required="">
 								</div>
-								<div class="medium-3 columns ">
+								<div class="small-12 medium-6 large-3 columns columMedium">
 									<a id="btnfindTour" class="btn btn-primary btn-Search">
 										<div class="label">Buscar</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>

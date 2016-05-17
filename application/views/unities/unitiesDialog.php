@@ -15,16 +15,16 @@
                     </span>
                 </div>
         </div>
-        <div class="box-body" style="display: block;">
-        <fieldset class="fieldset">
-            <div class="row">
+        <div class="box-body">
                 <!-- Property-->
                 <div class="row">
                     <div class="small-3 columns">
                         <label for="property" class="text-left">Property</label>
                     </div>
                     <div class="small-9 columns">
-                        <select type="text" id="property" name="property" class="general" required></select>
+						<div class="caja" >
+							<select type="text" id="property" name="property" class="input-group-field round" required></select>
+						</div>
                     </div>
                 </div>
                 <!-- Unit Type-->
@@ -33,7 +33,9 @@
                         <label for="unitType" class="text-left">Unit Type</label>
                     </div>
                     <div class="small-9 columns">
-                        <select type="text" id="unitType" name="unitType" class="general" required></select>
+						<div class="caja" >
+                        <select type="text" id="unitType" name="unitType" class="input-group-field round" required></select>
+						</div>
                     </div>
                 </div>
                 <!-- Frequency-->
@@ -42,8 +44,10 @@
                         <label for="frequency" class="text-left">Frequency</label>
                     </div>
                     <div class="small-9 columns">
-                        <select type="text" id="frequency" name="frequency" class="general" required></select>
-                    </div>
+						<div class="caja" >
+                        <select type="text" id="frequency" name="frequency" class="input-group-field round" required></select>
+						</div>
+				   </div>
                 </div>
                 <!-- Season-->
                 <div class="row">
@@ -51,8 +55,10 @@
                         <label for="season" class="text-left">Season</label>
                     </div>
                     <div class="small-9 columns">
-                        <select type="text" id="season" name="season" class="general" required></select>
-                    </div>
+						<div class="caja" >
+                        <select type="text" id="season" name="season" class="input-group-field round" required></select>
+						</div>
+					</div>
                 </div>
                 <!-- interval-->
                 <div class="row">
@@ -60,28 +66,21 @@
                         <label for="interval" class="text-left">Interval</label>
                     </div>
                     <div class="small-9 columns">
-                        <select type="text" id="interval" name="interval" class="general" required></select>
-                    </div>
+						<div class="caja" >
+                        <select type="text" id="interval" name="interval" class="input-group-field round" required></select>
+						</div>
+				   </div>
                 </div>
-            </div>
             <div class="row">
-                <div class="medium-12columns">
-                    <div class="row">
-                        <div class="large-12 columns">
-                            <div class="row">
-                                <div class="small-6 columns">
-
-                                </div>
-                                <div class="small-6 columns">
-                                    <a  id="btngetUnidades" href="#" class="button postfix"><i class="fa fa-search"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="large-12 columns">
+					<a id="btngetUnidades" class="btn btn-primary btn-right">
+						<div class="label">Buscar</div>
+						<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+					</a>
+					<!--<a  id="btngetUnidades" href="#" class="button postfix"><i class="fa fa-search"></i></a>-->
                 </div>
             </div>
         </div>
-         </fieldset>
     </div>
 </div>
 

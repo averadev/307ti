@@ -5,7 +5,7 @@
       <label for="legalName" class="text-left">Unit Price</label>
     </div>
     <div class="small-9 columns">
-       <input readonly id="unitPricePack" type="number" >
+       <input class="round general" readonly id="unitPricePack" type="number" >
     </div>
   </div>
   <div class="row">
@@ -13,7 +13,7 @@
       <label for="legalName" class="text-left">%</label>
     </div>
     <div class="small-9 columns">
-       <input id="porcentajePack" type="number" min="0" max="500000">
+       <input class="round general" id="porcentajePack" type="number" min="0" max="500000">
     </div>
   </div>
   <div class="row">
@@ -21,7 +21,7 @@
       <label for="legalName" class="text-left">Quantity</label>
     </div>
     <div class="small-9 columns">
-       <input id="quantityPack" type="number" min="0" max="500000">
+       <input class="round general" id="quantityPack" type="number" min="0" max="500000">
     </div>
   </div>
   <div class="row">
@@ -29,7 +29,7 @@
       <label for="legalName" class="text-left">Final Price</label>
     </div>
     <div class="small-9 columns">
-       <input readonly id="finalPricePack" type="number" >
+       <input class="round general" readonly id="finalPricePack" type="number" >
     </div>
   </div>
 </form>

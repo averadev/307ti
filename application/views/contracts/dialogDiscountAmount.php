@@ -5,12 +5,14 @@
       <label for="legalName" class="text-left">Pack type</label>
     </div>
     <div class="small-9 columns">
-       <select id="tiposPakc">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-      </select>
+		<div class="caja">
+			<select id="tiposPakc" class="input-group-field round">
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			</select>
+		</div>
     </div>
   </div>
    <div class="row">
@@ -18,7 +20,7 @@
       <label for="montoPack" class="text-left">monto</label>
     </div>
     <div class="small-9 columns">
-       <input id="montoPack" type="number" name="montoPack" min="0" max="999999">
+       <input class="round general" id="montoPack" type="number" name="montoPack" min="0" max="999999">
     </div>
   </div>
    <div class="row">
@@ -26,8 +28,16 @@
       <label for="legalName" class="text-left"></label>
     </div>
     <div class="small-9 columns">
-    <a id="btnAddmontoPack" href="#" class="button postfix">Add</a>
-     <a id="btnCleanmontoPack" href="#" class="button postfix">clean</a>
+    <!--<a id="btnAddmontoPack" href="#" class="button postfix">Add</a>
+     <a id="btnCleanmontoPack" href="#" class="button postfix">clean</a>-->
+	 <a id="btnAddmontoPack" class="btn btn-primary btn-Search">
+			<div class="label">Add</div>
+			<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+		</a>
+		<a id="btnCleanmontoPack" class="btn btn-primary spanSelect">
+			<div class="label">Clean</div>
+			<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+		</a>
     </div>
   </div>
 </form>
@@ -54,7 +64,7 @@
       <label for="totalDescPack" class="text-left">total</label>
     </div>
     <div class="small-9 columns">
-       <input id="totalDescPack" type="number" name="totalDescPack" min="2016" max="2099">
+       <input class="round general" id="totalDescPack" type="number" name="totalDescPack" min="2016" max="2099">
     </div>
   </div>
 </fieldset>

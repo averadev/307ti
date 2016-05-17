@@ -5,7 +5,7 @@
       <label for="legalName" class="text-left">Down payment</label>
     </div>
     <div class="small-9 columns">
-       <input readonly id="downpaymentPrice" type="number" name="quantity" min="1" max="480">
+       <input class="round general" readonly id="downpaymentPrice" type="number" name="quantity" min="1" max="480">
     </div>
   </div>
   <div class="row">
@@ -13,7 +13,7 @@
       <label for="legalName" class="text-left">contract expenditure</label>
     </div>
     <div class="small-9 columns">
-       <input id="downpaymentGastos" type="number" name="quantity" min="0" value="999">
+       <input class="round general" id="downpaymentGastos" type="number" name="quantity" min="0" value="999">
     </div>
   </div>
   <div class="row">
@@ -21,7 +21,7 @@
       <label for="legalName" class="text-left">Total to pay</label>
     </div>
     <div class="small-9 columns">
-       <input readonly id="downpaymentTotal" type="number" name="quantity">
+       <input class="round general" readonly id="downpaymentTotal" type="number" name="quantity">
     </div>
   </div>
   <div class="row">
@@ -29,12 +29,14 @@
       <label for="legalName" class="text-left">payment type</label>
     </div>
     <div class="small-9 columns">
-       <select id="tiposPago">
-        <option value="1">Contado</option>
-        <option value="2">Tarjeta de Credito</option>
-        <option value="3">Facturación</option>
-        <option value="4">Transferido</option>
-      </select>
+		<div class="caja">
+			<select id="tiposPago" class="input-group-field round">
+				<option value="1">Contado</option>
+				<option value="2">Tarjeta de Credito</option>
+				<option value="3">Facturación</option>
+				<option value="4">Transferido</option>
+			</select>
+		</div>
     </div>
   </div>
    <fieldset id="datosTarjeta" class="fieldset" style="display: none;">
@@ -47,7 +49,7 @@
                         <label for="legalName" class="text-left">Numero de Tarjeta</label>
                     </div>
                     <div class="small-9 columns">
-                        <input type="text" id="legalName" name="legalName" class="general" required>
+                        <input class="round general" type="text" id="legalName" name="legalName" class="general" required>
                     </div>
                 </div>
                 <!-- Language-->
@@ -56,7 +58,9 @@
                         <label id="alertLastName" for="right-label" class="text-left">Fecha de Expiración</label>
                     </div>
                     <div class="small-9 columns">
-                        <select id="selectLanguage" form="saveDataContract" required></select>
+						<div class="caja">
+							<select class="input-group-field round" id="selectLanguage" form="saveDataContract" required></select>
+						</div>
                     </div>
                 </div>
                 <!-- Codigo-->
@@ -65,7 +69,9 @@
                         <label id="alertLastName" for="right-label" class="text-left">Código</label>
                     </div>
                     <div class="small-9 columns">
-                        <select id="selectLanguage" form="saveDataContract" required></select>
+						<div class="caja">
+							<select class="input-group-field round" id="selectLanguage" form="saveDataContract" required></select>
+						</div>
                     </div>
                 </div>
     </fieldset>
@@ -75,7 +81,7 @@
       <label for="datePayment" class="text-left">payment date</label>
     </div>
     <div class="small-9 columns">
-       <input id="datePayment" type="date" name="datePayment" min="2016" max="2099">
+       <input class="round general" id="datePayment" type="date" name="datePayment" min="2016" max="2099">
     </div>
   </div>
    <div class="row">
@@ -83,7 +89,7 @@
       <label for="montoDownpayment" class="text-left">monto</label>
     </div>
     <div class="small-9 columns">
-       <input id="montoDownpayment" type="number" name="montoDownpayment" min="0" max="999999">
+       <input class="round general" id="montoDownpayment" type="number" name="montoDownpayment" min="0" max="999999">
     </div>
   </div>
    <div class="row">
@@ -91,8 +97,16 @@
       <label for="legalName" class="text-left"></label>
     </div>
     <div class="small-9 columns">
-    <a id="btnAddmontoDownpayment" href="#" class="button postfix">Add</a>
-     <a id="btnCleanmontoDownpayment" href="#" class="button postfix">clean</a>
+		<!--<a id="btnAddmontoDownpayment" href="#" class="button postfix">Add</a>
+		<a id="btnCleanmontoDownpayment" href="#" class="button postfix">clean</a>-->
+		<a id="btnAddmontoDownpayment" class="btn btn-primary btn-Search">
+			<div class="label">Add</div>
+			<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+		</a>
+		<a id="btnCleanmontoDownpayment" class="btn btn-primary spanSelect">
+			<div class="label">Clean</div>
+			<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+		</a>
     </div>
   </div>
 </form>
@@ -120,7 +134,7 @@
       <label for="finalPriceDownpayment" class="text-left">total</label>
     </div>
     <div class="small-9 columns">
-       <input id="finalPriceDownpayment" type="number" name="finalPriceDownpayment" min="2016" max="2099">
+       <input class="round general" id="finalPriceDownpayment" type="number" name="finalPriceDownpayment" min="2016" max="2099">
     </div>
   </div>
     <div class="row">
@@ -128,7 +142,7 @@
       <label for="referenceDownpayment" class="text-left">reference</label>
     </div>
     <div class="small-9 columns">
-       <input id="referenceDownpayment" type="text" name="referenceDownpayment" min="2016" max="2099">
+       <input class="round general" id="referenceDownpayment" type="text" name="referenceDownpayment" min="2016" max="2099">
     </div>
   </div>
   </fieldset>
