@@ -304,8 +304,17 @@ function drawTable2(data, table ,funcion, cadena){
 	
 	$('#' + table ).show();
 	
+	
+}
+
+function activeTable(table){
+	
+	if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
+		var tabla = $('#' + table).DataTable();
+		tabla.destroy();
+	}
+	
 	$('#' + table ).DataTable({
-		"scrollY": 350,
 		"scrollX": true,
 		"paging":   false,
 		"ordering": false,

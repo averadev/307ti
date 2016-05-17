@@ -19,6 +19,7 @@
 }
 body {
     background-color: #f2f2f2;
+	/*font-size:14px;*/
 }
 
 /**
@@ -27,7 +28,8 @@ body {
 input.general {
 	/*background:#000000;*/
 	border-color:rgb(230, 230, 230);
-	font-size: 0.875rem;
+	/*font-size: 0.875rem;*/
+	font-size:14px;
 }
 
 input.general:hover{
@@ -99,8 +101,9 @@ label {
 * @todo Diseño de los campos select
 */
 .caja {
-   overflow: hidden;
-   position:relative;
+	overflow: hidden;
+	position:relative;
+	
 }
 
 .caja select{
@@ -135,13 +138,20 @@ label {
 */
 .button {
 	color: #fff;
-    background-color: #225b88;
+    background-color:#00a89c;
 }
 
 .button:hover {
 	color: #e8edf1;
-    background-color: #1D4D74;
+    background-color: #00837A;
 }
+
+a.button.postfix.img {
+    padding: 0;
+    padding: 6px 6px;
+    padding-bottom: 7px;
+}
+
 
 .ui-widget-content a{
 	color: white;
@@ -538,8 +548,10 @@ fieldset.fieldsetFilter legend label{
 .fieldset{
 	border:1px solid #999;
 	border-radius:1px;
-	/*box-shadow:0 0 10px #999;*/
 	box-shadow: 0 1px 2px 1px rgba(0,0,0,.08), 0 3px 6px rgba(0,0,0,.08);
+	width:100%;
+	position:relative;
+	float:left;
 }
 .fieldset legend {
 	background:#fff;
@@ -880,8 +892,7 @@ table thead tr th, table tbody tr td{
 
 .tab-modal-top{
 	margin-top: 1.25rem;
-	/*position:relative;
-	float:left;*/
+	margin-bottom: 1.25rem;
 }
 
 /**
@@ -930,8 +941,8 @@ table thead tr th, table tbody tr td{
 	width:100%;
 	height:100%;
 	z-index:8;
-	top:0;
-	left:0;
+	top:0%;
+	left:0%;
 }
 
 .noResultsScreen{
@@ -1252,6 +1263,8 @@ label.error{
 	overflow:auto;
 	padding-left:0;
 	margin-left:0;
+	float:left;
+	position:relative;
 }
 
 /**
@@ -1424,13 +1437,17 @@ label.error{
 	font-size: 14px;
 }
 
-.btn img{
+.btn img, .btn i{
 	background:#00a89c;
 	float:right;
 	padding: 5px 4px;
     margin-top: -1px;
     margin-right: -1px;
     padding-top: -5px;
+}
+
+.btn i{
+	padding: 10px 8px;
 }
 
 .btn-primary{
@@ -1467,6 +1484,10 @@ label.error{
 	font-size:16px;
 }
 
+.border-bottom{
+	border-bottom:1px solid #183a59;
+	margin-bottom:10px;
+}
 
 /*********/
 /**
@@ -1476,6 +1497,10 @@ label.error{
 
 #section-people .box-filter .rdoField{
 	width:20%;
+}
+
+#dialog-People #section-people .box-filter .rdoField{
+	width:50%;
 }
 
 #section-contract .box-filter .rdoField{
@@ -1496,4 +1521,10 @@ label.error{
 #section-frontDesk .box-filter .rdoField{
 	width: 13%;
     margin-right: .3rem;
+}
+
+@media only screen and (max-width: 40em) {
+	#section-people .box-filter .rdoField{
+		width:50%;
+	}
 }

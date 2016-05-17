@@ -135,6 +135,7 @@ function createDialogContract(addContract) {
 			$('#dialog-Unidades').empty();
 		}
 	});
+	
 	return dialog;
 }
 function addTourContract(unidades){

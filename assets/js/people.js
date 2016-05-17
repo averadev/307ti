@@ -869,9 +869,6 @@ function getInfoPeople(id){
 			
 			$("#idPeople").data("pkPeopleId",item.pkPeopleId);
 			$("#idPeople").data("pkEmployeeId",item.pkEmployeeId);
-			/*$('.ui-dialog-titlebar').append(
-				'<div class="ui-dialog-titlebar2"><label>Edit person</label></div><img class="imgCloseModal" src="' + BASE_URL+	'assets/img/common/iconClose2.png">'
-			)*/
 			$('#imgCloseModal').off();
 			$('.imgCloseModal').on('click', function() {  hideModal(); });
 			document.getElementsByTagName("html")[0].style.overflow = "hidden";
@@ -934,10 +931,12 @@ function getInfoTabsPeople(screen, url){
 	
 	var search = "";
 	if(screen == "tab-PReservaciones"){
+		deleteTableInv("tableReservationsPeople");
 		showLoading('#tab-PReservaciones',true);
 		$('#tableReservationsPeople tbody').empty();
 		noResults('#' + screen,false);
 	}else{
+		deleteTableInv("tableContractPeople");
 		showLoading('#tab-PContratos',true);
 		$('#tableContractPeople tbody').empty();
 		search = $('#textSearchContractPeople').val();
@@ -964,7 +963,7 @@ function getInfoTabsPeople(screen, url){
 				if(data.items.length > 0){
 					drawTable2(data.items,"tableContractPeople",false,"tabla");
 				}else{
-					noResultsPeople("tab-PContratos", "tableContractPeople", "No results found");
+					noResultsPeople("divTableContractPeople", "tableContractPeople", "No results found");
 				}
 			}else if(screen == "tab-PEmpleados"){
 				$('#textTypeSeller').empty();
@@ -986,9 +985,9 @@ function getInfoTabsPeople(screen, url){
 				noResultsPeople("tab-PReservaciones", "tableReservationsPeople", "Try again");
 			}else{
 				showLoading('#tab-PContratos',false);
-				noResultsPeople("tab-PContratos", "tableReservationsPeople", "Try again");
+				noResultsPeople("divTableContractPeople", "tableReservationsPeople", "Try again");
 			}
-			showAlert(true,"Error in the search, try again later.",'button',showAlert);
+			//showAlert(true,"Error in the search, try again later.",'button',showAlert);
 		}
 	});
 }
@@ -1068,30 +1067,13 @@ function changeState(selector){
 	});
 }
 
-$(document).ready(function(){
-	/*$(window).on('scroll', function(){
-		var isOpen = $( dialogUser ).dialog( "isOpen" );
-		if(isOpen == true){
-			dialogUser.dialog('option', 'position', { my: "center", at: "center", of: window });
-		}
-	});
-	
-	$("#dialog-User").on('scroll', function(){
-		if($("#dialog-User").scrollTop() == 0){
-			$('#tabsModalPeople').removeClass('tabsModalFixed');
-			$('#tabsModalPeople').css('width',"100%")
-		}else{
-			$('#tabsModalPeople').addClass('tabsModalFixed');
-			$('#tabsModalPeople').css('width',$("#dialog-User").css('width'))
-		}
-	});
-	*/
-});
-
-
 function noResultsPeople(section, table, message){
 	alertify.error(message);
 	noResults('#' + section,true);
+	deleteTableInv(table);
+}
+
+function deleteTableInv(table){
 	if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
 		var tabla = $( '#' + table ).DataTable();
 		tabla.destroy();

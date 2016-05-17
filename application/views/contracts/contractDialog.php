@@ -19,7 +19,7 @@
                         <label for="legalName" class="text-left">Legal Name</label>
                     </div>
                     <div class="small-9 columns">
-                        <input type="text" id="legalName" name="legalName" class="general" required>
+                        <input type="text" id="legalName" name="legalName" class="round general" required>
                     </div>
                 </div>
                 <!-- Language-->
@@ -27,8 +27,10 @@
                     <div class="small-3 columns">
                         <label id="alertLastName" for="right-label" class="text-left">Language</label>
                     </div>
-                    <div class="small-9 columns">
-                        <select id="selectLanguage" form="saveDataContract" required></select>
+                    <div class="small-9 columns" style="margin-bottom:10px;">
+						<div class="caja" >
+							<select class="input-group-field round" id="selectLanguage" form="saveDataContract" required></select>
+						</div>
                     </div>
                 </div>
                 <!-- Tour ID-->
@@ -36,23 +38,38 @@
                     <div class="small-3 columns">
                         <label  for="TourID" class="text-left">Tour ID</label>
                     </div>
-                            <div class="large-9 columns">
-                                <div class="row collapse">
-                                    <div class="small-10 columns">
-                                        <input value="0" readonly type="text" placeholder="ID" name="TourID" id="TourID" required>
-                                    </div>
-                                    <div class="small-2 columns">
-                                        <a id="btnAddTourID" href="#" class="button postfix"><i class="fa fa-plus"></i></a>
-                                        <a id="btnDeleteTourID" href="#" class="button postfix"><i class="fa fa-trash-o"></i></a>
-                                    </div>
-                                </div>
-                            </div>
+					<div class="large-9 columns">
+						<div class="row">
+							<div class="small-4 large-4 columns">
+								<input value="0" readonly type="text" class="round general" placeholder="ID" name="TourID" id="TourID" required>
+							</div>
+							<!--<div class="small-2 columns">
+								<a id="btnAddTourID" href="#" class="button postfix"><i class="fa fa-plus"></i></a>
+								<a id="btnDeleteTourID" href="#" class="button postfix"><i class="fa fa-trash-o"></i></a>
+							</div >-->
+							<div class="small-8 large-8 columns">
+								<a id="btnAddTourID" class="btn btn-primary spanSelect">
+									<div class="label">Agregar</div>
+									<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+								</a>
+								<a id="btnDeleteTourID" class="btn btn-primary spanSelect">
+									<div class="label">Limpiar</div>
+									<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+								</a>
+							</div>
+						</div>
+					</div>
                 </div>
 
                 <div class="containerPeople">
                     <div class="row">
                         <div class="small-12 columns">
-                            <a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>
+                            <!--<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>-->
+							<a id="btnAddPeople" class="btn btn-primary spanSelect">
+								<div class="label">Agregar</div>
+								<i class="fa fa-user-plus"></i>
+								<!--<img src="<?php echo base_url().IMG; ?>common/more.png"/>-->
+							</a>
                         </div>
                         <div class="small-12 columns">
                             <table id="tablePeopleSelected" width="100%">
@@ -68,7 +85,9 @@
                                     <th></th>
                                 </tr>
                                 </thead>
-                                <tbody></tbody>
+                                <tbody>
+									<tr><td colspan="10" ></td></tr>
+								</tbody>
                         </table>
                         </div>
                     </div>
@@ -80,7 +99,12 @@
                 <div class="containerPeople">
                     <div class="row">
                         <div class="small-12 columns">
-                            <a id="btnAddUnidades" href="#" class="button tiny"><i class="fa fa-home"></i></a>
+                            <!--<a id="btnAddUnidades" href="#" class="button tiny"><i class="fa fa-home"></i></a>-->
+							<a id="btnAddPeople" class="btn btn-primary spanSelect">
+								<div class="label">Agregar</div>
+								<i class="fa fa-home"></i>
+								<!--<img src="<?php echo base_url().IMG; ?>common/more.png"/>-->
+							</a>
                         </div>
                         <div class="small-12 columns">
                             <table id="tableUnidadesSelected" width="100%">
@@ -97,7 +121,9 @@
                                         <th class="cellGeneral"></th>
                                     </tr>
                                 </thead>
-                            <tbody></tbody>
+								<tbody>
+									<tr><td colspan="10" ></td></tr>
+								</tbody>
                             </table>
                         </div>
                     </div>
@@ -108,35 +134,23 @@
                 <legend>Sales Condition</legend>
                 <div class="row">
                     <div class="small-6 columns">
-                        <div class="row">
-                            <div class="small-3 columns">
-                                <label  class="text-left">Sell Type</label>
-                            </div>
-                            <div class="small-9 columns">
-                                <select id="typeSales">
-
-                                </select>
-                            </div>
-                        </div>
-
+						<label  class="text-left">Sell Type</label>
+						<div class="caja" >
+							<select id="typeSales" class="input-group-field round">
+							</select>
+						</div>
                     </div>
                     <div class="small-6 columns">
-                        <div class="row">
-                            <div class="small-3 columns">
-                                <label id="alertLastName" for="contractR" class="text-left">Contract Related</label>
-                            </div>
-                            <div class="large-9 columns">
-                                <div class="row collapse">
-                                    <div class="small-10 columns">
-                                        <input id="contractR" name="contractR" type="text" placeholder="Folio" value="0">
-                                    </div>
-                                    <div class="small-2 columns">
-                                        <a href="#" class="button postfix"><i class="fa fa-search"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+						<div class="row collapse">
+							<label id="alertLastName" for="contractR" class="text-left">Contract Related</label>
+							<div class="small-10 columns">
+								<input class="round general" id="contractR" name="contractR" type="text" placeholder="Folio" value="0">
+							</div>
+							<div class="small-2 columns">
+								<a class="button postfix img"><img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/></a>
+							</div>
+						</div>
+					</div>
                 </div>
                 <div class="small-12 columns">
                     <table id="tableFinanciamiento" class="small-12 columns">
@@ -150,98 +164,100 @@
                         </tr>
                         </thead>
                         <tbody>
+							<tr><td colspan="10" ></td></tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="row">
-                    <div class="large-4 columns">
-                        <label>Unit Price
-                            <input readonly required type="text" id="precioUnidad" name="precioUNIDAD" placeholder="$0.00"/>
-                        </label>
+					<div class="small-3 columns">
+						<label>Unit Price</label>
+					</div>
+                    <div class="large-5 columns end">
+						<input readonly class="round general" required type="text" id="precioUnidad" name="precioUNIDAD" placeholder="$0.00"/>
                     </div>
-                    <div class="large-4 columns">
-                        <label>Pack Reference
-                            <div class="row collapse">
-                                <div class="small-8 columns">
-                                    <input required name="depositoEnganche" id="deposito" type="text" placeholder="$0.00">
-                                </div>
-                                <div class="small-4 columns">
-                                    <a id="btnPackReference" href="#" class="button postfix">Capture</a>
-                                </div>
-                            </div>
+				</div>
+				<div class="row">
+					<div class="small-3 columns">
+						<label>Pack Reference</label>
+					</div>
+                    <div class="large-5 columns end">
+						<input class="round general" required name="depositoEnganche" id="deposito" type="text" placeholder="$0.00">
                     </div>
-                    <div class="large-4 columns">
-                        <label>Sell Price
-                            <input readonly required type="text" id="precioVenta" name="precioVENTA" placeholder="$0.00" />
-                        </label>
+					<div class="large-4 columns end">
+						<a id="btnPackReference" href="#" class="button postfix">Capture</a>
+					</div>
+				</div>
+				<div class="row border-bottom">
+					<div class="small-3 columns">
+						<label>Sell Price</label>
+					</div>
+                    <div class="large-5 columns end">
+						<input class="round general" readonly required type="text" id="precioVenta" name="precioVENTA" placeholder="$0.00" />
                     </div>
                 </div>
 
-
                 <div class="row">
-                    <div class="large-4 columns">
-                        <label>Downpayment
-                            <input id="downpayment" required type="text" placeholder="$0.00"/>
-                        </label>
+                    <div class="large-3 columns">
+                        <label>Downpayment</label>
+					</div>
+					<div class="large-5 columns end">
+						<input class="round general" id="downpayment" required type="text" placeholder="$0.00"/>
                     </div>
-                    <div class="large-4 columns">
-                        <label>Choose</label>
+					
+                    <!---->
+				</div>
+				<div class="row" style="margin-bottom:10px;">
+					<div class="large-3 columns">
+						 <label>Choose</label>
+					</div>
+					<div class="large-6 columns end">
                         <input type="radio" name="engancheR" value="porcentaje" id="porcentaje"><label for="porcentaje">Porcentaje</label>
                         <input checked type="radio" name="engancheR" value="cantidad" id="cantidad"><label for="cantidad">Cantidad</label>
                     </div>
-                    <div class="large-4 columns">
-                        <label>Amount
-                            <input type="text" placeholder="%" />
-                        </label>
+				</div>
+				<div class="row">
+					<div class="large-3 columns">
+						<label>Amount</label>
+					</div>
+					<div class="large-5 columns end">
+						<input type="text" placeholder="%" />
                     </div>
-                </div>
+				</div>
                 <!--Enganche-->
                 <div class="row">
                     <div class="small-3 columns">
                         <label for="depositoEnganche" class="text-left">Deposit Downpayment</label>
                     </div>
-                    <div class="large-9 columns">
-                        <div class="row collapse">
-                            <div class="small-10 columns">
-                                <input required name="depositoEnganche" id="deposito" type="text" placeholder="$0.00">
-                            </div>
-                            <div class="small-2 columns">
-                                <a id="btnDownpayment" href="#" class="button postfix">Capture</a>
-                            </div>
-                        </div>
+                    <div class="large-5 columns">
+						<input class="round general" required name="depositoEnganche" id="deposito" type="text" placeholder="$0.00">
                     </div>
+					<div class="small-4 columns">
+						<a id="btnDownpayment" href="#" class="button postfix">Capture</a>
+					</div>
                 </div>
                 <!--Pagos programados-->
                 <div class="row">
                     <div class="small-3 columns">
                         <label id="alertLastName" for="right-label" class="text-left">Scheduled Payments</label>
                     </div>
-                    <div class="large-9 columns">
-                        <div class="row collapse">
-                            <div class="small-10 columns">
-                                <input id="scheduledPayments" type="text" placeholder="$0.00">
-                            </div>
-                            <div class="small-2 columns">
-                                <a id="btnScheduledPayments" href="#" class="button postfix">Capture</a>
-                            </div>
-                        </div>
-                    </div>
+					<div class="small-5 columns">
+						<input class="round general" id="scheduledPayments" type="text" placeholder="$0.00">
+					</div>
+					<div class="small-4 columns">
+						<a id="btnScheduledPayments" href="#" class="button postfix">Capture</a>
+					</div>
                 </div>
                 <!--Montos a Descontar-->
-                <div class="row">
+                <div class="row border-bottom">
                     <div class="small-3 columns">
                         <label id="alertLastName" for="right-label" class="text-left">Discount Amount</label>
                     </div>
-                    <div class="small-9 columns">
-                        <div class="row collapse">
-                            <div class="large-10 columns">
-                                <input id="totalDiscountPacks" type="text" placeholder="$0.00">
-                            </div>
-                            <div class="large-2 columns">
-                                <a id="btnDiscountAmount" href="#" class="button postfix">Capture</a>
-                            </div>
-                        </div>
-                    </div>
+					<div class="large-5 columns">
+						<input class="round general" id="totalDiscountPacks" type="text" placeholder="$0.00">
+					</div>
+					<div class="large-4 columns">
+						<a id="btnDiscountAmount" href="#" class="button postfix">Capture</a>
+					</div>
                 </div>
                 <div class="row">
                 <div class="small-12 columns">
@@ -254,7 +270,9 @@
                                         <th class="cellGeneral">Delete</th>
                                    </tr>
                                 </thead>
-                                <tbody id="packSeleccionados"></tbody>
+                                <tbody id="packSeleccionados">
+									<tr><td colspan="10" ></td></tr>
+								</tbody>
                             </table>
                         </div>
                     </div>

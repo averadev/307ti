@@ -267,8 +267,9 @@
 					<!-- Nacionalidad-->
 					<div class="small-12 large-6 columns">
 						<label id="alertNationality" for="textNationality" class="text-left">Nationality
-							<select id="textNationality" class="round">
-								<option value="">Select your nationality</option>
+						<div class="caja" >
+							<select id="textNationality" class="input-group-field round">
+								<option value="0">Select your nationality</option>
 								<?php
 								foreach($nationality as $item){
 									?>
@@ -277,6 +278,7 @@
 								}
 								?>
 							</select>
+						</div>
 						</label>
 					</div>
 					<!-- Calificacion-->
@@ -321,25 +323,29 @@
 						<!-- Pais -->
 						<div class="small-12 large-6 columns">
 							<label id="alertCountry" for="textCountry" class="text-left">Country
-								<select id="textCountry" class="round">
+							<div class="caja" >
+								<select id="textCountry" class="input-group-field round">
 									<option value="0" code="0">Select your country</option>
 									<?php
 									foreach($country as $item){
 								
 									?>
-									<option value="<?php echo $item->pkCountryId; ?>" code="<?php echo $item->CountryCode; ?>" nationality="<?php echo $item->Nationality; ?>"><?php echo $item->CountryDesc; ?></option>
+									<option value="<?php echo $item->pkCountryId; ?>" code="<?php echo $item->CountryCode; ?>" ><?php echo $item->CountryDesc; ?></option>
 									<?php
 									}
 									?>
 								</select>
+							</div>
 							</label>
 						</div>
 						<!-- Estado-->
 						<div class="small-12 large-6 columns">
 							<label id="alertState" for="textState" class="text-left">State
-								<select id="textState" class="round">
+							<div class="caja" >
+								<select id="textState" class="input-group-field round">
 									<option value="0" code="0">Select your state</option>
 								</select>
+							</div>
 							</label>
 						</div>
 					</div>
@@ -449,25 +455,27 @@
 		<div id="tab-PContratos" class="large-12 columns tab-modal">
 			
 			<div class="row tab-modal-top">
-				<div class="small-10 large-centered columns">
-					<fieldset class="large-12 columns">
-						<div class="row collapse">
-							<div class="large-10 columns">
-								<input type="text" id="textSearchContractPeople" class="general txtSearch" placeholder="Id folio" />
-							</div>
-							<div class="small-1 columns">
-								<a  id="btnSearchContractPeople" class="button postfix"><i class="fa fa-search"></i></a>
-							</div>
-							<div class="small-1 columns">
-								<a id="btnCleanSearchContractPeople" class="button postfix"><i class="fa fa-trash"></i></a>
-							</div>
+				<div class="small-12 large-centered columns">
+					<div class="row">
+						<div class="large-6 columns">
+							<input type="text" id="textSearchContractPeople" class="general txtSearch" placeholder="Id folio" />
 						</div>
-					</fieldset>
+						<div class="small-12 large-6 columns" style="padding-left: 0;">
+							<a id="btnSearchContractPeople" class="btn btn-primary btn-Search">
+								<div class="label">Buscar</div>
+								<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+							</a>
+							<a id="btnCleanSearchContractPeople" class="btn btn-primary spanSelect">
+								<div class="label">Limpiar</div>
+								<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+							</a>
+						</div>
+					</div>
 				</div>
 			</div>
 		
-			<div class="row" id="divTableContractPeople">
-				<div class="large-12 columns table-section2">
+			<div class="row" >
+				<div class="large-12 columns table-section2" id="divTableContractPeople">
 					<table id="tableContractPeople">
 						<thead>
 							<tr>
@@ -527,14 +535,16 @@
 							</div>
 						</div>
 						<!-- tipo de vendedor -->
-						<div class="row">
+						<div class="row" style="margin-bottom:10px;">
 							<div class="small-3 columns">
 								<label id="alertTypeSeller" for="textTypeSeller" class="text-left">Payroll account</label>
 							</div>
 							<div class="small-9 columns">
-								<select id="textTypeSeller" class="round">
-									<option value="0" code="0">Select a type of seller</option>
-								</select>
+								<div class="caja" >
+									<select id="textTypeSeller" class="input-group-field round">
+										<option value="0" code="0">Select a type of seller</option>
+									</select>
+								</div>
 							</div>
 						</div>
 						<!-- Nómina-->
@@ -543,11 +553,13 @@
 								<label id="alertRoster" for="textRoster" class="text-left">Payroll type</label>
 							</div>
 							<div class="small-9 columns">
-								<select id="textRoster" class="round">
-									<option value="0" code="0">Select the payroll</option>
-									<option value="1" code="0">Sales</option>
-									<option value="2" code="0">Administrator</option>
-								</select>
+								<div class="caja" >
+									<select id="textRoster" class="input-group-field round">
+										<option value="0" code="0">Select the payroll</option>
+										<option value="1" code="0">Sales</option>
+										<option value="2" code="0">Administrator</option>
+									</select>
+								</div>
 							</div>
 						</div>
 						<div class="rdoField">
