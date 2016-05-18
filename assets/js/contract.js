@@ -117,9 +117,10 @@ function createDialogContract(addContract) {
 			text: "Save and close",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
-				createNewContract();
-				$(this).dialog('close');
-				alertify.success("Se guardo correctamente");
+				if(createNewContract()){
+					$(this).dialog('close');
+					alertify.success("Se guardo correctamente");
+				}
 			}
 		},
 			{
@@ -361,13 +362,15 @@ function saveContract() {
 function createNewContract(){
 
 	var id = "saveDataContract";
-	var arrayWords = ["legalName", "selectLanguage", "TourID", "deposito", "precioUnidad", "precioVenta"];
+	var arrayWords = ["legalName", "selectLanguage", "TourID", "depositoEnganche", "precioUnidad", "precioVenta"];
 	var form = $("#"+id);
 	var elem = new Foundation.Abide(form, {});
 
-	// if(!verifyInputsByID(arrayWords)){
-	// 	$('#'+id).foundation('validateForm');
-	// }else{
+	if(!verifyInputsByID(arrayWords)){
+		$('#'+id).foundation('validateForm');
+		alertify.success("Please fill required fields (red)");
+		return false;
+	}else{
 
 	$.ajax({
 			data: {
@@ -376,8 +379,8 @@ function createNewContract(){
 				idiomaID : $( "#selectLanguage" ).val(),
 				peoples : getArrayValuesColumnTable("tablePeopleSelected", 1),
 				primario : selectTypePeople("primario"),
-				// secundaria: selectTypePeople("secundaria"),
-				// baneficiario: selectTypePeople("baneficiario"),
+				secundario: selectTypePeople("secundario"),
+				baneficiario: selectTypePeople("baneficiario"),
 				unidades : getArrayValuesColumnTable("tableUnidadesSelected", 1),
 				weeks: $("#weeksNumber").val().trim(),
 				firstYear :$("#firstYearWeeks").val().trim(),
@@ -411,6 +414,8 @@ function createNewContract(){
 		.fail(function( jqXHR, textStatus, errorThrown ) {
 			//alertify.error("Ocurrio un error vuelve a intentarlo");
 		});
+
+	}
 }
 
 
@@ -482,8 +487,8 @@ function tablaPersonas(personas){
             bodyHTML+="<td>" + personas[i][j] + "</td>";
         };
         bodyHTML += "<td><div class='rdoField'><input type='radio' name='primario'><label for='folio'>&nbsp;</label></div></td>";
-        bodyHTML += "<td><div class='rdoField'><input type='radio' name='primario'><label for='folio'>&nbsp;</label></div></td>";
-        bodyHTML += "<td><div class='rdoField'><input type='radio' name='primario'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><div class='rdoField'><input type='radio' name='secundario'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><div class='rdoField'><input type='radio' name='beneficiario'><label for='folio'>&nbsp;</label></div></td>";
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
         bodyHTML+="</tr>";
     }
@@ -645,11 +650,13 @@ function modalDepositDownpayment(){
        		text: "ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-
+       			var deposito = $("#finalPriceDownpayment").val();
+       			$("#depositoEnganche").val(deposito);
+       			$(this).dialog('close');	
        		}
      	}],
      close: function() {
-    	$('#dialog-Downpayment').empty();
+    	//$('#dialog-Downpayment').empty();
      }
 	});
 	return dialogo;

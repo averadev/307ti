@@ -61,7 +61,7 @@
 					</div>
                 </div>
                 <!-- interval-->
-                <div class="row">
+<!--                 <div class="row">
                     <div class="small-3 columns">
                         <label for="interval" class="text-left">Interval</label>
                     </div>
@@ -70,7 +70,7 @@
                         <select type="text" id="interval" name="interval" class="input-group-field round" required></select>
 						</div>
 				   </div>
-                </div>
+                </div> -->
             <div class="row">
                 <div class="large-12 columns">
 					<a id="btngetUnidades" class="btn btn-primary btn-right">

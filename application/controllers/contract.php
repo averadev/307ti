@@ -207,7 +207,6 @@ private function createSemanaOcupacion($idContrato){
 	}
 	public function getUnidades(){
 		if($this->input->is_ajax_request()) {
-			//$sql = $this->getFilters($_POST, 'Date', 'Contract');
 			$unidades = $this->contract_db->getUnidades();
 			echo json_encode($unidades);
 		}

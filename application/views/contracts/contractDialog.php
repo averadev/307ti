@@ -8,7 +8,7 @@
                 </div>
             </div>
         </div>
-        <form id="saveDataContract">
+        <form id="saveDataContract" data-abide>
             <div class="fieldset large-12 columns">
                 <legend>
                     Contract Data
@@ -171,7 +171,8 @@
 						<label>Unit Price</label>
 					</div>
                     <div class="large-5 columns end">
-						<input readonly class="round general" required type="text" id="precioUnidad" name="precioUNIDAD" placeholder="$0.00"/>
+<!-- 						<input readonly class="round general" required type="text" id="precioUnidad" name="precioUNIDAD" placeholder="$0.00"/> -->
+                        <input readonly type="text" id="precioUnidad" name="precioUNIDAD" class="round general" required>
                     </div>
 				</div>
 				<div class="row">
@@ -179,7 +180,7 @@
 						<label>Pack Reference</label>
 					</div>
                     <div class="large-5 columns end">
-						<input class="round general" required name="depositoEnganche" id="deposito" type="text" placeholder="$0.00">
+						<input class="round general" readonly name="packReference" id="finalPricePack" type="text" value="0">
                     </div>
 					<div class="large-4 columns end">
 						<a id="btnPackReference" href="#" class="button postfix">Capture</a>
@@ -227,7 +228,7 @@
                         <label for="depositoEnganche" class="text-left">Deposit Downpayment</label>
                     </div>
                     <div class="large-5 columns">
-						<input class="round general" required name="depositoEnganche" id="deposito" type="text" placeholder="$0.00">
+                        <input readonly type="text" id="depositoEnganche" name="depositoEnganche" class="round general" required>
                     </div>
 					<div class="small-4 columns">
 						<a id="btnDownpayment" href="#" class="button postfix">Capture</a>
@@ -285,9 +286,9 @@
                     </div>
                 </div>
             </div>
-            <div data-abide-error class="alert callout" style="display: none;">
+            <!-- <div data-abide-error class="alert callout" style="display: none;">
                 <p><i class="fi-alert"></i> please fill required fields (red).</p>
-            </div>
+            </div> -->
         </form>
     </div>
 </div>
