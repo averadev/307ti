@@ -10,15 +10,10 @@
                 <h3 class="box-title">
                     <span>Add Tour ID</span>
                 </h3>
-				<a data-widget="newContrat" id="newContract" class="btn btn-new">
+				<a data-widget="newTour" id="newTour" class="btn btn-new">
 					<div class="label">Nuevo</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
-                <!--<div class="pull-left box-tools">
-					<span data-widget="newContrat" id="newContract">
-						<span>( New )</span>
-					</span>
-                </div>-->
             </div>
             <div class="box-body box-filter">
                 <div class="row">
@@ -45,9 +40,6 @@
 					</div>
 					<div class="small-12 medium-12 large-12 columns">
 						<fieldset class="large-12 columns fieldsetFilter">
-							<!--<legend><input id="advanceSearchTour" type="checkbox">
-							<label for="advanceSearchTour">&nbsp;&nbsp;Advanced search</label>
-							</legend>-->
 							<div class="rdoField">
 								<input type="checkbox" id="advanceSearchTour" class="checkFilter">
 								<label for="advanceSearchTour">Advanced search</label>
@@ -102,54 +94,7 @@
 							</div>
 						</fieldset>
 					</div>
-                    <!--<fieldset class="large-6 columns">
-                        <legend>Select Period</legend>
-                        <div class="row">
-                            <div class="medium-6 columns">
-                                <input id="startDateTour" class="round" type="date" placeholder="Start Date">
-                            </div>
-                            <div class="medium-6 columns">
-                                <input id="endDateTour" class="round" type="date"  placeholder="End Date">
-                            </div>
-                        </div>
-                    </fieldset>-->
                 </div>
-                <!--<div class="row">
-                    <div class="medium-6 columns">
-                        <fieldset>
-                            <legend><input id="advanceSearchTour" type="checkbox">
-							<label for="advanceSearchTour">&nbsp;&nbsp;Advanced search</label>
-							</legend>
-
-                            <div class="row" id="advanceTour" style="display: none;">
-                                <div class="large-12 columns slide">
-                                    <input type="checkbox" name="filter_tourID" value="codEmpleadoTour" id="codEmpleadoTour" required><label for="codEmpleadoTour">Codigo de Empleado</label>
-                                    <input type="checkbox" name="filter_tourID" value="folioTour" id="folioTour"><label for="folioTour">Folio</label>
-                                    <input type="checkbox" name="filter_tourID" value="unidadTour" id="unidadTour"><label for="unidadTour">Unidad ID</label>
-                                    <input type="checkbox" name="filter_tourID" value="emailTour" id="emailTour"><label for="email">Email</label>
-                                    <input type="checkbox" name="filter_tourID" value="contratoTour" id="contratoTour"><label for="contratoTour">Contrato ID</label>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <div class="medium-6 columns">
-                        <div class="row">
-                            <div class="large-12 columns">
-                                <div class="row collapse">
-                                    <div class="small-10 columns">
-                                        <input id="stringTour" type="text" class="txtSearch" placeholder="Search Field" name="search"  required="">
-                                    </div>
-                                    <div class="small-1 columns">
-                                        <a  id="btnfindTour" href="#" class="button postfix"><i class="fa fa-search"></i></a>
-                                    </div>
-                                    <div class="small-1 columns">
-                                        <a id="btnCleanWordTour"  href="#" class="button postfix"><i class="fa fa-trash"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
             </div>
         </div>
     </div>
@@ -188,5 +133,5 @@
         </div>
     </div>
 </div>
-
+<div id="dialog-tourID" title="Tour ID" style="display: none;"></div>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>tours.js"></script>

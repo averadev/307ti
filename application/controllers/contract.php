@@ -29,7 +29,8 @@ class Contract extends CI_Controller {
 		
 			$idContrato = $this->createContract();
 			$this->insertOcupacion($idContrato);
-			$this->createUnidades($idContrato); //ciclo
+			echo  1;
+			//$this->createUnidades($idContrato); //ciclo
 			// $idPeopleAcc = $this->createPeople();
 			// $idFinanciamiento = $this->createFinanciamiento($idContrato);
 			// $idSemanaOcupacion = $this->createSemanaOcupacion($idContrato);
@@ -64,7 +65,8 @@ private function createContract(){
 }
 
 private function insertOcupacion($idContrato){
-	for($i =0; $i< intval($_POST['weeks']); $i++){
+	$rango = intval($_POST['lastYear']-$_POST['firstYear']);
+	for($i =0; $i< $rango; $i++){
 			$Ocupacion = [
 			"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
 			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
@@ -92,7 +94,8 @@ private function insertOcupacion($idContrato){
 }
 
 private function createUnidades($idContrato){
-	for($i =0; $i< intval($_POST['weeks']); $i++){
+	$rango = intval($_POST['lastYear']-$_POST['firstYear']);
+	for($i =0; $i< $rango; $i++){
 		$Unidades = [
 			"fkResId"                   => $idContrato,
 			"fkUnitId"    				=> $_POST['unidades'][$i],

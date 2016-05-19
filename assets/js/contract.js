@@ -312,8 +312,6 @@ function getDetalleContratoByID(i){
 	showLoading('#contracts',true);
 	ajaxHTML('dialog-Edit-Contract', 'contract/modalEdit');
     showModals('dialog-Edit-Contract', cleanAddPeople);
-	//ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
-	//ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
 }
 
 function getInputsByID(formData, divs){
@@ -332,7 +330,11 @@ function verifyInputsByID(divs){
 	}
 	return v;
 }
-
+function clearInputsById(divs){
+	for (var i = 0; i < divs.length; i++) {
+		 $('#'+divs[i]).val("");
+	}
+}
 
 function addClassTime(div){
 	$("#"+div).addClass("alertInput").delay(5000).queue(function(next){
@@ -362,7 +364,7 @@ function saveContract() {
 function createNewContract(){
 
 	var id = "saveDataContract";
-	var arrayWords = ["legalName", "selectLanguage", "TourID", "depositoEnganche", "precioUnidad", "precioVenta"];
+	var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta"];
 	var form = $("#"+id);
 	var elem = new Foundation.Abide(form, {});
 
@@ -376,7 +378,7 @@ function createNewContract(){
 			data: {
 				legalName : $("#legalName").val().trim(),
 				tourID : $("#TourID").val().trim(),
-				idiomaID : $( "#selectLanguage" ).val(),
+				idiomaID : $("#selectLanguage").val(),
 				peoples : getArrayValuesColumnTable("tablePeopleSelected", 1),
 				primario : selectTypePeople("primario"),
 				secundario: selectTypePeople("secundario"),
@@ -408,8 +410,15 @@ function createNewContract(){
 			url: 'contract/saveContract'
 		})
 		.done(function( data, textStatus, jqXHR ) {
-			alertify.success(data);
-			return true;
+			if (data== 1) {
+				var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta", "downpayment"];
+				clearInputsById(arrayWords);
+				$('#dialog-Weeks').empty();
+				$('#tablePeopleSelected tbody').empty();
+				$('#tableUnidadesSelected tbody').empty();
+				alertify.success(data);
+			}
+			
 		})
 		.fail(function( jqXHR, textStatus, errorThrown ) {
 			//alertify.error("Ocurrio un error vuelve a intentarlo");
@@ -990,6 +999,8 @@ function selectMetodoPagoProgramados(){
                 }else{
                     $('#contractstbody').empty();
                     alertify.error("No data found");
+                    var img = '<div class="divNoResults"><div class="noResultsScreen"><img src="http://localhost/307ti/assets/img/common/SIN RESULTADOS-01.png"> <label> Oh no! No Results. Try again. </label></div></div>';
+					$('#Unidadestbody').html(img);
                 }
             },
             error: function(){

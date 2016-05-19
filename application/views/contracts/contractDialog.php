@@ -25,11 +25,11 @@
                 <!-- Language-->
                 <div class="row">
                     <div class="small-3 columns">
-                        <label id="alertLastName" for="right-label" class="text-left">Language</label>
+                        <label  for="selectLanguage" class="text-left">Language</label>
                     </div>
                     <div class="small-9 columns">
 						<div class="caja" >
-							<select class="input-group-field round" id="selectLanguage" form="saveDataContract" required></select>
+							<select class="input-group-field round" id="selectLanguage" form="saveDataContract"></select>
 						</div>
                     </div>
                 </div>
@@ -40,14 +40,10 @@
                     </div>
 					<div class="large-9 columns">
 						<div class="row">
-							<div class="small-4 large-4 columns">
+							<div class="small-4 large-6 columns">
 								<input value="0" readonly type="text" class="round general" placeholder="ID" name="TourID" id="TourID" required>
 							</div>
-							<!--<div class="small-2 columns">
-								<a id="btnAddTourID" href="#" class="button postfix"><i class="fa fa-plus"></i></a>
-								<a id="btnDeleteTourID" href="#" class="button postfix"><i class="fa fa-trash-o"></i></a>
-							</div >-->
-							<div class="small-8 large-8 columns">
+							<div class="small-8 large-6 columns">
 								<a id="btnAddTourID" class="btn btn-primary spanSelect">
 									<div class="label">Agregar</div>
 									<img src="<?php echo base_url().IMG; ?>common/more.png"/>
@@ -171,8 +167,7 @@
 						<label>Unit Price</label>
 					</div>
                     <div class="large-5 columns end">
-<!-- 						<input readonly class="round general" required type="text" id="precioUnidad" name="precioUNIDAD" placeholder="$0.00"/> -->
-                        <input readonly type="text" id="precioUnidad" name="precioUNIDAD" class="round general" required>
+                        <input readonly type="text" id="precioUnidad" name="precioUnidad" class="round general" required>
                     </div>
 				</div>
 				<div class="row">

@@ -2,9 +2,60 @@
  * Created by Faustino on 20/04/2016.
  */
 //Tours
-$('#btnCleanWordTour').click(function (){ document.getElementById("stringTourID").value = "";});
-$('#btnfindTour').click(function(){getTours();});
-$("#advanceSearchTour").click(function() {$("#advanceTour").slideToggle("slow");});
+$(document).ready(function(){
+    maxHeight = screen.height * .25;
+    maxHeight = screen.height - maxHeight;
+
+    $(document).on( 'click', '#newTour', function () {
+        var addTour = dialogAddTour();
+        addTour.dialog("open");
+        console.log("=D");
+    });
+    $('#btnCleanWordTour').click(function (){ 
+        $("#stringTour").val("");
+    });
+    $('#btnfindTour').click(function(){
+        getTours();
+    });
+    $("#advanceSearchTour").click(function() {
+        $("#advanceTour").slideToggle("slow");
+    });
+});
+
+
+function dialogAddTour(){
+    var div = '#dialog-tourID';
+    dialogo = $("#dialog-tourID").dialog ({
+        open : function (event){
+            if ($(div).is(':empty')) {
+                showLoading(div,true);
+                $(this).load ("tours/modalAddTour" , function(){
+                    showLoading(div,false);
+                });
+            }
+        },
+        autoOpen: false,
+        height: maxHeight,
+        width: "50%",
+        modal: true,
+        buttons: [{
+            text: "Cancel",
+            "class": 'dialogModalButtonCancel',
+            click: function() {
+                $(this).dialog('close');
+           }
+        },{
+            text: "ok",
+            "class": 'dialogModalButtonAccept',
+            click: function() {
+                $(this).dialog('close');
+            }
+        }],
+     close: function() {
+     }
+    });
+    return dialogo;
+}
 
 function getTours(){
 
@@ -32,6 +83,8 @@ function getTours(){
             }else{
                 alertify.error("No data found");
                 showLoading("#tblToursbody", false);
+                var img = '<div class="divNoResults"><div class="noResultsScreen"><img src="http://localhost/307ti/assets/img/common/SIN RESULTADOS-01.png"> <label> Oh no! No Results. Try again. </label></div></div>';
+                $('#tourstbody').html(img);
             }
         },
         error: function(){
