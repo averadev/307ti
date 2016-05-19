@@ -23,6 +23,7 @@ $(function() {
 				 $(x[i]).addClass('active');
 				$(".module").addClass("moduleHide")
 				$("#module-"+ $(x[i]).attr("attr-screen")).removeClass("moduleHide");
+				getElementBoxActive();
             }
         }
         // Add new tab
@@ -37,6 +38,7 @@ $(function() {
 			$('.menu-content').find('div[attr-screen="' + screen + '"]').addClass('active');
             addTabEvent();
             loadModule(screen);
+			
         }
     });
 	
@@ -61,6 +63,7 @@ function addTabEvent(){
 			$('.menu-sel').removeClass('active');
 			var screen = $(this).attr("attr-screen");
 			$('.menu-content').find('div[attr-screen="' + screen + '"]').addClass('active');
+			getElementBoxActive();
         }
     });
     // Event Close Tab
@@ -126,6 +129,7 @@ function loadModule(screen){
 	showLoading('#module-'+screen,true);
 	$( "#module-"+screen ).load( BASE_URL+screen, function() {
 		showLoading('.general-section',false);
+		getElementBoxActive();
 	});
 }
 
@@ -243,7 +247,7 @@ function drawTable(data, funcion, cadena, table){
     //creación del body
     for (var i = 0; i < data.length; i++) {
         bodyHTML += "<tr>";
-       	bodyHTML += '<td onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
+       	bodyHTML += '<td class="iconEdit" onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
         for (var j in data[i]) {
             bodyHTML+="<td>" + data[i][j] + "</td>";
         };
@@ -291,7 +295,7 @@ function drawTable2(data, table ,funcion, cadena){
     for (var i = 0; i < data.length; i++) {
         bodyHTML += "<tr>";
 		if(funcion != false){
-			bodyHTML += '<td nowrap onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
+			bodyHTML += '<td class="iconEdit" nowrap onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
 		}
         for (var j in data[i]) {
             bodyHTML+="<td nowrap>" + data[i][j] + "</td>";
@@ -331,7 +335,6 @@ function activeTable(table){
         var box = $(this).parents(".box").first();
 		var section = $(this).parents(".section").attr('id');
 		var relation = $(box).attr('relation-attr');
-		console.log(section)
         //Find the body and the footer
         var bf = box.find(".box-body, .box-footer");
         if (!box.hasClass("collapsed-box")) {
@@ -352,6 +355,7 @@ function activeTable(table){
 
 
 function expandBox(section,relation){
+	$(".module").css('height',($( window ).height() - 100) + "px");
 	if(section != undefined && relation != undefined){
 		var position = $('#' + relation).position();
 		if(position.top != undefined){
@@ -496,7 +500,6 @@ function initializeTooltips(tooltips){
 				divReturn += "<div class='boxTitleTips'>Information</div>";
 				for (var j in tips) {
 					divReturn += "<div class='boxInfoTips'>" + j + ": " + tips[j] +"</div>"
-					console.log()
 				}
 				divReturn += "</div>";
 				return divReturn;
@@ -515,7 +518,7 @@ function drawTable3(data,titulo, table){
     //creación del body
     for (var i = 0; i < data.length; i++) {
         bodyHTML += "<tr>";
-        bodyHTML += '<td><i class="fa fa-info-circle"></i></td>';
+        bodyHTML += '<td class="iconEdit"><i class="fa fa-info-circle"></i></td>';
         for (var j in data[i]) {
             bodyHTML+="<td>" + data[i][j] + "</td>";
         };
@@ -553,4 +556,19 @@ function noResults(parentElement, isOpen = false ){
 		
 	}
 
+}
+
+$( window ).resize(function() {
+	//getElementBoxActive();
+});
+
+function getElementBoxActive(){
+	$('#tab-general .tabs-title.active').each(function (index) { 
+		var screen = $(this).attr("attr-screen");
+		var section = $('#module-' + screen).find('.section').first();
+		var box = $(section).find(".box").first();
+		section = $(section).attr('id');
+		var relation = $(box).attr('relation-attr');
+		expandBox(section,relation);
+	});
 }

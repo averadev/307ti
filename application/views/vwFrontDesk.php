@@ -44,7 +44,7 @@
 									<label id="alertArrivalFront" class="text-left">Arrival Date
 										<div class="input-group date" id="frontArrivalDate" >
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-											<input type="text" id="dateArrivalFront" class="input-group-field roundRight" readonly/>
+											<input type="text" id="dateArrivalFront" class="txtSearch input-group-field roundRight" readonly/>
 										</div>
 									</label>
 								</div>
@@ -143,34 +143,34 @@
 						<table id="tableFrontDesk" class="ganttTable" style="width:100%; float:left;">
 							<thead>
 								<tr class="gHeaderYear">
-									<th colspan="4" class="panelLeft last"></th>
+									<th colspan="4" class="panelLeftHead last"></th>
 								</tr>
 								<tr class="gHeaderMonth">
-									<th colspan="4" class="panelLeft last"></th>
+									<th colspan="4" class="panelLeftHead last"></th>
 								</tr>
 								<tr class="gHeaderDay" id="day">
-									<th class="panelLeft">
+									<th class="panelLeftHead">
 										Type
 										<div class="orderField" attr-field="fpi.FloorPlanDesc">
 											<span class="orderRow" attr-order="asc" ><i class="fa fa-caret-up"></i></span>
 											<span class="orderRow" attr-order="desc"><i class="fa fa-caret-down"></i></span>
 										</div>
 									</th>
-									<th class="panelLeft">
+									<th class="panelLeftHead">
 										Num
 										<div class="orderField" attr-field="u.UnitCode">
 											<span class="orderRow" attr-order="asc" ><i class="fa fa-caret-up"></i></span>
 											<span class="orderRow" attr-order="desc"><i class="fa fa-caret-down"></i></span>
 										</div>
 									</th>
-									<th class="panelLeft">
+									<th class="panelLeftHead">
 										status
 										<div class="orderField" attr-field="hks.HKStatusDesc">
 											<span class="orderRow" attr-order="asc" ><i class="fa fa-caret-up"></i></span>
 											<span class="orderRow" attr-order="desc"><i class="fa fa-caret-down"></i></span>
 										</div>
 									</th>
-									<th class="panelLeft last Tooltips">
+									<th class="panelLeftHead last Tooltips">
 										View
 										<div class="orderField" attr-field="v.ViewDesc">
 											<span class="orderRow" attr-order="asc" ><i class="fa fa-caret-up"></i></span>

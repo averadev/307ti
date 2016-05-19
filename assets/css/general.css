@@ -26,9 +26,7 @@ body {
 * @todo Field
 */
 input.general {
-	/*background:#000000;*/
 	border-color:rgb(230, 230, 230);
-	/*font-size: 0.875rem;*/
 	font-size:14px;
 }
 
@@ -418,6 +416,7 @@ a.button.postfix.img {
 .module{
 	position:relative;
 	height:564px;
+	height:564px;
 }
 
 /**
@@ -730,7 +729,7 @@ table thead tr th, table tbody tr td{
 /*** fin :)***/
 
 .iconEdit{
-	width:25px;
+	font-size:1rem;
 	cursor:pointer;
 }
 
@@ -861,13 +860,13 @@ table thead tr th, table tbody tr td{
 	background:#FFFFFF;
 	margin:0;
 	padding:0;
-	height:40px;
+	height:auto;
 }
 
 .tabsModal .tabs{
 	margin-left:0;
 	height:40px;
-	height:40px;
+	/*height:40px;*/
 }
 
 .tab-modal{
@@ -881,11 +880,12 @@ table thead tr th, table tbody tr td{
 .tabsModal .tabs .tabs-title{
 	margin:0;
 	margin-right:2px;
-	height:40px;
+	/*height:40px;*/
 }
 
 .tabsModal .tabs .tabs-title > a{
-	padding: 12px 30px;
+	/*padding: 12px 30px;*/
+	padding: 8px 15px;
 	font-size:14px;
 }
 
@@ -1278,45 +1278,42 @@ label.error{
 */
 @media only screen and (min-width: 40.063em) and (max-width: 64em) {
 	
-	.general-section{
-		padding: 0 20px 0 240px;
-		padding:0;
+	.general-section {
+		padding: 0 20px 0 150px;
 	}
-	.menu-section{
-		z-index: 1000;
-		float: left;
-		position: fixed;
-		height: auto;
-		width: 100%;
+	
+	.menu-section {
+		width:auto;
 	}
+	
 	.menu-content{
 		height: 100%;
-		width: 100%;
+		width: 150px;
 		overflow-y: auto;
 		padding-top:10px;
 		padding-bottom:10px;
 	}
 	.menu-sel{
-		cursor: pointer;
-		padding-top: 12px;
-		margin-bottom: 5px;
-		margin:0;
-		height: 40px;
-		width: 180px;
-		color: #3b3b3b;
-		font-size: 14px;
-		text-align: center;
-		background-color: #aaaaaa;
-		float:left;
-		margin-right:15px;
+		height: 70px;
+		text-align:center;
+		margin-right:0;
 	}
 	
-	.menu-fix{
+	.icon-menu-sel{
+		width:100%;
+		margin-left:0;
+	}
+	
+	.label-menu-sel{
+		width:100%;
+		margin-left: 0;
+	}
+	/*.menu-fix{
 		height:auto;
 	}
 	.general-section{
 		padding: 50px 5px 5px 5px;
-	}
+	}*/
 	
 	/*.menu-sel:hover{
 		color: #ffffff;

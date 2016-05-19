@@ -58,6 +58,9 @@ $(function() {
 * Muestra la lista de front desk
 */
 function getFrontDesk(order){
+	$('.rightPanel').remove();
+	$('.panelLeft').remove();
+	$('#tableFrontDesk tbody').empty();
 	showLoading( '#table-frontDesk', true );
 	
 	var filters = getFiltersCheckboxs('FilterFrontDesk');
@@ -78,7 +81,7 @@ function getFrontDesk(order){
 		dataType:'json',
 		success: function(data){
 			console.log(data)
-			$('.rightPanel').remove();
+			
 			var headYearHTML = "";
 			var headMonthHTML = "";
 			var headHTML = "";
@@ -115,41 +118,49 @@ function getFrontDesk(order){
 			
 			var bodyHTML = "";
 			for(i=0;i<items.length;i++){
-				bodyHTML += "<tr>";
+				
 				var item = items[i]
+				bodyHTML = "<tr id='tr" + i + "'>";
 				bodyHTML+="<td nowrap class='panelLeft'>"+item.type+"</th>";
 				bodyHTML+="<td nowrap class='panelLeft' >"+item.unit+"</th>";
 				bodyHTML+="<td nowrap class='panelLeft' >"+item.status+"</th>";
 				bodyHTML+="<td nowrap title='" + item.viewDesc + "' class='panelLeft last Tooltips'>"+item.view+"</th>";
+				bodyHTML += "</tr>";
+				$('#tableFrontDesk tbody').append(bodyHTML);
+				
+				for(j = 0;j<dates.length;j++){
+					bodyHTML="<td class='rightPanel' id='" + i + "-" + dates[j].pkCalendarId + "'></td>";
+					$('#tableFrontDesk tbody #tr' + i).append(bodyHTML);
+				}
 				
 				for(k = 0;k<items[i].values.length;k++){
-				
 					var values = items[i].values[k]
 					var valueToolTip = {Confirmation:values.ResConf, Room:item.unit, Guest:values.people, Arrival:values.dateFrom, Departure:values.dateTo};
 					var vToolTip = JSON.stringify(valueToolTip);
 					var exist = false;
-					$('.emptyCell').remove();
+					
 					for(j = 0;j<dates.length;j++){
 						var totaltd = (values.to - values.from) + 1;
 						if(dates[j].pkCalendarId >= values.from && dates[j].pkCalendarId <= values.to){
 							if(exist == false){
-								
-								
-								bodyHTML+="<td titleCustom='" +vToolTip +"' colspan='" + totaltd + "' class='" + values.occType + " rightPanel Tooltips'>" + values.people + "</td>";
+								$('#' + + i + "-" + dates[j].pkCalendarId).attr('colspan',totaltd);
+								$('#' + + i + "-" + dates[j].pkCalendarId).attr('titleCustom',vToolTip);
+								$('#' + + i + "-" + dates[j].pkCalendarId).attr('class',values.occType + " rightPanel Tooltips");
+								$('#' + + i + "-" + dates[j].pkCalendarId).text(values.people);
+								/*bodyHTML="<td titleCustom='" +vToolTip +"' colspan='" + totaltd + "' class='" + values.occType + " rightPanel Tooltips'>" + values.people + "</td>";*/
+								//$('#tableFrontDesk tbody #tr' + i).append(bodyHTML);
 								exist = true;
+							}else{
+								$('#' + + i + "-" + dates[j].pkCalendarId).remove();
 							}
-						}else{
-							bodyHTML+="<td class='rightPanel emptyCell'></td>";
+							
 						}
 					}
 				}
-				bodyHTML += "</tr>";
+				
 			}
 			
-			console.log(bodyHTML)
-			
-			
-			$('#tableFrontDesk tbody').html(bodyHTML);
+			//$('#tableFrontDesk tbody').html(bodyHTML);
 			
 			initializeTooltips('.Tooltips');
 			
@@ -180,7 +191,7 @@ function getWeekByYear(year){
 				var optionWeek = ""
 				for(i=0;i<items.length;i++){
 					var item = items[i];
-					optionWeek += "<option value='" + item.date + "'>" + item.Week + "</option>";
+					optionWeek += "<option value='" + item.date + "'>" + item.Intv + "</option>";
 				}
 				$('#textIntervalFront').html(optionWeek);
 				optionWeek = null;

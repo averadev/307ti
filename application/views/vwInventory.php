@@ -103,7 +103,7 @@
 											<?php
 											foreach($property as $item){
 											?>
-												<option value="<?php //echo $item->pkPropertyId; ?>" code="<?php echo $item->PropertyCode; ?>"><?php echo $item->PropertyName; ?></option>
+												<option value="<?php echo $item->pkPropertyId; ?>" code="<?php echo $item->PropertyCode; ?>"><?php echo $item->PropertyName; ?></option>
 											<?php
 											}
 											?>

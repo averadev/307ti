@@ -82,10 +82,22 @@ Class frontDesk_db extends CI_MODEL
 		if($filters['dates'] != false){
 			if (isset($filters['dates']['dateArrivalFront']) && !isset($filters['dates']['dateDepartureFront']) ){
 				$date = $filters['dates']['dateArrivalFront'];
-				$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),'" . $date . "',101) and tblCalendar.Date <= DATEADD(day,10,CONVERT(VARCHAR(10),'" . $date . "',101))");
+				$this->db->where("((select top 1 ro2.NightId from tblCalendar c3 LEFT JOIN tblResOcc ro2 on ro2.fkCalendarId = c3.pkCalendarId where ro.fkResId = ro2.fkResId and c3.Date = CONVERT(VARCHAR(10),'" . $date . "',101) ) = 1)");
+				$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),'" . $date . "',101) and tblCalendar.Date <= DATEADD(day,10,CONVERT(VARCHAR(10),'" . $date . "',101))");			
 			}else if (!isset($filters['dates']['dateArrivalFront']) && isset($filters['dates']['dateDepartureFront']) ){
 				$date = $filters['dates']['dateDepartureFront'];
-				$this->db->where("tblCalendar.Date >= DATEADD(day,-10,CONVERT(VARCHAR(10),'" . $date . "',101)) and tblCalendar.Date <= CONVERT(VARCHAR(10),'" . $date . "',101)");
+				$this->db->where("((select top 1 ro2.NightId from tblCalendar c2 LEFT JOIN tblResOcc ro2 on ro2.fkCalendarId = c2.pkCalendarId where ro.fkResId = ro2.fkResId and c2.Date = DATEADD(day,-1,CONVERT(VARCHAR(10),'" . $date . "',101))) = (SELECT top 1 ro2.NightId from tblResOcc ro2 where ro2.fkResId = ro.fkResId ORDER BY ro2.NightId DESC ))");
+				$this->db->where("tblCalendar.Date >= DATEADD(day,-11,CONVERT(VARCHAR(10),'" . $date . "',101)) and tblCalendar.Date <= DATEADD(day,-1,CONVERT(VARCHAR(10),'" . $date . "',101))");
+			}else if (isset($filters['dates']['dateArrivalFront']) && isset($filters['dates']['dateDepartureFront'])){
+				$date = $filters['dates']['dateArrivalFront'];
+				$date2 = $filters['dates']['dateDepartureFront'];
+				$condicionDate = "(((select top 1 ro2.NightId from tblCalendar c3 LEFT JOIN tblResOcc ro2 on ro2.fkCalendarId = c3.pkCalendarId ";
+				$condicionDate .= "where ro.fkResId = ro2.fkResId and c3.Date = CONVERT(VARCHAR(10),'" . $date . "',101) ) = 1) and ";
+				$condicionDate .= "((select top 1 ro2.NightId from tblCalendar c2 LEFT JOIN tblResOcc ro2 on ro2.fkCalendarId = c2.pkCalendarId ";
+				$condicionDate .= "where ro.fkResId = ro2.fkResId and c2.Date = DATEADD(day,-1,CONVERT(VARCHAR(10),'" . $date2 . "',101))) ";
+				$condicionDate .= "= (SELECT top 1 ro2.NightId from tblResOcc ro2 where ro2.fkResId = ro.fkResId ORDER BY ro2.NightId DESC )))";
+				$this->db->where($condicionDate);
+				$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),'" . $date . "',101) and tblCalendar.Date <= DATEADD(day,-1,CONVERT(VARCHAR(10),'" . $date2 . "',101))");
 			}else if (isset($filters['dates']['textIntervalFront'])){
 				$date = $filters['dates']['textIntervalFront'];
 				$this->db->where("tblCalendar.Date >= DATEADD(day,-10,CONVERT(VARCHAR(10),'" . $date . "',101)) and tblCalendar.Date <= CONVERT(VARCHAR(10),'" . $date . "',101)");
@@ -117,7 +129,11 @@ Class frontDesk_db extends CI_MODEL
 				$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),'" . $date . "',101) and tblCalendar.Date <= DATEADD(day,10,CONVERT(VARCHAR(10),'" . $date . "',101))");
 			}else if (!isset($filters['dates']['dateArrivalFront']) && isset($filters['dates']['dateDepartureFront']) ){
 				$date = $filters['dates']['dateDepartureFront'];
-				$this->db->where("tblCalendar.Date >= DATEADD(day,-10,CONVERT(VARCHAR(10),'" . $date . "',101)) and tblCalendar.Date <= CONVERT(VARCHAR(10),'" . $date . "',101)");
+				$this->db->where("tblCalendar.Date >= DATEADD(day,-11,CONVERT(VARCHAR(10),'" . $date . "',101)) and tblCalendar.Date <= DATEADD(day,-1,CONVERT(VARCHAR(10),'" . $date . "',101))");
+			}else if (isset($filters['dates']['dateArrivalFront']) && isset($filters['dates']['dateDepartureFront'])){
+				$date = $filters['dates']['dateArrivalFront'];
+				$date2 = $filters['dates']['dateDepartureFront'];
+				$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),'" . $date . "',101) and tblCalendar.Date <= DATEADD(day,-1,CONVERT(VARCHAR(10),'" . $date2 . "',101))");
 			}else if (isset($filters['dates']['textIntervalFront'])){
 				$date = $filters['dates']['textIntervalFront'];
 				$this->db->where("tblCalendar.Date >= DATEADD(day,-10,CONVERT(VARCHAR(10),'" . $date . "',101)) and tblCalendar.Date <= CONVERT(VARCHAR(10),'" . $date . "',101)");
@@ -143,7 +159,7 @@ Class frontDesk_db extends CI_MODEL
 	}
 	
 	public function getWeekByYear($year){
-		$this->db->select("c.Week, CONVERT(VARCHAR(10), c.Date,101) as date");
+		$this->db->select("c.Intv, CONVERT(VARCHAR(10), c.Date,101) as date");
 		$this->db->from("tblCalendar c");
 		$this->db->where("c.Year = ", $year);
 		$this->db->where("c.fkDayOfWeekId = 1");
