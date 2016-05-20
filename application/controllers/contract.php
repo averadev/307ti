@@ -172,7 +172,7 @@ private function createSemanaOcupacion($idContrato){
 		"fkResInvtId"   => $_POST['precioUnidad'],
 		"OccYear"       => $_POST[''],
 		"NightId"       => $_POST[''],
-		"fkResTypeId"   => $this->contract_db->selectRestType('Cont'),,
+		"fkResTypeId"   => $this->contract_db->selectRestType('Cont'),
 		"fkOccTypeId"   => 1,
 		"fkCalendarId" 	=> $_POST[''],
 		"ynActive"   	=> $_POST[''],

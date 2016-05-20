@@ -99,8 +99,8 @@
 		</div>
 	</div>
 	
-	<div class="large-12 columns" id="box-people-relation">
-		<div class="box">
+	<div class="large-12 columns" >
+		<div class="box" id="box-people-relation">
 			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
                </div>
@@ -178,7 +178,7 @@
 			</li>
 		</ul>
 	</div>
-	<div class="row contentModal" id="contentModalPeople">
+		<div class="large-12 columns contentModal" id="contentModalPeople">
 	
 		<div id="tab-PGeneral" class="large-12 columns tab-modal" style="display:inline;">
 			<!-- Datos personales -->
@@ -425,7 +425,7 @@
 				</div>
 			</fieldset>
 		</div>
-		<div id="tab-PReservaciones" class="large-12 columns tab-modal">
+		<!--<div id="tab-PReservaciones" class="large-12 columns tab-modal">
 			<div class="row tab-modal-top" id="divTableReservationsPeople">
 				<div class="large-12 columns table-section2">
 					<table id="tableReservationsPeople">
@@ -450,8 +450,8 @@
 					</table>
 				</div>
 			</div>
-		</div>
-		<div id="tab-PContratos" class="large-12 columns tab-modal">
+		</div>-->
+		<!--<div id="tab-PContratos" class="large-12 columns tab-modal">
 			
 			<div class="row tab-modal-top">
 				<div class="small-12 large-centered columns">
@@ -499,21 +499,20 @@
 					</table>
 				</div>
 			</div>
-		</div>
-		<div id="tab-PEmpleados" class="large-12 columns tab-modal">
+		</div>-->
+		<!--<div id="tab-PEmpleados" class="large-12 columns tab-modal">
 			<!-- Datos del contacto -->
-			<div class="row" id="alertValPeopleEmployee" style="display:none;">
+			<!--<div class="row" id="alertValPeopleEmployee" style="display:none;">
 				<div class="small-12 columns">
 					<div class="callout alert">
 						Please complete fields in red
 					</div>
 				</div>
 			</div>
-			<!--<fieldset class="fieldset">-->
 				<div class="row tab-modal-top" id="containerPeopleEmployee">
 					<div class="small-10 large-centered columns">
 						<!-- Código del colaborador:-->
-						<div class="row">
+						<!--<div class="row">
 							<div class="small-3 columns">
 								<label id="alertCodeCollaborator" for="textCodeCollaborator" class="text-left">Employee code</label>
 							</div>
@@ -523,18 +522,18 @@
 						</div>
 						<div class="row">
 							<!-- Iniciales-->
-							<div class="small-12 large-6 columns" style="float:right">
+							<!--<div class="small-12 large-6 columns" style="float:right">
 								<label id="alertInitials" for="textInitials" class="text-left">Initials</label>
 									<input type="text" id="textInitials" class="round general" >
 							</div>
 							<!-- Código numérico -->
-							<div class="small-12 large-6 columns">
+							<!--<div class="small-12 large-6 columns">
 								<label for="textCodeNumber" id="alertCodeNumber" class="text-left">Numeric code</label>
 									<input type="number" id="textCodeNumber" class="round general">
 							</div>
 						</div>
 						<!-- tipo de vendedor -->
-						<div class="row" style="margin-bottom:10px;">
+						<!--<div class="row" style="margin-bottom:10px;">
 							<div class="small-3 columns">
 								<label id="alertTypeSeller" for="textTypeSeller" class="text-left">Payroll account</label>
 							</div>
@@ -547,7 +546,7 @@
 							</div>
 						</div>
 						<!-- Nómina-->
-						<div class="row">
+						<!--<div class="row">
 							<div class="small-3 columns">
 								<label id="alertRoster" for="textRoster" class="text-left">Payroll type</label>
 							</div>
@@ -567,9 +566,8 @@
 						</div>
 					</div>
 				</div>
-			<!--</fieldset>-->
+			</div>-->
 		</div>
-	</div>
 	<input type="hidden" value="0" id="idPeople" />
 </div>
 

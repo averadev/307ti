@@ -355,12 +355,16 @@ function activeTable(table){
 
 
 function expandBox(section,relation){
-	$(".module").css('height',($( window ).height() - 100) + "px");
+	$(".module").css('height',($( window ).height() - 110) + "px");
 	if(section != undefined && relation != undefined){
 		var position = $('#' + relation).position();
+		//var hRelation = $('#' + relation).height();
 		if(position.top != undefined){
-			var a = ($("#" + section).height() - (position.top + 130));
-			$('#' + relation + ' .table').css('height', a + "px" );
+			var neHeight = ($("#" + section).height() - (position.top + 80));
+			if($('#' + relation + ' .pagina').length){
+				neHeight = neHeight - 35;
+			}
+			$('#' + relation + ' .table').css('height', neHeight + "px" );
 		}
 	}
 }

@@ -113,7 +113,7 @@ function createModalDialog(){
 	if(dialogUser != null){
 		dialogUser.dialog( "destroy" );
 	}
-	
+	console.log(maxHeight)
 	dialogUser = $( "#dialog-User" ).dialog({
 		autoOpen: false,
 		height: maxHeight,
@@ -147,7 +147,6 @@ function createModalDialog(){
 					}else{
 						EditUser(false, $("#idPeople").data("pkPeopleId") )
 					}
-					document.getElementsByTagName("html")[0].style.overflow = "auto";
 				}
 			},
 			{
@@ -191,15 +190,20 @@ function showModal(id){
 	if(id == 0){
 		$('.dialogModalButtonSecondary').hide();
 		$("#tabsModalPeople").hide();
+		//$('#dialog-User .contentModal').css('height', "100%" );
 		dialogUser.dialog( "option", "title", "People > Create person" );
 		dialogUser.dialog('open');
 		$('#imgCloseModal').off();
 		$('.imgCloseModal').on('click', function() {  hideModal(); });
+	
 	}else{
+		
 		dialogUser.dialog( "option", "title", "People > Edit person" );
 		$('.dialogModalButtonSecondary').show();
 		$("#tabsModalPeople").show();
+		$('#dialog-User .contentModal').css('height', "90%" );
 		getInfoPeople(id);
+		
 	}
 	/**/
 }
@@ -656,7 +660,6 @@ function hideAlertUserFields(){
 * limpia los campos de people
 */
 function cleanUserFields(){
-	document.getElementsByTagName("html")[0].style.overflow = "auto";
 	hideAlertUserFields();
 	$('#textName').val("");
 	$('#textLastName').val("");
@@ -872,7 +875,6 @@ function getInfoPeople(id){
 			$("#idPeople").data("pkEmployeeId",item.pkEmployeeId);
 			$('#imgCloseModal').off();
 			$('.imgCloseModal').on('click', function() {  hideModal(); });
-			document.getElementsByTagName("html")[0].style.overflow = "hidden";
 			$('body, html').animate({
 				scrollTop: '0px'
 			}, 0);

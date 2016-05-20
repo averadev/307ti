@@ -31,6 +31,15 @@ Class frontDesk_db extends CI_MODEL
 	}
 	
 	/**
+	* obtiene la lista de tblHKStatus
+	**/
+	public function getHKStatus(){
+		$this->db->select('tblHKStatus.pkHKStatusId, tblHKStatus.HKStatusDesc, tblHKStatus.HKStatusCode');
+		$this->db->from('tblHKStatus');
+		return  $this->db->get()->result();
+	}
+	
+	/**
 	* obtiene la lista de tblStatusType
 	**/
 	public function getFrontDesk($filters){

@@ -15,8 +15,38 @@
 			</div>
 			<!-- body search-->
 			<div class="box-body box-filter" style="display: block;">
-				<!--filter-->
+				<!-- module -->
 				<div class="row">
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter" Id="sectionFilter" >
+							<legend class="legendSearch">Choose the type search</legend>
+							<!-- Type of Availability -->
+							<div class="rdoField">
+								<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section1" id="FrontDeskLookUp" checked >
+								<label for="FrontDeskLookUp" >Front Desk Look Up</label>
+							</div>
+							<!-- Type of Availability -->
+							<div class="rdoField">
+								<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section2" id="HousekeepingJobConfig">
+								<label for="HousekeepingJobConfig">Housekeeping Job Config</label>
+							</div>
+							<div class="rdoField">
+								<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section3" id="HousekeepingConfiguration">
+								<label for="HousekeepingConfiguration">Housekeeping Configuration</label>
+							</div>
+							<div class="rdoField">
+								<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section4" id="HousekeepingLookup">
+								<label for="HousekeepingLookup">Housekeeping Lookup</label>
+							</div>
+							<div class="rdoField">
+								<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section5" id="FrontDeskReport">
+								<label for="FrontDeskReport">Report</label>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+				<!--filter-->
+				<div class="row sectionFrontDesk section1" style="display:none;">
 					<div class="small-12 medium-8 large-12 columns"> 
 						<fieldset class="large-12 columns fieldsetFilter">
 							<legend class="legendSearch">Choose the filters</legend>
@@ -99,16 +129,16 @@
 												<option value="">Select a view</option>
 												<?php
 												foreach($view as $item){
+													?>
+													<option value="<?php echo $item->pkViewId; ?>"><?php echo $item->ViewDesc; ?></option>
+													<?php
+												}
 												?>
-												<option value="<?php echo $item->pkViewId; ?>"><?php echo $item->ViewDesc; ?></option>
-												<?php
-											}
-										?>
 											</select>
 										</div>
 									</label>
 								</div>
-								<div class="small-12 large-3 columns" style="padding-top:35px;">
+								<div class="small-12 large-3 columns" style="padding-top:25px;">
 									<a id="btnSearchFrontDesk" class="btn btn-primary btn-Search">
 										<div class="label">Buscar</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
@@ -119,6 +149,97 @@
 									</a>
 								</div>
 							</div>
+						</fieldset>
+					</div>
+				</div>
+				<!-- Housekeeping Job Config -->
+				<div class="row sectionFrontDesk section2" style="display:none;">
+				</div>
+				
+				<!-- Housekeeping Configuration -->
+				<div class="row sectionFrontDesk section3">
+					<div class="small-12 medium-8 large-12 columns"> 
+						<fieldset class="large-12 columns fieldsetFilter">
+							<label>Status</label>
+							<?php
+							foreach($HKStatus as $item){
+								?>
+								<div class="rdoField">
+									<input name="FilterHKConfiguration" type="checkbox" id="<?php echo "hk" . $item->HKStatusCode; ?>" class="checkFilterFrontDesk" value="<?php echo $item->pkHKStatusId; ?>">
+									<label for="<?php echo "hk" . $item->HKStatusCode; ?>"><?php echo $item->HKStatusDesc; ?></label>
+								</div>
+								<?php
+								}
+							?>
+						</fieldset>
+					</div>
+					<div class="small-12 medium-12 large-12 columns">
+						<!-- text Field dates -->
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row">
+								<!-- Unit -->
+								<div class="small-12 large-3 columns">
+									<label id="alertUnitHKConfig" class="text-left">Unit Code 
+										<input id="textUnitHKConfig" type="text" class="txtSearch round general">
+									</label>
+								</div>
+								<div class="small-12 large-3 columns">
+									<label id="alertFloorPlanHKConfig" class="text-left">Floor plan 
+										<div class="caja" >
+											<select id="textFloorPlanHKConfig" class="input-group-field round">
+												<option value="">Select a view</option>
+												<?php
+												foreach($view as $item){
+													?>
+													<option value="<?php echo $item->pkViewId; ?>"><?php echo $item->ViewDesc; ?></option>
+													<?php
+												}
+												?>
+											</select>
+										</div>
+									</label>
+								</div>
+								<!-- Date -->
+								<div class="small-12 large-3 columns">
+									<label id="alertDateHKConfig" class="text-left">Arrival Date
+										<div class="input-group date" >
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="dateHKConfig" class="txtSearch input-group-field roundRight" readonly/>
+										</div>
+									</label>
+								</div>
+								<div class="small-12 large-3 columns">
+									<label id="alertSectionHKConfig" class="text-left">Section 
+										<input id="textSectionHKConfig" type="text" class="txtSearch round general">
+									</label>
+								</div>
+							</div>
+						</fieldset>
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row">
+								<div class="small-12 large-3 columns">
+									<label id="alertMaidHKConfig" class="text-left">Maid 
+										<input id="textMaidHKConfig" type="text" class="txtSearch round general">
+									</label>
+								</div>
+								<div class="small-12 large-3 columns">
+									<label id="alertSupervisorHKConfig" class="text-left">Supervisor 
+										<input id="textSupervisorHKConfig" type="text" class="txtSearch round general">
+									</label>
+								</div>
+								<div class="small-12 large-3 columns" style="padding-top:25px;">
+									<a id="btnSearchHKConfig" class="btn btn-primary btn-Search">
+										<div class="label">Search</div>
+										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+									</a>
+									<a id="btnCleanHKConfig" class="btn btn-primary spanSelect">
+										<div class="label">Clean</div>
+										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+									</a>
+								</div>
+								<div class="small-12 large-3 columns">&nbsp;</div>
+							</div>
+							
 						</fieldset>
 					</div>
 					
@@ -138,8 +259,7 @@
 			</div>
 			<div class="box-body" id="table-frontDesk" style="display: block;">
 				<div class="table">
-					<div id="divTableFrontDesk">
-					
+					<div id="divTableFrontDesk" class="section1 tableSection">
 						<table id="tableFrontDesk" class="ganttTable" style="width:100%; float:left;">
 							<thead>
 								<tr class="gHeaderYear">
@@ -179,29 +299,42 @@
 									</th>
 								</tr>
 							</thead>
-							
 							<tbody>
 							
 							</tbody>
 						</table>
 					</div>
-				</div>
-				<div class="pagina" >
-					<!--<div class="pages">
-						<div class="pagination" id="paginationInv">
-							<a href="#" class="first" data-action="first">&laquo;</a>
-							<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-							<input type="text" class="general" readonly="readonly" />
-							<a href="#" class="next" data-action="next">&rsaquo;</a>
-							<a href="#" class="last" data-action="last">&raquo;</a>
-						</div>
-						<input type="hidden" id="paginationPeople" value="true" />
-					</div>-->
+					
+					<div class="section3 tableSection" style="display:none;">
+						<table id="tableFrontDesk" class="ganttTable" style="width:100%; float:left;">
+							<thead>
+								<tr>
+									<th>pk</th>
+									<th>unitCode</th>
+									<th>FloorPlan</th>
+									<th>MaidName</th>
+									<th>MaidLName</th>
+									<th>EmployeeCode</th>
+									<th>SuperName</th>
+									<th>SuperLName</th>
+									<th>EmployeeCode</th>
+									<th>Section</th>
+									<th>Floor</th>
+									<th>Building</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+					
 				</div>
 			</div>
 		</div>
 	</div>
 	
 </div>
+
+<div id="dialog-Edit-Reservations" title="Summary Reservation" style="display: none;"></div>
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>frontDesk.js"></script>

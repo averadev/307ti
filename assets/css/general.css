@@ -239,7 +239,7 @@ a.button.postfix.img {
     height: 100%;
     width: 220px;
     overflow-y: auto;
-    padding: 30px 20px 10px 20px;
+    padding: 20px 20px 10px 20px;
 	background-color: #FFFFFF;
 	border-right: solid 4px #183a59;
 	border-right: 1px solid rgba(20,53,80,0.14);
@@ -768,6 +768,22 @@ table thead tr th, table tbody tr td{
 	background-color:#225b88;
 }
 
+.dialogModal .ui-dialog-content.ui-widget-content{
+	overflow: hidden;
+}
+
+.dialogModal .ui-dialog-content.ui-widget-content{
+	overflow: hidden;
+}
+
+#dialog-Edit-Contract.ui-dialog-content.ui-widget-content{
+	overflow: hidden;
+}
+
+#dialog-Edit-Reservations.ui-dialog-content.ui-widget-content{
+	overflow: hidden;
+}
+
 .ui-dialog .ui-dialog-title{
 	font-family: Arimo;
 	font-size:15px;
@@ -854,46 +870,65 @@ table thead tr th, table tbody tr td{
 	font-family: Arimo;
 }
 
+.modalDialog{
+	position:relative;
+	float:left;
+	width:100%;
+	height:100%;
+}
+
 .tabsModal{
+	position:relative;
 	float:left;
 	width:100%;
 	background:#FFFFFF;
 	margin:0;
 	padding:0;
-	height:auto;
 }
 
-.tabsModal .tabs{
-	margin-left:0;
-	height:40px;
-	/*height:40px;*/
+.contentModalHeader {
+    position: relative;
+    float: left;
+    width: 100%;
+    height: auto;
+}
+
+.contentModal{
+	position:relative;
+	float:left;
+	width:100%;
+	height:100%;
+	border-top:1px solid #aaaaaa;
+	padding: .5em 1em;
+	overflow-y:auto;
 }
 
 .tab-modal{
 	display:none;
 	/*overflow:auto;*/
-	height:400px;
+	/*height:400px;*/
+	height:100%;
 	position:relative;
 	float:left;
+}
+
+.tabsModal .tabs{
+	margin-left:0;
+	height:auto;
+	/*height:40px;*/
 }
 
 .tabsModal .tabs .tabs-title{
 	margin:0;
 	margin-right:2px;
 	/*height:40px;*/
+	height:auto;
 }
 
 .tabsModal .tabs .tabs-title > a{
 	/*padding: 12px 30px;*/
 	padding: 8px 15px;
 	font-size:14px;
-}
-
-.contentModal{
-	height:auto;
-	border-top:1px solid #aaaaaa;
-	padding: .5em 1em;
-	/*overflow-y:auto;*/
 }
 
 .contentModalEdit{
@@ -1078,7 +1113,7 @@ label.error{
 
 .box {
  	position: relative;
-  	margin: 20px 0;
+  	margin: 10px 0;
   	width: 100%;
   	background: #fff;
   	border-radius: 4px; 
@@ -1367,11 +1402,13 @@ label.error{
 }
 
 .headerModalBtn{
-	margin-left:2px;
+	margin-left:5px;
 }
 
 .headerModalBtn a{
 	margin-bottom:1px;
+	margin:0;
+	margin-left:-5px;
 }
 
 .headerDescription{
@@ -1391,6 +1428,8 @@ label.error{
 	padding-bottom:0;
 	margin-bottom:2px;
 	line-height:16px;
+	background: #e6e6e6;
+    margin: 0;
 }
 
 .pr-color{
@@ -1536,8 +1575,6 @@ label.error{
 	width:50%;
 }
 
-
-
 #section-InvDetailed .box-filter .rdoField{
 	width:25%;
 	margin-right: .8rem;
@@ -1548,8 +1585,24 @@ label.error{
     margin-right: .3rem;
 }
 
+#section-frontDesk .box-filter  #sectionFilter .rdoField{
+	width:25%;
+	width:auto;
+    /*margin-right: .8rem;*/
+}
+
 @media only screen and (max-width: 40em) {
 	#section-people .box-filter .rdoField{
 		width:50%;
 	}
+}
+
+.box-filter .input-group, .box-filter .input-group.date {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.box-filter .caja {
+    padding-bottom: 0;
+    margin-bottom: 0;
 }

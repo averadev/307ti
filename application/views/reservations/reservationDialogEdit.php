@@ -21,11 +21,6 @@
 			<div class="label">Account status</div>
 			<i class="fa fa-credit-card fa-lg"></i>
 		</a>
-		<!--<a id="btn" class="secondary hollow button tiny"><i class="fa fa-columns fa-lg">&nbsp;&nbsp;Front Page</i></a>
-		<a id="btn" class="secondary hollow button tiny"><i class="fa fa-money  fa-lg">&nbsp;&nbsp;I will pay</i></a>
-		<a id="btn" class="secondary hollow button tiny"><i class="fa fa-file-text-o fa-lg">&nbsp;&nbsp;Voucher</i></a>
-		<a id="btn" class="secondary hollow button tiny"><i class="fa fa-list-alt  fa-lg">&nbsp;&nbsp;Data sheet</i></a>
-		<a id="btn" class="secondary hollow button tiny"><i class="fa fa-credit-card fa-lg">&nbsp;&nbsp;Account status</i></a>-->
 	</div>
 </div>
 <div class="row headerDescription headerGeneral">
@@ -84,7 +79,7 @@
 				</div>
 			</div>
 		</div>
-		<form id="editDataContract" data-abide='ajax'>
+		<form id="editDataReservations" data-abide='ajax'>
 			<fieldset class="fieldset">
 				<legend>
 					Contract Data
@@ -290,13 +285,10 @@
 		<div class="tabsModal" id="tabsModalContrats">
 			<ul class="tabs" id="tabsContratsAccounts"  data-tabs>
 				<li class="tabs-title active" attr-screen="tab-CASales" >
-					<a>Accounts</a>
+					<a>Sales</a>
 				</li>
 				<li class="tabs-title" attr-screen="tab-CAMaintenance">
-					<a>Maintenance</a>
-				</li>
-				<li class="tabs-title" attr-screen="tab-CAMiscellaneous">
-					<a>Miscellaneous</a>
+					<a>Consumptions</a>
 				</li>
 			</ul>
 		</div>

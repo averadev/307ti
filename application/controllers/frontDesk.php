@@ -23,6 +23,7 @@ class FrontDesk extends CI_Controller {
 		//$data['property'] = $this->frontDesk_db->getProperty();
 		$data['view'] = $this->frontDesk_db->getView();
 		$data['status'] = $this->frontDesk_db->getStatus();
+		$data['HKStatus'] = $this->frontDesk_db->getHKStatus();
         $this->load->view('vwFrontDesk',$data);
 	}
 	
@@ -78,6 +79,12 @@ class FrontDesk extends CI_Controller {
 				$lastResId = $item->fkResId;
 			}
 			echo json_encode(array('items' => $res, 'dates' => $calendary));
+		}
+	}
+	
+	public function getHousekeepingConfiguration(){
+		if($this->input->is_ajax_request()){
+			echo json_encode(array('items' => "a"));
 		}
 	}
 	
