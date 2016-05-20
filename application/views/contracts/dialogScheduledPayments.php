@@ -43,7 +43,7 @@
                     </div>
                     <div class="small-9 columns">
 						<div class="caja">
-							<select class="input-group-field round" id="selectLanguage" form="saveDataContract" required></select>
+							<select class="input-group-field round" id="expirationDate" form="saveDataContract" required></select>
 						</div>
 					</div>
                 </div>
@@ -54,7 +54,7 @@
                     </div>
                     <div class="small-9 columns">
 						<div class="caja">
-							<select class="input-group-field round" id="selectLanguage" form="saveDataContract" required></select>
+							<select class="input-group-field round" id="CodigoTarjeta" form="saveDataContract" required></select>
 						</div>
 					</div>
                 </div>

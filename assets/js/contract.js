@@ -220,11 +220,6 @@ function addUnidadDialog() {
 				$(this).dialog('close');
 				var dialogWeeks = getWeeksDialog(unidades);
 				dialogWeeks.dialog("open");
-				// tablUnidadades(unidades);
-				// if(selectAllUnities()){
-				// 	$(this).dialog('close');
-				// 	//addUnidadDialogYears.dialog("open");
-				// };
 			}
 		}],
 		close: function() {
@@ -262,6 +257,7 @@ function addPeopleDialog() {
 			click: function() {
 				if(selectAllPeople()){
 					$(this).dialog('close');
+					createNombreLegal();
 				};
 			}
 		}],
@@ -270,6 +266,21 @@ function addPeopleDialog() {
 		}
 	});
 	return dialog;
+}
+
+function createNombreLegal(){
+	var texto = "";
+	var nombres = getArrayValuesColumnTable("tablePeopleSelected", 2);
+	var apellidos = getArrayValuesColumnTable("tablePeopleSelected", 3);
+	for (var i = 0; i < nombres.length; i++) {
+		texto += nombres[i]+" "+apellidos[i];
+		if (i!=nombres.length-1) {
+			texto += " and ";
+		}
+	}
+	if ($("#legalName").val()=="") {
+		$("#legalName").val(texto);
+	}
 }
 
 
@@ -362,7 +373,7 @@ function saveContract() {
 }
 
 function createNewContract(){
-
+	
 	var id = "saveDataContract";
 	var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta"];
 	var form = $("#"+id);
@@ -373,7 +384,7 @@ function createNewContract(){
 		alertify.success("Please fill required fields (red)");
 		return false;
 	}else{
-
+		showAlert(true,"Saving changes, please wait ....",'progressbar');
 	$.ajax({
 			data: {
 				legalName : $("#legalName").val().trim(),
@@ -411,6 +422,8 @@ function createNewContract(){
 		})
 		.done(function( data, textStatus, jqXHR ) {
 			if (data== 1) {
+				elem.resetForm();
+				showAlert(false,"Saving changes, please wait ....",'progressbar');
 				var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta", "downpayment"];
 				clearInputsById(arrayWords);
 				$('#dialog-Weeks').empty();
@@ -453,9 +466,6 @@ function selectAllPeople(){
 		alertify.error("Click over for choose one");
 		return false;
 	}else{
-	// 		if(jQuery.inArray(2,array) == -1){
-	//    console.log("no esta")
-	// }else{console.log("si esta")};
 		if (personas.length>0) {
 			tablaPersonas(personas);
 		}
@@ -1149,19 +1159,11 @@ function totalDescPackMain(){
 function getArrayValuesColumnTable(tabla, columna){
 	var items=[];
 	$('#'+tabla+' tbody tr td:nth-child('+columna+')').each( function(){
-	   items.push( $(this).text().replace(/\s+/g, " "));       
+		if ($(this).text().replace(/\s+/g, " ")!="") {
+			items.push( $(this).text().replace(/\s+/g, " "));
+		}       
 	});
 	return items;
-	//restrict array to unique items
-	//var items = $.unique( items );
-
-	// //iterate unique array and build array of select options
-	// $.each( items, function(i, item){
-	//     options.push('<option value="' + item + '">' + item + '</option>');
-	// })
-
-	// //finally empty the select and append the items from the array
-	// $('#selectId').empty().append( options.join() );
 }
 
 function getArrayValuesSelectedColum(tabla, columna){
