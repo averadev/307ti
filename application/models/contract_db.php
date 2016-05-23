@@ -195,6 +195,43 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
+    public function selectIdMetodoFin($string){
+        $this->db->select('pkFinMethodId');
+        $this->db->from('tblFinMethod');
+        $this->db->where('finMethodcode', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkFinMethodId;
+        }
+    }
+
+    public function selectIdFactor($string){
+        $this->db->select('pkFactorId');
+        $this->db->from('tblFactor');
+        $this->db->where('FactorCode', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkFinMethodId;
+        }
+    }
+    public function selectIdCurrency($string){
+        $this->db->select('pkCurrencyId');
+        $this->db->from('tblCurrency');
+        $this->db->where('Currencycode', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkFinMethodId;
+        }
+    }
 
     public function getUnidades(){
 

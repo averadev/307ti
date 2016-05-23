@@ -27,9 +27,12 @@ class Contract extends CI_Controller {
 		
 		if($this->input->is_ajax_request()){
 		
+			//$ocupaciones = [];
 			$idContrato = $this->createContract();
 			$this->insertOcupacion($idContrato);
-			echo  1;
+			$this->insertPeoples($idContrato);
+			//$this->insertFinanciamiento($idContrato);
+			echo  "1";
 			//$this->createUnidades($idContrato); //ciclo
 			// $idPeopleAcc = $this->createPeople();
 			// $idFinanciamiento = $this->createFinanciamiento($idContrato);
@@ -117,39 +120,41 @@ private function createUnidades($idContrato){
 	}
 }
 
-private function createPeople($idContrato){
-	for($i =0; $i< intval($_POST['peoples']); $i++){
+private function insertPeoples($idContrato){
+	$rango = intval(sizeof($_POST['peoples']));
+	for($i = 0; $i < $rango; $i++){
 		$personas = [
-			"pkResPeopleAccId"          => $_POST['pkResPeopleAccId'],
-			"fkResId"    				=> $idContrato,
-			"fkPeopleId"              	=> $_POST['peoples'][$i],
-			"fkAccId"             		=> $_POST['fkAccId'],
-			"ynPrimaryPeople"           => $_POST['peoples'][$_POST["primario"]],
-			"ynActive"          		=> 1,
-			"CrBy"             			=> 123,
-			"CrDt"						=> $this->getToday()
+			"fkResId"    		=> $idContrato,	
+			"fkPeopleId"        => $_POST['peoples'][$i],
+			"fkAccId"           => $_POST['fkAccId'],
+			"ynPrimaryPeople"   =>$_POST['types'][$i][0],
+			"ynBenficiary"		=>$_POST['types'][$i][1],
+			"ynOther"			=>$_POST['types'][$i][2],
+			"ynActive"          => 1,
+			"CrBy"             	=> 123,
+			"CrDt"				=> $this->getToday()
 		];
-
-			return $this->contract_db->insertReturnId('tblResPeopleAcc ', $personas);
+		$this->contract_db->insertReturnId('tblResPeopleAcc ', $personas);
 	}
 }
 
-private function createFinanciamiento($idContrato){
+private function insertFinanciamiento($idContrato){
+	$porcentaje = floatval(($_POST['specialDiscount']/$_POST['salePrice'])*100);
 	$financiamiento = [
 		"fkResId"                   => $idContrato,
-		"fkFinMethodId"    			=> 2,
-		"fkFactorId"              	=> 2,
-		"ListPrice"             	=> 30000,
-		"SpecialDiscount"           => 5000,
-		"SpecialDiscount%"          => 2000,
-		"CashDiscount"             	=> 1000,
-		"CashDiscount%"         	=> 10,
-		"NetSalePrice"              => 20000,
-		"Deposit"              		=> 2000,
-		"TransferAmt"               => 0,
-		"PackPrice"                 => 0,
-		"FinanceBalance"            => 15000,
-		"TotalFinanceAmt"           => 100,
+		"fkFinMethodId"    			=> $this->$contract_db->selectIdMetodoFin('CS'),
+		"fkFactorId"              	=> $this->$contract_db->selectIdFactor('24M14.1'),
+		"ListPrice"             	=> $_POST['listPrice'],
+		"SpecialDiscount"           => $_POST['specialDiscount'],
+		"SpecialDiscount%"          => $porcentaje,
+		"CashDiscount"             	=> $_POST['specialDiscount'],
+		"CashDiscount%"         	=> $porcentaje,
+		"NetSalePrice"              => $_POST['salePrice'],
+		"Deposit"              		=> $_POST['downpayment'],
+		"TransferAmt"               => $_POST['amountTransfer'],
+		"PackPrice"                 => $_POST['packPrice'],
+		"FinanceBalance"            => $_POST['financeBalance'],
+		"TotalFinanceAmt"           => $_POST['financeBalance'] + 100,
 		"DownPmtAmt"            	=> 200,
 		"DownPmt%"           		=> 5,
 		"MonthlyPmtAmt"            	=> 500,
@@ -160,10 +165,9 @@ private function createFinanciamiento($idContrato){
 		"ynReFin"           		=> 1,
 		"ynAvailable"           	=> 1,
 		"CrBy"                      => 123,
-		"CrDt"						=> getdate()
+		"CrDt"						=> $this->getToday()
 	];
-
-		return $this->contract_db->insertReturnId('tblResfin', $financiamiento);
+	$this->contract_db->insertReturnId('tblResfin', $financiamiento);
 }
 
 private function createSemanaOcupacion($idContrato){
@@ -175,12 +179,27 @@ private function createSemanaOcupacion($idContrato){
 		"fkResTypeId"   => $this->contract_db->selectRestType('Cont'),
 		"fkOccTypeId"   => 1,
 		"fkCalendarId" 	=> $_POST[''],
-		"ynActive"   	=> $_POST[''],
+		"ynActive"   	=> 1,
 		"CrBy"          => 123,
-		"CrDt"			=> getdate()
+		"CrDt"			=> $this->getToday()
 	];
 		return $this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
 }
+
+private function createDownPayment(){
+	$DownPayment = [
+		"fkResId"    	=> $idContrato,
+		"fkCurrencyId"  => $this->contract_db->selectIdCurrency('USD'),
+		"DownPmtNum"    => $_POST[''],
+		"DownPmtAmt"    => $_POST[''],
+		"DownPmtDueDt"  => $this->contract_db->selectRestType('Cont'),
+		"ynActive"   	=> 1,
+		"CrBy"          => 123,
+		"CrDt"			=> $this->getToday()
+	];
+		return $this->contract_db->insertReturnId('tblResDownPmt', $DownPayment);
+}
+
 //////////////////////////////////////////////////////
 	//busqueda de Unidades
 	public function getProperties(){

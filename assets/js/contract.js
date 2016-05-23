@@ -391,25 +391,27 @@ function createNewContract(){
 				tourID : $("#TourID").val().trim(),
 				idiomaID : $("#selectLanguage").val(),
 				peoples : getArrayValuesColumnTable("tablePeopleSelected", 1),
-				primario : selectTypePeople("primario"),
-				secundario: selectTypePeople("secundario"),
-				baneficiario: selectTypePeople("baneficiario"),
+				types: typePeople(),
 				unidades : getArrayValuesColumnTable("tableUnidadesSelected", 1),
 				weeks: $("#weeksNumber").val().trim(),
 				firstYear :$("#firstYearWeeks").val().trim(),
 				lastYear : $("#lastYearWeeks").val().trim(),
-				tipoVentaId : 1,
+				tipoVentaId : $("#typeSales").val(),
+				listPrice: $("#precioUnidad").val(),
+				salePrice: $("#precioVenta").val(),
+				specialDiscount:$("#totalDiscountPacks").val(),
+				downpayment:$("#downpayment").val(),
+				amountTransfer:$("#amountTransfer").val(),
+
+				packPrice:sumarArray(getArrayValuesColumnTable("tablePeopleSelected", 2)),
+				financeBalance: $("#financeBalance").val(),
+				
 				viewId: 1,
 				floorPlanId: 1,
 				SeassonId: 10,
 				FrequencyId: 2,
 				contratoRelacionadoId : 0,
-				pkResPeopleAccId: 2,
-				fkAccId: 3,
-				precioUnidad : 29714,
-				descuentoTotal :  0,
-				precioVenta :  29714,
-				deposito :  1500,
+				fkAccId: 10,
 				totalEnganche : 1500,
 				totalPagosProg : 1500,
 				depClosingFee : 1295,
@@ -429,7 +431,7 @@ function createNewContract(){
 				$('#dialog-Weeks').empty();
 				$('#tablePeopleSelected tbody').empty();
 				$('#tableUnidadesSelected tbody').empty();
-				alertify.success(data);
+				alertify.success("Contract Save");
 			}
 			
 		})
@@ -440,6 +442,40 @@ function createNewContract(){
 	}
 }
 
+function sumarArray(array){
+	var sum = 0;
+	$.each(
+		array,function(){
+			sum+=parseFloat(this) || 0;
+		}
+	);
+	return sum;
+}
+
+function typePeople(){
+	var typePeople =[];
+	var people = getArrayValuesColumnTable("tablePeopleSelected", 1);
+	var primario = selectTypePeople("primario");
+	var secundario = selectTypePeople("secundario");
+	var beneficiario = selectTypePeople("beneficiario");
+	for (var i = 0; i < people.length; i++) {
+		var persona = [];
+		if (people[primario]!= "undefined" && people[primario] == people[i]) {
+			persona = [1,0,0];
+			typePeople.push(persona);
+		}else if (persona[secundario]!= "undefined" && people[secundario] == people[i]) {
+			persona = [0,1,0];
+			typePeople.push(persona);
+		}else if (persona[beneficiario]!= "undefined" && people[beneficiario] == people[i]){
+			persona = [0,0,1];
+			typePeople.push(persona);
+		}else{
+			persona = [0,0,0];
+			typePeople.push(persona);	
+		}
+	}
+	return typePeople;
+}
 
 function getDataFormContract(){
 
@@ -637,11 +673,12 @@ function PackReference(){
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			$("#precioVenta").val($("#finalPricePack").val());
+       			$("#packReference").val($("#quantityPack").val());
        			$(this).dialog('close');
        		}
      	}],
      close: function() {
-    	$('#dialog-Pack').empty();
+    	//$('#dialog-Pack').empty();
      }
 	});
 	return dialogo;
@@ -819,6 +856,7 @@ function selectTypePeople(tipo){
 	var selectedIndex = radioButtons.index(radioButtons.filter(':checked'));
 	return selectedIndex;
 }
+
 
 function setValueInput(id, value){
 	var elemento = document.getElementById("precioUnidad");

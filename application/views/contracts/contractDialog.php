@@ -29,7 +29,7 @@
                     </div>
                     <div class="small-9 columns">
 						<div class="caja" >
-							<select class="input-group-field round" id="selectLanguage" form="saveDataContract"></select>
+							<select required class="input-group-field round" id="selectLanguage" form="saveDataContract"></select>
 						</div>
                     </div>
                 </div>
@@ -175,7 +175,7 @@
 						<label>Pack Reference</label>
 					</div>
                     <div class="large-5 columns end">
-						<input class="round general" readonly name="packReference" id="finalPricePack" type="text" value="0">
+						<input class="round general" readonly name="packReference" id="packReference" type="text" value="0">
                     </div>
 					<div class="large-4 columns end">
 						<a id="btnPackReference" href="#" class="button postfix">Capture</a>
@@ -230,7 +230,7 @@
 					</div>
                 </div>
                 <!--Pagos programados-->
-                <div class="row">
+                <div class="row border-bottom">
                     <div class="small-3 columns">
                         <label id="alertLastName" for="right-label" class="text-left">Scheduled Payments</label>
                     </div>
@@ -242,7 +242,7 @@
 					</div>
                 </div>
                 <!--Montos a Descontar-->
-                <div class="row border-bottom">
+                <div class="row">
                     <div class="small-3 columns">
                         <label id="alertLastName" for="right-label" class="text-left">Discount Amount</label>
                     </div>
@@ -273,11 +273,11 @@
                 <div class="row">
                     <div class="small-6 columns">
                         <label>Amount Transferred</label>
-                        <input class="round general" type="text" placeholder="$0.00">
+                        <input id="amountTransfer" class="round general" type="text" placeholder="$0.00">
                     </div>
                     <div class="small-6 columns">
                         <label>Balance financed</label>
-                        <input class="round general" type="text" placeholder="$0.00">
+                        <input id="financeBalance" class="round general" type="text" placeholder="$0.00">
                     </div>
                 </div>
             </div>
