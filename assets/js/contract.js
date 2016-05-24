@@ -1214,3 +1214,24 @@ function getArrayValuesSelectedColum(tabla, columna){
 	});
 	return items;
 }
+
+/**
+ * cambia los pantallas del modal con los tabs
+ */
+function changeTabsModalContract(screen){
+	//asigna la clase active
+	$('#tabsModalPeople .tabs .tabs-title').removeClass('active');
+	$('#tabsModalPeople .tabs li[attr-screen=' + screen + ']').addClass('active');
+	//muestra la pantalla selecionada
+	$('#contentModalPeople .tab-modal').hide();
+	$('#' + screen).show();
+	if($("#idPeople").data("pkPeopleId") != undefined ){
+		if(screen == "tab-PReservaciones"){
+			getInfoTabsPeople(screen, "people/getReservationsByPeople");
+		}else if(screen == "tab-PContratos"){
+			getInfoTabsPeople(screen, "people/getContractByPeople");
+		}else if(screen == "tab-PEmpleados"){
+			//getInfoTabsPeople(screen, "people/getEmployeeByPeople");
+		}
+	}
+}
