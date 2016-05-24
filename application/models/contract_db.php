@@ -232,8 +232,36 @@ class Contract_db extends CI_Model {
             return $row->pkFinMethodId;
         }
     }
+    public function selectIdOccType($string){
+        $this->db->select('pkOccTypeId');
+        $this->db->from('tblOccType');
+        $this->db->where('OccTypeCode', $string);
+        $query = $this->db->get();
 
-    public function getUnidades(){
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkOccTypeId;
+        }
+    }
+
+    public function selectIdCalendar($year, $week, $day){
+        //select pkCalendarId from tblCalendar where intv = 1 and  year = 2017 and fkDayOfWeekId = 1
+        $this->db->select('pkCalendarId');
+        $this->db->from('tblCalendar');
+        $this->db->where('year', $year);
+        $this->db->where('intv', $week);
+        $this->db->where('fkDayOfWeekId', $day);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkCalendarId;
+        }
+    }
+
+    public function getUnidades($filters){
 
         $this->db->select('unit.UnitCode as Code, flp.FloorPlanDesc as Description, price.PriceFixedWk as Price, freq.FrequencyDesc Frequency, season.SeasonDesc as Season');
         $this->db->from('tblResInvt invt');
@@ -242,6 +270,15 @@ class Contract_db extends CI_Model {
         $this->db->join('tblPrice price', 'price.fkUnitId = unit.pkUnitId', 'inner');
         $this->db->join('tblFrequency freq', 'freq.pkFrequencyId = invt.fkFrequencyId', 'inner');
         $this->db->join('tblSeason season', 'season.pkSeasonId = invt.fkSeassonId', 'inner');
+        if (!empty($filters['property'])) {
+            $this->db->where('unit.fkPropertyId', $filters['property']);
+        }
+        // if (!empty($filters['unitType'])) {
+        //     $this->db->where('unit.fkUnitTypeId', $filters['unitType']);
+        // }
+        // if (!empty($filters['frequency'])) {
+        //     $this->db->where('unit.frequency', $filters['frequency']);
+        // }
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {

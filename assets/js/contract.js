@@ -1034,7 +1034,10 @@ function selectMetodoPagoProgramados(){
         showLoading('#tblUnidades',true);
         $.ajax({
             data:{
-                words: "1"
+                property: $("#property").val(),
+                unitType: $("#unitType").val(),
+                frequency: $("#frequency").val(),
+                season: $("#season").val()
             },
             type: "POST",
             url: "contract/getUnidades",

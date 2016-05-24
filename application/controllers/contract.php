@@ -31,6 +31,8 @@ class Contract extends CI_Controller {
 			$idContrato = $this->createContract();
 			$this->insertOcupacion($idContrato);
 			$this->insertPeoples($idContrato);
+			$this->createSemanaOcupacion($idContrato);
+			$this->createUnidades($idContrato);
 			//$this->insertFinanciamiento($idContrato);
 			echo  "1";
 			//$this->createUnidades($idContrato); //ciclo
@@ -115,7 +117,6 @@ private function createUnidades($idContrato){
 			"CrBy"                      => 123,
 			"CrDt"						=> $this->getToday()
 		];
-
 		$this->contract_db->insertReturnId('tblResInvt', $Unidades);
 	}
 }
@@ -155,14 +156,14 @@ private function insertFinanciamiento($idContrato){
 		"PackPrice"                 => $_POST['packPrice'],
 		"FinanceBalance"            => $_POST['financeBalance'],
 		"TotalFinanceAmt"           => $_POST['financeBalance'] + 100,
-		"DownPmtAmt"            	=> 200,
-		"DownPmt%"           		=> 5,
-		"MonthlyPmtAmt"            	=> 500,
-		"BalanceActual"           	=> 11000,
+		"DownPmtAmt"            	=> 0,
+		"DownPmt%"           		=> 0,
+		"MonthlyPmtAmt"            	=> $_POST['pagoMensual'],
+		"BalanceActual"           	=> $_POST['financeBalance'],
 		"ynClosingfee"            	=> 1,
-		"ClosingFeeAmt"           	=> 2,
+		"ClosingFeeAmt"           	=> 100,
 		"OtherFeeAmt"           	=> 0,
-		"ynReFin"           		=> 1,
+		"ynReFin"           		=> false,
 		"ynAvailable"           	=> 1,
 		"CrBy"                      => 123,
 		"CrDt"						=> $this->getToday()
@@ -171,19 +172,30 @@ private function insertFinanciamiento($idContrato){
 }
 
 private function createSemanaOcupacion($idContrato){
-	$OcupacionTable = [
-		"fkResId"    	=> $idContrato,
-		"fkResInvtId"   => $_POST['precioUnidad'],
-		"OccYear"       => $_POST[''],
-		"NightId"       => $_POST[''],
-		"fkResTypeId"   => $this->contract_db->selectRestType('Cont'),
-		"fkOccTypeId"   => 1,
-		"fkCalendarId" 	=> $_POST[''],
-		"ynActive"   	=> 1,
-		"CrBy"          => 123,
-		"CrDt"			=> $this->getToday()
-	];
-		return $this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
+	$rangoYears = intval($_POST['lastYear']-$_POST['firstYear']);
+	$rangoWeeks = $_POST['weeks'];
+	$year = intval($_POST['firstYear']);
+	for ($i=0; $i <= $rangoYears ; $i++) {
+		for ($j=0; $j < $rangoWeeks ; $j++) { 
+			for ($k=1; $k < 8; $k++) { 
+				$OcupacionTable = [
+					"fkResId"    	=> $idContrato,
+					"fkResInvtId"   => 21,
+					"OccYear"       => $year,
+					"NightId"       => $k,
+					"fkResTypeId"   => $this->contract_db->selectRestType('Cont'),
+					"fkOccTypeId"   => $this->contract_db->selectIdOccType('OW'),
+					"fkCalendarId" 	=> $this->contract_db->selectIdCalendar($year, $j, $k),
+					"ynActive"   	=> 1,
+					"CrBy"          => 123,
+					"CrDt"			=> $this->getToday()
+				];
+				$this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
+			}
+		 }
+		 $year += 1; 
+	}
+	
 }
 
 private function createDownPayment(){
@@ -228,7 +240,12 @@ private function createDownPayment(){
 	}
 	public function getUnidades(){
 		if($this->input->is_ajax_request()) {
-			$unidades = $this->contract_db->getUnidades();
+			// $propiedad = $_POST['property'];
+			// $unitType = $_POST['unitType'];
+			// $frequency = $_POST['frequency'];
+			// $season = $_POST['season'];
+			$filtros = $this->receiveWords($_POST);
+			$unidades = $this->contract_db->getUnidades($filtros);
 			echo json_encode($unidades);
 		}
 	}
