@@ -246,7 +246,6 @@ class Contract_db extends CI_Model {
     }
 
     public function selectIdCalendar($year, $week, $day){
-        //select pkCalendarId from tblCalendar where intv = 1 and  year = 2017 and fkDayOfWeekId = 1
         $this->db->select('pkCalendarId');
         $this->db->from('tblCalendar');
         $this->db->where('year', $year);
@@ -258,6 +257,19 @@ class Contract_db extends CI_Model {
         {
             $row = $query->row();
             return $row->pkCalendarId;
+        }
+    }
+
+    public function selectIdAccType($string){
+        $this->db->select('pkAcctypeId');
+        $this->db->from('tblAcctype');
+        $this->db->where('AccTypeCode', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkAcctypeId;
         }
     }
 

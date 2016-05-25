@@ -442,6 +442,32 @@ function createNewContract(){
 	}
 }
 
+function getValueTableUnidades(tabla){
+	var unidades = [];
+	$('#'+tabla+' tbody tr').each( function(){
+		var unidad = {};
+		unidad.id = $(this).find('td').eq(0).text(),
+		unidad.price = $(this).find('td').eq(2).text(),
+		unidad.frequency = $(this).find('td').eq(3).text(),
+		unidad.week = $(this).find('td').eq(5).text()
+		unidades.push(unidad); 
+	});
+	return unidades;
+}
+function getValueTablePersonas(tabla){
+	var personas = [];
+	$('#'+tabla+' tbody tr').each( function(){
+		var persona = {};
+		persona.id = $(this).find('td').eq(0).text(),
+		persona.primario = $(this).find('td').eq(4).find('input[name=primario]').filter(':checked').val(),
+		persona.secundario = $(this).find('td').eq(5).find('input[name=secundario]').filter(':checked').val(),
+		persona.beneficiario = $(this).find('td').eq(6).find('input[name=beneficiario]').filter(':checked').val()
+		personas.push(persona); 
+	});
+	return personas;
+}
+
+
 function sumarArray(array){
 	var sum = 0;
 	$.each(
