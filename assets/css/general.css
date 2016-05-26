@@ -67,13 +67,15 @@ input[type=radio]:not(old){
   opacity : 0;
 }
 
-input[type=checkbox]:not(old) + label{
+input[type=checkbox]:not(old) + label, input[type=checkbox]:not(old) + span{
   display      : inline-block;
   margin-left  : -28px;
   padding-left : 28px;
   background   : url('../img/common/checks3.png') no-repeat 0 0;
   line-height  : 24px;
 }
+
+
 
 input[type=radio   ]:not(old) + label{
   display      : inline-block;
@@ -83,7 +85,7 @@ input[type=radio   ]:not(old) + label{
   line-height  : 24px;
 }
 
-input[type=checkbox]:not(old):checked + label{
+input[type=checkbox]:not(old):checked + label, input[type=checkbox]:not(old):checked + span{
   background-position : 0 -24px;
 }
 
@@ -777,6 +779,10 @@ table thead tr th, table tbody tr td{
 }
 
 #dialog-Edit-Contract.ui-dialog-content.ui-widget-content{
+	overflow: hidden;
+}
+
+#dialog-HKConfig.ui-dialog-content.ui-widget-content{
 	overflow: hidden;
 }
 
@@ -1553,7 +1559,7 @@ label.error{
 	width:20%;
 }
 
-#dialog-People #section-people .box-filter .rdoField{
+.ui-dialog #section-people .box-filter .rdoField{
 	width:50%;
 }
 
@@ -1605,4 +1611,63 @@ label.error{
 .box-filter .caja {
     padding-bottom: 0;
     margin-bottom: 0;
+}
+
+.ms-choice {
+	height: 2.4375rem;
+    padding: .5rem;
+    border: 1px solid #cacaca;
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    font-family: inherit;
+    line-height: normal;
+    color: #0a0a0a;
+    background-color: #fefefe;
+	border-radius: 3px;
+    font-family: Arimo;
+	font-size: 14px;
+	line-height: 39px;
+}
+
+
+.ms-choice::after{
+	content:"\025be";
+	display:table-cell;
+	padding-top:0 .5rem;
+	text-align:center;
+	width:25px;
+	height: 100%;
+	background-color:none;
+	position:absolute;
+	top:0;
+	right:0px;	
+	pointer-events: none;
+	font-size:1.4rem;
+	border: 1px solid #dbdbdb;
+	border-top-right-radius:3px;
+	border-bottom-right-radius:3px;
+	font-family: Arimo;
+}
+
+small.error{
+	position:relative;
+	width:100%;
+	float:left;
+    display: block;
+    font-size: 0.66667rem;
+    font-style: italic;
+    font-weight: normal;
+    margin-bottom: 0.88889rem;
+    margin-top: -1px;
+    padding: 0.33333rem 0.5rem 0.5rem;
+    background: #f04124;
+    color: #FFFFFF;
+}
+
+small.hidden{
+	display:none;
+}
+
+input.general.error, .caja.error{
+	margin-bottom:0;
 }

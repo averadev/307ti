@@ -12,6 +12,10 @@
 				<h3 class="box-title">
 					<span>FrontDesk Search</span>
 				</h3>
+				<a data-widget="newFontDesk" id="newFontDesk" class="btn btn-new">
+					<div class="label">Nuevo</div>
+					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+				</a>
 			</div>
 			<!-- body search-->
 			<div class="box-body box-filter" style="display: block;">
@@ -185,23 +189,24 @@
 								</div>
 								<div class="small-12 large-3 columns">
 									<label id="alertFloorPlanHKConfig" class="text-left">Floor plan 
-										<div class="caja" >
-											<select id="textFloorPlanHKConfig" class="input-group-field round">
-												<option value="">Select a view</option>
+										<!--<div class="caja" >-->
+										<!--class="input-group-field round"-->
+											<select id="textFloorPlanHKConfig" class="input-group-field round"  multiple="multiple">
+												<!--<option value="">Select a view</option>-->
 												<?php
-												foreach($view as $item){
+												foreach($floorPlan as $item){
 													?>
-													<option value="<?php echo $item->pkViewId; ?>"><?php echo $item->ViewDesc; ?></option>
+													<option value="<?php echo $item->pkFloorPlanID; ?>"><?php echo $item->FloorPlanDesc; ?></option>
 													<?php
 												}
 												?>
 											</select>
-										</div>
+										<!--</div>-->
 									</label>
 								</div>
 								<!-- Date -->
 								<div class="small-12 large-3 columns">
-									<label id="alertDateHKConfig" class="text-left">Arrival Date
+									<label id="alertDateHKConfig" class="text-left">Date
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
 											<input type="text" id="dateHKConfig" class="txtSearch input-group-field roundRight" readonly/>
@@ -306,7 +311,7 @@
 					</div>
 					
 					<div class="section3 tableSection" style="display:none;">
-						<table id="tableFrontDesk" class="ganttTable" style="width:100%; float:left;">
+						<table id="tableHKConfiguration" style="width:100%">
 							<thead>
 								<tr>
 									<th>pk</th>
@@ -336,5 +341,9 @@
 </div>
 
 <div id="dialog-Edit-Reservations" title="Summary Reservation" style="display: none;"></div>
+<div id="dialog-HKConfig" title="HouseKeepingConfiguration " style="display: none;"></div>
+<div id="dialog-people-hkConfig" title="people " style="display: none;"></div>
+<div id="dialog-unit-hkConfig" title="people " style="display: none;"></div>
+
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>frontDesk.js"></script>

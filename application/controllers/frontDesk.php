@@ -11,12 +11,14 @@ class FrontDesk extends CI_Controller {
 	
 	public function __construct() {
 		parent::__construct();
+		$this->load->library('nativesessions');
 		$this->load->helper('url');
 		$this->load->database('default');
 		$this->load->model('frontDesk_db');
-		/*if (!$this->session->userdata('type')) {
-            redirect('login');
-        }*/
+		$this->load->model('FloorPlan_db');
+		if(!$this->nativesessions->get('type')){
+			redirect('login');
+		}
 	}
     
 	public function index(){
@@ -24,6 +26,7 @@ class FrontDesk extends CI_Controller {
 		$data['view'] = $this->frontDesk_db->getView();
 		$data['status'] = $this->frontDesk_db->getStatus();
 		$data['HKStatus'] = $this->frontDesk_db->getHKStatus();
+		$data['floorPlan'] = $this->FloorPlan_db->getfloorPlan();
         $this->load->view('vwFrontDesk',$data);
 	}
 	
@@ -84,7 +87,17 @@ class FrontDesk extends CI_Controller {
 	
 	public function getHousekeepingConfiguration(){
 		if($this->input->is_ajax_request()){
-			echo json_encode(array('items' => "a"));
+			
+			$sql = $this->getFilters($_POST, '');
+			if(isset($_POST['filters'])){
+				$sql['checks'] = $this->receiveFilter($_POST['filters'],'uhs.fkHkStatusId');
+			}
+			if(isset($_POST['options'])){
+				$sql['options'] = $this->receiveFilter($_POST['options'],'fp.pkFloorPlanId');
+			}
+			$data = $this->frontDesk_db->getHousekeepingConfiguration($sql);
+			
+			echo json_encode(array('items' => $data));
 		}
 	}
 	
@@ -92,6 +105,72 @@ class FrontDesk extends CI_Controller {
 		if($this->input->is_ajax_request()){
 			$data = $this->frontDesk_db->getWeekByYear($_POST['year']);
 			echo json_encode(array('items' => $data,));
+		}
+	}
+	
+	public function getHkServiceType(){
+		if($this->input->is_ajax_request()){
+			$data = $this->frontDesk_db->getHkServiceType();
+			echo json_encode($data);
+		}
+	}
+	
+	public function getUnities(){
+		if($this->input->is_ajax_request()){
+			
+			$page = $_POST['page'];
+			if($_POST['page'] == 0 || $_POST['page'] == "0"){
+				$page = 1;
+			}
+			$page = ($page - 1) * 25;
+			$sql = $this->getFilters($_POST, '');
+			$data = $this->frontDesk_db->getUnities($sql);
+			$total = count($data);
+			$data = array_slice($data, $page, 25);
+			echo json_encode(array('items' => $data, 'total' => $total));
+		}
+	}
+	
+	public function modalHKConfig(){
+		if($this->input->is_ajax_request()){
+			$this->load->view('frontDesk/hkConfigDialog.php');
+		}
+	}
+	
+	public function modalUnitHKConfig(){
+		if($this->input->is_ajax_request()){
+			$this->load->view('unities/unitHkDialog.php');
+		}
+	}
+	
+	public function saveUnitHKConfig(){
+		if($this->input->is_ajax_request()){
+			
+			$hoy = getdate();
+			$strHoy = $hoy["year"]."-".$hoy["mon"]."-".$hoy["mday"] . " " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
+			
+			if($_POST['id'] == 0){
+				
+				$insert = array(
+					'fkUnitId'				=> $_POST['unit'],
+					'fkPeopleMaidId'		=> $_POST['maid'],
+					'fkPeopleSuperId'		=> $_POST['supervisor'],
+					'fkHKServiceTypeId'		=> $_POST['serviceType'],
+					'Date'					=> $strHoy,
+					'Section'				=> $_POST['section'],
+					'ynActive'				=> 1,
+					'CrDate'				=> $strHoy,
+					'Crby'					=> $this->nativesessions->get('id'),
+					'MdDate'				=> $strHoy,
+					'MdBy'					=> $this->nativesessions->get('id'),
+				);
+				
+				$data = $this->frontDesk_db->insert($insert,"tblUnitHKConfig");
+				
+				$data = "saveUnitHKConfig save";
+			}
+			
+			$message = array('success' => true, 'message' => $data);
 		}
 	}
 	

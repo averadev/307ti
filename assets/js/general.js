@@ -3,6 +3,7 @@
 var dialogUser = null;
 
 $(function() {
+	
     // Button Dropdown Menu
     $('.btn-menu').on('click', function() {
         toggeMenu();
@@ -281,7 +282,7 @@ function drawTable2(data, table ,funcion, cadena){
 	}
 	
 	var headHTML = "<tr>";
-	if(funcion != false){
+	if(funcion != false){ 
 		headHTML += "<th>"+cadena+"</th>";
 	}
     var bodyHTML = '';
@@ -293,7 +294,7 @@ function drawTable2(data, table ,funcion, cadena){
 	headHTML += "</tr>";
     //creación del body
     for (var i = 0; i < data.length; i++) {
-        bodyHTML += "<tr>";
+        bodyHTML += "<tr id='row" + data[i].ID + "'>";
 		if(funcion != false){
 			bodyHTML += '<td class="iconEdit" nowrap onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
 		}
@@ -307,6 +308,17 @@ function drawTable2(data, table ,funcion, cadena){
 	
 	$('#' + table ).show();
 	
+	var heightScroll = $('#' + table ).parents(".table").first();
+	heightScroll = heightScroll.height();
+	
+	$('#' + table ).DataTable({
+		"scrollY": heightScroll - 50,
+		"scrollX": true,
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		"filter": 	false,
+	});
 	
 }
 
@@ -365,8 +377,33 @@ function expandBox(section,relation){
 				neHeight = neHeight - 35;
 			}
 			$('#' + relation + ' .table').css('height', neHeight + "px" );
+			var tableH = $('#' + relation + ' .table').find("table");
+			tableH.each( function( index ) {
+				idT = $(this).attr('id');
+				if ( $.fn.dataTable.isDataTable( '#' + idT ) ) {
+					var tabla = $('#' + idT).DataTable();
+					var newHeightTable = neHeight - 50;
+					$('#' + idT + '_wrapper').children('.dataTables_scroll').children('.dataTables_scrollBody').css('height', newHeightTable + "px");
+					
+				}
+			}
+    );
 		}
 	}
+}
+
+function noResultsTable(section, table, message){
+	alertify.error(message);
+	noResults('#' + section,true);
+	deleteTable(table);
+}
+
+function deleteTable(table){
+	if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
+		var tabla = $( '#' + table ).DataTable();
+		tabla.destroy();
+	}
+	$('#' + table).hide();
 }
 
 function getWords(divs){
@@ -392,6 +429,19 @@ function getFiltersCheckboxs(name) {
         }
     );
     return filters;
+}
+
+function getWordsByArray(name) {
+    words = {};
+	for(i=0;i<name.length;i++){
+		words[name[i]] = name[i];
+	}
+   /* name.each(
+        function() {
+            words[$(this)] = $(this)
+        }
+    );*/
+    return words;
 }
 
 function generalSelects(data, div){
@@ -575,4 +625,21 @@ function getElementBoxActive(){
 		var relation = $(box).attr('relation-attr');
 		expandBox(section,relation);
 	});
+}
+
+function activatePaginador(div, funcion){
+	$('#' + div).jqPagination({
+		max_page: 1,
+		paged: function(page) {
+			if($('#' + div).val() == true){
+				$('#' + div).val(false);
+			}else{
+				funcion(page);
+			}
+		}
+	});
+}
+
+function changeIndexPaginator(div, maxPage){
+	$('#' + div).jqPagination('option', 'max_page', maxPage);
 }

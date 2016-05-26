@@ -8,6 +8,11 @@
 var maxHeight = 400;
 
 var dialogEditContract = modalEditReservations();
+var dialogHKConfig = modalHKConfig();
+var peopleDialogHK = addPeopleDialogHKC();
+var unitDialogHK = addUnitDialogHKC();
+
+var FloorplanFD;
 
 /**************Index****************/
 $('#btnSearchFrontDesk').off();
@@ -21,6 +26,10 @@ $('#btnCleanFrontDesk').off();
 $('#btnCleanFrontDesk').on('click', function(){ cleanFilterFrontDesk(); })
 
 $('.SectionFrontDesk').on('click', function(){ showSection($(this).val()); });
+
+//muestra el modal para agregar
+$('#newFontDesk').off();
+$('#newFontDesk').on('click', function() {  showModaFrontDesk(0); });
 
 /************Funciones**************/
 
@@ -60,7 +69,14 @@ $(function() {
 	dateYear = $("#dateYearFront").data('Zebra_DatePicker');
 	dateUnitHK = $("#dateHKConfig").data('Zebra_DatePicker');
 	$('#dateArrivalFront').val("04/13/2016");
-	$('#dateHKConfig').val(getCurrentDate());
+	//$('#dateHKConfig').val(getCurrentDate());
+	FloorplanFD =  $('#textFloorPlanHKConfig').multipleSelect({
+		width: '100%',
+		placeholder: "Select a floor plan",
+		selectAll: false,
+		onClick: function(view) {
+		},
+	});
 });
 
 /**
@@ -73,8 +89,8 @@ function getFrontDesk(order){
 	var words = null;
 	var options = null;
 	var url = "";
-	
-	if($('.SectionFrontDesk').val() == "section1"){
+	var section = $('.SectionFrontDesk:checked').val();
+	if(section == "section1"){
 		$('.rightPanel').remove();
 		$('.panelLeft').remove();
 		$('#tableFrontDesk tbody').empty();
@@ -83,11 +99,13 @@ function getFrontDesk(order){
 		words = getWords(["textUnitCodeFront","textConfirmationFront","textViewFront"]);
 		options = getWords(["textIntervalFront"]);
 		url = "frontDesk/getFrontDesk";
-	}else if($('.SectionFrontDesk').val() == "section2"){
+	}else if(section == "section2"){
+		
+	}else if(section == "section3"){
 		filters = getFiltersCheckboxs('FilterHKConfiguration');
 		dates = getDates(["dateHKConfig"]);
 		words = getWords(["textUnitHKConfig","textSectionHKConfig","textMaidHKConfig","textSupervisorHKConfig"]);
-		options = getWords(["textFloorPlanHKConfig"]);
+		options = getWordsByArray(FloorplanFD.multipleSelect('getSelects'));
 		url = "frontDesk/getHousekeepingConfiguration";
 	}
 	
@@ -95,7 +113,7 @@ function getFrontDesk(order){
 }
 
 function ajaxFrontDesk( url, filters, dates, words, options, order ){
-	
+	noResults('#table-frontDesk',false);
 	showLoading( '#table-frontDesk', true );
 	
 	$.ajax({
@@ -110,14 +128,30 @@ function ajaxFrontDesk( url, filters, dates, words, options, order ){
        	url: url,
 		dataType:'json',
 		success: function(data){
-			console.log(data);
-			if($('.SectionFrontDesk').val() == "section1"){
-				createTableLookUp(data);
+			var section = $('.SectionFrontDesk:checked').val();
+			if(data.items.length > 0){
+				switch(section) {
+					case "section1":
+						createTableLookUp(data);
+					break;
+					case "section2":
+						
+					break;
+					case "section3":
+						drawTable2(data.items,"tableHKConfiguration","showHKConfiguration","Edit");
+					break;
+				}
+			}else{
+				switch(section) {
+					case "section1":
+						
+					break;
+					case "section3":
+						noResultsTable("table-frontDesk", "tableHKConfiguration", "no results found");
+					break;
+				}
 			}
-			
-			
-			showLoading('#table-frontDesk',false);
-			
+			showLoading('#table-frontDesk',false);	
 		},
 		error: function(){
 			alertify.error("Try again");
@@ -195,15 +229,16 @@ function modalEditReservations(){
   		open : function (event){
 	    	$(this).load ("reservations/modalEdit" , function(){
 	 			showLoading('#dialog-Edit-Reservations',false);	
-				var hTabs = $('#dialog-Edit-Reservations .contentModalHeader').height();
+				/*var hTabs = $('#dialog-Edit-Reservations .contentModalHeader').height();
 				var hContent = $('#dialog-Edit-Reservations .contentModal').height();
-				$('#dialog-Edit-Reservations .contentModal').css('height', ( hContent - (hTabs) + 25 )); 
+				$('#dialog-Edit-Reservations .contentModal').css('height', ( hContent - (hTabs) + 25 ));*/ 
 	    	});
 		},
 		autoOpen: false,
      	height: maxHeight,
      	width: "50%",
      	modal: true,
+		dialogClass: 'dialogModal',
      	buttons: [{
 	       	text: "Cancel",
 	       	"class": 'dialogModalButtonCancel',
@@ -222,6 +257,64 @@ function modalEditReservations(){
      }
 	});
 	return dialogo;
+}
+
+/****************************************/
+/****************************************/
+/****************************************/
+
+function modalHKConfig(){
+	maxHeight = screen.height * .25;
+	maxHeight = screen.height - maxHeight;
+	
+	showLoading('#dialog-HKConfig',true);
+	dialog = $("#dialog-HKConfig").dialog ({
+  		open : function (event){
+	    	$(this).load ("frontDesk/modalHKConfig" , function(){
+	 			showLoading('#dialog-HKConfig',false);	
+				/*var hTabs = $('#dialog-HKConfig .contentModalHeader').height();
+				var hContent = $('#dialog-HKConfig .contentModal').height();
+				$('#dialog-HKConfig .contentModal').css('height', ( hContent - (hTabs) + 25 )); */
+				ajaxSelectsFrontDesk('frontDesk/getHkServiceType','try again', generalSelectsFront, 'SltServiceTypeHKC', 'Select a service type');
+				$('#btnAddPeopleHKC').off();
+				$('#btnAddPeopleHKC').on('click', function() { 
+					peopleDialogHK = addPeopleDialogHKC();
+					peopleDialogHK.dialog( "open" );
+				});
+				$('#btnAddUnitHKC').off();
+				$('#btnAddUnitHKC').on('click', function() { 
+					unitDialogHK = addUnitDialogHKC();
+					unitDialogHK.dialog( "open" );
+				});
+				
+	    	});
+		},
+		autoOpen: false,
+     	height: maxHeight,
+     	width: "50%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Save",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+				var results = validateHKCForm();
+				if(results){
+					saveHKConfig(0);
+				}
+       		}
+     	}],
+     close: function() {
+    	$('#dialog-HKConfig').empty();
+     }
+	});
+	
+	return dialog;
 }
 
 function showReservation(){
@@ -318,4 +411,372 @@ function createTableLookUp(data){
 			//$('#tableFrontDesk tbody').html(bodyHTML);
 			$('.showReservation').on('click', function(){ showReservation() });
 			initializeTooltips('.Tooltips');
+}
+
+function showHKConfiguration(){
+	
+}
+
+function showModaFrontDesk(id){
+	dialogHKConfig.dialog('open');
+}
+
+/***************************/
+/***************************/
+/***************************/
+
+function addPeopleDialogHKC() {
+	var div = "#dialog-people-hkConfig";	
+	dialog = $(div).dialog({
+		open : function (event){
+			if ($(div).is(':empty')) {
+				showLoading(div, true);
+				$(this).load ("people/index" , function(){
+		    		showLoading(div, false);
+		    		$("#dialog-User").hide();
+	            	selectTableFrontDesk("tablePeople","tablePeopleSelectedHKC", 2);
+	    		});
+			}
+			if( jQuery.isFunction( markRowTableFrontDesk ) ) {
+				markRowTableFrontDesk("tablePeople");
+			}
+		},
+		autoOpen: false,
+		height: maxHeight,
+		width: "50%",
+		modal: true,
+		buttons: [{
+			text: "Ok",
+			"class": 'dialogModalButtonAccept',
+			click: function() {
+				
+				$(this).dialog('close');
+			}
+		}],
+		close: function() {
+			//$('#dialog-people-hkConfig').empty();
+		}
+	});
+	return dialog;
+}
+
+function selectTableFrontDesk(div,div2, total){
+	$("#"+div).off();
+	$("#"+div).on("click", "tr", function(){
+		$("#" + div2 + " tbody .rowSpace").remove();
+		var totalTr = $("#" + div2 + " tbody tr").length;
+		if($(this).attr('class') == "even yellow" || $(this).attr('class') == "odd yellow"){
+			$(this).removeClass("yellow");
+			deselectedPeople(this,div2);
+		}else if(totalTr < total){
+			$(this).addClass("yellow");
+			selectAllTableFontDesk(this, div, div2);
+		}
+	});
+}
+
+function markRowTableFrontDesk(div){
+	$("#"+div + " tbody tr").removeClass("yellow");
+	$("#tablePeopleSelectedHKC tbody tr").each(function (){
+		var selector1 = this;
+		selector1 = $(selector1).attr('id');
+		if(selector1 != undefined){
+			var res = selector1.split("PS");
+			var idRwo1 = res[1];
+			$("#" + div + " tbody tr").each(function (){
+				var selector2 = this;
+				var idRwo2 = $(selector2).attr('id');
+				if(idRwo1 == idRwo2){
+					$(selector2).addClass('yellow');
+				}
+			})
+		}
+	});
+}
+
+function selectAllTableFontDesk(selector, div, div2){
+	var rowSelect = [];
+
+	var array = $(selector);
+	for (var i = 0; i < array.length; i++) {
+		var fullArray = $(array[i]).find("td");
+		if(div == "tablePeople"){
+			row = [
+				fullArray.eq(1).text().replace(/\s+/g, " "),
+				fullArray.eq(2).text().replace(/\s+/g, " "),
+				fullArray.eq(3).text().replace(/\s+/g, " "),
+			];
+		}else{
+			row = [
+				fullArray.eq(0).text().replace(/\s+/g, " "),
+				fullArray.eq(1).text().replace(/\s+/g, " "),
+				fullArray.eq(2).text().replace(/\s+/g, " "),
+				fullArray.eq(3).text().replace(/\s+/g, " "),
+			];
+		}
+		rowSelect.push(row);
+	}
+	if (rowSelect.length>0) {
+		tableSelectHKC(rowSelect,div, div2);
+	}
+}
+
+function tableSelectHKC(rowSelect,div, div2){
+	
+	//$('#tablePeopleSelectedHKC tbody').empty();
+	var bodyHTML = '';
+	    //creación del body
+    for (var i = 0; i < rowSelect.length; i++) {
+        bodyHTML += "<tr class='rowValid' id='PSrow" + rowSelect[i][0] + "' >";
+        for (var j in rowSelect[i]) {
+            bodyHTML+="<td>" + rowSelect[i][j] + "</td>";
+        };
+		if(div == "tablePeople"){
+			var nameRadio = "people" + rowSelect[i][0]
+			bodyHTML += "<td><div class='rdoField'><input class='typeRollHKC' attr_type='maid' value='" + rowSelect[i][0] + "' type='radio' name='" + nameRadio + "'><label for='folio'>&nbsp;</label></div></td>";
+			bodyHTML += "<td><div class='rdoField'><input class='typeRollHKC' attr_type='superior' value='" + rowSelect[i][0] + "' type='radio' name='" + nameRadio + "'><label for='folio'>&nbsp;</label></div></td>";
+        }
+		bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
+        bodyHTML+="</tr>";
+    }
+    $("#" + div2 + " tbody").append(bodyHTML);
+    deleteElementTable(div2);
+}
+
+function deselectedPeople(selector,div2){
+	var idRow = $(selector).attr('id');
+	$('#' + div2 + ' tbody #PS' + idRow ).remove();
+}
+
+//reducir a una funcion
+function deleteElementTable(div){
+	$("#"+div+" tr").on("click", "button", function(){
+		$(this).closest("tr").remove();
+	});
+}
+
+function createNombreLegal(){
+	/*var texto = "";
+	var nombres = getArrayValuesColumnTable("tablePeopleSelectedHKC", 2);
+	var apellidos = getArrayValuesColumnTable("tablePeopleSelectedHKC", 3);
+	for (var i = 0; i < nombres.length; i++) {
+		texto += nombres[i]+" "+apellidos[i];
+		if (i!=nombres.length-1) {
+			texto += " and ";
+		}
+	}
+	if ($("#legalName").val()=="") {
+		$("#legalName").val(texto);
+	}*/
+}
+
+function addUnitDialogHKC(){
+	var div = "#dialog-unit-hkConfig";	
+	dialog = $(div).dialog({
+		open : function (event){
+			if ($(div).is(':empty')) {
+				showLoading(div, true);
+				$(this).load ("frontDesk/modalUnitHKConfig" , function(){
+		    		showLoading(div, false);
+					ajaxSelectsFrontDesk('contract/getProperties','try again', generalSelectsFront, 'propertyHKC', 'Select a propety');
+	    			ajaxSelectsFrontDesk('contract/getUnitTypes','try again', generalSelectsFront, 'unitTypeHKC', 'Select a floor plan');
+					$('#btnGetUnities').off();
+					$('#btnGetUnities').on('click', function(){ getUnitiesHKC(0); });
+					$('.comboHKC').off("change");
+					$('.comboHKC').change(function(){ disableOtherComboHKC(this)});
+					activatePaginador('paginationUnitHKC', getUnitiesHKC);
+					selectTableFrontDesk("tblUnitHKC","tableUnitsSelectedHKC", 1);
+	    		});
+			}
+			if( jQuery.isFunction( "markRowTableFrontDesk" ) ) {
+				//markRowTableFrontDesk("tablePeople");
+			}
+		},
+		autoOpen: false,
+		height: maxHeight,
+		width: "50%",
+		modal: true,
+		buttons: [{
+			text: "Ok",
+			"class": 'dialogModalButtonAccept',
+			click: function() {
+				$(this).dialog('close');
+			}
+		}],
+		close: function() {
+			//$('#dialog-people-hkConfig').empty();
+		}
+	});
+	return dialog;
+}
+
+function ajaxSelectsFrontDesk(url,errorMsj, funcion, divSelect, firtOption) {
+	$.ajax({
+		type: "POST",
+		url: url,
+		dataType:'json',
+		success: function(data){
+			funcion(data, divSelect, firtOption);
+		},
+		error: function(){
+			alertify.error(errorMsj);
+		}
+	});
+}
+
+function generalSelectsFront(data, div, firtOption){
+	var select = '';
+	select += '<option value="">' + firtOption + '</option>';
+    for (var i = 0; i < data.length; i++) {
+        select += '<option value="'+data[i].ID+'">';
+        for (var j in data[i]) {
+            if(data[i][j] != data[i].ID){
+                select+= data[i][j].trim();
+            }
+        };
+        select+='</option>';
+    }
+    $("#"+div).html(select);
+}
+
+function getUnitiesHKC(page){
+	
+	var options = ["",""];
+	if( $('#propertyHKC option').length > 0 && $('#unitTypeHKC option').length > 0){
+		options = getWords(["propertyHKC","unitTypeHKC"]);
+	}
+	words = getWords(["searchUnitHKC"]);
+	showLoading('#table-unitsHKC',true);
+
+	$.ajax({
+		data:{
+			words: words,
+			options: options,
+			page:page,
+		},
+   		type: "POST",
+       	url: "frontDesk/getUnities",
+		dataType:'json',
+		success: function(data){
+			if(data.items.length > 0){
+				var total = data.total;
+				paginadorFrontDesk(total,"paginationUnitHKC",page);
+				drawTable2(data.items,"tblUnitHKC",false,"Edit");
+			}else{
+				noResultsTable("table-unitsHKC", "tblUnitHKC", "no results found");
+			}
+			showLoading('#table-unitsHKC',false);	
+		},
+		error: function(){
+			showLoading('#table-unitsHKC',false);
+			noResultsTable("table-unitsHKC", "tblUnitHKC", "Try again");
+		}
+    });
+}
+
+function paginadorFrontDesk(totalItems,div,page){
+	var total = totalItems;
+	if( parseInt(total) == 0 ){ total = 1; }
+		total = parseInt( total/25 );
+	if(totalItems%25 == 0){
+		total = total - 1;		
+	}
+	total = total + 1
+	if(page == 0){
+		$('#' + div).val(true);
+		changeIndexPaginator( div, total );
+	}
+}
+
+function disableOtherComboHKC(selector){
+	var value = $(selector).val();
+	$('.comboHKC').val("");
+	$(selector).val(value);
+}
+
+function validateHKCForm(){
+	var result = true;
+	hideFieldHKCForm();
+	if($("#textSectionHKC").val().trim().length == 0){
+		$("#textSectionHKC").addClass('error');
+		$('#textSectionHKC').siblings('small').removeClass('hidden');
+		result = false;
+	}
+	
+	if($("#SltServiceTypeHKC").val() == ""){
+		result = false;
+		$('#SltServiceTypeHKC').parent().addClass('error');
+		$('#SltServiceTypeHKC').parent().siblings('small').removeClass('hidden');
+	}
+	
+	var totalTr = $("#tablePeopleSelectedHKC tbody tr.rowValid").length;
+	if(totalTr != 2){
+		$('#tablePeopleSelectedHKC').siblings('small').html('please select 2 pleople.').removeClass('hidden');
+		result = false;
+	}else{
+		var selectRadio = $('.typeRollHKC:checked').length;
+		var radioMaid = $('.typeRollHKC[attr_type=maid]:checked').length;
+		var radioSuperior = $('.typeRollHKC[attr_type=superior]:checked').length;
+		
+		if(selectRadio != 2 || (radioMaid != 1 && radioSuperior != 1) ){
+			result = false;
+			$('#tablePeopleSelectedHKC').siblings('small').html('please select a maid person and a superior person.').removeClass('hidden');
+		}
+	}
+	
+	totalTr = $("#tableUnitsSelectedHKC tbody tr.rowValid").length;
+	if(totalTr != 1){
+		$('#tableUnitsSelectedHKC').siblings('small').removeClass('hidden');
+		result = false;
+	}
+		
+	return result;	
+}
+
+function hideFieldHKCForm(){
+	$('#section-HKC').find('small').addClass('hidden');
+	$('#section-HKC').find('input').removeClass('error');
+	$('#section-HKC').find('.caja').removeClass('error');
+}
+
+function saveHKConfig(id){
+	
+	showAlert(true,"Saving changes, please wait ....",'progressbar');
+	
+	var maid = $('.typeRollHKC[attr_type=maid]:checked').val();
+	var supervisor = $('.typeRollHKC[attr_type=superior]:checked').val();
+	var unit = $('#tableUnitsSelectedHKC tbody tr').find('td').first().text().trim();
+	
+	$.ajax({
+		data:{
+			id: id,
+			section: $('#textSectionHKC').val(),
+			serviceType: $('#SltServiceTypeHKC').val(),
+			maid: maid,
+			supervisor: supervisor,
+			unit: unit,
+		},
+   		type: "POST",
+       	url: "frontDesk/saveUnitHKConfig",
+		dataType:'json',
+		success: function(data){
+			showAlert(true,data.message,'button',showAlert);
+			dialogHKConfig.dialog('open');
+			getFrontDesk("");
+			/*if(data.items.length > 0){
+				var total = data.total;
+				paginadorFrontDesk(total,"paginationUnitHKC",page);
+				drawTable2(data.items,"tblUnitHKC",false,"Edit");
+			}else{
+				noResultsTable("table-unitsHKC", "tblUnitHKC", "no results found");
+			}
+			showLoading('#table-unitsHKC',false);*/	
+		},
+		error: function(){
+			//showLoading('#table-unitsHKC',false);
+			//noResultsTable("table-unitsHKC", "tblUnitHKC", "Try again");
+			showAlert(true,"Error inserting data, try again later. ",'button',showAlert);
+			dialogHKConfig.dialog('open');
+		}
+    });
 }

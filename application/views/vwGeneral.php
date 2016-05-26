@@ -13,6 +13,9 @@
         <link rel="stylesheet" href="<?php echo base_url().CSS; ?>alertify/alertify.core.css" />
         <link rel="stylesheet" href="<?php echo base_url().CSS; ?>alertify/alertify.default.css" />
         <link rel="stylesheet" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" />
+		<!-- MultiSelect-->
+		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>multiselect/multiple-select.css" />
+		<!-- General --->
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>general.css" />
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>inventary.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -23,6 +26,7 @@
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>gantt/gantt.css" />
 		<!-- Tooltip-->
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>tooltip/tooltip.css" />
+		
 		
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
@@ -36,7 +40,8 @@
         
 		<!-- Zebra_Datepicker -->
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>zebra/zebra_datepicker.js"></script>
-		<!-- gantt -->
+		<!-- MultiSelect -->
+		<script type="text/javascript" src="<?php echo base_url().JS; ?>multiselect/multiple-select.js"></script>
     </head>
     <body>
 		

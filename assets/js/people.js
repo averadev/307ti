@@ -113,7 +113,6 @@ function createModalDialog(){
 	if(dialogUser != null){
 		dialogUser.dialog( "destroy" );
 	}
-	console.log(maxHeight)
 	dialogUser = $( "#dialog-User" ).dialog({
 		autoOpen: false,
 		height: maxHeight,
@@ -744,8 +743,8 @@ function searchPeople(page){
 				var total = data.total;
 				alertify.success("Found "+ total + " People");
 				if( parseInt(total) == 0 ){ total = 1; }
-				total = parseInt( total/10 );
-				if(data.total%10 == 0){
+				total = parseInt( total/25 );
+				if(data.total%25 == 0){
 					total = total - 1;		
 				}
 				total = total + 1
@@ -753,7 +752,16 @@ function searchPeople(page){
 					$('#paginationPeople').val(true);
 					loadPaginatorPeople( total );
 				}
-				drawTable2(data.items,"tablePeople","showModal","editar");
+				drawTable2(data.items,"tablePeople","showModal","Edit");
+				
+				
+				/*isFunction: function( obj ) {
+					return jQuery.type(obj) === "function";
+				},*/
+				
+				if( $.isFunction( "markRowTableFrontDesk" ) ) {
+					frontDesk:markRowTableFrontDesk("tablePeople");
+				}
 			}else{
 				noResultsPeople("section-table-people", "tablePeople", "No results found");
 			}

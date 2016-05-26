@@ -146,3 +146,10 @@ where
 (((select top 1 ro2.NightId from tblCalendar c2 LEFT JOIN tblResOcc ro2 on ro2.fkCalendarId = c2.pkCalendarId where ro.fkResId = ro2.fkResId and c2.Date = '2016-04-13 00:00:00.000' ) = 1) and
 ((select top 1 ro2.NightId from tblCalendar c2 LEFT JOIN tblResOcc ro2 on ro2.fkCalendarId = c2.pkCalendarId where ro.fkResId = ro2.fkResId and c2.Date = DATEADD(day,-1,CONVERT(VARCHAR(10),'2016-04-20 00:00:00.000',101))) = (SELECT top 1 ro2.NightId from tblResOcc ro2 where ro2.fkResId = ro.fkResId ORDER BY ro2.NightId DESC ))) and
 (c.Date >= DATEADD(day,-11,CONVERT(VARCHAR(10),'2016-04-20 00:00:00.000',101)) and c.Date <= DATEADD(day,-1,CONVERT(VARCHAR(10),'2016-04-20 00:00:00.000',101)))
+
+
+
+--@cantidad int = 10
+
+--declare @total INT = (@pagina-1) * @cantidad select * 
+--from tblPeople ORDER BY tblPeople.pkPeopleId OFFSET @total ROWS FETCH NEXT @cantidad ROW ONLY--

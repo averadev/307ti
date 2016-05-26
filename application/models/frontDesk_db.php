@@ -175,5 +175,100 @@ Class frontDesk_db extends CI_MODEL
 		return  $this->db->get()->result();
 	}
 	
+	/*************** HousekeepingConfiguration******************/
+	
+	public function getHousekeepingConfiguration($filters){
+		$this->db->select('u.unitcode, fp.FloorPlanDesc, p.name as MaidName, p.lname as MaidLName, e.EmployeeCode as EmployeeCodeMaid');
+		$this->db->select('p2.name as SuperName, p2.lname as SuperLName, e2.EmployeeCode, cfg.section,f.level as Floor, b.buildingDesc');
+		$this->db->from('tblUnitHkconfig cfg');
+		$this->db->join('tblunit u', 'u.pkunitid = cfg.fkUnitid', 'inner');
+		$this->db->join('tblUnithkstatus uhs', 'uhs.fkunitid = u.pkunitid', 'inner');
+		$this->db->join('tblhkStatus hs', 'hs.pkHkStatusid = uhs.fkHkStatusid ', 'inner');
+		$this->db->join('tblFloor f', 'f.pkFloorid = u.fkFloorid', 'inner');
+		$this->db->join('tblBuilding b', 'b.pkBuildingid =f.fkbuildingid', 'inner');
+		$this->db->join('tblpeople p', 'pkPeopleid = cfg.fkPeopleMaidid', 'inner');
+		$this->db->join('tblpeople p2', 'p2.pkPeopleid = cfg.fkPeopleSuperid', 'inner');
+		$this->db->join('tblhkServicetype st', 'st.pkhkServiceTypeid = cfg.fkhkServiceTypeid', 'inner');
+		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanId = u.fkFloorPlanId', 'inner');
+		$this->db->join('tblEmployee e', 'e.fkPeopleId = p.pkPeopleId', 'inner');
+		$this->db->join('tblEmployee e2', 'e2.fkPeopleId = p2.pkPeopleId', 'inner');
+		$this->db->join('tblPeopleType pt', 'pt.pkPeopleTypeId = p.fkPeopleTypeId', 'inner');
+		if($filters['words'] != false){
+			if (isset($filters['words']['textUnitHKConfig'])){
+				$this->db->where('u.UnitCode = ', $filters['words']['textUnitHKConfig']);
+			}
+			if (isset($filters['words']['textSectionHKConfig'])){
+				$this->db->where('cfg.section = ', $filters['words']['textSectionHKConfig']);
+			}
+			if (isset($filters['words']['textMaidHKConfig'])){
+				$this->db->where('e.EmployeeCode = ', $filters['words']['textMaidHKConfig']);
+				$this->db->where('e.ynOnDuty = 1');
+				$this->db->where('pt.ynMaid = 1 and pt.ynSup = 1 and pt.ynActive = 1');
+			}
+			if (isset($filters['words']['textSupervisorHKConfig'])){
+				$this->db->where('e2.EmployeeCode = ', $filters['words']['textSupervisorHKConfig']);
+				$this->db->where('e.ynOnDuty = 1');
+				$this->db->where('pt.ynMaid = 1 and pt.ynSup = 1 and pt.ynActive = 1');
+			}
+		}
+		if($filters['dates'] != false){
+			if (isset($filters['dates']['dateHKConfig'])){
+				$date = $filters['dates']['dateHKConfig'];
+				$this->db->where("CONVERT(VARCHAR(10),cfg.Date,101)>= CONVERT(VARCHAR(10),'" . $date . "',101)");
+			}
+		}
+		if($filters['checks'] != false){
+			$this->db->where("( " . $filters['checks'] . ")");
+		}
+		
+		if($filters['options'] != false){
+			$this->db->where("( " . $filters['options'] . ")");
+		}
+		
+		//$this->db->where('tblStatus.ynActive = 1');
+		//$this->db->where('tblStatusTypeStatus.ynActive = 1');
+		//$this->db->where('tblStatusTypeStatus.fkStatusTypeId = 2');
+		return  $this->db->get()->result();
+	}
+	
+	public function getUnities($filters){
+		$this->db->select('u.pkUnitId as ID, u.UnitCode, fp.FloorPlanDesc, p.PropertyName');
+		$this->db->from('tblUnit u');
+		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = u.fkFloorPlanId', 'inner');
+		$this->db->join('tblProperty p', 'p.pkPropertyId = u.fkPropertyId', 'inner');
+		if($filters['words'] != false){
+			if (isset($filters['words']['searchUnitHKC'])){
+				$this->db->where('u.UnitCode = ', $filters['words']['searchUnitHKC']);
+			}
+		}
+		//"propertyHKC","unitTypeHKC"
+		if($filters['options'] != false){
+			if (isset($filters['options']['propertyHKC'])){
+				$this->db->where('u.fkPropertyId = ', $filters['options']['propertyHKC']);
+			}
+			if (isset($filters['options']['unitTypeHKC'])){
+				$this->db->where('u.fkFloorPlanId = ', $filters['options']['unitTypeHKC']);
+			}
+		}
+		
+		
+		return  $this->db->get()->result();
+	}
+	
+	public function getHkServiceType(){
+		$this->db->select("st.pkHkServiceTypeId as ID, st.HkServiceTypeDesc");
+		$this->db->from("tblHkServiceType st");
+		$this->db->where("st.ynActive = 1");
+		$query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+	}
+	
+	public function insert($data, $table){
+		$this->db->insert($table, $data);
+	}
+	
 }
 //end model
