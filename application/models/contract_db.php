@@ -186,6 +186,18 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
+    public function selectIdFrequency($string){
+        $this->db->select("pkFrequencyID");
+        $this->db->from('tblFrequency');
+        $this->db->where('FrequencyDesc', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkFrequencyID;
+        }
+    }
     public function selectSeasons(){
         $this->db->select("pkSeasonId as ID, SeasonDesc");
         $this->db->from('tblSeason');
@@ -193,6 +205,18 @@ class Contract_db extends CI_Model {
         if($query->num_rows() > 0 )
         {
             return $query->result();
+        }
+    }
+    public function selectIdSeason($string){
+        $this->db->select("pkSeasonId");
+        $this->db->from('tblSeason');
+        $this->db->where('SeasonDesc', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkSeasonId;
         }
     }
     public function selectIdMetodoFin($string){
@@ -273,9 +297,22 @@ class Contract_db extends CI_Model {
         }
     }
 
+    public function selectIdFloorPlan($string){
+        $this->db->select('pkFloorPlanID');
+        $this->db->from('tblFloorPlan');
+        $this->db->where('FloorPlanDesc', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkFloorPlanID;
+        }
+    }
+
     public function getUnidades($filters){
 
-        $this->db->select('unit.UnitCode as Code, flp.FloorPlanDesc as Description, price.PriceFixedWk as Price, freq.FrequencyDesc Frequency, season.SeasonDesc as Season');
+        $this->db->select('unit.UnitCode as Code, RTRIM(flp.FloorPlanDesc) Description, price.PriceFixedWk as Price, freq.FrequencyDesc Frequency, season.SeasonDesc as Season');
         $this->db->from('tblResInvt invt');
         $this->db->join('tblUnit unit', 'unit.pkUnitId = invt.fkUnitId', 'inner');
         $this->db->join('tblFloorPlan flp', 'flp.pkFloorPlanID = unit.fkFloorPlanId', 'inner');

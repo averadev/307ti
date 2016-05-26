@@ -184,7 +184,6 @@ function addUnidadDialog() {
 	var div = "#dialog-Unidades";
 	dialog = $( "#dialog-Unidades" ).dialog({
 		open : function (event){
-			if ($(div).is(':empty')) {
 				showLoading(div,true);
 				$(this).load ("contract/modalUnidades" , function(){
 		    		showLoading(div,false);
@@ -197,9 +196,6 @@ function addUnidadDialog() {
 					});
 		            selectTableUnico("tblUnidades");
 	    		});
-			}else{
-				$(this).dialog('open');
-			}
 	    	
 		},
 		autoOpen: false,
@@ -217,13 +213,15 @@ function addUnidadDialog() {
 			"class": 'dialogModalButtonAccept',
 			click: function() {
 				var unidades = selectAllUnities();
-				$(this).dialog('close');
-				var dialogWeeks = getWeeksDialog(unidades);
-				dialogWeeks.dialog("open");
+				if (unidades.length>0) {
+					$(this).dialog('close');
+					var dialogWeeks = getWeeksDialog(unidades);
+					dialogWeeks.dialog("open");
+				}
 			}
 		}],
 		close: function() {
-			//$('#dialog-Unidades').empty();
+			$('#dialog-Unidades').empty();
 		}
 	});
 	return dialog;
@@ -232,14 +230,12 @@ function addPeopleDialog() {
 	var div = "#dialog-People";	
 	dialog = $(div).dialog({
 		open : function (event){
-			if ($(div).is(':empty')) {
 				showLoading(div, true);
 				$(this).load ("people/index" , function(){
 		    		showLoading(div, false);
 		    		$("#dialog-User").hide();
 	            	selectTable("tablePeople");
 	    		});
-			}	
 		},
 		autoOpen: false,
 		height: maxHeight,
@@ -262,7 +258,7 @@ function addPeopleDialog() {
 			}
 		}],
 		close: function() {
-			//$('#dialog-People').empty();
+			$('#dialog-People').empty();
 		}
 	});
 	return dialog;
@@ -384,89 +380,117 @@ function createNewContract(){
 		alertify.success("Please fill required fields (red)");
 		return false;
 	}else{
-		showAlert(true,"Saving changes, please wait ....",'progressbar');
-	$.ajax({
-			data: {
-				legalName : $("#legalName").val().trim(),
-				tourID : $("#TourID").val().trim(),
-				idiomaID : $("#selectLanguage").val(),
-				peoples : getArrayValuesColumnTable("tablePeopleSelected", 1),
-				types: typePeople(),
-				unidades : getArrayValuesColumnTable("tableUnidadesSelected", 1),
-				weeks: $("#weeksNumber").val().trim(),
-				firstYear :$("#firstYearWeeks").val().trim(),
-				lastYear : $("#lastYearWeeks").val().trim(),
-				tipoVentaId : $("#typeSales").val(),
-				listPrice: $("#precioUnidad").val(),
-				salePrice: $("#precioVenta").val(),
-				specialDiscount:$("#totalDiscountPacks").val(),
-				downpayment:$("#downpayment").val(),
-				amountTransfer:$("#amountTransfer").val(),
+		var personas = getValueTableUnidades();
+		var unidades = getValueTablePersonas();
+		if (personas.length<=0) {
+			alertify.error("Debes de agregar al menos una persona");
+		}else if (unidades.length<=0) {
+			alertify.error("Debes de agregar al menos una persona");
+		}else{
+			showAlert(true,"Saving changes, please wait ....",'progressbar');
+			$.ajax({
+					data: {
+						legalName : $("#legalName").val().trim(),
+						tourID : $("#TourID").val().trim(),
+						idiomaID : $("#selectLanguage").val(),
+						//peoples : getArrayValuesColumnTable("tablePeopleSelected", 1),
+						peoples: getValueTablePersonas(),
+						types: typePeople(),
+						//unidades : getArrayValuesColumnTable("tableUnidadesSelected", 1),
+						unidades: getValueTableUnidades(),
+						weeks: $("#weeksNumber").val().trim(),
+						firstYear :$("#firstYearWeeks").val().trim(),
+						lastYear : $("#lastYearWeeks").val().trim(),
+						tipoVentaId : $("#typeSales").val(),
+						listPrice: $("#precioUnidad").val(),
+						salePrice: $("#precioVenta").val(),
+						specialDiscount:$("#totalDiscountPacks").val(),
+						downpayment:$("#downpayment").val(),
+						amountTransfer:$("#amountTransfer").val(),
 
-				packPrice:sumarArray(getArrayValuesColumnTable("tablePeopleSelected", 2)),
-				financeBalance: $("#financeBalance").val(),
-				
-				viewId: 1,
-				floorPlanId: 1,
-				SeassonId: 10,
-				FrequencyId: 2,
-				contratoRelacionadoId : 0,
-				fkAccId: 10,
-				totalEnganche : 1500,
-				totalPagosProg : 1500,
-				depClosingFee : 1295,
-				montoTransfer : 6000,
-				balance : 42711.8
-			},
-			type: "POST",
-			dataType:'json',
-			url: 'contract/saveContract'
-		})
-		.done(function( data, textStatus, jqXHR ) {
-			if (data== 1) {
-				elem.resetForm();
-				showAlert(false,"Saving changes, please wait ....",'progressbar');
-				var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta", "downpayment"];
-				clearInputsById(arrayWords);
-				$('#dialog-Weeks').empty();
-				$('#tablePeopleSelected tbody').empty();
-				$('#tableUnidadesSelected tbody').empty();
-				alertify.success("Contract Save");
-			}
-			
-		})
-		.fail(function( jqXHR, textStatus, errorThrown ) {
-			//alertify.error("Ocurrio un error vuelve a intentarlo");
-		});
-
+						packPrice:sumarArray(getArrayValuesColumnTable("tablePeopleSelected", 2)),
+						financeBalance: $("#financeBalance").val(),
+						
+						viewId: 1,
+						floorPlanId: 1,
+						SeassonId: 10,
+						FrequencyId: 2,
+						contratoRelacionadoId : 0,
+						fkAccId: 10,
+						totalEnganche : 1500,
+						totalPagosProg : 1500,
+						depClosingFee : 1295,
+						montoTransfer : 6000,
+						balance : 42711.8
+					},
+					type: "POST",
+					dataType:'json',
+					url: 'contract/saveContract'
+				})
+				.done(function( data, textStatus, jqXHR ) {
+					if (data== 1) {
+						elem.resetForm();
+						showAlert(false,"Saving changes, please wait ....",'progressbar');
+						var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta", "downpayment"];
+						clearInputsById(arrayWords);
+						$('#dialog-Weeks').empty();
+						$('#tablePeopleSelected tbody').empty();
+						$('#tableUnidadesSelected tbody').empty();
+						alertify.success("Contract Save");
+					}
+					
+				})
+				.fail(function( jqXHR, textStatus, errorThrown ) {
+					//alertify.error("Ocurrio un error vuelve a intentarlo");
+				});
+		}
 	}
 }
 
-function getValueTableUnidades(tabla){
+function getValueTableUnidades(){
+	var tabla = "tableUnidadesSelected";
 	var unidades = [];
 	$('#'+tabla+' tbody tr').each( function(){
-		var unidad = {};
-		unidad.id = $(this).find('td').eq(0).text(),
-		unidad.price = $(this).find('td').eq(2).text(),
-		unidad.frequency = $(this).find('td').eq(3).text(),
-		unidad.week = $(this).find('td').eq(5).text()
-		unidades.push(unidad); 
+		if ($(this).text().replace(/\s+/g, " ")!="") {
+			var unidad = {};
+			unidad.id = $(this).find('td').eq(0).text(),
+			unidad.floorPlan = $(this).find('td').eq(1).text(),
+			unidad.frequency = $(this).find('td').eq(3).text(),
+			unidad.season = $(this).find('td').eq(4).text(),
+			unidad.week = $(this).find('td').eq(5).text()
+			unidades.push(unidad); 
+		}
 	});
 	return unidades;
 }
-function getValueTablePersonas(tabla){
+function getValueTablePersonas(){
+	var tabla = "tablePeopleSelected";
+	var unidades = [];
 	var personas = [];
 	$('#'+tabla+' tbody tr').each( function(){
-		var persona = {};
-		persona.id = $(this).find('td').eq(0).text(),
-		persona.primario = $(this).find('td').eq(4).find('input[name=primario]').filter(':checked').val(),
-		persona.secundario = $(this).find('td').eq(5).find('input[name=secundario]').filter(':checked').val(),
-		persona.beneficiario = $(this).find('td').eq(6).find('input[name=beneficiario]').filter(':checked').val()
-		personas.push(persona); 
+		if ($(this).text().replace(/\s+/g, " ")!="") {
+			var persona = {};
+			persona.id = $(this).find('td').eq(0).text(),
+			persona.primario = converCheked($(this).find('td').eq(4).find('input[name=primario]').filter(':checked').val()),
+			persona.secundario = converCheked($(this).find('td').eq(5).find('input[name=secundario]').filter(':checked').val()),
+			persona.beneficiario = converCheked($(this).find('td').eq(6).find('input[name=beneficiario]').filter(':checked').val())
+			personas.push(persona); 
+		}
+		
 	});
 	return personas;
 }
 
+
+function converCheked(val){
+	var c;
+	if (val == "on") {
+		c = 1;
+	}else{
+		c = 0;
+	}
+	return c;
+}
 
 function sumarArray(array){
 	var sum = 0;
@@ -511,21 +535,39 @@ function getDataFormContract(){
 }
 
 function selectAllPeople(){
+	var personasSeleccionaDas = getArrayValuesColumnTable("tablePeopleSelected", 1);
+	// if (true) {
+
+	// };
+	
+	//var personasNuevas = 
 	var personas = [];
 
 	var array = $("#tablePeople .yellow");
 	for (var i = 0; i < array.length; i++) {
 		var fullArray = $(array[i]).find("td");
-		persona = [
-			fullArray.eq(1).text().replace(/\s+/g, " "),
-			fullArray.eq(2).text().replace(/\s+/g, " "),
-			fullArray.eq(3).text().replace(/\s+/g, " "),
-			fullArray.eq(9).text().replace(/\s+/g, " ")
-		];
-		personas.push(persona);
+		if (personasSeleccionaDas.length>0) {
+			if (!isInArray(fullArray.eq(1).text().replace(/\s+/g, " ") ,personasSeleccionaDas)) {
+				persona = [
+					fullArray.eq(1).text().replace(/\s+/g, " "),
+					fullArray.eq(2).text().replace(/\s+/g, " "),
+					fullArray.eq(3).text().replace(/\s+/g, " "),
+					fullArray.eq(9).text().replace(/\s+/g, " ")
+					];
+					personas.push(persona);
+			}
+		}else{
+			persona = [
+				fullArray.eq(1).text().replace(/\s+/g, " "),
+				fullArray.eq(2).text().replace(/\s+/g, " "),
+				fullArray.eq(3).text().replace(/\s+/g, " "),
+				fullArray.eq(9).text().replace(/\s+/g, " ")
+			];
+			personas.push(persona);
+		}
 	}
 	if (personas.length <= 0) {
-		alertify.error("Click over for choose one");
+		alertify.error("Search and click over for choose one");
 		return false;
 	}else{
 		if (personas.length>0) {
@@ -535,6 +577,11 @@ function selectAllPeople(){
 	}
 	
 }
+
+function isInArray(value, array) {
+	console.log(value);
+  return array.indexOf(value) > -1;
+}
 function selectAllUnities(){
 	var unidades = [];
 
@@ -542,19 +589,19 @@ function selectAllUnities(){
 	for (var i = 0; i < array.length; i++) {
 		var fullArray = $(array[i]).find("td");
 		unidad = [
-			fullArray.eq(1).text().replace(/\s+/g, " "),
-			fullArray.eq(2).text().replace(/\s+/g, " "),
-			fullArray.eq(3).text().replace(/\s+/g, " "),
-			fullArray.eq(4).text().replace(/\s+/g, " "),
-			fullArray.eq(5).text().replace(/\s+/g, " ")
+			fullArray.eq(1).text(),
+			fullArray.eq(2).text(),
+			// fullArray.eq(2).attr("idfloorplan"),
+			fullArray.eq(3).text(),
+			fullArray.eq(4).text(),
+			fullArray.eq(5).text()
 		];
 		unidades.push(unidad);
 	}
 	if (unidades.length <= 0) {
-		alertify.error("Click over for choose one");
-		//return false;
+		alertify.error("Search and click over for choose one");
+		return unidades;
 	}else{
-		
 		return unidades;
 	}
 }
@@ -685,8 +732,8 @@ function PackReference(){
 	    	});
 		},
 		autoOpen: false,
-     	height: maxHeight,
-     	width: "50%",
+     	height: maxHeight/2,
+     	width: "25%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -839,8 +886,8 @@ function tablUnidadades(unidades, weeks, primero, ultimo){
 		 for (var i = 0; i < unidades.length; i++) {
         bodyHTML += "<tr>";
         for (var j in unidades[i]) {
-            bodyHTML+="<td>" + unidades[i][j] + "</td>";
-        };
+        	bodyHTML+="<td>" + unidades[i][j] + "</td>";
+        }
         bodyHTML += "<td>"+k+"</td>";
         bodyHTML += "<td>"+primero+"</td>";
         bodyHTML += "<td>"+ultimo+"</td>";
@@ -1261,3 +1308,39 @@ function changeTabsModalContract(screen){
 		}
 	}
 }
+
+
+function drawTableUnidades(data, funcion, cadena, table){
+    var headHTML = "<th>"+cadena+"</th>";
+    var bodyHTML = '';
+    //creación de la cabecera
+	for (var j in data[0]) {
+		if (j != "IDFloorPlan") {
+			headHTML+="<th>"+j+"</th>";
+		}
+    }
+    //creación del body
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+       	bodyHTML += '<td class="iconEdit" onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
+        for (var j in data[i]) {
+        	if (data[i][j] != data[i].IDFloorPlan) {
+        		if(data[i][j] == data[i].Description){
+        			bodyHTML+="<td IDFloorPlan="+data[i].IDFloorPlan+">" + data[i][j] + "</td>";
+        		}else if (data[i][j] != data[i].IDFloorPlan) {
+        			bodyHTML+="<td IDFloorPlan="+data[i].IDFloorPlan+">" + data[i][j] + "</td>";
+        		}
+        		else{
+        			bodyHTML+="<td>" + data[i][j] + "</td>";
+        		}
+        	}
+        };
+        bodyHTML+="</tr>";
+    }
+    $('#' + table + "thead" ).html(headHTML);
+    $('#' + table + "tbody" ).html(bodyHTML);
+    //pluginTables(table);
+}
+
+//var a = $('#tblUnidades tbody .yellow').html();
+//var b = $('#tableUnidadesSelected tbody').html(a);

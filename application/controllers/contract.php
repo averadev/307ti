@@ -26,13 +26,14 @@ class Contract extends CI_Controller {
 	public function saveContract(){
 		
 		if($this->input->is_ajax_request()){
-
+			//var_dump($_POST);
 			$idContrato = $this->createContract();
-			$this->insertOcupacion($idContrato);
 			$this->insertPeoples($idContrato);
-			//$this->createSemanaOcupacion($idContrato);
 			$this->createUnidades($idContrato);
-			//$this->insertFinanciamiento($idContrato);
+			// $this->insertOcupacion($idContrato);
+			//$this->insertPeoples($idContrato);
+			// //$this->createSemanaOcupacion($idContrato);
+			// //$this->insertFinanciamiento($idContrato);
 			echo  "1";
 	}
 }
@@ -98,12 +99,12 @@ private function createUnidades($idContrato){
 	for($i =0; $i< $rango; $i++){
 		$Unidades = [
 			"fkResId"                   => $idContrato,
-			"fkUnitId"    				=> $_POST['unidades'][$i],
-			"Intv"              		=> $i+1,
-			"fkFloorPlanId"             => $_POST['floorPlanId'],
+			"fkUnitId"    				=> $_POST['unidades'][$i]['id'],
+			"Intv"              		=> $_POST['unidades'][$i]['week'],
+			"fkFloorPlanId"             => $this->contract_db->selectIdFloorPlan($_POST['unidades'][$i]['floorPlan']),
 			"fkViewId"               	=> $_POST['viewId'],
-			"fkSeassonId"               => $_POST['SeassonId'],
-			"fkFrequencyId"             => $_POST['FrequencyId'],
+			"fkSeassonId"               => $this->contract_db->selectIdSeason($_POST['unidades'][$i]['season']),
+			"fkFrequencyId"             => $this->contract_db->selectIdFrequency($_POST['unidades'][$i]['frequency']),
 			"WeeksNumber"         		=> $_POST['weeks'],
 			"NightsNumber"              => $dias,
 			"FirstOccYear"              => $_POST['firstYear'],
@@ -121,11 +122,11 @@ private function insertPeoples($idContrato){
 	for($i = 0; $i < $rango; $i++){
 		$personas = [
 			"fkResId"    		=> $idContrato,	
-			"fkPeopleId"        => $_POST['peoples'][$i],
+			"fkPeopleId"        => $_POST['peoples'][$i]["id"],
 			"fkAccId"           => $this->contract_db->selectIdAccType('FDK'),
-			"ynPrimaryPeople"   =>$_POST['types'][$i][0],
-			"ynBenficiary"		=>$_POST['types'][$i][1],
-			"ynOther"			=>$_POST['types'][$i][2],
+			"ynPrimaryPeople"   => $_POST['peoples'][$i]['primario'],
+			"ynBenficiary"		=> $_POST['peoples'][$i]['secundario'],
+			"ynOther"			=> $_POST['peoples'][$i]['beneficiario'],
 			"ynActive"          => 1,
 			"CrBy"             	=> $this->nativesessions->get('id'),
 			"CrDt"				=> $this->getToday()
