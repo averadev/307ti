@@ -194,13 +194,21 @@
                     <div class="large-3 columns">
                         <label>Downpayment</label>
 					</div>
-					<div class="large-5 columns end">
+					<div class="large-2 columns end">
 						<input class="round general" id="downpayment" required type="text" placeholder="$0.00"/>
                     </div>
-					
-                    <!---->
+                    <div class="large-4 columns end">
+                        <input type="radio" name="engancheR" value="porcentaje" id="porcentaje"><label for="porcentaje">Porcentaje</label>
+                        <input checked type="radio" name="engancheR" value="cantidad" id="cantidad"><label for="cantidad">Cantidad</label>
+                    </div>
+                    <div class="large-1 columns">
+                        <label>Amount</label>
+                    </div>
+                    <div class="large-2 columns end">
+                        <input id="montoTotal" class="round general" type="text" placeholder="%" />
+                    </div>
 				</div>
-				<div class="row" style="margin-bottom:10px;">
+<!-- 				<div class="row" style="margin-bottom:10px;">
 					<div class="large-3 columns">
 						 <label>Choose</label>
 					</div>
@@ -208,15 +216,15 @@
                         <input type="radio" name="engancheR" value="porcentaje" id="porcentaje"><label for="porcentaje">Porcentaje</label>
                         <input checked type="radio" name="engancheR" value="cantidad" id="cantidad"><label for="cantidad">Cantidad</label>
                     </div>
-				</div>
-				<div class="row">
+				</div> -->
+				<!-- <div class="row">
 					<div class="large-3 columns">
 						<label>Amount</label>
 					</div>
 					<div class="large-5 columns end">
 						<input class="round general" type="text" placeholder="%" />
                     </div>
-				</div>
+				</div> -->
                 <!--Enganche-->
                 <div class="row">
                     <div class="small-3 columns">

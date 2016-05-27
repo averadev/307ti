@@ -10,7 +10,7 @@
   </div>
   <div class="row">
     <div class="small-3 columns">
-      <label for="legalName" class="text-left">%</label>
+      <label for="legalName" class="text-left">Porcentaje</label>
     </div>
     <div class="small-9 columns">
        <input class="round general" id="porcentajePack" type="number" min="0" max="500000">

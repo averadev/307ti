@@ -31,7 +31,7 @@ class Contract extends CI_Controller {
 			$this->insertPeoples($idContrato);
 			$this->createUnidades($idContrato);
 			// $this->insertOcupacion($idContrato);
-			//$this->insertPeoples($idContrato);
+			$this->insertPeoples($idContrato);
 			// //$this->createSemanaOcupacion($idContrato);
 			// //$this->insertFinanciamiento($idContrato);
 			echo  "1";
@@ -302,7 +302,7 @@ private function createDownPayment(){
 	public function getContratos(){
 		if($this->input->is_ajax_request()) {
 			$sql = $this->getFilters($_POST, 'RI.CrDt', 'Contract');
-			$contratos = $this->contract_db->getContratos($sql);
+			$contratos = $this->contract_db->getContratos2($sql);
 			echo json_encode($contratos);
 		}
 

@@ -41,6 +41,38 @@ class Contract_db extends CI_Model {
         }
 
     }
+     function getContratos2($filters){
+        $sql = "";
+        $this->db->select('R.pkResId as ID, R.folio as Folio, R.LegalName as LegalName, UT.FloorPlanDesc, FR.FrequencyDesc');
+        $this->db->select('ES.StatusDesc, RI.CrDt, R.FirstOccYear, R.LastOccYear, 28000 as listPrice, 25000 as netsale');
+        $this->db->from('tblRes R');
+        $this->db->join('tblResinvt RI', 'RI.fkResId = R.pkResId');
+        $this->db->join('tblFloorPlan UT', 'UT.pkFloorPlanID = RI.fkFloorPlanId');
+        $this->db->join('tblFrequency FR', 'FR.pkFrequencyId = RI.fkFrequencyId');
+        $this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId');
+        $this->db->where('R.fkResTypeId', '5');
+        if($filters['dates'] != false) {
+            $sql = $filters['dates'];
+        }
+        if($filters['words'] != false){
+
+            if ($filters['checks'] != false){
+
+                $this->filterContracts($filters);
+            }
+        }
+        if($sql!=""){
+            $this->db->where($sql, NULL);
+        }
+
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+
+    }
 
 
     public function createContract(){
@@ -312,6 +344,16 @@ class Contract_db extends CI_Model {
 
     public function getUnidades($filters){
 
+        // select P.PropertyName, flp.FloorPlanDesc from tblUnit U
+        // inner join tblModule M on M.pkModuleId = 1
+        // inner join tblModuleResType MR on MR.FkModuleId = M.pkModuleId    
+        // inner join tblResType RT on RT.pkResTypeId =  MR.FkResTypeId
+        // inner join tblResTypeUnitType RTU on RTU.pkResTypeUnitTypeId = RT.pkResTypeId
+        // inner join tblUnitType UT on UT.pkUnitTypeId = RTU.pkResTypeUnitTypeId
+        // inner join tblProperty P on P.pkPropertyId = U.fkPropertyId
+        // inner join tblFloorPlan flp on flp.pkFloorPlanID = U.fkFloorPlanId
+        // --inner join tblSeason SS on SS.pkSeasonId = invt.fkSeassonId
+        // --inner join tblView V on V.fkPropertyId = P.pkPropertyId
         $this->db->select('unit.UnitCode as Code, RTRIM(flp.FloorPlanDesc) Description, price.PriceFixedWk as Price, freq.FrequencyDesc Frequency, season.SeasonDesc as Season');
         $this->db->from('tblResInvt invt');
         $this->db->join('tblUnit unit', 'unit.pkUnitId = invt.fkUnitId', 'inner');
@@ -322,12 +364,6 @@ class Contract_db extends CI_Model {
         if (!empty($filters['property'])) {
             $this->db->where('unit.fkPropertyId', $filters['property']);
         }
-        // if (!empty($filters['unitType'])) {
-        //     $this->db->where('unit.fkUnitTypeId', $filters['unitType']);
-        // }
-        // if (!empty($filters['frequency'])) {
-        //     $this->db->where('unit.frequency', $filters['frequency']);
-        // }
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {

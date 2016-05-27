@@ -80,9 +80,41 @@ $(document).ready(function(){
 		$("#avanzada").slideToggle("slow");
 	});
 
+	$(document).on( 'change', '#downpayment', function () {
+		var monto = $("#downpayment").val();
+		cambiarCantidadP(monto);
+		updateBalanceFinal();
+	});
+	$(document).on( 'change', "input[name='engancheR']:checked", function () {
+		var monto = $("#downpayment").val();
+		cambiarCantidadP(monto);
+	});
+	$(document).on( 'change', "#precioVenta", function () {
+		updateBalanceFinal();
+	});
+
+
 	getDatailByID("contractstbody");
 });
+
+function updateBalanceFinal(){
+	var precioVenta = $("#precioVenta").val();
+	var enganche = $("#downpayment").val();
+	var balanceFinal = $("#financeBalance").val(precioVenta - enganche);
+}
 	
+function cambiarCantidadP(monto){
+	var seleccionado = $("input[name='engancheR']:checked").val();
+	var precioVenta = $("#precioVenta").val();
+	if (seleccionado == 'porcentaje') {
+		var porcentaje = precioVenta * (monto/100);
+		$("#montoTotal").val(porcentaje);
+	}else{
+		$("#montoTotal").val(monto);
+	}
+}
+
+
 function createDialogContract(addContract) {
 	var div = "#dialog-Contract";
 	if (addContract!=null) {
@@ -681,7 +713,7 @@ function getWeeksDialog(unidades){
 	    		showLoading('#dialog-Weeks', false);
 	    		$("#weeksNumber").val(1);
 	    		setYear("firstYearWeeks", 0);
-	    		setYear("lastYearWeeks", 1);
+	    		setYear("lastYearWeeks", 25);
 	    	});
 		},
 		autoOpen: false,
@@ -780,8 +812,14 @@ function modalDepositDownpayment(){
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			var deposito = $("#finalPriceDownpayment").val();
-       			$("#depositoEnganche").val(deposito);
-       			$(this).dialog('close');	
+       			var total = $("#downpaymentTotal").val();
+       			if (deposito>total) {
+       				alertify.error("la cantidad es mayor al tatal")
+       			}else{
+       				$("#depositoEnganche").val(deposito);
+       				$(this).dialog('close');	
+       			}
+       			
        		}
      	}],
      close: function() {
