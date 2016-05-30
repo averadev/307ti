@@ -10,7 +10,7 @@
   </div>
   <div class="row">
     <div class="small-3 columns">
-      <label for="legalName" class="text-left">payment type</label>
+      <label  class="text-left">payment type</label>
     </div>
     <div class="small-9 columns">
 		<div class="caja">
@@ -23,43 +23,47 @@
 		</div>
     </div>
   </div>
-   <fieldset id="datosTarjetaProgramados" class="fieldset" style="display: none;">
+  <fieldset id="datosTarjetaProgramados" class="fieldset" style="display: none;">
                 <legend>
                     Datos de la tarjeta
                 </legend>
-                <!-- Legal name-->
+                <!-- Numero de tarjeta-->
                 <div class="row">
                     <div class="small-3 columns">
-                        <label for="legalName" class="text-left">Numero de Tarjeta</label>
+                        <label for="numeroTarjeta" class="text-left">Numero de Tarjeta</label>
                     </div>
                     <div class="small-9 columns">
-                        <input class="round general" type="text" id="legalName" name="legalName" class="general" required>
+                        <input class="round general" type="text" id="numeroTarjetaProgramados" name="numeroTarjeta" class="general" required>
                     </div>
                 </div>
-                <!-- Language-->
+                <!-- fecha de expiracion-->
                 <div class="row">
                     <div class="small-3 columns">
-                        <label id="alertLastName" for="right-label" class="text-left">Fecha de Expiración</label>
+                        <label  for="dateExpiracion" class="text-left">Fecha de Expiración</label>
                     </div>
                     <div class="small-9 columns">
-						<div class="caja">
-							<select class="input-group-field round" id="expirationDate" form="saveDataContract" required></select>
-						</div>
-					</div>
+                        <input class="round general" type="text" id="dateExpiracionProgramados" name="dateExpiracion" class="general" required>
+                    </div>
                 </div>
-                <!-- Codigo-->
+                 <!-- Codigo Postal-->
                 <div class="row">
                     <div class="small-3 columns">
-                        <label id="alertLastName" for="right-label" class="text-left">Código</label>
+                        <label  for="codigoPostal" class="text-left">Código Postal</label>
                     </div>
                     <div class="small-9 columns">
-						<div class="caja">
-							<select class="input-group-field round" id="CodigoTarjeta" form="saveDataContract" required></select>
-						</div>
-					</div>
+                        <input class="round general" type="text" id="codigoPostalProgramados" name="codigoPostal" class="general" required>
+                    </div>
+                </div>
+                <!-- Codigo tarjeta-->
+                <div class="row">
+                    <div class="small-3 columns">
+                        <label  for="codigoTarjeta" class="text-left">Código CVC</label>
+                    </div>
+                   <div class="small-9 columns">
+                        <input class="round general" type="text" id="codigoTarjetaProgramados" name="codigoTarjeta" class="general" required>
+                    </div>
                 </div>
     </fieldset>
-
   <div class="row">
     <div class="small-3 columns">
       <label for="datePaymentPrg" class="text-left">payment date</label>

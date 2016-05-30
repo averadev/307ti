@@ -643,3 +643,77 @@ function activatePaginador(div, funcion){
 function changeIndexPaginator(div, maxPage){
 	$('#' + div).jqPagination('option', 'max_page', maxPage);
 }
+
+function validateCardNumber(number) {
+	var regex = new RegExp("^[0-9]{16}$");
+	if (!regex.test(number))
+	    return false;
+
+ 	return luhnCheck(number);
+ }
+
+function luhnCheck(val) {
+    var sum = 0;
+    for (var i = 0; i < val.length; i++) {
+        var intVal = parseInt(val.substr(i, 1));
+        if (i % 2 == 0) {
+            intVal *= 2;
+            if (intVal > 9) {
+                intVal = 1 + (intVal % 10);
+            }
+        }
+        sum += intVal;
+    }
+    return (sum % 10) == 0;
+}
+
+var formatNumber = {
+ separador: ",", // separador para los miles
+ sepDecimal: '.', // separador para los decimales
+ formatear:function (num){
+	 num +='';
+	 var splitStr = num.split('.');
+	 var splitLeft = splitStr[0];
+	 var splitRight = splitStr.length; 1 ? this.sepDecimal + splitStr[1] : '';
+	 var regx = /(\d+)(\d{3})/;
+	 while (regx.test(splitLeft)) {
+	 	splitLeft = splitLeft.replace(regx, '$1' + this.separador + '$2');
+	 }
+	 return this.simbol + splitLeft +splitRight;
+ },
+ new:function(num, simbol){
+ this.simbol = simbol ||'';
+ return this.formatear(num);
+ }
+}
+function number_format(amount, decimals) {
+
+    amount += ''; // por si pasan un numero en vez de un string
+    amount = parseFloat(amount.replace(/[^0-9\.]/g, '')); // elimino cualquier cosa que no sea numero o punto
+
+    decimals = decimals || 0; // por si la variable no fue fue pasada
+
+    // si no es un numero o es igual a cero retorno el mismo cero
+    if (isNaN(amount) || amount === 0) 
+        return parseFloat(0).toFixed(decimals);
+
+    // si es mayor o menor que cero retorno el valor formateado como numero
+    amount = '' + amount.toFixed(decimals);
+
+    var amount_parts = amount.split('.'),
+        regexp = /(\d+)(\d{3})/;
+
+    while (regexp.test(amount_parts[0]))
+        amount_parts[0] = amount_parts[0].replace(regexp, '$1' + ',' + '$2');
+
+    return amount_parts.join('.');
+}
+
+//var price = $("#unitPricePack").val().replace("$", "");
+
+function errorInput(div, s){
+	var segundos = s * 1000;
+	$("#"+div).addClass("is-invalid-input").delay(segundos).queue(function(){
+		$(this).removeClass("is-invalid-input").dequeue();
+	});
+}
