@@ -31,7 +31,6 @@ class Contract extends CI_Controller {
 			$this->insertPeoples($idContrato);
 			$this->createUnidades($idContrato);
 			// $this->insertOcupacion($idContrato);
-			$this->insertPeoples($idContrato);
 			// //$this->createSemanaOcupacion($idContrato);
 			// //$this->insertFinanciamiento($idContrato);
 			echo  "1";
@@ -236,13 +235,17 @@ private function createDownPayment(){
 	}
 	public function getUnidades(){
 		if($this->input->is_ajax_request()) {
-			// $propiedad = $_POST['property'];
-			// $unitType = $_POST['unitType'];
-			// $frequency = $_POST['frequency'];
-			// $season = $_POST['season'];
 			$filtros = $this->receiveWords($_POST);
 			$unidades = $this->contract_db->getUnidades($filtros);
 			echo json_encode($unidades);
+		}
+	}
+
+	public function getPeopleContract(){
+		if($this->input->is_ajax_request()) {
+			$id = $_POST['idContrato'];
+			$peoples = $this->contract_db->getPeopleContract($id);
+			echo json_encode($peoples);
 		}
 	}
 

@@ -43,7 +43,8 @@ class Contract_db extends CI_Model {
     }
      function getContratos2($filters){
         $sql = "";
-        $this->db->select('R.pkResId as ID, R.folio as Folio, R.LegalName as LegalName, UT.FloorPlanDesc, FR.FrequencyDesc');
+        $this->db->distinct('R.pkResId as ID');
+        $this->db->select('R.folio as Folio, R.LegalName as LegalName, UT.FloorPlanDesc, FR.FrequencyDesc');
         $this->db->select('ES.StatusDesc, RI.CrDt, R.FirstOccYear, R.LastOccYear, 28000 as listPrice, 25000 as netsale');
         $this->db->from('tblRes R');
         $this->db->join('tblResinvt RI', 'RI.fkResId = R.pkResId');
@@ -51,6 +52,7 @@ class Contract_db extends CI_Model {
         $this->db->join('tblFrequency FR', 'FR.pkFrequencyId = RI.fkFrequencyId');
         $this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId');
         $this->db->where('R.fkResTypeId', '5');
+        $this->db->order_by('ID', 'DESC');
         if($filters['dates'] != false) {
             $sql = $filters['dates'];
         }
@@ -74,6 +76,25 @@ class Contract_db extends CI_Model {
 
     }
 
+    public function getPeopleContract($string){
+        $sql = "";
+        $this->db->distinct();
+        $this->db->select('P.pkPeopleId as ID, P.Name, AD.Street1');
+        $this->db->select('PC.ynPrimaryPeople, PC.YnBenficiary, PC.ynOther');
+        $this->db->from('tblResPeopleAcc PC');
+        $this->db->join('tblPeople P', 'P.pkPeopleId = PC.fkPeopleId');
+        $this->db->join('tblPeopleAddress PAD', 'PAD.fkPeopleId = P.pkPeopleId');
+        $this->db->join('tblAddress AD', 'AD.pkAddressid = PAD.fkAddressId');
+        $this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId');
+        $this->db->where('fkResId', $string);
+        $this->db->order_by('ID', 'DESC');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
 
     public function createContract(){
 

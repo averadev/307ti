@@ -444,8 +444,10 @@ function createNewContract(){
 
 						packPrice:sumarArray(getArrayValuesColumnTable("tablePeopleSelected", 2)),
 						financeBalance: $("#financeBalance").val(),
-						tablapagos: getValueTableDownpayment,
-								
+						tablapagos: getValueTableDownpayment(),
+						tablaPagosProgramados:getValueTableDownpaymentScheduled(),
+						tablaPacks: getValueTablePacks(),
+
 						viewId: 1,
 						floorPlanId: 1,
 						SeassonId: 10,
@@ -497,6 +499,35 @@ function createNewContract(){
 		});
 		return pagos;
 	}
+
+function getValueTablePacks(){
+	var tabla = "tableDescuentos";
+	var packs = [];
+	$('#'+tabla+' tbody tr').each( function(){
+		if ($(this).text().replace(/\s+/g, " ")!="") {
+			var pack = {};
+			pack.id = $(this).find('td').eq(0).text(),
+			pack.amount = $(this).find('td').eq(1).text()
+			packs.push(pack); 
+		}
+	});
+	return packs;
+}
+
+function getValueTableDownpaymentScheduled(){
+	var tabla = "tablePagosPrgSelected";
+	var pagos = [];
+	$('#'+tabla+' tbody tr').each( function(){
+		if ($(this).text().replace(/\s+/g, " ")!="") {
+			var pago = {};
+			pago.date = $(this).find('td').eq(0).text(),
+			pago.type = $(this).find('td').eq(1).text(),
+			pago.amount = $(this).find('td').eq(2).text()
+			pagos.push(pago); 
+		}
+	});
+	return pagos;
+}
 
 function getValueTableUnidades(){
 	var tabla = "tableUnidadesSelected";
@@ -1014,8 +1045,7 @@ function getDatailByID(id){
 		if (pickedup != null) {
         	pickedup.removeClass("yellow");
 			var id = $(this).find("td").eq(1).text().trim();
-			console.log(id);
-            var dialogEditContract = modalEditContract();
+            var dialogEditContract = modalEditContract(id);
             dialogEditContract.dialog("open");
           }
           $( this ).addClass("yellow");
@@ -1023,13 +1053,14 @@ function getDatailByID(id){
 	});
 }
 
-function modalEditContract(){
-
+function modalEditContract(id){
+	console.log(id);
 	showLoading('#dialog-Edit-Contract',true);
 	dialogo = $("#dialog-Edit-Contract").dialog ({
   		open : function (event){
 	    	$(this).load ("contract/modalEdit" , function(){
-	 			showLoading('#dialog-Edit-Contract',false);	
+	 			showLoading('#dialog-Edit-Contract',false);
+
 	    	});
 		},
 		autoOpen: false,
@@ -1405,3 +1436,21 @@ function drawTableUnidades(data, funcion, cadena, table){
 
 //var a = $('#tblUnidades tbody .yellow').html();
 //var b = $('#tableUnidadesSelected tbody').html(a);
+
+
+function getPeopleContract(id){
+	$.ajax({
+	    data:{
+	        idContrato: id
+	    },
+	    type: "POST",
+	    url: "contract/getPeopleContract",
+	    dataType:'json',
+	    success: function(data){
+	      
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
