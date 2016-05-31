@@ -43,8 +43,8 @@ class Contract_db extends CI_Model {
     }
      function getContratos2($filters){
         $sql = "";
-        $this->db->distinct('R.pkResId as ID');
-        $this->db->select('R.folio as Folio, R.LegalName as LegalName, UT.FloorPlanDesc, FR.FrequencyDesc');
+        $this->db->distinct();
+        $this->db->select('R.pkResId as ID, R.folio as Folio, R.LegalName as LegalName, RTRIM(UT.FloorPlanDesc) as FloorPlan, FR.FrequencyDesc');
         $this->db->select('ES.StatusDesc, RI.CrDt, R.FirstOccYear, R.LastOccYear, 28000 as listPrice, 25000 as netsale');
         $this->db->from('tblRes R');
         $this->db->join('tblResinvt RI', 'RI.fkResId = R.pkResId');
@@ -79,13 +79,28 @@ class Contract_db extends CI_Model {
     public function getPeopleContract($string){
         $sql = "";
         $this->db->distinct();
-        $this->db->select('P.pkPeopleId as ID, P.Name, AD.Street1');
-        $this->db->select('PC.ynPrimaryPeople, PC.YnBenficiary, PC.ynOther');
+        $this->db->select('P.pkPeopleId as ID, RTRIM(P.Name) as Name, RTRIM(P.LName) AS lastName');
+        $this->db->select('RTRIM(AD.Street1) as address, PC.ynPrimaryPeople, PC.YnBenficiary, PC.ynOther');
         $this->db->from('tblResPeopleAcc PC');
         $this->db->join('tblPeople P', 'P.pkPeopleId = PC.fkPeopleId');
         $this->db->join('tblPeopleAddress PAD', 'PAD.fkPeopleId = P.pkPeopleId');
         $this->db->join('tblAddress AD', 'AD.pkAddressid = PAD.fkAddressId');
-        $this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId');
+        $this->db->where('fkResId', $string);
+        $this->db->order_by('ID', 'DESC');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+        public function getUnitiesContract($string){
+        $sql = "";
+        $this->db->select('RI.fkUnitId as ID, TF.FrequencyDesc, RTRIM(TFP.floorPlanDesc) as description');
+        $this->db->select('RI.FirstOccYear, RI.LastOccYear');
+        $this->db->from('tblResInvt RI');
+        $this->db->join('tblFloorplan TFP', 'RI.fkFloorPlanId = TFP.pkFloorPlanId', 'inner');
+        $this->db->join('tblFrequency TF', 'RI.fkFrequencyId = TF.pkFrequencyId', 'inner');
         $this->db->where('fkResId', $string);
         $this->db->order_by('ID', 'DESC');
         $query = $this->db->get();

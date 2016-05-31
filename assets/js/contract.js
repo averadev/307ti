@@ -1,5 +1,4 @@
 $(document).ready(function(){
-
 	maxHeight = screen.height * .25;
 	maxHeight = screen.height - maxHeight;
 	var addContract = null;
@@ -1060,7 +1059,8 @@ function modalEditContract(id){
   		open : function (event){
 	    	$(this).load ("contract/modalEdit" , function(){
 	 			showLoading('#dialog-Edit-Contract',false);
-
+	 			getPeopleContract(id);
+	 			getUnitiesContract(id);
 	    	});
 		},
 		autoOpen: false,
@@ -1447,10 +1447,40 @@ function getPeopleContract(id){
 	    url: "contract/getPeopleContract",
 	    dataType:'json',
 	    success: function(data){
-	      
+	    	drawTableSinHead(data, "peoplesContract");
 	    },
 	    error: function(){
 	        alertify.error("Try again");
 	    }
 	});
+}
+function getUnitiesContract(id){
+	$.ajax({
+	    data:{
+	        idContrato: id
+	    },
+	    type: "POST",
+	    url: "contract/getUnitiesContract",
+	    dataType:'json',
+	    success: function(data){
+	    	drawTableSinHead(data, "tableUnidadesContract");
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function drawTableSinHead(data, table){
+	var deleteButton = "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
+    var bodyHTML = '';
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        };
+        bodyHTML += deleteButton;
+        bodyHTML+="</tr>";
+    }
+    $('#' + table).html(bodyHTML);
 }

@@ -106,8 +106,8 @@ private function createUnidades($idContrato){
 			"fkFrequencyId"             => $this->contract_db->selectIdFrequency($_POST['unidades'][$i]['frequency']),
 			"WeeksNumber"         		=> $_POST['weeks'],
 			"NightsNumber"              => $dias,
-			"FirstOccYear"              => $_POST['firstYear'],
-			"LastOccYear"               => $_POST['lastYear'],
+			"FirstOccYear"              => trim($_POST['firstYear']),
+			"LastOccYear"               => trim($_POST['lastYear']),
 			"ynActive"                  => 1,
 			"CrBy"                      => $this->nativesessions->get('id'),
 			"CrDt"						=> $this->getToday()
@@ -245,6 +245,14 @@ private function createDownPayment(){
 		if($this->input->is_ajax_request()) {
 			$id = $_POST['idContrato'];
 			$peoples = $this->contract_db->getPeopleContract($id);
+			echo json_encode($peoples);
+		}
+	}
+
+	public function getUnitiesContract(){
+		if($this->input->is_ajax_request()) {
+			$id = $_POST['idContrato'];
+			$peoples = $this->contract_db->getUnitiesContract($id);
 			echo json_encode($peoples);
 		}
 	}

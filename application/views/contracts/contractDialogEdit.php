@@ -92,9 +92,9 @@
 				<div class="containerContract">
 					<div class="row">
 						<div class="small-12 columns">
-							<a id="btnAddPeople" class="button tiny"><i class="fa fa-user-plus">&nbsp;&nbsp;Refinancing contract</i></a>
+							<a id="btnAddPeople" class="button tiny"><i class="fa fa-user-plus">Refinancing contract</i></a>
 						</div>
-						<table id="tablePeopleSelected" width="100%">
+						<table id="peopleContract" width="100%">
 							<thead>
 								<tr class="trColspan" >
 									<th colspan="8" class="thColspan" >People</tr>
@@ -110,8 +110,8 @@
 									<th></th>
 								</tr>
 							</thead>
-							<tbody>
-								<tr>
+							<tbody id="peoplesContract">
+							<!-- 	<tr>
 									<td>23</td>
 									<td>Faustino</td>
 									<td>Loeza</td>
@@ -120,7 +120,7 @@
 									<td><input type="radio" name="peopleContract" value="2"></td>
 									<td><input type="radio" name="peopleContract" value="3"></td>
 									<td><button type="button" class="alert button"><i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i></button></td>
-								</tr>
+								</tr> -->
 							</tbody>
 						</table>
 					</div>
@@ -145,7 +145,7 @@
 									<th></th>
 								</tr>
 							</thead>
-							<tbody>
+							<tbody id="tableUnidadesContract">
 								<tr>
 									<td>sds5d5</td>
 									<td>PArgo 1 3Rec</td>
