@@ -252,11 +252,22 @@ private function createDownPayment(){
 	public function getUnitiesContract(){
 		if($this->input->is_ajax_request()) {
 			$id = $_POST['idContrato'];
-			$peoples = $this->contract_db->getUnitiesContract($id);
-			echo json_encode($peoples);
+			$unities = $this->contract_db->getUnitiesContract($id);
+			echo json_encode($unities);
 		}
 	}
 
+	public function getDatosContractById(){
+		if($this->input->is_ajax_request()) {
+			$id = $_POST['idContrato'];
+			$datos =[
+				"contract"=> $this->contract_db->getContratos2(null,$id),
+				"peoples" => $this->contract_db->getPeopleContract($id),
+				"unities" => $this->contract_db->getUnitiesContract($id)
+			];
+			echo json_encode($datos);
+		}
+	}
 //////////////////////////////////////////////////////
 	public function modal(){
 		if($this->input->is_ajax_request()) {
@@ -313,7 +324,8 @@ private function createDownPayment(){
 	public function getContratos(){
 		if($this->input->is_ajax_request()) {
 			$sql = $this->getFilters($_POST, 'RI.CrDt', 'Contract');
-			$contratos = $this->contract_db->getContratos2($sql);
+			$id = null;
+			$contratos = $this->contract_db->getContratos2($sql, $id);
 			echo json_encode($contratos);
 		}
 

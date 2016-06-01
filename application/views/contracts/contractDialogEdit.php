@@ -21,22 +21,17 @@
 			<div class="label">Account status</div>
 			<i class="fa fa-credit-card fa-lg"></i>
 		</a>
-		<!--<a id="btn" class="secondary hollow button tiny"><i class="fa fa-columns fa-lg">&nbsp;&nbsp;Front Page</i></a>
-		<a id="btn" class="secondary hollow button tiny"><i class="fa fa-money  fa-lg">&nbsp;&nbsp;I will pay</i></a>
-		<a id="btn" class="secondary hollow button tiny"><i class="fa fa-file-text-o fa-lg">&nbsp;&nbsp;Voucher</i></a>
-		<a id="btn" class="secondary hollow button tiny"><i class="fa fa-list-alt  fa-lg">&nbsp;&nbsp;Data sheet</i></a>
-		<a id="btn" class="secondary hollow button tiny"><i class="fa fa-credit-card fa-lg">&nbsp;&nbsp;Account status</i></a>-->
 	</div>
 </div>
-<div class="row headerDescription headerGeneral">
+<div class="row headerDescription headerGeneral" style="padding: 8px;">
 	<div class="small-12 medium-12 large-8 columns"  >
-		<label class="headerDescriptionTitle">[0000-0000] Nombre del contrato </label>
-		<label class="headerGeneral" >Marlin 1 Planta 2 Rec, 10, 1 semana(s), Av. Roca </label>
-		<label class="headerGeneral">Año: 2016</label>
+		<label class="headerDescriptionTitle" id="editContractTitle"></label>
+		<label class="headerGeneral" id="editContracFloorPlan"></label>
+		<label class="headerGeneral" id="editContracYear"></label>
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
-		<label class="headerGeneral">Estatus:<span>Pendiente de Imprimir</span></label>
-		<label class="headerGeneral">Banderas:<span>0</span></label>
+		<label class="headerGeneral" id="editContracStatus"></label>
+		<label class="headerGeneral">Banderas: <span>0</span></label>
 	</div>
 </div>
 <!-- tabs de los modales -->
@@ -49,7 +44,7 @@
 			<a>Accounts</a>
 		</li>
 		<li class="tabs-title" attr-screen="tab-CVendors">
-			<a>Vendors</a>
+			<a>Sellers</a>
 		</li>
 		<li class="tabs-title" attr-screen="tab-CProvisions">
 			<a>Provisions</a>
@@ -97,7 +92,7 @@
 						<table id="peopleContract" width="100%">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >People</tr>
+									<th colspan="8" class="thColspan" >People</th>
 								</tr> 
 								<tr>
 									<th class="cellEdit" >ID</th>
@@ -110,18 +105,7 @@
 									<th></th>
 								</tr>
 							</thead>
-							<tbody id="peoplesContract">
-							<!-- 	<tr>
-									<td>23</td>
-									<td>Faustino</td>
-									<td>Loeza</td>
-									<td>Cancun</td>
-									<td><input type="radio" name="peopleContract" value="1"></td>
-									<td><input type="radio" name="peopleContract" value="2"></td>
-									<td><input type="radio" name="peopleContract" value="3"></td>
-									<td><button type="button" class="alert button"><i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i></button></td>
-								</tr> -->
-							</tbody>
+							<tbody id="peoplesContract"></tbody>
 						</table>
 					</div>
 				</div>
@@ -132,7 +116,7 @@
                         <table id="tableUnidades" width="100%">
                             <thead>
 								<tr class="trColspan">
-									<th colspan="8">Units</tr>
+									<th colspan="8">Units</th>
 								</tr>
 								<tr>
 									<th class="cellEdit" >Code</th>
@@ -145,18 +129,7 @@
 									<th></th>
 								</tr>
 							</thead>
-							<tbody id="tableUnidadesContract">
-								<tr>
-									<td>sds5d5</td>
-									<td>PArgo 1 3Rec</td>
-									<td>$38,000.00</td>
-									<td>#1</td>
-									<td>2016</td>
-									<td>2017</td>
-									<td><input type="radio" name="people" value="3"></td>
-									<td><button type="button" class="alert button"><i class="fa fa-minus-circle fa-lg" aria-hidden="true"></i></button></td>
-								</tr>
-                            </tbody>
+							<tbody id="tableUnidadesContract"></tbody>
                         </table>
                     </div>
                 </div>
@@ -172,7 +145,7 @@
 					<table class="tableAccountResult">
 						<thead>
 							<tr class="trColspan">
-								<th colspan="4">Results</tr>
+								<th colspan="4">Results</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -221,7 +194,7 @@
 					<table class="tableAccountResult">
 						<thead>
 							<tr class="trColspan">
-								<th colspan="4">Results</tr>
+								<th colspan="4">Results</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -251,15 +224,14 @@
 					</table>
 				</div>
 			</fieldset>
-			
-			<!-- tour -->
+			<!-- Condiciones de financiamiento -->
 			<fieldset class="fieldset">
-				<legend class="btnCollapseField" attr-screen="editTourID" >
+				<legend class="btnCollapseField"  attr-screen="editOr" >
 					<img class="imgCollapseFieldset" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>
 					Tour
 				</legend>
-				<div class="row" id="editTourID" style="display:none;">
-					<div class="small-12 medium-8 large-6 columns">
+				<div class="row" id="editOr" style="display:none;">
+										<div class="small-12 medium-8 large-6 columns">
 						<!-- Tour ID-->
 						<div class="row">
 							<div class="small-3 columns">
@@ -271,19 +243,20 @@
 										<input value="0" readonly type="text" placeholder="ID" name="TourID" id="TourID" required>
 									</div>
 									<div class="small-2 columns">
-										<a id="btnAddTourID" href="#" class="button postfix"><i class="fa fa-user-plus">&nbsp;&nbsp;Add</i></a>
+										<a id="btnAddTourID" href="#" class="button postfix"><i class="fa fa-user-plus">Add</i></a>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="small-12 medium-8 large-6 columns" style="text-align:right;"> 
-						<a id="btn" class="button small"><i class="fa fa-save fa-lg">&nbsp;&nbsp;Guardar</i></a>
-						<a id="btn" class="button small"><i class="fa fa-minus-circle fa-lg">&nbsp;&nbsp;Eliminar</i></a>
+						<a id="btn" class="button small"><i class="fa fa-save fa-lg">Guardar</i></a>
+						<a id="btn" class="button small"><i class="fa fa-minus-circle fa-lg">Eliminar</i></a>
 					</div>
-				</div>				
+				</div>
 			</fieldset>
-		</form>
+			
+			
 	</div>
 	<!-- tabs cuentas -->
 	<div id="tab-CAccounts" class="large-12 columns tab-modal" style="display:none;">
@@ -728,19 +701,3 @@
 	</div>
 	
 </div>
-<script>
-   /* $('#btnAddTourID').click(function(){
-        ajaxHTML('dialog-tourID', 'tours/modal');
-        showModals('dialog-tourID', cleanAddPeople);
-    });
-    $('#btnAddPeople').click(function(){
-        $('#dialog-People').empty();
-        ajaxHTML('dialog-People', 'people/');
-        showModals('dialog-People', cleanAddPeople);
-    });
-    $('#btnAddUnidades').click(function(){
-        ajaxHTML('dialog-Unidades', 'contract/modalUnidades');
-        showModals('dialog-Unidades', cleanAddUnidades);
-    });*/
-
-</script>

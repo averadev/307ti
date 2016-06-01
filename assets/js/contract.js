@@ -1059,8 +1059,7 @@ function modalEditContract(id){
   		open : function (event){
 	    	$(this).load ("contract/modalEdit" , function(){
 	 			showLoading('#dialog-Edit-Contract',false);
-	 			getPeopleContract(id);
-	 			getUnitiesContract(id);
+	 			getDatosContract(id);
 	    	});
 		},
 		autoOpen: false,
@@ -1127,15 +1126,6 @@ function porcentajePack(porcentaje, cantidad){
 function cantidad(cantidad, precio){
 	return parseFloat((cantidad / precio)*100);
 }
-// $(document).ready(function(){
-//     $("#myTable td").click(function() {     
- 
-//         var column_num = parseInt( $(this).index() ) + 1;
-//         var row_num = parseInt( $(this).parent().index() )+1;    
- 
-//         $("#result").html( "Row_num =" + row_num + "  ,  Rolumn_num ="+ column_num );   
-//     });
-// });
 
 function porcetajeDownpayment(){
 	var unitPrice = $("#downpayment").val();
@@ -1483,4 +1473,37 @@ function drawTableSinHead(data, table){
         bodyHTML+="</tr>";
     }
     $('#' + table).html(bodyHTML);
+}
+
+
+function getDatosContract(id){
+	$.ajax({
+	    data:{
+	        idContrato: id
+	    },
+	    type: "POST",
+	    url: "contract/getDatosContractById",
+	    dataType:'json',
+	    success: function(data){
+	    	drawTableSinHead(data["peoples"], "peoplesContract");
+	    	drawTableSinHead(data["unities"], "tableUnidadesContract");
+	    	drawDataContract(data["contract"][0]);
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function drawDataContract(data){
+	var numero = "["+data.Folio+"-"+data.ID+"]";
+	var nombreLegal= data.LegalName;
+	var titulo = numero + " " + nombreLegal;
+	var floorPlan = data.FloorPlan + ","+ data.FrequencyDesc;
+	var year ="Year: "+ data.FirstOccYear;
+	var status = "Status: " + data.StatusDesc;
+	$("#editContractTitle").text(titulo);
+	$("#editContracFloorPlan").text(floorPlan);
+	$("#editContracYear").text(year);
+	$("#editContracStatus").text(status);
 }

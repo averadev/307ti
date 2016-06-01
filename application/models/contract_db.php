@@ -41,7 +41,7 @@ class Contract_db extends CI_Model {
         }
 
     }
-     function getContratos2($filters){
+     function getContratos2($filters, $id){
         $sql = "";
         $this->db->distinct();
         $this->db->select('R.pkResId as ID, R.folio as Folio, R.LegalName as LegalName, RTRIM(UT.FloorPlanDesc) as FloorPlan, FR.FrequencyDesc');
@@ -53,18 +53,21 @@ class Contract_db extends CI_Model {
         $this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId');
         $this->db->where('R.fkResTypeId', '5');
         $this->db->order_by('ID', 'DESC');
-        if($filters['dates'] != false) {
-            $sql = $filters['dates'];
-        }
-        if($filters['words'] != false){
-
-            if ($filters['checks'] != false){
-
-                $this->filterContracts($filters);
+        if (!is_null($filters)) {
+            if($filters['dates'] != false) {
+                $sql = $filters['dates'];
+            }
+            if($filters['words'] != false){
+                if ($filters['checks'] != false){
+                    $this->filterContracts($filters);
+                }
             }
         }
+        if ($id!=NULL) {
+          $this->db->where('R.pkResId', $id);
+        }
         if($sql!=""){
-            $this->db->where($sql, NULL);
+           $this->db->where($sql, NULL);
         }
 
         $query = $this->db->get();
