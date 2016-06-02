@@ -1060,6 +1060,7 @@ function modalEditContract(id){
 	    	$(this).load ("contract/modalEdit" , function(){
 	 			showLoading('#dialog-Edit-Contract',false);
 	 			getDatosContract(id);
+	 			setEventosEditarContrato(id);
 	    	});
 		},
 		autoOpen: false,
@@ -1506,4 +1507,31 @@ function drawDataContract(data){
 	$("#editContracFloorPlan").text(floorPlan);
 	$("#editContracYear").text(year);
 	$("#editContracStatus").text(status);
+}
+
+function updateTourContrato(id){
+	$.ajax({
+	    data:{
+	        idContrato: id,
+	        tourID: $("#TourID").val()
+	    },
+	    type: "POST",
+	    url: "contract/updateTourContrato",
+	    dataType:'json',
+	    success: function(data){
+	    	if (data.afectados>0) {
+	    		alertify.success(data.mensaje);
+	    	}else{
+	    		alertify.error(data.mensaje);
+	    	}
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+function setEventosEditarContrato(id){
+	$("#btnUpdateTourID").click(function(){
+		updateTourContrato(id);
+	});
 }

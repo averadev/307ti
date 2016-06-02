@@ -1,23 +1,23 @@
 <div class="contentModalHeader">
 <div class="row collapse headerGeneral" >
 	<div class="small-12 medium-12 large-12 columns headerModalBtn"  > 
-		<a id="btn" class="btn btn-primary spanSelect">
+		<a id="btnFrontPage" class="btn btn-primary spanSelect">
 			<div class="label">Front Page</div>
 			<i class="fa fa-columns fa-lg"></i>
 		</a>
-		<a id="btn" class="btn btn-primary spanSelect">
+		<a id="btnIWillPay" class="btn btn-primary spanSelect">
 			<div class="label">I will pay</div>
 			<i class="fa fa-money fa-lg"></i>
 		</a>
-		<a id="btn" class="btn btn-primary spanSelect">
+		<a id="btnVoucher" class="btn btn-primary spanSelect">
 			<div class="label">Voucher</div>
 			<i class="fa fa-file-text-o fa-lg"></i>
 		</a>
-		<a id="btn" class="btn btn-primary spanSelect">
+		<a id="btnDatasheet" class="btn btn-primary spanSelect">
 			<div class="label">Data sheet</div>
 			<i class="fa fa-list-alt fa-lg"></i>
 		</a>
-		<a id="btn" class="btn btn-primary spanSelect">
+		<a id="btnAccountStatus" class="btn btn-primary spanSelect">
 			<div class="label">Account status</div>
 			<i class="fa fa-credit-card fa-lg"></i>
 		</a>
@@ -35,7 +35,7 @@
 	</div>
 </div>
 <!-- tabs de los modales -->
-<div class="tabsModal" id="tabsModalContrats">
+<div class="tabsModal">
 	<ul class="tabs" id="tabsContrats" data-tabs>
 		<li class="tabs-title active" attr-screen="tab-CGeneral" >
 			<a>General</a>
@@ -70,7 +70,7 @@
 <!-- contenido del modal -->
 <div class="contentModal">
 	
-	<div id="tab-CGeneral" class="large-12 columns tab-modal" style="display:inline;">
+	<div id="tab-CGeneral" class="large-12 columns tab-modal" style="display:inline-block;">
 		<!-- Error Message -->
 		<div class="row" id="alertValidateContrato" style="display:none;">
 			<div class="small-12 columns">
@@ -79,7 +79,6 @@
 				</div>
 			</div>
 		</div>
-		<form id="editDataContract" data-abide='ajax'>
 			<fieldset class="fieldset">
 				<legend>
 					Contract Data
@@ -224,14 +223,14 @@
 					</table>
 				</div>
 			</fieldset>
-			<!-- Condiciones de financiamiento -->
-			<fieldset class="fieldset">
+			<!-- Tour -->
+			<fieldset class="fieldset" style="margin-bottom: 50px;">
 				<legend class="btnCollapseField"  attr-screen="editOr" >
 					<img class="imgCollapseFieldset" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>
 					Tour
 				</legend>
 				<div class="row" id="editOr" style="display:none;">
-										<div class="small-12 medium-8 large-6 columns">
+					<div class="small-12 medium-8 large-6 columns">
 						<!-- Tour ID-->
 						<div class="row">
 							<div class="small-3 columns">
@@ -240,7 +239,7 @@
 							<div class="large-9 columns">
 								<div class="row collapse">
 									<div class="small-10 columns">
-										<input value="0" readonly type="text" placeholder="ID" name="TourID" id="TourID" required>
+										<input value="0" type="text" placeholder="ID" name="TourID" id="TourID">
 									</div>
 									<div class="small-2 columns">
 										<a id="btnAddTourID" href="#" class="button postfix"><i class="fa fa-user-plus">Add</i></a>
@@ -250,17 +249,23 @@
 						</div>
 					</div>
 					<div class="small-12 medium-8 large-6 columns" style="text-align:right;"> 
-						<a id="btn" class="button small"><i class="fa fa-save fa-lg">Guardar</i></a>
+						<a id="btnUpdateTourID" class="button small"><i class="fa fa-save fa-lg">Guardar</i></a>
 						<a id="btn" class="button small"><i class="fa fa-minus-circle fa-lg">Eliminar</i></a>
 					</div>
 				</div>
 			</fieldset>
-			
-			
-	</div>
+			<fieldset class="fieldset"></fieldset>
+</div>
+
+
+
+
+
+
+
 	<!-- tabs cuentas -->
 	<div id="tab-CAccounts" class="large-12 columns tab-modal" style="display:none;">
-		<div class="tabsModal" id="tabsModalContrats">
+		<div class="tabsModal">
 			<ul class="tabs" id="tabsContratsAccounts"  data-tabs>
 				<li class="tabs-title active" attr-screen="tab-CASales" >
 					<a>Accounts</a>
@@ -279,11 +284,11 @@
 			<div id="tab-CASales" class="large-12 columns tab-modal" style="display:inline;">
 				
 				<fieldset class="fieldset">
-					<div class="row" id="editTermsOfSale">
+					<div class="row">
 						<table class="tableAccountResult">
 							<thead>
 								<tr class="trColspan">
-									<th colspan="4">Results</tr>
+									<th colspan="4">Results</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -321,7 +326,7 @@
 							<table id="tableSellerSelected" width="100%" style="min-height:250px;">
 								<thead>
 									<tr class="trColspan" >
-										<th colspan="9" class="thColspan" >Seller</tr>
+										<th colspan="9" class="thColspan" >Seller</th>
 									</tr> 
 									<tr>
 										<th class="cellEdit" >Id</th>
@@ -346,11 +351,11 @@
 			<!-- mantenimiento -->
 			<div id="tab-CAMaintenance" class="large-12 columns tab-modal" style="display:none;">
 				<fieldset class="fieldset">
-					<div class="row" id="editTermsOfSale">
+					<div class="row">
 						<table class="tableAccountResult">
 							<thead>
 								<tr class="trColspan">
-									<th colspan="4">Results</tr>
+									<th colspan="4">Results</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -376,7 +381,7 @@
 							<table id="tableSellerSelected" width="100%" style="min-height:250px;">
 								<thead>
 									<tr class="trColspan" >
-										<th colspan="9" class="thColspan" >Maintenance accounts</tr>
+										<th colspan="9" class="thColspan" >Maintenance accounts</th>
 									</tr> 
 									<tr>
 										<th class="cellEdit" >Id</th>
@@ -401,11 +406,11 @@
 			<!-- Misceláneos -->
 			<div id="tab-CAMiscellaneous" class="large-12 columns tab-modal" style="display:none;">
 				<fieldset class="fieldset">
-					<div class="row" id="editTermsOfSale">
+					<div class="row">
 						<table class="tableAccountResult">
 							<thead>
 								<tr class="trColspan">
-									<th colspan="4">Results</tr>
+									<th colspan="4">Results</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -443,7 +448,7 @@
 							<table id="tableSellerSelected" width="100%" style="min-height:250px;">
 								<thead>
 									<tr class="trColspan" >
-										<th colspan="9" class="thColspan" >Miscellaneous accounts</tr>
+										<th colspan="9" class="thColspan" >Miscellaneous accounts</th>
 									</tr> 
 									<tr>
 										<th class="cellEdit" >Id</th>
@@ -467,16 +472,22 @@
 			</div>
 		</div>
 	</div>
+
+
+
+
+
+
 	<!-- tabs vendedores -->
 	<div id="tab-CVendors" class="large-12 columns tab-modal" style="display:none;">
-		<form id="editDataContract" data-abide='ajax'>
+		<form id="editDataContractVendedores" data-abide='ajax'>
 			<fieldset class="fieldset">
 				<div class="containerContract">
 					<div class="row">
 						<table id="tableSellerSelected" width="100%" style="min-height:250px;">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Seller</tr>
+									<th colspan="8" class="thColspan" >Seller</th>
 								</tr> 
 								<tr>
 									<th class="cellEdit" ></th>
@@ -503,7 +514,7 @@
 	</div>
 	<!-- tabs vendedores -->
 	<div id="tab-CProvisions" class="large-12 columns tab-modal" style="display:none;">
-		<form id="editDataContract" data-abide='ajax'>
+		<form data-abide='ajax'>
 			<fieldset class="fieldset">
 				
 				<div class="containerContract">
@@ -511,7 +522,7 @@
 						<table id="tableProvisionsSelected" width="100%" style="min-height:250px;">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Provisions</tr>
+									<th colspan="8" class="thColspan" >Provisions</th>
 								</tr> 
 								<tr>
 									<th class="cellGeneral">Code</th>
@@ -534,14 +545,14 @@
 	</div>
 	<!-- tabs años de ocupacion -->
 	<div id="tab-COccupation" class="large-12 columns tab-modal" style="display:none;">
-		<form id="editDataContract" data-abide='ajax'>
+		<form  data-abide='ajax'>
 			<fieldset class="fieldset">
 				<div class="containerContract">
 					<div class="row">
 						<table id="tableCOccupationSelected" width="100%" style="min-height:250px;">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Years of occupation</tr>
+									<th colspan="8" class="thColspan" >Years of occupation</th>
 								</tr> 
 								<tr>
 									<th class="cellGeneral">Occupancy Type</th>
@@ -561,14 +572,14 @@
 	</div>
 	<!-- tabs años de ocupacion -->
 	<div id="tab-CDocuments" class="large-12 columns tab-modal" style="display:none;">
-		<form id="editDataContract" data-abide='ajax'>
+		<form data-abide='ajax'>
 			<fieldset class="fieldset">
 				<div class="containerContract">
 					<div class="row">
 						<table id="tableCDocumentsSelected" width="100%" style="min-height:250px;">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Years of occupation</tr>
+									<th colspan="8" class="thColspan" >Years of occupation</th>
 								</tr> 
 								<tr>
 									<th class="cellEdit"></th>
@@ -589,14 +600,14 @@
 	</div>
 	<!-- tabs notas -->
 	<div id="tab-CNotes" class="large-12 columns tab-modal" style="display:none;">
-		<form id="editDataContract" data-abide='ajax'>
+		<form  data-abide='ajax'>
 			<fieldset class="fieldset">
 				<div class="containerContract">
 					<div class="row">
 						<table id="tableCNotesSelected" width="100%" style="min-height:250px;">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Notes</tr>
+									<th colspan="8" class="thColspan" >Notes</th>
 								</tr> 
 								<tr>
 									<th class="cellEdit"></th>
@@ -623,7 +634,7 @@
 	</div>
 	<!-- Banderas -->
 	<div id="tab-CFlags" class="large-12 columns tab-modal" style="display:none;">
-		<form id="editDataContract" data-abide='ajax'>
+		<form  data-abide='ajax'>
 			<fieldset class="fieldset">
 				<div class="containerContract">
 					<div class="row">
@@ -631,7 +642,7 @@
 							<table id="tableCNotesListSelected" width="100%" style="min-height:250px;">
 								<thead>
 									<tr class="trColspan" >
-										<th colspan="2" class="thColspan" >List of flags</tr>
+										<th colspan="2" class="thColspan" >List of flags</th>
 									</tr> 
 									<tr>
 										<th class="cellGeneral">Code</th>
@@ -647,7 +658,7 @@
 							<table id="tableCNotesAssignedSelected" width="100%" style="min-height:250px;">
 								<thead>
 									<tr class="trColspan" >
-										<th colspan="2" class="thColspan" >Assigned flags</tr>
+										<th colspan="2" class="thColspan" >Assigned flags</th>
 									</tr> 
 									<tr>
 										<th class="cellGeneral">Code</th>
@@ -670,14 +681,14 @@
 	</div>
 	<!-- archivos -->
 	<div id="tab-CFiles" class="large-12 columns tab-modal" style="display:none;">
-		<form id="editDataContract" data-abide='ajax'>
+		<form  data-abide='ajax'>
 			<fieldset class="fieldset">
 				<div class="containerContract">
 					<div class="row">
 						<table id="tableCFilesSelected" width="100%" style="min-height:250px;">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Notes</tr>
+									<th colspan="8" class="thColspan" >Notes</th>
 								</tr> 
 								<tr>
 									<th class="cellGeneral">Id</th>

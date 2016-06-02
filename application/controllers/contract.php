@@ -320,6 +320,25 @@ private function createDownPayment(){
 		return $this->contract_db->insertReturnId($Contract,"tblContract");;
 	}
 
+	public function updateTourContrato(){
+		if ($this->input->is_ajax_request()) {
+			$id = $_POST['idContrato'];
+			$tourID = $_POST["tourID"];
+			$condicion = "pkResId = " . $id;
+			$datos = [
+				"fkTourId" => $tourID
+			];
+			$afectados = $this->contract_db->updateReturnId("tblRes", $datos, $condicion);
+			if ($afectados>0) {
+				$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados];
+				echo json_encode($mensaje);
+			}else{
+				$mensaje = ["mesaje"=>"ocurrio un error", $afectados => $afectados];
+				echo json_encode($mensaje);
+			}
+		}
+	}
+
 
 	public function getContratos(){
 		if($this->input->is_ajax_request()) {

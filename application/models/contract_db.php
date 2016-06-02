@@ -504,5 +504,10 @@ class Contract_db extends CI_Model {
         $this->db->insert($table, $data);
         return $this->db->insert_id();
     }
+    public function updateReturnId($table, $data, $condicion){
+        $this->db->where($condicion);
+        $this->db->update($table, $data);
+        return $this->db->affected_rows();
+    }
 
 }
