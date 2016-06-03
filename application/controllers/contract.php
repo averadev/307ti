@@ -97,20 +97,20 @@ private function createUnidades($idContrato){
 	$dias = intval($_POST['weeks']) * 7;
 	for($i =0; $i< $rango; $i++){
 		$Unidades = [
-			"fkResId"                   => $idContrato,
-			"fkUnitId"    				=> $_POST['unidades'][$i]['id'],
-			"Intv"              		=> $_POST['unidades'][$i]['week'],
-			"fkFloorPlanId"             => $this->contract_db->selectIdFloorPlan($_POST['unidades'][$i]['floorPlan']),
-			"fkViewId"               	=> $_POST['viewId'],
-			"fkSeassonId"               => $this->contract_db->selectIdSeason($_POST['unidades'][$i]['season']),
-			"fkFrequencyId"             => $this->contract_db->selectIdFrequency($_POST['unidades'][$i]['frequency']),
-			"WeeksNumber"         		=> $_POST['weeks'],
-			"NightsNumber"              => $dias,
-			"FirstOccYear"              => trim($_POST['firstYear']),
-			"LastOccYear"               => trim($_POST['lastYear']),
-			"ynActive"                  => 1,
-			"CrBy"                      => $this->nativesessions->get('id'),
-			"CrDt"						=> $this->getToday()
+			"fkResId"       => $idContrato,
+			"fkUnitId"    	=> $_POST['unidades'][$i]['id'],
+			"Intv"          => $_POST['unidades'][$i]['week'],
+			"fkFloorPlanId" => $this->contract_db->selectIdFloorPlan($_POST['unidades'][$i]['floorPlan']),
+			"fkViewId"      => $_POST['viewId'],
+			"fkSeassonId"   => $this->contract_db->selectIdSeason($_POST['unidades'][$i]['season']),
+			"fkFrequencyId" => $this->contract_db->selectIdFrequency($_POST['unidades'][$i]['frequency']),
+			"WeeksNumber"   => $_POST['weeks'],
+			"NightsNumber"  => $dias,
+			"FirstOccYear"  => $_POST['firstYear'],
+			"LastOccYear"   => $_POST['lastYear'],
+			"ynActive"      => 1,
+			"CrBy"          => $this->nativesessions->get('id'),
+			"CrDt"			=> $this->getToday()
 		];
 		$this->contract_db->insertReturnId('tblResInvt', $Unidades);
 	}

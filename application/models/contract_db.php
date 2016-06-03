@@ -7,6 +7,14 @@ class Contract_db extends CI_Model {
         parent::__construct();
     }
 
+    function getUnidadesContratos(){
+        $sql = "";
+        $this->db->select();
+        $this->db->select();
+        $this->db->from();
+        $this->db->where();
+    }
+
     function getContratos($filters){
 		$sql = "";
         $this->db->select('R.pkResId as ID, R.folio as Folio, R.LegalName as LegalName, UT.FloorPlanDesc, FR.FrequencyDesc');
@@ -509,5 +517,6 @@ class Contract_db extends CI_Model {
         $this->db->update($table, $data);
         return $this->db->affected_rows();
     }
+
 
 }
