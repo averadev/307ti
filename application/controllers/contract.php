@@ -26,13 +26,14 @@ class Contract extends CI_Controller {
 	public function saveContract(){
 		
 		if($this->input->is_ajax_request()){
-			//var_dump($_POST);
 			$idContrato = $this->createContract();
+			$this->insertOcupacion($idContrato);
 			$this->insertPeoples($idContrato);
 			$this->createUnidades($idContrato);
-			// $this->insertOcupacion($idContrato);
-			// //$this->createSemanaOcupacion($idContrato);
-			// //$this->insertFinanciamiento($idContrato);
+			$this->createDownPayment($idContrato);
+			$this->insertFinanciamiento($idContrato);
+			//$this->createSemanaOcupacion($idContrato);
+			
 			echo  "1";
 	}
 }
@@ -135,11 +136,13 @@ private function insertPeoples($idContrato){
 }
 
 private function insertFinanciamiento($idContrato){
-	$porcentaje = floatval(($_POST['specialDiscount']/$_POST['salePrice'])*100);
+	$porcentaje = intval(($_POST['specialDiscount']/$_POST['salePrice']))*100;
+	$balanceFinal = intval($_POST['financeBalance']);
+	$porEnganche = intval(($_POST['downpayment']/$balanceFinal))*100;
 	$financiamiento = [
 		"fkResId"                   => $idContrato,
-		"fkFinMethodId"    			=> $this->$contract_db->selectIdMetodoFin('CS'),
-		"fkFactorId"              	=> $this->$contract_db->selectIdFactor('24M14.1'),
+		"fkFinMethodId"    			=> $this->contract_db->selectIdMetodoFin('CS'),
+		"fkFactorId"              	=> $this->contract_db->selectIdFactor('24M14.1'),
 		"ListPrice"             	=> $_POST['listPrice'],
 		"SpecialDiscount"           => $_POST['specialDiscount'],
 		"SpecialDiscount%"          => $porcentaje,
@@ -149,12 +152,12 @@ private function insertFinanciamiento($idContrato){
 		"Deposit"              		=> $_POST['downpayment'],
 		"TransferAmt"               => $_POST['amountTransfer'],
 		"PackPrice"                 => $_POST['packPrice'],
-		"FinanceBalance"            => $_POST['financeBalance'],
-		"TotalFinanceAmt"           => $_POST['financeBalance'] + 100,
-		"DownPmtAmt"            	=> 0,
-		"DownPmt%"           		=> 0,
-		"MonthlyPmtAmt"            	=> $_POST['pagoMensual'],
-		"BalanceActual"           	=> $_POST['financeBalance'],
+		"FinanceBalance"            => $balanceFinal,
+		"TotalFinanceAmt"           => $balanceFinal + 100,
+		"DownPmtAmt"            	=> $_POST['downpayment'],
+		"DownPmt%"           		=> $porEnganche,
+		"MonthlyPmtAmt"            	=> 1000,
+		"BalanceActual"           	=> $balanceFinal,
 		"ynClosingfee"            	=> 1,
 		"ClosingFeeAmt"           	=> 100,
 		"OtherFeeAmt"           	=> 0,
@@ -193,18 +196,22 @@ private function createSemanaOcupacion($idContrato){
 	
 }
 
-private function createDownPayment(){
-	$DownPayment = [
-		"fkResId"    	=> $idContrato,
-		"fkCurrencyId"  => $this->contract_db->selectIdCurrency('USD'),
-		"DownPmtNum"    => $_POST[''],
-		"DownPmtAmt"    => $_POST[''],
-		"DownPmtDueDt"  => $this->contract_db->selectRestType('Cont'),
-		"ynActive"   	=> 1,
-		"CrBy"          => $this->nativesessions->get('id'),
-		"CrDt"			=> $this->getToday()
-	];
-		return $this->contract_db->insertReturnId('tblResDownPmt', $DownPayment);
+private function createDownPayment($idContrato){
+	$pagos = sizeof($_POST['tablaPagosProgramados']);
+	for ($i=0; $i < $pagos; $i++) { 
+		$DownPayment = [
+			"fkResId"    	=> $idContrato,
+			"fkCurrencyId"  => $this->contract_db->selectIdCurrency('MXP'),
+			"DownPmtNum"    => $i + 1,
+			"DownPmtAmt"    => $_POST['tablaPagosProgramados'][$i]["amount"],
+			"DownPmtDueDt"  => $_POST['tablaPagosProgramados'][$i]["date"],
+			"ynActive"   	=> 1,
+			"CrBy"          => $this->nativesessions->get('id'),
+			"CrDt"			=> $this->getToday()
+		];
+		$this->contract_db->insertReturnId('tblResDownPmt', $DownPayment);
+	}
+	
 }
 
 //////////////////////////////////////////////////////
@@ -263,7 +270,9 @@ private function createDownPayment(){
 			$datos =[
 				"contract"=> $this->contract_db->getContratos2(null,$id),
 				"peoples" => $this->contract_db->getPeopleContract($id),
-				"unities" => $this->contract_db->getUnitiesContract($id)
+				"unities" => $this->contract_db->getUnitiesContract($id),
+				"terminosVenta" => $this->contract_db->getTerminosVentaContract($id),
+				"terminosFinanciamiento" => $this->contract_db->getTerminosFinanciamiento($id)
 			];
 			echo json_encode($datos);
 		}

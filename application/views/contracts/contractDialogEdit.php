@@ -150,33 +150,33 @@
 						<tbody>
 							<tr>
 								<td>Price</td>
-								<td>$000,000.00</td>
+								<td id="cventaPrice">$00.00</td>
 								<td>Number of weeks</td>
-								<td>$000,000.00</td>
+								<td id="cventaWeeks"></td>
 							</tr>
 							<tr>
 								<td>Reference pack</td>
-								<td>$000,000.00</td>
+								<td id="cventaPackR">$00.00</td>
 								<td>Sale price</td>
-								<td>$000,000.00</td>
+								<td id="cventaSalePrice">$00.00</td>
 							</tr>
 							<tr>
 								<td>Hitch</td>
-								<td>$000,000.00</td>
+								<td id="cventaHitch">$00.00</td>
 								<td>Transferred amount</td>
-								<td>$000,000.00</td>
+								<td id="cventaTransferA">$00.00</td>
 							</tr>
 							<tr>
 								<td>Cost contract</td>
-								<td>$000,000.00</td>
+								<td id="cventaCostContract">$00.00</td>
 								<td>Hook amount transferred more</td>
-								<td>$000,000.00</td>
+								<td id="cventaAmountTransfer">$000,000.00</td>
 							</tr>
 							<tr>
 								<td>Pack amount</td>
-								<td>$000,000.00</td>
+								<td id="cventapackAmount">$000,000.00</td>
 								<td>Balance to be financed</td>
-								<td>$000,000.00</td>
+								<td id="cventaFinanced">$00.00</td>
 							</tr>
 						</tbody>
 					</table>
@@ -199,19 +199,19 @@
 						<tbody>
 							<tr>
 								<td>Balance to be Financed</td>
-								<td>$000,000.00</td>
+								<td id="cfbalanceFinanced">$00.00</td>
 								<td>Type of funding</td>
-								<td>$000,000.00</td>
+								<td>$00.00</td>
 							</tr>
 							<tr>
 								<td>Monthly payment</td>
-								<td>$000,000.00</td>
+								<td id="cfPagoMensual">$00.00</td>
 								<td>Cost collection</td>
 								<td>$000,000.00</td>
 							</tr>
 							<tr>
 								<td>% Hitch</td>
-								<td>$000,000.00</td>
+								<td id="cfEnganche">$00.00</td>
 								<td>Total funding</td>
 								<td>$000,000.00</td>
 							</tr>

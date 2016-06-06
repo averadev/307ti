@@ -301,7 +301,7 @@ class Contract_db extends CI_Model {
     public function selectIdMetodoFin($string){
         $this->db->select('pkFinMethodId');
         $this->db->from('tblFinMethod');
-        $this->db->where('finMethodcode', $string);
+        $this->db->where('finMethodCode', $string);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )
@@ -320,7 +320,7 @@ class Contract_db extends CI_Model {
         if($query->num_rows() > 0 )
         {
             $row = $query->row();
-            return $row->pkFinMethodId;
+            return $row->pkFactorId;
         }
     }
     public function selectIdCurrency($string){
@@ -332,7 +332,7 @@ class Contract_db extends CI_Model {
         if($query->num_rows() > 0 )
         {
             $row = $query->row();
-            return $row->pkFinMethodId;
+            return $row->pkCurrencyId;
         }
     }
     public function selectIdOccType($string){
@@ -429,6 +429,32 @@ class Contract_db extends CI_Model {
             return $row->Folio;
         }
     }
+
+    public function getTerminosVentaContract($id){
+        $this->db->select("R.ListPrice, R.PackPrice, R.Deposit, R.ClosingFeeAmt, R.NetSalePrice");
+        $this->db->select("R.TransferAmt, R.BalanceActual, RI.WeeksNumber");
+        $this->db->from("tblResFin R");
+        $this->db->join('tblResInvt RI', 'R.fkResId = RI.fkResId', 'inner');
+        $this->db->where('R.fkResId', $id);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+
+    public function getTerminosFinanciamiento($id){
+
+        $this->db->select("R.FinanceBalance, R.MonthlyPmtAmt, R.DownPmt% as porcentaje , R.TotalFinanceAmt");
+        $this->db->from("tblResFin R");
+        $this->db->where('R.fkResId', $id);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+
 
     public function getTours($filters){
         $sql = "";

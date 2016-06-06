@@ -441,7 +441,7 @@ function createNewContract(){
 						downpayment:$("#downpayment").val(),
 						amountTransfer:$("#amountTransfer").val(),
 
-						packPrice:sumarArray(getArrayValuesColumnTable("tablePeopleSelected", 2)),
+						packPrice:sumarArray(getArrayValuesColumnTable("tableDescuentos", 2)),
 						financeBalance: $("#financeBalance").val(),
 						tablapagos: getValueTableDownpayment(),
 						tablaPagosProgramados:getValueTableDownpaymentScheduled(),
@@ -1053,7 +1053,6 @@ function getDatailByID(id){
 }
 
 function modalEditContract(id){
-	console.log(id);
 	showLoading('#dialog-Edit-Contract',true);
 	dialogo = $("#dialog-Edit-Contract").dialog ({
   		open : function (event){
@@ -1371,27 +1370,77 @@ function getArrayValuesSelectedColum(tabla, columna){
 	return items;
 }
 
+
+
+
 /**
  * cambia los pantallas del modal con los tabs
  */
-function changeTabsModalContract(screen){
-	//asigna la clase active
-	$('#tabsModalPeople .tabs .tabs-title').removeClass('active');
-	$('#tabsModalPeople .tabs li[attr-screen=' + screen + ']').addClass('active');
+function changeTabsModalContract(screen, id){
+	console.log(screen);
+	console.log(id)
+	$('#tabsContrats .tabs-title').removeClass('active');
+	$('#tabsContrats li[attr-screen=' + screen + ']').addClass('active');
 	//muestra la pantalla selecionada
-	$('#contentModalPeople .tab-modal').hide();
+	$('#tabsContrats .tab-modal').hide();
 	$('#' + screen).show();
-	if($("#idPeople").data("pkPeopleId") != undefined ){
-		if(screen == "tab-PReservaciones"){
-			getInfoTabsPeople(screen, "people/getReservationsByPeople");
-		}else if(screen == "tab-PContratos"){
-			getInfoTabsPeople(screen, "people/getContractByPeople");
-		}else if(screen == "tab-PEmpleados"){
-			//getInfoTabsPeople(screen, "people/getEmployeeByPeople");
-		}
+	switch(screen){
+		case "tab-CGeneral":
+			getDatosContract(id);
+			break;
+		case "tab-CAccounts":
+			getDatosContractAccounts(id);
+			break;
+		case "tab-CVendors":
+			getDatosContractSellers(id);
+			break;
+		case "tab-CProvisions":
+			getDatosContractProvisions(id);
+			break;
+		case "tab-COccupation":
+			getDatosContractOcupation(id);
+			break;
+		case "tab-CDocuments":
+			getDatosContractDocuments(id);
+			break;
+		case "tab-CNotes":
+			getDatosContractNotes(id);
+			break;
+		case "tab-CFlags":
+			getDatosContractFlags(id);
+			break;
+		case "tab-CFiles":
+			getDatosContractFiles(id);
+			break;
+
+
 	}
 }
 
+function getDatosContractAccounts(id){
+	console.log("Cuentas " + id);
+}
+function getDatosContractSellers(id){
+	console.log("Vendedores " + id);
+}
+function getDatosContractProvisions(id){
+	console.log("Provisiones" + id);
+}
+function getDatosContractOcupation(id){
+	console.log("Ocupacion " + id);
+}
+function getDatosContractDocuments(id){
+	console.log("Documentos " + id);
+}
+function getDatosContractNotes(id){
+	console.log("Notas " + id);
+}
+function getDatosContractFlags(id){
+	console.log("Banderas " + id);
+}
+function getDatosContractFiles(id){
+	console.log("Archivos " + id);
+}
 
 function drawTableUnidades(data, funcion, cadena, table){
     var headHTML = "<th>"+cadena+"</th>";
@@ -1489,12 +1538,51 @@ function getDatosContract(id){
 	    	drawTableSinHead(data["peoples"], "peoplesContract");
 	    	drawTableSinHead(data["unities"], "tableUnidadesContract");
 	    	drawDataContract(data["contract"][0]);
+	    	drawTerminosVenta(data["terminosVenta"][0]);
+	    	drawTerminoFinanciamiento(data["terminosFinanciamiento"][0]);
 	    },
 	    error: function(){
 	        alertify.error("Try again");
 	    }
 	});
 }
+
+function drawTerminosVenta(data){
+	var price = parseFloat(data.ListPrice).toFixed(2);
+	var semanas = data.WeeksNumber;
+	var packReference = parseFloat(data.PackPrice).toFixed(2);
+	var salePrice = parseFloat(data.NetSalePrice).toFixed(2);
+	var enganche = parseFloat(data.Deposit).toFixed(2);
+	var transferido = parseFloat(data.TransferAmt).toFixed(2);
+	var costoContract = parseFloat(data.ClosingFeeAmt).toFixed(2);
+	var packAmount = parseFloat(data.PackPrice).toFixed(2);
+	var balanceFinal = parseFloat(data.BalanceActual).toFixed(2);
+
+
+	$("#cventaPrice").text(price);
+	$("#cventaWeeks").text(semanas);
+	$("#cventaPackR").text(packReference);
+	$("#cventaSalePrice").text(salePrice);
+	$("#cventaHitch").text(enganche);
+	$("#cventaTransferA").text(transferido);
+	$("#cventaCostContract").text(costoContract);
+	$("#cventapackAmount").text(packAmount);
+	$("#cventaFinanced").text(balanceFinal);
+	$("#cventaAmountTransfer").text(enganche + transferido);
+}
+
+function drawTerminoFinanciamiento(data){
+	var balanceFinal  = data.FinanceBalance;
+	var pagoMensual = data.MonthlyPmtAmt;
+	var porEnganche = data.porcentaje;
+	//var balanceFinal = data.TotalFinanceAmt;
+
+	$("#cfbalanceFinanced").text(balanceFinal);
+	$("#cfPagoMensual").text(pagoMensual);
+	$("#cfEnganche").text(porEnganche);
+
+}
+
 
 function drawDataContract(data){
 	var numero = "["+data.Folio+"-"+data.ID+"]";
@@ -1534,4 +1622,7 @@ function setEventosEditarContrato(id){
 	$("#btnUpdateTourID").click(function(){
 		updateTourContrato(id);
 	});
+	// $('#tabsContrats .tabs-title').on('click', function() { 
+	// 	changeTabsModalContract($(this).attr('attr-screen'), id);
+	// });
 }
