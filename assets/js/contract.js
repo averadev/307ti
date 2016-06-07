@@ -152,7 +152,7 @@ function createDialogContract(addContract) {
 			text: "Save and close",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
-					createNewContract()
+					createNewContract();
 					$(this).dialog('close');
 					alertify.success("Se guardo correctamente");
 				
@@ -469,6 +469,8 @@ function createNewContract(){
 						showAlert(false,"Saving changes, please wait ....",'progressbar');
 						var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta", "downpayment"];
 						clearInputsById(arrayWords);
+						var fin = modalFinanciamiento();
+						fin.dialog("show");
 						$('#dialog-Weeks').empty();
 						$('#tablePeopleSelected tbody').empty();
 						$('#tableUnidadesSelected tbody').empty();
