@@ -1184,7 +1184,8 @@ function selectMetodoPagoProgramados(){
                 property: $("#property").val(),
                 unitType: $("#unitType").val(),
                 frequency: $("#frequency").val(),
-                season: $("#season").val()
+                season: $("#season").val(),
+                interval: $("#interval").val()
             },
             type: "POST",
             url: "contract/getUnidades",
@@ -1626,3 +1627,56 @@ function setEventosEditarContrato(id){
 	// 	changeTabsModalContract($(this).attr('attr-screen'), id);
 	// });
 }
+
+
+
+function modalFinanciamiento() {
+	var div = "#dialog-Financiamiento";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+  				showLoading(div, true);
+				$(this).load ("contract/modalFinanciamiento" , function(){
+					showLoading(div, false);
+					initEventosFinanciamiento();
+				});
+		},
+		autoOpen: false,
+     	height: maxHeight,
+     	width: "50%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+    
+       		}
+     	}],
+     close: function() {
+    	//$('#dialog-ScheduledPayments').empty();
+     }
+	});
+	return dialogo;
+}
+
+
+function initEventosFinanciamiento(){
+	$("#btnCalcularF").click(function(){
+		var palabras = $("#terminosFinanciamientoF option:selected").text();
+		palabras = palabras.split(",");
+		console.log(palabras[0]);
+		console.log(palabras[1]);
+
+	});
+}
+
+
+//$("#terminosFinanciamientoF option:selected").attr('code')
+//var palabras = $("#terminosFinanciamientoF option:selected").text()
+//palabras[0] = "52 Meses";
+//palabras[1] = ""

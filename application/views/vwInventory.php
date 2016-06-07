@@ -88,7 +88,7 @@
 											<?php
 											foreach($floorPlan as $item){
 											?>
-												<option value="<?php echo $item->pkFloorPlanID; ?>" code="<?php echo $item->FloorPlanCode; ?>"><?php echo $item->		FloorPlanDesc; ?></option>
+												<option value="<?php echo $item->pkFloorPlanID; ?>" code="<?php echo $item->FloorPlanCode; ?>"><?php echo $item->FloorPlanDesc; ?></option>
 											<?php
 											}
 											?>

@@ -19,7 +19,7 @@ class Contract extends CI_Controller {
     
 	public function index(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('vwContract.php');
+			$this->load->view('vwContract');
 		}
 	}
 
@@ -242,8 +242,9 @@ private function createDownPayment($idContrato){
 	}
 	public function getUnidades(){
 		if($this->input->is_ajax_request()) {
+			$intervalo = $_POST['interval'];
 			$filtros = $this->receiveWords($_POST);
-			$unidades = $this->contract_db->getUnidades($filtros);
+			$unidades = $this->contract_db->getUnidades($filtros, $intervalo);
 			echo json_encode($unidades);
 		}
 	}
@@ -280,49 +281,57 @@ private function createDownPayment($idContrato){
 //////////////////////////////////////////////////////
 	public function modal(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('contracts/contractDialog.php');
+			$this->load->view('contracts/contractDialog');
 		}
 	}
 
 	public function modalWeeks(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('contracts/contractDialogWeeks.php');
+			$this->load->view('contracts/contractDialogWeeks');
 		}
 	}
 
 	public function modalPack(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('contracts/dialogPackReference.php');
+			$this->load->view('contracts/dialogPackReference');
 		}
 	}
 
 	public function modalDepositDownpayment(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('contracts/dialogDepositDownpayment.php');
+			$this->load->view('contracts/dialogDepositDownpayment');
 		}
 	}
 	public function modalDiscountAmount(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('contracts/dialogDiscountAmount.php');
+			$this->load->view('contracts/dialogDiscountAmount');
 		}
 	}
 
 	public function ScheduledPayments(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('contracts/dialogScheduledPayments.php');
+			$this->load->view('contracts/dialogScheduledPayments');
 		}
 	}
 
 	public function modalUnidades(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('unities/unitiesDialog.php');
+			$this->load->view('unities/unitiesDialog');
 		}
 	}
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('contracts/contractDialogEdit.php');
+			$this->load->view('contracts/contractDialogEdit');
 		}
 	}
+
+	public function modalFinanciamiento(){
+		if($this->input->is_ajax_request()) {
+			$data['factores'] = $this->contract_db->selectFactors();
+			$this->load->view('contracts/contractDialogFinanciamiento', $data);
+		}
+	}
+
 
 //////////////////////////////////////////////////////
 	public function insertContrat($Contract){
