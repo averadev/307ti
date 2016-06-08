@@ -35,27 +35,26 @@
                     </div>
                 </div>
 			</div>
+			<!-- maind -->
 			<div class="fieldset large-12 columns">
-                <legend>people</legend>
+                <legend>People maid</legend>
 
                 <div class="containerPeopleHKC">
                     <div class="row">
                         <div class="small-12 columns">
                             <!--<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>-->
-							<a id="btnAddPeopleHKC" class="btn btn-primary spanSelect">
+							<a id="btnAddPeopleHKCMaid" class="btn btn-primary spanSelect">
 								<div class="label">Agregar</div>
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
                         </div>
                         <div class="small-12 columns">
-                            <table id="tablePeopleSelectedHKC" width="100%">
+                            <table id="tablePeopleMaidSelectedHKC" width="100%">
                                 <thead>
 									<tr>
 										<th class="cellEdit" >ID</th>
 										<th class="cellGeneral">Name</th>
 										<th class="cellGeneral">Last name</th>
-										<th class="cellGeneral" >Maid</th>
-										<th class="cellGeneral" >Superior</th>
 										<th></th>
 									</tr>
 								</thead>
@@ -63,15 +62,47 @@
 									<tr class="rowSpace"><td colspan="10" ></td></tr>
 								</tbody>
 							</table>
-							<small class="error hidden">please select 2 pleople.</small>
+							<small class="error hidden">please select a pleople maid.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			<!-- superior -->
+			<div class="fieldset large-12 columns">
+                <legend>People superior</legend>
+
+                <div class="containerPeopleHKC">
+                    <div class="row">
+                        <div class="small-12 columns">
+                            <!--<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>-->
+							<a id="btnAddPeopleHKCSupe" class="btn btn-primary spanSelect">
+								<div class="label">Agregar</div>
+								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+							</a>
+                        </div>
+                        <div class="small-12 columns">
+                            <table id="tablePeopleSupeSelectedHKC" width="100%">
+                                <thead>
+									<tr>
+										<th class="cellEdit" >ID</th>
+										<th class="cellGeneral">Name</th>
+										<th class="cellGeneral">Last name</th>
+										<th></th>
+									</tr>
+								</thead>
+                                <tbody>
+									<tr class="rowSpace"><td colspan="10" ></td></tr>
+								</tbody>
+							</table>
+							<small class="error hidden">please select a pleople superior.</small>
                         </div>
                     </div>
                 </div>
             </div>
 			
 			<!-- Unidades -->
-            <div class="fieldset large-12 columns">
-                <legend class="btnAddressData">Units</legend>
+            <div class="fieldset large-12 columns" id="unitHKConfig">
+                <legend class="">Units</legend>
                 <div class="containerPeople">
                     <div class="row">
                         <div class="small-12 columns">

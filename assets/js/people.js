@@ -172,7 +172,6 @@ function createModalDialog(){
 	});
 	
 	//dialogUser.css('overflow', 'hidden');
-	
 }
 
 /**
@@ -713,14 +712,10 @@ function cleanUserFields(){
 */
 function searchPeople(page){
 	$('#tablePeople tbody').empty();
-	//$('.divLoadingTable').show();
 	showLoading('#section-table-people',true);
-	/*if(xhrPeople && xhrPeople.readyState != 4) { 
-		xhrPeople.abort();
-		xhrPeople = null;
-	}*/
 	
-	//if($('#checkFilterAdvance').val())
+	var typePeople = $('#btnSearch').attr('attr_people');
+	
 	noResults('#section-table-people',false);
 	opcionAdvanced = "";
 	if($('#checkFilterAdvance').is(':checked')){
@@ -736,6 +731,7 @@ function searchPeople(page){
 			lastName:$("#checkFilter2").is(':checked'),
 			name:$("#checkFilter3").is(':checked'),
 			advanced:opcionAdvanced,
+			typePeople:typePeople,
 			page:page,
 		},
 		success: function(data){
@@ -754,13 +750,15 @@ function searchPeople(page){
 				}
 				drawTable2(data.items,"tablePeople","showModal","Edit");
 				
-				
-				/*isFunction: function( obj ) {
-					return jQuery.type(obj) === "function";
-				},*/
-				
-				if( $.isFunction( "markRowTableFrontDesk" ) ) {
-					frontDesk:markRowTableFrontDesk("tablePeople");
+				if( $.isFunction( markRowTableFrontDesk ) ){
+					var typePeople = $("#dialog-people-hkConfig").find('#btnSearch').attr('attr_people');
+					console.log(typePeople)
+					if(typePeople == "maid"){
+						markRowTableFrontDesk( "tablePeople", "tablePeopleMaidSelectedHKC" );
+					}else if(typePeople == "superior"){
+						markRowTableFrontDesk( "tablePeople", "tablePeopleSupeSelectedHKC" );
+					}
+					//frontDesk:markRowTableFrontDesk("tablePeople");
 				}
 			}else{
 				noResultsPeople("section-table-people", "tablePeople", "No results found");
@@ -1085,7 +1083,7 @@ function noResultsPeople(section, table, message){
 }
 
 function deleteTableInv(table){
-	if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
+	if ( $.fn.dataTable.isDataTable( '#' + table ) ){
 		var tabla = $( '#' + table ).DataTable();
 		tabla.destroy();
 	}

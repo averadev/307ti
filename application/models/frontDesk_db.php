@@ -40,6 +40,15 @@ Class frontDesk_db extends CI_MODEL
 	}
 	
 	/**
+	* obtiene la lista de tblHkServiceType
+	**/
+	public function getServiceType(){
+		$this->db->select('hkst.pkHkServiceTypeId, hkst.HkServiceTypeCode, hkst.HkServiceTypeDesc');
+		$this->db->from('tblHkServiceType hkst');
+		return  $this->db->get()->result();
+	}
+	
+	/**
 	* obtiene la lista de tblStatusType
 	**/
 	public function getFrontDesk($filters){
@@ -178,7 +187,7 @@ Class frontDesk_db extends CI_MODEL
 	/*************** HousekeepingConfiguration******************/
 	
 	public function getHousekeepingConfiguration($filters){
-		$this->db->select('u.unitcode, fp.FloorPlanDesc, p.name as MaidName, p.lname as MaidLName, e.EmployeeCode as EmployeeCodeMaid');
+		$this->db->select('cfg.pkUnitHKId as ID, u.unitcode, fp.FloorPlanDesc, p.name as MaidName, p.lname as MaidLName, e.EmployeeCode as EmployeeCodeMaid');
 		$this->db->select('p2.name as SuperName, p2.lname as SuperLName, e2.EmployeeCode, cfg.section,f.level as Floor, b.buildingDesc');
 		$this->db->from('tblUnitHkconfig cfg');
 		$this->db->join('tblunit u', 'u.pkunitid = cfg.fkUnitid', 'inner');
@@ -260,14 +269,134 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->from("tblHkServiceType st");
 		$this->db->where("st.ynActive = 1");
 		$query = $this->db->get();
-        if($query->num_rows() > 0 )
-        {
+        if($query->num_rows() > 0 ){
             return $query->result();
         }
 	}
 	
 	public function insert($data, $table){
 		$this->db->insert($table, $data);
+	}
+	
+	public function update($data, $table, $condicion){
+		$this->db->where($condicion);
+		$this->db->update($table, $data);
+	}
+	
+	public function updateBatch($data,$table, $field){
+		$this->db->update_batch( $table, $data, $field ); 
+	}
+	
+	public function getHKConfigurationById($id){
+		$this->db->select("cfg.pkUnitHKId, cfg.Section, cfg.fkHKServiceTypeId");
+		$this->db->select('u.pkUnitId, LTRIM(RTRIM(u.UnitCode)) as UnitCode, LTRIM(RTRIM(fp.FloorPlanDesc)) as FloorPlanDesc, LTRIM(RTRIM(pr.PropertyName)) as PropertyName');
+		$this->db->select('LTRIM(RTRIM(p.pkPeopleId)) as MaidId, LTRIM(RTRIM(p.name)) as MaidName, LTRIM(RTRIM(p.lname)) as MaidLName');
+		$this->db->select('LTRIM(RTRIM(p2.pkPeopleId)) as SuperId, LTRIM(RTRIM(p2.name)) as SuperName, LTRIM(RTRIM(p2.lname)) as SuperLName');
+		$this->db->from('tblUnitHkconfig cfg');
+		$this->db->join('tblunit u', 'u.pkunitid = cfg.fkUnitid', 'inner');
+		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = u.fkFloorPlanId', 'inner');
+		$this->db->join('tblProperty pr', 'pr.pkPropertyId = u.fkPropertyId', 'inner');
+		$this->db->join('tblpeople p', 'pkPeopleid = cfg.fkPeopleMaidid', 'inner');
+		$this->db->join('tblpeople p2', 'p2.pkPeopleid = cfg.fkPeopleSuperid', 'inner');
+		$this->db->where('cfg.pkUnitHKId = ', $id);
+		return  $this->db->get()->result();
+	}
+	
+	/*************** Housekeeping Look Up******************/
+	
+	public function getHousekeepingLookUp($filters){
+		$this->db->select('cfg.pkUnitHKId as ID, u.unitcode, fp.FloorPlanDesc, p.name as MaidName, p.lname as MaidLName, e.EmployeeCode as EmployeeCodeMaid');
+		$this->db->select('p2.name as SuperName, p2.lname as SuperLName, e2.EmployeeCode, cfg.Date, cfg.section,f.level as Floor, b.buildingDesc');
+		$this->db->select('hkc.HkCodeDesc as HkCode, st.HkServiceTypeDesc as ServiceType, uhs.pkUnitHKStatusId as idStatus, hs.HKStatusDesc as status');
+		$this->db->from('tblUnitHkconfig cfg');
+		$this->db->join('tblunit u', 'u.pkunitid = cfg.fkUnitid', 'inner');
+		$this->db->join('tblUnithkstatus uhs', 'uhs.fkunitid = u.pkunitid', 'inner');
+		$this->db->join('tblhkStatus hs', 'hs.pkHkStatusid = uhs.fkHkStatusid ', 'inner');
+		$this->db->join('tblFloor f', 'f.pkFloorid = u.fkFloorid', 'inner');
+		$this->db->join('tblBuilding b', 'b.pkBuildingid =f.fkbuildingid', 'inner');
+		$this->db->join('tblpeople p', 'pkPeopleid = cfg.fkPeopleMaidid', 'inner');
+		$this->db->join('tblpeople p2', 'p2.pkPeopleid = cfg.fkPeopleSuperid', 'inner');
+		$this->db->join('tblhkServicetype st', 'st.pkhkServiceTypeid = cfg.fkhkServiceTypeid', 'inner');
+		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanId = u.fkFloorPlanId', 'inner');
+		$this->db->join('tblEmployee e', 'e.fkPeopleId = p.pkPeopleId', 'inner');
+		$this->db->join('tblEmployee e2', 'e2.fkPeopleId = p2.pkPeopleId', 'inner');
+		$this->db->join('tblPeopleType pt', 'pt.pkPeopleTypeId = p.fkPeopleTypeId', 'inner');
+		$this->db->join('tblHkCode hkc', 'hkc.pkHkCodeId = uhs.fkHkCodeId', 'left');
+		if($filters['dates'] != false){
+			if(isset($filters['dates']['dateHKLookUp'])){
+				$date = $filters['dates']['dateHKLookUp'];
+				//$this->db->where("CONVERT(VARCHAR(10),cfg.Date,101)>= CONVERT(VARCHAR(10),'" . $date . "',101)");
+				$this->db->where("(select top 1 CONVERT(VARCHAR(10),cfg2.Date,101) from tblUnitHkconfig cfg2 where cfg2.fkUnitId = cfg.fkUnitId ORDER BY cfg2.date DESC) = CONVERT(VARCHAR(10),'" . $date . "',101)");
+				$this->db->where("CONVERT(VARCHAR(10),'" . $date . "',101) = CONVERT(VARCHAR(10),cfg.Date,101)");
+				//where  and ;
+			}
+		}
+		if($filters['checks'] != false){
+			$this->db->where("( " . $filters['checks'] . ")");
+		}
+		
+		if($filters['options'] != false){
+			if (isset($filters['options']['ServiceTypeLookUp'])){
+				$this->db->where('cfg.fkhkServiceTypeid = ', $filters['options']['ServiceTypeLookUp']);
+			}
+		}
+		return  $this->db->get()->result();
+	}
+	
+	public function getUnitHKstatusLookUp($filters){
+		$this->db->select("uhks.pkUnitHKStatusId as ID, uhks.fkHkStatusId");
+		$this->db->select("u.UnitCode");
+		$this->db->from('tblUnitHKStatus uhks');
+		$this->db->join('tblunit u', 'u.pkunitid = uhks.fkUnitId', 'inner');
+		if($filters['checks'] != false){
+			$this->db->where("( " . $filters['checks'] . ")");
+		}
+		return  $this->db->get()->result();
+	}
+	
+	/*************** Housekeeping Report ******************/
+	
+	public function getHousekeepingReport($filters){
+		$this->db->distinct();
+		$this->db->select('cfg.pkUnitHKId as ID, u.unitcode, fp.FloorPlanDesc, p.name as MaidName, p.lname as MaidLName, e.EmployeeCode as EmployeeCodeMaid');
+		$this->db->select('p2.name as SuperName, p2.lname as SuperLName, e2.EmployeeCode, cfg.Date, cfg.section,f.level as Floor, b.buildingDesc');
+		$this->db->select('hkc.HkCodeDesc as HkCode, st.HkServiceTypeDesc as ServiceType, uhs.pkUnitHKStatusId as idStatus, hs.HKStatusDesc as status');
+		$this->db->from('tblUnitHkconfig cfg');
+		$this->db->join('tblunit u', 'u.pkunitid = cfg.fkUnitid', 'inner');
+		$this->db->join('tblUnithkstatus uhs', 'uhs.fkunitid = u.pkunitid', 'inner');
+		$this->db->join('tblhkStatus hs', 'hs.pkHkStatusid = uhs.fkHkStatusid ', 'inner');
+		$this->db->join('tblFloor f', 'f.pkFloorid = u.fkFloorid', 'inner');
+		$this->db->join('tblBuilding b', 'b.pkBuildingid =f.fkbuildingid', 'inner');
+		$this->db->join('tblpeople p', 'pkPeopleid = cfg.fkPeopleMaidid', 'inner');
+		$this->db->join('tblpeople p2', 'p2.pkPeopleid = cfg.fkPeopleSuperid', 'inner');
+		$this->db->join('tblhkServicetype st', 'st.pkhkServiceTypeid = cfg.fkhkServiceTypeid', 'inner');
+		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanId = u.fkFloorPlanId', 'inner');
+		$this->db->join('tblEmployee e', 'e.fkPeopleId = p.pkPeopleId', 'inner');
+		$this->db->join('tblEmployee e2', 'e2.fkPeopleId = p2.pkPeopleId', 'inner');
+		$this->db->join('tblPeopleType pt', 'pt.pkPeopleTypeId = p.fkPeopleTypeId', 'inner');
+		$this->db->join('tblHkCode hkc', 'hkc.pkHkCodeId = uhs.fkHkCodeId', 'left');
+		if($filters['dates'] != false){
+			$this->db->join('tblResInvt ri', 'ri.fkUnitId = u.pkunitid', 'inner');
+			$this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId', 'inner');
+			$this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId', 'left');
+			if(isset($filters['dates']['dateArrivalReport'])){
+				$date = $filters['dates']['dateArrivalReport'];
+				$this->db->where("ro.NightId = 1");
+				$this->db->where("CONVERT(VARCHAR(10),'" . $date . "',101) = CONVERT(VARCHAR(10),c.Date,101)");
+			}
+			if(isset($filters['dates']['dateDepartureReport'])){
+				$date = $filters['dates']['dateDepartureReport'];
+				$this->db->where("ro.NightId = ( SELECT top 1 ro2.NightId from tblResOcc ro2 where ro2.fkResId = ro.fkResId ORDER BY ro2.NightId DESC )");
+				$this->db->where("CONVERT(VARCHAR(10),'" . $date . "',101) = CONVERT(VARCHAR(10),c.Date,101)");
+			}
+			//$this->db->order_by("ro.fkResId ASC"); 
+		}
+		/*if($filters['checks'] != false){
+			$this->db->where("( " . $filters['checks'] . ")");
+		}*/
+		$this->db->order_by("u.unitcode ASC");
+		
+		return  $this->db->get()->result();
 	}
 	
 }

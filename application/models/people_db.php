@@ -9,7 +9,7 @@ Class people_db extends CI_MODEL
     /**
      * Obtiene la lista de personas
      */
-	public function getPeople($text,$peopleId,$lastName,$name,$advanced,$page){
+	public function getPeople($text,$peopleId,$lastName,$name,$advanced,$page,$typePeople){
 		
 		/*SELECT RowTable.pkPeopleId FROM ( SELECT ROW_NUMBER() OVER ( ORDER BY tblPeople.pkPeopleId ) AS RowNum, *
 			FROM  tblPeople
@@ -29,6 +29,9 @@ Class people_db extends CI_MODEL
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');
 		$this->db->select('tblState.StateDesc, tblCountry.CountryDesc');
         $this->db->from('tblPeople');
+		if($typePeople == "superior"){
+			$this->db->join('tblEmployee', 'tblEmployee.fkPeopleId = tblPeople.pkPeopleId', 'inner');
+		}
 		$this->db->join('tblPeopleAddress', 'tblPeopleAddress.fkPeopleId = tblPeople.pkPeopleId', 'left');
 		$this->db->join('tblAddress', 'tblAddress.pkAddressid = tblPeopleAddress.fkAddressId', 'left');
 		$this->db->join('tblState', 'tblState.pkStateId = tblAddress.FkStateId', 'left');

@@ -143,7 +143,7 @@
 									</label>
 								</div>
 								<div class="small-12 large-3 columns" style="padding-top:25px;">
-									<a id="btnSearchFrontDesk" class="btn btn-primary btn-Search">
+									<a id="btnSearchFrontDesk" class="btn btn-primary btn-Search searchFD">
 										<div class="label">Buscar</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 									</a>
@@ -233,7 +233,7 @@
 									</label>
 								</div>
 								<div class="small-12 large-3 columns" style="padding-top:25px;">
-									<a id="btnSearchHKConfig" class="btn btn-primary btn-Search">
+									<a id="btnSearchHKConfig" class="btn btn-primary btn-Search searchFD">
 										<div class="label">Search</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 									</a>
@@ -248,6 +248,154 @@
 						</fieldset>
 					</div>
 					
+				</div>
+				<!-- House Keeping Look Up -->
+				<div class="row sectionFrontDesk section4" style="display:none;">
+					<div class="small-12 medium-8 large-12 columns"> 
+						<fieldset class="large-12 columns fieldsetFilter">
+							<label>Status</label>
+							<?php
+							foreach($HKStatus as $item){
+								?>
+								<div class="rdoField">
+									<input name="statusHKLookUp" type="checkbox" id="<?php echo "hklu" . $item->HKStatusCode; ?>" class="checkFilterFrontDesk" value="<?php echo $item->pkHKStatusId; ?>">
+									<label for="<?php echo "hklu" . $item->HKStatusCode; ?>"><?php echo $item->HKStatusDesc; ?></label>
+								</div>
+								<?php
+							}
+							foreach($HKStatus as $item){
+								?>
+								<!---<div class="rdoField">
+									<input name="FilterHKConfiguration" type="checkbox" id="<?php echo "hk" . $item->HKStatusCode; ?>" class="checkFilterFrontDesk" value="<?php echo $item->pkHKStatusId; ?>">
+									<label for="<?php echo "hk" . $item->HKStatusCode; ?>"><?php echo $item->HKStatusCode; ?></label>
+								</div>-->
+								<?php
+							}
+							?>
+						</fieldset>
+					</div>
+					<div class="small-12 medium-12 large-12 columns">
+						<!-- text Field dates -->
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row">
+								<!-- Unit -->
+								<div class="small-12 large-3 columns">
+									<label id="alertDateHKLookUp" class="text-left">Date
+										<input type="text" id="dateHKLookUp" class="txtSearch" placeholder="Enter a date" >
+									</label>
+								</div>
+								<div class="small-12 large-3 columns">
+									<label id="alertIntervalFront" class="text-left">Interval
+										<div class="caja" >
+											<select id="ServiceTypeLookUp" class="txtSearch input-group-field round">
+												<option value="0">Select a Service Type</option>
+												<?php
+												foreach($serviceType as $item){
+													?>
+													<option value="<?php echo $item->pkHkServiceTypeId; ?>"><?php echo $item->HkServiceTypeDesc; ?></option>
+													<?php
+												}
+												?>
+											</select>
+										</div>
+									</label>
+								</div>
+								<div class="small-12 large-6 columns" style="padding-top:25px;">
+									<a id="btnHKREPORT" class="btn btn-primary btn-Search">
+										<div class="label">HK REPORT</div>
+										<img src="<?php echo base_url().IMG; ?>common/report.png"/>
+									</a>
+									<a id="btnChgStatus" class="btn btn-primary spanSelect">
+										<div class="label">Chg Status</div>
+										<img src="<?php echo base_url().IMG; ?>common/check.png"/>
+									</a>
+								</div>
+								<!--<div class="small-12 large-3 columns">
+									<label id="alertFloorPlanHKConfig" class="text-left">Floor plan 
+											<select id="textFloorPlanHKConfig" class="input-group-field round"  multiple="multiple">
+												<?php
+												foreach($floorPlan as $item){
+													?>
+													<option value="<?php echo $item->pkFloorPlanID; ?>"><?php echo $item->FloorPlanDesc; ?></option>
+													<?php
+												}
+												?>
+											</select>
+									</label>
+								</div>-->
+							</div>
+						</fieldset>
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row" style="margin-bottom:0; padding-bottom:0;">
+								<div class="small-12 large-6 columns" style="padding-top:5px;">
+									<a id="btnSearchHKLookUp" class="btn btn-primary btn-Search searchFD">
+										<div class="label">Search</div>
+										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+									</a>
+									<a id="btnCleanHKLookUp" class="btn btn-primary spanSelect">
+										<div class="label">Clean</div>
+										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+									</a>
+								</div>
+								<div class="small-12 large-3 columns">&nbsp;</div>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+				<!-- House Keeping Look Up -->
+				<div class="row sectionFrontDesk section5" style="display:none;">
+					<div class="small-12 medium-8 large-12 columns"> 
+						<fieldset class="large-12 columns fieldsetFilter">
+								
+						</fieldset>
+					</div>
+					<div class="small-12 medium-12 large-12 columns">
+						<!-- text Field dates -->
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row">
+								<!-- Unit -->
+								<div class="small-12 large-3 columns">
+									<label id="" class="text-left">Date Arrival
+										<div class="input-group date" id="frontArrivalDate" >
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="dateArrivalReport" class="txtSearch input-group-field roundRight" placeholder="Enter a date" readonly />
+										</div>
+									</label>
+								</div>
+								<div class="small-12 large-3 columns">
+									<label id="" class="text-left">Date Departure
+										<div class="input-group date" id="frontArrivalDate" >
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="dateDepartureReport" class="txtSearch input-group-field roundRight" placeholder="Enter a date" readonly />
+										</div>
+									</label>
+								</div>
+								<div class="small-12 large-6 columns" style="padding-top:30px;">
+									<input name="checkReport" type="checkbox" id="reportBalance" class="checkReport">
+									<label for="reportBalance">Balances</label>
+								</div>
+							</div>
+						</fieldset>
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row" style="margin-bottom:0; padding-bottom:0;">
+								<div class="small-12 large-6 columns" style="padding-top:5px;">
+									<a id="btnSearchHKLookUp" class="btn btn-primary btn-Search searchFD">
+										<div class="label">Search</div>
+										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+									</a>
+									<a id="btnCleanHKLookUp" class="btn btn-primary spanSelect">
+										<div class="label">Clean</div>
+										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+									</a>
+									<a id="btnHKREPORT" class="btn btn-primary btn-Search">
+										<div class="label">HK REPORT</div>
+										<img src="<?php echo base_url().IMG; ?>common/report.png"/>
+									</a>
+								</div>
+								<div class="small-12 large-3 columns">&nbsp;</div>
+							</div>
+						</fieldset>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -333,6 +481,71 @@
 						</table>
 					</div>
 					
+					<div class="section4 tableSection" style="display:none;">
+						<table id="tableHKLookUp" style="width:100%">
+							<thead>
+								<tr>
+									<th>pk</th>
+									<th>unitCode</th>
+									<th>FloorPlan</th>
+									<th>MaidName</th>
+									<th>MaidLName</th>
+									<th>EmployeeCode</th>
+									<th>SuperName</th>
+									<th>SuperLName</th>
+									<th>EmployeeCode</th>
+									<th>Section</th>
+									<th>Floor</th>
+									<th>Building</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+					
+					<div class="section5 tableSection" style="display:none;">
+						<table id="tableHKReport" style="width:100%">
+							<thead>
+								<tr>
+									<th>pk</th>
+									<th>unitCode</th>
+									<th>FloorPlan</th>
+									<th>MaidName</th>
+									<th>MaidLName</th>
+									<th>EmployeeCode</th>
+									<th>SuperName</th>
+									<th>SuperLName</th>
+									<th>EmployeeCode</th>
+									<th>Section</th>
+									<th>Floor</th>
+									<th>Building</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+					
+				</div>
+				<div class="pagina" id="generalPage" style="display:none;" >
+					<div class="pages">
+						<div class="pagination" id="paginationHKConfig" >
+							<a href="#" class="first" data-action="first">&laquo;</a>
+							<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+							<input type="text" class="general" readonly="readonly" />
+							<a href="#" class="next" data-action="next">&rsaquo;</a>
+							<a href="#" class="last" data-action="last">&raquo;</a>
+						</div>
+						<div class="pagination" id="paginationHKLookUp" >
+							<a href="#" class="first" data-action="first">&laquo;</a>
+							<a href="#" class="previous" data-action="previous">&lsaquo;</a>
+							<input type="text" class="general" readonly="readonly" />
+							<a href="#" class="next" data-action="next">&rsaquo;</a>
+							<a href="#" class="last" data-action="last">&raquo;</a>
+						</div>
+						<input type="hidden" id="paginationPeople" value="true" />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -343,7 +556,8 @@
 <div id="dialog-Edit-Reservations" title="Summary Reservation" style="display: none;"></div>
 <div id="dialog-HKConfig" title="HouseKeepingConfiguration " style="display: none;"></div>
 <div id="dialog-people-hkConfig" title="people " style="display: none;"></div>
-<div id="dialog-unit-hkConfig" title="people " style="display: none;"></div>
+<div id="dialog-unit-hkConfig" title="unit " style="display: none;"></div>
+<div id="dialog-edit-HKStatus" title="hk status" style="display: none;"></div>
 
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>frontDesk.js"></script>

@@ -1,6 +1,6 @@
 /**
 * @fileoverview Funciones del screen frontDesk (busqueda)
-*
+* Abandona toda esperanza aquellos que entren aqui
 * @author Alfredo Chi
 * @version 0.1
 */
@@ -8,16 +8,17 @@
 var maxHeight = 400;
 
 var dialogEditContract = modalEditReservations();
-var dialogHKConfig = modalHKConfig();
-var peopleDialogHK = addPeopleDialogHKC();
+var dialogHKConfig = modalHKConfig(0);
+var peopleDialogHK = addPeopleDialogHKC("");
 var unitDialogHK = addUnitDialogHKC();
+var chgStatusDialog = editHKStatus();
 
 var FloorplanFD;
 
 /**************Index****************/
-$('#btnSearchFrontDesk').off();
-$('#btnSearchFrontDesk').on('click', function(){ $('.orderRow').removeClass("active"); getFrontDesk(""); });
-$('#btnSearchHKConfig').on('click', function(){ getFrontDesk(""); });
+
+$('.searchFD').off();
+$('.searchFD').on('click', function(){ $('.orderRow').removeClass("active"); getFrontDesk("",1); });
 
 $('#orderRow').off();
 $('.orderRow').on('click', function(){ orderRowFront(this); });
@@ -31,6 +32,15 @@ $('.SectionFrontDesk').on('click', function(){ showSection($(this).val()); });
 $('#newFontDesk').off();
 $('#newFontDesk').on('click', function() {  showModaFrontDesk(0); });
 
+$('#btnChgStatus').off();
+$('#btnChgStatus').on('click', function() {  showModaChgStatus(); });
+
+$('#btnHKREPORT').off();
+$('#btnHKREPORT').on('click', function() {  createExcel(); });
+
+
+
+
 /************Funciones**************/
 
 /**
@@ -40,11 +50,12 @@ var dateArrival = null;
 var dateDeparture = null;
 var dateYear = null;
 var dateUnitHK = null;
+var dateHKLookUp = null;
 
 $(function() {
 	
 	//dateField
-	datepickerZebra = $( "#dateArrivalFront, #dateDepartureFront, #dateHKConfig" ).Zebra_DatePicker({
+	datepickerZebra = $( "#dateArrivalFront, #dateDepartureFront, #dateHKConfig, #dateHKLookUp, #dateArrivalReport, #dateDepartureReport" ).Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false,
 		onSelect: function(date1, date2, date3, elements) {
@@ -68,6 +79,7 @@ $(function() {
 	dateDeparture = $("#dateDepartureFront").data('Zebra_DatePicker');
 	dateYear = $("#dateYearFront").data('Zebra_DatePicker');
 	dateUnitHK = $("#dateHKConfig").data('Zebra_DatePicker');
+	dateHKLookUp = $("#dateHKLookUp").data('Zebra_DatePicker');
 	$('#dateArrivalFront').val("04/13/2016");
 	//$('#dateHKConfig').val(getCurrentDate());
 	FloorplanFD =  $('#textFloorPlanHKConfig').multipleSelect({
@@ -77,12 +89,18 @@ $(function() {
 		onClick: function(view) {
 		},
 	});
+	activatePaginador('paginationHKConfig', gepPageFrontDesk);
+	activatePaginador('paginationHKLookUp', gepPageFrontDesk);
 });
+
+function gepPageFrontDesk(page){
+	getFrontDesk("",page)
+}
 
 /**
 * Muestra la lista de front desk
 */
-function getFrontDesk(order){
+function getFrontDesk(order, page){
 	
 	var filters = null;
 	var dates = null;
@@ -107,14 +125,28 @@ function getFrontDesk(order){
 		words = getWords(["textUnitHKConfig","textSectionHKConfig","textMaidHKConfig","textSupervisorHKConfig"]);
 		options = getWordsByArray(FloorplanFD.multipleSelect('getSelects'));
 		url = "frontDesk/getHousekeepingConfiguration";
+	}else if(section == "section4"){
+		filters = getFiltersCheckboxs('statusHKLookUp');
+		dates = getDates(["dateHKLookUp"]);
+		words = getWords(["textUnitHKConfig"]);
+		options = getWords(["ServiceTypeLookUp"]);
+		url = "frontDesk/getHousekeepingLookUp";
+	}else if(section == "section5"){
+		filters = getFiltersCheckboxs('checkReport');
+		dates = getDates(["dateArrivalReport","dateDepartureReport"]);
+		words = {};
+		options = {};
+		url = "frontDesk/getHousekeepingReport";
 	}
 	
-	ajaxFrontDesk( url, filters, dates, words, options, order );
+	ajaxFrontDesk( url, filters, dates, words, options, order, page );
 }
 
-function ajaxFrontDesk( url, filters, dates, words, options, order ){
+function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 	noResults('#table-frontDesk',false);
 	showLoading( '#table-frontDesk', true );
+	
+	console.log(dates)
 	
 	$.ajax({
 		data:{
@@ -123,11 +155,13 @@ function ajaxFrontDesk( url, filters, dates, words, options, order ){
 			words: words,
 			options: options,
 			order:order,
+			page:page,
 		},
    		type: "POST",
        	url: url,
 		dataType:'json',
 		success: function(data){
+			console.log(data);
 			var section = $('.SectionFrontDesk:checked').val();
 			if(data.items.length > 0){
 				switch(section) {
@@ -138,7 +172,16 @@ function ajaxFrontDesk( url, filters, dates, words, options, order ){
 						
 					break;
 					case "section3":
-						drawTable2(data.items,"tableHKConfiguration","showHKConfiguration","Edit");
+						drawTable2(data.items,"tableHKConfiguration","showModaFrontDesk","Edit");
+						paginadorFrontDesk(data.total,"paginationHKConfig",0);
+					break;
+					case "section4":
+						var option = {type:"input", input:"checkbox", title:"editStatus", name:"HKLookUpStatus", id:"idStatus"};
+						drawTable2( data.items,"tableHKLookUp","showModaFrontDesk","Edit", option );
+						paginadorFrontDesk(data.total,"paginationHKLookUp",0);
+					break;
+					case "section5":
+						drawTable2( data.items, "tableHKReport", false, "" );
 					break;
 				}
 			}else{
@@ -148,6 +191,15 @@ function ajaxFrontDesk( url, filters, dates, words, options, order ){
 					break;
 					case "section3":
 						noResultsTable("table-frontDesk", "tableHKConfiguration", "no results found");
+						paginadorFrontDesk(1,"paginationHKConfig",0);
+					break;
+					case "section4":
+						noResultsTable("table-frontDesk", "tableHKLookUp", "no results found");
+						paginadorFrontDesk(1,"paginationHKLookUp",0);
+					break;
+					case "section5":
+						noResultsTable("table-frontDesk", "tableHKReport", "no results found");
+						//paginadorFrontDesk(1,"paginationHKLookUp",0);
 					break;
 				}
 			}
@@ -200,7 +252,7 @@ function orderRowFront(selector){
 	var order = $(selector).attr('attr-order');
 	$('.orderRow').removeClass("active");
 	$(selector).addClass("active");
-	getFrontDesk(field + " " + order);
+	getFrontDesk(field + " " + order,1);
 }
 
 /**
@@ -263,22 +315,27 @@ function modalEditReservations(){
 /****************************************/
 /****************************************/
 
-function modalHKConfig(){
+function modalHKConfig(id){
 	maxHeight = screen.height * .25;
 	maxHeight = screen.height - maxHeight;
 	
-	showLoading('#dialog-HKConfig',true);
 	dialog = $("#dialog-HKConfig").dialog ({
   		open : function (event){
+			showLoading('#dialog-HKConfig',true);
 	    	$(this).load ("frontDesk/modalHKConfig" , function(){
-	 			showLoading('#dialog-HKConfig',false);	
+	 				
 				/*var hTabs = $('#dialog-HKConfig .contentModalHeader').height();
 				var hContent = $('#dialog-HKConfig .contentModal').height();
 				$('#dialog-HKConfig .contentModal').css('height', ( hContent - (hTabs) + 25 )); */
 				ajaxSelectsFrontDesk('frontDesk/getHkServiceType','try again', generalSelectsFront, 'SltServiceTypeHKC', 'Select a service type');
-				$('#btnAddPeopleHKC').off();
-				$('#btnAddPeopleHKC').on('click', function() { 
-					peopleDialogHK = addPeopleDialogHKC();
+				$('#btnAddPeopleHKCMaid').off();
+				$('#btnAddPeopleHKCMaid').on('click', function() { 
+					peopleDialogHK = addPeopleDialogHKC('maid');
+					peopleDialogHK.dialog( "open" );
+				});
+				$('#btnAddPeopleHKCSupe').off();
+				$('#btnAddPeopleHKCSupe').on('click', function() { 
+					peopleDialogHK = addPeopleDialogHKC('superior');
 					peopleDialogHK.dialog( "open" );
 				});
 				$('#btnAddUnitHKC').off();
@@ -286,6 +343,12 @@ function modalHKConfig(){
 					unitDialogHK = addUnitDialogHKC();
 					unitDialogHK.dialog( "open" );
 				});
+				if(id == 0){
+					showLoading('#dialog-HKConfig',false);
+				}else{
+					$('#unitHKConfig').hide();
+					showHKConfiguration(id);
+				}
 				
 	    	});
 		},
@@ -305,7 +368,7 @@ function modalHKConfig(){
        		click: function() {
 				var results = validateHKCForm();
 				if(results){
-					saveHKConfig(0);
+					saveHKConfig(id);
 				}
        		}
      	}],
@@ -322,6 +385,19 @@ function showReservation(){
 }
 
 function showSection(section){
+	if(section == "section3"){
+		$('#generalPage').show();
+		$('#paginationHKConfig').show();
+		$('#paginationHKLookUp').hide();
+	}else if(section == "section4"){
+		$('#generalPage').show();
+		$('#paginationHKLookUp').show();
+		$('#paginationHKConfig').hide();
+	}else{
+		$('#generalPage').hide();
+		$('#paginationHKConfig').hide();
+		$('#paginationHKLookUp').hide();
+	}
 	$('#section-frontDesk .sectionFrontDesk, #section-frontDesk .tableSection').hide();
 	$('#section-frontDesk .' + section).toggle(500);
 }
@@ -360,7 +436,6 @@ function createTableLookUp(data){
 			}
 			
 			$('#tableFrontDesk .gHeaderDay').append(headHTML);
-			
 			
 			var bodyHTML = "";
 			for(i=0;i<items.length;i++){
@@ -401,11 +476,9 @@ function createTableLookUp(data){
 							}else{
 								$('#' + + i + "-" + dates[j].pkCalendarId).remove();
 							}
-							
 						}
 					}
 				}
-				
 			}
 			
 			//$('#tableFrontDesk tbody').html(bodyHTML);
@@ -413,11 +486,51 @@ function createTableLookUp(data){
 			initializeTooltips('.Tooltips');
 }
 
-function showHKConfiguration(){
+function showHKConfiguration(id){
+	showLoading('#dialog-HKConfig',true);
+	$.ajax({
+		type: "POST",
+		data:{
+			id:id
+		},
+		url: "frontDesk/getHKConfigurationById",
+		dataType:'json',
+		success: function(data){
+			//console.log(data);
+			if(data.items.length > 0){
+				var item = data.items[0];
+				$('.rowSpace').remove();
+				$('#textSectionHKC').val(item.Section);
+				var rowSelect = [];
+				var row = [item.MaidId, item.MaidName, item.MaidLName];
+				rowSelect.push(row);
+				tableSelectHKC(rowSelect,"tablePeople","tablePeopleMaidSelectedHKC");
+				var rowSelect = [];
+				var row = [item.SuperId, item.SuperName, item.SuperLName];
+				rowSelect.push(row);
+				tableSelectHKC(rowSelect,"tablePeople","tablePeopleSupeSelectedHKC");
+				$('#SltServiceTypeHKC').val(item.fkHKServiceTypeId);
+				var rowSelect = [];
+				var row = [item.pkUnitId, item.UnitCode, item.FloorPlanDesc, item.PropertyName];
+				rowSelect.push(row);
+				tableSelectHKC(rowSelect,"tblUnitHKC","tableUnitsSelectedHKC");
+				$('#SltServiceTypeHKC').val(item.fkHKServiceTypeId);
+			}
+			showLoading('#dialog-HKConfig',false);
+			
+			//funcion(data, divSelect, firtOption);
+		},
+		error: function(data){
+			if(data)
+			showLoading('#dialog-HKConfig',false);
+			//alertify.error(errorMsj);
+		}
+	});
 	
 }
 
 function showModaFrontDesk(id){
+	dialogHKConfig = modalHKConfig(id)
 	dialogHKConfig.dialog('open');
 }
 
@@ -425,8 +538,12 @@ function showModaFrontDesk(id){
 /***************************/
 /***************************/
 
-function addPeopleDialogHKC() {
-	var div = "#dialog-people-hkConfig";	
+function addPeopleDialogHKC(typePeople) {
+	var div = "#dialog-people-hkConfig";
+	
+	/*if($(div).dialog() != null){
+		$(div).dialog( "destroy" );
+	}*/
 	dialog = $(div).dialog({
 		open : function (event){
 			if ($(div).is(':empty')) {
@@ -434,11 +551,21 @@ function addPeopleDialogHKC() {
 				$(this).load ("people/index" , function(){
 		    		showLoading(div, false);
 		    		$("#dialog-User").hide();
-	            	selectTableFrontDesk("tablePeople","tablePeopleSelectedHKC", 2);
+					$("#dialog-people-hkConfig").find('#btnSearch').attr('attr_people',typePeople);
+					if(typePeople == "maid"){
+						selectTableFrontDesk("tablePeople","tablePeopleMaidSelectedHKC", 1);
+					}else{
+						selectTableFrontDesk("tablePeople","tablePeopleSupeSelectedHKC", 1);
+					}
+	            	//
 	    		});
 			}
 			if( jQuery.isFunction( markRowTableFrontDesk ) ) {
-				markRowTableFrontDesk("tablePeople");
+				if(typePeople == "maid"){
+					markRowTableFrontDesk( "tablePeople", "tablePeopleMaidSelectedHKC" );
+				}else{
+					markRowTableFrontDesk( "tablePeople", "tablePeopleSupeSelectedHKC" );
+				}
 			}
 		},
 		autoOpen: false,
@@ -451,10 +578,13 @@ function addPeopleDialogHKC() {
 			click: function() {
 				
 				$(this).dialog('close');
+				//$(this).dialog( "destroy" );
+				$("#dialog-people-hkConfig").empty();
 			}
 		}],
 		close: function() {
 			//$('#dialog-people-hkConfig').empty();
+			$("#dialog-people-hkConfig").empty();
 		}
 	});
 	return dialog;
@@ -464,20 +594,27 @@ function selectTableFrontDesk(div,div2, total){
 	$("#"+div).off();
 	$("#"+div).on("click", "tr", function(){
 		$("#" + div2 + " tbody .rowSpace").remove();
-		var totalTr = $("#" + div2 + " tbody tr").length;
-		if($(this).attr('class') == "even yellow" || $(this).attr('class') == "odd yellow"){
-			$(this).removeClass("yellow");
-			deselectedPeople(this,div2);
-		}else if(totalTr < total){
+		if(total == 1){
+			$('#' + div + ' tbody tr' ).removeClass("yellow");
 			$(this).addClass("yellow");
+			$('#' + div2 + ' tbody' ).empty();
 			selectAllTableFontDesk(this, div, div2);
+		}else{
+			var totalTr = $("#" + div2 + " tbody tr").length;
+			if($(this).attr('class') == "even yellow" || $(this).attr('class') == "odd yellow"){
+				$(this).removeClass("yellow");
+				deselectedPeople(this,div2);
+			}else if(totalTr < total){
+				$(this).addClass("yellow");
+				selectAllTableFontDesk(this, div, div2);
+			}
 		}
 	});
 }
 
-function markRowTableFrontDesk(div){
+function markRowTableFrontDesk( div, div2 ){
 	$("#"+div + " tbody tr").removeClass("yellow");
-	$("#tablePeopleSelectedHKC tbody tr").each(function (){
+	$("#" + div2 + " tbody tr").each(function (){
 		var selector1 = this;
 		selector1 = $(selector1).attr('id');
 		if(selector1 != undefined){
@@ -489,7 +626,7 @@ function markRowTableFrontDesk(div){
 				if(idRwo1 == idRwo2){
 					$(selector2).addClass('yellow');
 				}
-			})
+			});
 		}
 	});
 }
@@ -523,7 +660,7 @@ function selectAllTableFontDesk(selector, div, div2){
 
 function tableSelectHKC(rowSelect,div, div2){
 	
-	//$('#tablePeopleSelectedHKC tbody').empty();
+	//$('#tablePeopleMaidSelectedHKC tbody').empty();
 	var bodyHTML = '';
 	    //creación del body
     for (var i = 0; i < rowSelect.length; i++) {
@@ -531,11 +668,11 @@ function tableSelectHKC(rowSelect,div, div2){
         for (var j in rowSelect[i]) {
             bodyHTML+="<td>" + rowSelect[i][j] + "</td>";
         };
-		if(div == "tablePeople"){
+		/*if(div == "tablePeople"){
 			var nameRadio = "people" + rowSelect[i][0]
 			bodyHTML += "<td><div class='rdoField'><input class='typeRollHKC' attr_type='maid' value='" + rowSelect[i][0] + "' type='radio' name='" + nameRadio + "'><label for='folio'>&nbsp;</label></div></td>";
 			bodyHTML += "<td><div class='rdoField'><input class='typeRollHKC' attr_type='superior' value='" + rowSelect[i][0] + "' type='radio' name='" + nameRadio + "'><label for='folio'>&nbsp;</label></div></td>";
-        }
+        }*/
 		bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
         bodyHTML+="</tr>";
     }
@@ -557,8 +694,8 @@ function deleteElementTable(div){
 
 function createNombreLegal(){
 	/*var texto = "";
-	var nombres = getArrayValuesColumnTable("tablePeopleSelectedHKC", 2);
-	var apellidos = getArrayValuesColumnTable("tablePeopleSelectedHKC", 3);
+	var nombres = getArrayValuesColumnTable("tablePeopleMaidSelectedHKC", 2);
+	var apellidos = getArrayValuesColumnTable("tablePeopleMaidSelectedHKC", 3);
 	for (var i = 0; i < nombres.length; i++) {
 		texto += nombres[i]+" "+apellidos[i];
 		if (i!=nombres.length-1) {
@@ -662,6 +799,7 @@ function getUnitiesHKC(page){
 				var total = data.total;
 				paginadorFrontDesk(total,"paginationUnitHKC",page);
 				drawTable2(data.items,"tblUnitHKC",false,"Edit");
+				alertify.success("Found "+ total + " units");
 			}else{
 				noResultsTable("table-unitsHKC", "tblUnitHKC", "no results found");
 			}
@@ -709,25 +847,23 @@ function validateHKCForm(){
 		$('#SltServiceTypeHKC').parent().siblings('small').removeClass('hidden');
 	}
 	
-	var totalTr = $("#tablePeopleSelectedHKC tbody tr.rowValid").length;
-	if(totalTr != 2){
-		$('#tablePeopleSelectedHKC').siblings('small').html('please select 2 pleople.').removeClass('hidden');
+	totalTr = $("#tablePeopleMaidSelectedHKC tbody tr.rowValid").length;
+	if(totalTr != 1){
+		$('#tablePeopleMaidSelectedHKC').siblings('small').removeClass('hidden');
 		result = false;
-	}else{
-		var selectRadio = $('.typeRollHKC:checked').length;
-		var radioMaid = $('.typeRollHKC[attr_type=maid]:checked').length;
-		var radioSuperior = $('.typeRollHKC[attr_type=superior]:checked').length;
-		
-		if(selectRadio != 2 || (radioMaid != 1 && radioSuperior != 1) ){
-			result = false;
-			$('#tablePeopleSelectedHKC').siblings('small').html('please select a maid person and a superior person.').removeClass('hidden');
-		}
 	}
 	
-	totalTr = $("#tableUnitsSelectedHKC tbody tr.rowValid").length;
+	totalTr = $("#tablePeopleSupeSelectedHKC tbody tr.rowValid").length;
 	if(totalTr != 1){
-		$('#tableUnitsSelectedHKC').siblings('small').removeClass('hidden');
+		$('#tablePeopleSupeSelectedHKC').siblings('small').removeClass('hidden');
 		result = false;
+	}
+	if( $('#unitHKConfig').is(":visible") ){
+		totalTr = $("#tableUnitsSelectedHKC tbody tr.rowValid").length;
+		if(totalTr != 1){
+			$('#tableUnitsSelectedHKC').siblings('small').removeClass('hidden');
+			result = false;
+		}
 	}
 		
 	return result;	
@@ -743,8 +879,8 @@ function saveHKConfig(id){
 	
 	showAlert(true,"Saving changes, please wait ....",'progressbar');
 	
-	var maid = $('.typeRollHKC[attr_type=maid]:checked').val();
-	var supervisor = $('.typeRollHKC[attr_type=superior]:checked').val();
+	var maid = $('#tablePeopleMaidSelectedHKC tbody tr').find('td').first().text().trim();
+	var supervisor = $('#tablePeopleSupeSelectedHKC tbody tr').find('td').first().text().trim();
 	var unit = $('#tableUnitsSelectedHKC tbody tr').find('td').first().text().trim();
 	
 	$.ajax({
@@ -761,22 +897,197 @@ function saveHKConfig(id){
 		dataType:'json',
 		success: function(data){
 			showAlert(true,data.message,'button',showAlert);
-			dialogHKConfig.dialog('open');
-			getFrontDesk("");
-			/*if(data.items.length > 0){
-				var total = data.total;
-				paginadorFrontDesk(total,"paginationUnitHKC",page);
-				drawTable2(data.items,"tblUnitHKC",false,"Edit");
-			}else{
-				noResultsTable("table-unitsHKC", "tblUnitHKC", "no results found");
-			}
-			showLoading('#table-unitsHKC',false);*/	
+			dialogHKConfig.dialog('close');
+			getFrontDesk("",0);
 		},
 		error: function(){
-			//showLoading('#table-unitsHKC',false);
-			//noResultsTable("table-unitsHKC", "tblUnitHKC", "Try again");
 			showAlert(true,"Error inserting data, try again later. ",'button',showAlert);
-			dialogHKConfig.dialog('open');
+			dialogHKConfig.dialog( 'open' );
+		}
+    });
+}
+
+function showModaChgStatus(){
+	
+	var filters = getFiltersCheckboxs('HKLookUpStatus');
+	if($.isEmptyObject(filters)){
+		alertify.error("Select an option on the table");
+	}else{
+		var chgStatusDialog = editHKStatus(filters);
+		chgStatusDialog.dialog( 'open' );
+	}
+	
+	/**/
+}
+
+function editHKStatus(filters){
+	
+	var div = "#dialog-edit-HKStatus";
+	
+	maxHeight = screen.height * .25;
+	maxHeight = screen.height - maxHeight;
+	
+	dialog = $(div).dialog ({
+		open : function (event){
+			showLoading(div,true);
+	    	$(this).load ("frontDesk/modalHKStatusDesc" , function(){
+				getHKstatusLookUp(filters);
+	    	});
+		},
+		autoOpen: false,
+     	height: maxHeight,
+     	width: "50%",
+     	modal: true,
+     	buttons: [{
+			text: "Cancel",
+			"class": 'dialogModalButtonCancel',
+			click: function() {
+	         	$(this).dialog('close');
+			}
+	   	},{
+       		text: "Save",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+				getStatusUnit();
+       		}
+     	}],
+		close: function() {
+			$(div).empty();
+		}
+	});
+	
+	return dialog;
+	
+}
+
+function getHKstatusLookUp(filters){
+	var div = "#dialog-edit-HKStatus";
+	showLoading(div,false);
+	showLoading(div,true);
+	$.ajax({
+		data:{
+			filters: filters,
+		},
+   		type: "POST",
+       	url: "frontDesk/getHKstatusLookUp",
+		dataType:'json',
+		success: function(data){
+			console.log(data)
+			
+			$('#contentHKStatus').empty();
+			
+			var items = data.status;
+			var optionHtml = "";
+			for(var i=0;i<items.length;i++){
+				var item = items[i];
+				optionHtml += '<option value="' + item.pkHKStatusId + '">' + item.HKStatusDesc + '</option>';
+			}
+			
+			for(var i=0;i<data.items.length;i++){
+				var item = data.items[i];
+				
+				var selectHtml = '<div class="caja" ><select id="txthkStatus' + item.ID + '" class="input-group-field round">';
+				selectHtml += optionHtml;
+				selectHtml += '</select></div>';
+				
+				var bodyHtml = '<div class="fieldset large-12 columns">';
+				bodyHtml += '<table class="tablehkStatus" id="tablehkStatus' + item.ID + '"  width="100%">';
+				bodyHtml += '<thead><tr><th>Id</th><th>Unit</th><th>HK Status</th></tr></thead>';
+				bodyHtml += '<tbody>';
+				bodyHtml += '<td>' + item.ID + '</td>';
+				bodyHtml += '<td>' + item.UnitCode + '</td>';
+				bodyHtml += '<td>' + selectHtml + '</td>';
+				bodyHtml += '</tbody>';
+				bodyHtml += '</table">';
+				bodyHtml += '</div>';
+				$('#contentHKStatus').append(bodyHtml);
+				
+				$('#txthkStatus' + item.ID).val(item.fkHkStatusId);
+			}
+			
+			var div = "#dialog-edit-HKStatus";
+			showLoading(div,false);
+		},
+		error: function(){
+			alertify.error("Try, again");
+			var div = "#dialog-edit-HKStatus";
+			$(div).dialog('close');
+		}
+    });
+	
+}
+
+function getStatusUnit(){
+	
+	//var khstatus = {};
+	rowStatus = [];
+	
+	$(".tablehkStatus tbody tr").each(function (index){
+		var idUnitStatus = 0, idStatus;
+		$(this).children("td").each(function (index2) {
+			switch (index2) {
+				case 0:
+					idUnitStatus = $(this).text();
+				break;
+				case 2:
+					idStatus = $(this).find('select').val();
+				break;
+			}
+		});
+		var status = {pkUnitHKStatusId:idUnitStatus, fkHkStatusId:idStatus};
+		rowStatus.push(status);
+	});
+	//console.log(rowStatus);
+	saveHKStatus(rowStatus)
+	
+}
+
+function saveHKStatus(rowStatus){
+	var div = "#dialog-edit-HKStatus";
+	showLoading(div,true);
+	$.ajax({
+		data:{
+			rowStatus:rowStatus
+		},
+   		type: "POST",
+       	url: "frontDesk/saveHKStatus",
+		dataType:'json',
+		success: function(data){
+			showLoading(div,false);
+			alertify.success(data);
+			chgStatusDialog.dialog( 'close' );
+			getFrontDesk("",0);
+		},
+		error: function(){
+			showLoading(div,false);
+			showAlert(true,"Error updating data, try again later. ",'button',showAlert);
+			chgStatusDialog.dialog( 'close' );
+		}
+    });
+	
+}
+
+function createExcel(){
+	$.ajax({
+		/*data:{
+			rowStatus:rowStatus
+		},*/
+   		type: "POST",
+       	url: "frontDesk/generateReport",
+		dataType:'json',
+		success: function(data){
+			console.log(data);
+			 window.location = "frontDesk/createExcel";
+		/*	showLoading(div,false);
+			alertify.success(data);
+			chgStatusDialog.dialog( 'close' );
+			getFrontDesk("",0);*/
+		},
+		error: function(){
+			/*showLoading(div,false);
+			showAlert(true,"Error updating data, try again later. ",'button',showAlert);
+			chgStatusDialog.dialog( 'close' );*/
+			alertify.error("error");
 		}
     });
 }

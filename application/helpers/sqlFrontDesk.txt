@@ -153,3 +153,24 @@ where
 
 --declare @total INT = (@pagina-1) * @cantidad select * 
 --from tblPeople ORDER BY tblPeople.pkPeopleId OFFSET @total ROWS FETCH NEXT @cantidad ROW ONLY--
+
+select DISTINCT u.unitcode, fp.FloorPlanDesc, p.name as MaidName, p.lname as MaidLName,
+ e.EmployeeCode, p2.name as SuperName, p2.lname as SuperLName, e2.EmployeeCode, 
+cfg.section,f.level as Floor, b.buildingDesc, --, hs.hkstatusDesc, st.hkServiceTypeDesc
+ro.fkCalendarId, CONVERT(VARCHAR(11),c.Date,106) as Date, CONVERT(VARCHAR(10),c.Date,101) as date2
+from tblUnitHkconfig cfg
+join tblunit u on u.pkunitid = cfg.fkUnitid
+join tblUnithkstatus uhs on uhs.fkunitid = u.pkunitid 
+join tblhkStatus hs on hs.pkHkStatusid = uhs.fkHkStatusid 
+join tblFloor f on f.pkFloorid = u.fkFloorid 
+join tblBuilding b on b.pkBuildingid =f.fkbuildingid
+Join tblpeople p on p.pkPeopleid = cfg.fkPeopleMaidid
+Join tblpeople p2 on p2.pkPeopleid = cfg.fkPeopleSuperid
+join tblhkServicetype st on st.pkhkServiceTypeid = cfg.fkhkServiceTypeid 
+join tblFloorPlan fp on fp.pkFloorPlanId = u.fkFloorPlanId
+join tblEmployee e on e.fkPeopleId = p.pkPeopleId
+join tblEmployee e2 on e2.fkPeopleId = p2.pkPeopleId
+join tblResInvt ri on ri.fkUnitId = u.pkunitid
+join tblResOcc ro on ro.fkResInvtId = ri.pkResInvtId
+join tblCalendar c on c.pkCalendarId = ro.fkCalendarId
+where CONVERT(VARCHAR(10),c.Date,101) = '04/13/2016'

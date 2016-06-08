@@ -274,8 +274,76 @@ function pluginTables(table) {
     });
 }
 
-function drawTable2(data, table ,funcion, cadena){
+function drawTable2(data, table ,funcion, cadena, option){
+	if( option == undefined ){
+		option = false;
+	}
+	if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
+		var tabla = $('#' + table).DataTable();
+		tabla.destroy();
+	}
+	
+	var headHTML = "<tr>";
+	if(funcion != false){ 
+		headHTML += "<th>"+cadena+"</th>";
+	}
+    var bodyHTML = '';
+	
+    //creación de la cabecera
+	for (var j in data[0]) {
+        headHTML+="<th>"+j+"</th>";
+    }
+	if( option != false ){
+		if(option.type == "input"){
+			 headHTML+="<th>"+option.title+"</th>";
+		}
+	}
+	
+	headHTML += "</tr>";
+    //creación del body
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr id='row" + data[i].ID + "'>";
+		if(funcion != false){
+			bodyHTML += '<td class="iconEdit" nowrap onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
+		}
+        for (var j in data[i]) {
+            bodyHTML+="<td nowrap>" + data[i][j] + "</td>";
+        };
+		
+		if( option != false ){
+			if(option.type == "input"){
+				var idOption = data[i].ID;
+				if(typeof(option.id) != "undefined"){
+					var opt = option.id;
+					idOption = data[i][opt];
+				}
+				bodyHTML+='<td nowrap><input name="' + option.name + '" type="checkbox" id="'+idOption+'" class="' + option.name + '" value="'+idOption+'"><label>&nbsp;</label></td>';
+			}
+		}
+		
+        bodyHTML+="</tr>";
+    }
+	$('#' + table + " thead" ).html(headHTML);
+	$('#' + table + " tbody" ).html(bodyHTML);
+	
+	$('#' + table ).show();
+	
+	var heightScroll = $('#' + table ).parents(".table").first();
+	heightScroll = heightScroll.height();
+	
+	$('#' + table ).DataTable({
+		"scrollY": heightScroll - 50,
+		"scrollX": true,
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		"filter": 	false,
+	});
+	
+}
 
+/*function drawTableInput(data, table ,funcion, cadena, input){
+	
 	if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
 		var tabla = $('#' + table).DataTable();
 		tabla.destroy();
@@ -320,7 +388,7 @@ function drawTable2(data, table ,funcion, cadena){
 		"filter": 	false,
 	});
 	
-}
+}*/
 
 function activeTable(table){
 	
@@ -374,7 +442,10 @@ function expandBox(section,relation){
 		if(position.top != undefined){
 			var neHeight = ($("#" + section).height() - (position.top + 80));
 			if($('#' + relation + ' .pagina').length){
-				neHeight = neHeight - 35;
+				if ($('#' + relation + ' .pagina').is(':visible')){
+					neHeight = neHeight - 35;
+				}
+				
 			}
 			$('#' + relation + ' .table').css('height', neHeight + "px" );
 			var tableH = $('#' + relation + ' .table').find("table");
@@ -436,16 +507,11 @@ function getWordsByArray(name) {
 	for(i=0;i<name.length;i++){
 		words[name[i]] = name[i];
 	}
-   /* name.each(
-        function() {
-            words[$(this)] = $(this)
-        }
-    );*/
     return words;
 }
 
 function generalSelects(data, div){
-    var select = ' <option value="0">Elige una opcion</option>';
+     var select = ' <option value="0">Elige una opcion</option>';
     for (var i = 0; i < data.length; i++) {
         select += '<option value="'+data[i].ID+'">';
         for (var j in data[i]) {

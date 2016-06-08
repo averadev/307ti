@@ -82,7 +82,7 @@
 									<input type="text" id="txtSearch" class="txtSearch" placeholder="Enter a search parameter" />
 								</div>
 								<div class="small-12 large-6 columns" style="padding-left: 0;">
-									<a id="btnSearch" class="btn btn-primary btn-Search">
+									<a id="btnSearch" class="btn btn-primary btn-Search" attr_people="">
 										<div class="label">Buscar</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 									</a>

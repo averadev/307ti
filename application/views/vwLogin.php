@@ -18,7 +18,7 @@
             <div class="medium-2 columns">&nbsp;</div>
             <div class="formLogin medium-8 columns">
                 <div class="row">
-                    <div class="imgLogo"><img src="<?php echo base_url().IMG; ?>logo/demo.png"/></div>
+                    <div class="imgLogo"><img src="<?php echo base_url().IMG; ?>logo/logo.jpg"/></div>
                 </div>
                 
                 <!--<form>-->

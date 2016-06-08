@@ -49,7 +49,7 @@
             <div class="menu-opt">
                 <div href="#" class="btn-menu pr-color"></div>
             </div>
-            <div class="menu-opt logo"><img src="<?php echo base_url().IMG; ?>logo/demo.png"/></div>
+            <div class="menu-opt logo"><img src="<?php echo base_url().IMG; ?>logo/logo.jpg"/></div>
 			<div class="menu-config">
 				<img src="<?php echo base_url().IMG; ?>common/5.png" />
 				<p><?php echo $this->nativesessions->get('username'); ?></p>
