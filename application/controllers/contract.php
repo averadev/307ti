@@ -173,26 +173,27 @@ private function createSemanaOcupacion($idContrato){
 	$rangoYears = intval($_POST['lastYear']-$_POST['firstYear']);
 	$rangoWeeks = $_POST['weeks'];
 	$year = intval($_POST['firstYear']);
-	for ($i=0; $i <= $rangoYears ; $i++) {
-		for ($j=0; $j < $rangoWeeks ; $j++) { 
-			for ($k=1; $k < 8; $k++) { 
-				$OcupacionTable = [
-					"fkResId"    	=> $idContrato,
-					"fkResInvtId"   => 21,
-					"OccYear"       => $year,
-					"NightId"       => $k,
-					"fkResTypeId"   => $this->contract_db->selectRestType('Cont'),
-					"fkOccTypeId"   => $this->contract_db->selectIdOccType('OW'),
-					"fkCalendarId" 	=> $this->contract_db->selectIdCalendar($year, $j, $k),
-					"ynActive"   	=> 1,
-					"CrBy"          => $this->nativesessions->get('id'),
-					"CrDt"			=> $this->getToday()
-				];
-				$this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
-			}
-		 }
-		 $year += 1; 
-	}
+
+	// for ($i=0; $i <= $rangoYears ; $i++) {
+	// 	for ($j=0; $j < $rangoWeeks ; $j++) { 
+	// 		for ($k=1; $k < 8; $k++) { 
+	// 			$OcupacionTable = [
+	// 				"fkResId"    	=> $idContrato,
+	// 				"fkResInvtId"   => 21,
+	// 				"OccYear"       => $year,
+	// 				"NightId"       => $k,
+	// 				"fkResTypeId"   => $this->contract_db->selectRestType('Cont'),
+	// 				"fkOccTypeId"   => $this->contract_db->selectIdOccType('OW'),
+	// 				"fkCalendarId" 	=> $this->contract_db->selectIdCalendar($year, $j, $k),
+	// 				"ynActive"   	=> 1,
+	// 				"CrBy"          => $this->nativesessions->get('id'),
+	// 				"CrDt"			=> $this->getToday()
+	// 			];
+	// 			$this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
+	// 		}
+	// 	 }
+	// 	 $year += 1; 
+	// }
 	
 }
 
@@ -242,9 +243,8 @@ private function createDownPayment($idContrato){
 	}
 	public function getUnidades(){
 		if($this->input->is_ajax_request()) {
-			$intervalo = $_POST['interval'];
 			$filtros = $this->receiveWords($_POST);
-			$unidades = $this->contract_db->getUnidades($filtros, $intervalo);
+			$unidades = $this->contract_db->getUnidades($filtros);
 			echo json_encode($unidades);
 		}
 	}

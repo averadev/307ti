@@ -401,41 +401,31 @@ class Contract_db extends CI_Model {
         }
     }
 
-    public function getUnidades($filters, $i){
+    public function getUnidades($filters){
 
-        // select P.PropertyName , U.pkUnitId as ID, U.UnitCode, FP.FloorPlanDesc, PRI.PriceFixedWk, PRI.Week, SE.SeasonDesc  from tblUnit U
-        // left join tblResInvt RI on U.pkUnitId = RI.fkUnitId
-        // left join tblResOcc ROC on RI.pkResInvtId = ROC.fkResInvtId
-        // inner join tblFloorPlan FP on U.fkFloorPlanId = FP.pkFloorPlanID
-        // inner join tblPrice PRI on U.pkUnitId = PRI.fkUnitId  and PRI.Week = 1 ---cambia dependiendo del intervalo
-        // left join tblSeason SE on PRI.fkSeasonId = SE.pkSeasonId
-        // inner join tblProperty P on P.pkPropertyId = U.fkPropertyId
-        // where RI.fkUnitId is null
-        // order by U.pkUnitId asc
-        ///////////////////////////////////////////////////////
-        // select P.PropertyName, flp.FloorPlanDesc from tblUnit U
-        // inner join tblModule M on M.pkModuleId = 1
-        // inner join tblModuleResType MR on MR.FkModuleId = M.pkModuleId    
-        // inner join tblResType RT on RT.pkResTypeId =  MR.FkResTypeId
-        // inner join tblResTypeUnitType RTU on RTU.pkResTypeUnitTypeId = RT.pkResTypeId
-        // inner join tblUnitType UT on UT.pkUnitTypeId = RTU.pkResTypeUnitTypeId
-        // inner join tblProperty P on P.pkPropertyId = U.fkPropertyId
-        // inner join tblFloorPlan flp on flp.pkFloorPlanID = U.fkFloorPlanId
-        // --inner join tblSeason SS on SS.pkSeasonId = invt.fkSeassonId
-        // --inner join tblView V on V.fkPropertyId = P.pkPropertyId
-        $this->db->select('P.PropertyName , U.pkUnitId as ID, U.UnitCode, FP.FloorPlanDesc, PRI.PriceFixedWk, PRI.Week, SE.SeasonDesc');
+        $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc, CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price, PRI.Week, SE.SeasonDesc');
         $this->db->from('tblUnit U');
         $this->db->join('tblResInvt RI', 'U.pkUnitId = RI.fkUnitId', 'left');
         $this->db->join('tblResOcc ROC', 'RI.pkResInvtId = ROC.fkResInvtId', 'left');
         $this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
-        $this->db->join('tblPrice PRI', 'U.pkUnitId = PRI.fkUnitId and PRI.Week = '. $i, 'inner');
-        $this->db->join('tblSeason SE', 'PRI.fkSeasonId = SE.pkSeasonId', 'left');
+        $this->db->join('tblPrice PRI', 'U.pkUnitId = PRI.fkUnitId', 'inner');
+        $this->db->join('tblSeason SE', 'PRI.fkSeasonId = SE.pkSeasonId', 'inner');
         $this->db->join('tblProperty P', 'P.pkPropertyId = U.fkPropertyId', 'inner');
         $this->db->where('RI.fkUnitId is null', null);
-        $this->db->order_by('U.pkUnitId', 'ASC');
-        if (!empty($filters['property'])) {
-            $this->db->where('U.fkPropertyId', $filters['property']);
+        if (!empty($filters['interval'])) {
+            $this->db->where('PRI.Week', $filters['interval']);
         }
+        if (!empty($filters['season'])) {
+            $this->db->where('PRI.fkSeasonId', $filters['season']);
+        }
+        if (!empty($filters['unitType'])) {
+           $this->db->where('U.fkFloorPlanId', $filters['unitType']);
+        }
+        if (!empty($filters['property'])) {
+           $this->db->where('P.pkPropertyId', $filters['property']);
+           $this->db->where('U.fkPropertyId', $filters['property']);
+        }
+        $this->db->order_by('U.pkUnitId', 'ASC');
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {

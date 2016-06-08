@@ -104,7 +104,7 @@
                             <table id="tableUnidadesSelected" width="100%">
                                 <thead>
                                     <tr>
-                                        <th class="cellEdit" >Code</th>
+                                        <th class="cellEdit" >Id</th>
                                         <th class="cellGeneral">Description</th>
                                         <th class="cellGeneral">Price</th>
                                         <th class="cellGeneral">Frequency</th>
