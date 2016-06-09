@@ -400,10 +400,35 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
+    
+    public function selectUnitiesContract($resId, $year){
+        $this->db->select("RI.pkResInvtId, RI.fkUnitId, RI.Intv, RI.FirstOccYear, RI.LastOccYear, C.pkCalendarId,C.fkDayOfWeekId, C.Year");
+        $this->db->from('tblResInvt RI');
+        $this->db->join('tblCalendar C', 'C.Intv = RI.Intv', 'inner');
+         $this->db->where('C.Year', $year);
+        $this->db->where('fkResId', $resId);
+        $this->db->order_by('intv', 'ASC');
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+    public function selectYearsUnitiesContract($resId){
+        $this->db->select("RI.FirstOccYear, RI.LastOccYear");
+        $this->db->from('tblResInvt RI');
+        $this->db->where('fkResId', $resId);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
 
     public function getUnidades($filters){
 
-        $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc, CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price, PRI.Week, SE.SeasonDesc');
+        $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc');
+        $this->db->select('CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price, PRI.Week, SE.SeasonDesc, PRI.ClosingCost');
         $this->db->from('tblUnit U');
         $this->db->join('tblResInvt RI', 'U.pkUnitId = RI.fkUnitId', 'left');
         $this->db->join('tblResOcc ROC', 'RI.pkResInvtId = ROC.fkResInvtId', 'left');

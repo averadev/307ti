@@ -27,13 +27,13 @@ class Contract extends CI_Controller {
 		
 		if($this->input->is_ajax_request()){
 			$idContrato = $this->createContract();
+
 			$this->insertOcupacion($idContrato);
 			$this->insertPeoples($idContrato);
 			$this->createUnidades($idContrato);
 			$this->createDownPayment($idContrato);
 			$this->insertFinanciamiento($idContrato);
 			//$this->createSemanaOcupacion($idContrato);
-			
 			echo  "1";
 	}
 }
@@ -60,7 +60,6 @@ private function createContract(){
         "CrBy"                      => $this->nativesessions->get('id'),
         "CrDt"						=> $this->getToday()
 	];
-	//return $Contract;
 	return $this->contract_db->insertReturnId('tblRes', $Contract);
 }
 
@@ -169,32 +168,37 @@ private function insertFinanciamiento($idContrato){
 	$this->contract_db->insertReturnId('tblResfin', $financiamiento);
 }
 
-private function createSemanaOcupacion($idContrato){
-	$rangoYears = intval($_POST['lastYear']-$_POST['firstYear']);
-	$rangoWeeks = $_POST['weeks'];
-	$year = intval($_POST['firstYear']);
+public function createSemanaOcupacion(){
 
-	// for ($i=0; $i <= $rangoYears ; $i++) {
-	// 	for ($j=0; $j < $rangoWeeks ; $j++) { 
-	// 		for ($k=1; $k < 8; $k++) { 
-	// 			$OcupacionTable = [
-	// 				"fkResId"    	=> $idContrato,
-	// 				"fkResInvtId"   => 21,
-	// 				"OccYear"       => $year,
-	// 				"NightId"       => $k,
-	// 				"fkResTypeId"   => $this->contract_db->selectRestType('Cont'),
-	// 				"fkOccTypeId"   => $this->contract_db->selectIdOccType('OW'),
-	// 				"fkCalendarId" 	=> $this->contract_db->selectIdCalendar($year, $j, $k),
-	// 				"ynActive"   	=> 1,
-	// 				"CrBy"          => $this->nativesessions->get('id'),
-	// 				"CrDt"			=> $this->getToday()
-	// 			];
-	// 			$this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
-	// 		}
-	// 	 }
-	// 	 $year += 1; 
-	// }
-	
+	ini_set('max_execution_time', 120);
+	$idContrato = $_POST['idContrato'];
+	$Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
+	$Unidades = [];
+	$fYear = $Years[0]->FirstOccYear;
+	$lYear = $Years[0]->LastOccYear;
+	for ($i = $fYear; $i <= $lYear ; $i++) { 
+		array_push($Unidades, $this->contract_db->selectUnitiesContract($idContrato, $i));
+	}
+
+	for ($i=0; $i < sizeof($Unidades); $i++) {
+		for ($j=0; $j < sizeof($Unidades[$i]); $j++) {
+			$OcupacionTable = [
+				"fkResId"    	=> $idContrato,
+				"fkResInvtId"   => $Unidades[$i][$j]->pkResInvtId,
+				"OccYear"       => $Unidades[$i][$j]->Year,
+				"NightId"       => $Unidades[$i][$j]->fkDayOfWeekId,
+				"fkResTypeId"   => 5, //$this->contract_db->selectRestType('Cont'),
+				"fkOccTypeId"   => 1, //$this->contract_db->selectIdOccType('OW'),
+				"fkCalendarId" 	=> $Unidades[$i][$j]->pkCalendarId,
+				"ynActive"   	=> 1,
+				"CrBy"          => $this->nativesessions->get('id'),
+				"CrDt"			=> $this->getToday()
+			];
+			array_push($json, $OcupacionTable);
+			$this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
+		 }
+	}
+	echo json_encode(["mensaje" => "Se ingresaron Correctamente"]);
 }
 
 private function createDownPayment($idContrato){

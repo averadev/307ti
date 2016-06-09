@@ -167,10 +167,6 @@ function createDialogContract(addContract) {
 			}],
 		close: function() {
 			$('#dialog-Contract').empty();
-			// $('#dialog-ScheduledPayments').empty();
-			// $('#dialog-tourID').empty();
-			// $('#dialog-People').empty();
-			// $('#dialog-Unidades').empty();
 		}
 	});
 	
@@ -427,15 +423,15 @@ function createNewContract(){
 			showAlert(true,"Saving changes, please wait ....",'progressbar');
 			$.ajax({
 					data: {
-						legalName : $("#legalName").val().trim(),
-						tourID : $("#TourID").val().trim(),
-						idiomaID : $("#selectLanguage").val(),
+						legalName : $("#legalName").val().trim(), //
+						tourID : $("#TourID").val().trim(), //
+						idiomaID : $("#selectLanguage").val(), //
 						peoples: getValueTablePersonas(),
 						types: typePeople(),
 						unidades: getValueTableUnidades(),
 						weeks: $("#weeksNumber").val().trim(),
-						firstYear :$("#firstYearWeeks").val().trim(),
-						lastYear : $("#lastYearWeeks").val().trim(),
+						firstYear :$("#firstYearWeeks").val().trim(), //
+						lastYear : $("#lastYearWeeks").val().trim(), //
 						tipoVentaId : $("#typeSales").val(),
 						listPrice: $("#precioUnidad").val(),
 						salePrice: $("#precioVenta").val(),
@@ -540,9 +536,12 @@ function getValueTableUnidades(){
 			var unidad = {};
 			unidad.id = $(this).find('td').eq(0).text(),
 			unidad.floorPlan = $(this).find('td').eq(1).text(),
+			unidad.price = $(this).find('td').eq(2).text(),
 			unidad.frequency = $(this).find('td').eq(3).text(),
 			unidad.season = $(this).find('td').eq(4).text(),
-			unidad.week = $(this).find('td').eq(5).text()
+			unidad.week = $(this).find('td').eq(5).text(),
+			unidad.fyear = $(this).find('td').eq(6).text(),
+			unidad.lyear = $(this).find('td').eq(7).text()
 			unidades.push(unidad); 
 		}
 	});
@@ -660,28 +659,6 @@ function selectAllPeople(){
 function isInArray(value, array) {
   return array.indexOf(value) > -1;
 }
-// function selectAllUnities(){
-// 	var unidades = [];
-
-// 	var array = $("#tblUnidades .yellow");
-// 	for (var i = 0; i < array.length; i++) {
-// 		var fullArray = $(array[i]).find("td");
-// 		unidad = [
-// 			fullArray.eq(1).text(),
-// 			fullArray.eq(2).text(),
-// 			fullArray.eq(3).text(),
-// 			fullArray.eq(4).text(),
-// 			fullArray.eq(5).text()
-// 		];
-// 		unidades.push(unidad);
-// 	}
-// 	if (unidades.length <= 0) {
-// 		alertify.error("Search and click over for choose one");
-// 		return unidades;
-// 	}else{
-// 		return unidades;
-// 	}
-// }
 
 function getValueTableUnidadesSeleccionadas(){
 	var unidadesId = getArrayValuesColumnTable("tableUnidadesSelected", 1);
@@ -1673,7 +1650,9 @@ function modalFinanciamiento() {
        		text: "ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-    
+    			alertify.success("Financiamiento guardado");
+    			$(this).dialog('close');
+	       
        		}
      	}],
      close: function() {
@@ -1685,12 +1664,29 @@ function modalFinanciamiento() {
 
 
 function initEventosFinanciamiento(){
+	setDate("fechaPrimerPagoF");
+	var palabras = $("#terminosFinanciamientoF option:selected").text();
+		palabras = palabras.split(",");
+		$("#numeroMesesF").text(palabras[0]);
+		$("#tasaInteresF").text(palabras[1]);
+
 	$("#btnCalcularF").click(function(){
+		var pagoTotal = parseFloat($("#balanceFinanciarF").text());
+		var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
+		var interes = parseFloat($("#tasaInteresF").text().split("%")[0]);
+		var pagoMensual = pagoTotal / meses;
+		$("#pagoMF").text(pagoMensual);
+		$("#CargoCF").text("8.95");
+		var totalMensual = pagoMensual + 8.95;
+		$("#totalPagarF").text(totalMensual);
+
+
+	});
+	$('#terminosFinanciamientoF').on('change', function() {
 		var palabras = $("#terminosFinanciamientoF option:selected").text();
 		palabras = palabras.split(",");
-		console.log(palabras[0]);
-		console.log(palabras[1]);
-
+		$("#numeroMesesF").text(palabras[0]);
+		$("#tasaInteresF").text(palabras[1]);
 	});
 }
 
@@ -1699,3 +1695,22 @@ function initEventosFinanciamiento(){
 //var palabras = $("#terminosFinanciamientoF option:selected").text()
 //palabras[0] = "52 Meses";
 //palabras[1] = ""
+
+
+
+function setUnitiesContractPrueba(){
+	$.ajax({
+	    data:{
+	        idContrato: 186
+	    },
+	    type: "POST",
+	    url: "contract/createSemanaOcupacion",
+	    dataType:'json',
+	    success: function(data){
+	    	//drawTableSinHead(data, "tableUnidadesContract");
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}

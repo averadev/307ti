@@ -5,7 +5,7 @@
       <label for="totalContracF" class="text-left">Total contract</label>
     </div>
     <div class="small-9 columns">
-       <p id="totalContracF">$00.00</p>
+       <p id="totalContracF">38714.00</p>
     </div>
   </div>
   <div class="row">
@@ -13,7 +13,7 @@
       <label for="balanceFinanciarF" class="text-left">Balance a financiar</label>
     </div>
     <div class="small-9 columns">
-       <p id="balanceFinanciarF">$00.00</p>
+       <p id="balanceFinanciarF">38714.00</p>
     </div>
   </div>
   <div class="row">
@@ -38,10 +38,6 @@
                     <?php
                     }
             ?>
-<!-- 				<option value="1">Contado</option>
-				<option value="2">Tarjeta de Credito</option>
-				<option value="3">Facturación</option>
-				<option value="4">Transferido</option> -->
 			</select>
 		</div>
     </div>
@@ -88,9 +84,9 @@
                 </thead>
                 <tbody id="tbodyPagosSelected">
                 <tr>
-                    <td>$0.00</td>
-                    <td>$0.00</td>
-                    <td>$0.00</td>
+                    <td id="pagoMF">0.00</td>
+                    <td id="CargoCF">0.00</td>
+                    <td id="totalPagarF">0.00</td>
                 </tr>
                 </tbody>
             </table>
