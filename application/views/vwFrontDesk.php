@@ -301,7 +301,7 @@
 									</label>
 								</div>
 								<div class="small-12 large-6 columns" style="padding-top:25px;">
-									<a id="btnHKREPORT" class="btn btn-primary btn-Search">
+									<a id="btnHKLUREPORT" class="btn btn-primary btn-Search">
 										<div class="label">HK REPORT</div>
 										<img src="<?php echo base_url().IMG; ?>common/report.png"/>
 									</a>
@@ -350,6 +350,7 @@
 						</fieldset>
 					</div>
 					<div class="small-12 medium-12 large-12 columns">
+					
 						<!-- text Field dates -->
 						<fieldset class="large-12 columns fieldsetFilter">
 							<div class="row">

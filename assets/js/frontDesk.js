@@ -36,10 +36,10 @@ $('#btnChgStatus').off();
 $('#btnChgStatus').on('click', function() {  showModaChgStatus(); });
 
 $('#btnHKREPORT').off();
-$('#btnHKREPORT').on('click', function() {  createExcel(); });
+$('#btnHKREPORT').on('click', function() {  generateReportFrontDesk(); });
 
-
-
+$('#btnHKLUREPORT').off();
+$('#btnHKLUREPORT').on('click', function() {  generateReportFrontDesk(); });
 
 /************Funciones**************/
 
@@ -1067,27 +1067,48 @@ function saveHKStatus(rowStatus){
 	
 }
 
-function createExcel(){
-	$.ajax({
-		/*data:{
-			rowStatus:rowStatus
-		},*/
-   		type: "POST",
-       	url: "frontDesk/generateReport",
-		dataType:'json',
-		success: function(data){
-			console.log(data);
-			 window.location = "frontDesk/createExcel";
-		/*	showLoading(div,false);
-			alertify.success(data);
-			chgStatusDialog.dialog( 'close' );
-			getFrontDesk("",0);*/
-		},
-		error: function(){
-			/*showLoading(div,false);
-			showAlert(true,"Error updating data, try again later. ",'button',showAlert);
-			chgStatusDialog.dialog( 'close' );*/
-			alertify.error("error");
-		}
-    });
+function generateReportFrontDesk(){
+	
+	var filters = null;
+	var dates = null;
+	var words = null;
+	var options = null;
+	var url = "";
+	var section = $('.SectionFrontDesk:checked').val();
+	
+	if(section == "section4"){
+		filters = getFiltersCheckboxs('statusHKLookUp');
+		dates = getDates(["dateHKLookUp"]);
+		words = getWords(["textUnitHKConfig"]);
+		options = getWords(["ServiceTypeLookUp"]);
+		url = "?type=lookUp";
+	}else if(section == "section5"){
+		filters = getFiltersCheckboxs('checkReport');
+		dates = getDates(["dateArrivalReport","dateDepartureReport"]);
+		words = {};
+		options = {};
+		url = "?type=report";
+	}
+	
+	filters = JSON.stringify(filters);
+	dates = JSON.stringify(dates);
+	words = JSON.stringify(words);
+	options = JSON.stringify(options);
+	
+	//dates = dates.serialize()
+	
+	url += "&filters=" + filters;
+	url += "&dates=" + dates;
+	url += "&words=" + words;
+	url += "&options=" + options;
+	
+	//console.log(url);
+	//console.log(filters);
+	createExcel(url)
+	
+}
+
+function createExcel(url){
+	
+	window.location = "frontDesk/getReportFrontDesk" + url;
 }

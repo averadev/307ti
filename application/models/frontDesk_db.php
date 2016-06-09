@@ -305,9 +305,9 @@ Class frontDesk_db extends CI_MODEL
 	/*************** Housekeeping Look Up******************/
 	
 	public function getHousekeepingLookUp($filters){
-		$this->db->select('cfg.pkUnitHKId as ID, u.unitcode, fp.FloorPlanDesc, p.name as MaidName, p.lname as MaidLName, e.EmployeeCode as EmployeeCodeMaid');
-		$this->db->select('p2.name as SuperName, p2.lname as SuperLName, e2.EmployeeCode, cfg.Date, cfg.section,f.level as Floor, b.buildingDesc');
-		$this->db->select('hkc.HkCodeDesc as HkCode, st.HkServiceTypeDesc as ServiceType, uhs.pkUnitHKStatusId as idStatus, hs.HKStatusDesc as status');
+	$this->db->select('cfg.pkUnitHKId as ID, u.unitcode as Unit, fp.FloorPlanDesc as Floor_plan, p.name as Maid_Name, p.lname as Maid_Last_Name, e.EmployeeCode as Employee_Code_Maid');
+		$this->db->select('p2.name as Superior_Name, p2.lname as Superior_Last_Name, e2.EmployeeCode as Super_Employe_code, cfg.Date, cfg.section as Section, f.level as Floor, b.buildingDesc as Building');
+		$this->db->select('hkc.HkCodeDesc as Status_Unit, st.HkServiceTypeDesc as Service_Type, uhs.pkUnitHKStatusId as idStatus, hs.HKStatusDesc as Status');
 		$this->db->from('tblUnitHkconfig cfg');
 		$this->db->join('tblunit u', 'u.pkunitid = cfg.fkUnitid', 'inner');
 		$this->db->join('tblUnithkstatus uhs', 'uhs.fkunitid = u.pkunitid', 'inner');

@@ -284,44 +284,158 @@ class FrontDesk extends CI_Controller {
 		}
 	}
 	
-	public function createExcel(){
+	public function getReportFrontDesk(){
+		
+		/*$filters = json_decode( $_GET['filters'] );
+		$dates = json_decode( $_GET['dates'] );
+		$words = json_decode( $_GET['words'] );
+		$options = json_decode( $_GET['options'] );*/
+		$sql = array();
+		if(isset($_GET['filters'])){
+			$filters = json_decode( $_GET['filters'] );
+			$sql['checks'] = $this->receiveFilter($filters,'uhs.fkHkStatusId');
+		}
+		if(isset($_GET['dates'])){
+			$dates = json_decode( $_GET['dates'] );
+			$sql['dates'] = $this->receiveWords($dates);
+		}
+		if(isset($_GET['words'])){
+			$words = json_decode( $_GET['words'] );
+			$sql['checks'] = $this->receiveWords($words);
+		}
+		if(isset($_GET['options'])){
+			$options = json_decode( $_GET['options'] );
+			$sql['options'] = $this->receiveWords($options);
+		}
+		
+		$data = array();
+		if($_GET['type'] == "lookUp"){
+			$data = $this->frontDesk_db->getHousekeepingLookUp($sql);
+		}else if($_GET['type'] == "report"){
+			$data = $this->frontDesk_db->getHousekeepingReport($sql);
+		}
+		
+		$this->createExcel($data);
+	}
+	
+	private function createExcel($items){
 		
 		$date = new DateTime();
 		
-		//$this->load->library('excel');
 		//activate worksheet number 1
 		$this->excel->setActiveSheetIndex(0);
 		//name the worksheet
-		$this->excel->getActiveSheet()->setTitle('frontdesk report');
+		$this->excel->getActiveSheet()->setTitle("report 1");
 		//$this->excel->getActiveSheet()->setTitle('frontdesk report2');
 		//set cell A1 content with some text
-		$this->excel->getActiveSheet()->setCellValue('A1', 'Front Desk report');
+		$this->excel->getActiveSheet()->setCellValue('C1', 'Front Desk');
 		//change the font size
-		$this->excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(20);
+		$this->excel->getActiveSheet()->getStyle('C1')->getFont()->setSize(20);
 		//make the font become bold
-		$this->excel->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('C1')->getFont()->setBold(true);
 		//merge cell A1 until D1
-		$this->excel->getActiveSheet()->mergeCells('A1:D1');
+		$this->excel->getActiveSheet()->mergeCells('C1:J3');
 		//set aligment to center for that merged cell (A1 to D1)
-		$this->excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('C1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 		
-		$excel2->addSheet();
-		$excel2->setActiveSheetIndex(1);  
-		$excel2->getActiveSheet()->setCellValue('A4', 'second page') ;
-		$this->excel->getActiveSheet()->setTitle('frontdesk report2');
-		//name the worksheet
-		//$this->excel->getActiveSheet()->setTitle('frontdesk report2');
+		$this->excel->getActiveSheet()->setCellValue('C5', 'Housekeeping Lookup');
+		$this->excel->getActiveSheet()->getStyle('C5')->getFont()->setSize(16);
+		$this->excel->getActiveSheet()->getStyle('C5')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->mergeCells('C5:J5');
+		$this->excel->getActiveSheet()->getStyle('C5')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		
+		$objDrawing = new PHPExcel_Worksheet_Drawing();
+		$objDrawing->setName('Logo');
+		$objDrawing->setDescription('Logo');
+		$logo = APPPATH."/third_party/logo.jpg";
+		$objDrawing->setPath($logo);
+		$objDrawing->setCoordinates('A1');
+		$objDrawing->setHeight(88);
+		$objDrawing->setWorksheet($this->excel->getActiveSheet());
+		
+		$firtCell = 8;
+		$cont = 0;
+		$num = $firtCell;
+		$letter = "";
+		foreach($items[0] as $key => $item){
+			$letter = $this->getNameFromNumber($cont);
+			$cell = $letter . $num;
+			$name = str_replace("_", " ", $key);
+			$this->excel->getActiveSheet()->setCellValue($cell, $name);
+			$this->excel->getActiveSheet()->getColumnDimension($letter)->setAutoSize(true);
+			$this->excel->getActiveSheet()->getStyle($cell)->getFont()->setSize(13);
+			$this->excel->getActiveSheet()->getStyle($cell)->getAlignment()->setIndent(1);
+			$cont++;
+			
+		}
+		$this->excel->getActiveSheet()->getRowDimension($firtCell)->setRowHeight(30);
+		$cell = "A" . $firtCell;
+		$cell2 = $letter . $num;
+		$this->excel->getActiveSheet()->setAutoFilter($cell . ":" . $cell2);
+		$styleArray = array('font' => array('bold' => true));
+		$this->excel->getActiveSheet()->getStyle($cell . ":" . $cell2)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$this->excel->getActiveSheet()->getStyle($cell . ":" . $cell2)->getFill()->getStartColor()->setARGB('99ccff');
+		$this->excel->getActiveSheet()->getStyle($cell . ":" . $cell2)->applyFromArray($styleArray);
+		
+		$styleBorder = array(
+			'borders' => array(
+				'allborders' => array(
+					'style' => PHPExcel_Style_Border::BORDER_THIN
+				)
+			)
+		);
+		$this->excel->getActiveSheet()->getStyle($cell . ":" . $cell2)->applyFromArray($styleBorder);
+		
+		$styleAlig = array(
+			'alignment' => array(
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+			)
+		);
+		$this->excel->getActiveSheet()->getStyle($cell . ":" . $cell2)->applyFromArray($styleAlig);
+		
+		$firtCell = $firtCell + 1;
+		$cont = 0;
+		$num = $firtCell;
+		$letter = "";
+		foreach($items as $item){
+			$cont = 0;
+			foreach($item as  $item2){
+				$letter = $this->getNameFromNumber($cont);
+				$cell = $letter . $num;
+				$this->excel->getActiveSheet()->setCellValue($cell, trim($item2));
+				$cont++;
+			}
+			$this->excel->getActiveSheet()->getRowDimension($num)->setRowHeight(20);
+			$letter = $this->getNameFromNumber(0);
+			$cell = $letter . $firtCell;
+			$letter2 = $this->getNameFromNumber($cont - 1);
+			$cell2 = $letter2 . $num;
+			$this->excel->getActiveSheet()->getStyle($cell . ":" . $cell2)->applyFromArray($styleAlig);
+			$this->excel->getActiveSheet()->getStyle($cell . ":" . $cell2)->applyFromArray($styleBorder);
+			$num++;
+		}
+		$cont = 0;
 		
 		$filename='FrontDeskReport-' . $date->getTimestamp() . '.xlsx'; //save our workbook as this file name
 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //mime type
 		header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
 		header('Cache-Control: max-age=0'); //no cache
 					
-		//save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
-		//if you want to save it as .XLSX Excel 2007 format
 		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
-		//force user to download the Excel file without writing it to server's HD
 		$objWriter->save('php://output');
+	}
+	
+	//obtiene el la letras del excel por numero
+	private function getNameFromNumber($num) {
+    	$numeric = $num % 26;
+    	$letter = chr(65 + $numeric);
+    	$num2 = intval($num / 26);
+    	if ($num2 > 0) {
+        	return $this->getNameFromNumber($num2 - 1) . $letter;
+    	} else {
+        	return $letter;
+    	}
 	}
 	
 	private function getFilters($array, $field){
