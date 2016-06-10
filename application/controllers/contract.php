@@ -33,7 +33,7 @@ class Contract extends CI_Controller {
 			$this->createUnidades($idContrato);
 			$this->createDownPayment($idContrato);
 			$this->insertFinanciamiento($idContrato);
-			//$this->createSemanaOcupacion($idContrato);
+			$this->createSemanaOcupacion($idContrato);
 			echo  "1";
 	}
 }

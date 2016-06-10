@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <!-- Frequency-->
-<!--                 <div class="row">
+                <div class="row">
                     <div class="small-3 columns">
                         <label for="frequency" class="text-left">Frequency</label>
                     </div>
@@ -48,7 +48,7 @@
                         <select type="text" id="frequency" name="frequency" class="input-group-field round" required></select>
 						</div>
 				   </div>
-                </div> -->
+                </div>
                 <!-- Season-->
                 <div class="row">
                     <div class="small-3 columns">

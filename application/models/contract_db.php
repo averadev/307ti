@@ -430,13 +430,11 @@ class Contract_db extends CI_Model {
         $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc');
         $this->db->select('CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price, PRI.Week, SE.SeasonDesc, PRI.ClosingCost');
         $this->db->from('tblUnit U');
-        $this->db->join('tblResInvt RI', 'U.pkUnitId = RI.fkUnitId', 'left');
-        $this->db->join('tblResOcc ROC', 'RI.pkResInvtId = ROC.fkResInvtId', 'left');
         $this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
         $this->db->join('tblPrice PRI', 'U.pkUnitId = PRI.fkUnitId', 'inner');
         $this->db->join('tblSeason SE', 'PRI.fkSeasonId = SE.pkSeasonId', 'inner');
         $this->db->join('tblProperty P', 'P.pkPropertyId = U.fkPropertyId', 'inner');
-        $this->db->where('RI.fkUnitId is null', null);
+        $this->db->where('PRI.fkStatusId', 17);
         if (!empty($filters['interval'])) {
             $this->db->where('PRI.Week', $filters['interval']);
         }
