@@ -325,7 +325,8 @@ private function createDownPayment($idContrato){
 	}
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
-			$data['idTour'] = $this->contract_db->selectIdTour(224);
+			$id = $_GET['id'];
+			$data['idTour'] = $this->contract_db->selectIdTour($id);
 			$this->load->view('contracts/contractDialogEdit', $data);
 		}
 	}
@@ -334,6 +335,12 @@ private function createDownPayment($idContrato){
 		if($this->input->is_ajax_request()) {
 			$data['factores'] = $this->contract_db->selectFactors();
 			$this->load->view('contracts/contractDialogFinanciamiento', $data);
+		}
+	}
+	public function modalSellers(){
+		if($this->input->is_ajax_request()) {
+			//$data['factores'] = $this->contract_db->selectFactors();
+			$this->load->view('people/sellerDialog');
 		}
 	}
 
@@ -363,6 +370,11 @@ private function createDownPayment($idContrato){
 	}
 
 
+	public function getSellers(){
+		if($this->input->is_ajax_request()) {
+			echo json_encode(["mensaje" => "Tabla de vendedores"]);
+		}
+	}
 	public function getContratos(){
 		if($this->input->is_ajax_request()) {
 			$sql = $this->getFilters($_POST, 'RI.CrDt', 'Contract');

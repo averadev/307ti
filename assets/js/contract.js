@@ -1051,11 +1051,8 @@ function getDatailByID(id){
 function modalEditContract(id){
 	showLoading('#dialog-Edit-Contract',true);
 	dialogo = $("#dialog-Edit-Contract").dialog ({
-		data:{
-			idContrato:id
-		},
   		open : function (event){
-	    	$(this).load ("contract/modalEdit" , function(){
+	    	$(this).load("contract/modalEdit?id="+id , function(){
 	 			showLoading('#dialog-Edit-Contract',false);
 	 			getDatosContract(id);
 	 			setEventosEditarContrato(id);
@@ -1710,6 +1707,72 @@ function setUnitiesContractPrueba(){
 	    dataType:'json',
 	    success: function(data){
 	    	//drawTableSinHead(data, "tableUnidadesContract");
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+
+function modalSellers() {
+	var div = "#dialog-Sellers";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+  				showLoading(div, true);
+				$(this).load ("contract/modalSellers" , function(){
+					showLoading(div, false);
+					initEventosSellers();
+				});
+		},
+		autoOpen: false,
+     	height: maxHeight,
+     	width: "50%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+    			alertify.success("Financiamiento guardado");
+    			$(this).dialog('close');
+	       
+       		}
+     	}],
+     close: function() {
+    	//$('#dialog-ScheduledPayments').empty();
+     }
+	});
+	return dialogo;
+}
+
+function initEventosSellers(){
+	$("#btnSearchSeller").click(function(){
+		getSellers();
+	});
+	$("#btnCleanSearchSeller").click(function(){
+		$("#txtSearchSeller").val("");
+	});
+}
+
+function getSellers(){
+	var div = "#section-table-seller";
+	showLoading(div, true);
+	$.ajax({
+	    data:{
+	        idContrato: 186
+	    },
+	    type: "POST",
+	    url: "contract/getSellers",
+	    dataType:'json',
+	    success: function(data){
+	    	console.log(data["mensaje"]);
+	    	showLoading(div, false);
 	    },
 	    error: function(){
 	        alertify.error("Try again");
