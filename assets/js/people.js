@@ -750,9 +750,8 @@ function searchPeople(page){
 				}
 				drawTable2(data.items,"tablePeople","showModal","Edit");
 				
-				if( $.isFunction( markRowTableFrontDesk ) ){
+				if( jQuery.isFunction( "markRowTableFrontDesk" ) ){
 					var typePeople = $("#dialog-people-hkConfig").find('#btnSearch').attr('attr_people');
-					console.log(typePeople)
 					if(typePeople == "maid"){
 						markRowTableFrontDesk( "tablePeople", "tablePeopleMaidSelectedHKC" );
 					}else if(typePeople == "superior"){

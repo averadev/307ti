@@ -331,11 +331,13 @@ function drawTable2(data, table ,funcion, cadena, option){
 	var heightScroll = $('#' + table ).parents(".table").first();
 	heightScroll = heightScroll.height();
 	
-	$('#' + table ).DataTable({
+	$('#' + table ) .on( 'order.dt',  function (event, a){
+		console.log(a);
+	}).DataTable({
 		"scrollY": heightScroll - 50,
 		"scrollX": true,
 		"paging":   false,
-		"ordering": false,
+		//"ordering": false,
 		"info":     false,
 		"filter": 	false,
 	});
