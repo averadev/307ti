@@ -1051,6 +1051,9 @@ function getDatailByID(id){
 function modalEditContract(id){
 	showLoading('#dialog-Edit-Contract',true);
 	dialogo = $("#dialog-Edit-Contract").dialog ({
+		data:{
+			idContrato:id
+		},
   		open : function (event){
 	    	$(this).load ("contract/modalEdit" , function(){
 	 			showLoading('#dialog-Edit-Contract',false);
@@ -1179,7 +1182,6 @@ function selectMetodoPagoProgramados(){
             data:{
                 property: $("#property").val(),
                 unitType: $("#unitType").val(),
-                // frequency: $("#frequency").val(),
                 season: $("#season").val(),
                 interval: $("#interval").val()
             },

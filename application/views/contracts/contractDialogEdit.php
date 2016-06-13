@@ -239,7 +239,7 @@
 							<div class="large-9 columns">
 								<div class="row collapse">
 									<div class="small-10 columns">
-										<input value="0" type="text" placeholder="ID" name="TourID" id="TourID">
+										<input value="<?php echo $idTour; ?>" type="text" placeholder="ID" name="TourID" id="TourID">
 									</div>
 									<div class="small-2 columns">
 										<a id="btnAddTourID" href="#" class="button postfix"><i class="fa fa-user-plus">Add</i></a>

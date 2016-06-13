@@ -425,6 +425,19 @@ class Contract_db extends CI_Model {
         }
     }
 
+    public function selectIdTour($string){
+        $this->db->select('fkTourId');
+        $this->db->from('tblRes');
+        $this->db->where('pkResId', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->fkTourId;
+        }
+    }
+
     public function getUnidades($filters){
 
         $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc');

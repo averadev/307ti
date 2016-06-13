@@ -325,7 +325,8 @@ private function createDownPayment($idContrato){
 	}
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('contracts/contractDialogEdit');
+			$data['idTour'] = $this->contract_db->selectIdTour(224);
+			$this->load->view('contracts/contractDialogEdit', $data);
 		}
 	}
 
