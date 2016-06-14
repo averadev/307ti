@@ -239,7 +239,7 @@
 							<div class="large-9 columns">
 								<div class="row collapse">
 									<div class="small-10 columns">
-										<input value="<?php echo $idTour; ?>" type="text" placeholder="ID" name="TourID" id="TourID">
+										<input readonly value="<?php echo $idTour; ?>" type="text" placeholder="ID" name="TourID" id="TourID">
 									</div>
 									<div class="small-2 columns">
 										<a id="btnAddTourID" href="#" class="button postfix"><i class="fa fa-user-plus">Add</i></a>
@@ -323,7 +323,7 @@
 				<fieldset class="fieldset">
 					<div class="containerContract">
 						<div class="row">
-							<table id="tableSellerSelected" width="100%" style="min-height:250px;">
+							<table width="100%" style="min-height:250px;">
 								<thead>
 									<tr class="trColspan" >
 										<th colspan="9" class="thColspan" >Seller</th>
@@ -378,7 +378,7 @@
 				<fieldset class="fieldset">
 					<div class="containerContract">
 						<div class="row">
-							<table id="tableSellerSelected" width="100%" style="min-height:250px;">
+							<table width="100%" style="min-height:250px;">
 								<thead>
 									<tr class="trColspan" >
 										<th colspan="9" class="thColspan" >Maintenance accounts</th>
@@ -445,7 +445,7 @@
 				<fieldset class="fieldset">
 					<div class="containerContract">
 						<div class="row">
-							<table id="tableSellerSelected" width="100%" style="min-height:250px;">
+							<table  width="100%" style="min-height:250px;">
 								<thead>
 									<tr class="trColspan" >
 										<th colspan="9" class="thColspan" >Miscellaneous accounts</th>
@@ -490,16 +490,16 @@
 									<th colspan="8" class="thColspan" >Seller</th>
 								</tr> 
 								<tr>
-									<th class="cellEdit" ></th>
+									<th class="cellEdit" >ID</th>
 									<th class="cellGeneral">Code</th>
 									<th class="cellGeneral">Name</th>
-									<th class="cellGeneral" >Role</th>
+									<!-- <th class="cellGeneral" >Role</th>
 									<th class="cellGeneral" >Commission Amount</th>
-									<th class="cellGeneral" >Comision Porcentaje</th>
+									<th class="cellGeneral" >Comision Porcentaje</th> -->
 									<th></th>
 								</tr>
 							</thead>
-							<tbody>
+							<tbody id="tableSellerSelectedbody">
 								<tr></tr>
 							</tbody>
 						</table>
@@ -507,8 +507,8 @@
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btn" class="button tiny"><i class="fa fa-user-plus fa-lg">&nbsp;&nbsp;New seller</i></a>
-				<a id="btn" class="button tiny"><i class="fa fa-user-times fa-lg">&nbsp;&nbsp;Remove seller</i></a>
+				<a id="btnNewSeller" class="button tiny"><i class="fa fa-user-plus fa-lg">New seller</i></a>
+				<a id="btnRemoveSeller" class="button tiny"><i class="fa fa-user-times fa-lg">Remove seller</i></a>
 			</div>
 		</form>
 	</div>
@@ -539,7 +539,7 @@
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btn" class="button tiny"><i class="fa fa-plus-circle fa-lg">&nbsp;&nbsp;New Provision</i></a>
+				<a id="btnNewProvision" class="button tiny"><i class="fa fa-plus-circle fa-lg">New Provision</i></a>
 			</div>
 		</form>
 	</div>
@@ -549,7 +549,7 @@
 			<fieldset class="fieldset">
 				<div class="containerContract">
 					<div class="row">
-						<table id="tableCOccupationSelected" width="100%" style="min-height:250px;">
+						<table id="tableCOccupationSelected" width="100%">
 							<thead>
 								<tr class="trColspan" >
 									<th colspan="8" class="thColspan" >Years of occupation</th>
@@ -558,10 +558,12 @@
 									<th class="cellGeneral">Occupancy Type</th>
 									<th class="cellGeneral">Occupation Year</th>
 									<th class="cellGeneral">Week</th>
+									<th class="cellGeneral">First Year</th>
+									<th class="cellGeneral">Last Year</th>
 									<th></th>
 								</tr>
 							</thead>
-							<tbody>
+							<tbody id="tableCOccupationSelectedbody">
 								<tr></tr>
 							</tbody>
 						</table>
@@ -627,8 +629,8 @@
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btn" class="button tiny"><i class="fa fa-plus-circle fa-lg">&nbsp;&nbsp;New Note</i></a>
-				<a id="btn" class="button tiny"><i class="fa fa-sticky-note-o fa-lg">&nbsp;&nbsp;See all notes</i></a>
+				<a id="btn" class="button tiny"><i class="fa fa-plus-circle fa-lg">New Note</i></a>
+				<a id="btn" class="button tiny"><i class="fa fa-sticky-note-o fa-lg">See all notes</i></a>
 			</div>
 		</form>
 	</div>
@@ -674,8 +676,8 @@
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btn" class="button tiny"><i class="fa fa-save fa-lg">&nbsp;&nbsp;Save</i></a>
-				<a id="btn" class="button tiny"><i class="fa fa-refresh fa-lg">&nbsp;&nbsp;Next Status</i></a>
+				<a id="btn" class="button tiny"><i class="fa fa-save fa-lg">Save</i></a>
+				<a id="btn" class="button tiny"><i class="fa fa-refresh fa-lg">Next Status</i></a>
 			</div>
 		</form>
 	</div>
@@ -706,7 +708,7 @@
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btn" class="button tiny"><i class="fa fa-plus-circle fa-lg">&nbsp;&nbsp;New file</i></a>
+				<a id="btn" class="button tiny"><i class="fa fa-plus-circle fa-lg">New file</i></a>
 			</div>
 		</form>
 	</div>

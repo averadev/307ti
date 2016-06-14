@@ -11,6 +11,8 @@ $(document).ready(function(){
 	var dialogDiscountAmount = modalDiscountAmount();
 	var dialogEditContract = modalEditContract();
 	var dialogAddTour = addTourContract();
+	var modalVendedores = null;
+	var modalProvisiones = null;
 
 	$(document).on( 'click', '#newContract', function () {
 		addContract = createDialogContract(addContract);
@@ -31,7 +33,28 @@ $(document).ready(function(){
 	        unidadDialog.dialog( "open" );
 	        
 	    });
-
+ 	
+ 	$(document).on( 'click', '#btnNewSeller', function () {
+ 		if (modalVendedores!=null) {
+	    		modalVendedores.dialog( "destroy" );
+	    	}
+	    	modalVendedores = modalSellers();
+	        modalVendedores.dialog( "open" );
+	 });
+	$(document).on( 'click', '#btnNewProvision', function () {
+ 		if (modalProvisiones!=null) {
+	    		modalProvisiones.dialog( "destroy" );
+	    	}
+	    	modalProvisiones = modalProvisions();
+	        modalProvisiones.dialog( "open" );
+	 });
+// $('#btnNewSeller').click(function(){
+// 		 if (modalVendedores!=null) {
+// 	    		modalVendedores.dialog( "destroy" );
+// 	    	}
+// 	    	modalVendedores = modalSellers();
+// 	        modalVendedores.dialog( "open" );
+// 	});
 	$(document).on( 'click', '#btnPackReference', function () {
 		var dialogPack = PackReference();
 		dialogPack.dialog("open");
@@ -1374,7 +1397,7 @@ function getArrayValuesSelectedColum(tabla, columna){
  */
 function changeTabsModalContract(screen, id){
 	console.log(screen);
-	console.log(id)
+	console.log(id);
 	$('#tabsContrats .tabs-title').removeClass('active');
 	$('#tabsContrats li[attr-screen=' + screen + ']').addClass('active');
 	//muestra la pantalla selecionada
@@ -1417,13 +1440,15 @@ function getDatosContractAccounts(id){
 	console.log("Cuentas " + id);
 }
 function getDatosContractSellers(id){
-	console.log("Vendedores " + id);
+	console.log("vendedores");
+	
 }
 function getDatosContractProvisions(id){
 	console.log("Provisiones" + id);
 }
 function getDatosContractOcupation(id){
 	console.log("Ocupacion " + id);
+	getWeeks(id);
 }
 function getDatosContractDocuments(id){
 	console.log("Documentos " + id);
@@ -1521,7 +1546,6 @@ function drawTableSinHead(data, table){
     $('#' + table).html(bodyHTML);
 }
 
-
 function getDatosContract(id){
 	$.ajax({
 	    data:{
@@ -1618,9 +1642,9 @@ function setEventosEditarContrato(id){
 	$("#btnUpdateTourID").click(function(){
 		updateTourContrato(id);
 	});
-	// $('#tabsContrats .tabs-title').on('click', function() { 
-	// 	changeTabsModalContract($(this).attr('attr-screen'), id);
-	// });
+	$('#tabsContrats .tabs-title').on('click', function() { 
+		changeTabsModalContract($(this).attr('attr-screen'), id);
+	});
 }
 
 
@@ -1736,16 +1760,16 @@ function modalSellers() {
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Add",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-    			alertify.success("Financiamiento guardado");
+    			alertify.success("added employees");
     			$(this).dialog('close');
 	       
        		}
      	}],
      close: function() {
-    	//$('#dialog-ScheduledPayments').empty();
+    	$('#dialog-Sellers').empty();
      }
 	});
 	return dialogo;
@@ -1771,8 +1795,66 @@ function getSellers(){
 	    url: "contract/getSellers",
 	    dataType:'json',
 	    success: function(data){
-	    	console.log(data["mensaje"]);
 	    	showLoading(div, false);
+	    	drawTableId(data,"tableSellerbody");
+	    	selectTable("tableSellerbody");
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function modalProvisions() {
+	var div = "#dialog-Provisiones";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+  				showLoading(div, true);
+				$(this).load ("contract/modalProvisions" , function(){
+					showLoading(div, false);
+					//initEventosSellers();
+				});
+		},
+		autoOpen: false,
+     	height: maxHeight/1.5,
+     	width: "40%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Save",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+    			alertify.success("added employees");
+    			$(this).dialog('close');
+	       
+       		}
+     	}],
+     close: function() {
+    	$('#dialog-Sellers').empty();
+     }
+	});
+	return dialogo;
+}
+
+function getWeeks(id){
+	var div = "#tableCOccupationSelectedbody";
+	showLoading(div, true);
+	$.ajax({
+	    data:{
+	        idContrato: id
+	    },
+	    type: "POST",
+	    url: "contract/selectWeeksContract",
+	    dataType:'json',
+	    success: function(data){
+	    	showLoading(div, false);
+	    	drawTableId(data,"tableCOccupationSelectedbody");
+	    	//selectTable("tableSellerbody");
 	    },
 	    error: function(){
 	        alertify.error("Try again");

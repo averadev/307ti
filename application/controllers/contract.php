@@ -282,6 +282,14 @@ private function createDownPayment($idContrato){
 			echo json_encode($datos);
 		}
 	}
+
+	public function selectWeeksContract(){
+		if($this->input->is_ajax_request()) {
+			$id = $_POST['idContrato'];
+			$weeks = $this->contract_db->selectWeeksContract($id);
+			echo json_encode($weeks);
+		}
+	}
 //////////////////////////////////////////////////////
 	public function modal(){
 		if($this->input->is_ajax_request()) {
@@ -344,6 +352,14 @@ private function createDownPayment($idContrato){
 		}
 	}
 
+	public function modalProvisions(){
+		if($this->input->is_ajax_request()) {
+			//$data['factores'] = $this->contract_db->selectFactors();
+			$this->load->view('contracts/dialogProvisionesContract');
+		}
+	}
+
+
 
 //////////////////////////////////////////////////////
 	public function insertContrat($Contract){
@@ -372,7 +388,8 @@ private function createDownPayment($idContrato){
 
 	public function getSellers(){
 		if($this->input->is_ajax_request()) {
-			echo json_encode(["mensaje" => "Tabla de vendedores"]);
+			$sellers = $this->contract_db->selectEmployees();
+			echo json_encode($sellers);
 		}
 	}
 	public function getContratos(){

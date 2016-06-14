@@ -785,3 +785,14 @@ function errorInput(div, s){
 		$(this).removeClass("is-invalid-input").dequeue();
 	});
 }
+function drawTableId(data, table){
+    var bodyHTML = '';
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        };
+        bodyHTML+="</tr>";
+    }
+    $('#' + table).html(bodyHTML);
+}

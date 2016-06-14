@@ -94,52 +94,26 @@
 			<div class="box-header pr-color">
 				<div class="pull-right box-tools">
                </div>
-               <h3 class="box-title">
-               	<span>Sellers</span>
-               </h3>
+               <h3 class="box-title"><span>Sellers</span></h3>
 			</div>
-			<div class="box-body" id="section-table-seller" style="display: block;height: 300px;">
+			<div class="box-body" id="section-table-seller">
 				<div class="table" id="tb" >
 					<div class="" id="divTableSeller">
-						<table id="tableSeller" class="display hover" cellspacing="0"  width="100%" style="display:none;">
+						<table id="tableSeller" class="display hover" cellspacing="0"  width="100%">
 							<thead>
 								<tr>
-									<th>Edit</th>
-									<th>Id</th>
-									<th>Name</th>
-									<th>Last name</th>
-									<th>Gender</th>
-									<th>Birth date</th>
-									<th>Street, number, colonia</th>
-									<th>City</th>
-									<th>State</th>
-									<th>Country</th>
-									<th>Zip code</th>
-									<th>Phone number 1</th>
-									<th>Phone number 2</th>
-									<th>Phone number 3</th>
-									<th>Email</th>
-									<th>Email 2</th>
+									<th>ID</th>
+									<th>Codigo</th>
+									<th>Nombre completo</th>
+									<!--<th>Rol</th>-->
 								</tr>
 							</thead>
-							<tbody>
-		
+							<tbody id="tableSellerbody">
+								<tr></tr>
 							</tbody>
 						</table>
 					</div>
 				</div>
-<!-- 				<div class="pagina" >
-					<div class="pages">
-						<div class="pagination" id="paginationSeller">
-							<a href="#" class="first" data-action="first">&laquo;</a>
-							<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-							<input type="text" class="general" readonly="readonly" />
-							<a href="#" class="next" data-action="next">&rsaquo;</a>
-							<a href="#" class="last" data-action="last">&raquo;</a>
-						</div>
-						<input type="hidden" id="paginationSeller" value="true" />
-					</div>
-				</div> -->
 			</div>
 		</div>
 	</div>

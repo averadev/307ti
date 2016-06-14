@@ -405,7 +405,7 @@ class Contract_db extends CI_Model {
         $this->db->select("RI.pkResInvtId, RI.fkUnitId, RI.Intv, RI.FirstOccYear, RI.LastOccYear, C.pkCalendarId,C.fkDayOfWeekId, C.Year");
         $this->db->from('tblResInvt RI');
         $this->db->join('tblCalendar C', 'C.Intv = RI.Intv', 'inner');
-         $this->db->where('C.Year', $year);
+        $this->db->where('C.Year', $year);
         $this->db->where('fkResId', $resId);
         $this->db->order_by('intv', 'ASC');
         $query = $this->db->get();
@@ -435,6 +435,41 @@ class Contract_db extends CI_Model {
         {
             $row = $query->row();
             return $row->fkTourId;
+        }
+    }
+
+    public function selectEmployees(){
+        $this->db->select("E.pkEmployeeId, RTRIM(E.EmployeeCode) as Code");
+        $this->db->select("(RTRIM(P.Name) + ' '+ RTRIM(P.SecondName) + ' '+ RTRIM(P.LName)) as name");
+        $this->db->from('tblPeople P');
+        $this->db->join('tblEmployee E', 'P.pkPeopleId = E.fkPeopleId', 'inner');
+        //$this->db->where('fkResId', $resId);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+    public function selectWeeksContract($string){
+        $this->db->select("RI.pkResInvtId, RI.fkUnitId,RI.Intv, RI.FirstOccYear, RI.LastOccYear ");
+        $this->db->from('tblResInvt RI');
+        $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
+        $this->db->where('fkResId', $string);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+    public function selectDocumentsContract($string){
+        $this->db->select("RI.pkResInvtId, RI.fkUnitId,RI.Intv, RI.FirstOccYear, RI.LastOccYear ");
+        $this->db->from('tblResInvt RI');
+        $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
+        $this->db->where('fkResId', $string);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
         }
     }
 
