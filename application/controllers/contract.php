@@ -219,6 +219,24 @@ private function createDownPayment($idContrato){
 	
 }
 
+
+public function createNote(){
+	if($this->input->is_ajax_request()) {
+		$Note = [
+			"fkNoteTypeId" => $_POST['noteType'],
+			"fkResId"		=> $_POST['idContrato'],
+			"fkPeopleId"	=> $_POST[''],
+			"NoteDesc"		=> $_POST['noteDescription'],
+			"ynVI"			=> 1,
+			"Occyear"		=> "2016",
+			"ynActive"		=> 1,
+			"CrBy"			=> 1,
+			"CrDt"			=>"2016"
+
+		];
+		$this->contract_db->insertReturnId('tblNote', $Note);
+	}
+}
 //////////////////////////////////////////////////////
 	//busqueda de Unidades
 	public function getProperties(){
@@ -311,7 +329,8 @@ private function createDownPayment($idContrato){
 
 	public function modalDepositDownpayment(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('contracts/dialogDepositDownpayment');
+			$data["paymentTypes"] = $this->contract_db->selectPaymentType();
+			$this->load->view('contracts/dialogDepositDownpayment', $data);
 		}
 	}
 	public function modalDiscountAmount(){
@@ -322,7 +341,8 @@ private function createDownPayment($idContrato){
 
 	public function ScheduledPayments(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('contracts/dialogScheduledPayments');
+			$data["paymentTypes"] = $this->contract_db->selectPaymentType();
+			$this->load->view('contracts/dialogScheduledPayments', $data);
 		}
 	}
 
@@ -359,6 +379,12 @@ private function createDownPayment($idContrato){
 		}
 	}
 
+	public function modalAddNotas(){
+		if($this->input->is_ajax_request()) {
+			$data['notesType'] = $this->contract_db->selectTypeNotas();
+			$this->load->view('contracts/dialogNotasContract', $data);
+		}
+	}
 
 
 //////////////////////////////////////////////////////
@@ -421,6 +447,12 @@ private function createDownPayment($idContrato){
 		if($this->input->is_ajax_request()){
 			$types = $this->contract_db->getSaleTypes();
 			echo json_encode($types);
+		}
+	}
+	public function getFlags(){
+		if($this->input->is_ajax_request()){
+			$flags = $this->contract_db->selectFlags();
+			echo json_encode($flags);
 		}
 	}
 

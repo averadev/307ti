@@ -11,8 +11,7 @@ $(document).ready(function(){
 	var dialogDiscountAmount = modalDiscountAmount();
 	var dialogEditContract = modalEditContract();
 	var dialogAddTour = addTourContract();
-	var modalVendedores = null;
-	var modalProvisiones = null;
+
 
 	$(document).on( 'click', '#newContract', function () {
 		addContract = createDialogContract(addContract);
@@ -48,13 +47,14 @@ $(document).ready(function(){
 	    	modalProvisiones = modalProvisions();
 	        modalProvisiones.dialog( "open" );
 	 });
-// $('#btnNewSeller').click(function(){
-// 		 if (modalVendedores!=null) {
-// 	    		modalVendedores.dialog( "destroy" );
-// 	    	}
-// 	    	modalVendedores = modalSellers();
-// 	        modalVendedores.dialog( "open" );
-// 	});
+	$(document).on( 'click', '#btnNewNote', function () {
+ 		if (modalNotas!=null) {
+	    		modalNotas.dialog( "destroy" );
+	    	}
+	    	modalNotas = modalAddNotas();
+	        modalNotas.dialog( "open" );
+	 });
+	
 	$(document).on( 'click', '#btnPackReference', function () {
 		var dialogPack = PackReference();
 		dialogPack.dialog("open");
@@ -1458,6 +1458,7 @@ function getDatosContractNotes(id){
 }
 function getDatosContractFlags(id){
 	console.log("Banderas " + id);
+	getFlags();
 }
 function getDatosContractFiles(id){
 	console.log("Archivos " + id);
@@ -1855,6 +1856,89 @@ function getWeeks(id){
 	    	showLoading(div, false);
 	    	drawTableId(data,"tableCOccupationSelectedbody");
 	    	//selectTable("tableSellerbody");
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+function getFlags(id){
+	var div = "#tableCOccupationSelectedbody";
+	showLoading(div, true);
+	$.ajax({
+	    data:{
+	        idContrato: id
+	    },
+	    type: "POST",
+	    url: "contract/getFlags",
+	    dataType:'json',
+	    success: function(data){
+	    	showLoading(div, false);
+	    	drawTableId(data,"tableCOccupationSelectedbody");
+	    	//selectTable("tableSellerbody");
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function modalAddNotas() {
+	var div = "#dialog-Notas";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+  				showLoading(div, true);
+				$(this).load ("contract/modalAddNotas" , function(){
+					showLoading(div, false);
+					//initEventosSellers();
+				});
+		},
+		autoOpen: false,
+     	height: maxHeight/1.5,
+     	width: "40%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Save",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       			//SaveNotesContract();
+    			alertify.success("Note Save");
+    			$(this).dialog('close');
+	       
+       		}
+     	}],
+     close: function() {
+    	$('#dialog-Sellers').empty();
+     }
+	});
+	return dialogo;
+}
+
+function SaveNote(){
+	var noteType = $("#notesTypes").val();
+	var noteDescription = $("#NoteDescription").val();
+}
+
+function SaveNotesContract(id){
+	var noteType = $("#notesTypes").val();
+	var noteDescription = $("#NoteDescription").val();
+	$.ajax({
+	    data:{
+	        idContrato: id,
+	        noteType:noteType,
+	        noteDescription : noteDescription
+	    },
+	    type: "POST",
+	    url: "contract/createNote",
+	    dataType:'json',
+	    success: function(data){
+	    	//drawTableSinHead(data, "tableUnidadesContract");
 	    },
 	    error: function(){
 	        alertify.error("Try again");

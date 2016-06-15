@@ -53,12 +53,13 @@ class Contract_db extends CI_Model {
         $sql = "";
         $this->db->distinct();
         $this->db->select('R.pkResId as ID, R.folio as Folio, R.LegalName as LegalName, RTRIM(UT.FloorPlanDesc) as FloorPlan, FR.FrequencyDesc');
-        $this->db->select('ES.StatusDesc, RI.CrDt, R.FirstOccYear, R.LastOccYear, 28000 as listPrice, 25000 as netsale');
+        $this->db->select('ES.StatusDesc, RI.CrDt, R.FirstOccYear, R.LastOccYear, RF.ListPrice, RF.NetSalePrice as netsale');
         $this->db->from('tblRes R');
         $this->db->join('tblResinvt RI', 'RI.fkResId = R.pkResId');
         $this->db->join('tblFloorPlan UT', 'UT.pkFloorPlanID = RI.fkFloorPlanId');
         $this->db->join('tblFrequency FR', 'FR.pkFrequencyId = RI.fkFrequencyId');
         $this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId');
+        $this->db->join('tblResFin RF', 'RF.fkResId = R.pkResId');
         $this->db->where('R.fkResTypeId', '5');
         $this->db->order_by('ID', 'DESC');
         if (!is_null($filters)) {
@@ -409,8 +410,7 @@ class Contract_db extends CI_Model {
         $this->db->where('fkResId', $resId);
         $this->db->order_by('intv', 'ASC');
         $query = $this->db->get();
-        if($query->num_rows() > 0 )
-        {
+        if($query->num_rows() > 0 ){
             return $query->result();
         }
     }
@@ -419,8 +419,7 @@ class Contract_db extends CI_Model {
         $this->db->from('tblResInvt RI');
         $this->db->where('fkResId', $resId);
         $query = $this->db->get();
-        if($query->num_rows() > 0 )
-        {
+        if($query->num_rows() > 0 ){
             return $query->result();
         }
     }
@@ -431,8 +430,7 @@ class Contract_db extends CI_Model {
         $this->db->where('pkResId', $string);
         $query = $this->db->get();
 
-        if($query->num_rows() > 0 )
-        {
+        if($query->num_rows() > 0 ){
             $row = $query->row();
             return $row->fkTourId;
         }
@@ -443,10 +441,8 @@ class Contract_db extends CI_Model {
         $this->db->select("(RTRIM(P.Name) + ' '+ RTRIM(P.SecondName) + ' '+ RTRIM(P.LName)) as name");
         $this->db->from('tblPeople P');
         $this->db->join('tblEmployee E', 'P.pkPeopleId = E.fkPeopleId', 'inner');
-        //$this->db->where('fkResId', $resId);
         $query = $this->db->get();
-        if($query->num_rows() > 0 )
-        {
+        if($query->num_rows() > 0 ){
             return $query->result();
         }
     }
@@ -456,8 +452,7 @@ class Contract_db extends CI_Model {
         $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
         $this->db->where('fkResId', $string);
         $query = $this->db->get();
-        if($query->num_rows() > 0 )
-        {
+        if($query->num_rows() > 0 ){
             return $query->result();
         }
     }
@@ -467,12 +462,48 @@ class Contract_db extends CI_Model {
         $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
         $this->db->where('fkResId', $string);
         $query = $this->db->get();
-        if($query->num_rows() > 0 )
-        {
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
+    public function selectPaymentType(){
+        $this->db->select("T.pkTrxTypeId as ID, RTRIM(T.TrxTypeDesc) as Type");
+        $this->db->from('tbltrxtype T');
+        $this->db->where('fkTrxClassid', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
             return $query->result();
         }
     }
 
+    public function selectNotas(){
+        $this->db->select("T.pkTrxTypeId as ID, RTRIM(T.TrxTypeDesc) as Type");
+        $this->db->from('tbltrxtype T');
+        $this->db->where('fkTrxClassid', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
+    public function selectTypeNotas(){
+        $this->db->select("NT.pkNoteTypeid as ID, NT.NoteTypeDesc as description");
+        $this->db->from('tblNoteType NT');
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
+
+    public function selectFlags(){
+        $this->db->select("F.pkFlagId, F.FlagCode, F.FlagDesc");
+        $this->db->from('tblflag F');
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
     public function getUnidades($filters){
 
         $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc');
@@ -530,7 +561,6 @@ class Contract_db extends CI_Model {
     }
 
     public function getTerminosFinanciamiento($id){
-
         $this->db->select("R.FinanceBalance, R.MonthlyPmtAmt, R.DownPmt% as porcentaje , R.TotalFinanceAmt");
         $this->db->from("tblResFin R");
         $this->db->where('R.fkResId', $id);

@@ -1,6 +1,9 @@
 // Init events
 
 var dialogUser = null;
+var modalVendedores = null;
+var modalProvisiones = null;
+var modalNotas = null;
 
 $(function() {
 	
@@ -796,3 +799,4 @@ function drawTableId(data, table){
     }
     $('#' + table).html(bodyHTML);
 }
+

@@ -15,10 +15,12 @@
     <div class="small-9 columns">
 		<div class="caja">
 			<select id="tiposPagoProgramados" class="input-group-field round">
-				<option value="1">Cash</option>
-        <option value="2">Credit Card</option>
-        <option value="3">Billing</option>
-        <option value="4">Transfer</option>
+			 <?php
+                foreach($paymentTypes as $item){?>
+                    <option value="<?php echo $item->ID; ?>"><?php echo $item->Type; ?></option>
+                    <?php
+                }
+            ?>
 			</select>
 		</div>
     </div>

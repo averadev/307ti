@@ -626,7 +626,7 @@
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btn" class="button tiny"><i class="fa fa-plus-circle fa-lg">New Note</i></a>
+				<a id="btnNewNote" class="button tiny"><i class="fa fa-plus-circle fa-lg">New Note</i></a>
 				<a id="btn" class="button tiny"><i class="fa fa-sticky-note-o fa-lg">See all notes</i></a>
 			</div>
 		</form>

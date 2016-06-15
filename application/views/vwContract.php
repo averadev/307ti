@@ -159,4 +159,5 @@
 <div id="dialog-Financiamiento" title="Financing Terms" style="display: none;"></div>
 <div id="dialog-Sellers" title="Set Sellers" style="display: none;"></div>
 <div id="dialog-Provisiones" title="Add Provisions" style="display: none;"></div>
+<div id="dialog-Notas" title="Add Notes" style="display: none;"></div>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>contract.js"></script>
