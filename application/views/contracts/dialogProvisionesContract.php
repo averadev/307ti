@@ -7,17 +7,17 @@
     <div class="small-9 columns">
 		<div class="caja">
 			<select id="tiposPago" class="input-group-field round">
-				<option value="1">Contado</option>
-				<option value="2">Tarjeta de Credito</option>
-				<option value="3">Facturación</option>
-				<option value="4">Transferido</option>
+				<option value="1">Cash</option>
+				<option value="2">Credit Card</option>
+				<option value="3">Billing</option>
+				<option value="4">Transfer</option>
 			</select>
 		</div>
     </div>
   </div>
    <div class="row">
     <div class="small-3 columns">
-      <label for="montoDownpayment" class="text-left">monto</label>
+      <label for="montoDownpayment" class="text-left">Amount</label>
     </div>
     <div class="small-9 columns">
        <input class="round general" id="montoDownpayment" type="number" name="montoDownpayment" min="0" max="999999">
@@ -47,7 +47,7 @@
                 <thead>
                     <tr>
                         <th class="cellGeneral">Pack type</th>
-                        <th class="cellGeneral">amount</th>
+                        <th class="cellGeneral">Amount</th>
                         <th class="cellGeneral">Delete</th>
                    </tr>
                 </thead>

@@ -17,7 +17,7 @@
   </div>
    <div class="row">
     <div class="small-3 columns">
-      <label for="montoPack" class="text-left">monto</label>
+      <label for="montoPack" class="text-left">Amount</label>
     </div>
     <div class="small-9 columns">
        <input class="round general" id="montoPack" type="number" name="montoPack" min="0" max="999999">
@@ -48,8 +48,8 @@
             <table id="tablePackgSelected" width="100%">
                 <thead>
                     <tr>
-                        <th class="cellGeneral">pack type</th>
-                        <th class="cellGeneral">amount</th>
+                        <th class="cellGeneral">pack Type</th>
+                        <th class="cellGeneral">Amount</th>
                         <th class="cellGeneral">Delete</th>
                    </tr>
                 </thead>
@@ -61,7 +61,7 @@
 </fieldset>
   <div class="row">
     <div class="small-3 columns">
-      <label for="totalDescPack" class="text-left">total</label>
+      <label for="totalDescPack" class="text-left">Total</label>
     </div>
     <div class="small-9 columns">
        <input class="round general" id="totalDescPack" type="number" name="totalDescPack" min="2016" max="2099">

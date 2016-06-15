@@ -31,7 +31,7 @@
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
 		<label class="headerGeneral" id="editContracStatus"></label>
-		<label class="headerGeneral">Banderas: <span>0</span></label>
+		<label class="headerGeneral">Flags: <span>0</span></label>
 	</div>
 </div>
 <!-- tabs de los modales -->
@@ -75,7 +75,7 @@
 		<div class="row" id="alertValidateContrato" style="display:none;">
 			<div class="small-12 columns">
 				<div data-alert class="alert-box alert " >
-					Por favor rellene los campos Obligatorios(rojo)
+					 Please fill required fields(red)
 				</div>
 			</div>
 		</div>
@@ -95,12 +95,12 @@
 								</tr> 
 								<tr>
 									<th class="cellEdit" >ID</th>
-									<th class="cellGeneral">Nombre</th>
-									<th class="cellGeneral">Apellidos</th>
-									<th class="cellGeneral" >Dirección</th>
-									<th class="cellGeneral" >Persona Principal</th>
-									<th class="cellGeneral" >Persona Secundaria</th>
-									<th class="cellGeneral" >Beneficiario</th>
+									<th class="cellGeneral">Name</th>
+									<th class="cellGeneral">Last Name</th>
+									<th class="cellGeneral" >Address</th>
+									<th class="cellGeneral" >Main</th>
+									<th class="cellGeneral" >Secondary</th>
+									<th class="cellGeneral" >Beneficiary</th>
 									<th></th>
 								</tr>
 							</thead>
@@ -120,11 +120,11 @@
 								<tr>
 									<th class="cellEdit" >Code</th>
 									<th class="cellGeneral">Description</th>
-									<th class="cellGeneral">Precio</th>
-									<th class="cellGeneral" ># de Semana</th>
-									<th class="cellGeneral" >Primer año OCC</th>
-									<th class="cellGeneral" >Ultimo año OCC</th>
-									<th class="cellGeneral" >Frecuencia</th>
+									<th class="cellGeneral">Price</th>
+									<th class="cellGeneral" ># Week</th>
+									<th class="cellGeneral" >Fisrt Year OCC</th>
+									<th class="cellGeneral" >Last Year OCC</th>
+									<th class="cellGeneral" >Frequency</th>
 									<th></th>
 								</tr>
 							</thead>
@@ -249,8 +249,8 @@
 						</div>
 					</div>
 					<div class="small-12 medium-8 large-6 columns" style="text-align:right;"> 
-						<a id="btnUpdateTourID" class="button small"><i class="fa fa-save fa-lg">Guardar</i></a>
-						<a id="btn" class="button small"><i class="fa fa-minus-circle fa-lg">Eliminar</i></a>
+						<a id="btnUpdateTourID" class="button small"><i class="fa fa-save fa-lg">Save</i></a>
+						<a id="btn" class="button small"><i class="fa fa-minus-circle fa-lg">Delete</i></a>
 					</div>
 				</div>
 			</fieldset>
@@ -336,8 +336,8 @@
 										<th class="cellGeneral" >Sign transaction</th>
 										<th class="cellGeneral" >Concept Trxid</th>
 										<th class="cellGeneral" >Date</th>
-										<th class="cellGeneral" >Rode</th>
-										<th class="cellGeneral" >Monto Bal</th>
+										<th class="cellGeneral" >Amount</th>
+										<th class="cellGeneral" >Amount Bal</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -391,8 +391,8 @@
 										<th class="cellGeneral" >Sign transaction</th>
 										<th class="cellGeneral" >Concept Trxid</th>
 										<th class="cellGeneral" >Date</th>
-										<th class="cellGeneral" >Rode</th>
-										<th class="cellGeneral" >Monto Bal</th>
+										<th class="cellGeneral" >Amount</th>
+										<th class="cellGeneral" >Amount Bal</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -458,8 +458,8 @@
 										<th class="cellGeneral" >Sign transaction</th>
 										<th class="cellGeneral" >Concept Trxid</th>
 										<th class="cellGeneral" >Date</th>
-										<th class="cellGeneral" >Rode</th>
-										<th class="cellGeneral" >Monto Bal</th>
+										<th class="cellGeneral" >Amount</th>
+										<th class="cellGeneral" >Amount Bal</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -493,9 +493,6 @@
 									<th class="cellEdit" >ID</th>
 									<th class="cellGeneral">Code</th>
 									<th class="cellGeneral">Name</th>
-									<!-- <th class="cellGeneral" >Role</th>
-									<th class="cellGeneral" >Commission Amount</th>
-									<th class="cellGeneral" >Comision Porcentaje</th> -->
 									<th></th>
 								</tr>
 							</thead>
@@ -588,7 +585,7 @@
 									<th class="cellGeneral">Creation date</th>
 									<th class="cellGeneral">Document type</th>
 									<th class="cellGeneral">User</th>
-									<th class="cellGeneral">Impreso</th>
+									<th class="cellGeneral">Printed</th>
 								</tr>
 							</thead>
 							<tbody>

@@ -4,7 +4,7 @@
         <div class="row" id="alertValidateContrato" style="display:none;">
             <div class="small-12 columns">
                 <div data-alert class="alert-box alert " >
-                    Por favor rellene los campos Obligatorios(rojo)
+                    Please fill required fields(red)
                 </div>
             </div>
         </div>
@@ -45,11 +45,11 @@
 							</div>
 							<div class="small-8 large-6 columns">
 								<a id="btnAddTourID" class="btn btn-primary spanSelect">
-									<div class="label">Agregar</div>
+									<div class="label">Add</div>
 									<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 								</a>
 								<a id="btnDeleteTourID" class="btn btn-primary spanSelect">
-									<div class="label">Limpiar</div>
+									<div class="label">Clean</div>
 									<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 								</a>
 							</div>
@@ -62,7 +62,7 @@
                         <div class="small-12 columns">
                             <!--<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>-->
 							<a id="btnAddPeople" class="btn btn-primary spanSelect">
-								<div class="label">Agregar</div>
+								<div class="label">Add</div>
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
                         </div>
@@ -71,12 +71,12 @@
                                 <thead>
                                 <tr>
                                     <th class="cellEdit" >ID</th>
-                                    <th class="cellGeneral">Nombre</th>
-                                    <th class="cellGeneral">Apellidos</th>
-                                    <th class="cellGeneral" >Dirección</th>
-                                    <th class="cellGeneral" >Persona Principal</th>
-                                    <th class="cellGeneral" >Persona Secundaria</th>
-                                    <th class="cellGeneral" >Beneficiario</th>
+                                    <th class="cellGeneral">Name</th>
+                                    <th class="cellGeneral">Last Name</th>
+                                    <th class="cellGeneral" >Address</th>
+                                    <th class="cellGeneral" >Main</th>
+                                    <th class="cellGeneral" >Secondary</th>
+                                    <th class="cellGeneral" >Beneficiary</th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -90,7 +90,7 @@
             </div>
             <!-- Unidades -->
             <div class="fieldset large-12 columns">
-                <legend class="btnAddressData">Unidades</legend>
+                <legend class="btnAddressData">Unities</legend>
                 <div class="containerPeople">
                     <div class="row">
                         <div class="small-12 columns">
@@ -109,7 +109,7 @@
                                         <th class="cellGeneral">Price</th>
                                         <th class="cellGeneral">Frequency</th>
                                         <th class="cellGeneral">Season</th>
-                                        <th class="cellGeneral"># de Semana</th>
+                                        <th class="cellGeneral"># Week</th>
                                         <th class="cellGeneral">First Year OCC</th>
                                         <th class="cellGeneral">Last Year OCC</th>
                                         <th class="cellGeneral"></th>
@@ -151,9 +151,9 @@
                         <thead>
                         <tr>
                             <th class="cellEdit" >Folio</th>
-                            <th class="cellGeneral">Nombre Legal</th>
-                            <th class="cellGeneral">Tipo de unidad</th>
-                            <th class="cellDate" >Fecha</th>
+                            <th class="cellGeneral">Legal Name</th>
+                            <th class="cellGeneral">Unit Type</th>
+                            <th class="cellDate" >Date</th>
                             <th class="cellGeneral" >Total</th>
                         </tr>
                         </thead>
@@ -198,8 +198,8 @@
 						<input class="round general" id="downpayment" required type="text" placeholder="$0.00"/>
                     </div>
                     <div class="large-4 columns end">
-                        <input type="radio" name="engancheR" value="porcentaje" id="porcentaje"><label for="porcentaje">Porcentaje</label>
-                        <input checked type="radio" name="engancheR" value="cantidad" id="cantidad"><label for="cantidad">Cantidad</label>
+                        <input type="radio" name="engancheR" value="porcentaje" id="porcentaje"><label for="porcentaje">Percentage</label>
+                        <input checked type="radio" name="engancheR" value="cantidad" id="cantidad"><label for="cantidad">Amount</label>
                     </div>
                     <div class="large-1 columns">
                         <label>Amount</label>
@@ -208,24 +208,6 @@
                         <input id="montoTotal" class="round general" type="text" placeholder="%" />
                     </div>
 				</div>
-<!-- 				<div class="row" style="margin-bottom:10px;">
-					<div class="large-3 columns">
-						 <label>Choose</label>
-					</div>
-					<div class="large-6 columns end">
-                        <input type="radio" name="engancheR" value="porcentaje" id="porcentaje"><label for="porcentaje">Porcentaje</label>
-                        <input checked type="radio" name="engancheR" value="cantidad" id="cantidad"><label for="cantidad">Cantidad</label>
-                    </div>
-				</div> -->
-				<!-- <div class="row">
-					<div class="large-3 columns">
-						<label>Amount</label>
-					</div>
-					<div class="large-5 columns end">
-						<input class="round general" type="text" placeholder="%" />
-                    </div>
-				</div> -->
-                <!--Enganche-->
                 <div class="row">
                     <div class="small-3 columns">
                         <label for="depositoEnganche" class="text-left">Deposit Downpayment</label>

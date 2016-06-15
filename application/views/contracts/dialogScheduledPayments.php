@@ -10,27 +10,27 @@
   </div>
   <div class="row">
     <div class="small-3 columns">
-      <label  class="text-left">payment type</label>
+      <label  class="text-left">Payment Type</label>
     </div>
     <div class="small-9 columns">
 		<div class="caja">
 			<select id="tiposPagoProgramados" class="input-group-field round">
-				<option value="1">Contado</option>
-				<option value="2">Tarjeta de Credito</option>
-				<option value="3">Facturación</option>
-				<option value="4">Transferido</option>
+				<option value="1">Cash</option>
+        <option value="2">Credit Card</option>
+        <option value="3">Billing</option>
+        <option value="4">Transfer</option>
 			</select>
 		</div>
     </div>
   </div>
   <fieldset id="datosTarjetaProgramados" class="fieldset" style="display: none;">
                 <legend>
-                    Datos de la tarjeta
+                   Card Data
                 </legend>
                 <!-- Numero de tarjeta-->
                 <div class="row">
                     <div class="small-3 columns">
-                        <label for="numeroTarjeta" class="text-left">Numero de Tarjeta</label>
+                        <label for="numeroTarjeta" class="text-left">Card Number</label>
                     </div>
                     <div class="small-9 columns">
                         <input class="round general" type="text" id="numeroTarjetaProgramados" name="numeroTarjeta" class="general" required>
@@ -39,7 +39,7 @@
                 <!-- fecha de expiracion-->
                 <div class="row">
                     <div class="small-3 columns">
-                        <label  for="dateExpiracion" class="text-left">Fecha de Expiración</label>
+                        <label  for="dateExpiracion" class="text-left">Expiration Date</label>
                     </div>
                     <div class="small-9 columns">
                         <input class="round general" type="text" id="dateExpiracionProgramados" name="dateExpiracion" class="general" required>
@@ -48,7 +48,7 @@
                  <!-- Codigo Postal-->
                 <div class="row">
                     <div class="small-3 columns">
-                        <label  for="codigoPostal" class="text-left">Código Postal</label>
+                        <label  for="codigoPostal" class="text-left">PostCode</label>
                     </div>
                     <div class="small-9 columns">
                         <input class="round general" type="text" id="codigoPostalProgramados" name="codigoPostal" class="general" required>
@@ -57,7 +57,7 @@
                 <!-- Codigo tarjeta-->
                 <div class="row">
                     <div class="small-3 columns">
-                        <label  for="codigoTarjeta" class="text-left">Código CVC</label>
+                        <label  for="codigoTarjeta" class="text-left">CVC</label>
                     </div>
                    <div class="small-9 columns">
                         <input class="round general" type="text" id="codigoTarjetaProgramados" name="codigoTarjeta" class="general" required>
@@ -66,7 +66,7 @@
     </fieldset>
   <div class="row">
     <div class="small-3 columns">
-      <label for="datePaymentPrg" class="text-left">payment date</label>
+      <label for="datePaymentPrg" class="text-left">Payment Date</label>
     </div>
     <div class="small-9 columns">
        <input class="round general" id="datePaymentPrg" type="date" name="datePaymentPrg" min="2016" max="2099">
@@ -74,7 +74,7 @@
   </div>
    <div class="row">
     <div class="small-3 columns">
-      <label for="montoDownpaymentPrg" class="text-left">monto</label>
+      <label for="montoDownpaymentPrg" class="text-left">Amount</label>
     </div>
     <div class="small-9 columns">
        <input class="round general" id="montoDownpaymentPrg" type="number" name="montoDownpaymentPrg" min="0" max="999999">
@@ -106,7 +106,7 @@
                 <thead>
                     <tr>
                         <th class="cellEdit" >Date</th>
-                        <th class="cellGeneral">payment type</th>
+                        <th class="cellGeneral">Payment Type</th>
                         <th class="cellGeneral">amount</th>
                         <th class="cellGeneral">Delete</th>
                    </tr>
@@ -119,7 +119,7 @@
 </fieldset>
   <div class="row">
     <div class="small-3 columns">
-      <label for="totalProgramado" class="text-left">total</label>
+      <label for="totalProgramado" class="text-left">Total</label>
     </div>
     <div class="small-9 columns">
        <input class="round general" id="totalProgramado" type="number" name="totalProgramado" min="2016" max="2099">
@@ -127,7 +127,7 @@
   </div>
     <div class="row">
     <div class="small-3 columns">
-      <label for="pendiente" class="text-left">due</label>
+      <label for="pendiente" class="text-left">Due</label>
     </div>
     <div class="small-9 columns">
        <input class="round general" id="pendiente" type="text" name="pendiente" min="2016" max="2099">

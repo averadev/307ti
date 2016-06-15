@@ -55,7 +55,7 @@
 							<div class="filtersAdvanced" id="avanzada" style="display:none;">
 								<div class="rdoField">
 									<input type="radio" name="filtro_contrato" value="codEmpleado" id="codEmpleado" required>
-									<label for="codEmpleado">Codigo de Empleado</label>
+									<label for="codEmpleado">Employee code</label>
 								</div>
 								<div class="rdoField">
 									<input type="radio" name="filtro_contrato" value="folio" id="folio">
@@ -63,7 +63,7 @@
 								</div>
 								<div class="rdoField">
 									<input type="radio" name="filtro_contrato" value="unidad" id="unidad">
-									<label for="unidad">Unidad ID</label>
+									<label for="unidad">Unit ID</label>
 								</div>
 								<div class="rdoField">
 									<input type="radio" name="filtro_contrato" value="email" id="email" />
@@ -71,7 +71,7 @@
 								</div>
 								<div class="rdoField">
 									<input type="radio" name="filtro_contrato" value="contrato" id="contrato">
-									<label for="contrato">Contrato ID</label>
+									<label for="contrato">Contract ID</label>
 								</div>
 							</div>
 						</fieldset>
@@ -92,11 +92,11 @@
 								</div>
 								<div class="medium-3 columns ">
 									<a id="btnfind" class="btn btn-primary btn-Search">
-										<div class="label">Buscar</div>
+										<div class="label">Search</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 									</a>
 									<a id="btnCleanWord" class="btn btn-primary spanSelect">
-										<div class="label">Limpiar</div>
+										<div class="label">Clean</div>
 										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 									</a>
 								</div>
@@ -116,7 +116,7 @@
 				<div class="pull-right box-tools">
                </div>
                <h3 class="box-title">
-               	<span>Contracts Relation</span>
+               	<span>Contracts</span>
                </h3>
 			</div>
 			<div class="box-body"  style="display: block;">

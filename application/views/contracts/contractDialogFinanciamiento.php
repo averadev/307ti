@@ -44,15 +44,15 @@
   </div>
   <div class="row">
     <div class="small-3 columns">
-      <label for="numeroMesesF" class="text-left"># Meses</label>
+      <label for="numeroMesesF" class="text-left"># Months</label>
     </div>
     <div class="small-9 columns">
-       <p id="numeroMesesF">0 Meses</p>
+       <p id="numeroMesesF">0 Months</p>
     </div>
   </div>
    <div class="row">
     <div class="small-3 columns">
-      <label for="tasaInteresF" class="text-left">Tase de interes</label>
+      <label for="tasaInteresF" class="text-left">Interest Rate</label>
     </div>
     <div class="small-9 columns">
        <p id="tasaInteresF">0%</p>
@@ -64,22 +64,22 @@
     </div>
     <div class="small-9 columns">
 		<a id="btnCalcularF" class="btn btn-primary spanSelect">
-			<div class="label">Calcular</div>
+			<div class="label">Calculate</div>
 			<i class="fa fa-calculator" aria-hidden="true"></i>
 		</a>
     </div>
   </div>
 </form>
 <fieldset class="fieldset">
-    <legend class="btnAddressData">Pago Mensual</legend>
+    <legend class="btnAddressData">Monthly Payment</legend>
     <div class="containerPeople">
         <div class="row">
             <table id="tablePagosSelected" width="100%">
                 <thead>
                     <tr>
-                        <th class="cellEdit" >Pago</th>
-                        <th class="cellGeneral">Cargo Cobranza</th>
-                        <th class="cellGeneral">Total a pagar</th>
+                        <th class="cellEdit" >Payment</th>
+                        <th class="cellGeneral">Charge collection</th>
+                        <th class="cellGeneral">Total to Pay</th>
                    </tr>
                 </thead>
                 <tbody id="tbodyPagosSelected">

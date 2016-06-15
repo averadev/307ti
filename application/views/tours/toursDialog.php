@@ -26,15 +26,15 @@
 							</div>
 							<div class="rdoField">
 								<input checked type="checkbox" name="filter_tourID" value="nombre" id="nombreTour">
-								<label for="nombreTour">Nombre</label>
+								<label for="nombreTour">Name</label>
 							</div>
 							<div class="rdoField">
 								<input type="checkbox" name="filter_tourID" value="apellido" id="apellidoTour">
-								<label for="apellidoTour">Apellido</label>
+								<label for="apellidoTour">Last Name</label>
 							</div>
 							<div class="rdoField">
 								<input type="checkbox" name="filter_tourID" value="reservacionIdTour" id="reservacionIdTour">
-								<label for="reservacionIdTour">Reservación ID</label>
+								<label for="reservacionIdTour">Reservation ID</label>
 							</div>
 						</fieldset>
 					</div>
@@ -42,12 +42,12 @@
 						<fieldset class="large-12 columns fieldsetFilter">
 							<div class="rdoField">
 								<input type="checkbox" id="advanceSearchTour" class="checkFilter">
-								<label for="advanceSearchTour">Advanced search</label>
+								<label for="advanceSearchTour">Advanced Search</label>
 							</div>
                             <div class="filtersAdvanced" id="advanceTour" style="display: none;">
 								<div class="rdoField">
 									<input type="checkbox" name="filter_tourID" value="codEmpleadoTour" id="codEmpleadoTour" required>
-									<label for="codEmpleadoTour">Codigo de Empleado</label>
+									<label for="codEmpleadoTour">Employee Code</label>
 								</div>
 								<div class="rdoField">
 									<input type="checkbox" name="filter_tourID" value="folioTour" id="folioTour">
@@ -55,7 +55,7 @@
 								</div>
 								<div class="rdoField">
 									<input type="checkbox" name="filter_tourID" value="unidadTour" id="unidadTour">
-									<label for="unidadTour">Unidad ID</label>
+									<label for="unidadTour">Unit ID</label>
 								</div>
 								<div class="rdoField">
 									<input type="checkbox" name="filter_tourID" value="emailTour" id="emailTour">
@@ -63,7 +63,7 @@
 								</div>
 								<div class="rdoField">
 									<input type="checkbox" name="filter_tourID" value="contratoTour" id="contratoTour">
-									<label for="contratoTour">Contrato ID</label>
+									<label for="contratoTour">Contract ID</label>
 								</div>
 							</div>
 						</fieldset>
@@ -83,11 +83,11 @@
 								</div>
 								<div class="small-12 medium-6 large-3 columns columMedium">
 									<a id="btnfindTour" class="btn btn-primary btn-Search">
-										<div class="label">Buscar</div>
+										<div class="label">Search</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 									</a>
 									<a id="btnCleanWordTour" class="btn btn-primary spanSelect">
-										<div class="label">Limpiar</div>
+										<div class="label">Clean</div>
 										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 									</a>
 								</div>
@@ -106,7 +106,7 @@
                 <div class="pull-right box-tools">
                 </div>
                 <h3 class="box-title">
-                    <span>Tours Relation</span>
+                    <span>Tours</span>
                 </h3>
             </div>
             <div class="box-body" style="display: block;">
