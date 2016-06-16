@@ -12,10 +12,10 @@
 				<h3 class="box-title">
 					<span>FrontDesk Search</span>
 				</h3>
-				<a data-widget="newFontDesk" id="newFontDesk" class="btn btn-new">
+				<!--<a data-widget="newFontDesk" id="newFontDesk" class="btn btn-new">
 					<div class="label">Nuevo</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
-				</a>
+				</a>-->
 			</div>
 			<!-- body search-->
 			<div class="box-body box-filter" style="display: block;">

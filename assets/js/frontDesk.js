@@ -174,6 +174,8 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 					case "section3":
 						drawTable2(data.items,"tableHKConfiguration","showModaFrontDesk","Edit");
 						paginadorFrontDesk(data.total,"paginationHKConfig",0);
+						
+						//alert( 'Column '+order[0][0]+' is the ordering column' );
 					break;
 					case "section4":
 						var option = {type:"input", input:"checkbox", title:"editStatus", name:"HKLookUpStatus", id:"idStatus"};

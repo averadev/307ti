@@ -599,8 +599,50 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
+	
+	public function getAccountsById($id){
+        $this->db->distinct();
+        $this->db->select('att.pkAccTrxId as ID, att.ynActive as Active');
+		$this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Transaccion_Signo, att.fkAccId as AccID');
+		$this->db->select('tc.TrxClassDesc as Concept_Trxid');
+		$this->db->select('att.CrDt as Creation_Date, att.DueDt as Due_Date, att.Amount, att.AbsAmount, 0 as Overdue_Amount');
+		$this->db->select('att.Doc as Document, att.Remark as Reference');
+		//$this->db->select('att.pkAccTrxId as ID');
+        $this->db->from('tblAccTrx att');
+        $this->db->join('tblAcc a', 'a.pkAccId = att.fkAccId');
+        $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId');
+        $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = att.fkTrxTypeId');
+		$this->db->join('tblTrxClass tc', 'tc.pkTrxClassid = att.fkTrxClassID');
+        $this->db->where('rpa.fkResId', $id);
+        $query = $this->db->get();
 
-
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+	
+	public function selectTrxType(){
+        $this->db->select("pkTrxTypeId as ID, TrxTypeDesc");
+        $this->db->from('TblTrxType');
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+	
+	public function selectTrxClass(){
+        $this->db->select("pkTrxClassid as ID, TrxClassDesc");
+        $this->db->from('tblTrxClass');
+		$this->db->where('TrxSign = 1');
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+	
     //
     private function filterContracts($filters){
 

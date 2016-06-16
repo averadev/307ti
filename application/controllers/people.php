@@ -79,7 +79,7 @@ class People extends CI_Controller {
 				$idPeople = $this->people_db->insertReturnId($insert,"tblPeople");
 				
 				$insertAddress = array(
-					'fkAddressTypeid'	=> 9,
+					'fkAddressTypeid'	=> 1,
 					'Street1'			=> $_POST['street'],
 					'Street2'			=> $_POST['colony'],
 					'fkCountryId'		=> $_POST['country'],
@@ -217,7 +217,7 @@ class People extends CI_Controller {
 					
 				}else{
 					$insertAddress = array(
-						'fkAddressTypeid'	=> 9,
+						'fkAddressTypeid'	=> 1,
 						'Street1'			=> $_POST['street'],
 						'Street2'			=> $_POST['colony'],
 						'fkCountryId'		=> $_POST['country'],

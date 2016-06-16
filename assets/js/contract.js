@@ -11,6 +11,7 @@ $(document).ready(function(){
 	var dialogDiscountAmount = modalDiscountAmount();
 	var dialogEditContract = modalEditContract();
 	var dialogAddTour = addTourContract();
+	var dialogAccount = opcionAccount();
 
 
 	$(document).on( 'click', '#newContract', function () {
@@ -73,6 +74,11 @@ $(document).ready(function(){
 	$(document).on( 'click', '#btnDiscountAmount', function () {
 		var dialogDiscountAmount = modalDiscountAmount();
 		dialogDiscountAmount.dialog("open");
+	});
+	
+	$(document).on( 'click', '#btNewTransAcc', function () {
+		var dialogAccount = opcionAccount();
+		dialogAccount.dialog("open");
 	});
 
 	$(document).on( 'click', '#btnAddTourID', function () {
@@ -1078,6 +1084,7 @@ function modalEditContract(id){
 	    	$(this).load("contract/modalEdit?id="+id , function(){
 	 			showLoading('#dialog-Edit-Contract',false);
 	 			getDatosContract(id);
+				getAccounts(id);
 	 			setEventosEditarContrato(id);
 	    	});
 		},
@@ -1547,6 +1554,12 @@ function drawTableSinHead(data, table){
     $('#' + table).html(bodyHTML);
 }
 
+function setHeightModal(div){
+	var hTabs = $('#' + div + ' .contentModalHeader').height();
+	var hContent = $('#' + div + ' .contentModal').height();
+	$('#' + div + ' .contentModal').css('height', ( hContent - (hTabs) + 25 ));
+}
+
 function getDatosContract(id){
 	$.ajax({
 	    data:{
@@ -1561,11 +1574,73 @@ function getDatosContract(id){
 	    	drawDataContract(data["contract"][0]);
 	    	drawTerminosVenta(data["terminosVenta"][0]);
 	    	drawTerminoFinanciamiento(data["terminosFinanciamiento"][0]);
+			var contraTemp = data["contract"][0];
+			$('td.folioAccount').text(contraTemp.Folio);
+			setHeightModal('dialog-Edit-Contract');
 	    },
 	    error: function(){
 	        alertify.error("Try again");
 	    }
 	});
+}
+
+function getAccounts(id){
+	$.ajax({
+	    data:{
+	        idContrato: id
+	    },
+	    type: "POST",
+	    url: "contract/getAccountsById",
+	    dataType:'json',
+	    success: function(data){
+			//console.log(data);
+			var sales = data["sales"];
+			drawTable2(sales, "tableAccountSeller", false, "");
+			setTableAccount(sales, "");
+			//drawTableSinHead(data["sales"], "peoplesContract");
+	    	/*drawTableSinHead(data["peoples"], "peoplesContract");
+	    	drawTableSinHead(data["unities"], "tableUnidadesContract");
+	    	drawDataContract(data["contract"][0]);
+	    	drawTerminosVenta(data["terminosVenta"][0]);
+	    	drawTerminoFinanciamiento(data["terminosFinanciamiento"][0]);*/
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function setTableAccount(items){
+	var balance = 0, balanceDeposits = 0, balanceSales = 0, defeatedDeposits = 0, defeatedSales = 0;
+	for(i=0;i<items.length;i++){
+		var item = items[i];
+		var tempTotal = 0, tempTotal2 = 0;
+		if( item.Transaccion_Signo == 1 ){
+			tempTotal = parseFloat(item.AbsAmount);
+			tempTotal2 = parseFloat(item.Overdue_Amount);
+		}
+		if( item.Concept_Trxid.trim() == "Sale" ){
+			if(tempTotal2 != 0){
+				defeatedSales += tempTotal;
+			}else{
+				balanceSales += tempTotal;
+			}
+		}else{
+			if(tempTotal2 != 0){
+				defeatedDeposits += tempTotal;
+			}else{
+				balanceDeposits += tempTotal;
+			}
+		}
+	}
+	balance = balanceDeposits + balanceSales;
+	
+	$('td.balanceAccount').text('$ ' + balance.toFixed(2));
+	$('td.balanceDepAccount').text('$ ' + balanceDeposits.toFixed(2));
+	$('td.balanceSaleAccount').text('$ ' + balanceSales.toFixed(2));
+	$('td.defeatedDepAccount').text('$ ' + defeatedDeposits.toFixed(2));
+	$('td.defeatedSaleAccount').text('$ ' + defeatedSales.toFixed(2));
+	
 }
 
 function drawTerminosVenta(data){
@@ -1944,4 +2019,70 @@ function SaveNotesContract(id){
 	        alertify.error("Try again");
 	    }
 	});
+}
+
+/*** modal Account ***/
+function opcionAccount(){
+	var div = "#dialog-accounts";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+			if ($(div).is(':empty')) {
+  				showLoading(div, true);
+				$(this).load ("contract/modalAccount" , function(){
+					showLoading(div, false);
+					//initEventosSellers();
+					$( "#dueDateAcc" ).Zebra_DatePicker({
+						format: 'm/d/Y',
+						show_icon: false,
+					});
+					setDataOpcionAccount();
+					ajaxSelects('contract/getTrxType','try again', generalSelects, 'slcTransTypeAcc');
+					ajaxSelects('contract/getTrxClass','try again', generalSelects, 'slcTrxClassAcc');
+					
+				});
+			}else{
+				setDataOpcionAccount();
+			}
+		},
+		autoOpen: false,
+     	height: maxHeight,
+     	width: "50%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Save",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+				var id = "saveAccCont";
+				var arrayWords = ["slcTransTypeAcc", "slcTrxClassAcc", "AmountAcc", "dueDateAcc"];
+				var form = $("#"+id);
+				var elem = new Foundation.Abide(form, {});
+				if(!verifyInputsByID(arrayWords)){
+					$('#'+id).foundation('validateForm');
+					alertify.success("Please fill required fields (red)");
+				}else{
+					saveAccCont();
+				}
+       		}
+     	}],
+     close: function() {
+    	//$('#dialog-ScheduledPayments').empty();
+     }
+	});
+	return dialogo;
+}
+
+function setDataOpcionAccount(){
+	$('#dueDateAcc').val(getCurrentDate());
+	$('#legalNameAcc').text($('#editContractTitle').text());
+	$('#balanceAcc').text($('.balanceAccount').text());
+}
+
+function saveAccCont(){
+	
 }

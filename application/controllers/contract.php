@@ -287,6 +287,20 @@ public function createNote(){
 			echo json_encode($unities);
 		}
 	}
+	
+	public function getTrxType(){
+		if($this->input->is_ajax_request()) {
+			$properties = $this->contract_db->selectTrxType();
+			echo json_encode($properties);
+		}
+	}
+	
+	public function getTrxClass(){
+		if($this->input->is_ajax_request()) {
+			$properties = $this->contract_db->selectTrxClass();
+			echo json_encode($properties);
+		}
+	}
 
 	public function getDatosContractById(){
 		if($this->input->is_ajax_request()) {
@@ -297,6 +311,24 @@ public function createNote(){
 				"unities" => $this->contract_db->getUnitiesContract($id),
 				"terminosVenta" => $this->contract_db->getTerminosVentaContract($id),
 				"terminosFinanciamiento" => $this->contract_db->getTerminosFinanciamiento($id)
+			];
+			echo json_encode($datos);
+		}
+	}
+	
+	public function getAccountsById(){
+		if($this->input->is_ajax_request()) {
+			$id = $_POST['idContrato'];
+			$sales = $this->contract_db->getAccountsById($id);
+			foreach($sales as $item){
+				$CurDate = strtotime(date("Y-m-d H:i:00",time()));
+				$dueDate = strtotime($item->Due_Date);
+				if($dueDate <= $CurDate){
+					$item->Overdue_Amount = $item->AbsAmount;
+				}
+			}
+			$datos =[
+				"sales"=> $sales
 			];
 			echo json_encode($datos);
 		}

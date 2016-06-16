@@ -255,20 +255,14 @@
 				</div>
 			</fieldset>
 			<fieldset class="fieldset"></fieldset>
-</div>
-
-
-
-
-
-
+	</div>
 
 	<!-- tabs cuentas -->
 	<div id="tab-CAccounts" class="large-12 columns tab-modal" style="display:none;">
 		<div class="tabsModal">
 			<ul class="tabs" id="tabsContratsAccounts"  data-tabs>
 				<li class="tabs-title active" attr-screen="tab-CASales" >
-					<a>Accounts</a>
+					<a>Sales</a>
 				</li>
 				<li class="tabs-title" attr-screen="tab-CAMaintenance">
 					<a>Maintenance</a>
@@ -282,71 +276,63 @@
 		<div class="ModalContractAccounts">
 			<!-- ventas-->
 			<div id="tab-CASales" class="large-12 columns tab-modal" style="display:inline;">
-				
-				<fieldset class="fieldset">
-					<div class="row">
-						<table class="tableAccountResult">
-							<thead>
-								<tr class="trColspan">
-									<th colspan="4">Results</th>
-								</tr>
-							</thead>
+				<div class="row" style="padding:0;">
+					<div class="large-12 columns" style="padding:0;" >
+						<table class="tableAccountResult" style="margin-top:16px;">
 							<tbody>
 								<tr>
-									<td>Folio Contract</td>
-									<td>00000</td>
+									<td >Folio Contract</td>
+									<td class="folioAccount">00000</td>
 									<td></td>
 									<td></td>
 								</tr>
 								<tr>
 									<td>Balance</td>
-									<td>$000,000.00</td>
+									<td class="balanceAccount">$000,000.00</td>
 									<td></td>
 									<td></td>
 								</tr>
 								<tr>
 									<td>Balance of Deposits</td>
-									<td>$000,000.00</td>
+									<td class="balanceDepAccount">$000,000.00</td>
 									<td>Defeated Deposits</td>
-									<td>$000,000.00</td>
+									<td class="defeatedDepAccount">$000,000.00</td>
 								</tr>
 								<tr>
 									<td>Balance Sales</td>
-									<td>$000,000.00</td>
+									<td class="balanceSaleAccount">$000,000.00</td>
 									<td>Defeated Sales</td>
-									<td>$000,000.00</td>
+									<td class="defeatedSaleAccount">$000,000.00</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
-				</fieldset>
-				<fieldset class="fieldset">
-					<div class="containerContract">
-						<div class="row">
-							<table width="100%" style="min-height:250px;">
-								<thead>
-									<tr class="trColspan" >
-										<th colspan="9" class="thColspan" >Seller</th>
-									</tr> 
-									<tr>
-										<th class="cellEdit" >Id</th>
-										<th class="cellGeneral">Code</th>
-										<th class="cellGeneral">Active</th>
-										<th class="cellGeneral" >Type</th>
-										<th class="cellGeneral" >Sign transaction</th>
-										<th class="cellGeneral" >Concept Trxid</th>
-										<th class="cellGeneral" >Date</th>
-										<th class="cellGeneral" >Amount</th>
-										<th class="cellGeneral" >Amount Bal</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr></tr>
-								</tbody>
-							</table>
-						</div>
+				</div>
+				<div class="row" style="padding:0;">
+					<div class="large-12 columns table-section2" style="padding:0;" >
+						<table id="tableAccountSeller" width="100%" style="min-height:150px;">
+							<thead>
+								<!--<tr class="trColspan" >
+									<th colspan="9" class="thColspan" >Seller</th>
+								</tr> -->
+								<tr>
+									<th class="cellGeneral">Id</th>
+									<th class="cellGeneral">Code</th>
+									<th class="cellGeneral">Active</th>
+									<th class="cellGeneral">Type</th>
+									<th class="cellGeneral">Sign transaction</th>
+									<th class="cellGeneral">Concept Trxid</th>
+									<th class="cellGeneral">Date</th>
+									<th class="cellGeneral">Rode</th>
+									<th class="cellGeneral">Monto Bal</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr></tr>
+							</tbody>
+						</table>
 					</div>
-				</fieldset>
+				</div>
 			</div>
 			<!-- mantenimiento -->
 			<div id="tab-CAMaintenance" class="large-12 columns tab-modal" style="display:none;">
@@ -472,11 +458,6 @@
 			</div>
 		</div>
 	</div>
-
-
-
-
-
 
 	<!-- tabs vendedores -->
 	<div id="tab-CVendors" class="large-12 columns tab-modal" style="display:none;">
