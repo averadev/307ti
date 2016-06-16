@@ -7,11 +7,12 @@
     <div class="small-9 columns">
 		<div class="caja">
 			<select id="notesTypes" class="input-group-field round">
-				<option value="1">Sells</option>
-				<option value="2">Contracts</option>
-				<option value="3">FrontDesk</option>
-				<option value="4">Transfer</option>
-
+				 <?php
+                foreach($notesType as $item){?>
+                    <option value="<?php echo $item->ID; ?>"><?php echo $item->description; ?></option>
+                    <?php
+                }
+            ?>
 			</select>
 		</div>
     </div>

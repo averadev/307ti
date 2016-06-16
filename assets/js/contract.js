@@ -1907,14 +1907,14 @@ function modalAddNotas() {
        		text: "Save",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			//SaveNotesContract();
+       			SaveNotesContract(224);
     			alertify.success("Note Save");
     			$(this).dialog('close');
 	       
        		}
      	}],
      close: function() {
-    	$('#dialog-Sellers').empty();
+    	//$('#dialog-Sellers').empty();
      }
 	});
 	return dialogo;

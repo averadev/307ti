@@ -225,16 +225,17 @@ public function createNote(){
 		$Note = [
 			"fkNoteTypeId" => $_POST['noteType'],
 			"fkResId"		=> $_POST['idContrato'],
-			"fkPeopleId"	=> $_POST[''],
+			"fkPeopleId"	=> $_POST['idContrato'],
 			"NoteDesc"		=> $_POST['noteDescription'],
 			"ynVI"			=> 1,
 			"Occyear"		=> "2016",
 			"ynActive"		=> 1,
-			"CrBy"			=> 1,
-			"CrDt"			=>"2016"
+			"CrBy"			=> $this->nativesessions->get('id'),
+			"CrDt"			=> $this->getToday()
 
 		];
 		$this->contract_db->insertReturnId('tblNote', $Note);
+		//echo json_encode(["mensaje"=> "Se inserto Correctamente"]);
 	}
 }
 //////////////////////////////////////////////////////
