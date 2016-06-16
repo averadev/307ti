@@ -584,22 +584,21 @@
 			<fieldset class="fieldset">
 				<div class="containerContract">
 					<div class="row">
-						<table id="tableCNotesSelected" width="100%" style="min-height:250px;">
+						<table id="tableCNotesSelected" width="100%">
 							<thead>
 								<tr class="trColspan" >
 									<th colspan="8" class="thColspan" >Notes</th>
 								</tr> 
 								<tr>
-									<th class="cellEdit"></th>
-									<th class="cellGeneral">Code</th>
+									<th class="cellEdit">ID</th>
 									<th class="cellGeneral">Note type</th>
 									<th class="cellGeneral">Note</th>
 									<th class="cellGeneral">Creation date</th>
 									<th class="cellGeneral">Created by</th>
-									<th class="cellGeneral">Occupation year</th>
+									
 								</tr>
 							</thead>
-							<tbody>
+							<tbody id="tableCNotesSelectedBody">
 								<tr></tr>
 							</tbody>
 						</table>
@@ -619,17 +618,18 @@
 				<div class="containerContract">
 					<div class="row">
 						<div class="small-12 medium-6 large-6 columns">
-							<table id="tableCNotesListSelected" width="100%" style="min-height:250px;">
+							<table id="tableFlagsList" width="100%" style="min-height:250px;">
 								<thead>
 									<tr class="trColspan" >
-										<th colspan="2" class="thColspan" >List of flags</th>
+										<th colspan="3" class="thColspan" >List of flags</th>
 									</tr> 
 									<tr>
+										<th class="cellGeneral">ID</th>
 										<th class="cellGeneral">Code</th>
 										<th class="cellGeneral">Descripción</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody id="tableFlagsListBody">
 									<tr></tr>
 								</tbody>
 							</table>
@@ -654,7 +654,7 @@
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btn" class="button tiny"><i class="fa fa-save fa-lg">Save</i></a>
+				<a id="btnSAveFlags" class="button tiny"><i class="fa fa-save fa-lg">Save</i></a>
 				<a id="btn" class="button tiny"><i class="fa fa-refresh fa-lg">Next Status</i></a>
 			</div>
 		</form>

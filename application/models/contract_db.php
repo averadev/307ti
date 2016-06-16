@@ -495,10 +495,33 @@ class Contract_db extends CI_Model {
         }
     }
 
-    public function selectFlags(){
-        $this->db->select("F.pkFlagId, F.FlagCode, F.FlagDesc");
+    public function selecTypetFlags(){
+        $this->db->select("F.pkFlagId as ID, F.FlagCode, F.FlagDesc");
         $this->db->from('tblflag F');
         $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
+
+    public function selectIdMainPeople($string){
+        $this->db->select('fkPeopleId as ID');
+        $this->db->from('tblResPeopleAcc');
+        $this->db->where('fkResId', $string);
+        $this->db->where('YnPrimaryPeople', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->ID;
+        }
+    }
+    public function selectNotes($ID){
+        $this->db->select("N.pkNoteId, NT.NoteTypeDesc, N.NoteDesc, N.CrDt, N.CrBy");
+        $this->db->from('tblNote N');
+        $this->db->join('tblNoteType NT', 'N.fkNoteTypeId = NT.pkNoteTypeid', 'inner');
+        $this->db->where('fkResId', $ID);
+        $this->db->where('N.ynActive', 1);
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();

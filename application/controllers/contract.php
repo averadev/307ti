@@ -223,9 +223,9 @@ private function createDownPayment($idContrato){
 public function createNote(){
 	if($this->input->is_ajax_request()) {
 		$Note = [
-			"fkNoteTypeId" => $_POST['noteType'],
+			"fkNoteTypeId" =>  $_POST['noteType'],
 			"fkResId"		=> $_POST['idContrato'],
-			"fkPeopleId"	=> $_POST['idContrato'],
+			"fkPeopleId"	=> $this->contract_db->selectIdMainPeople($_POST['idContrato']),
 			"NoteDesc"		=> $_POST['noteDescription'],
 			"ynVI"			=> 1,
 			"Occyear"		=> "2016",
@@ -235,7 +235,33 @@ public function createNote(){
 
 		];
 		$this->contract_db->insertReturnId('tblNote', $Note);
-		//echo json_encode(["mensaje"=> "Se inserto Correctamente"]);
+		echo json_encode(["mensaje"=> "Se inserto Correctamente"]);
+	}
+}
+
+public function createFlags(){
+	if($this->input->is_ajax_request()) {
+		$flags = $_POST["flags"];
+		for ($i=0; $i < sizeof($flags); $i++) { 
+			$flag = [
+				"fkResId"		=> $_POST['idContrato'],
+				"fkFlagId"		=> $flags[$i],
+				"ynActive"		=> 1,
+				"CrBy"			=> $this->nativesessions->get('id'),
+				"CrDt"			=> $this->getToday()
+			];
+			$this->contract_db->insertReturnId('tblResFlag', $flag);
+		}
+		
+		echo json_encode(["mensaje"=> "Se inserto Correctamente"]);
+	}
+}
+
+public function getNotesContract(){
+	if($this->input->is_ajax_request()) {
+		$ID = $_POST['idContrato'];
+		$notes = $this->contract_db->selectNotes($ID);
+		echo json_encode($notes);
 	}
 }
 //////////////////////////////////////////////////////
@@ -484,7 +510,7 @@ public function createNote(){
 	}
 	public function getFlags(){
 		if($this->input->is_ajax_request()){
-			$flags = $this->contract_db->selectFlags();
+			$flags = $this->contract_db->selecTypetFlags();
 			echo json_encode($flags);
 		}
 	}

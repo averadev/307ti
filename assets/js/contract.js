@@ -1069,6 +1069,7 @@ function getDatailByID(id){
 		if (pickedup != null) {
         	pickedup.removeClass("yellow");
 			var id = $(this).find("td").eq(1).text().trim();
+			//var id = getValueFromTableSelected("contracts", 1);
             var dialogEditContract = modalEditContract(id);
             dialogEditContract.dialog("open");
           }
@@ -1462,13 +1463,22 @@ function getDatosContractDocuments(id){
 }
 function getDatosContractNotes(id){
 	console.log("Notas " + id);
+	getNotes(id);
 }
 function getDatosContractFlags(id){
 	console.log("Banderas " + id);
+	initEventosFlags();
 	getFlags();
 }
 function getDatosContractFiles(id){
 	console.log("Archivos " + id);
+}
+
+function initEventosFlags(){
+	$("#btnSAveFlags").click(function (){
+		console.log("HOLA");
+		SaveFlagsContract();
+	});
 }
 
 function drawTableUnidades(data, funcion, cadena, table){
@@ -1929,8 +1939,8 @@ function getWeeks(id){
 	    dataType:'json',
 	    success: function(data){
 	    	showLoading(div, false);
-	    	drawTableId(data,"tableCOccupationSelectedbody");
-	    	//selectTable("tableSellerbody");
+	    	drawTableId(data,"tableFlagsListBody");
+	    	selectTable("tableFlagsListBody");
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -1938,7 +1948,7 @@ function getWeeks(id){
 	});
 }
 function getFlags(id){
-	var div = "#tableCOccupationSelectedbody";
+	var div = "#tableFlagsListBody";
 	showLoading(div, true);
 	$.ajax({
 	    data:{
@@ -1982,8 +1992,7 @@ function modalAddNotas() {
        		text: "Save",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			SaveNotesContract(224);
-    			alertify.success("Note Save");
+       			SaveNotesContract();
     			$(this).dialog('close');
 	       
        		}
@@ -2000,7 +2009,8 @@ function SaveNote(){
 	var noteDescription = $("#NoteDescription").val();
 }
 
-function SaveNotesContract(id){
+function SaveNotesContract(){
+	var id = getValueFromTableSelected("contracts", 1);
 	var noteType = $("#notesTypes").val();
 	var noteDescription = $("#NoteDescription").val();
 	$.ajax({
@@ -2013,7 +2023,49 @@ function SaveNotesContract(id){
 	    url: "contract/createNote",
 	    dataType:'json',
 	    success: function(data){
-	    	//drawTableSinHead(data, "tableUnidadesContract");
+	    	alertify.success(data['mensaje']);
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function getNotes(id){
+	var url = "contract/getNotesContract";
+	var div = "#tableCNotesSelectedBody";
+	showLoading(div, true);
+	$.ajax({
+	    data:{
+	        idContrato: id
+	    },
+	    type: "POST",
+	    url: url,
+	    dataType:'json',
+	    success: function(data){
+	    	showLoading(div, false);
+	    	drawTableId(data,"tableCNotesSelectedBody");
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function SaveFlagsContract(){
+
+	var flags = getArrayValuesSelectedColum("tableFlagsList", 1);
+	var id = getValueFromTableSelected("contracts", 1);
+	$.ajax({
+	    data:{
+	        idContrato: id,
+	        flags:flags
+	    },
+	    type: "POST",
+	    url: "contract/createFlags",
+	    dataType:'json',
+	    success: function(data){
+	    	alertify.success(data['mensaje']);
 	    },
 	    error: function(){
 	        alertify.error("Try again");
