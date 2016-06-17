@@ -239,6 +239,50 @@ public function createNote(){
 	}
 }
 
+	public function saveTransactionAcc(){
+		if($this->input->is_ajax_request()) {
+			if($_POST['attrId'] == "btNewTransAcc"){
+				$debit = -1 * abs($_POST['amount']);
+				$transaction = [
+					"fkAccid" 			=> $_POST['accId'],
+					"fkTrxTypeId"		=> $_POST['trxTypeId'],
+					"fkTrxClassID"		=> $_POST['trxClassID'],
+					"Debit-"			=> $debit,
+					"Credit+"			=> 0,
+					"Amount"			=> $_POST['amount'],
+					"AbsAmount"			=> $_POST['amount'],
+					"Remark"			=> $_POST['remark'],
+					"Doc"				=> $_POST['doc'],
+					"DueDt"				=> $_POST['dueDt'],
+					"ynActive"			=> 1,
+					"CrBy"				=> $this->nativesessions->get('id'),
+					"CrDt"				=> $this->getToday(),
+					"MdBy"				=> $this->nativesessions->get('id'),
+					"MdDt"				=> $this->getToday()
+
+				];
+				$this->contract_db->insertReturnId('tblAccTrx', $transaction);
+				$message= array('success' => true, 'message' => "transaction save");
+			}else{
+				$idTrans = $_POST['idTrans'];
+				$valTrans = $_POST['valTrans'];
+				$amount = $_POST['amount'];
+				$transaction = array();
+				for ($i = 0; $i<count($idTrans); $i++){
+					if($valTrans == $amount){
+						
+					}
+				}
+				/*foreach($idTrans as $item){
+					if
+				}*/
+				//$message = $_POST['idTrans'];
+				$message= array('success' => true, 'message' => "transaction save");
+			}
+			echo json_encode($message);
+		}
+	}
+
 public function createFlags(){
 	if($this->input->is_ajax_request()) {
 		$flags = $_POST["flags"];
@@ -352,12 +396,22 @@ public function getFlagsContract(){
 	public function getAccountsById(){
 		if($this->input->is_ajax_request()) {
 			$id = $_POST['idContrato'];
-			$sales = $this->contract_db->getAccountsById($id);
+			$typeInfo = $_POST['typeInfo'];
+			$sales = $this->contract_db->getAccountsById($id, $typeInfo);
 			foreach($sales as $item){
-				$CurDate = strtotime(date("Y-m-d H:i:00",time()));
-				$dueDate = strtotime($item->Due_Date);
-				if($dueDate <= $CurDate){
-					$item->Overdue_Amount = $item->AbsAmount;
+				
+				if($typeInfo == "account"){
+					$CurDate = strtotime(date("Y-m-d H:i:00",time()));
+					$dueDate = strtotime($item->Due_Date);
+					if($dueDate <= $CurDate){
+						$item->Overdue_Amount = $item->AbsAmount;
+					}
+				}else{
+					$item->inputAll = '<input type="checkbox" id="' . $item->ID . '" class="checkPayAcc" name="checkPayAcc" value="' . $item->AbsAmount . '"><label for="checkFilter1">&nbsp;</label>';
+					//$someArray=array(224=>'someword1'); 
+					//array_unshift($item, $someArray);
+					//$item->prueba = 150;
+					//array_unshift($item, $item->prueba = 150);
 				}
 			}
 			$datos =[
@@ -456,6 +510,13 @@ public function getFlagsContract(){
 		if($this->input->is_ajax_request()) {
 			//$data['notesType'] = $this->contract_db->selectTypeNotas();
 			$this->load->view('contracts/dialogUploadFile');
+		}
+	}
+	
+	public function modalAccount(){
+		if($this->input->is_ajax_request()) {
+			//$data['factores'] = $this->contract_db->selectFactors();
+			$this->load->view('contracts/accountDialog');
 		}
 	}
 

@@ -456,6 +456,16 @@
 					</div>
 				</fieldset>
 			</div>
+			<div class="small-12 large-12 columns" style="padding-top:5px;">
+				<a id="btNewTransAcc" class="btn btn-primary btn-Search">
+					<div class="label">New Transaction</div>
+					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+				</a>
+				<a id="btAddPayAcc" class="btn btn-primary spanSelect">
+					<div class="label">Add Payment</div>
+					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+				</a>
+			</div>
 		</div>
 	</div>
 

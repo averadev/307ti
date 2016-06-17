@@ -84,8 +84,8 @@ $(document).ready(function(){
 		dialogDiscountAmount.dialog("open");
 	});
 	
-	$(document).on( 'click', '#btNewTransAcc', function () {
-		var dialogAccount = opcionAccount();
+	$(document).on( 'click', '#btNewTransAcc, #btAddPayAcc', function () {
+		var dialogAccount = opcionAccount($(this).attr('id'));
 		dialogAccount.dialog("open");
 	});
 
@@ -133,6 +133,9 @@ $(document).ready(function(){
 		$("#financeBalance").val(balanceFinal - transferido);
 	});
 
+	var dialogEditContract = modalEditContract(224);
+	dialogEditContract.dialog("open");
+	
 	getDatailByID("contractstbody");
 });
 
@@ -1093,7 +1096,7 @@ function modalEditContract(id){
 	    	$(this).load("contract/modalEdit?id="+id , function(){
 	 			showLoading('#dialog-Edit-Contract',false);
 	 			getDatosContract(id);
-				getAccounts(id);
+				getAccounts( id, "account" );
 	 			setEventosEditarContrato(id);
 	    	});
 		},
@@ -1595,7 +1598,7 @@ function getDatosContract(id){
 	    	drawTerminoFinanciamiento(data["terminosFinanciamiento"][0]);
 			var contraTemp = data["contract"][0];
 			$('td.folioAccount').text(contraTemp.Folio);
-			//setHeightModal('dialog-Edit-Contract');
+			setHeightModal('dialog-Edit-Contract');
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -1603,10 +1606,11 @@ function getDatosContract(id){
 	});
 }
 
-function getAccounts(id){
+function getAccounts(id, typeInfo){
 	$.ajax({
 	    data:{
-	        idContrato: id
+	        idContrato: id,
+			typeInfo:typeInfo
 	    },
 	    type: "POST",
 	    url: "contract/getAccountsById",
@@ -1614,14 +1618,18 @@ function getAccounts(id){
 	    success: function(data){
 			//console.log(data);
 			var sales = data["sales"];
-			drawTable2(sales, "tableAccountSeller", false, "");
-			setTableAccount(sales, "");
-			//drawTableSinHead(data["sales"], "peoplesContract");
-	    	/*drawTableSinHead(data["peoples"], "peoplesContract");
-	    	drawTableSinHead(data["unities"], "tableUnidadesContract");
-	    	drawDataContract(data["contract"][0]);
-	    	drawTerminosVenta(data["terminosVenta"][0]);
-	    	drawTerminoFinanciamiento(data["terminosFinanciamiento"][0]);*/
+			if(typeInfo == "account"){
+				drawTable2(sales, "tableAccountSeller", false, "");
+				setTableAccount(sales, "");
+				$('#btNewTransAcc').data( 'idRes', id )
+				$('#btNewTransAcc').data( 'idAcc', sales[0].AccID );
+			}else{
+				drawTable2(sales, "tabletPaymentAccoun", false, "");
+				$(".checkPayAcc").off( 'change' );
+				$(".checkPayAcc").on('change', function () {
+					amountTotalPaymentAcc(this);
+				});
+			}
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -2137,10 +2145,11 @@ function SaveFlagsContract(){
 }
 
 /*** modal Account ***/
-function opcionAccount(){
+function opcionAccount(attrId){
 	var div = "#dialog-accounts";
 	dialogo = $(div).dialog ({
   		open : function (event){
+			
 			if ($(div).is(':empty')) {
   				showLoading(div, true);
 				$(this).load ("contract/modalAccount" , function(){
@@ -2150,13 +2159,13 @@ function opcionAccount(){
 						format: 'm/d/Y',
 						show_icon: false,
 					});
-					setDataOpcionAccount();
+					setDataOpcionAccount(attrId);
+					
 					ajaxSelects('contract/getTrxType','try again', generalSelects, 'slcTransTypeAcc');
 					ajaxSelects('contract/getTrxClass','try again', generalSelects, 'slcTrxClassAcc');
-					
 				});
 			}else{
-				setDataOpcionAccount();
+				setDataOpcionAccount(attrId);
 			}
 		},
 		autoOpen: false,
@@ -2181,7 +2190,7 @@ function opcionAccount(){
 					$('#'+id).foundation('validateForm');
 					alertify.success("Please fill required fields (red)");
 				}else{
-					saveAccCont();
+					saveAccCont(attrId);
 				}
        		}
      	}],
@@ -2192,12 +2201,79 @@ function opcionAccount(){
 	return dialogo;
 }
 
-function setDataOpcionAccount(){
+function setDataOpcionAccount(attrId){
+	if(attrId == "btNewTransAcc"){
+		$('#grpTrxClassAcc').show();
+		$('#grpTablePayAcc').hide();
+	}else{
+		getAccounts( $('#btNewTransAcc').data( 'idRes' ), "payment" );
+		$('#grpTrxClassAcc').hide();
+		$('#grpTablePayAcc').show();
+	}
+	$('#accountIdAcc').text( $('#btNewTransAcc').data( 'idAcc' ) );
 	$('#dueDateAcc').val(getCurrentDate());
 	$('#legalNameAcc').text($('#editContractTitle').text());
 	$('#balanceAcc').text($('.balanceAccount').text());
 }
 
-function saveAccCont(){
+function saveAccCont(attrId){
 	
+	var idTrans = new Array();
+	var valTrans = new Array();
+	if( attrId == "btAddPayAcc" ){
+		$('.checkPayAcc:checked').each( function() {
+			idTrans.push($(this).attr('id'));
+			valTrans.push($(this).val());
+		});
+	}
+	
+	//console.log($('#btNewTransAcc').data( 'idRes' ));
+	showAlert(true,"Saving changes, please wait ....",'progressbar');
+	$.ajax({
+		data: {
+			attrId:attrId,
+			accId:$('#btNewTransAcc').data( 'idAcc' ),
+			trxTypeId:$('#slcTransTypeAcc').val(),
+			trxClassID:$('#slcTrxClassAcc').val(),
+			amount:$('#AmountAcc').val(),
+			dueDt:$('#dueDateAcc').val(),
+			doc:$('#documentAcc').val(),
+			remark:$('#referenceAcc').val(),
+			idTrans:idTrans,
+			valTrans:valTrans,
+		},type: "POST",
+		dataType:'json',
+		url: 'contract/saveTransactionAcc'
+	}).done(function( data, textStatus, jqXHR ) {
+		console.log(data);
+		if( data.success ){
+			//alert("guardeishion");
+			//getDatailByID("contractstbody");
+			
+			getAccounts( $('#btNewTransAcc').data( 'idRes' ), "account" );
+			$("#dialog-accounts").dialog('close');
+			showAlert(false,"Saving changes, please wait ....",'progressbar');
+		}else{
+			$("#dialog-accounts").dialog('close');
+			showAlert(false,"Saving changes, please wait ....",'progressbar');
+			//alert("no transacenshion");
+		}
+	}).fail(function( jqXHR, textStatus, errorThrown ) {
+		//alert("no guardeishion");
+		//$("#dialog-accounts").dialog('close');
+		showAlert(false,"Saving changes, please wait ....",'progressbar');
+	});
+}
+
+function amountTotalPaymentAcc(selector){
+	var amoutCur = $('#amountSettledAcc').text();
+	var amoutCur = amoutCur.replace("$", "");
+	amoutCur = parseFloat(amoutCur)
+	console.log(amoutCur)
+	if($(selector).is(':checked')){
+		amoutCur += parseFloat($(selector).val());
+	}else{
+		amoutCur -= parseFloat($(selector).val());
+	}
+	$('#amountSettledAcc').text('$ ' + amoutCur)
 }

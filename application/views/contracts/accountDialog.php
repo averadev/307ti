@@ -14,10 +14,10 @@
                 <!-- Legal name-->
 				<div class="row">
 					<div class="small-4 columns">
-                        <label for="" class="text-left titleBold">Account ID:</label>
+                        <label for="accountIdAcc" class="text-left titleBold">Account ID:</label>
                     </div>
                     <div class="small-8 columns">
-                        <label for="" class="text-left">15556</label>
+                        <label id="accountIdAcc" for="accountIdAcc" class="text-left">15556</label>
                     </div>
                 </div>
 				<div class="row">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
 				<!-- Concept transition type -->
-				<div class="row">
+				<div class="row" id="grpTrxClassAcc">
 					<div class="small-4 columns">
                         <label for="slcTrxClassAcc" class="text-left">Concept transition type:</label>
                     </div>
@@ -110,6 +110,42 @@
                     </div>
                 </div>
             </div>
+			<div class="fieldset large-12 columns" style="margin-top:0;" id="grpTablePayAcc">
+				<div class="row" style="padding:0;">
+					<div class="large-12 columns" style="padding:0;" >
+						<table id="tabletPaymentAccoun" width="100%" style="min-height:150px;">
+							<thead>
+								<!--<tr class="trColspan" >
+									<th colspan="9" class="thColspan" >Seller</th>
+								</tr> -->
+								<tr>
+									<th class="cellGeneral">
+										<input type="checkbox" id="checkFilter1" class="checkFilter" value="peopleId">
+										<label for="checkFilter1">&nbsp;</label>
+									</th>
+									<th class="cellGeneral">Id</th>
+									<th class="cellGeneral">Code</th>
+									<th class="cellGeneral">Concept Trxid</th>
+									<th class="cellGeneral">Date</th>
+									<th class="cellGeneral">Monto</th>
+									<th class="cellGeneral">Monto Bal</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr></tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="row">
+					<div class="small-6 columns">
+                        <label for="" class="text-left titleBold" style="text-align: right;">Amount to be settled:</label>
+                    </div>
+                    <div class="small-6 columns">
+                        <label for="" id="amountSettledAcc" class="text-left">$ 0.00</label>
+                    </div>
+                </div>
+			</div>
         </form>
     </div>
 </div>

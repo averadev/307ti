@@ -635,13 +635,22 @@ class Contract_db extends CI_Model {
         }
     }
 	
-	public function getAccountsById($id){
+	public function getAccountsById($id,$typeInfo){
         $this->db->distinct();
-        $this->db->select('att.pkAccTrxId as ID, att.ynActive as Active');
-		$this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Transaccion_Signo, att.fkAccId as AccID');
-		$this->db->select('tc.TrxClassDesc as Concept_Trxid');
-		$this->db->select('att.CrDt as Creation_Date, att.DueDt as Due_Date, att.Amount, att.AbsAmount, 0 as Overdue_Amount');
-		$this->db->select('att.Doc as Document, att.Remark as Reference');
+		if($typeInfo == "account"){
+			$this->db->select('att.pkAccTrxId as ID, att.ynActive as Active');
+			$this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Transaccion_Signo, att.fkAccId as AccID');
+			$this->db->select('tc.TrxClassDesc as Concept_Trxid');
+			$this->db->select('att.CrDt as Creation_Date, att.DueDt as Due_Date, att.Amount, att.AbsAmount, 0 as Overdue_Amount');
+			$this->db->select('att.Doc as Document, att.Remark as Reference');
+		}else{
+			$this->db->select('0 as inputAll');
+			$this->db->select('att.pkAccTrxId as ID');
+			$this->db->select('tt.TrxTypeCode as Code');
+			$this->db->select('tc.TrxClassDesc as Concept_Trxid');
+			$this->db->select('att.DueDt as Due_Date, att.Amount, att.AbsAmount');
+		}
+       
 		//$this->db->select('att.pkAccTrxId as ID');
         $this->db->from('tblAccTrx att');
         $this->db->join('tblAcc a', 'a.pkAccId = att.fkAccId');
@@ -649,6 +658,9 @@ class Contract_db extends CI_Model {
         $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = att.fkTrxTypeId');
 		$this->db->join('tblTrxClass tc', 'tc.pkTrxClassid = att.fkTrxClassID');
         $this->db->where('rpa.fkResId', $id);
+		if($typeInfo == "payment"){
+			$this->db->where('tt.TrxSign = 1');
+		}
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )
