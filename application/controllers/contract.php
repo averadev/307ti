@@ -264,6 +264,13 @@ public function getNotesContract(){
 		echo json_encode($notes);
 	}
 }
+public function getFlagsContract(){
+	if($this->input->is_ajax_request()) {
+		$ID = $_POST['idContrato'];
+		$notes = $this->contract_db->selectFlags($ID);
+		echo json_encode($notes);
+	}
+}
 //////////////////////////////////////////////////////
 	//busqueda de Unidades
 	public function getProperties(){
@@ -445,6 +452,14 @@ public function getNotesContract(){
 		}
 	}
 
+	public function modalAddFileContract(){
+		if($this->input->is_ajax_request()) {
+			//$data['notesType'] = $this->contract_db->selectTypeNotas();
+			$this->load->view('contracts/dialogUploadFile');
+		}
+	}
+
+
 
 //////////////////////////////////////////////////////
 	public function insertContrat($Contract){
@@ -508,7 +523,7 @@ public function getNotesContract(){
 			echo json_encode($types);
 		}
 	}
-	public function getFlags(){
+	public function getTypesFlags(){
 		if($this->input->is_ajax_request()){
 			$flags = $this->contract_db->selecTypetFlags();
 			echo json_encode($flags);

@@ -41,6 +41,14 @@ $(document).ready(function(){
 	    	modalVendedores = modalSellers();
 	        modalVendedores.dialog( "open" );
 	 });
+
+ 	 $(document).on( 'click', '#btnNewFile', function () {
+ 		if (modalNewFile!=null) {
+	    		modalNewFile.dialog( "destroy" );
+	    	}
+	    	modalNewFile = modalNewFileContract();
+	        modalNewFile.dialog( "open" );
+	 });
 	$(document).on( 'click', '#btnNewProvision', function () {
  		if (modalProvisiones!=null) {
 	    		modalProvisiones.dialog( "destroy" );
@@ -1468,7 +1476,8 @@ function getDatosContractNotes(id){
 function getDatosContractFlags(id){
 	console.log("Banderas " + id);
 	initEventosFlags();
-	getFlags();
+	getTypesFlags();
+	getFlags(id);
 }
 function getDatosContractFiles(id){
 	console.log("Archivos " + id);
@@ -1586,7 +1595,7 @@ function getDatosContract(id){
 	    	drawTerminoFinanciamiento(data["terminosFinanciamiento"][0]);
 			var contraTemp = data["contract"][0];
 			$('td.folioAccount').text(contraTemp.Folio);
-			setHeightModal('dialog-Edit-Contract');
+			//setHeightModal('dialog-Edit-Contract');
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -1861,6 +1870,40 @@ function modalSellers() {
 	return dialogo;
 }
 
+function modalNewFileContract() {
+	var div = "#dialog-newFile";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+  				showLoading(div, true);
+				$(this).load ("contract/modalAddFileContract" , function(){
+					showLoading(div, false);
+				});
+		},
+		autoOpen: false,
+     	height: maxHeight/3,
+     	width: "25%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Add",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+    			alertify.success("File added");
+    			$(this).dialog('close');
+	       
+       		}
+     	}],
+     close: function() {
+     }
+	});
+	return dialogo;
+}
+
 function initEventosSellers(){
 	$("#btnSearchSeller").click(function(){
 		getSellers();
@@ -1939,15 +1982,15 @@ function getWeeks(id){
 	    dataType:'json',
 	    success: function(data){
 	    	showLoading(div, false);
-	    	drawTableId(data,"tableFlagsListBody");
-	    	selectTable("tableFlagsListBody");
+	    	drawTableId(data,"tableCOccupationSelectedbody");
+	    	selectTable("tableCOccupationSelectedbody");
 	    },
 	    error: function(){
 	        alertify.error("Try again");
 	    }
 	});
 }
-function getFlags(id){
+function getTypesFlags(id){
 	var div = "#tableFlagsListBody";
 	showLoading(div, true);
 	$.ajax({
@@ -1955,12 +1998,12 @@ function getFlags(id){
 	        idContrato: id
 	    },
 	    type: "POST",
-	    url: "contract/getFlags",
+	    url: "contract/getTypesFlags",
 	    dataType:'json',
 	    success: function(data){
 	    	showLoading(div, false);
-	    	drawTableId(data,"tableCOccupationSelectedbody");
-	    	//selectTable("tableSellerbody");
+	    	drawTableId(data,"tableFlagsListBody");
+	    	selectTable("tableFlagsListBody");
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -2045,6 +2088,26 @@ function getNotes(id){
 	    success: function(data){
 	    	showLoading(div, false);
 	    	drawTableId(data,"tableCNotesSelectedBody");
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+function getFlags(id){
+	var url = "contract/getFlagsContract";
+	var div = "#notesAsignedBody";
+	showLoading(div, true);
+	$.ajax({
+	    data:{
+	        idContrato: id
+	    },
+	    type: "POST",
+	    url: url,
+	    dataType:'json',
+	    success: function(data){
+	    	showLoading(div, false);
+	    	drawTableId(data,"notesAsignedBody");
 	    },
 	    error: function(){
 	        alertify.error("Try again");

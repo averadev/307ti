@@ -4,6 +4,7 @@ var dialogUser = null;
 var modalVendedores = null;
 var modalProvisiones = null;
 var modalNotas = null;
+var modalNewFile = null;
 
 $(function() {
 	

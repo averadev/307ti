@@ -495,6 +495,18 @@ class Contract_db extends CI_Model {
         }
     }
 
+    public function selectFlags($ID){
+        $this->db->select("F.pkResFlagId, FT.FlagCode, FT.FlagDesc");
+        $this->db->from('tblResFlag F');
+        $this->db->join('tblFlag FT', 'F.fkFlagId = FT.pkFlagId', 'inner');
+        $this->db->where('F.fkResId', $ID);
+        $this->db->where('F.ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
+
     public function selecTypetFlags(){
         $this->db->select("F.pkFlagId as ID, F.FlagCode, F.FlagDesc");
         $this->db->from('tblflag F');

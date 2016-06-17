@@ -638,14 +638,15 @@
 							<table id="tableCNotesAssignedSelected" width="100%" style="min-height:250px;">
 								<thead>
 									<tr class="trColspan" >
-										<th colspan="2" class="thColspan" >Assigned flags</th>
+										<th colspan="3" class="thColspan" >Assigned flags</th>
 									</tr> 
 									<tr>
+										<th class="cellGeneral">ID</th>
 										<th class="cellGeneral">Code</th>
 										<th class="cellGeneral">Descripción</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody id="notesAsignedBody">
 									<tr></tr>
 								</tbody>
 							</table>
@@ -686,7 +687,7 @@
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btn" class="button tiny"><i class="fa fa-plus-circle fa-lg">New file</i></a>
+				<a id="btnNewFile" class="button tiny"><i class="fa fa-plus-circle fa-lg">New file</i></a>
 			</div>
 		</form>
 	</div>
