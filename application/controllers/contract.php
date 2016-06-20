@@ -475,6 +475,8 @@ public function getFlagsContract(){
 		if($this->input->is_ajax_request()) {
 			$id = $_GET['id'];
 			$data['idTour'] = $this->contract_db->selectIdTour($id);
+			$data['contract']= $this->contract_db->getContratos2(null,$id);
+			$data['flags'] = $this->contract_db->selectFlags($id);
 			$this->load->view('contracts/contractDialogEdit', $data);
 		}
 	}

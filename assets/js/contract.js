@@ -1593,7 +1593,7 @@ function getDatosContract(id){
 	    success: function(data){
 	    	drawTableSinHead(data["peoples"], "peoplesContract");
 	    	drawTableSinHead(data["unities"], "tableUnidadesContract");
-	    	drawDataContract(data["contract"][0]);
+	    	//drawDataContract(data["contract"][0]);
 	    	drawTerminosVenta(data["terminosVenta"][0]);
 	    	drawTerminoFinanciamiento(data["terminosFinanciamiento"][0]);
 			var contraTemp = data["contract"][0];
@@ -2094,6 +2094,7 @@ function getNotes(id){
 	    url: url,
 	    dataType:'json',
 	    success: function(data){
+	    	console.table(data);
 	    	showLoading(div, false);
 	    	drawTableId(data,"tableCNotesSelectedBody");
 	    },

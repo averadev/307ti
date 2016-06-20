@@ -25,13 +25,18 @@
 </div>
 <div class="row headerDescription headerGeneral" style="padding: 8px;">
 	<div class="small-12 medium-12 large-8 columns"  >
-		<label class="headerDescriptionTitle" id="editContractTitle"></label>
-		<label class="headerGeneral" id="editContracFloorPlan"></label>
-		<label class="headerGeneral" id="editContracYear"></label>
+		<label class="headerDescriptionTitle" id="editContractTitle"><?php  echo "[".$contract[0]->Folio ."-".$contract[0]->ID."]".$contract[0]->LegalName;?></label>
+		<label class="headerGeneral" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
+		<label class="headerGeneral" id="editContracYear"><?php echo "Year: ". $contract[0]->FirstOccYear; ?></label>
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
-		<label class="headerGeneral" id="editContracStatus"></label>
-		<label class="headerGeneral">Flags: <span>0</span></label>
+		<label class="headerGeneral" id="editContracStatus"><?php echo "Status: ".$contract[0]->StatusDesc;?></label>
+		<label class="headerGeneral">Flags: 
+		<?php
+			 foreach($flags as $item){
+			 	echo $item->FlagDesc.", ";
+			 }
+		?></label>
 	</div>
 </div>
 <!-- tabs de los modales -->
