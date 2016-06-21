@@ -241,7 +241,7 @@ public function createNote(){
 
 	public function saveTransactionAcc(){
 		if($this->input->is_ajax_request()) {
-			if($_POST['attrId'] == "btNewTransAcc"){
+			if($_POST['attrType'] == "newTransAcc"){
 				$debit = -1 * abs($_POST['amount']);
 				$transaction = [
 					"fkAccid" 			=> $_POST['accId'],
@@ -266,18 +266,61 @@ public function createNote(){
 			}else{
 				$idTrans = $_POST['idTrans'];
 				$valTrans = $_POST['valTrans'];
-				$amount = $_POST['amount'];
-				$transaction = array();
-				for ($i = 0; $i<count($idTrans); $i++){
-					if($valTrans == $amount){
+				$trxClass = $_POST['trxClass'];
+				$amount = floatval($_POST['amount']);
+				$update = array();
+				$insertTrx = array();
+				for($i = 0; $i<count($idTrans); $i++){
+					if($amount > 0){
+						$trans = floatval($valTrans[$i]);
+						$totalAmou = 0;
+						$totalAmou2 = 0;
+						if($trans == $amount){
+							$totalAmou2 = $trans;
+							$amount = 0;
+						}else if( $trans > $amount ){
+							$totalAmou2 = $amount;
+							$totalAmou = $trans - $amount;
+							$amount = 0;
+						}else if($trans < $amount){
+							$amount = $amount - $trans;
+							$totalAmou2 = $trans;
+						}
+						$totalAmou = str_replace(",", ".", $totalAmou);
+						$transU = array(
+							//'pkAccTrxId'	=>	$idTrans[$i],
+							'AbsAmount'		=>	$totalAmou,
+						);
+						$condicion = "pkAccTrxId = " . $idTrans[$i];
+						$this->contract_db->updateReturnId( 'tblAccTrx', $transU, $condicion );
+						//array_push($update, $transU);
 						
+						$debit = floatval(-1 * abs($totalAmou2));
+						$debit = str_replace(",", ".", $debit);
+						$totalAmou2 = str_replace(",", ".", $totalAmou2);
+						$transI = array(
+							"fkAccid" 			=> $_POST['accId'],
+							"fkTrxTypeId"		=> $_POST['trxTypeId'],
+							"fkTrxClassID"		=> $trxClass[$i],
+							"Debit-"			=> $debit,
+							"Credit+"			=> 0,
+							"Amount"			=> $totalAmou2,
+							"AbsAmount"			=> $totalAmou2,
+							"Remark"			=> $_POST['remark'],
+							"Doc"				=> $_POST['doc'],
+							"DueDt"				=> $_POST['dueDt'],
+							"ynActive"			=> 1,
+							"CrBy"				=> $this->nativesessions->get('id'),
+							"CrDt"				=> $this->getToday(),
+							"MdBy"				=> $this->nativesessions->get('id'),
+							"MdDt"				=> $this->getToday()
+						);
+						$this->contract_db->insertReturnId( 'tblAccTrx', $transI );
+						//array_push($insertTrx, $transI);
 					}
 				}
-				/*foreach($idTrans as $item){
-					if
-				}*/
-				//$message = $_POST['idTrans'];
-				$message= array('success' => true, 'message' => "transaction save");
+				
+				$message= array('success' => true, 'message' => "transaction saveee");
 			}
 			echo json_encode($message);
 		}
@@ -413,15 +456,15 @@ public function getFlagsContract(){
 	
 	public function getTrxType(){
 		if($this->input->is_ajax_request()) {
-			$properties = $this->contract_db->selectTrxType();
-			echo json_encode($properties);
+			$trxType = $this->contract_db->selectTrxType($_POST['attrType']);
+			echo json_encode($trxType);
 		}
 	}
 	
 	public function getTrxClass(){
 		if($this->input->is_ajax_request()) {
-			$properties = $this->contract_db->selectTrxClass();
-			echo json_encode($properties);
+			$trxClass = $this->contract_db->selectTrxClass();
+			echo json_encode($trxClass);
 		}
 	}
 
@@ -443,7 +486,8 @@ public function getFlagsContract(){
 		if($this->input->is_ajax_request()) {
 			$id = $_POST['idContrato'];
 			$typeInfo = $_POST['typeInfo'];
-			$sales = $this->contract_db->getAccountsById($id, $typeInfo);
+			$typeAcc = $_POST['typeAcc'];
+			$sales = $this->contract_db->getAccountsById($id, $typeInfo, $typeAcc);
 			foreach($sales as $item){
 				
 				if($typeInfo == "account"){
@@ -453,7 +497,8 @@ public function getFlagsContract(){
 						$item->Overdue_Amount = $item->AbsAmount;
 					}
 				}else{
-					$item->inputAll = '<input type="checkbox" id="' . $item->ID . '" class="checkPayAcc" name="checkPayAcc" value="' . $item->AbsAmount . '"><label for="checkFilter1">&nbsp;</label>';
+					$item->inputAll = '<input type="checkbox" id="' . $item->ID . '" class="checkPayAcc" name="checkPayAcc[]" value="' . $item->AbsAmount . '" trxClass="' . $item->pkTrxClassid . '"  ><label for="checkFilter1">&nbsp;</label>';
+					unset($item->pkTrxClassid);
 					//$someArray=array(224=>'someword1'); 
 					//array_unshift($item, $someArray);
 					//$item->prueba = 150;

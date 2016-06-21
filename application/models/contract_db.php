@@ -646,7 +646,7 @@ class Contract_db extends CI_Model {
         }
     }
 	
-	public function getAccountsById($id,$typeInfo){
+	public function getAccountsById( $id, $typeInfo, $typeAcc ){
         $this->db->distinct();
 		if($typeInfo == "account"){
 			$this->db->select('att.pkAccTrxId as ID, att.ynActive as Active');
@@ -658,7 +658,7 @@ class Contract_db extends CI_Model {
 			$this->db->select('0 as inputAll');
 			$this->db->select('att.pkAccTrxId as ID');
 			$this->db->select('tt.TrxTypeCode as Code');
-			$this->db->select('tc.TrxClassDesc as Concept_Trxid');
+			$this->db->select('tc.pkTrxClassid, tc.TrxClassDesc as Concept_Trxid');
 			$this->db->select('att.DueDt as Due_Date, att.Amount, att.AbsAmount');
 		}
        
@@ -669,8 +669,16 @@ class Contract_db extends CI_Model {
         $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = att.fkTrxTypeId');
 		$this->db->join('tblTrxClass tc', 'tc.pkTrxClassid = att.fkTrxClassID');
         $this->db->where('rpa.fkResId', $id);
+		if($typeAcc == "sale"){
+			//$this->db->where('tt.pkTrxTypeId =! ');
+		}else if($typeAcc == "maintenance"){
+			$this->db->where('att.fkTrxTypeId = 8');
+		}else if($typeAcc == "loan"){
+			$this->db->where('att.fkTrxTypeId = 16');
+		}
 		if($typeInfo == "payment"){
 			$this->db->where('tt.TrxSign = 1');
+			$this->db->where('att.AbsAmount > 0');
 		}
         $query = $this->db->get();
 
@@ -680,9 +688,12 @@ class Contract_db extends CI_Model {
         }
     }
 	
-	public function selectTrxType(){
+	public function selectTrxType($type){
         $this->db->select("pkTrxTypeId as ID, TrxTypeDesc");
         $this->db->from('TblTrxType');
+		if($type == "addPayAcc"){
+			$this->db->where('TrxSign = -1');
+		}
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {

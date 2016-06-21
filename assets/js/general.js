@@ -803,3 +803,8 @@ function drawTableId(data, table){
     $('#' + table).html(bodyHTML);
 }
 
+function setHeightModal(div){
+	var hTabs = $('#' + div + ' .contentModalHeader').height();
+	var hContent = $('#' + div + ' .contentModal').height();
+	$('#' + div + ' .contentModal').css('height', ( hContent - (hTabs) + 25 ));
+}

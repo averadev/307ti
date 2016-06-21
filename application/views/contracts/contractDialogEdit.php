@@ -273,7 +273,7 @@
 					<a>Maintenance</a>
 				</li>
 				<li class="tabs-title" attr-screen="tab-CAMiscellaneous">
-					<a>Miscellaneous</a>
+					<a>Loan</a>
 				</li>
 			</ul>
 		</div>
@@ -341,14 +341,9 @@
 			</div>
 			<!-- mantenimiento -->
 			<div id="tab-CAMaintenance" class="large-12 columns tab-modal" style="display:none;">
-				<fieldset class="fieldset">
-					<div class="row">
-						<table class="tableAccountResult">
-							<thead>
-								<tr class="trColspan">
-									<th colspan="4">Results</th>
-								</tr>
-							</thead>
+				<div class="row" style="padding:0;">
+					<div class="large-12 columns" style="padding:0;" >
+						<table class="tableAccountResult" style="margin-top:16px;">
 							<tbody>
 								<tr>
 									<td>Folio Contract</td>
@@ -365,45 +360,38 @@
 							</tbody>
 						</table>
 					</div>
-				</fieldset>
-				<fieldset class="fieldset">
-					<div class="containerContract">
-						<div class="row">
-							<table width="100%" style="min-height:250px;">
-								<thead>
-									<tr class="trColspan" >
-										<th colspan="9" class="thColspan" >Maintenance accounts</th>
-									</tr> 
-									<tr>
-										<th class="cellEdit" >Id</th>
-										<th class="cellGeneral">Code</th>
-										<th class="cellGeneral">Active</th>
-										<th class="cellGeneral" >Type</th>
-										<th class="cellGeneral" >Sign transaction</th>
-										<th class="cellGeneral" >Concept Trxid</th>
-										<th class="cellGeneral" >Date</th>
-										<th class="cellGeneral" >Amount</th>
-										<th class="cellGeneral" >Amount Bal</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr></tr>
-								</tbody>
-							</table>
-						</div>
+				</div>
+				<div class="row" style="padding:0;">
+					<div class="large-12 columns table-section2" style="padding:0;" >
+						<table id="tableAccountMaintenance" width="100%" style="min-height:150px;">
+							<thead>
+								<!--<tr class="trColspan" >
+									<th colspan="9" class="thColspan" >Seller</th>
+								</tr> -->
+								<tr>
+									<th class="cellGeneral">Id</th>
+									<th class="cellGeneral">Code</th>
+									<th class="cellGeneral">Active</th>
+									<th class="cellGeneral">Type</th>
+									<th class="cellGeneral">Sign transaction</th>
+									<th class="cellGeneral">Concept Trxid</th>
+									<th class="cellGeneral">Date</th>
+									<th class="cellGeneral">Rode</th>
+									<th class="cellGeneral">Monto Bal</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr></tr>
+							</tbody>
+						</table>
 					</div>
-				</fieldset>
+				</div>
 			</div>
 			<!-- Misceláneos -->
 			<div id="tab-CAMiscellaneous" class="large-12 columns tab-modal" style="display:none;">
-				<fieldset class="fieldset">
-					<div class="row">
-						<table class="tableAccountResult">
-							<thead>
-								<tr class="trColspan">
-									<th colspan="4">Results</th>
-								</tr>
-							</thead>
+				<div class="row" style="padding:0;">
+					<div class="large-12 columns" style="padding:0;" >
+						<table class="tableAccountResult" style="margin-top:16px;">
 							<tbody>
 								<tr>
 									<td>Folio Contract</td>
@@ -432,41 +420,36 @@
 							</tbody>
 						</table>
 					</div>
-				</fieldset>
-				<fieldset class="fieldset">
-					<div class="containerContract">
-						<div class="row">
-							<table  width="100%" style="min-height:250px;">
-								<thead>
-									<tr class="trColspan" >
-										<th colspan="9" class="thColspan" >Miscellaneous accounts</th>
-									</tr> 
-									<tr>
-										<th class="cellEdit" >Id</th>
-										<th class="cellGeneral">Code</th>
-										<th class="cellGeneral">Active</th>
-										<th class="cellGeneral" >Type</th>
-										<th class="cellGeneral" >Sign transaction</th>
-										<th class="cellGeneral" >Concept Trxid</th>
-										<th class="cellGeneral" >Date</th>
-										<th class="cellGeneral" >Amount</th>
-										<th class="cellGeneral" >Amount Bal</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr></tr>
-								</tbody>
-							</table>
-						</div>
+				</div>
+				<div class="row" style="padding:0;">
+					<div class="large-12 columns table-section2" style="padding:0;" >
+						<table id="tableAccountLoan" width="100%" style="min-height:150px;">
+							<thead>
+								<tr>
+									<th class="cellGeneral">Id</th>
+									<th class="cellGeneral">Code</th>
+									<th class="cellGeneral">Active</th>
+									<th class="cellGeneral">Type</th>
+									<th class="cellGeneral">Sign transaction</th>
+									<th class="cellGeneral">Concept Trxid</th>
+									<th class="cellGeneral">Date</th>
+									<th class="cellGeneral">Rode</th>
+									<th class="cellGeneral">Monto Bal</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr></tr>
+							</tbody>
+						</table>
 					</div>
-				</fieldset>
+				</div>
 			</div>
 			<div class="small-12 large-12 columns" style="padding-top:5px;">
-				<a id="btNewTransAcc" class="btn btn-primary btn-Search">
+				<a id="btNewTransAcc" attr_type="newTransAcc" class="btn btn-primary btn-Search">
 					<div class="label">New Transaction</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
-				<a id="btAddPayAcc" class="btn btn-primary spanSelect">
+				<a id="btAddPayAcc" attr_type="addPayAcc" class="btn btn-primary spanSelect">
 					<div class="label">Add Payment</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>

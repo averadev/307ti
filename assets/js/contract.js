@@ -85,7 +85,7 @@ $(document).ready(function(){
 	});
 	
 	$(document).on( 'click', '#btNewTransAcc, #btAddPayAcc', function () {
-		var dialogAccount = opcionAccount($(this).attr('id'));
+		var dialogAccount = opcionAccount($(this).attr('attr_type'));
 		dialogAccount.dialog("open");
 	});
 
@@ -1096,7 +1096,7 @@ function modalEditContract(id){
 	    	$(this).load("contract/modalEdit?id="+id , function(){
 	 			showLoading('#dialog-Edit-Contract',false);
 	 			getDatosContract(id);
-				getAccounts( id, "account" );
+				
 	 			setEventosEditarContrato(id);
 	    	});
 		},
@@ -1427,7 +1427,10 @@ function changeTabsModalContract(screen, id){
 			getDatosContract(id);
 			break;
 		case "tab-CAccounts":
-			getDatosContractAccounts(id);
+			//getDatosContractAccounts(id);
+			getAccounts( id, "account", "sale" );
+			getAccounts( id, "account", "maintenance" );
+			getAccounts( id, "account", "loan" );
 			break;
 		case "tab-CVendors":
 			getDatosContractSellers(id);
@@ -1601,12 +1604,6 @@ function drawTableSinHead(data, table){
     $('#' + table).html(bodyHTML);
 }
 
-function setHeightModal(div){
-	var hTabs = $('#' + div + ' .contentModalHeader').height();
-	var hContent = $('#' + div + ' .contentModal').height();
-	$('#' + div + ' .contentModal').css('height', ( hContent - (hTabs) + 25 ));
-}
-
 function getDatosContract(id){
 	$.ajax({
 	    data:{
@@ -1631,28 +1628,39 @@ function getDatosContract(id){
 	});
 }
 
-function getAccounts(id, typeInfo){
+function getAccounts( id, typeInfo, typeAcc ){
 	$.ajax({
 	    data:{
 	        idContrato: id,
-			typeInfo:typeInfo
+			typeInfo:typeInfo,
+			typeAcc: typeAcc
 	    },
 	    type: "POST",
 	    url: "contract/getAccountsById",
 	    dataType:'json',
 	    success: function(data){
-			//console.log(data);
 			var sales = data["sales"];
 			if(typeInfo == "account"){
-				drawTable2(sales, "tableAccountSeller", false, "");
+				if(typeAcc == "sale"){
+					drawTable2(sales, "tableAccountSeller", false, "");
+				}else if(typeAcc == "maintenance"){
+					drawTable2(sales, "tableAccountMaintenance", false, "");
+				}else if(typeAcc == "loan"){
+					drawTable2(sales, "tableAccountLoan", false, "");
+				}
+				
 				setTableAccount(sales, "");
 				$('#btNewTransAcc').data( 'idRes', id )
 				$('#btNewTransAcc').data( 'idAcc', sales[0].AccID );
 			}else{
 				drawTable2(sales, "tabletPaymentAccoun", false, "");
 				$(".checkPayAcc").off( 'change' );
-				$(".checkPayAcc").on('change', function () {
-					amountTotalPaymentAcc(this);
+				$(".checkPayAcc").on('change', function (){
+					var amoutCur = 0;
+					$("input[name='checkPayAcc[]']:checked").each(function(){
+						amoutCur = amoutCur + parseFloat($(this).val());
+					});
+					$('#amountSettledAcc').text( '$ ' + amoutCur.toFixed(4) );
 				});
 			}
 	    },
@@ -2208,7 +2216,7 @@ function nextStatusContract(){
 // 	});
 // }
 /*** modal Account ***/
-function opcionAccount(attrId){
+function opcionAccount(attrType){
 	var div = "#dialog-accounts";
 	dialogo = $(div).dialog ({
   		open : function (event){
@@ -2222,13 +2230,15 @@ function opcionAccount(attrId){
 						format: 'm/d/Y',
 						show_icon: false,
 					});
-					setDataOpcionAccount(attrId);
-					
-					ajaxSelects('contract/getTrxType','try again', generalSelects, 'slcTransTypeAcc');
-					ajaxSelects('contract/getTrxClass','try again', generalSelects, 'slcTrxClassAcc');
+					$("#slcTransTypeAcc").attr('disabled', true);
+					setDataOpcionAccount(attrType);
+					getTrxType('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
+					ajaxSelects('contract/getTrxClass', 'try again', generalSelects, 'slcTrxClassAcc');
 				});
 			}else{
-				setDataOpcionAccount(attrId);
+				$("#slcTransTypeAcc").attr('disabled', true);
+				getTrxType('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
+				setDataOpcionAccount(attrType);
 			}
 		},
 		autoOpen: false,
@@ -2246,14 +2256,31 @@ function opcionAccount(attrId){
        		"class": 'dialogModalButtonAccept',
        		click: function() {
 				var id = "saveAccCont";
-				var arrayWords = ["slcTransTypeAcc", "slcTrxClassAcc", "AmountAcc", "dueDateAcc"];
 				var form = $("#"+id);
 				var elem = new Foundation.Abide(form, {});
-				if(!verifyInputsByID(arrayWords)){
+				var arrayInput = ["AmountAcc", "dueDateAcc"];
+				var arraySelect = ["slcTransTypeAcc", "slcTrxClassAcc"];
+				if(attrType == "addPayAcc"){
+					arraySelect = ["slcTransTypeAcc"];
+				}
+				if(!verifyAccount(arrayInput, arraySelect )){
 					$('#'+id).foundation('validateForm');
 					alertify.success("Please fill required fields (red)");
 				}else{
-					saveAccCont(attrId);
+					var amoutCur = 0;
+					$("input[name='checkPayAcc[]']:checked").each(function(){
+						amoutCur = amoutCur + parseFloat($(this).val());
+					});
+					if( amoutCur.toFixed(4) > parseFloat($('#AmountAcc').val().trim()).toFixed(4)){
+						var msg = "The stated amount does not cover all of the selected concepts.</br>A partial payment was stored.";
+						alertify.confirm(msg, function (e){
+							if(e){
+								saveAccCont(attrType);
+							}
+						});
+					}else{
+						saveAccCont(attrType);
+					}
 				}
        		}
      	}],
@@ -2264,8 +2291,8 @@ function opcionAccount(attrId){
 	return dialogo;
 }
 
-function setDataOpcionAccount(attrId){
-	if(attrId == "btNewTransAcc"){
+function setDataOpcionAccount(attrType){
+	if(attrType == "newTransAcc"){
 		$('#grpTrxClassAcc').show();
 		$('#grpTablePayAcc').hide();
 	}else{
@@ -2279,14 +2306,15 @@ function setDataOpcionAccount(attrId){
 	$('#balanceAcc').text($('.balanceAccount').text());
 }
 
-function saveAccCont(attrId){
-	
+function saveAccCont(attrType){
 	var idTrans = new Array();
 	var valTrans = new Array();
-	if( attrId == "btAddPayAcc" ){
+	var trxClass = new Array();
+	if( attrType == "addPayAcc" ){
 		$('.checkPayAcc:checked').each( function() {
 			idTrans.push($(this).attr('id'));
 			valTrans.push($(this).val());
+			trxClass.push($(this).attr('trxclass'));
 		});
 	}
 	
@@ -2294,7 +2322,7 @@ function saveAccCont(attrId){
 	showAlert(true,"Saving changes, please wait ....",'progressbar');
 	$.ajax({
 		data: {
-			attrId:attrId,
+			attrType:attrType,
 			accId:$('#btNewTransAcc').data( 'idAcc' ),
 			trxTypeId:$('#slcTransTypeAcc').val(),
 			trxClassID:$('#slcTrxClassAcc').val(),
@@ -2304,6 +2332,7 @@ function saveAccCont(attrId){
 			remark:$('#referenceAcc').val(),
 			idTrans:idTrans,
 			valTrans:valTrans,
+			trxClass:trxClass,
 		},type: "POST",
 		dataType:'json',
 		url: 'contract/saveTransactionAcc'
@@ -2312,7 +2341,6 @@ function saveAccCont(attrId){
 		if( data.success ){
 			//alert("guardeishion");
 			//getDatailByID("contractstbody");
-			
 			getAccounts( $('#btNewTransAcc').data( 'idRes' ), "account" );
 			$("#dialog-accounts").dialog('close');
 			showAlert(false,"Saving changes, please wait ....",'progressbar');
@@ -2325,18 +2353,57 @@ function saveAccCont(attrId){
 		//alert("no guardeishion");
 		//$("#dialog-accounts").dialog('close');
 		showAlert(false,"Saving changes, please wait ....",'progressbar');
+		alertify.error("Try Again");
 	});
 }
 
-function amountTotalPaymentAcc(selector){
-	var amoutCur = $('#amountSettledAcc').text();
-	var amoutCur = amoutCur.replace("$", "");
-	amoutCur = parseFloat(amoutCur)
-	console.log(amoutCur)
-	if($(selector).is(':checked')){
-		amoutCur += parseFloat($(selector).val());
-	}else{
-		amoutCur -= parseFloat($(selector).val());
+function getTrxType(url, attrType, errorMsj, funcion, divSelect){
+	$.ajax({
+		type: "POST",
+		data: {
+			attrType:attrType
+		},
+		url: url,
+		dataType:'json',
+		success: function(data){
+			funcion(data, divSelect);
+			$("#slcTransTypeAcc").attr('disabled', false);
+		},
+		error: function(){
+			$("#slcTransTypeAcc").attr('disabled', false);
+			alertify.error(errorMsj);
+		}
+	});
+}
+
+function verifyAccount( inputArray, selectArray ){
+	var v = true;
+	for (var i = 0; i < inputArray.length; i++){
+		 if($('#'+inputArray[i]).val().trim().length <= 0){
+		 	v = false;
+		 }
 	}
-	$('#amountSettledAcc').text('$ ' + amoutCur)
+	
+	for (var i = 0; i < selectArray.length; i++){
+		if($('#'+selectArray[i]).val() == 0){
+		 	v = false;
+		}
+	}
+	
+	//AmountAcc
+	if( $('#grpTablePayAcc').is(":visible") ){
+		if( $("input[name='checkPayAcc[]']:checked").length == 0){
+			v = false;
+		}else{
+			var amoutCur = $('#amountSettledAcc').text();
+			amoutCur = amoutCur.replace("$", "");
+			amoutCur = parseFloat(amoutCur.trim());
+			if($('#AmountAcc').val().trim() > amoutCur){
+				v = false;
+				alertify.error("The amount of selected positions is less than the payment amount captured.");
+			}
+		}
+	}
+	
+	return v;
 }
