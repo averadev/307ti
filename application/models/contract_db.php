@@ -539,6 +539,17 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
+
+    public function propertyTable($p){
+        $this->db->select($p['valor'] .' as '.  $p['alias']);
+        $this->db->from($p['tabla']);
+        $this->db->where($p['codicion'], $p['id']);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->$p['alias'];
+        }
+    }
     public function getUnidades($filters){
 
         $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc');

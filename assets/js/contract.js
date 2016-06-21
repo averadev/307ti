@@ -1466,21 +1466,27 @@ function getDatosContractProvisions(id){
 	console.log("Provisiones" + id);
 }
 function getDatosContractOcupation(id){
-	console.log("Ocupacion " + id);
-	getWeeks(id);
+	if ($("#tableCOccupationSelectedbody").is(':empty')) {
+		getWeeks(id);	
+	}
 }
 function getDatosContractDocuments(id){
 	console.log("Documentos " + id);
 }
 function getDatosContractNotes(id){
-	console.log("Notas " + id);
-	getNotes(id);
+	if ($('#tableCNotesSelectedBody').is(':empty')){
+  		getNotes(id);
+	}
+	
 }
 function getDatosContractFlags(id){
-	console.log("Banderas " + id);
-	initEventosFlags();
-	getTypesFlags();
-	getFlags(id);
+	if ($("#tableFlagsListBody").is(':empty')) {
+		getTypesFlags();
+	}
+	if ($("#flagsAsignedBody").is(':empty')) {
+		getFlags(id);
+		initEventosFlags();
+	}
 }
 function getDatosContractFiles(id){
 	console.log("Archivos " + id);
@@ -1488,9 +1494,28 @@ function getDatosContractFiles(id){
 
 function initEventosFlags(){
 	$("#btnSAveFlags").click(function (){
-		console.log("HOLA");
-		SaveFlagsContract();
+		var flags = getArrayValuesSelectedColum("tableFlagsList", 1).length;
+		if (flags>0) {
+			SaveFlagsContract();
+		}else{
+			alertify.error("You should pick one");
+		}
+		
 	});
+	$("#btnNextStatus").click(function(){
+		nextStatusContract();
+	});
+	//activeEvent('btnNextStatus', 'nextStatusContract');
+}
+
+function activeEventClick(id, funcionA){
+	$("#"+id).click(function(){
+		funcionA();
+	});
+}
+function deactiveEventClick(id){
+	console.log("desactivado");
+	$('#'+id).unbind('click');
 }
 
 function drawTableUnidades(data, funcion, cadena, table){
@@ -2105,7 +2130,7 @@ function getNotes(id){
 }
 function getFlags(id){
 	var url = "contract/getFlagsContract";
-	var div = "#notesAsignedBody";
+	var div = "#flagsAsignedBody";
 	showLoading(div, true);
 	$.ajax({
 	    data:{
@@ -2116,7 +2141,7 @@ function getFlags(id){
 	    dataType:'json',
 	    success: function(data){
 	    	showLoading(div, false);
-	    	drawTableId(data,"notesAsignedBody");
+	    	drawTableId(data,"flagsAsignedBody");
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -2144,7 +2169,44 @@ function SaveFlagsContract(){
 	    }
 	});
 }
-
+function nextStatusContract(){
+	deactiveEventClick("btnNextStatus");
+	var id = getValueFromTableSelected("contracts", 1);
+	$.ajax({
+	    data:{
+	        idContrato: id,
+	    },
+	    type: "POST",
+	    url: "contract/nextStatusContract",
+	    dataType:'json',
+	    success: function(data){
+	    	$("#editContracStatus").text("Status: "+data['status']);
+	    	alertify.success(data['mensaje']);
+	    		$("#btnNextStatus").click(function(){
+					nextStatusContract();
+				});
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+// function selectStatusContract(){
+// 	$.ajax({
+// 	    data:{
+// 	        id: 2,
+// 	    },
+// 	    type: "POST",
+// 	    url: "contract/getPropertyStatus",
+// 	    dataType:'json',
+// 	    success: function(data){
+// 	    	$("#editContracStatus").text(data['propiedad']);
+// 	    },
+// 	    error: function(){
+// 	        alertify.error("Try again");
+// 	    }
+// 	});
+// }
 /*** modal Account ***/
 function opcionAccount(attrId){
 	var div = "#dialog-accounts";

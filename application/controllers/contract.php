@@ -301,6 +301,52 @@ public function createFlags(){
 	}
 }
 
+public function nextStatusContract(){
+	if($this->input->is_ajax_request()) {
+		$id = $_POST['idContrato'];
+		$peticion = [
+			"tabla" 	=> 'tblRes',
+			"valor" 	=> 'fkStatusId',
+			"alias" 	=> 'ID',
+			"codicion"	=> 'pkResID',
+			"id"		=>	$id
+		];
+		$IdStatus = $this->contract_db->propertyTable($peticion);
+		if ($IdStatus < 19) {
+			$IdStatus += 1;
+		}
+		$Res = [
+			"fkStatusId"	=> $IdStatus,
+			"MdBy"			=> $this->nativesessions->get('id'),
+			"MdDt"			=> $this->getToday()
+		];
+		$condicion = "pkResId = " . $id;
+		$afectados = $this->contract_db->updateReturnId('tblRes', $Res, $condicion);
+		if ($afectados>0) {
+			$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados, "status" => $this->getPropertyStatus($IdStatus)];
+			echo json_encode($mensaje);
+		}else{
+			$mensaje = ["mesaje"=>"ocurrio un error", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
+			echo json_encode($mensaje);
+		}
+	}
+}
+
+public function getPropertyStatus($IdStatus){
+
+
+		$peticion = [
+				"tabla" 	=> 'tblStatus',
+				"valor" 	=> 'StatusDesc',
+				"alias" 	=> 'Status',
+				"codicion"	=> 'pkStatusId',
+				"id"		=>	$IdStatus
+			];
+		$propiedad = $this->contract_db->propertyTable($peticion);
+	return $propiedad;
+
+}
+
 public function getNotesContract(){
 	if($this->input->is_ajax_request()) {
 		$ID = $_POST['idContrato'];

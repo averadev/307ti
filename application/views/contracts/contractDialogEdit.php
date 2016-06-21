@@ -27,10 +27,10 @@
 	<div class="small-12 medium-12 large-8 columns"  >
 		<label class="headerDescriptionTitle" id="editContractTitle"><?php  echo "[".$contract[0]->Folio ."-".$contract[0]->ID."]".$contract[0]->LegalName;?></label>
 		<label class="headerGeneral" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
-		<label class="headerGeneral" id="editContracYear"><?php echo "Year: ". $contract[0]->FirstOccYear; ?></label>
+		<label class="headerGeneral" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
-		<label class="headerGeneral" id="editContracStatus"><?php echo "Status: ".$contract[0]->StatusDesc;?></label>
+		<label class="headerGeneral" id="editContracStatus">Status: <?php echo $contract[0]->StatusDesc;?></label>
 		<label class="headerGeneral">Flags: 
 		<?php
 			 foreach($flags as $item){
@@ -556,9 +556,7 @@
 									<th></th>
 								</tr>
 							</thead>
-							<tbody id="tableCOccupationSelectedbody">
-								<tr></tr>
-							</tbody>
+							<tbody id="tableCOccupationSelectedbody"></tbody>
 						</table>
 					</div>
 				</div>
@@ -613,9 +611,7 @@
 									
 								</tr>
 							</thead>
-							<tbody id="tableCNotesSelectedBody">
-								<tr></tr>
-							</tbody>
+							<tbody id="tableCNotesSelectedBody"></tbody>
 						</table>
 					</div>
 				</div>
@@ -644,9 +640,7 @@
 										<th class="cellGeneral">Descripción</th>
 									</tr>
 								</thead>
-								<tbody id="tableFlagsListBody">
-									<tr></tr>
-								</tbody>
+								<tbody id="tableFlagsListBody"></tbody>
 							</table>
 						</div>
 						<div class="small-12 medium-6 large-6 columns">
@@ -661,9 +655,7 @@
 										<th class="cellGeneral">Descripción</th>
 									</tr>
 								</thead>
-								<tbody id="notesAsignedBody">
-									<tr></tr>
-								</tbody>
+								<tbody id="flagsAsignedBody"></tbody>
 							</table>
 						</div>
 					</div>
@@ -671,7 +663,7 @@
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
 				<a id="btnSAveFlags" class="button tiny"><i class="fa fa-save fa-lg">Save</i></a>
-				<a id="btn" class="button tiny"><i class="fa fa-refresh fa-lg">Next Status</i></a>
+				<a id="btnNextStatus" class="button tiny"><i class="fa fa-refresh fa-lg">Next Status</i></a>
 			</div>
 		</form>
 	</div>
