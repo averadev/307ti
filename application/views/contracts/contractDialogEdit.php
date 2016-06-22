@@ -259,7 +259,6 @@
 					</div>
 				</div>
 			</fieldset>
-			<fieldset class="fieldset"></fieldset>
 	</div>
 
 	<!-- tabs cuentas -->

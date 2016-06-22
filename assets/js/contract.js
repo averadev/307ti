@@ -1424,7 +1424,7 @@ function changeTabsModalContract(screen, id){
 	$('#' + screen).show();
 	switch(screen){
 		case "tab-CGeneral":
-			getDatosContract(id);
+			//getDatosContract(id);
 			break;
 		case "tab-CAccounts":
 			//getDatosContractAccounts(id);
@@ -2043,15 +2043,24 @@ function getTypesFlags(id){
 	    dataType:'json',
 	    success: function(data){
 	    	showLoading(div, false);
-	    	drawTableId(data,"tableFlagsListBody");
-	    	selectTable("tableFlagsListBody");
+	    	console.table(data);
+	    	if (data) {
+	    		drawTableId(data,"tableFlagsListBody");
+	    		selectTable("tableFlagsListBody");
+	    	}else{
+	    		mensajeDatosVacios("tableFlagsListBody");
+	    	}
 	    },
 	    error: function(){
 	        alertify.error("Try again");
 	    }
 	});
 }
-
+function mensajeDatosVacios(div){
+	var img = '<img class="imagenError" src="http://localhost/307ti/assets/img/common/SIN RESULTADOS-01.png"> <label> Oh no! No Results. Try again. </label>';
+	var html = '<div class="row">'+img+'</div>';
+	$('#'+div).html(html);
+}
 function modalAddNotas() {
 	var div = "#dialog-Notas";
 	dialogo = $(div).dialog ({
@@ -2129,7 +2138,11 @@ function getNotes(id){
 	    success: function(data){
 	    	console.table(data);
 	    	showLoading(div, false);
-	    	drawTableId(data,"tableCNotesSelectedBody");
+	    	if (data) {
+	    		drawTableId(data,"tableCNotesSelectedBody");
+	    	}else{
+	    		mensajeDatosVacios("tableCNotesSelectedBody");
+	    	}
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -2149,7 +2162,12 @@ function getFlags(id){
 	    dataType:'json',
 	    success: function(data){
 	    	showLoading(div, false);
-	    	drawTableId(data,"flagsAsignedBody");
+	    	if (data) {
+	    		drawTableId(data,"flagsAsignedBody");
+	    	}else{
+	    		mensajeDatosVacios("flagsAsignedBody");
+	    	}
+	    	
 	    },
 	    error: function(){
 	        alertify.error("Try again");

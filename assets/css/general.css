@@ -1672,3 +1672,8 @@ small.hidden{
 input.general.error, .caja.error{
 	margin-bottom:0;
 }
+
+.imagenError{
+	width: 300px;
+	text-align: center;
+}

@@ -394,7 +394,7 @@ public function getNotesContract(){
 	if($this->input->is_ajax_request()) {
 		$ID = $_POST['idContrato'];
 		$notes = $this->contract_db->selectNotes($ID);
-		echo json_encode($notes);
+		echo json_encode(null);
 	}
 }
 public function getFlagsContract(){
