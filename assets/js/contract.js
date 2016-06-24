@@ -372,14 +372,15 @@ function getContratos(){
 		dataType:'json',
 		success: function(data){
 			showLoading('#contracts',false);
-			if(data != null){
+			if(data){
 				alertify.success("Found "+ data.length);
 				drawTable3(data, "details", "contracts");
 			}else{
 				$('#contractstbody').empty();
-				alertify.error("No data found");
-				var img = '<div class="divNoResults"><div class="noResultsScreen"><img src="http://localhost/307ti/assets/img/common/SIN RESULTADOS-01.png"> <label> Oh no! No Results. Try again. </label></div></div>';
-				$('#contractstbody').html(img);
+				mensajeDatosVacios('contractstbody');
+				//alertify.error("No data found");
+				// var img = '<div class="divNoResults"><div class="noResultsScreen"><img src="http://localhost/307ti/assets/img/common/SIN RESULTADOS-01.png"> <label> Oh no! No Results. Try again. </label></div></div>';
+				// $('#contractstbody').html(img);
 			}
 		},
 		error: function(){
@@ -2058,7 +2059,7 @@ function getTypesFlags(id){
 }
 function mensajeDatosVacios(div){
 	var img = '<img class="imagenError" src="http://localhost/307ti/assets/img/common/SIN RESULTADOS-01.png"> <label> Oh no! No Results. Try again. </label>';
-	var html = '<div class="row">'+img+'</div>';
+	var html = '<div class="divNoResults"><div class="noResultsScreen"><img src="http://localhost/307ti/assets/img/common/SIN RESULTADOS-01.png"> <label> Oh no! No Results. Try again. </label></div></div>';
 	$('#'+div).html(html);
 }
 function modalAddNotas() {

@@ -33,9 +33,11 @@
 		<label class="headerGeneral" id="editContracStatus">Status: <?php echo $contract[0]->StatusDesc;?></label>
 		<label class="headerGeneral">Flags: 
 		<?php
-			 foreach($flags as $item){
-			 	echo $item->FlagDesc.", ";
-			 }
+			if (!empty($flags)) {
+				 foreach($flags as $item){
+			 		echo $item->FlagDesc.", ";
+			 	}
+			}
 		?></label>
 	</div>
 </div>
