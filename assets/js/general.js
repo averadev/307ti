@@ -519,7 +519,7 @@ function getWordsByArray(name) {
 }
 
 function generalSelects(data, div){
-     var select = ' <option value="0">Elige una opcion</option>';
+     var select = ' <option value="0">Choose an option</option>';
     for (var i = 0; i < data.length; i++) {
         select += '<option value="'+data[i].ID+'">';
         for (var j in data[i]) {

@@ -647,7 +647,8 @@
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
 				<a id="btnSAveFlags" class="button tiny"><i class="fa fa-save fa-lg">Save</i></a>
-				<a id="btnNextStatus" class="button tiny"><i class="fa fa-refresh fa-lg">Next Status</i></a>
+				<a id="btnNextStatus" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>Next Status</a>
+<!-- 				<i class="fa fa-refresh fa-spin fa-3x fa-fw"></i> -->
 			</div>
 		</form>
 	</div>

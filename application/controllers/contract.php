@@ -24,10 +24,10 @@ class Contract extends CI_Controller {
 	}
 
 	public function saveContract(){
-		
-		if($this->input->is_ajax_request()){
-			$idContrato = $this->createContract();
 
+		if($this->input->is_ajax_request()){
+
+			$idContrato = $this->createContract();
 			$this->insertOcupacion($idContrato);
 			$this->insertPeoples($idContrato);
 			$this->createUnidades($idContrato);
@@ -94,7 +94,7 @@ private function insertOcupacion($idContrato){
 
 private function createUnidades($idContrato){
 	$rango = intval(sizeof($_POST['unidades']));
-	$dias = intval($_POST['weeks']) * 7;
+	$dias = sizeof($_POST['weeks']) * 7;
 	for($i =0; $i< $rango; $i++){
 		$Unidades = [
 			"fkResId"       => $idContrato,
@@ -104,7 +104,7 @@ private function createUnidades($idContrato){
 			"fkViewId"      => $_POST['viewId'],
 			"fkSeassonId"   => $this->contract_db->selectIdSeason($_POST['unidades'][$i]['season']),
 			"fkFrequencyId" => $this->contract_db->selectIdFrequency($_POST['unidades'][$i]['frequency']),
-			"WeeksNumber"   => $_POST['weeks'],
+			"WeeksNumber"   => $_POST['weeks'][$i],
 			"NightsNumber"  => $dias,
 			"FirstOccYear"  => $_POST['firstYear'],
 			"LastOccYear"   => $_POST['lastYear'],
@@ -140,8 +140,8 @@ private function insertFinanciamiento($idContrato){
 	$porEnganche = intval(($_POST['downpayment']/$balanceFinal))*100;
 	$financiamiento = [
 		"fkResId"                   => $idContrato,
-		"fkFinMethodId"    			=> $this->contract_db->selectIdMetodoFin('CS'),
-		"fkFactorId"              	=> $this->contract_db->selectIdFactor('24M14.1'),
+		"fkFinMethodId"    			=> $this->contract_db->selectIdMetodoFin('RG'),
+		"fkFactorId"              	=> $this->contract_db->selectIdFactor('12M0'),
 		"ListPrice"             	=> $_POST['listPrice'],
 		"SpecialDiscount"           => $_POST['specialDiscount'],
 		"SpecialDiscount%"          => $porcentaje,
@@ -168,14 +168,15 @@ private function insertFinanciamiento($idContrato){
 	$this->contract_db->insertReturnId('tblResfin', $financiamiento);
 }
 
-public function createSemanaOcupacion(){
+public function createSemanaOcupacion($idContrato){
 
 	ini_set('max_execution_time', 120);
-	$idContrato = $_POST['idContrato'];
+	//$idContrato = $_POST['idContrato'];
 	$Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
+
 	$Unidades = [];
-	$fYear = $Years[0]->FirstOccYear;
-	$lYear = $Years[0]->LastOccYear;
+	$fYear = $Years[0]['FirstOccYear'];
+	$lYear = $Years[0]['LastOccYear'];
 	for ($i = $fYear; $i <= $lYear ; $i++) { 
 		array_push($Unidades, $this->contract_db->selectUnitiesContract($idContrato, $i));
 	}
@@ -187,8 +188,8 @@ public function createSemanaOcupacion(){
 				"fkResInvtId"   => $Unidades[$i][$j]->pkResInvtId,
 				"OccYear"       => $Unidades[$i][$j]->Year,
 				"NightId"       => $Unidades[$i][$j]->fkDayOfWeekId,
-				"fkResTypeId"   => 5, //$this->contract_db->selectRestType('Cont'),
-				"fkOccTypeId"   => 1, //$this->contract_db->selectIdOccType('OW'),
+				"fkResTypeId"   => 5,
+				"fkOccTypeId"   => 1,
 				"fkCalendarId" 	=> $Unidades[$i][$j]->pkCalendarId,
 				"ynActive"   	=> 1,
 				"CrBy"          => $this->nativesessions->get('id'),
@@ -199,24 +200,31 @@ public function createSemanaOcupacion(){
 		 }
 	}
 	echo json_encode(["mensaje" => "Se ingresaron Correctamente"]);
+	//var_dump($Years);
 }
 
 private function createDownPayment($idContrato){
-	$pagos = sizeof($_POST['tablaPagosProgramados']);
-	for ($i=0; $i < $pagos; $i++) { 
-		$DownPayment = [
-			"fkResId"    	=> $idContrato,
-			"fkCurrencyId"  => $this->contract_db->selectIdCurrency('MXP'),
-			"DownPmtNum"    => $i + 1,
-			"DownPmtAmt"    => $_POST['tablaPagosProgramados'][$i]["amount"],
-			"DownPmtDueDt"  => $_POST['tablaPagosProgramados'][$i]["date"],
-			"ynActive"   	=> 1,
-			"CrBy"          => $this->nativesessions->get('id'),
-			"CrDt"			=> $this->getToday()
-		];
-		$this->contract_db->insertReturnId('tblResDownPmt', $DownPayment);
+	if(!empty($_POST['tablaPagosProgramados'])){
+		$pagos = sizeof($_POST['tablaPagosProgramados']);
+	}else{
+		$pagos = 0;
 	}
 	
+	if ($pagos>0) {
+		for ($i=0; $i < $pagos; $i++) { 
+			$DownPayment = [
+				"fkResId"    	=> $idContrato,
+				"fkCurrencyId"  => $this->contract_db->selectIdCurrency('MXP'),
+				"DownPmtNum"    => $i + 1,
+				"DownPmtAmt"    => $_POST['tablaPagosProgramados'][$i]["amount"],
+				"DownPmtDueDt"  => $_POST['tablaPagosProgramados'][$i]["date"],
+				"ynActive"   	=> 1,
+				"CrBy"          => $this->nativesessions->get('id'),
+				"CrDt"			=> $this->getToday()
+			];
+			$this->contract_db->insertReturnId('tblResDownPmt', $DownPayment);
+	}
+	}
 }
 
 

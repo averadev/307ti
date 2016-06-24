@@ -316,6 +316,7 @@ class Contract_db extends CI_Model {
         $this->db->select('pkFactorId');
         $this->db->from('tblFactor');
         $this->db->where('FactorCode', $string);
+        $this->db->where('ynActive', 1);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )

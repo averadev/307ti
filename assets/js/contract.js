@@ -133,8 +133,8 @@ $(document).ready(function(){
 		$("#financeBalance").val(balanceFinal - transferido);
 	});
 
-	var dialogEditContract = modalEditContract(224);
-	dialogEditContract.dialog("open");
+	// var dialogEditContract = modalEditContract(224);
+	// dialogEditContract.dialog("open");
 	
 	getDatailByID("contractstbody");
 });
@@ -166,17 +166,12 @@ function createDialogContract(addContract) {
 	
 	dialog = $(div).dialog({
 		open : function (event){
-			// if ($(div).is(':empty')) {
-				showLoading(div,true);
-				$(this).load ("contract/modal" , function(){
-		    		showLoading(div,false);
-		 			ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
-					ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
-	    		});
-			// }else{
-			// 	$(this).dialog('open');
-			// }
-	    	
+			showLoading(div,true);
+			$(this).load ("contract/modal" , function(){
+		    	showLoading(div,false);
+		 		ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
+				ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
+	    	});
 		},
 		autoOpen: false,
 		height: maxHeight,
@@ -195,7 +190,6 @@ function createDialogContract(addContract) {
 					createNewContract();
 					$(this).dialog('close');
 					alertify.success("Se guardo correctamente");
-				
 			}
 		},
 			{
@@ -209,12 +203,10 @@ function createDialogContract(addContract) {
 			$('#dialog-Contract').empty();
 		}
 	});
-	
 	return dialog;
 }
 function addTourContract(unidades){
 	var div = '#dialog-tourID';
-	
 	var unidades = unidades;
 	dialogo = $("#dialog-tourID").dialog ({
   		open : function (event){
@@ -246,7 +238,6 @@ function addTourContract(unidades){
        		}
      	}],
      close: function() {
-    	//$('#dialog-tourID').empty();
      }
 	});
 	return dialogo;
@@ -260,7 +251,7 @@ function addUnidadDialog() {
 		    		showLoading(div,false);
 		    		ajaxSelects('contract/getProperties','try again', generalSelects, 'property');
 	    			ajaxSelects('contract/getUnitTypes','try again', generalSelects, 'unitType');
-	    			ajaxSelects('contract/getFrequencies','try again', generalSelects, 'frequency');
+	    			//ajaxSelects('contract/getFrequencies','try again', generalSelects, 'frequency');
 	    			ajaxSelects('contract/getSeasons','try again', generalSelects, 'season');
 					$('#btngetUnidades').click(function(){
 					        getUnidades();
@@ -360,7 +351,6 @@ function getContratos(){
     var dates = getDates(arrayDate);
     var arrayWords = ["stringContrat"];
     var words = getWords(arrayWords);
-
     $.ajax({
 		data:{
 			filters: filters,
@@ -378,9 +368,6 @@ function getContratos(){
 			}else{
 				$('#contractstbody').empty();
 				mensajeDatosVacios('contractstbody');
-				//alertify.error("No data found");
-				// var img = '<div class="divNoResults"><div class="noResultsScreen"><img src="http://localhost/307ti/assets/img/common/SIN RESULTADOS-01.png"> <label> Oh no! No Results. Try again. </label></div></div>';
-				// $('#contractstbody').html(img);
 			}
 		},
 		error: function(){
@@ -464,48 +451,36 @@ function createNewContract(){
 			showAlert(true,"Saving changes, please wait ....",'progressbar');
 			$.ajax({
 					data: {
-						legalName : $("#legalName").val().trim(), //
-						tourID : $("#TourID").val().trim(), //
-						idiomaID : $("#selectLanguage").val(), //
+						legalName : $("#legalName").val().trim(),
+						tourID : $("#TourID").val().trim(),
+						idiomaID : $("#selectLanguage").val(),
 						peoples: getValueTablePersonas(),
 						types: typePeople(),
 						unidades: getValueTableUnidades(),
-						weeks: $("#weeksNumber").val().trim(),
-						firstYear :$("#firstYearWeeks").val().trim(), //
-						lastYear : $("#lastYearWeeks").val().trim(), //
+						weeks: getArrayValuesColumnTable("tableUnidadesSelected", 6),
+						firstYear :$("#firstYearWeeks").val().trim(),
+						lastYear : $("#lastYearWeeks").val().trim(),
 						tipoVentaId : $("#typeSales").val(),
 						listPrice: $("#precioUnidad").val(),
 						salePrice: $("#precioVenta").val(),
 						specialDiscount:$("#totalDiscountPacks").val(),
 						downpayment:$("#downpayment").val(),
 						amountTransfer:$("#amountTransfer").val(),
-
 						packPrice:sumarArray(getArrayValuesColumnTable("tableDescuentos", 2)),
 						financeBalance: $("#financeBalance").val(),
 						tablapagos: getValueTableDownpayment(),
 						tablaPagosProgramados:getValueTableDownpaymentScheduled(),
 						tablaPacks: getValueTablePacks(),
-
 						viewId: 1,
-						floorPlanId: 1,
-						SeassonId: 10,
-						FrequencyId: 2,
-						contratoRelacionadoId : 0,
-						fkAccId: 10,
-						totalEnganche : 1500,
-						totalPagosProg : 1500,
-						depClosingFee : 1295,
-						montoTransfer : 6000,
-						balance : 42711.8
 					},
 					type: "POST",
 					dataType:'json',
 					url: 'contract/saveContract'
 				})
 				.done(function( data, textStatus, jqXHR ) {
+					showAlert(false,"Saving changes, please wait ....",'progressbar');
 					if (data== 1) {
 						elem.resetForm();
-						showAlert(false,"Saving changes, please wait ....",'progressbar');
 						var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta", "downpayment"];
 						clearInputsById(arrayWords);
 						var fin = modalFinanciamiento();
@@ -518,7 +493,6 @@ function createNewContract(){
 					
 				})
 				.fail(function( jqXHR, textStatus, errorThrown ) {
-					//alertify.error("Ocurrio un error vuelve a intentarlo");
 				});
 		}
 	}
@@ -796,14 +770,15 @@ function getWeeksDialog(unidades){
   		open : function (event){
 	    	$(this).load ("contract/modalWeeks", function(){
 	    		showLoading('#dialog-Weeks', false);
+	    		ajaxSelects('contract/getFrequencies','try again', generalSelects, 'frequency');
 	    		$("#weeksNumber").val(1);
 	    		setYear("firstYearWeeks", 0);
 	    		setYear("lastYearWeeks", 25);
 	    	});
 		},
 		autoOpen: false,
-     	height: maxHeight/2,
-     	width: "25%",
+     	height: 360,
+     	width: 400,
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -815,16 +790,15 @@ function getWeeksDialog(unidades){
        		text: "ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			var weeks = $("#weeksNumber").val();
+       			var frequency = $("#frequency option:selected" ).text();
        			var primero = $("#firstYearWeeks").val();
        			var ultimo = $("#lastYearWeeks").val();
-       			tablUnidadades(unidades, weeks, primero, ultimo);	
+       			tablUnidadades(unidades, frequency, primero, ultimo);	
        			$(this).dialog('close');
        			setValueUnitPrice();
        		}
      	}],
      close: function() {
-    	//$('#dialog-Weeks').empty();
      }
 	});
 	return dialogo;
@@ -868,7 +842,6 @@ function PackReference(){
        		}
      	}],
      close: function() {
-    	//$('#dialog-Pack').empty();
      }
 	});
 	return dialogo;
@@ -908,7 +881,6 @@ function modalDepositDownpayment(){
        		}
      	}],
      close: function() {
-    	//$('#dialog-Downpayment').empty();
      }
 	});
 	return dialogo;
@@ -954,7 +926,6 @@ function modalScheduledPayments() {
        		}
      	}],
      close: function() {
-    	//$('#dialog-ScheduledPayments').empty();
      }
 	});
 	return dialogo;
@@ -1001,15 +972,14 @@ function modalDiscountAmount(){
 	return dialogo;
 }
 
-function tablUnidadades(unidades, weeks, primero, ultimo){
-	var weeks = parseInt(weeks);
+function tablUnidadades(unidades, frequency, primero, ultimo){
 	var bodyHTML = '';
 	for (var i = 0; i < unidades.length; i++) {
 		bodyHTML += "<tr>";
 		bodyHTML += "<td>"+unidades[i].id+"</td>";
 		bodyHTML += "<td>"+unidades[i].description+"</td>";
 		bodyHTML += "<td>"+unidades[i].price+"</td>";
-		bodyHTML += "<td>"+weeks+"</td>";
+		bodyHTML += "<td>"+frequency+"</td>";
 		bodyHTML += "<td>"+unidades[i].season+"</td>";
 		bodyHTML += "<td>"+unidades[i].week+"</td>";
 		bodyHTML += "<td>"+primero+"</td>";
@@ -1154,7 +1124,6 @@ function calcularPack(){
 	    	 }else{
 	    	 	$("#finalPricePack").val(precioInicial);
 	    	 }
-	       
 	    }        
 	});
 }
@@ -1229,15 +1198,14 @@ function selectMetodoPagoProgramados(){
             url: "contract/getUnidades",
             dataType:'json',
             success: function(data){
+				showLoading('#tblUnidades',false);
                 if(data != null){
-                    showLoading('#tblUnidades',false);
                     alertify.success("Found "+ data.length);
                     drawTable(data, 'add', "details", "Unidades");
                 }else{
                     $('#contractstbody').empty();
                     alertify.error("No data found");
-                    var img = '<div class="divNoResults"><div class="noResultsScreen"><img src="http://localhost/307ti/assets/img/common/SIN RESULTADOS-01.png"> <label> Oh no! No Results. Try again. </label></div></div>';
-					$('#Unidadestbody').html(img);
+                    mensajeDatosVacios("Unidadestbody");
                 }
             },
             error: function(){
@@ -2058,8 +2026,7 @@ function getTypesFlags(id){
 	});
 }
 function mensajeDatosVacios(div){
-	var img = '<img class="imagenError" src="http://localhost/307ti/assets/img/common/SIN RESULTADOS-01.png"> <label> Oh no! No Results. Try again. </label>';
-	var html = '<div class="divNoResults"><div class="noResultsScreen"><img src="http://localhost/307ti/assets/img/common/SIN RESULTADOS-01.png"> <label> Oh no! No Results. Try again. </label></div></div>';
+	var html = '<div class="divNoResults"><div class="noResultsScreen"><img src="' + BASE_URL + 'assets/img/common/SIN RESULTADOS-01.png' + '" /> <label> Oh no! No Results. Try again. </label></div></div>';
 	$('#'+div).html(html);
 }
 function modalAddNotas() {
@@ -2198,6 +2165,7 @@ function SaveFlagsContract(){
 }
 function nextStatusContract(){
 	deactiveEventClick("btnNextStatus");
+	$("#iNextStatus").addClass("fa-spin");
 	var id = getValueFromTableSelected("contracts", 1);
 	$.ajax({
 	    data:{
@@ -2207,6 +2175,7 @@ function nextStatusContract(){
 	    url: "contract/nextStatusContract",
 	    dataType:'json',
 	    success: function(data){
+	    	$("#iNextStatus").removeClass("fa-spin");
 	    	$("#editContracStatus").text("Status: "+data['status']);
 	    	alertify.success(data['mensaje']);
 	    		$("#btnNextStatus").click(function(){
