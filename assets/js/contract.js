@@ -447,7 +447,11 @@ function createNewContract(){
 		if (personas.length<=0) {
 			alertify.error("Debes de agregar al menos una persona");
 		}else if (unidades.length<=0) {
-			alertify.error("Debes de agregar al menos una persona");
+			alertify.error("Debes de agregar al menos una unidad");
+		}else if($("#selectLanguage").val()=="0"){
+			$("#selectLanguage").addClass('is-invalid-input');
+			//$.scrollTo($('#selectLanguage'), 1000);
+			alertify.error("Choose a language");
 		}else{
 			showAlert(true,"Saving changes, please wait ....",'progressbar');
 			$.ajax({
@@ -479,8 +483,9 @@ function createNewContract(){
 					url: 'contract/saveContract'
 				})
 				.done(function( data, textStatus, jqXHR ) {
+					console.table(data);
 					showAlert(false,"Saving changes, please wait ....",'progressbar');
-					if (data== 1) {
+					if (data['status']== 1) {
 						elem.resetForm();
 						var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta", "downpayment"];
 						clearInputsById(arrayWords);
@@ -492,7 +497,7 @@ function createNewContract(){
 						$('#dialog-Weeks').empty();
 						$('#tablePeopleSelected tbody').empty();
 						$('#tableUnidadesSelected tbody').empty();
-						alertify.success("Contract Save");
+						alertify.success(data['mensaje']);
 					}
 					
 				})
@@ -1079,17 +1084,19 @@ function modalEditContract(id){
      	height: maxHeight,
      	width: "50%",
      	modal: true,
-     	buttons: [{
-	       	text: "Cancel",
-	       	"class": 'dialogModalButtonCancel',
-	       	click: function() {
-	         	$(this).dialog('close');
-	       }
-	   	},{
-       		text: "ok",
+     	buttons: [
+     // 	{
+	    //    	text: "Cancel",
+	    //    	"class": 'dialogModalButtonCancel',
+	    //    	click: function() {
+	    //      	$(this).dialog('close');
+	    //    }
+	   	// },
+	   	{
+       		text: "Close",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-
+       			$(this).dialog('close');
        		}
      	}],
      close: function() {
@@ -1782,8 +1789,9 @@ function modalFinanciamiento() {
        		text: "ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-    			alertify.success("Financiamiento guardado");
-    			$(this).dialog('close');
+    			//alertify.success("Financiamiento guardado");
+    			updateFinanciamiento(421);
+    			//$(this).dialog('close');
 	       
        		}
      	}],
@@ -1794,6 +1802,27 @@ function modalFinanciamiento() {
 	return dialogo;
 }
 
+function updateFinanciamiento(id){
+	var fechaPP = $("#fechaPrimerPagoF").val();
+    var factor = $("#terminosFinanciamientoF").val();
+    var pagoMensual = getArrayValuesColumnTable("tablePagosSelected", 3);
+	$.ajax({
+	    data:{
+	        idContrato: id,
+	        factor:factor,
+	        pagoMensual: pagoMensual[0]
+	    },
+	    type: "POST",
+	    url: "contract/updateFinanciamiento",
+	    dataType:'json',
+	    success: function(data){
+	    	alertify.success(data['mensaje']);
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
 
 function initEventosFinanciamiento(){
 	setDate("fechaPrimerPagoF");
@@ -1806,12 +1835,12 @@ function initEventosFinanciamiento(){
 		var pagoTotal = parseFloat($("#balanceFinanciarF").text());
 		var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
 		var interes = parseFloat($("#tasaInteresF").text().split("%")[0]);
-		var pagoMensual = pagoTotal / meses;
+		var pagoMensual = parseFloat(pagoTotal / meses);
+		var pagoMensual = (pagoMensual).toFixed(2);
 		$("#pagoMF").text(pagoMensual);
 		$("#CargoCF").text("8.95");
-		var totalMensual = pagoMensual + 8.95;
+		var totalMensual = parseFloat(pagoMensual) + parseFloat(8.95);
 		$("#totalPagarF").text(totalMensual);
-
 
 	});
 	$('#terminosFinanciamientoF').on('change', function() {
@@ -2030,7 +2059,7 @@ function getTypesFlags(id){
 	});
 }
 function mensajeDatosVacios(div){
-	var html = '<div class="divNoResults"><div class="noResultsScreen"><img src="' + BASE_URL + 'assets/img/common/SIN RESULTADOS-01.png' + '" /> <label> Oh no! No Results. Try again. </label></div></div>';
+	var html = '<img src="' + BASE_URL + 'assets/img/common/SIN RESULTADOS-01.png' + '" /> <label> Oh no! No Results. Try again. </label>';
 	$('#'+div).html(html);
 }
 function modalAddNotas() {
@@ -2398,4 +2427,21 @@ function verifyAccount( inputArray, selectArray ){
 	}
 	
 	return v;
+}
+
+function pruebas(){
+	$.ajax({
+	    data:{
+	        idContrato: 547,
+	    },
+	    type: "POST",
+	    url: "contract/pruebasContract",
+	    dataType:'json',
+	    success: function(data){
+	    	console.table(data);
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
 }

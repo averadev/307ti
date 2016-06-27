@@ -23,18 +23,30 @@ class Contract extends CI_Controller {
 		}
 	}
 
+	public function pruebasContract(){
+		$idContrato = $_POST['idContrato'];
+		$Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
+		echo $Years[0]->FirstOccYear;
+		echo "<br>";
+		echo $Years[0]->LastOccYear;
+	}
+
 	public function saveContract(){
 
 		if($this->input->is_ajax_request()){
-
+			ini_set('max_execution_time', 120);
 			$idContrato = $this->createContract();
 			$this->insertOcupacion($idContrato);
 			$this->insertPeoples($idContrato);
 			$this->createUnidades($idContrato);
 			$this->createDownPayment($idContrato);
-			$this->insertFinanciamiento($idContrato);
+			$balanceFinal = $this->insertFinanciamiento($idContrato);
 			$this->createSemanaOcupacion($idContrato);
-			echo  "1";
+			echo  json_encode([
+				"mensaje" => 'Contract Save',
+				"status" => 1,
+				"idContrato" =>$idContrato,
+				"balanceFinal" => $balanceFinal]);
 	}
 }
 
@@ -141,7 +153,7 @@ private function insertFinanciamiento($idContrato){
 	$financiamiento = [
 		"fkResId"                   => $idContrato,
 		"fkFinMethodId"    			=> $this->contract_db->selectIdMetodoFin('RG'),
-		"fkFactorId"              	=> $this->contract_db->selectIdFactor('12M0'),
+		"fkFactorId"              	=> 0,
 		"ListPrice"             	=> $_POST['listPrice'],
 		"SpecialDiscount"           => $_POST['specialDiscount'],
 		"SpecialDiscount%"          => $porcentaje,
@@ -166,21 +178,22 @@ private function insertFinanciamiento($idContrato){
 		"CrDt"						=> $this->getToday()
 	];
 	$this->contract_db->insertReturnId('tblResfin', $financiamiento);
+	return $balanceFinal;
 }
 
 public function updateFinanciamiento(){
 	if($this->input->is_ajax_request()) {
 		$financiamiento = [
-			"fkFactorId"	=> $this->contract_db->selectIdFactor($_POST['factor']),
+			"fkFactorId"	=> $_POST['factor'],
 			"MonthlyPmtAmt" => $_POST['pagoMensual']
 		];
-		$condicion = "pkResId = " . $id;
-		$afectados = $this->contract_db->updateReturnId('tblRes', $financiamiento, $condicion);
+		$condicion = "fkResId = " . $_POST['idContrato'];
+		$afectados = $this->contract_db->updateReturnId('tblResfin', $financiamiento, $condicion);
 		if ($afectados>0) {
 			$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados];
 			echo json_encode($mensaje);
 		}else{
-			$mensaje = ["mesaje"=>"ocurrio un error", $afectados => $afectados];	
+			$mensaje = ["mesaje"=>"ocurrio un error"];	
 			echo json_encode($mensaje);
 		}
 	}
@@ -188,13 +201,12 @@ public function updateFinanciamiento(){
 
 public function createSemanaOcupacion($idContrato){
 
-	ini_set('max_execution_time', 120);
 	//$idContrato = $_POST['idContrato'];
 	$Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
 
 	$Unidades = [];
-	$fYear = $Years[0]['FirstOccYear'];
-	$lYear = $Years[0]['LastOccYear'];
+	$fYear = $Years[0]->FirstOccYear;
+	$lYear = $Years[0]->LastOccYear;
 	for ($i = $fYear; $i <= $lYear ; $i++) { 
 		array_push($Unidades, $this->contract_db->selectUnitiesContract($idContrato, $i));
 	}
