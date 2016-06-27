@@ -267,13 +267,13 @@
 	<div id="tab-CAccounts" class="large-12 columns tab-modal" style="display:none;">
 		<div class="tabsModal">
 			<ul class="tabs" id="tabsContratsAccounts"  data-tabs>
-				<li class="tabs-title active" attr-screen="tab-CASales" >
+				<li class="tabs-title active" attr-screen="tab-CASales" attr-accType="1" >
 					<a>Sales</a>
 				</li>
-				<li class="tabs-title" attr-screen="tab-CAMaintenance">
+				<li class="tabs-title" attr-screen="tab-CAMaintenance" attr-accType="3">
 					<a>Maintenance</a>
 				</li>
-				<li class="tabs-title" attr-screen="tab-CAMiscellaneous">
+				<li class="tabs-title" attr-screen="tab-CALoan" attr-accType="2">
 					<a>Loan</a>
 				</li>
 			</ul>
@@ -284,7 +284,7 @@
 			<div id="tab-CASales" class="large-12 columns tab-modal" style="display:inline;">
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
-						<table class="tableAccountResult" style="margin-top:16px;">
+						<table class="tableAccountResult" id="tableSaleAccRes" style="margin-top:16px;">
 							<tbody>
 								<tr>
 									<td >Folio Contract</td>
@@ -344,19 +344,19 @@
 			<div id="tab-CAMaintenance" class="large-12 columns tab-modal" style="display:none;">
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
-						<table class="tableAccountResult" style="margin-top:16px;">
+						<table class="tableAccountResult" id="tableMainteAccRes" style="margin-top:16px;">
 							<tbody>
 								<tr>
 									<td>Folio Contract</td>
-									<td>00000</td>
+									<td class="folioAccount">00000</td>
 									<td></td>
 									<td></td>
 								</tr>
 								<tr>
 									<td>Balance Maintenance</td>
-									<td>$000,000.00</td>
+									<td class="balanceDepAccount">$000,000.00</td>
 									<td>Defeated Maintenance</td>
-									<td>$000,000.00</td>
+									<td class="defeatedDepAccount">$000,000.00</td>
 								</tr>
 							</tbody>
 						</table>
@@ -389,10 +389,10 @@
 				</div>
 			</div>
 			<!-- Misceláneos -->
-			<div id="tab-CAMiscellaneous" class="large-12 columns tab-modal" style="display:none;">
+			<div id="tab-CALoan" class="large-12 columns tab-modal" style="display:none;">
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
-						<table class="tableAccountResult" style="margin-top:16px;">
+						<table class="tableAccountResult" id="tableLoanAccRes" style="margin-top:16px;">
 							<tbody>
 								<tr>
 									<td>Folio Contract</td>
@@ -402,21 +402,21 @@
 								</tr>
 								<tr>
 									<td>Miscellaneous balance</td>
-									<td>$000,000.00</td>
+									<td class="folioAccount">$000,000.00</td>
 									<td></td>
 									<td></td>
 								</tr>
 								<tr>
 									<td>Balance of Deposits</td>
-									<td>$000,000.00</td>
+									<td class="balanceDepAccount">$000,000.00</td>
 									<td>Defeated Deposits</td>
-									<td>$000,000.00</td>
+									<td class="defeatedDepAccount">$000,000.00</td>
 								</tr>
 								<tr>
 									<td>Balance Sales</td>
-									<td>$000,000.00</td>
+									<td class="balanceSaleAccount">$000,000.00</td>
 									<td>Defeated Sales</td>
-									<td>$000,000.00</td>
+									<td class="defeatedSaleAccount">$000,000.00</td>
 								</tr>
 							</tbody>
 						</table>
@@ -656,9 +656,9 @@
 	<div id="tab-CFiles" class="large-12 columns tab-modal" style="display:none;">
 		<form  data-abide='ajax'>
 			<fieldset class="fieldset">
-				<div class="containerContract">
+				<div class="containerContract" id="contentTableFile">
 					<div class="row">
-						<table id="tableCFilesSelected" width="100%" style="min-height:250px;">
+						<table id="tableCFilesSelected" width="100%" >
 							<thead>
 								<tr class="trColspan" >
 									<th colspan="8" class="thColspan" >Notes</th>
@@ -672,14 +672,16 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr></tr>
 							</tbody>
 						</table>
 					</div>
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btnNewFile" class="button tiny"><i class="fa fa-plus-circle fa-lg">New file</i></a>
+				<a id="btnNewFile" class="btn btn-primary btn-Search">
+					<div class="label">New file</div>
+					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+				</a>
 			</div>
 		</form>
 	</div>

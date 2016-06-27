@@ -413,6 +413,39 @@ public function nextStatusContract(){
 	}
 }
 
+public function saveFile(){
+	$message = "";
+	$result = $this->uploadFile($_FILES, $_POST['ruta']);
+	if($result != false){
+		$file = [
+			"fkDocTypeId" 	=> 	1,
+			"docPath" 		=> 	$result,
+			"ynActive" 		=> 	1,
+			"CrBy"			=>	$this->nativesessions->get('id'),
+			"CrDt"			=>	$this->getToday(),
+			"MdBy"			=> 	$this->nativesessions->get('id'),
+			"MdDt"			=>	$this->getToday()
+		];
+		$idFile = $this->contract_db->insertReturnId('tblDoc', $file);
+		
+		$fileRes = [
+			"fkResId" 		=> 	$_POST['id'],
+			"fkdocId" 		=> 	$idFile,
+			"ynActive" 		=> 	1,
+			"CrBy"			=>	$this->nativesessions->get('id'),
+			"CrDt"			=>	$this->getToday(),
+			"MdBy"			=> 	$this->nativesessions->get('id'),
+			"MdDt"			=>	$this->getToday()
+		];
+		$idFile = $this->contract_db->insertReturnId('tblResDoc', $fileRes);
+		
+		$message = array('success' => true, 'message' => "File uploaded correctly", 'nameImage' => $result );
+	}else{
+		$message = array('success' => false, 'message' => "Try again");
+	}
+	echo json_encode($message);
+}
+
 public function getPropertyStatus($IdStatus){
 
 
@@ -494,7 +527,7 @@ public function getFlagsContract(){
 	
 	public function getTrxType(){
 		if($this->input->is_ajax_request()) {
-			$trxType = $this->contract_db->selectTrxType($_POST['attrType']);
+			$trxType = $this->contract_db->selectTrxType($_POST['attrType'],$_POST['trxType']);
 			echo json_encode($trxType);
 		}
 	}
@@ -503,6 +536,13 @@ public function getFlagsContract(){
 		if($this->input->is_ajax_request()) {
 			$trxClass = $this->contract_db->selectTrxClass();
 			echo json_encode($trxClass);
+		}
+	}
+
+	public function getFilesContract(){
+		if($this->input->is_ajax_request()) {
+			$file = $this->contract_db->getFilesContract($_POST['idRes']);
+			echo json_encode($file);
 		}
 	}
 
@@ -525,27 +565,35 @@ public function getFlagsContract(){
 			$id = $_POST['idContrato'];
 			$typeInfo = $_POST['typeInfo'];
 			$typeAcc = $_POST['typeAcc'];
-			$sales = $this->contract_db->getAccountsById($id, $typeInfo, $typeAcc);
-			foreach($sales as $item){
-				
-				if($typeInfo == "account"){
-					$CurDate = strtotime(date("Y-m-d H:i:00",time()));
-					$dueDate = strtotime($item->Due_Date);
-					if($dueDate <= $CurDate){
-						$item->Overdue_Amount = $item->AbsAmount;
+			$datos = array();
+			if($typeInfo == "account"){
+				$acc = $this->contract_db->getAccByRes( $id );
+				$datos['acc'] = $acc;
+				$typeTr = array( 'sale', 'maintenance', 'loan' );
+				foreach($typeTr as $tyTr){
+					$data = $this->contract_db->getAccountsById( $id, $typeInfo, $tyTr);
+					foreach($data as $item){
+						$CurDate = strtotime(date("Y-m-d H:i:00",time()));
+						$dueDate = strtotime($item->Due_Date);
+						$item->Overdue_Amount = 0;
+						if( $dueDate <= $CurDate  ){
+							if( $item->Sign_transaction == 1 || $item->Sign_transaction == "1" ){
+								$item->Overdue_Amount = $item->AbsAmount;
+							}
+						}
 					}
-				}else{
+					$datos[$tyTr] = $data;
+				}
+				
+			}else{
+				$tyTr = $_POST['typeAcc'];
+				$data = $this->contract_db->getAccountsById( $id, $typeInfo, $tyTr);
+				foreach($data as $item){
 					$item->inputAll = '<input type="checkbox" id="' . $item->ID . '" class="checkPayAcc" name="checkPayAcc[]" value="' . $item->AbsAmount . '" trxClass="' . $item->pkTrxClassid . '"  ><label for="checkFilter1">&nbsp;</label>';
 					unset($item->pkTrxClassid);
-					//$someArray=array(224=>'someword1'); 
-					//array_unshift($item, $someArray);
-					//$item->prueba = 150;
-					//array_unshift($item, $item->prueba = 150);
 				}
+				$datos['acc'] = $data;
 			}
-			$datos =[
-				"sales"=> $sales
-			];
 			echo json_encode($datos);
 		}
 	}
@@ -788,6 +836,36 @@ public function getFlagsContract(){
 			return false;
 		}
 	}
+	
+	private function uploadFile($files, $route){
+		foreach ($files as $key) {
+    		if($key['error'] == UPLOAD_ERR_OK ){//Verificamos si se subio correctamente
+      			$name = $key['name'];//Obtenemos el nombre del archivo
+      			$temporal = $key['tmp_name']; //Obtenemos el nombre del archivo temporal
+      			$size= ($key['size'] / 1000)."Kb"; //Obtenemos el tamaño en KB
+				$tipo = $key['type']; //obtenemos el tipo de imagen
+				
+				$fecha = new DateTime();
+				
+				$nombreTimeStamp = "fileContact_" . $fecha->getTimestamp();
+				
+				$extension=explode(".",$name); 
+				$extension=$extension[count($extension)-1]; 
+        		$nombreTimeStamp = $nombreTimeStamp . "." . $extension;
+				
+				if(move_uploaded_file($temporal, $route . $nombreTimeStamp)){
+					return $nombreTimeStamp;
+				}else{
+					return false;
+				}
+				
+    		}else{
+				return false;
+    		}
+		}
+		return false;
+	}
+	
 }
 
 

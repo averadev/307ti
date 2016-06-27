@@ -110,7 +110,7 @@
                     </div>
                 </div>
             </div>
-			<div class="fieldset large-12 columns" style="margin-top:0;" id="grpTablePayAcc">
+			<div class="fieldset large-12 columns" style="margin-top:0; min-height:200px;" id="grpTablePayAcc" >
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
 						<table id="tabletPaymentAccoun" width="100%" style="min-height:150px;">

@@ -1472,7 +1472,7 @@ function getDatosContractFlags(id){
 	}
 }
 function getDatosContractFiles(id){
-	console.log("Archivos " + id);
+	getFiles(id);
 }
 
 function initEventosFlags(){
@@ -1923,8 +1923,8 @@ function modalNewFileContract() {
 				});
 		},
 		autoOpen: false,
-     	height: maxHeight/3,
-     	width: "25%",
+     	height: maxHeight/2,
+     	width: "40%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -1936,9 +1936,7 @@ function modalNewFileContract() {
        		text: "Add",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-    			alertify.success("File added");
-    			$(this).dialog('close');
-	       
+				uploadFileCont();
        		}
      	}],
      close: function() {
@@ -2257,9 +2255,11 @@ function opcionAccount(attrType){
 					ajaxSelects('contract/getTrxClass', 'try again', generalSelects, 'slcTrxClassAcc');
 				});
 			}else{
+				showLoading(div, true);
 				$("#slcTransTypeAcc").attr('disabled', true);
 				getTrxType('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
 				setDataOpcionAccount(attrType);
+				showLoading(div, false);
 			}
 		},
 		autoOpen: false,
@@ -2317,7 +2317,8 @@ function setDataOpcionAccount(attrType){
 		$('#grpTrxClassAcc').show();
 		$('#grpTablePayAcc').hide();
 	}else{
-		getAccounts( $('#btNewTransAcc').data( 'idRes' ), "payment" );
+		var trxType = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accType');
+		getAccounts( $('#btNewTransAcc').data( 'idRes' ), "payment", trxType );
 		$('#grpTrxClassAcc').hide();
 		$('#grpTablePayAcc').show();
 	}
@@ -2362,7 +2363,7 @@ function saveAccCont(attrType){
 		if( data.success ){
 			//alert("guardeishion");
 			//getDatailByID("contractstbody");
-			getAccounts( $('#btNewTransAcc').data( 'idRes' ), "account" );
+			getAccounts( $('#btNewTransAcc').data( 'idRes' ), "account", "" );
 			$("#dialog-accounts").dialog('close');
 			showAlert(false,"Saving changes, please wait ....",'progressbar');
 		}else{
@@ -2379,10 +2380,13 @@ function saveAccCont(attrType){
 }
 
 function getTrxType(url, attrType, errorMsj, funcion, divSelect){
+	var trxType = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accType');
 	$.ajax({
 		type: "POST",
 		data: {
-			attrType:attrType
+			attrType:attrType,
+			trxType:trxType
+			
 		},
 		url: url,
 		dataType:'json',
@@ -2427,6 +2431,91 @@ function verifyAccount( inputArray, selectArray ){
 	}
 	
 	return v;
+}
+
+function uploadFileCont(){
+	
+	showAlert(true,"Saving changes, please wait ....",'progressbar');
+	
+	var id = getValueFromTableSelected("contracts", 1);
+	//creamos la variable Request 
+	if(window.XMLHttpRequest) {
+ 		var Req = new XMLHttpRequest(); 
+ 	}else if(window.ActiveXObject) { 
+ 		var Req = new ActiveXObject("Microsoft.XMLHTTP"); 
+ 	}	
+	
+	var data = new FormData(); 
+	
+	data.append('id',id);
+		
+	//var ruta = new Array();
+		
+	var archivos = document.getElementById("fileToUpload");//Damos el valor del input tipo file
+ 	var archivo = archivos.files; //obtenemos los valores de la imagen
+	data.append('image',archivo[0]);
+	ruta = "assets/img/files/";
+	
+	//rutaJson = JSON.stringify(ruta);
+	data.append('ruta',ruta);
+		
+	data.append('nameImage',$('#imagenName').val());
+		
+	//cargamos los parametros para enviar la imagen
+	Req.open("POST", "contract/saveFile", true);
+		
+	//nos devuelve los resultados
+	Req.onload = function(Event) {
+		//Validamos que el status http sea ok 
+		if (Req.status == 200) {
+			var obj = JSON.parse(Req.responseText);
+			if(obj.success){
+				alertify.success(obj.message);
+			}else{
+				alertify.error("Try again");
+			}
+			getFiles(id);
+			var div = "#dialog-newFile";
+			$(div).dialog('close');
+			showAlert(false,"Saving changes, please wait ....",'progressbar');
+		} else { 
+			getFiles(id);
+			alertify.error("Try again");
+			var div = "#dialog-newFile";
+			$(div).dialog('close');
+			showAlert(false,"Saving changes, please wait ....",'progressbar');
+		} 	
+	};
+		
+	//Enviamos la petición 
+ 	Req.send(data);	
+}
+
+function getFiles(id){
+	var url = "contract/getFilesContract";
+	//var div = "#tableCFilesSelected";
+	showLoading("#tableCFilesSelected", true);
+	$.ajax({
+	    data:{
+	        idRes: id
+	    },
+	    type: "POST",
+	    url: url,
+	    dataType:'json',
+	    success: function(data){
+			console.log(data);
+			if(data.length > 0){
+				drawTable2(data, "tableCFilesSelected", false, "");
+			}else{
+				noResultsTable("contentTableFile", "tableCFilesSelected", "No results found");
+			}
+			
+			showLoading("#tableCFilesSelected", false);
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
 }
 
 function pruebas(){
