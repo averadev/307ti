@@ -14,6 +14,7 @@ $(document).ready(function(){
 	var dialogAccount = opcionAccount();
 
 
+
 	$(document).on( 'click', '#newContract', function () {
 		addContract = createDialogContract(addContract);
 		addContract.dialog("open");
@@ -483,8 +484,11 @@ function createNewContract(){
 						elem.resetForm();
 						var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta", "downpayment"];
 						clearInputsById(arrayWords);
-						var fin = modalFinanciamiento();
-						fin.dialog("open");
+						 if (modalFin!=null) {
+				    		modalFin.dialog( "destroy" );
+				    	}
+				    	modalFin = modalFinanciamiento();
+				        modalFin.dialog( "open" );
 						$('#dialog-Weeks').empty();
 						$('#tablePeopleSelected tbody').empty();
 						$('#tableUnidadesSelected tbody').empty();

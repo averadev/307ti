@@ -5,7 +5,7 @@ var modalVendedores = null;
 var modalProvisiones = null;
 var modalNotas = null;
 var modalNewFile = null;
-
+var modalFin = null;
 $(function() {
 	
     // Button Dropdown Menu

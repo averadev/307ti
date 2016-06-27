@@ -155,7 +155,7 @@ private function insertFinanciamiento($idContrato){
 		"TotalFinanceAmt"           => $balanceFinal + 100,
 		"DownPmtAmt"            	=> $_POST['downpayment'],
 		"DownPmt%"           		=> $porEnganche,
-		"MonthlyPmtAmt"            	=> 1000,
+		"MonthlyPmtAmt"            	=> 0,
 		"BalanceActual"           	=> $balanceFinal,
 		"ynClosingfee"            	=> 1,
 		"ClosingFeeAmt"           	=> 100,
@@ -166,6 +166,24 @@ private function insertFinanciamiento($idContrato){
 		"CrDt"						=> $this->getToday()
 	];
 	$this->contract_db->insertReturnId('tblResfin', $financiamiento);
+}
+
+public function updateFinanciamiento(){
+	if($this->input->is_ajax_request()) {
+		$financiamiento = [
+			"fkFactorId"	=> $this->contract_db->selectIdFactor($_POST['factor']),
+			"MonthlyPmtAmt" => $_POST['pagoMensual']
+		];
+		$condicion = "pkResId = " . $id;
+		$afectados = $this->contract_db->updateReturnId('tblRes', $financiamiento, $condicion);
+		if ($afectados>0) {
+			$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados];
+			echo json_encode($mensaje);
+		}else{
+			$mensaje = ["mesaje"=>"ocurrio un error", $afectados => $afectados];	
+			echo json_encode($mensaje);
+		}
+	}
 }
 
 public function createSemanaOcupacion($idContrato){
