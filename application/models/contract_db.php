@@ -723,14 +723,21 @@ class Contract_db extends CI_Model {
     }
 	
 	public function getFilesContract($id){
-		$this->db->select("d.pkDocId as ID, d.docPath, 0 as Description");
+		$this->db->select("d.pkDocId as ID, d.docPath as Path, d.docDesc as Description");
 		$this->db->select("dt.DocTypeDesc");
-		$this->db->select("rd.ynActive");
-		$this->db->select("rd.CrDt");
+		$this->db->select("rd.CrDt as Date");
         $this->db->from('tblDoc d');
 		$this->db->join('tblDocType dt', 'dt.pkDocTypeId = d.fkDocTypeId');
 		$this->db->join('tblResDoc rd', 'rd.fkdocId = d.pkDocId');
 		$this->db->where('rd.fkResId = ', $id);
+		$this->db->where('d.ynActive = 1');
+        $query = $this->db->get();
+		return $query->result();
+	}
+	
+	public function getDocType(){
+		$this->db->select("dt.pkDocTypeId as ID, dt.DocTypeDesc");
+        $this->db->from('tblDocType dt');
         $query = $this->db->get();
 		return $query->result();
 	}

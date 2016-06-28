@@ -1918,6 +1918,7 @@ function modalNewFileContract() {
   		open : function (event){
   				showLoading(div, true);
 				$(this).load ("contract/modalAddFileContract" , function(){
+					ajaxSelects('contract/getDocType', 'try again', generalSelects, 'slcTypeFileUp');
 					showLoading(div, false);
 				});
 		},
@@ -1935,7 +1936,18 @@ function modalNewFileContract() {
        		text: "Add",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-				uploadFileCont();
+				var arrayInput = ["fileDescription","fileToUpload"];
+				var arraySelect = ["slcTypeFileUp"];
+				if(verifyFile( arrayInput, arraySelect )){
+					uploadFileCont();
+				}else{
+					var id = "saveFileCont";
+					var form = $("#"+id);
+					var elem = new Foundation.Abide(form, {});
+					$('#'+id).foundation('validateForm');
+					alertify.success("Please fill required fields");
+				}
+				
        		}
      	}],
      close: function() {
@@ -2443,6 +2455,8 @@ function uploadFileCont(){
 	var data = new FormData(); 
 	
 	data.append('id',id);
+	data.append('description',$('#fileDescription').val().trim());
+	data.append('typeDoc',$('#slcTypeFileUp').val());
 		
 	//var ruta = new Array();
 		
@@ -2454,7 +2468,7 @@ function uploadFileCont(){
 	//rutaJson = JSON.stringify(ruta);
 	data.append('ruta',ruta);
 		
-	data.append('nameImage',$('#imagenName').val());
+	//data.append('nameImage',$('#imagenName').val());
 		
 	//cargamos los parametros para enviar la imagen
 	Req.open("POST", "contract/saveFile", true);
@@ -2463,12 +2477,13 @@ function uploadFileCont(){
 	Req.onload = function(Event) {
 		//Validamos que el status http sea ok 
 		if (Req.status == 200) {
-			var obj = JSON.parse(Req.responseText);
+			/*var obj = JSON.parse(Req.responseText);
 			if(obj.success){
 				alertify.success(obj.message);
 			}else{
 				alertify.error("Try again");
-			}
+			}*/
+			alertify.success("File uploaded correctly");
 			getFiles(id);
 			var div = "#dialog-newFile";
 			$(div).dialog('close');
@@ -2500,7 +2515,7 @@ function getFiles(id){
 	    success: function(data){
 			console.log(data);
 			if(data.length > 0){
-				drawTable2(data, "tableCFilesSelected", false, "");
+				drawTable2(data, "tableCFilesSelected", "deleteFile", "eliminar");
 			}else{
 				noResultsTable("contentTableFile", "tableCFilesSelected", "No results found");
 			}
@@ -2511,6 +2526,65 @@ function getFiles(id){
 	        alertify.error("Try again");
 	    }
 	});
+}
+
+function deleteFile(idFile){
+	alertify.confirm("To delete the file?", function (e) {
+		if (e) {
+			showLoading("#tableCFilesSelected", true);
+			$.ajax({
+				data:{
+					idFile: idFile
+				},
+				type: "POST",
+				url: "contract/deleteFile",
+				dataType:'json',
+				success: function(data){
+					var id = getValueFromTableSelected("contracts", 1);
+					getFiles(id);
+					showLoading("#tableCFilesSelected", false);
+					alertify.success("deleted file");
+				},
+				error: function(){
+					alertify.error("Try again");
+					showLoading("#tableCFilesSelected", false);
+				}
+			});
+			// user clicked "ok"
+		} else {
+			// user clicked "cancel"
+		}
+	});
+	//alert('id');
+}
+
+function verifyFile( inputArray, selectArray ){
+	
+	var v = true;
+	for (var i = 0; i < inputArray.length; i++){
+		 if($('#'+inputArray[i]).val().trim().length <= 0){
+		 	v = false;
+		 }
+	}
+	
+	for (var i = 0; i < selectArray.length; i++){
+		if($('#'+selectArray[i]).val() == 0){
+		 	v = false;
+		}
+	}
+	
+	if($('#fileToUpload').val().length > 0){
+		var archivos = document.getElementById("fileToUpload");//Damos el valor del input tipo file
+		var archivo = archivos.files; //obtenemos los valores de la imagen
+		var sizeByte = parseInt(archivo[0].size / 1024);
+		//var sizekiloByte = parseInt(sizeByte / 1024);
+		if( sizeByte > 2048){
+			v = false;
+			alertify.error("the file must not exceed 2 mb");
+		}
+	}
+	
+	return v;
 }
 
 function pruebas(){

@@ -413,38 +413,51 @@ public function nextStatusContract(){
 	}
 }
 
-public function saveFile(){
-	$message = "";
-	$result = $this->uploadFile($_FILES, $_POST['ruta']);
-	if($result != false){
-		$file = [
-			"fkDocTypeId" 	=> 	1,
-			"docPath" 		=> 	$result,
-			"ynActive" 		=> 	1,
-			"CrBy"			=>	$this->nativesessions->get('id'),
-			"CrDt"			=>	$this->getToday(),
-			"MdBy"			=> 	$this->nativesessions->get('id'),
-			"MdDt"			=>	$this->getToday()
-		];
-		$idFile = $this->contract_db->insertReturnId('tblDoc', $file);
-		
-		$fileRes = [
-			"fkResId" 		=> 	$_POST['id'],
-			"fkdocId" 		=> 	$idFile,
-			"ynActive" 		=> 	1,
-			"CrBy"			=>	$this->nativesessions->get('id'),
-			"CrDt"			=>	$this->getToday(),
-			"MdBy"			=> 	$this->nativesessions->get('id'),
-			"MdDt"			=>	$this->getToday()
-		];
-		$idFile = $this->contract_db->insertReturnId('tblResDoc', $fileRes);
-		
-		$message = array('success' => true, 'message' => "File uploaded correctly", 'nameImage' => $result );
-	}else{
-		$message = array('success' => false, 'message' => "Try again");
+	public function saveFile(){
+		$message = "";
+		$result = $this->uploadFile($_FILES, $_POST['ruta']);
+		if($result != false){
+			$file = [
+				"fkDocTypeId" 	=> 	$_POST['typeDoc'],
+				"docPath" 		=> 	$result,
+				"docDesc" 		=> 	$_POST['description'],
+				"ynActive" 		=> 	1,
+				"CrBy"			=>	$this->nativesessions->get('id'),
+				"CrDt"			=>	$this->getToday(),
+				"MdBy"			=> 	$this->nativesessions->get('id'),
+				"MdDt"			=>	$this->getToday()
+			];
+			$idFile = $this->contract_db->insertReturnId('tblDoc', $file);
+			
+			$fileRes = [
+				"fkResId" 		=> 	$_POST['id'],
+				"fkdocId" 		=> 	$idFile,
+				"ynActive" 		=> 	1,
+				"CrBy"			=>	$this->nativesessions->get('id'),
+				"CrDt"			=>	$this->getToday(),
+				"MdBy"			=> 	$this->nativesessions->get('id'),
+				"MdDt"			=>	$this->getToday()
+			];
+			$idFile = $this->contract_db->insertReturnId('tblResDoc', $fileRes);
+			
+			$message = array('success' => true, 'message' => "File uploaded correctly", 'nameImage' => $result );
+		}else{
+			$message = array('success' => false, 'message' => "Try again");
+		}
+		echo json_encode($message);
 	}
-	echo json_encode($message);
-}
+
+	public function deleteFile(){
+		
+		$file = [
+				//"pkDocId" 	=> $_POST['idFile'],
+				"ynActive" 	=> 0
+		];
+		$condicion = "pkDocId = " . $_POST['idFile'];
+		$data = $this->contract_db->updateReturnId("tblDoc", $file, $condicion);
+		echo json_encode($data);
+
+	}
 
 public function getPropertyStatus($IdStatus){
 
@@ -595,6 +608,13 @@ public function getFlagsContract(){
 				$datos['acc'] = $data;
 			}
 			echo json_encode($datos);
+		}
+	}
+	
+	public function getDocType(){
+		if($this->input->is_ajax_request()) {
+			$docType = $this->contract_db->getDocType();
+			echo json_encode($docType);
 		}
 	}
 
@@ -838,6 +858,8 @@ public function getFlagsContract(){
 	}
 	
 	private function uploadFile($files, $route){
+		//$route = "http://pmsweb.307ti.com/assets/img/files/";
+		
 		foreach ($files as $key) {
     		if($key['error'] == UPLOAD_ERR_OK ){//Verificamos si se subio correctamente
       			$name = $key['name'];//Obtenemos el nombre del archivo
