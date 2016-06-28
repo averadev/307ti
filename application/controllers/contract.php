@@ -225,11 +225,11 @@ public function createSemanaOcupacion($idContrato){
 				"CrBy"          => $this->nativesessions->get('id'),
 				"CrDt"			=> $this->getToday()
 			];
-			array_push($json, $OcupacionTable);
+			//array_push($json, $OcupacionTable);
 			$this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
 		 }
 	}
-	echo json_encode(["mensaje" => "Se ingresaron Correctamente"]);
+	//echo json_encode(["mensaje" => "Se ingresaron Correctamente"]);
 	//var_dump($Years);
 }
 
