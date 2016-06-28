@@ -76,7 +76,7 @@ $('#textCountry').change(function(){ changeState(this) });
 */
 $(document).ready(function(){
 	
-	noResults('#section-table-people',true);
+	//noResults('#section-table-people',true);
 	
 	//$(document).foundation();
 	//maxHeight
@@ -113,6 +113,9 @@ function createModalDialog(){
 	if(dialogUser != null){
 		dialogUser.dialog( "destroy" );
 	}
+	$("#textPhone1").mask("(999) 999-9999");
+	$("#textPhone2").mask("(999) 999-9999");
+	$("#textPhone3").mask("(999) 999-9999");
 	dialogUser = $( "#dialog-User" ).dialog({
 		autoOpen: false,
 		height: maxHeight,
@@ -281,7 +284,7 @@ function saveUserData(id, isClosed){
 	var phoneArray = new Array();
 	$(".phonePeople").each(function (index){
 		if($(this).val().trim().length != 0){
-			phoneArray.push($(this).val().trim());
+			phoneArray.push($(this).val().trim().replace(/[^\d]/g, ''));
 		}
 	});
 	var jsonPhone = JSON.stringify(phoneArray);
@@ -318,10 +321,10 @@ function saveUserData(id, isClosed){
 		dataType:'json',
 		data: { 
 			id:id,
-			name:$('#textName').val().trim(),
-			SecondName:$('#textMiddleName').val().trim(),
-			lName:$('#textLastName').val().trim(),
-			lName2:$('#TextSecondLastName').val().trim(),
+			name:$('#textName').val().trim().toUpperCase(),
+			SecondName:$('#textMiddleName').val().trim().toUpperCase(),
+			lName:$('#textLastName').val().trim().toUpperCase(),
+			lName2:$('#TextSecondLastName').val().trim().toUpperCase(),
 			birthDate:$('#textBirthdate').val().trim(),
 			gender:gender,
 			WeddingAnniversary:$('#textWeddingAnniversary').val().trim(),
@@ -665,7 +668,7 @@ function cleanUserFields(){
 	$('#textBirthdate').val("");
 	$('#textWeddingAnniversary').val("");
 	//$('#textNationality').val("");
-	$('#textQualification').val("");
+	//$('#textQualification').val("");
 	$('#RadioMale').prop( "checked", false );
 	$("#RadioFemale").prop( "checked", false );
 	
@@ -716,7 +719,7 @@ function searchPeople(page){
 	
 	var typePeople = $('#btnSearch').attr('attr_people');
 	
-	noResults('#section-table-people',false);
+	//noResults('#section-table-people',false);
 	opcionAdvanced = "";
 	if($('#checkFilterAdvance').is(':checked')){
 		opcionAdvanced = $('.RadioSearchPeople:checked').val();
@@ -814,7 +817,7 @@ function getInfoPeople(id){
 		},
 		success: function(data){
 			var item = data.item[0];
-			$('#textName').val(item.Name.trim());
+			$('#textName').val(item.Name.trim().toUpperCase());
 			$('#textMiddleName').val(item.SecondName.trim());
 			$('#textLastName').val(item.LName.trim());
 			$('#TextSecondLastName').val(item.LName2.trim());
@@ -942,13 +945,13 @@ function getInfoTabsPeople(screen, url){
 		deleteTableInv("tableReservationsPeople");
 		showLoading('#tab-PReservaciones',true);
 		$('#tableReservationsPeople tbody').empty();
-		noResults('#' + screen,false);
+		//noResults('#' + screen,false);
 	}else{
 		deleteTableInv("tableContractPeople");
 		showLoading('#tab-PContratos',true);
 		$('#tableContractPeople tbody').empty();
 		search = $('#textSearchContractPeople').val();
-		noResults('#' + screen,false);
+		//noResults('#' + screen,false);
 	}
 	$.ajax({
    		type: "POST",
@@ -1077,7 +1080,7 @@ function changeState(selector){
 
 function noResultsPeople(section, table, message){
 	alertify.error(message);
-	noResults('#' + section,true);
+	//noResults('#' + section,true);
 	deleteTableInv(table);
 }
 

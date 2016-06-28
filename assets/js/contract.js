@@ -368,7 +368,7 @@ function getContratos(){
 				drawTable3(data, "details", "contracts");
 			}else{
 				$('#contractstbody').empty();
-				mensajeDatosVacios('contractstbody');
+				alertify.error("No records found");
 			}
 		},
 		error: function(){
@@ -1215,8 +1215,7 @@ function selectMetodoPagoProgramados(){
                     drawTable(data, 'add', "details", "Unidades");
                 }else{
                     $('#contractstbody').empty();
-                    alertify.error("No data found");
-                    mensajeDatosVacios("Unidadestbody");
+                    alertify.error("No records found");
                 }
             },
             error: function(){
@@ -2048,17 +2047,13 @@ function getTypesFlags(id){
 	    		drawTableId(data,"tableFlagsListBody");
 	    		selectTable("tableFlagsListBody");
 	    	}else{
-	    		mensajeDatosVacios("tableFlagsListBody");
+	    		alertify.error("No records found");
 	    	}
 	    },
 	    error: function(){
 	        alertify.error("Try again");
 	    }
 	});
-}
-function mensajeDatosVacios(div){
-	var html = '<img src="' + BASE_URL + 'assets/img/common/SIN RESULTADOS-01.png' + '" /> <label> Oh no! No Results. Try again. </label>';
-	$('#'+div).html(html);
 }
 function modalAddNotas() {
 	var div = "#dialog-Notas";
@@ -2140,7 +2135,7 @@ function getNotes(id){
 	    	if (data) {
 	    		drawTableId(data,"tableCNotesSelectedBody");
 	    	}else{
-	    		mensajeDatosVacios("tableCNotesSelectedBody");
+	    		alertify.error("No records found");
 	    	}
 	    },
 	    error: function(){
@@ -2164,7 +2159,7 @@ function getFlags(id){
 	    	if (data) {
 	    		drawTableId(data,"flagsAsignedBody");
 	    	}else{
-	    		mensajeDatosVacios("flagsAsignedBody");
+	    		alertify.error("No records found");
 	    	}
 	    	
 	    },

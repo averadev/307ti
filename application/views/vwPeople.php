@@ -12,14 +12,9 @@
 					<span>People Search</span>
 				</h3>
 				<a data-widget="newContrat" id="newUser" class="btn btn-new">
-					<div class="label">Nuevo</div>
+					<div class="label">New</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
-				<!--<div class="pull-left box-tools">
-					<span data-widget="newContrat" id="newUser">
-						<span>( New )</span>
-					</span>
-				</div>-->
 			</div>
 			<div class="box-body box-filter" style="">
 				<div class="row">
@@ -83,11 +78,11 @@
 								</div>
 								<div class="small-12 large-6 columns" style="padding-left: 0;">
 									<a id="btnSearch" class="btn btn-primary btn-Search" attr_people="">
-										<div class="label">Buscar</div>
+										<div class="label">Search</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 									</a>
 									<a id="btnCleanSearch" class="btn btn-primary spanSelect">
-										<div class="label">Limpiar</div>
+										<div class="label">Clean</div>
 										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 									</a>
 								</div>
@@ -282,11 +277,21 @@
 					</div>
 					<!-- Calificacion-->
 					<div class="small-12 large-6 columns">
-						<label for="textQualification" class="text-left">Qualification
-							<input type="number" id="textQualification" class="round general">
+						<label class="text-left">Qualification
+						<div class="caja" >
+							<select id="textQualification" class="input-group-field round">
+								<option value="0">Select your Qualification</option>
+								<?php
+								foreach($qualifications as $item){
+									?>
+									<option value="<?php echo $item->ID; ?>"><?php echo $item->Description; ?></option>
+									<?php
+								}
+								?>
+							</select>
+						</div>
 						</label>
-					</div>
-				</div>		
+					</div>		
 			</fieldset>
 			<!-- Datos del domicilio -->
 			<div class="row" id="alertValPeopleAddress" style="display:none;">
@@ -461,11 +466,11 @@
 						</div>
 						<div class="small-12 large-6 columns" style="padding-left: 0;">
 							<a id="btnSearchContractPeople" class="btn btn-primary btn-Search">
-								<div class="label">Buscar</div>
+								<div class="label">Search</div>
 								<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 							</a>
 							<a id="btnCleanSearchContractPeople" class="btn btn-primary spanSelect">
-								<div class="label">Limpiar</div>
+								<div class="label">Clean</div>
 								<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 							</a>
 						</div>

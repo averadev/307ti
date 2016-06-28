@@ -19,6 +19,7 @@ class People extends CI_Controller {
 	public function index(){
 		$data['country'] = $this->people_db->getCountry();
 		$data['nationality'] = $this->people_db->getNationality();
+		$data['qualifications'] = $this->people_db->getQualifications();
         $this->load->view('vwPeople',$data);
 	}
 	

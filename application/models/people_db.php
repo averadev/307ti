@@ -100,7 +100,16 @@ Class people_db extends CI_MODEL
 		$this->db->where('tblCountry.YnActive = ', 1);
 		return  $this->db->get()->result();
 	}
-	
+	public function getQualifications(){
+		$this->db->select("pkQualificationId as ID, QualificationDesc as Description");
+        $this->db->from("tblQualification");
+        $this->db->where("ynActive", 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+	}
 	/**
     * Obtiene los estados
     */

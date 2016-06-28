@@ -11,7 +11,7 @@
                		<span>Contract Search</span>
                	</h3>
 				<a data-widget="newContrat" id="newContract" class="btn btn-new">
-					<div class="label">Nuevo</div>
+					<div class="label">New</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
 				<!--<div class="pull-left box-tools">
@@ -41,6 +41,10 @@
 								<input type="radio" name="filtro_contrato" value="reservacionId" id="reservacionId">
 								<label for="reservacionId">Reservation ID</label>
 							</div>
+							<div class="rdoField">
+									<input type="radio" name="filtro_contrato" value="folio" id="folio">
+									<label for="folio">Folio</label>
+								</div>
 						</fieldset>
 					</div>
 					
@@ -56,10 +60,6 @@
 								<div class="rdoField">
 									<input type="radio" name="filtro_contrato" value="codEmpleado" id="codEmpleado" required>
 									<label for="codEmpleado">Employee code</label>
-								</div>
-								<div class="rdoField">
-									<input type="radio" name="filtro_contrato" value="folio" id="folio">
-									<label for="folio">Folio</label>
 								</div>
 								<div class="rdoField">
 									<input type="radio" name="filtro_contrato" value="unidad" id="unidad">

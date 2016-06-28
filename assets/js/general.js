@@ -160,7 +160,8 @@ $(document).ready(function(){
 * @param success funcion que se llama si tiene un boton aceptar si esta vacio no aparece
 * @param cancel funcion que se llama si tiene un boton cancelar si esta vacio no aparece
 */
-function showAlert(isOpen = false,message = null,typeForm = null, success = null, cancel = null){
+function showAlert(isOpen, message, typeForm, success, cancel){
+	//isOpen = false,message = null,typeForm = null, success = null, cancel = null
 	//indica si la alerta se muestra o escond
 	if(isOpen){
 		progressBarAlert.progressbar( "option", "value", false );
@@ -212,7 +213,8 @@ function showAlert(isOpen = false,message = null,typeForm = null, success = null
 * @param success funcion que se llama si tiene un boton aceptar si esta vacio no aparece
 * @param cancel funcion que se llama si tiene un boton cancelar si esta vacio no aparece
 */
-function showLoading(parentElement, isOpen = false,message = null, success = null ){
+function showLoading(parentElement, isOpen,message, success){
+	//parentElement, isOpen = false,message = null, success = null 
 	//indica si la alerta se muestra o escond
 	if(isOpen){
 		var messageLoading = "LOADING";
@@ -662,10 +664,8 @@ function changeColor(color, color2){
 	$(".pr-color").css('background-color', color);
 }
 
-function noResults(parentElement, isOpen = false ){
-	/*if(!isOpen){
-		isOpen = false;
-	}*/
+function noResults(parentElement, isOpen){
+	//parentElement, isOpen = false
 	//indica si la alerta se muestra o escond
 	if(isOpen){
 		var widthLoading = $(parentElement).css('width')

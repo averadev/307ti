@@ -125,7 +125,7 @@
             </div>
             <!-- Condiciones de financiamiento -->
              <div class="fieldset large-12 columns">
-                <legend>Sales Condition</legend>
+                <legend>Sale Terms</legend>
                 <div class="row">
                     <div class="small-6 columns">
 						<label  class="text-left">Sell Type</label>
@@ -172,7 +172,7 @@
 				</div>
 				<div class="row">
 					<div class="small-3 columns">
-						<label>Pack Reference</label>
+						<label>Discount</label>
 					</div>
                     <div class="large-5 columns end">
 						<input class="round general" readonly name="packReference" id="packReference" type="text" value="0">
@@ -210,7 +210,7 @@
 				</div>
                 <div class="row">
                     <div class="small-3 columns">
-                        <label for="depositoEnganche" class="text-left">Deposit Downpayment</label>
+                        <label for="depositoEnganche" class="text-left">Deposit</label>
                     </div>
                     <div class="large-5 columns">
                         <input readonly type="text" id="depositoEnganche" name="depositoEnganche" class="round general" required>
@@ -245,7 +245,7 @@
                 </div>
                 <div class="row">
 					<div class="small-12 columns">
-						<p>Added Packs</p>
+						<p>Extras</p>
 						<table id="tableDescuentos" class="large-12 columns">
 							<thead>
 								<tr>

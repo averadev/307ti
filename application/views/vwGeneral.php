@@ -37,6 +37,8 @@
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>paginacion/jquery.jqpagination.js"></script>
 		<script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>validateDate.js"></script>
+		<script type="text/javascript" src="<?php echo base_url().JS; ?>jquery.maskedinput.min.js"></script>
+		
         
 		<!-- Zebra_Datepicker -->
 		<script type="text/javascript" src="<?php echo base_url().JS; ?>zebra/zebra_datepicker.js"></script>

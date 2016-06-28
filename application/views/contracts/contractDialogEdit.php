@@ -51,13 +51,13 @@
 			<a>Accounts</a>
 		</li>
 		<li class="tabs-title" attr-screen="tab-CVendors">
-			<a>Sellers</a>
+			<a>Sales People</a>
 		</li>
 		<li class="tabs-title" attr-screen="tab-CProvisions">
-			<a>Provisions</a>
+			<a>Gifts</a>
 		</li>
 		<li class="tabs-title" attr-screen="tab-COccupation">
-			<a>Years of Occupation</a>
+			<a>Occupancy</a>
 		</li>
 		<li class="tabs-title" attr-screen="tab-CDocuments">
 			<a>Documents</a>
@@ -162,13 +162,13 @@
 								<td id="cventaWeeks"></td>
 							</tr>
 							<tr>
-								<td>Reference pack</td>
+								<td>Discount</td>
 								<td id="cventaPackR">$00.00</td>
 								<td>Sale price</td>
 								<td id="cventaSalePrice">$00.00</td>
 							</tr>
 							<tr>
-								<td>Hitch</td>
+								<td>Deposit</td>
 								<td id="cventaHitch">$00.00</td>
 								<td>Transferred amount</td>
 								<td id="cventaTransferA">$00.00</td>
@@ -194,7 +194,7 @@
 			<fieldset class="fieldset">
 				<legend class="btnCollapseField"  attr-screen="editTermsOfFinancing" >
 					<img class="imgCollapseFieldset" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>
-					Terms of financing
+					 Financig Terms
 				</legend>
 				<div class="row" id="editTermsOfFinancing" style="display:none;">
 					<table class="tableAccountResult">
@@ -467,7 +467,7 @@
 						<table id="tableSellerSelected" width="100%" style="min-height:250px;">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Seller</th>
+									<th colspan="8" class="thColspan" >Sales People</th>
 								</tr> 
 								<tr>
 									<th class="cellEdit" >ID</th>
@@ -485,7 +485,7 @@
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
 				<a id="btnNewSeller" class="button tiny"><i class="fa fa-user-plus fa-lg">New seller</i></a>
-				<a id="btnRemoveSeller" class="button tiny"><i class="fa fa-user-times fa-lg">Remove seller</i></a>
+				<a id="btnRemoveSeller" class="button tiny"><i class="fa fa-user-times fa-lg">Remove Sale People</i></a>
 			</div>
 		</form>
 	</div>
@@ -499,7 +499,7 @@
 						<table id="tableProvisionsSelected" width="100%" style="min-height:250px;">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Provisions</th>
+									<th colspan="8" class="thColspan" >Gifts</th>
 								</tr> 
 								<tr>
 									<th class="cellGeneral">Code</th>
@@ -529,7 +529,7 @@
 						<table id="tableCOccupationSelected" width="100%">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Years of occupation</th>
+									<th colspan="8" class="thColspan" >Occupancy</th>
 								</tr> 
 								<tr>
 									<th class="cellGeneral">Occupancy Type</th>
@@ -556,7 +556,7 @@
 						<table id="tableCDocumentsSelected" width="100%" style="min-height:250px;">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Years of occupation</th>
+									<th colspan="8" class="thColspan" >Occupancy</th>
 								</tr> 
 								<tr>
 									<th class="cellEdit"></th>
