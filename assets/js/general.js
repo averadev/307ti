@@ -6,6 +6,7 @@ var modalProvisiones = null;
 var modalNotas = null;
 var modalNewFile = null;
 var modalFin = null;
+var modalAllNotes = null;
 $(function() {
 	
     // Button Dropdown Menu

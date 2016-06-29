@@ -1677,3 +1677,11 @@ input.general.error, .caja.error{
 	width: 300px;
 	text-align: center;
 }
+
+.notes{
+	border: 5px solid #00837A;
+}
+.editBox{
+	max-height: 250px;
+    overflow: scroll;
+}

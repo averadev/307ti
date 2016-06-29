@@ -38,17 +38,17 @@
 						</div>
                     </div>
                 </div>
-                <!-- Frequency-->
-<!--                 <div class="row">
+                <!-- Unit View-->
+                <div class="row">
                     <div class="small-3 columns">
-                        <label for="frequency" class="text-left">Frequency</label>
+                        <label for="unitView" class="text-left">Unit View</label>
                     </div>
                     <div class="small-9 columns">
 						<div class="caja" >
-                        <select type="text" id="frequency" name="frequency" class="input-group-field round" required></select>
+                        <select type="text" id="unitView" name="unitView" class="input-group-field round" required></select>
 						</div>
 				   </div>
-                </div> -->
+                </div>
                 <!-- Season-->
                 <div class="row">
                     <div class="small-3 columns">
@@ -129,7 +129,7 @@
             <div class="row">
                 <div class="large-12 columns">
 					<a id="btngetUnidades" class="btn btn-primary btn-right">
-						<div class="label">Buscar</div>
+						<div class="label">Search</div>
 						<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 					</a>
 					<!--<a  id="btngetUnidades" href="#" class="button postfix"><i class="fa fa-search"></i></a>-->

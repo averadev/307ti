@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	maxHeight = screen.height * .25;
+	maxHeight = screen.height * .10;
 	maxHeight = screen.height - maxHeight;
 	var addContract = null;
     var unidadDialog = addUnidadDialog();
@@ -63,6 +63,13 @@ $(document).ready(function(){
 	    	}
 	    	modalNotas = modalAddNotas();
 	        modalNotas.dialog( "open" );
+	 });
+	$(document).on( 'click', '#btnGetAllNotes', function () {
+ 		if (modalAllNotes!=null) {
+	    		modalAllNotes.dialog( "destroy" );
+	    	}
+	    	modalAllNotes = modalGetAllNotes();
+	        modalAllNotes.dialog( "open" );
 	 });
 	
 	$(document).on( 'click', '#btnPackReference', function () {
@@ -252,7 +259,7 @@ function addUnidadDialog() {
 		    		showLoading(div,false);
 		    		ajaxSelects('contract/getProperties','try again', generalSelects, 'property');
 	    			ajaxSelects('contract/getUnitTypes','try again', generalSelects, 'unitType');
-	    			//ajaxSelects('contract/getFrequencies','try again', generalSelects, 'frequency');
+	    			ajaxSelects('contract/getViewsType','try again', generalSelects, 'unitView');
 	    			ajaxSelects('contract/getSeasons','try again', generalSelects, 'season');
 					$('#btngetUnidades').click(function(){
 					        getUnidades();
@@ -1203,7 +1210,8 @@ function selectMetodoPagoProgramados(){
                 property: $("#property").val(),
                 unitType: $("#unitType").val(),
                 season: $("#season").val(),
-                interval: $("#interval").val()
+                interval: $("#interval").val(),
+                view: $("#unitView").val()
             },
             type: "POST",
             url: "contract/getUnidades",
@@ -1256,7 +1264,8 @@ function initEventosDownpayment(){
 
 function initEventosDownpaymentProgramados(){
 	var downpayment = $("#downpayment").val();
-	$("#downpaymentProgramado").val(downpayment);
+	var deposit = $("#depositoEnganche").val();
+	$("#downpaymentProgramado").val(downpayment-deposit);
 	selectMetodoPagoProgramados();
 	setDate("datePaymentPrg");
 	$('#btnCleanmontoDownpaymentPrg').click(function (){
@@ -2102,6 +2111,33 @@ function modalAddNotas() {
 	});
 	return dialogo;
 }
+function modalGetAllNotes() {
+	var id = getValueFromTableSelected("contracts", 1);
+	var div = "#dialog-Notas";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+  				showLoading(div, true);
+				$(this).load ("contract/modalgetAllNotes?id="+id , function(){
+					showLoading(div, false);
+				});
+		},
+		autoOpen: false,
+     	height: maxHeight,
+     	width: "50%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Close",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	}],
+     close: function() {
+    	$(this).empty();
+     }
+	});
+	return dialogo;
+}
 
 function SaveNote(){
 	var noteType = $("#notesTypes").val();
@@ -2123,6 +2159,7 @@ function SaveNotesContract(){
 	    dataType:'json',
 	    success: function(data){
 	    	alertify.success(data['mensaje']);
+	    	getNotes(id);
 	    },
 	    error: function(){
 	        alertify.error("Try again");

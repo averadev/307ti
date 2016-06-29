@@ -234,7 +234,7 @@
                 <!--Montos a Descontar-->
                 <div class="row">
                     <div class="small-3 columns">
-                        <label id="alertLastName" for="right-label" class="text-left">Discount Amount</label>
+                        <label id="alertLastName" for="right-label" class="text-left">Cash Discount</label>
                     </div>
 					<div class="large-5 columns">
 						<input class="round general" id="totalDiscountPacks" type="text" placeholder="$0.00">

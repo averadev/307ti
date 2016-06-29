@@ -2,7 +2,7 @@
 <form>
   <div class="row">
     <div class="small-3 columns">
-      <label for="downpaymentPrice" class="text-left">Down payment</label>
+      <label for="downpaymentPrice" class="text-left">Down Payment Amount</label>
     </div>
     <div class="small-9 columns">
        <input class="round general" readonly id="downpaymentPrice" type="number" name="downpaymentPrice" min="1" max="480">
@@ -10,7 +10,7 @@
   </div>
   <div class="row">
     <div class="small-3 columns">
-      <label for="downpaymentGastos" class="text-left">contract expenditure</label>
+      <label for="downpaymentGastos" class="text-left">Closing Cost</label>
     </div>
     <div class="small-9 columns">
        <input class="round general" id="downpaymentGastos" type="number" name="downpaymentGastos" min="0" value="999">
@@ -26,7 +26,7 @@
   </div>
   <div class="row">
     <div class="small-3 columns">
-      <label for="tiposPago" class="text-left">payment type</label>
+      <label for="tiposPago" class="text-left">Payment Type</label>
     </div>
     <div class="small-9 columns">
 		<div class="caja">
@@ -91,7 +91,7 @@
   </div>
    <div class="row">
     <div class="small-3 columns">
-      <label for="montoDownpayment" class="text-left">Amount</label>
+      <label for="montoDownpayment" class="text-left">Deposit Amount</label>
     </div>
     <div class="small-9 columns">
        <input class="round general" id="montoDownpayment" type="number" name="montoDownpayment" min="0" max="999999">
@@ -121,7 +121,7 @@
                 <thead>
                     <tr>
                         <th class="cellEdit" >Date</th>
-                        <th class="cellGeneral">Payment type</th>
+                        <th class="cellGeneral">Payment Type</th>
                         <th class="cellGeneral">Amount</th>
                         <th class="cellGeneral">Delete</th>
                    </tr>

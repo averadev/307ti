@@ -508,6 +508,12 @@ public function getFlagsContract(){
 			echo json_encode($properties);
 		}
 	}
+	public function getViewsType(){
+		if($this->input->is_ajax_request()) {
+			$properties = $this->contract_db->selectViewsType();
+			echo json_encode($properties);
+		}
+	}
 	public function getSeasons(){
 		if($this->input->is_ajax_request()) {
 			$properties = $this->contract_db->selectSeasons();
@@ -655,7 +661,6 @@ public function getFlagsContract(){
 			$this->load->view('contracts/dialogDiscountAmount');
 		}
 	}
-
 	public function ScheduledPayments(){
 		if($this->input->is_ajax_request()) {
 			$data["paymentTypes"] = $this->contract_db->selectPaymentType();
@@ -718,8 +723,13 @@ public function getFlagsContract(){
 			$this->load->view('contracts/accountDialog');
 		}
 	}
-
-
+	public function modalgetAllNotes(){
+		if($this->input->is_ajax_request()) {
+			$idContrato = $_GET['id'];
+			$data['notes'] = $this->contract_db->selectNotes($idContrato);
+			$this->load->view('contracts/dialogAllNotes', $data);
+		}
+	}
 
 //////////////////////////////////////////////////////
 	public function insertContrat($Contract){

@@ -170,6 +170,7 @@ class Contract_db extends CI_Model {
         $this->db->select('pkLocationId');
         $this->db->from('tblLocation');
         $this->db->where('LocationCode', $string);
+        $this->db->where('ynActive', 1);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )
@@ -182,6 +183,7 @@ class Contract_db extends CI_Model {
     public function getLanguages(){
         $this->db->select('pkLanguageId as ID, LanguageDesc');
         $this->db->from('tblLanguage');
+        $this->db->where('ynActive', 1);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )
@@ -193,6 +195,7 @@ class Contract_db extends CI_Model {
     public function getSaleTypes(){
         $this->db->select('pkSaletypeId as ID, SaleTypeDesc');
         $this->db->from('tblSaleType');
+        $this->db->where('ynActive', 1);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 ) {
@@ -205,6 +208,7 @@ class Contract_db extends CI_Model {
         $this->db->select('top 1 (pkExchangeRateId)');
         $this->db->from('tblexchangerate');
         $this->db->order_by('pkExchangeRateId', 'DESC');
+        $this->db->where('ynActive', 1);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )
@@ -218,6 +222,7 @@ class Contract_db extends CI_Model {
         $this->db->select('pksaleTypeId');
         $this->db->from('tblSaleType');
         $this->db->where('SaleTypeCode', $string);
+        $this->db->where('ynActive', 1);
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
@@ -229,6 +234,7 @@ class Contract_db extends CI_Model {
         $this->db->select('pkinvtTypeId');
         $this->db->from('tblInvtType');
         $this->db->where('InvtTypeCode', $string);
+        $this->db->where('ynActive', 1);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )
@@ -242,6 +248,7 @@ class Contract_db extends CI_Model {
         $this->db->select("pkPropertyId as ID, PropertyName");
         $this->db->from('tblProperty');
         $query = $this->db->get();
+        $this->db->where('ynActive', 1);
         if($query->num_rows() > 0 )
         {
             return $query->result();
@@ -260,6 +267,17 @@ class Contract_db extends CI_Model {
     public function selectFrequencies(){
         $this->db->select("pkFrequencyId as ID, FrequencyDesc");
         $this->db->from('tblFrequency');
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+    public function selectViewsType(){
+        $this->db->select("pkViewId as ID, ViewDesc");
+        $this->db->from('tblView');
+        $this->db->where('ynActive', 1);
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {
@@ -554,12 +572,13 @@ class Contract_db extends CI_Model {
     public function getUnidades($filters){
 
         $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc');
-        $this->db->select('CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price, PRI.Week, SE.SeasonDesc, PRI.ClosingCost');
+        $this->db->select('CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price, PRI.Week, SE.SeasonDesc, PRI.ClosingCost, V.ViewDesc as View');
         $this->db->from('tblUnit U');
         $this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
         $this->db->join('tblPrice PRI', 'U.pkUnitId = PRI.fkUnitId', 'inner');
         $this->db->join('tblSeason SE', 'PRI.fkSeasonId = SE.pkSeasonId', 'inner');
         $this->db->join('tblProperty P', 'P.pkPropertyId = U.fkPropertyId', 'inner');
+        $this->db->join('tblView V', 'U.fkViewId = V.pkViewId', 'inner');
         $this->db->where('PRI.fkStatusId', 17);
         if (!empty($filters['interval'])) {
             $this->db->where('PRI.Week', $filters['interval']);
@@ -573,6 +592,9 @@ class Contract_db extends CI_Model {
         if (!empty($filters['property'])) {
            $this->db->where('P.pkPropertyId', $filters['property']);
            $this->db->where('U.fkPropertyId', $filters['property']);
+        }
+        if (!empty($filters['view'])) {
+           $this->db->where('V.pkViewId', $filters['view']);
         }
         $this->db->order_by('U.pkUnitId', 'ASC');
         $query = $this->db->get();

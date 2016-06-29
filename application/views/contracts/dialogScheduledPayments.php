@@ -2,7 +2,7 @@
 <form>
   <div class="row">
     <div class="small-3 columns">
-      <label for="downpaymentProgramado" class="text-left">Scheduled payment</label>
+      <label for="downpaymentProgramado" class="text-left">Scheduled Payments Amount</label>
     </div>
     <div class="small-9 columns">
        <input class="round general" readonly id="downpaymentProgramado" type="number" name="downpaymentProgramado" min="1" max="480">

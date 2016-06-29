@@ -578,7 +578,7 @@
 	<!-- tabs notas -->
 	<div id="tab-CNotes" class="large-12 columns tab-modal" style="display:none;">
 		<form  data-abide='ajax'>
-			<fieldset class="fieldset">
+			<fieldset class="fieldset editBox">
 				<div class="containerContract">
 					<div class="row">
 						<table id="tableCNotesSelected" width="100%">
@@ -602,7 +602,7 @@
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
 				<a id="btnNewNote" class="button tiny"><i class="fa fa-plus-circle fa-lg">New Note</i></a>
-				<a id="btn" class="button tiny"><i class="fa fa-sticky-note-o fa-lg">See all notes</i></a>
+				<a id="btnGetAllNotes" class="button tiny"><i class="fa fa-sticky-note-o fa-lg">See all notes</i></a>
 			</div>
 		</form>
 	</div>
