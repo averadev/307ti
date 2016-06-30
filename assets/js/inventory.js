@@ -84,6 +84,7 @@ function searchInventary(page){
 				page:page,
 			},
 			success: function(data){
+				console.table(data['items']);
 				drawTable2(data.items,"tableInvDetailed",false,"tabla");
 				showLoading('#divTableInvDetailed',false);
 				$('#tableInvDetailed').show();

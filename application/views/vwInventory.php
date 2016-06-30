@@ -99,7 +99,7 @@
 								<div class="small-12 large-3 columns">
 									<div class="caja" >
 										<select id="textInvProperty" class="comboBoxInvDetailed selectSearch input-group-field round">
-											<option value="0">select a Property</option>
+<!-- 											<option value="0">select a Property</option> -->
 											<?php
 											foreach($property as $item){
 											?>
@@ -112,11 +112,11 @@
 								</div>
 								<div class="small-12 large-3 columns">
 									<a id="btnInvSearch" class="btn btn-primary btn-Search">
-										<div class="label">Buscar</div>
+										<div class="label">Search</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 									</a>
 									<a id="btnInvCleanSearch" class="btn btn-primary spanSelect">
-										<div class="label">Limpiar</div>
+										<div class="label">Clean</div>
 										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 									</a>
 								</div>

@@ -117,7 +117,7 @@ Class inventory_db extends CI_MODEL
 		
 		$cadena = "";
 		//$cadena = "";
-			$cadena = "select count(u.pkUnitId) as total from tblUnit u";
+			$cadena = "select count(u.pkUnitId) as TOTAL from tblUnit u";
 			if($Overbooking == 0 && $OOO == 0){
 				$cadena = $cadena . " left join (select fkUnitID from tblUnitHKStatus uk 
 				inner join tblOccStatus os on os.pkOccStatusID = uk.fkOccStatusID and os.ynOccupancy = 1 
@@ -136,7 +136,7 @@ Class inventory_db extends CI_MODEL
 				where " . $typePropety . " and uk.fkUnitID is null and ob.ValidFromDt >= tblCalendar.Date";
 			}
 			
-		$cadena2 = "SELECT count(r.pkResId) as total from tblRes r";
+		$cadena2 = "SELECT count(r.pkResId) as TOTAL from tblRes r";
 		$cadena2 = $cadena2 . " INNER JOIN tblResType rt on rt.pkResTypeId = r.fkResTypeId and rt.ynHotRes = 1";
 		$cadena2 = $cadena2 . " INNER JOIN tblResOcc ro on ro.fkResId = r.pkResId";
 		if($nonDeducted == 0){
@@ -145,9 +145,9 @@ Class inventory_db extends CI_MODEL
 		}
 		$cadena2 = $cadena2 . " where ro.fkCalendarId = tblCalendar.pkCalendarId";
 		
-		$this->db->select("tblCalendar.pkCalendarId, tblDayOfWeek.DayOfWeekDesc as day, tblCalendar.Date, CONVERT(VARCHAR(11),tblCalendar.Date,106) as Date2");
-		$this->db->select("(" . $cadena . ") as total");
-		$this->db->select("(" . $cadena2 . ") as total2");
+		$this->db->select("tblCalendar.pkCalendarId, tblDayOfWeek.DayOfWeekDesc as DAY, tblCalendar.Date as DATE, CONVERT(VARCHAR(11),tblCalendar.Date,106) as DATE2");
+		$this->db->select("(" . $cadena . ") as TOTAL");
+		$this->db->select("(" . $cadena2 . ") as TOTAL2");
 		$this->db->from("tblCalendar");
 		$this->db->join('tblDayOfWeek', 'tblDayOfWeek.pkDayOfWeekId = tblCalendar.fkDayOfWeekId', 'inner');
 		if($date != ""){
@@ -159,13 +159,13 @@ Class inventory_db extends CI_MODEL
 	}
 	
 	public function getRoomsControl( $date, $property ){
-		$physicalRooms = "Select count(*) as total from tblUnit u where u.fkPropertyId = '" . $property . "' and u.ynActive = 1";
-		$OutofOrder = "Select count(*) as total 
+		$physicalRooms = "Select count(*) as TOTAL from tblUnit u where u.fkPropertyId = '" . $property . "' and u.ynActive = 1";
+		$OutofOrder = "Select count(*) as TOTAL 
 						from tblUnit u 
 						INNER JOIN tblUnitHKStatus uhk on uhk.fkUnitId = u.pkUnitId
 						INNER JOIN tblOccStatus os on os.pkOccStatusID = uhk.fkOccStatusID
 						where u.fkPropertyId = '" . $property . "' and uhk.fkCalendarID = tblCalendar.pkCalendarId and os.ynOccupancy = 1";
-		$DeductedRooms = "SELECT count(r.pkResId) as total from tblRes r
+		$DeductedRooms = "SELECT count(r.pkResId) as TOTAL from tblRes r
 					INNER JOIN tblResType rt on rt.pkResTypeId = r.fkResTypeId and rt.ynHotRes = 1
 					INNER JOIN tblResOcc ro on ro.fkResId = r.pkResId
 					INNER JOIN tblResStatus rs on rs.fkResId = r.pkResId
@@ -177,13 +177,13 @@ Class inventory_db extends CI_MODEL
 					INNER JOIN tblStatus s on s.pkStatusId = rs.fkStatusId
 					INNER JOIN tblResOcc ro on ro.fkResId = r.pkResId
 					where rt.ynHotRes = 1 and s.ynResDeducted = 0 and ro.fkCalendarId = tblCalendar.pkCalendarId";
-		$OutofService = "Select count(*) as total 
+		$OutofService = "Select count(*) as TOTAL 
 						from tblUnit u 
 						INNER JOIN tblUnitHKStatus uhk on uhk.fkUnitId = u.pkUnitId
 						INNER JOIN tblOccStatus os on os.pkOccStatusID = uhk.fkOccStatusID
 						where u.fkPropertyId = '" . $property . "' and uhk.fkCalendarID = tblCalendar.pkCalendarId and os.ynAvailability = 0";
 		
-		$this->db->select("tblCalendar.pkCalendarId, tblDayOfWeek.DayOfWeekDesc as day, tblCalendar.Date, CONVERT(VARCHAR(11),tblCalendar.Date,106) as Date2");
+		$this->db->select("tblCalendar.pkCalendarId, tblDayOfWeek.DayOfWeekDesc as DAY, tblCalendar.Date as DATE, CONVERT(VARCHAR(11),tblCalendar.Date,106) as DATE2");
 		$this->db->select("(" . $physicalRooms . ") as physicalRooms");
 		$this->db->select("(" . $OutofOrder . ") as OutofOrder");
 		$this->db->select("(0) as InventoryRooms");

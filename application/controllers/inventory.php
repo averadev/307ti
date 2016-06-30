@@ -30,7 +30,7 @@ class Inventory extends CI_Controller {
 	**/
 	public function getInvDetailedAvailability(){
 		if($this->input->is_ajax_request()){
-			$total = 0;
+			$TOTAL = 0;
 			/*$date = date_create($_POST['date']);
 			$date = date_format($date, 'Y-m-d');*/
 			$date = $_POST['date'];
@@ -45,21 +45,21 @@ class Inventory extends CI_Controller {
 			
 			
 			foreach($data as $item){
-				$item->Date = $item->Date2;
+				$item->Date = $item->DATE2;
 				if($availability == "Availability"){
-					$item->total = $item->total - $item->total2;
+					$item->TOTAL = $item->TOTAL - $item->TOTAL2;
 				}else{
 					if($Overbooking == 0){
-						if( $item->total2 < 0 ){
-							$item->total = 0; 
+						if( $item->TOTAL2 < 0 ){
+							$item->TOTAL = 0; 
 						}
 					}else if($Overbooking == 1){
-						if($item->total2 > $item->total){
-							$item->total = $item->total2;
+						if($item->TOTAL2 > $item->TOTAL){
+							$item->TOTAL = $item->TOTAL2;
 						}
 					}
 				}
-				unset($item->pkCalendarId,$item->Date2,$item->total2);
+				unset($item->pkCalendarId,$item->DATE2,$item->TOTAL2);
 			}
 			
 			if($property == 1){
@@ -71,25 +71,25 @@ class Inventory extends CI_Controller {
 					foreach($data2 as $item){
 						
 						if($availability == "Availability"){
-							$item->total = $item->total - $item->total2;
+							$item->TOTAL = $item->TOTAL - $item->TOTAL2;
 						}else{
 							if($Overbooking == 0){
-								if( $item->total2 < 0 ){
-									$item->total = 0; 
+								if( $item->TOTAL2 < 0 ){
+									$item->TOTAL = 0; 
 								}
 							}else if($Overbooking == 1){
-								if($item->total2 > $item->total){
-									$item->total = $item->total2;
+								if($item->TOTAL2 > $item->TOTAL){
+									$item->TOTAL = $item->TOTAL2;
 								}
 							}
 						}
 						
-						$data[$cont]->$fpName = $item->total;
+						$data[$cont]->$fpName = $item->TOTAL;
 						$cont = $cont + 1;
 					}
 				}
 			}
-			echo json_encode(array('items' => $data, 'total' => $total));
+			echo json_encode(array('items' => $data, 'total' => $TOTAL));
 		}
 	}
 	
@@ -102,7 +102,7 @@ class Inventory extends CI_Controller {
 			$data = $this->inventory_db->getRoomsControl($date, $property);
 			
 			foreach($data as $item){
-				$item->Date = $item->Date2;
+				$item->Date = $item->DATE2;
 				$item->InventoryRooms = $item->physicalRooms - $item->OutofOrder;
 				if($item->DeductedRooms > 1){
 					$item->DeductedRooms  = 0;
@@ -114,7 +114,7 @@ class Inventory extends CI_Controller {
 					$item->Occupancy = "0%" ;
 				}
 				
-				unset($item->pkCalendarId,$item->Date2);
+				unset($item->pkCalendarId,$item->DATE2);
 			}
 			echo json_encode(array('items' => $data, 'total' => $total));
 		}

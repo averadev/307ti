@@ -10,10 +10,10 @@
 					</span>
 				</div>
 				<h3 class="box-title">
-					<span>FrontDesk Search</span>
+					<span>FrontDesk</span>
 				</h3>
 				<!--<a data-widget="newFontDesk" id="newFontDesk" class="btn btn-new">
-					<div class="label">Nuevo</div>
+					<div class="label">New</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>-->
 			</div>
@@ -21,33 +21,39 @@
 			<div class="box-body box-filter" style="display: block;">
 				<!-- module -->
 				<div class="row">
-					<div class="small-12 medium-12 large-12 columns">
+					<div class="small-12 medium-12 large-3 columns">
 						<fieldset class="large-12 columns fieldsetFilter" Id="sectionFilter" >
 							<legend class="legendSearch">Choose the type search</legend>
 							<!-- Type of Availability -->
-							<div class="rdoField">
-								<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section1" id="FrontDeskLookUp" checked >
-								<label for="FrontDeskLookUp" >Front Desk Look Up</label>
-							</div>
-							<!-- Type of Availability -->
-							<div class="rdoField">
-								<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section2" id="HousekeepingJobConfig">
-								<label for="HousekeepingJobConfig">Housekeeping Job Config</label>
-							</div>
-							<div class="rdoField">
-								<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section3" id="HousekeepingConfiguration">
-								<label for="HousekeepingConfiguration">Housekeeping Configuration</label>
-							</div>
-							<div class="rdoField">
-								<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section4" id="HousekeepingLookup">
-								<label for="HousekeepingLookup">Housekeeping Lookup</label>
-							</div>
-							<div class="rdoField">
-								<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section5" id="FrontDeskReport">
-								<label for="FrontDeskReport">Report</label>
-							</div>
+							<select id="typeSearchFrontDesk" class="txtSearch input-group-field round">
+								<option value="section1">Front Desk Look Up</option>
+								<option value="section2">Housekeeping Job Config</option>
+								<option value="section3">Housekeeping Configuration</option>
+								<option value="section4">Housekeeping Lookup</option>
+								<option value="section5">Report</option>
+							</select>
 						</fieldset>
-					</div>
+<!-- <div class="rdoField">
+	<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section1" id="FrontDeskLookUp" checked >
+	<label for="FrontDeskLookUp" >Front Desk Look Up</label>
+</div>
+<div class="rdoField">
+	<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section2" id="HousekeepingJobConfig">
+	<label for="HousekeepingJobConfig">Housekeeping Job Config</label>
+</div>
+<div class="rdoField">
+	<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section3" id="HousekeepingConfiguration">
+	<label for="HousekeepingConfiguration">Housekeeping Configuration</label>
+</div>
+<div class="rdoField">
+	<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section4" id="HousekeepingLookup">
+	<label for="HousekeepingLookup">Housekeeping Lookup</label>
+</div>
+<div class="rdoField">
+	<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section5" id="FrontDeskReport">
+	<label for="FrontDeskReport">Report</label>
+</div> -->
+</div>
 				</div>
 				<!--filter-->
 				<div class="row sectionFrontDesk section1" style="display:none;">
@@ -144,11 +150,11 @@
 								</div>
 								<div class="small-12 large-3 columns" style="padding-top:25px;">
 									<a id="btnSearchFrontDesk" class="btn btn-primary btn-Search searchFD">
-										<div class="label">Buscar</div>
+										<div class="label">Search</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 									</a>
 									<a id="btnCleanFrontDesk" class="btn btn-primary spanSelect">
-										<div class="label">Limpiar</div>
+										<div class="label">Clean</div>
 										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 									</a>
 								</div>

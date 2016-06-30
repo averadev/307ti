@@ -26,7 +26,7 @@ $('.orderRow').on('click', function(){ orderRowFront(this); });
 $('#btnCleanFrontDesk').off();
 $('#btnCleanFrontDesk').on('click', function(){ cleanFilterFrontDesk(); })
 
-$('.SectionFrontDesk').on('click', function(){ showSection($(this).val()); });
+$('#typeSearchFrontDesk').on('change', function(){ showSection($(this).val()); });
 
 //muestra el modal para agregar
 $('#newFontDesk').off();
@@ -387,19 +387,10 @@ function showReservation(){
 }
 
 function showSection(section){
-	if(section == "section3"){
-		$('#generalPage').show();
-		$('#paginationHKConfig').show();
-		$('#paginationHKLookUp').hide();
-	}else if(section == "section4"){
-		$('#generalPage').show();
-		$('#paginationHKLookUp').show();
-		$('#paginationHKConfig').hide();
-	}else{
-		$('#generalPage').hide();
-		$('#paginationHKConfig').hide();
-		$('#paginationHKLookUp').hide();
-	}
+	console.log(section);
+	$('#generalPage').hide();
+	$('#paginationHKConfig').hide();
+	$('#paginationHKLookUp').hide();
 	$('#section-frontDesk .sectionFrontDesk, #section-frontDesk .tableSection').hide();
 	$('#section-frontDesk .' + section).toggle(500);
 }

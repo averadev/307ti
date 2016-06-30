@@ -809,3 +809,10 @@ function setHeightModal(div){
 	var hContent = $('#' + div + ' .contentModal').height();
 	$('#' + div + ' .contentModal').css('height', ( hContent - (hTabs) + 25 ));
 }
+
+function  gotoDiv(contenedor, div){
+	console.log("=D");
+	$('#'+contenedor).animate({
+        scrollTop: $("#"+div).offset().top
+    }, 500);
+}

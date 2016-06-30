@@ -14,11 +14,6 @@
 					<div class="label">New</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
-				<!--<div class="pull-left box-tools">
-					<span data-widget="newContrat" id="newContract">
-						<span>( New )</span>
-					</span>
-				</div>-->
 			</div>
 			<div class="box-body box-filter">
 				<div class="row">
@@ -26,8 +21,8 @@
 						<fieldset class="large-12 columns fieldsetFilter">
 							<legend class="legendSearch">Choose a filter</legend>
 							<div class="rdoField">
-								<input type="radio" name="filtro_contrato" value="personaId" id="personaId" required>
-								<label for="personaId">People ID</label>
+								<input type="radio" name="filtro_contrato" value="contrato" id="contrato">
+								<label for="contrato">Contract ID</label>
 							</div>
 							<div class="rdoField">
 								<input checked type="radio" name="filtro_contrato" value="nombre" id="nombre">
@@ -50,8 +45,6 @@
 					
 					<div class="small-12 medium-12 large-12 columns">
 						<fieldset class="large-12 columns fieldsetFilter">
-						<!--<legend><input id="busquedaAvanazada" type="checkbox"></legend>-->
-						<!--<label for="busquedaAvanazada">Advanced search</label>-->
 							<div class="rdoField">
 								<input type="checkbox" id="busquedaAvanazada" class="checkFilter">
 								<label for="busquedaAvanazada">Advanced search</label>
@@ -70,8 +63,8 @@
 									<label for="email">Email</label>
 								</div>
 								<div class="rdoField">
-									<input type="radio" name="filtro_contrato" value="contrato" id="contrato">
-									<label for="contrato">Contract ID</label>
+									<input type="radio" name="filtro_contrato" value="personaId" id="personaId" required>
+									<label for="personaId">People ID</label>
 								</div>
 							</div>
 						</fieldset>

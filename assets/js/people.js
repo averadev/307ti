@@ -229,7 +229,8 @@ function showDivModal(div){
 		if($("#imgCoppapseAddress").attr('class') == "imgCollapseFieldset down"){
 			$("#imgCoppapseAddress").removeClass('down');
 			$("#imgCoppapseAddress").addClass('up');
-			$("#imgCoppapseAddress").attr( 'src', BASE_URL+'assets/img/common/iconCollapseUp.png' )
+			$("#imgCoppapseAddress").attr( 'src', BASE_URL+'assets/img/common/iconCollapseUp.png' );
+			gotoDiv('contentModalPeople','textPostalCode');
 		}else{
 			$("#imgCoppapseAddress").removeClass('up');
 			$("#imgCoppapseAddress").addClass('down');
@@ -240,7 +241,8 @@ function showDivModal(div){
 		if($("#imgCoppapseContact").attr('class') == "imgCollapseFieldset down"){
 			$("#imgCoppapseContact").removeClass('down');
 			$("#imgCoppapseContact").addClass('up');
-			$("#imgCoppapseContact").attr( 'src', BASE_URL+'assets/img/common/iconCollapseUp.png' )
+			$("#imgCoppapseContact").attr( 'src', BASE_URL+'assets/img/common/iconCollapseUp.png' );
+			gotoDiv('contentModalPeople','textEmail2');
 		}else{
 			$("#imgCoppapseContact").removeClass('up');
 			$("#imgCoppapseContact").addClass('down');
