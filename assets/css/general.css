@@ -187,8 +187,9 @@ a.button.postfix.img {
 	padding-bottom:0;
 	padding-left:0;
     background-color: #c7c7c7;
-	background: #EDEDED;
+	background: #00a89c;
     border-bottom: 2px solid #D9DEE4;
+    color: white;
 }
 .menu-opt{
     float: left;
@@ -287,7 +288,7 @@ a.button.postfix.img {
 .menu-config{
 	float:right;
 	height:40px;
-	background:#EFEFEF;
+	background:#183a59;
 	margin-top:2px;
 	margin-right:10px;
 	border:#A1ACB2 solid 1px;
@@ -1684,4 +1685,10 @@ input.general.error, .caja.error{
 .editBox{
 	max-height: 250px;
     overflow: scroll;
+}
+.headerTitle{
+	font-size: 1.2em;
+    padding: .5em;
+    font-family: initial;
+    font-weight: 800;
 }

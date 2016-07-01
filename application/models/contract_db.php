@@ -454,6 +454,19 @@ class Contract_db extends CI_Model {
             return $row->fkTourId;
         }
     }
+    public function selectMaxStatus(){
+        $this->db->select('max(pkStatusId) as maximo');
+        $this->db->from('tblStatus S');
+        $this->db->join('tblStatusTypeStatus TS', 'S.pkStatusId = TS.fkStatusId', 'inner');
+        $this->db->where('TS.fkStatusTypeId', 1);
+        $this->db->where('TS.ynActive', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->maximo;
+        }
+    }
 
     public function selectEmployees(){
         $this->db->select("E.pkEmployeeId, RTRIM(E.EmployeeCode) as Code");

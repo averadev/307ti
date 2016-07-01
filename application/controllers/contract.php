@@ -393,7 +393,8 @@ public function nextStatusContract(){
 			"id"		=>	$id
 		];
 		$IdStatus = $this->contract_db->propertyTable($peticion);
-		if ($IdStatus < 19) {
+		$maximo = $this->contract_db->selectMaxStatus();
+		if ($IdStatus < $maximo) {
 			$IdStatus += 1;
 		}
 		$Res = [
