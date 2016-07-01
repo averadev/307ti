@@ -291,7 +291,8 @@
 							</select>
 						</div>
 						</label>
-					</div>		
+					</div>	
+				</div>
 			</fieldset>
 			<!-- Datos del domicilio -->
 			<div class="row" id="alertValPeopleAddress" style="display:none;">

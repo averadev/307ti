@@ -98,6 +98,10 @@
 					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/1.png"/></span>
 					<div class="label-menu-sel">FrontDesk</div>
 				</div>
+				<div class="menu-sel" attr-screen="reservation">
+					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/4.png"/></span>
+					<div class="label-menu-sel">Reservation</div>
+				</div>
                 <div class="menu-fix">&nbsp;</div>
             </div>
         </div>
