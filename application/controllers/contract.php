@@ -136,8 +136,7 @@ private function insertPeoples($idContrato){
 			"fkPeopleId"        => $_POST['peoples'][$i]["id"],
 			"fkAccId"           => $this->contract_db->selectIdAccType('FDK'),
 			"ynPrimaryPeople"   => $_POST['peoples'][$i]['primario'],
-			"ynBenficiary"		=> $_POST['peoples'][$i]['secundario'],
-			"ynOther"			=> $_POST['peoples'][$i]['beneficiario'],
+			"ynBenficiary"		=> $_POST['peoples'][$i]['beneficiario'],
 			"ynActive"          => 1,
 			"CrBy"             	=> $this->nativesessions->get('id'),
 			"CrDt"				=> $this->getToday()

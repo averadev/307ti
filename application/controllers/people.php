@@ -65,7 +65,7 @@ class People extends CI_Controller {
 					'SecondName'		=> $_POST['SecondName'],
 					'LName'				=> $_POST['lName'],
 					'LName2'			=> $_POST['lName2'],
-					'Gender'			=> $_POST['gender'],
+					// 'Gender'			=> $_POST['gender'],
 					'BirthDayMonth'		=> $BirthDayMonth,
 					'BirthDayDay'		=> $BirthDayDay,
 					'BirthDayYear'		=> $BirthDayYear,
@@ -181,7 +181,7 @@ class People extends CI_Controller {
 					'SecondName'		=> $_POST['SecondName'],
 					'LName'				=> $_POST['lName'],
 					'LName2'			=> $_POST['lName2'],
-					'Gender'			=> $_POST['gender'],
+					// 'Gender'			=> $_POST['gender'],
 					'BirthDayMonth'		=> $BirthDayMonth,
 					'BirthDayDay'		=> $BirthDayDay,
 					'BirthDayYear'		=> $BirthDayYear,
@@ -417,13 +417,13 @@ class People extends CI_Controller {
 			if(is_null(!$item->LName2) or $item->LName2 != "                         " ){
 				$arrayData[$cont]['LastName'] = $arrayData[$cont]['LastName'] . " " . $item->LName2;
 			}
-			if($item->Gender == "M"){
-				$arrayData[$cont]['Gender'] = "Male";
-			}else if($item->Gender == "F"){
-				$arrayData[$cont]['Gender'] = "Famale";
-			}else{
-				$arrayData[$cont]['Gender'] = "unknown";
-			}
+			// if($item->Gender == "M"){
+			// 	$arrayData[$cont]['Gender'] = "Male";
+			// }else if($item->Gender == "F"){
+			// 	$arrayData[$cont]['Gender'] = "Famale";
+			// }else{
+			// 	$arrayData[$cont]['Gender'] = "unknown";
+			// }
 			
 			$arrayData[$cont]['Birthdate'] = $item->BirthDayDay . " " . $months[$item->BirthDayMonth] . " " . $item->BirthDayYear;
 			

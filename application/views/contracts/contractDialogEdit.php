@@ -105,8 +105,7 @@
 									<th class="cellGeneral">Name</th>
 									<th class="cellGeneral">Last Name</th>
 									<th class="cellGeneral" >Address</th>
-									<th class="cellGeneral" >Main</th>
-									<th class="cellGeneral" >Secondary</th>
+									<th class="cellGeneral" >Primary</th>
 									<th class="cellGeneral" >Beneficiary</th>
 									<th></th>
 								</tr>

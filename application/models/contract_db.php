@@ -92,7 +92,7 @@ class Contract_db extends CI_Model {
         $sql = "";
         $this->db->distinct();
         $this->db->select('P.pkPeopleId as ID, RTRIM(P.Name) as Name, RTRIM(P.LName) AS lastName');
-        $this->db->select('RTRIM(AD.Street1) as address, PC.ynPrimaryPeople, PC.YnBenficiary, PC.ynOther');
+        $this->db->select('RTRIM(AD.Street1) as address, PC.ynPrimaryPeople, PC.YnBenficiary');
         $this->db->from('tblResPeopleAcc PC');
         $this->db->join('tblPeople P', 'P.pkPeopleId = PC.fkPeopleId');
         $this->db->join('tblPeopleAddress PAD', 'PAD.fkPeopleId = P.pkPeopleId');
@@ -109,7 +109,7 @@ class Contract_db extends CI_Model {
         public function getUnitiesContract($string){
         $sql = "";
         $this->db->select('RI.fkUnitId as ID, TF.FrequencyDesc, RTRIM(TFP.floorPlanDesc) as description');
-        $this->db->select('RI.FirstOccYear, RI.LastOccYear');
+        $this->db->select('RI.WeeksNumber, RI.FirstOccYear, RI.LastOccYear, RI.fkFrequencyId');
         $this->db->from('tblResInvt RI');
         $this->db->join('tblFloorplan TFP', 'RI.fkFloorPlanId = TFP.pkFloorPlanId', 'inner');
         $this->db->join('tblFrequency TF', 'RI.fkFrequencyId = TF.pkFrequencyId', 'inner');

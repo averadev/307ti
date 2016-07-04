@@ -449,8 +449,8 @@ function createNewContract(){
 		alertify.success("Please fill required fields (red)");
 		return false;
 	}else{
-		var personas = getValueTableUnidades();
-		var unidades = getValueTablePersonas();
+		var unidades = getValueTableUnidades();
+		var personas = getValueTablePersonas();
 		if (personas.length<=0) {
 			alertify.error("Debes de agregar al menos una persona");
 		}else if (unidades.length<=0) {
@@ -582,14 +582,14 @@ function getValueTablePersonas(){
 	var tabla = "tablePeopleSelected";
 	var unidades = [];
 	var personas = [];
-	$('#'+tabla+' tbody tr').each( function(){
+	$('#'+tabla+' tbody tr').each( function(i){
 		if ($(this).text().replace(/\s+/g, " ")!="") {
 			var persona = {};
 			persona.id = $(this).find('td').eq(0).text(),
-			persona.primario = converCheked($(this).find('td').eq(4).find('input[name=primario]').filter(':checked').val()),
-			persona.secundario = converCheked($(this).find('td').eq(5).find('input[name=secundario]').filter(':checked').val()),
-			persona.beneficiario = converCheked($(this).find('td').eq(6).find('input[name=beneficiario]').filter(':checked').val())
-			personas.push(persona); 
+			persona.primario = $(this).find('td').eq(4).find('input[name=peopleType1]').is(':checked'),
+			persona.beneficiario = $(this).find('td').eq(5).find('input[name=peopleType2]').is(':checked')
+			personas.push(persona);
+			console.log(i); 
 		}
 	});
 	return personas;
@@ -597,6 +597,7 @@ function getValueTablePersonas(){
 
 
 function converCheked(val){
+	console.log(val);
 	var c;
 	if (val == "on") {
 		c = 1;
@@ -721,16 +722,27 @@ function tablaPersonas(personas){
         for (var j in personas[i]) {
             bodyHTML+="<td>" + personas[i][j] + "</td>";
         };
-        bodyHTML += "<td><div class='rdoField'><input type='radio' name='primario'><label for='folio'>&nbsp;</label></div></td>";
-        bodyHTML += "<td><div class='rdoField'><input type='radio' name='secundario'><label for='folio'>&nbsp;</label></div></td>";
-        bodyHTML += "<td><div class='rdoField'><input type='radio' name='beneficiario'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><div class='rdoField'><input class='primy' value='"+i+"'  type='radio' name='peopleType1'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><div class='rdoField'><input class='benefy' value='"+i+"' type='checkbox' name='peopleType2'><label for='folio'>&nbsp;</label></div></td>";
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
         bodyHTML+="</tr>";
     }
     $('#tablePeopleSelected tbody').append(bodyHTML);
+    defaultValues();
+    onChangePrimary();
     deleteElementTable("tablePeopleSelected");
 }
 
+function onChangePrimary(){
+	$(".primy").change(function(){
+		//var selected = getIndexCheckbox();
+		checkAllBeneficiary(this.value);
+	});
+}
+function defaultValues(){
+	$('.primy')[0].checked = true;
+	checkAllBeneficiary(0);
+}
 //reducir a una funcion
 function deleteElementTable(div){
 	$("#"+div+" tr").on("click", "button", function(){
@@ -1251,6 +1263,7 @@ function initEventosDownpayment(){
 		if($("#montoDownpayment").val()>0){
 			tableDownpaymentSelected();
 			totalDownpayment();
+			//$("#montoDownpayment").val(0);
 		}else{
 			alertify.error("the amount should be greater to zero and minus than the amount total");
 			errorInput("montoDownpayment", 2);
@@ -1586,7 +1599,7 @@ function drawTableSinHead(data, table){
         for (var j in data[i]) {
             bodyHTML+="<td>" + data[i][j] + "</td>";
         };
-        bodyHTML += deleteButton;
+        //bodyHTML += deleteButton;
         bodyHTML+="</tr>";
     }
     $('#' + table).html(bodyHTML);

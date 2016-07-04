@@ -811,8 +811,26 @@ function setHeightModal(div){
 }
 
 function  gotoDiv(contenedor, div){
-	console.log("=D");
 	$('#'+contenedor).animate({
         scrollTop: $("#"+div).offset().top
     }, 500);
+}
+
+function getIndexCheckbox(){
+	var x;
+	var data = $('.primy:checked').map(function(){
+		x = this.value;
+	}).get();
+	return x;
+}
+
+function checkAllBeneficiary(selected){
+	$(".benefy").each(function (i) {
+		if (selected != i) {
+			this.checked = true;
+		}else{
+			this.checked = false;
+		}
+		
+	});	
 }
