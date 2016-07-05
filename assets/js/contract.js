@@ -1622,10 +1622,24 @@ function getDatosContract(id){
 			var contraTemp = data["contract"][0];
 			$('td.folioAccount').text(contraTemp.Folio);
 			setHeightModal('dialog-Edit-Contract');
+			addFunctionality();
 	    },
 	    error: function(){
 	        alertify.error("Try again");
 	    }
+	});
+}
+
+function addFunctionality(){
+	var div = "peoplesContract";
+	selectTableUnico(div);
+	tableOnclick(div);
+}
+
+function tableOnclick(id){
+	$("#"+id).on("click", "tr", function(){
+		var idPeople = $(this).find("td").eq(0).text().trim();
+		console.log(idPeople);
 	});
 }
 

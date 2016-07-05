@@ -834,3 +834,118 @@ function checkAllBeneficiary(selected){
 		
 	});	
 }
+
+function getModal() {
+	var id = getValueFromTableSelected("contracts", 1);
+	var div = "#dialog-Notas";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+  				showLoading(div, true);
+				// $(this).load ("contract/modalgetAllNotes?id="+id , function(){
+				// 	showLoading(div, false);
+				// });
+		},
+		autoOpen: false,
+     	height: maxHeight,
+     	width: "50%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Close",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	}],
+     close: function() {
+    	//$(this).empty();
+     }
+	});
+	return dialogo;
+}
+
+// var url = "contract/pruebasContract";
+// var datos = idContrato: {id,noteType:noteType,noteDescription : noteDescription}
+/**
+	var ajaxData =  {
+		url: "contract/pruebasContract",
+		datos: {
+			nombre: "Faustinoloeza",
+			edad: 24,
+			id: "21s2d15ssds45"
+		},
+		funcionExito : HolaUser
+	}
+	var ajaxData2 =  {
+		url: "contract/pruebasContract",
+		datos: {
+			nombre: "Faustinoloeza",
+			edad: 24,
+			id: "21s2d15ssds45"
+		},
+		funcionExito : HolaUser2,
+		funcionError: mensajeAlertify
+	}
+	var ajaxData3 =  {
+		url: "contract/pruebasContract",
+		datos: {},
+		funcionExito : HolaUser2
+	}
+
+**/
+
+function HolaUser2(datos){
+	$("#dialog-Notas").append(datos);
+	alertify.success("ya termine");
+}
+function mensajeAlertify(){
+	alertify.error("Try again =/");
+}
+function ajaxDATA(datos){
+	$.ajax({
+	    data:datos.datos,
+	    type: "POST",
+	    url: datos.url,
+	    dataType:'html',
+	    success: function(data){
+	    	datos.funcionExito(data);
+	    },
+	    error: function(){
+	        datos.funcionError();
+	    }
+	});
+}
+
+function modalGeneral() {
+	var ajaxData2 =  {
+		url: "contract/pruebasContract",
+		datos: {
+			nombre: "Faustinoloeza",
+			edad: 24,
+			id: "21s2d15ssds45"
+		},
+		funcionExito : HolaUser2,
+		funcionError: mensajeAlertify
+	};
+	// var id = getValueFromTableSelected("contracts", 1);
+	var div = "#dialog-Notas";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+  			ajaxDATA(ajaxData2)
+  		},  			
+		autoOpen: false,
+     	height: maxHeight,
+     	width: "50%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Close",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	}],
+     close: function() {
+    	$(this).empty();
+     }
+	});
+	return dialogo;
+}

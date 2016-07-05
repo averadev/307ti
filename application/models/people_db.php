@@ -149,7 +149,7 @@ Class people_db extends CI_MODEL
     */
 	public function getPeopleById($id){
 		$this->db->select('tblPeople.pkPeopleId, tblPeople.fkPeopleTypeId, tblPeople.Name, tblPeople.SecondName, tblPeople.LName, tblPeople.LName2');
-		$this->db->select('tblPeople.Gender, tblPeople.BirthDayMonth, tblPeople.BirthDayDay, tblPeople.BirthDayYear, tblPeople.Initials');
+		$this->db->select('tblPeople.BirthDayMonth, tblPeople.BirthDayDay, tblPeople.BirthDayYear, tblPeople.Initials');
 		$this->db->select('CONVERT(VARCHAR(11),tblPeople.Anniversary,101) as Anniversary, tblPeople.Qualification, tblPeople.Nationality');
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');
 		$this->db->select('tblState.pkStateId, tblState.StateCode, tblState.StateDesc');

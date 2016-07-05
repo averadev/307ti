@@ -24,11 +24,12 @@ class Contract extends CI_Controller {
 	}
 
 	public function pruebasContract(){
-		$idContrato = $_POST['idContrato'];
-		$Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
-		echo $Years[0]->FirstOccYear;
-		echo "<br>";
-		echo $Years[0]->LastOccYear;
+		$this->load->view('contracts/contractDialog');
+		// $idContrato = $_POST['idContrato'];
+		// $Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
+		// echo $Years[0]->FirstOccYear;
+		// echo "<br>";
+		// echo $Years[0]->LastOccYear;
 	}
 
 	public function saveContract(){
