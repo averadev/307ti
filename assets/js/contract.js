@@ -1,7 +1,6 @@
 $(document).ready(function(){
 	maxHeight = screen.height * .10;
 	maxHeight = screen.height - maxHeight;
-	var addContract = null;
     var unidadDialog = addUnidadDialog();
     var peopleDialog = addPeopleDialog();
 	var dialogWeeks = getWeeksDialog();
@@ -14,11 +13,9 @@ $(document).ready(function(){
 	var dialogAccount = opcionAccount();
 
 
-
-	$(document).on( 'click', '#newContract', function () {
-		addContract = createDialogContract(addContract);
-		addContract.dialog("open");
-	});
+$(document).on( 'click', '#newContract', function () {
+	showModalContract();
+});
 
 	$(document).on( 'click', '#btnAddPeople', function () {
 		
@@ -164,54 +161,57 @@ function cambiarCantidadP(monto){
 	}
 	updateBalanceFinal();
 }
-
-
-function createDialogContract(addContract) {
-	var div = "#dialog-Contract";
-	if (addContract!=null) {
-	    	addContract.dialog( "destroy" );
-	    }
-	
-	dialog = $(div).dialog({
-		open : function (event){
-			showLoading(div,true);
-			$(this).load ("contract/modal" , function(){
-		    	showLoading(div,false);
-		 		ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
-				ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
-	    	});
-		},
-		autoOpen: false,
-		height: maxHeight,
+function createContractSelect(datos){
+	$("#dialog-Contract").html(datos);
+	ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
+	ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
+}
+function showModalContract(){
+	var ajaxData =  {
+		url: "contract/pruebasContract",
+		tipo: "html",
+		datos: {},
+		funcionExito : createContractSelect,
+		funcionError: mensajeAlertify
+	};
+	var modalPropiedades = {
+		div: "dialog-Contract",
+		altura: maxHeight,
 		width: "50%",
-		modal: true,
-		buttons: [{
-			text: "Cancel",
-			"class": 'dialogModalButtonCancel',
-			click: function() {
-				$(this).dialog('close');
-			}
+		onOpen: ajaxDATA,
+		onSave: createNewContract,
+		botones :[{
+			text: "Close",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	         }
 		},{
-			text: "Save and close",
+			text: "Save and Close",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
+				if (verifyContractALL()) {
 					createNewContract();
 					$(this).dialog('close');
-					alertify.success("Se guardo correctamente");
+				}
+				
 			}
-		},
-			{
-				text: "Save",
-				"class": 'dialogModalButtonAccept',
-				click: function() {
+		},{
+			text: "Save",
+			"class": 'dialogModalButtonAccept',
+			click: function() {
+				if (verifyContractALL()) {
 					createNewContract();
 				}
-			}],
-		close: function() {
-			$('#dialog-Contract').empty();
-		}
-	});
-	return dialog;
+			}
+		}]
+	};
+
+	if (addContract!=null) {
+		addContract.dialog( "destroy" );
+	}
+	addContract = modalGeneral2(modalPropiedades, ajaxData);
+	addContract.dialog( "open" );
 }
 function addTourContract(unidades){
 	var div = '#dialog-tourID';
@@ -436,9 +436,8 @@ function ajaxSelects(url,errorMsj, funcion, divSelect) {
 function saveContract() {
 	console.log("ok esto es genial");
 }
-
-function createNewContract(){
-	
+function verifyContract(){
+	var value = true;
 	var id = "saveDataContract";
 	var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta"];
 	var form = $("#"+id);
@@ -447,71 +446,95 @@ function createNewContract(){
 	if(!verifyInputsByID(arrayWords)){
 		$('#'+id).foundation('validateForm');
 		alertify.success("Please fill required fields (red)");
-		return false;
-	}else{
-		var unidades = getValueTableUnidades();
-		var personas = getValueTablePersonas();
-		if (personas.length<=0) {
-			alertify.error("Debes de agregar al menos una persona");
-		}else if (unidades.length<=0) {
-			alertify.error("Debes de agregar al menos una unidad");
-		}else if($("#selectLanguage").val()=="0"){
-			$("#selectLanguage").addClass('is-invalid-input');
-			//$.scrollTo($('#selectLanguage'), 1000);
-			alertify.error("Choose a language");
-		}else{
-			showAlert(true,"Saving changes, please wait ....",'progressbar');
-			$.ajax({
-					data: {
-						legalName : $("#legalName").val().trim(),
-						tourID : $("#TourID").val().trim(),
-						idiomaID : $("#selectLanguage").val(),
-						peoples: getValueTablePersonas(),
-						types: typePeople(),
-						unidades: getValueTableUnidades(),
-						weeks: getArrayValuesColumnTable("tableUnidadesSelected", 6),
-						firstYear :$("#firstYearWeeks").val().trim(),
-						lastYear : $("#lastYearWeeks").val().trim(),
-						tipoVentaId : $("#typeSales").val(),
-						listPrice: $("#precioUnidad").val(),
-						salePrice: $("#precioVenta").val(),
-						specialDiscount:$("#totalDiscountPacks").val(),
-						downpayment:$("#downpayment").val(),
-						amountTransfer:$("#amountTransfer").val(),
-						packPrice:sumarArray(getArrayValuesColumnTable("tableDescuentos", 2)),
-						financeBalance: $("#financeBalance").val(),
-						tablapagos: getValueTableDownpayment(),
-						tablaPagosProgramados:getValueTableDownpaymentScheduled(),
-						tablaPacks: getValueTablePacks(),
-						viewId: 1,
-					},
-					type: "POST",
-					dataType:'json',
-					url: 'contract/saveContract'
-				})
-				.done(function( data, textStatus, jqXHR ) {
-					console.table(data);
-					showAlert(false,"Saving changes, please wait ....",'progressbar');
-					if (data['status']== 1) {
-						elem.resetForm();
-						var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta", "downpayment"];
-						clearInputsById(arrayWords);
-						 if (modalFin!=null) {
-				    		modalFin.dialog( "destroy" );
-				    	}
-				    	modalFin = modalFinanciamiento();
-				        modalFin.dialog( "open" );
-						$('#dialog-Weeks').empty();
-						$('#tablePeopleSelected tbody').empty();
-						$('#tableUnidadesSelected tbody').empty();
-						alertify.success(data['mensaje']);
-					}
-					
-				})
-				.fail(function( jqXHR, textStatus, errorThrown ) {
-				});
+		value = false;
+	}
+	return value;
+}
+function verifyTablesContract(){
+	var value = true;
+	var unidades = getValueTableUnidades();
+	var personas = getValueTablePersonas();
+	if (personas.length<=0) {
+		alertify.error("You should add one people or more");
+		value = false;
+	}else if (unidades.length<=0) {
+		alertify.error("You should add one unity or more");
+		value = false;
+	}
+	return value;
+}
+function verifyLanguage(){
+	var value = true;
+	if($("#selectLanguage").val()=="0"){
+		value = false;
+		gotoDiv("contentModalContract", "selectLanguage");
+		$("#selectLanguage").addClass('is-invalid-input');
+		alertify.error("Choose a language");
+	}
+	return value;
+}
+function verifyContractALL(){
+	var value = false;
+	if (verifyContract()) {
+		if (verifyTablesContract()) {
+			if (verifyLanguage()) {
+				value = true;
+			}
+			
 		}
 	}
+	return value;
+}
+function createNewContract(){
+
+		showAlert(true,"Saving changes, please wait ....",'progressbar');
+		$.ajax({
+			data: {
+				legalName : $("#legalName").val().trim(),
+				tourID : $("#TourID").val().trim(),
+				idiomaID : $("#selectLanguage").val(),
+				peoples: getValueTablePersonas(),
+				types: typePeople(),
+				unidades: getValueTableUnidades(),
+				weeks: getArrayValuesColumnTable("tableUnidadesSelected", 6),
+				firstYear :$("#firstYearWeeks").val().trim(),
+				lastYear : $("#lastYearWeeks").val().trim(),
+				tipoVentaId : $("#typeSales").val(),
+				listPrice: $("#precioUnidad").val(),
+				salePrice: $("#precioVenta").val(),
+				specialDiscount:$("#totalDiscountPacks").val(),
+				downpayment:$("#downpayment").val(),
+				amountTransfer:$("#amountTransfer").val(),
+				packPrice:sumarArray(getArrayValuesColumnTable("tableDescuentos", 2)),
+				financeBalance: $("#financeBalance").val(),
+				tablapagos: getValueTableDownpayment(),
+				tablaPagosProgramados:getValueTableDownpaymentScheduled(),
+				tablaPacks: getValueTablePacks(),
+				viewId: 1,
+			},
+			type: "POST",
+			dataType:'json',
+			url: 'contract/saveContract'
+		}).done(function( data, textStatus, jqXHR ) {
+				showAlert(false,"Saving changes, please wait ....",'progressbar');
+				if (data['status']== 1) {
+					elem.resetForm();
+					var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta", "downpayment"];
+					clearInputsById(arrayWords);
+					if (modalFin!=null) {
+						modalFin.dialog( "destroy" );
+					}
+					modalFin = modalFinanciamiento();
+					modalFin.dialog( "open" );
+					$('#dialog-Weeks').empty();
+					$('#tablePeopleSelected tbody').empty();
+					$('#tableUnidadesSelected tbody').empty();
+					alertify.success(data['mensaje']);
+				}}).fail(function( jqXHR, textStatus, errorThrown ) {
+
+				});
+	
+		
 }
 
 //funciona para pagos enganches
@@ -1067,9 +1090,10 @@ function getValueFromTableSelected(id, posicion){
 }
 
 function setValueUnitPrice(){
-		var precio = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 3));
-		$("#precioUnidad").val(precio);
-		$("#precioVenta").val(precio);
+	var precio = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 3));
+	$("#precioUnidad").val(precio);
+	$("#precioVenta").val(precio);
+	updateBalanceFinal();
 }
 
 
@@ -2667,3 +2691,4 @@ function pruebas(){
 	    }
 	});
 }
+

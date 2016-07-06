@@ -1,5 +1,6 @@
 // Init events
 
+var addContract = null;
 var dialogUser = null;
 var modalVendedores = null;
 var modalProvisiones = null;
@@ -7,6 +8,7 @@ var modalNotas = null;
 var modalNewFile = null;
 var modalFin = null;
 var modalAllNotes = null;
+var modalNuevoxD = null;
 $(function() {
 	
     // Button Dropdown Menu
@@ -863,40 +865,7 @@ function getModal() {
 	return dialogo;
 }
 
-// var url = "contract/pruebasContract";
-// var datos = idContrato: {id,noteType:noteType,noteDescription : noteDescription}
-/**
-	var ajaxData =  {
-		url: "contract/pruebasContract",
-		datos: {
-			nombre: "Faustinoloeza",
-			edad: 24,
-			id: "21s2d15ssds45"
-		},
-		funcionExito : HolaUser
-	}
-	var ajaxData2 =  {
-		url: "contract/pruebasContract",
-		datos: {
-			nombre: "Faustinoloeza",
-			edad: 24,
-			id: "21s2d15ssds45"
-		},
-		funcionExito : HolaUser2,
-		funcionError: mensajeAlertify
-	}
-	var ajaxData3 =  {
-		url: "contract/pruebasContract",
-		datos: {},
-		funcionExito : HolaUser2
-	}
 
-**/
-
-function HolaUser2(datos){
-	$("#dialog-Notas").append(datos);
-	alertify.success("ya termine");
-}
 function mensajeAlertify(){
 	alertify.error("Try again =/");
 }
@@ -905,9 +874,9 @@ function ajaxDATA(datos){
 	    data:datos.datos,
 	    type: "POST",
 	    url: datos.url,
-	    dataType:'html',
+	    dataType: datos.tipo,
 	    success: function(data){
-	    	datos.funcionExito(data);
+			datos.funcionExito(data);
 	    },
 	    error: function(){
 	        datos.funcionError();
@@ -915,26 +884,15 @@ function ajaxDATA(datos){
 	});
 }
 
-function modalGeneral() {
-	var ajaxData2 =  {
-		url: "contract/pruebasContract",
-		datos: {
-			nombre: "Faustinoloeza",
-			edad: 24,
-			id: "21s2d15ssds45"
-		},
-		funcionExito : HolaUser2,
-		funcionError: mensajeAlertify
-	};
-	// var id = getValueFromTableSelected("contracts", 1);
-	var div = "#dialog-Notas";
-	dialogo = $(div).dialog ({
+function modalGeneral(propiedades, datosAjax) {
+	showLoading("#"+propiedades.div,true);
+	dialogo = $("#"+propiedades.div).dialog ({
   		open : function (event){
-  			ajaxDATA(ajaxData2)
+  			propiedades.onOpen(datosAjax);
   		},  			
 		autoOpen: false,
-     	height: maxHeight,
-     	width: "50%",
+     	height: propiedades.altura,
+     	width: propiedades.width,
      	modal: true,
      	buttons: [{
 	       	text: "Close",
@@ -949,3 +907,85 @@ function modalGeneral() {
 	});
 	return dialogo;
 }
+
+function modalGeneral2(propiedades, datosAjax) {
+	showLoading("#"+propiedades.div,true);
+	dialogo = $("#"+propiedades.div).dialog ({
+  		open : function (event){
+  			propiedades.onOpen(datosAjax);
+  		},  			
+		autoOpen: false,
+     	height: propiedades.altura,
+     	width: propiedades.width,
+     	modal: true,
+     	buttons: propiedades.botones,
+     close: function() {
+    	$(this).empty();
+     }
+	});
+	return dialogo;
+}
+
+function modalXgeneral(){
+
+	var ajaxData =  {
+		url: "contract/pruebasContract",
+		tipo: "html",
+		datos: {},
+		funcionExito : createContractSelect,
+		funcionError: mensajeAlertify
+	};
+	var modalPropiedades = {
+		div: "dialog-Contract",
+		altura: maxHeight,
+		width: "50%",
+		onOpen: ajaxDATA,
+		onSave: createNewContract
+	};
+
+	if (modalNuevoxD!=null) {
+		modalNuevoxD.dialog( "destroy" );
+	}
+	modalNuevoxD = modalGeneral2(modalPropiedades, ajaxData);
+	modalNuevoxD.dialog( "open" );
+}
+
+
+/*function ajaxDATA2(datos){
+	$.ajax({
+	    data:datos.datos,
+	    type: "POST",
+	    url: "contract/pruebasContract",
+	    dataType: 'html',
+	    success: function(data){
+			HolaUser2(data);
+
+	    },
+	    error: function(){
+	        datos.funcionError();
+	    }
+	});
+}
+function modalGeneral2(propiedades, datosAjax) {
+
+	dialogo = $("#"+propiedades.div).dialog ({
+  		open : function (event){
+  			propiedades.onOpen(datosAjax);
+  		},  			
+		autoOpen: false,
+     	height: propiedades.altura,
+     	width: propiedades.width,
+     	modal: true,
+     	buttons: [{
+	       	text: "Close",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	}],
+     close: function() {
+    	$(this).empty();
+     }
+	});
+	return dialogo;
+}*/
