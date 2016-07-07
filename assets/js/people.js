@@ -829,7 +829,6 @@ function getInfoPeople(id){
 			}else if(item.Gender == "F"){
 				$("#RadioFemale").prop("checked", true);
 			}
-			//$('#textBirthdate').val(convertToDateFormat(item.BirthDayDay, item.BirthDayMonth, item.BirthDayYear ));
 			$('#textBirthdate').val(item.birthdate);
 			$('#textWeddingAnniversary').val(item.Anniversary);
 			$('#textNationality').val(item.Nationality.trim())

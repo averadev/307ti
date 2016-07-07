@@ -22,6 +22,18 @@ class People extends CI_Controller {
 		$data['qualifications'] = $this->people_db->getQualifications();
         $this->load->view('vwPeople',$data);
 	}
+
+	public function peopleDetailView(){
+		$data['country'] = $this->people_db->getCountry();
+		$data['nationality'] = $this->people_db->getNationality();
+		$data['qualifications'] = $this->people_db->getQualifications();
+
+		// $data['detalle'] = $this->people_db->getPeopleById($_POST['id']);
+		// $condicion = "ynEmp = 1";
+		// $data["tipos"] = $this->people_db->getPeopleType($condicion);
+		//echo json_encode($data);
+		$this->load->view('people/detailPeopleDialog',$data);	
+	}
 	
 	/**
 	* guarda los datos del usuario
@@ -522,27 +534,6 @@ class People extends CI_Controller {
 			$PeopleType = $this->people_db->getPeopleType($condicion);
 			$states = array();
 			foreach($data as $item){
-				
-				
-				/*foreach($item as $subItem){
-					echo $subItem;
-					echo "</br>";
-					if(is_null($subItem)){
-						//echo "hola";
-						//echo "</br>";
-						$subItem = "";
-					}
-				}*/
-				
-				/*foreach($item as $subItem){
-					if(is_null($subItem)){
-						echo "hola";
-						echo "</br>";
-						//$subItem = "";
-					}
-				}*/
-				
-				//$item->Nationality = "";
 				
 				$item->birthdate = $item->BirthDayMonth . "/" .  $item->BirthDayDay . "/" . $item->BirthDayYear;
 				

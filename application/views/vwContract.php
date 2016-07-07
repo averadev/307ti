@@ -21,11 +21,11 @@
 						<fieldset class="large-12 columns fieldsetFilter">
 							<legend class="legendSearch">Choose a filter</legend>
 							<div class="rdoField">
-								<input type="radio" name="filtro_contrato" value="contrato" id="contrato">
+								<input checked type="radio" name="filtro_contrato" value="contrato" id="contrato">
 								<label for="contrato">Contract ID</label>
 							</div>
 							<div class="rdoField">
-								<input checked type="radio" name="filtro_contrato" value="nombre" id="nombre">
+								<input  type="radio" name="filtro_contrato" value="nombre" id="nombre">
 								<label for="nombre">Name</label>
 							</div>
 							<div class="rdoField">

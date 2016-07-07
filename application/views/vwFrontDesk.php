@@ -12,10 +12,6 @@
 				<h3 class="box-title">
 					<span>FrontDesk</span>
 				</h3>
-				<!--<a data-widget="newFontDesk" id="newFontDesk" class="btn btn-new">
-					<div class="label">New</div>
-					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
-				</a>-->
 			</div>
 			<!-- body search-->
 			<div class="box-body box-filter" style="display: block;">
@@ -27,32 +23,12 @@
 							<!-- Type of Availability -->
 							<select id="typeSearchFrontDesk" class="txtSearch input-group-field round">
 								<option value="section1">Front Desk Look Up</option>
-								<option value="section2">Housekeeping Job Config</option>
+<!-- 								<option value="section2">Housekeeping Job Config</option> -->
 								<option value="section3">Housekeeping Configuration</option>
 								<option value="section4">Housekeeping Lookup</option>
 								<option value="section5">Report</option>
 							</select>
 						</fieldset>
-<!-- <div class="rdoField">
-	<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section1" id="FrontDeskLookUp" checked >
-	<label for="FrontDeskLookUp" >Front Desk Look Up</label>
-</div>
-<div class="rdoField">
-	<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section2" id="HousekeepingJobConfig">
-	<label for="HousekeepingJobConfig">Housekeeping Job Config</label>
-</div>
-<div class="rdoField">
-	<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section3" id="HousekeepingConfiguration">
-	<label for="HousekeepingConfiguration">Housekeeping Configuration</label>
-</div>
-<div class="rdoField">
-	<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section4" id="HousekeepingLookup">
-	<label for="HousekeepingLookup">Housekeeping Lookup</label>
-</div>
-<div class="rdoField">
-	<input type="radio" name="SearchFrontDesk" class="SectionFrontDesk" value="section5" id="FrontDeskReport">
-	<label for="FrontDeskReport">Report</label>
-</div> -->
 </div>
 				</div>
 				<!--filter-->

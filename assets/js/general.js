@@ -355,53 +355,6 @@ function drawTable2(data, table ,funcion, cadena, option){
 	
 }
 
-/*function drawTableInput(data, table ,funcion, cadena, input){
-	
-	if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
-		var tabla = $('#' + table).DataTable();
-		tabla.destroy();
-	}
-	
-	var headHTML = "<tr>";
-	if(funcion != false){ 
-		headHTML += "<th>"+cadena+"</th>";
-	}
-    var bodyHTML = '';
-	
-    //creación de la cabecera
-	for (var j in data[0]) {
-        headHTML+="<th>"+j+"</th>";
-    }
-	headHTML += "</tr>";
-    //creación del body
-    for (var i = 0; i < data.length; i++) {
-        bodyHTML += "<tr id='row" + data[i].ID + "'>";
-		if(funcion != false){
-			bodyHTML += '<td class="iconEdit" nowrap onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
-		}
-        for (var j in data[i]) {
-            bodyHTML+="<td nowrap>" + data[i][j] + "</td>";
-        };
-        bodyHTML+="</tr>";
-    }
-	$('#' + table + " thead" ).html(headHTML);
-	$('#' + table + " tbody" ).html(bodyHTML);
-	
-	$('#' + table ).show();
-	
-	var heightScroll = $('#' + table ).parents(".table").first();
-	heightScroll = heightScroll.height();
-	
-	$('#' + table ).DataTable({
-		"scrollY": heightScroll - 50,
-		"scrollX": true,
-		"paging":   false,
-		"ordering": false,
-		"info":     false,
-		"filter": 	false,
-	});
-	
-}*/
 
 function activeTable(table){
 	
@@ -576,8 +529,6 @@ function changeTabs(selector){
 	$('#' + parentTabs + " .tabs-title").removeClass('active');
 	$(selector).addClass('active');
 	var parent = $('#' + screen).parent().attr('class');
-	//$('.' + parent + ' .tab-modal').hide();
-	//$('.' + parent + ' #' + screen).show();
 	$('.' + parent).children('.tab-modal').hide();
 	$('.' + parent).children('#' + screen).show();
 }

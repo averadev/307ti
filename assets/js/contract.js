@@ -1663,7 +1663,7 @@ function addFunctionality(){
 function tableOnclick(id){
 	$("#"+id).on("click", "tr", function(){
 		var idPeople = $(this).find("td").eq(0).text().trim();
-		console.log(idPeople);
+		showModalContractXD(idPeople);
 	});
 }
 
@@ -2678,11 +2678,11 @@ function verifyFile( inputArray, selectArray ){
 function pruebas(){
 	$.ajax({
 	    data:{
-	        idContrato: 547,
+	        id: 2,
 	    },
 	    type: "POST",
-	    url: "contract/pruebasContract",
-	    dataType:'json',
+	    url: "people/peopleDetailView",
+	    dataType:'html',
 	    success: function(data){
 	    	console.table(data);
 	    },
@@ -2692,3 +2692,142 @@ function pruebas(){
 	});
 }
 
+
+function showModalContractXD(id){
+	var ajaxData =  {
+		url: "people/peopleDetailView",
+		tipo: "html",
+		datos: {
+			id:id
+		},
+		funcionExito : managePeopleRequest,
+		funcionError: mensajeAlertify
+	};
+	var modalPropiedades = {
+		div: "dialog-Contract",
+		altura: maxHeight,
+		width: "50%",
+		onOpen: ajaxDATA,
+		onSave: createNewContract,
+		botones :[{
+			text: "Close",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	         }
+		},{
+			text: "Save and Close",
+			"class": 'dialogModalButtonAccept',
+			click: function() {
+				if (verifyContractALL()) {
+					createNewContract();
+					$(this).dialog('close');
+				}
+				
+			}
+		},{
+			text: "Save",
+			"class": 'dialogModalButtonAccept',
+			click: function() {
+				if (verifyContractALL()) {
+					createNewContract();
+				}
+			}
+		}]
+	};
+
+	if (addContract!=null) {
+		addContract.dialog( "destroy" );
+	}
+	addContract = modalGeneral2(modalPropiedades, ajaxData);
+	addContract.dialog( "open" );
+	getDatosP(id);
+}
+
+function managePeopleRequest(data){
+	$("#dialog-Contract").html(data);
+}
+function getDatosP(id){
+	var ajaxData =  {
+		url: "people/getPeopleById",
+		tipo: "json",
+		datos: {
+			id:id
+		},
+		funcionExito : manageDatosPeople,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
+
+function manageDatosPeople(data){
+	var item = data.item[0];
+			$('#textName').val(item.Name.trim().toUpperCase());
+			$('#textMiddleName').val(item.SecondName.trim());
+			$('#textLastName').val(item.LName.trim());
+			$('#TextSecondLastName').val(item.LName2.trim());
+			
+			if(item.Gender == "M"){
+				$('#RadioMale').prop("checked", true);
+			}else if(item.Gender == "F"){
+				$("#RadioFemale").prop("checked", true);
+			}
+			$('#textBirthdate').val(item.birthdate);
+			$('#textWeddingAnniversary').val(item.Anniversary);
+			$('#textNationality').val(item.Nationality.trim())
+			$('#textQualification').val(item.Qualification.trim());
+			$('#textStreet').val(item.Street1.trim());
+			$('#textColony').val(item.Street2.trim());
+			$('#textCity').val(item.City.trim());
+			$('#textPostalCode').val(item.ZipCode.trim());
+			if(item.pkCountryId != null || item.pkCountryId == ""){
+				$("select#textCountry").val(item.pkCountryId);
+			}else{
+				$("select#textCountry").val(0);
+			}
+			$('#textState').empty();
+			$('#textState').append('<option value="0" code="0">Select your state</option>');
+			if(data.states.length > 0){
+				for(i=0;i<data.states.length;i++){
+					var state = data.states[i];
+					$('#textState').append('<option value="' + state.pkStateId + '" code="' + state.StateCode + '">' + state.StateDesc + '</option>');
+				}
+			}
+			if(item.pkStateId != null || item.pkStateId == ""){
+				$("select#textState").val(item.pkStateId);
+			}else{
+				$("select#textState").val(0);
+			}
+			
+			$('#textPhone1').val(item.phone1.trim());
+			$('#textPhone2').val(item.phone2.trim());
+			$('#textPhone3').val(item.phone3.trim());
+			$('#textEmail1').val(item.email1.trim());
+			$('#textEmail2').val(item.email2.trim());
+			
+			$('#textTypeSeller').empty();
+			$('#textTypeSeller').append('<option value="0" code="0">Select a type of seller</option>');
+			for(i=0;i<data.peopleType.length;i++){
+				var peopleType = data.peopleType[i];
+				$('#textTypeSeller').append('<option value="' + peopleType.pkPeopleTypeId + '" code="' + peopleType.PeopleTypeCode + '">' + peopleType.PeopleTypeDesc + '</option>');
+			}
+			
+			if(item.pkEmployeeId > 0){
+				$("#checkPeopleEmployee").prop( "checked", true );
+				$('#textCodeCollaborator').val(item.EmployeeCode.trim());
+				$('#textInitials').val(item.InitialsEmplo.trim());
+				$('#textCodeNumber').val(item.NumericCode);
+				$('#textTypeSeller').val(item.fkPeopleTypeId);
+				$('#textRoster').val(0);
+				$('#textTypeSeller').val(item.fkPeopleTypeId);
+				$('#textRoster').val(item.fkVendorTypeId);
+			}
+			
+			$("#idPeople").data("pkPeopleId",item.pkPeopleId);
+			$("#idPeople").data("pkEmployeeId",item.pkEmployeeId);
+			$('#imgCloseModal').off();
+			$('.imgCloseModal').on('click', function() {  hideModal(); });
+			$('body, html').animate({
+				scrollTop: '0px'
+			}, 0);
+}

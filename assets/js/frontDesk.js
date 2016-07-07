@@ -107,8 +107,10 @@ function getFrontDesk(order, page){
 	var words = null;
 	var options = null;
 	var url = "";
-	var section = $('.SectionFrontDesk:checked').val();
+	//var section = $('.SectionFrontDesk:checked').val();
+	var section = $('#typeSearchFrontDesk').val();
 	if(section == "section1"){
+		console.log("=S");
 		$('.rightPanel').remove();
 		$('.panelLeft').remove();
 		$('#tableFrontDesk tbody').empty();
@@ -161,8 +163,9 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
        	url: url,
 		dataType:'json',
 		success: function(data){
-			console.log(data);
-			var section = $('.SectionFrontDesk:checked').val();
+			console.table(data);
+			//var section = $('.SectionFrontDesk:checked').val();
+			var section = $('#typeSearchFrontDesk').val();
 			if(data.items.length > 0){
 				switch(section) {
 					case "section1":
