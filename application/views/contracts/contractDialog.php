@@ -172,7 +172,7 @@
 				</div>
 				<div class="row">
 					<div class="small-3 columns">
-						<label>Discount</label>
+						<label>Extras</label>
 					</div>
                     <div class="large-5 columns end">
 						<input class="round general" readonly name="packReference" id="packReference" type="text" value="0">
@@ -245,7 +245,7 @@
                 </div>
                 <div class="row">
 					<div class="small-12 columns">
-						<p>Extras</p>
+<!-- 						<p>Extras</p> -->
 						<table id="tableDescuentos" class="large-12 columns">
 							<thead>
 								<tr>
@@ -262,7 +262,7 @@
 				</div>
                 <div class="row">
                     <div class="small-6 columns">
-                        <label>Amount Transferred</label>
+                        <label>Transfer Amount</label>
                         <input id="amountTransfer" class="round general" type="text" placeholder="$0.00">
                     </div>
                     <div class="small-6 columns">

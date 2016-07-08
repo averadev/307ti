@@ -75,7 +75,7 @@
 </div>
 </div>
 <!-- contenido del modal -->
-<div class="contentModal">
+<div class="contentModal" id="ContenidoModalContractEdit">
 	
 	<div id="tab-CGeneral" class="large-12 columns tab-modal" style="display:inline-block;">
 		<!-- Error Message -->
@@ -121,9 +121,10 @@
                         <table id="tableUnidades" width="100%">
                             <thead>
 								<tr class="trColspan">
-									<th colspan="8">Units</th>
+									<th colspan="9">Units</th>
 								</tr>
 								<tr>
+								<th class="cellEdit" >ID</th>
 									<th class="cellEdit" >Code</th>
 									<th class="cellGeneral">Description</th>
 									<th class="cellGeneral">Price</th>
@@ -141,7 +142,7 @@
 			</fieldset>
 			
 			<!-- Condiciones de venta -->
-			<fieldset class="fieldset">
+			<fieldset class="fieldset" id="ventaCondi">
 				<legend class="btnCollapseField"  attr-screen="editTermsOfSale" >
 					<img class="imgCollapseFieldset" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>
 					Terms of sale
@@ -190,7 +191,7 @@
 			</fieldset>
 			
 			<!-- Condiciones de financiamiento -->
-			<fieldset class="fieldset">
+			<fieldset class="fieldset" id="finTerminos">
 				<legend class="btnCollapseField"  attr-screen="editTermsOfFinancing" >
 					<img class="imgCollapseFieldset" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>
 					 Financig Terms
@@ -230,7 +231,7 @@
 				</div>
 			</fieldset>
 			<!-- Tour -->
-			<fieldset class="fieldset" style="margin-bottom: 50px;">
+			<fieldset class="fieldset" style="margin-bottom: 50px;"  id="tourEditCon">
 				<legend class="btnCollapseField"  attr-screen="editOr" >
 					<img class="imgCollapseFieldset" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>
 					Tour

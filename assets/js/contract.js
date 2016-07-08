@@ -145,11 +145,26 @@ $(document).on( 'click', '#newContract', function () {
 });
 
 function updateBalanceFinal(){
-	var precioVenta = $("#precioVenta").val();
-	var enganche = $("#montoTotal").val();
-	var balanceFinal = $("#financeBalance").val(precioVenta - enganche);
+	//PrecioVenta + PackReference + ClosingCost-DownPayment-CashDiscount-TransferAmount
+	var precioVenta = getNumberTextInput("precioVenta");
+	var packReference = getNumberTextInput("packReference");
+	var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
+	var downpayment = getNumberTextInput("downpayment");
+	var cashDiscount = getNumberTextInput("totalDiscountPacks");
+	var transferAmount = getNumberTextInput("amountTransfer");
+	var total = precioVenta + packReference + closingCost;
+	var descuento = downpayment+cashDiscount+transferAmount;
+	var balanceFinal = $("#financeBalance").val(total-descuento);
 }
-	
+
+function getNumberTextInput(div){
+	var valor = $("#"+div).val();
+	if(valor){
+		return parseFloat(valor);
+	}else{
+		return 0;
+	}
+}	
 function cambiarCantidadP(monto){
 	var seleccionado = $("input[name='engancheR']:checked").val();
 	var precioVenta = $("#precioVenta").val();
@@ -729,6 +744,7 @@ function getValueTableUnidadesSeleccionadas(){
 			unidad.price = $(this).find('td').eq(4).text(),
 			unidad.week = $(this).find('td').eq(5).text(),			
 			unidad.season = $(this).find('td').eq(6).text(),
+			unidad.costoClosing = $(this).find('td').eq(7).text(),
 			unidades.push(unidad); 
 		}
 	});
@@ -889,6 +905,7 @@ function PackReference(){
        		click: function() {
        			$("#precioVenta").val($("#finalPricePack").val());
        			$("#packReference").val($("#quantityPack").val());
+       			updateBalanceFinal();
        			$(this).dialog('close');
        		}
      	}],
@@ -1033,6 +1050,7 @@ function tablUnidadades(unidades, frequency, primero, ultimo){
 		bodyHTML += "<td>"+frequency+"</td>";
 		bodyHTML += "<td>"+unidades[i].season+"</td>";
 		bodyHTML += "<td>"+unidades[i].week+"</td>";
+		bodyHTML += "<td style='display:none;'>"+ parseFloat(unidades[i].costoClosing).toFixed(2)+"</td>";
 		bodyHTML += "<td>"+primero+"</td>";
         bodyHTML += "<td>"+ultimo+"</td>";
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
@@ -1640,7 +1658,6 @@ function getDatosContract(id){
 	    success: function(data){
 	    	drawTableSinHead(data["peoples"], "peoplesContract");
 	    	drawTableSinHead(data["unities"], "tableUnidadesContract");
-	    	//drawDataContract(data["contract"][0]);
 	    	drawTerminosVenta(data["terminosVenta"][0]);
 	    	drawTerminoFinanciamiento(data["terminosFinanciamiento"][0]);
 			var contraTemp = data["contract"][0];
@@ -1819,6 +1836,13 @@ function setEventosEditarContrato(id){
 	});
 	$('#tabsContrats .tabs-title').on('click', function() { 
 		changeTabsModalContract($(this).attr('attr-screen'), id);
+	});
+
+	$("#finTerminos").click(function(){
+		gotoDiv('ContenidoModalContractEdit', 'tourEditCon');
+	});
+	$("#ventaCondi").click(function(){
+		gotoDiv('ContenidoModalContractEdit', 'finTerminos');
 	});
 }
 

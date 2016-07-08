@@ -108,13 +108,14 @@ class Contract_db extends CI_Model {
     }
         public function getUnitiesContract($string){
         $sql = "";
-        $this->db->select('RI.fkUnitId as ID, TF.FrequencyDesc, RTRIM(TFP.floorPlanDesc) as description');
+        $this->db->select('U.UnitCode, TF.FrequencyDesc, RTRIM(TFP.floorPlanDesc) as description');
         $this->db->select('RI.WeeksNumber, RI.FirstOccYear, RI.LastOccYear, RI.fkFrequencyId');
         $this->db->from('tblResInvt RI');
         $this->db->join('tblFloorplan TFP', 'RI.fkFloorPlanId = TFP.pkFloorPlanId', 'inner');
         $this->db->join('tblFrequency TF', 'RI.fkFrequencyId = TF.pkFrequencyId', 'inner');
+        $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
         $this->db->where('fkResId', $string);
-        $this->db->order_by('ID', 'DESC');
+        $this->db->order_by('', 'DESC');
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )
