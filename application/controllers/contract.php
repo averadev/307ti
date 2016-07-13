@@ -183,19 +183,20 @@ private function insertFinanciamiento($idContrato){
 
 public function updateFinanciamiento(){
 	if($this->input->is_ajax_request()) {
-		$financiamiento = [
-			"fkFactorId"	=> $_POST['factor'],
-			"MonthlyPmtAmt" => $_POST['pagoMensual']
-		];
-		$condicion = "fkResId = " . $_POST['idContrato'];
-		$afectados = $this->contract_db->updateReturnId('tblResfin', $financiamiento, $condicion);
-		if ($afectados>0) {
-			$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados];
-			echo json_encode($mensaje);
-		}else{
-			$mensaje = ["mesaje"=>"ocurrio un error"];	
-			echo json_encode($mensaje);
-		}
+		var_dump($_POST);
+		// $financiamiento = [
+		// 	"fkFactorId"	=> $_POST['factor'],
+		// 	"MonthlyPmtAmt" => $_POST['pagoMensual']
+		// ];
+		// $condicion = "fkResId = " . $_POST['idContrato'];
+		// $afectados = $this->contract_db->updateReturnId('tblResfin', $financiamiento, $condicion);
+		// if ($afectados>0) {
+		// 	$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados];
+		// 	echo json_encode($mensaje);
+		// }else{
+		// 	$mensaje = ["mesaje"=>"ocurrio un error"];	
+		// 	echo json_encode($mensaje);
+		// }
 	}
 }
 
@@ -686,6 +687,8 @@ public function getFlagsContract(){
 
 	public function modalFinanciamiento(){
 		if($this->input->is_ajax_request()) {
+			$idContrato = $_POST['idContrato'];
+			$data['precio'] = $this->contract_db->selectPriceFin($idContrato);
 			$data['factores'] = $this->contract_db->selectFactors();
 			$this->load->view('contracts/contractDialogFinanciamiento', $data);
 		}

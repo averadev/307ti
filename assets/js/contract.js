@@ -16,12 +16,15 @@ $(document).ready(function(){
 $(document).on( 'click', '#newContract', function () {
 	showModalContract();
 });
+$(document).on( 'click', '#btnRefinancingContract', function () {
+	var id = getValueFromTableSelected("contracts", 1);
+	showModalFin(id);
+});
 
-	$(document).on( 'click', '#btnAddPeople', function () {
-		
-         peopleDialog = addPeopleDialog();
-         peopleDialog.dialog( "open" );
-	});
+$(document).on( 'click', '#btnAddPeople', function () {
+	peopleDialog = addPeopleDialog();
+	peopleDialog.dialog( "open" );
+});
 
 	 $(document).on( 'click', '#btnAddUnidades', function () {
 	        if (unidadDialog!=null) {
@@ -1883,6 +1886,49 @@ function modalFinanciamiento() {
      }
 	});
 	return dialogo;
+}
+function addHTMLModalFin(data){
+	$("#dialog-Financiamiento").html(data);
+	initEventosFinanciamiento();
+}
+
+function showModalFin(id){
+
+	var ajaxData =  {
+		url: "contract/modalFinanciamiento",
+		tipo: "html",
+		datos: {
+			idContrato: id
+		},
+		funcionExito : addHTMLModalFin,
+		funcionError: mensajeAlertify
+	};
+	var modalPropiedades = {
+		div: "dialog-Financiamiento",
+		altura: maxHeight,
+		width: "50%",
+		onOpen: ajaxDATA,
+		onSave: createNewContract,
+		botones :[{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+    			updateFinanciamiento(id);
+       		}
+     	}]
+	};
+
+	if (modalFin!=null) {
+		modalFin.dialog( "destroy" );
+	}
+	modalFin = modalGeneral2(modalPropiedades, ajaxData);
+	modalFin.dialog( "open" );
 }
 
 function updateFinanciamiento(id){

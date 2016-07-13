@@ -108,12 +108,13 @@ class Contract_db extends CI_Model {
     }
         public function getUnitiesContract($string){
         $sql = "";
-        $this->db->select('U.UnitCode, TF.FrequencyDesc, RTRIM(TFP.floorPlanDesc) as description');
-        $this->db->select('RI.WeeksNumber, RI.FirstOccYear, RI.LastOccYear, RI.fkFrequencyId');
+        $this->db->select('U.UnitCode, RTRIM(TFP.floorPlanDesc) as description, CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price');
+        $this->db->select('RI.WeeksNumber, RI.FirstOccYear, RI.LastOccYear');
         $this->db->from('tblResInvt RI');
         $this->db->join('tblFloorplan TFP', 'RI.fkFloorPlanId = TFP.pkFloorPlanId', 'inner');
         $this->db->join('tblFrequency TF', 'RI.fkFrequencyId = TF.pkFrequencyId', 'inner');
         $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
+        $this->db->join('tblPrice PRI', 'U.pkUnitId = PRI.fkUnitId and RI.WeeksNumber = PRI.Week', 'inner');
         $this->db->where('fkResId', $string);
         $this->db->order_by('', 'DESC');
         $query = $this->db->get();
@@ -419,6 +420,19 @@ class Contract_db extends CI_Model {
         if($query->num_rows() > 0 )
         {
             return $query->result();
+        }
+    }
+
+    public function selectPriceFin($id){
+        $this->db->select('totalFinanceAmt,financeBalance');
+        $this->db->from('tblResfin');
+        $this->db->where('fkResId', $id);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+             return $query->result();
+            //$row = $query->row();
+            //return $row->financeBalance;
         }
     }
     

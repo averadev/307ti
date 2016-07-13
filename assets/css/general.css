@@ -1692,3 +1692,7 @@ input.general.error, .caja.error{
     font-family: initial;
     font-weight: 800;
 }
+
+.oculto{
+	display: none;
+}

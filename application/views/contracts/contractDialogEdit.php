@@ -93,7 +93,8 @@
 				<div class="containerContract">
 					<div class="row">
 						<div class="small-12 columns">
-							<a id="btnAddPeople" class="button tiny"><i class="fa fa-user-plus">Refinancing contract</i></a>
+							<a id="btnRefinancingContract" class="button tiny">
+							<i class="fa fa-user-plus">Refinancing contract</i></a>
 						</div>
 						<table id="peopleContract" width="100%">
 							<thead>
@@ -124,15 +125,16 @@
 									<th colspan="9">Units</th>
 								</tr>
 								<tr>
-								<th class="cellEdit" >ID</th>
+									<!-- <th class="cellEdit oculto">ID</th>
+									<th class="cellEdit oculto">Frequency</th> -->
 									<th class="cellEdit" >Code</th>
 									<th class="cellGeneral">Description</th>
 									<th class="cellGeneral">Price</th>
 									<th class="cellGeneral" ># Week</th>
 									<th class="cellGeneral" >Fisrt Year OCC</th>
 									<th class="cellGeneral" >Last Year OCC</th>
-									<th class="cellGeneral" >Frequency</th>
-									<th></th>
+<!-- 									<th class="cellGeneral" >Frequency</th> -->
+<!-- 									<th></th> -->
 								</tr>
 							</thead>
 							<tbody id="tableUnidadesContract"></tbody>

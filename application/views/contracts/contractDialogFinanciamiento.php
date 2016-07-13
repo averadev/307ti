@@ -5,7 +5,7 @@
       <label for="totalContracF" class="text-left">Total contract</label>
     </div>
     <div class="small-9 columns">
-       <p id="totalContracF">38714.00</p>
+       <p id="totalContracF"><?php echo $precio[0]->totalFinanceAmt; ?></p>
     </div>
   </div>
   <div class="row">
@@ -13,7 +13,7 @@
       <label for="balanceFinanciarF" class="text-left">Balance a financiar</label>
     </div>
     <div class="small-9 columns">
-       <p id="balanceFinanciarF">38714.00</p>
+       <p id="balanceFinanciarF"><?php echo $precio[0]->financeBalance; ?></p>
     </div>
   </div>
   <div class="row">
