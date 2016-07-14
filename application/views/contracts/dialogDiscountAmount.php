@@ -6,12 +6,7 @@
     </div>
     <div class="small-9 columns">
 		<div class="caja">
-			<select id="tiposPakc" class="input-group-field round">
-			<option value="1">1</option>
-			<option value="2">2</option>
-			<option value="3">3</option>
-			<option value="4">4</option>
-			</select>
+			<select id="tiposPakc" class="input-group-field round"></select>
 		</div>
     </div>
   </div>

@@ -192,10 +192,10 @@
                 <!--Montos a Descontar-->
                 <div class="row">
                     <div class="small-3 columns">
-                        <label id="alertLastName" for="right-label" class="text-left">Special Discount</label>
+                        <label id="" for="right-label" class="text-left">Special Discount</label>
                     </div>
                     <div class="large-5 columns">
-                        <input class="round general" id="totalDiscountPacks" type="text" placeholder="$0.00">
+                        <input class="round general" id="" type="text" placeholder="$0.00">
                     </div>
                     <div class="large-4 columns">
                         <a id="btnDiscountAmount" href="#" class="button postfix">Capture</a>
@@ -203,7 +203,7 @@
                 </div>
                 <div class="row">
                     <div class="small-12 columns">
-                        <table id="tableDescuentos" class="large-12 columns">
+                        <table id="" class="large-12 columns">
                             <thead>
                                 <tr>
                                     <th class="cellGeneral">pack type</th>
@@ -211,7 +211,7 @@
                                     <th class="cellGeneral">Delete</th>
                                 </tr>
                             </thead>
-                            <tbody id="packSeleccionados">
+                            <tbody id="">
                                 <tr><td colspan="10" ></td></tr>
                             </tbody>
                         </table>

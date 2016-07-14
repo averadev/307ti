@@ -578,7 +578,7 @@ function getValueTablePacks(){
 		if ($(this).text().replace(/\s+/g, " ")!="") {
 			var pack = {};
 			pack.id = $(this).find('td').eq(0).text(),
-			pack.amount = $(this).find('td').eq(1).text()
+			pack.amount = $(this).find('td').eq(2).text()
 			packs.push(pack); 
 		}
 	});
@@ -1334,11 +1334,14 @@ function initEventosDownpaymentProgramados(){
 function initEventosDiscount(){
 	getTypeGifts();
 	$("#btnAddmontoPack").click(function(){
-		if ($("#montoPack").val()>0) {
-			PacksAdds();
-		}else{
+		if ($("#montoPack").val()<=0) {
 			alertify.error("the amount should be greater to zero");
 			errorInput("montoPack", 2);
+		}else if($("#tiposPakc").val()<=0){
+			alertify.error("choose a pack type");
+			errorInput("tiposPakc", 2);
+		}else{
+			PacksAdds();
 		}
 	});
 }
@@ -1351,18 +1354,21 @@ function getTypeGifts(){
 		funcionExito : typesGift,
 		funcionError: mensajeAlertify
 	};
-	ajaxData(ajaxDatos);
+	ajaxDATA(ajaxDatos);
 }
 
 function typesGift(data){
+	console.table(data);
 	generalSelects(data, "tiposPakc");
 }
 
 function PacksAdds(){
 	var td = "";
+	var IdTipoPack = $("#tiposPakc").val();
 	var tipoPack = $("#tiposPakc option:selected").text();
 	var monto = $("#montoPack").val();
 		td = "<tr>";
+		td += "<td style='display:none'>"+IdTipoPack+"</td>";
 		td += "<td>"+tipoPack+"</td>";
 		td += "<td class='montoPacks'>"+monto+"</td>";
 		td += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
@@ -2178,8 +2184,8 @@ function getWeeks(id){
 	    dataType:'json',
 	    success: function(data){
 	    	showLoading(div, false);
-	    	drawTableId(data,"tableCOccupationSelectedbody");
-	    	selectTable("tableCOccupationSelectedbody");
+	    	drawTableIdOcupacion(data,"tableCOccupationSelectedbody");
+	    	//selectTable("tableCOccupationSelectedbody");
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -2914,4 +2920,27 @@ function manageDatosPeople(data){
 			$('body, html').animate({
 				scrollTop: '0px'
 			}, 0);
+}
+
+
+function drawTableIdOcupacion(data, table){
+	console.table(data);
+	var primero = data[0].FirstOccYear;
+	var last = data[0].LastOccYear;
+	var rango = last - primero;
+	var bodyHTML = '';
+
+	for (var i = 0; i < data.length; i++) {
+        	bodyHTML += "<tr>";
+        	for (var j in data[i]) {
+        		bodyHTML+="<td>" + data[i][j] + "</td>";
+            	
+            };
+
+        	bodyHTML+="</tr>";
+   //      	for (var j = 0; j <= rango; j++) {
+			// 	bodyHTML+=	bodyHTML;
+			// }
+        }
+    $('#' + table).html(bodyHTML);
 }

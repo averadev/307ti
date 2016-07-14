@@ -478,7 +478,7 @@ public function getPropertyStatus($IdStatus){
 
 public function getTypesGiftContract(){
 	if($this->input->is_ajax_request()) {
-		$campos = "pkGiftTypeId, GiftTypeDesc";
+		$campos = "pkGiftTypeId as ID, GiftTypeDesc";
 		$tabla = "tblGiftType";
 		$typesGift = $this->contract_db->selectTypeGeneral($campos, $tabla);
 		echo json_encode($typesGift);
