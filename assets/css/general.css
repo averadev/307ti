@@ -138,12 +138,12 @@ label {
 */
 .button {
 	color: #fff;
-    background-color:#00a89c;
+    background-color:#b77648;
 }
 
 .button:hover {
 	color: #e8edf1;
-    background-color: #00837A;
+    background-color: #662c19;
 }
 
 a.button.postfix.img {
@@ -278,7 +278,7 @@ a.button.postfix.img {
 }
 
 .menu-sel:hover{
-    background-color: #183a59;
+    background-color: #b77648;
 	color:#FFFFFF;
 }
 .menu-fix{
@@ -381,15 +381,13 @@ a.button.postfix.img {
 }
 
 .tabs dd > a, .tabs .tabs-title > a {
-	/*background-color:#d5d5d5;
-	color:#183a59;*/
-	background-color:#EDEDED;
+	background-color:#fde7be;
 	color:#183a59;
 }
 
 .tabs .tabs-title.active > a  {
 	background-color:#662c19;
-	color:#FFFFFF;
+	color:white;
 }
 
 .iconCloseTab{
@@ -398,15 +396,14 @@ a.button.postfix.img {
 	cursor: pointer;
 	padding: 6px 10px;
 	padding-bottom:7px;
-	background:#00a89c;
+	background:#b77648;
 	border-left:1px solid #bababa;
 	font-size:16px;
 	color:#FFFFFF;
 }
 
 .active .iconCloseTab{
-	background:#fde7be;
-	border-left:1px solid #2f4d69;
+	background:#b77648;
 	color:#FFFFFF;
 }
 
@@ -1260,7 +1257,7 @@ label.error{
 }
 
 .yellow {
-    background-color: #00a89c !important;
+    background-color: #b77648 !important;
     color: white;
 }
 .blue_divina{
