@@ -74,10 +74,12 @@
                                     <tr>
                                         <th class="cellEdit" >Id</th>
                                         <th class="cellGeneral">Description</th>
-                                        <th class="cellGeneral">Price</th>
+                                        <th class="cellGeneral">View</th>
                                         <th class="cellGeneral">Frequency</th>
-                                        <th class="cellGeneral">Season</th>
-                                        <th class="cellGeneral"># Week</th>
+                                        <th class="cellGeneral">floor</th>
+                                        <th class="cellGeneral">intv</th>
+										<th class="cellGeneral">Season</th>
+										<th class="cellGeneral"># Week</th>
                                         <th class="cellGeneral">First Year OCC</th>
                                         <th class="cellGeneral">Last Year OCC</th>
                                         <th class="cellGeneral"></th>
@@ -95,16 +97,24 @@
              <div class="fieldset large-12 columns">
                 <legend>Sale Terms</legend>
                 <div class="row">
-                    <div class="small-6 columns">
-						<label  class="text-left">Sell Type</label>
+                    <div class="small-4 columns">
+						<label  class="text-left">Occupancy Type</label>
 						<div class="caja" >
-							<select id="typeSales" class="input-group-field round">
+							<select id="occupancySalesRes" class="input-group-field round">
 							</select>
 						</div>
                     </div>
-                    <div class="small-6 columns">
+					<div class="small-4 columns">
+						<label for="RateRes" class="text-left">Rate</label>
+						<!--<input id="RateRes" name="RateRes" type="text" class="round general" placeholder="Rate" />-->
+						<div class="caja" >
+							<select id="RateRes" class="input-group-field round">
+							</select>
+						</div>
+                    </div>
+                    <div class="small-4 columns">
 						<div class="row collapse">
-							<label id="alertLastName" for="contractR" class="text-left">Contract Related</label>
+							<label id="alertLastName" for="contractR" class="text-left">Reservation Related</label>
 							<div class="small-10 columns">
 								<input class="round general" id="contractR" name="contractR" type="text" placeholder="Folio" value="0">
 							</div>
@@ -132,10 +142,10 @@
                 </div>
                 <div class="row">
 					<div class="small-3 columns">
-						<label>Unit Price</label>
+						<label>Price</label>
 					</div>
                     <div class="large-5 columns end">
-                        <input readonly type="text" id="precioUnidad" name="precioUnidad" class="round general" required>
+                        <input readonly type="text" id="precioUnidadRes" name="precioUnidadRes" class="round general" required>
                     </div>
 				</div>
 				<div class="row">
@@ -154,7 +164,7 @@
 						<label>Sell Price</label>
 					</div>
                     <div class="large-5 columns end">
-						<input class="round general" readonly required type="text" id="precioVenta" name="precioVENTA" placeholder="$0.00" />
+						<input class="round general" readonly required type="text" id="precioVentaRes" name="precioVentaRes" placeholder="$0.00" />
                     </div>
                 </div>
 
@@ -163,7 +173,7 @@
                         <label>Downpayment</label>
 					</div>
 					<div class="large-2 columns end">
-						<input class="round general" id="downpayment" required type="text" placeholder="$0.00"/>
+						<input class="round general" id="downpaymentRes" required type="text" placeholder="$0.00"/>
                     </div>
                     <div class="large-4 columns end">
                         <input type="radio" name="engancheR" value="porcentaje" id="porcentaje"><label for="porcentaje">Percentage</label>
@@ -173,15 +183,15 @@
                         <label>Amount</label>
                     </div>
                     <div class="large-2 columns end">
-                        <input id="montoTotal" class="round general" type="text" placeholder="%" />
+                        <input id="montoTotalRes" class="round general" type="text" placeholder="%" />
                     </div>
 				</div>
                 <div class="row">
                     <div class="small-3 columns">
-                        <label for="depositoEnganche" class="text-left">Deposit</label>
+                        <label for="depositoEngancheRes" class="text-left">Deposit</label>
                     </div>
                     <div class="large-5 columns">
-                        <input readonly type="text" id="depositoEnganche" name="depositoEnganche" class="round general" required>
+                        <input readonly type="text" id="depositoEngancheRes" name="depositoEngancheRes" class="round general" required>
                     </div>
 					<div class="small-4 columns">
 						<a id="btnDownpaymentRes" href="#" class="button postfix">Capture</a>
@@ -205,7 +215,7 @@
                         <label id="alertLastName" for="right-label" class="text-left">Discount Amount</label>
                     </div>
 					<div class="large-5 columns">
-						<input class="round general" id="totalDiscountPacks" type="text" placeholder="$0.00">
+						<input class="round general" id="totalDiscountPacksRes" type="text" placeholder="$0.00">
 					</div>
 					<div class="large-4 columns">
 						<a id="btnDiscountAmountRes" href="#" class="button postfix">Capture</a>
@@ -214,7 +224,7 @@
                 <div class="row">
 					<div class="small-12 columns">
 						<p>Extras</p>
-						<table id="tableDescuentos" class="large-12 columns">
+						<table id="tableDescuentosRes" class="large-12 columns">
 							<thead>
 								<tr>
 									<th class="cellGeneral">pack type</th>
@@ -222,7 +232,7 @@
 									<th class="cellGeneral">Delete</th>
 								</tr>
 							</thead>
-							<tbody id="packSeleccionados">
+							<tbody id="packSeleccionadosRes">
 								<tr><td colspan="10" ></td></tr>
 							</tbody>
 						</table>
@@ -231,11 +241,11 @@
                 <div class="row">
                     <div class="small-6 columns">
                         <label>Amount Transferred</label>
-                        <input id="amountTransfer" class="round general" type="text" placeholder="$0.00">
+                        <input id="amountTransferRes" class="round general" type="text" placeholder="$0.00">
                     </div>
                     <div class="small-6 columns">
                         <label>Balance financed</label>
-                        <input id="financeBalance" class="round general" type="text" placeholder="$0.00">
+                        <input id="financeBalanceRes" class="round general" type="text" placeholder="$0.00">
                     </div>
                 </div>
             </div>

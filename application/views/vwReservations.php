@@ -167,7 +167,7 @@
 <div id="dialog-Downpayment" title="Downpayment" style="display: none;"></div>
 <div id="dialog-ScheduledPayments" title="Scheduled Payments" style="display: none;"></div>
 <div id="dialog-DiscountAmount" title="Discount Amount" style="display: none;"></div>
-<div id="dialog-Financiamiento" title="Financing Terms" style="display: none;"></div>
+<div id="dialog-FinanciamientoRes" title="Financing Terms" style="display: none;"></div>
 <div id="dialog-Sellers" title="Set Sellers" style="display: none;"></div>
 <div id="dialog-Provisiones" title="Add Provisions" style="display: none;"></div>
 <div id="dialog-Notas" title="Add Notes" style="display: none;"></div>

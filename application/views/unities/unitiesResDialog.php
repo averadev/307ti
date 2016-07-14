@@ -19,7 +19,7 @@
                 <!-- Property-->
                 <div class="row">
                     <div class="small-3 columns">
-                        <label for="property" class="text-left">Property</label>
+                        <label for="propertyRes" class="text-left">Property</label>
                     </div>
                     <div class="small-9 columns">
 						<div class="caja" >
@@ -61,7 +61,7 @@
 				<!-- date time -->
 				<div class="row">
 					<!-- From Date -->
-					<div class="small-12 large-6 columns" style="float:right">
+					<div class="small-12 large-6 columns">
 						<label for="fromDateUnitRes" class="text-left">From Date
 							<div class="input-group date" >
 								<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
@@ -105,11 +105,11 @@
 				</div>
             <div class="row">
                 <div class="large-12 columns">
-					<a id="btngetUnidades" class="btn btn-primary btn-right">
+					<a id="btnGetUnidadesRes" class="btn btn-primary btn-right">
 						<div class="label">Buscar</div>
 						<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 					</a>
-					<!--<a  id="btngetUnidades" href="#" class="button postfix"><i class="fa fa-search"></i></a>-->
+					<!--<a  id="btnGetUnidadesRes" href="#" class="button postfix"><i class="fa fa-search"></i></a>-->
                 </div>
             </div>
         </div>
