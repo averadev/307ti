@@ -463,7 +463,7 @@ function validateUserFields(){
     }
 	
 	//Telefono 3
-	if($('#textPhone3').val().trim().length > 0 && $('#textPhone3').val().trim().length > 11 ){
+	if($('#textPhone3').val().trim().length > 0 && $('#textPhone3').val().trim().length > 14 ){
 		$('#alertPhone3').addClass('error');
 		$('#textPhone3').focus();
 		errorText = "El telefono 3 debe tener maximo 11 caracteres<br>"  + errorText;
@@ -471,7 +471,7 @@ function validateUserFields(){
 	}
 	
 	//Telefono 2
-	if($('#textPhone2').val().trim().length > 0 && $('#textPhone2').val().trim().length > 11 ){
+	if($('#textPhone2').val().trim().length > 0 && $('#textPhone2').val().trim().length > 14 ){
 		$('#alertPhone2').addClass('error');
 		$('#textPhone2').focus();
 		errorText = "El telefono 2 debe tener maximo 11 caracteres<br>"  + errorText;
@@ -485,7 +485,7 @@ function validateUserFields(){
 		errorText = "Telefono<br>"  + errorText;
 		infoContact = false;
 	}
-	if($('#textPhone1').val().trim().length > 11){
+	if($('#textPhone1').val().trim().length > 14){
 		$('#alertPhone1').addClass('error');
 		$('#textPhone1').focus();
 		errorText = "El telefono debe tener maximo 11 caracteres<br>"  + errorText;

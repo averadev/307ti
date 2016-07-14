@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" />
 		<!-- MultiSelect-->
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>multiselect/multiple-select.css" />
-		<!-- General --->
+		<!-- General -->
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>general.css" />
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>inventary.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -101,6 +101,14 @@
 				<div class="menu-sel" attr-screen="reservation">
 					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/4.png"/></span>
 					<div class="label-menu-sel">Reservation</div>
+				</div>
+				<div class="menu-sel" attr-screen="billing">
+					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/4.png"/></span>
+					<div class="label-menu-sel">Billing</div>
+				</div>
+				<div class="menu-sel" attr-screen="collections">
+					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/4.png"/></span>
+					<div class="label-menu-sel">Collections</div>
 				</div>
                 <div class="menu-fix">&nbsp;</div>
             </div>
