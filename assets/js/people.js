@@ -301,9 +301,9 @@ function saveUserData(id, isClosed){
 	
 	var gender;
 	if($("#RadioMale").is(':checked')) {
-		gender = "M";
+		gender = "2";
 	}else{
-		gender = "F";
+		gender = "1";
 	}
 	
 	var employee = 0;
@@ -824,9 +824,9 @@ function getInfoPeople(id){
 			$('#textLastName').val(item.LName.trim());
 			$('#TextSecondLastName').val(item.LName2.trim());
 			
-			if(item.Gender == "M"){
+			if(item.Gender == "2"){
 				$('#RadioMale').prop("checked", true);
-			}else if(item.Gender == "F"){
+			}else if(item.Gender == "1"){
 				$("#RadioFemale").prop("checked", true);
 			}
 			$('#textBirthdate').val(item.birthdate);

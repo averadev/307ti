@@ -10,21 +10,11 @@ Class people_db extends CI_MODEL
      * Obtiene la lista de personas
      */
 	public function getPeople($text,$peopleId,$lastName,$name,$advanced,$page,$typePeople){
-		
-		/*SELECT RowTable.pkPeopleId FROM ( SELECT ROW_NUMBER() OVER ( ORDER BY tblPeople.pkPeopleId ) AS RowNum, *
-			FROM  tblPeople
-			) AS RowTable
-			WHERE   RowNum >= 1
-			AND RowNum <= 25
-			ORDER BY RowNum;
-		*/
-		
 		$cadena = "(";
-		
 		$this->db->distinct('tblPeople.pkPeopleId');
         $this->db->select('tblPeople.pkPeopleId as ID, tblPeople.Name, tblPeople.SecondName, tblPeople.LName, tblPeople.LName2');
 		
-		$this->db->select('tblPeople.BirthDayMonth, tblPeople.BirthDayDay, tblPeople.BirthDayYear');
+		$this->db->select('tblPeople.fkGenderId,tblPeople.BirthDayMonth, tblPeople.BirthDayDay, tblPeople.BirthDayYear');
 		$this->db->select('CONVERT(VARCHAR(11),tblPeople.Anniversary,106) as Anniversary, Qualification, tblPeople.Nationality');
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');
 		$this->db->select('tblState.StateDesc, tblCountry.CountryDesc');
@@ -149,7 +139,7 @@ Class people_db extends CI_MODEL
     */
 	public function getPeopleById($id){
 		$this->db->select('tblPeople.pkPeopleId, tblPeople.fkPeopleTypeId, tblPeople.Name, tblPeople.SecondName, tblPeople.LName, tblPeople.LName2');
-		$this->db->select('tblPeople.BirthDayMonth, tblPeople.BirthDayDay, tblPeople.BirthDayYear, tblPeople.Initials');
+		$this->db->select('tblPeople.fkGenderId, tblPeople.BirthDayMonth, tblPeople.BirthDayDay, tblPeople.BirthDayYear, tblPeople.Initials');
 		$this->db->select('CONVERT(VARCHAR(11),tblPeople.Anniversary,101) as Anniversary, tblPeople.Qualification, tblPeople.Nationality');
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');
 		$this->db->select('tblState.pkStateId, tblState.StateCode, tblState.StateDesc');
