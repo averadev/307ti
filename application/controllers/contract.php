@@ -476,6 +476,15 @@ public function getPropertyStatus($IdStatus){
 
 }
 
+public function getTypesGiftContract(){
+	if($this->input->is_ajax_request()) {
+		$campos = "pkGiftTypeId, GiftTypeDesc";
+		$tabla = "tblGiftType";
+		$typesGift = $this->contract_db->selectTypeGeneral($campos, $tabla);
+		echo json_encode($typesGift);
+	}
+}
+
 public function getNotesContract(){
 	if($this->input->is_ajax_request()) {
 		$ID = $_POST['idContrato'];
@@ -634,7 +643,7 @@ public function getFlagsContract(){
 		}
 	}
 //////////////////////////////////////////////////////
-	public function modal(){
+	public function modalContract(){
 		if($this->input->is_ajax_request()) {
 			$this->load->view('contracts/contractDialog');
 		}

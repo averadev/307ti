@@ -186,7 +186,7 @@ function createContractSelect(datos){
 }
 function showModalContract(){
 	var ajaxData =  {
-		url: "contract/pruebasContract",
+		url: "contract/modalContract",
 		tipo: "html",
 		datos: {},
 		funcionExito : createContractSelect,
@@ -1332,6 +1332,7 @@ function initEventosDownpaymentProgramados(){
 }
 
 function initEventosDiscount(){
+	getTypeGifts();
 	$("#btnAddmontoPack").click(function(){
 		if ($("#montoPack").val()>0) {
 			PacksAdds();
@@ -1340,6 +1341,21 @@ function initEventosDiscount(){
 			errorInput("montoPack", 2);
 		}
 	});
+}
+
+function getTypeGifts(){
+	var ajaxDatos =  {
+		url: "contract/getTypesGiftContract",
+		tipo: "json",
+		datos: {},
+		funcionExito : typesGift,
+		funcionError: mensajeAlertify
+	};
+	ajaxData(ajaxDatos);
+}
+
+function typesGift(data){
+	generalSelects(data, "tiposPakc");
 }
 
 function PacksAdds(){
@@ -1461,8 +1477,6 @@ function getArrayValuesSelectedColum(tabla, columna){
  * cambia los pantallas del modal con los tabs
  */
 function changeTabsModalContract(screen, id){
-	console.log(screen);
-	console.log(id);
 	$('#tabsContrats .tabs-title').removeClass('active');
 	$('#tabsContrats li[attr-screen=' + screen + ']').addClass('active');
 	//muestra la pantalla selecionada

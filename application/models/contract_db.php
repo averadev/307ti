@@ -597,6 +597,27 @@ class Contract_db extends CI_Model {
             return $row->$p['alias'];
         }
     }
+
+    public function selectTypesGift(){
+        $this->db->select("pkGiftTypeId, GiftTypeDesc");
+        $this->db->from('tblGiftType');
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
+
+    public function selectTypeGeneral($campos, $tabla){
+        $this->db->select($campos);
+        $this->db->from($tabla);
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
+
     public function getUnidades($filters){
 
         $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc');
