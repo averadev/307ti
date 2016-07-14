@@ -186,8 +186,8 @@ a.button.postfix.img {
 	padding-top:0;
 	padding-bottom:0;
 	padding-left:0;
-    background-color: #c7c7c7;
 	background: #00a89c;
+	background-color: #fde7be;
     border-bottom: 2px solid #D9DEE4;
     color: white;
 }
@@ -255,8 +255,8 @@ a.button.postfix.img {
     width: 100%;
 	font-size: 16px;
 	color:#183a59;
-    background-color: #aaaaaa;
-	background: #EDEDED;
+    background-color: #fde7be;
+	background: #fde7be;
 	border: 1px solid rgba(20,53,80,0.14);
 }
 
@@ -288,7 +288,7 @@ a.button.postfix.img {
 .menu-config{
 	float:right;
 	height:40px;
-	background:#183a59;
+	background:#662c19;
 	margin-top:2px;
 	margin-right:10px;
 	border:#A1ACB2 solid 1px;
@@ -346,10 +346,12 @@ a.button.postfix.img {
 	padding-top:4px;
 	padding-bottom:4px;
 	border-bottom:#c7c7c7 solid 1px;
+	background: #fde7be;
 }
 
 .menu-config-dropdown ul li:hover{
-	background:#c7c7c7;
+	background:#662c19;
+	color: white;
 }
 
 /**
@@ -386,7 +388,7 @@ a.button.postfix.img {
 }
 
 .tabs .tabs-title.active > a  {
-	background-color:#183a59;
+	background-color:#662c19;
 	color:#FFFFFF;
 }
 
@@ -403,13 +405,13 @@ a.button.postfix.img {
 }
 
 .active .iconCloseTab{
-	background:#00a89c;
+	background:#fde7be;
 	border-left:1px solid #2f4d69;
 	color:#FFFFFF;
 }
 
 .iconCloseTab:hover{
-    background-color: #00837A;
+    background-color: #b77648;
 }
 
 .moduleHide{
@@ -760,15 +762,14 @@ table thead tr th, table tbody tr td{
 	background:#183a59;
 	border-radius:0;
 	margin:0;
-	background-color:#225b88;
+	background-color:#662c19;
 }
 .dialogModal .ui-dialog-titlebar{
 	color:#FFF;	
 	background:#183a59;
 	border-radius:0;
 	margin:0;
-	/*background:#183a59 url("../img/common/arrowSection.png") no-repeat right;*/
-	background-color:#225b88;
+	background-color:#662c19;
 }
 
 .dialogModal .ui-dialog-content.ui-widget-content{
@@ -829,7 +830,7 @@ table thead tr th, table tbody tr td{
 	
 .dialogModalButtonCancel .ui-button-text{
 	color:#FFF;	
-	background:#225b88;
+	background:#b77648;
 	border-color:#225b88;
 	box-shadow: 0 1px 2px 1px rgba(0,0,0,.08), 0 3px 6px rgba(0,0,0,.08);
 	font-family: Arimo;
@@ -841,7 +842,7 @@ table thead tr th, table tbody tr td{
 
 .dialogModalButtonAccept .ui-button-text{
 	color:#FFF;	
-	background:#183a59;
+	background:#662c19;
 	border-color:#183a59;
 	box-shadow: 0 1px 2px 1px rgba(0,0,0,.08), 0 3px 6px rgba(0,0,0,.08);
 	font-family: Arimo;
@@ -1441,7 +1442,8 @@ label.error{
 }
 
 .pr-color{
-	background-color:#183a59;
+	/*background-color:#183a59;*/
+	background-color: #662c19;
 	color:#FFFFFF;
 	font-size:16px;
 	border: 1px solid rgba(20,53,80,0.14);
@@ -1483,11 +1485,12 @@ label.error{
 	text-align:center;
 	padding: 8px 13px;
 	cursor:pointer;
-	font-size: 14px;
+	font-size: 16px;
+	color: #662c19;
 }
 
 .btn img, .btn i{
-	background:#00a89c;
+	background:#b77648;
 	float:right;
 	padding: 8px 8px;
     margin-top: -1px;
@@ -1501,18 +1504,19 @@ label.error{
 
 .btn-primary{
 	color: #FFFFFF;
-    background-color: #183a59;
+    background-color: #fde7be;
 	border: 1px solid rgba(20,53,80,0.14);
 }
 
 .btn-primary:hover{
 	color: #fff;
-    background-color: #225b88;
-    border-color: #18405f;
+    background-color: #f8dca8;
+    border-color: #b77648;
 }
 
 .btn-new{
-	background:#00a89c;
+	/*background:#00a89c;*/
+	background: #fde7be;
 	color: #FFFFFF;
 	border: 1px solid rgba(20,53,80,0.14);
 	float:right;
@@ -1526,7 +1530,7 @@ label.error{
 }
 
 .btn-new img{
-	background:#00837A;
+	background:#b77648;
 	/*padding: 8px 6px;*/
 }
 
@@ -1691,6 +1695,7 @@ input.general.error, .caja.error{
     padding: .5em;
     font-family: initial;
     font-weight: 800;
+    color: #662c19;
 }
 
 .oculto{
