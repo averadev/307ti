@@ -6,21 +6,23 @@
     </div>
     <div class="small-9 columns">
 		<div class="caja">
-			<select id="tiposPago" class="input-group-field round">
-				<option value="1">Cash</option>
-				<option value="2">Credit Card</option>
-				<option value="3">Billing</option>
-				<option value="4">Transfer</option>
-			</select>
+			<select id="tiposPacksD" class="input-group-field round">
+            <?php
+            foreach($typesGift as $item){?>
+                <option value="<?php echo $item->ID; ?>"><?php echo $item->GiftDesc; ?></option>
+            <?php
+            }
+            ?>   
+      </select>
 		</div>
     </div>
   </div>
    <div class="row">
     <div class="small-3 columns">
-      <label for="montoDownpayment" class="text-left">Amount</label>
+      <label for="montoProvisiones" class="text-left">Amount</label>
     </div>
     <div class="small-9 columns">
-       <input class="round general" id="montoDownpayment" type="number" name="montoDownpayment" min="0" max="999999">
+       <input class="round general" id="montoProvisiones" type="number" name="montoProvisiones" min="0" max="999999">
     </div>
   </div>
    <div class="row">
@@ -28,11 +30,11 @@
       <label for="btnAddmontoDownpayment" class="text-left"></label>
     </div>
     <div class="small-9 columns">
-		<a id="btnAddmontoDownpayment" class="btn btn-primary btn-Search">
+		<a id="btnAddPovisionesDI" class="btn btn-primary btn-Search">
 			<div class="label">Add</div>
 			<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 		</a>
-		<a id="btnCleanmontoDownpayment" class="btn btn-primary spanSelect">
+		<a id="btnCleanAmountProvisiones" class="btn btn-primary spanSelect">
 			<div class="label">Clean</div>
 			<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 		</a>
@@ -43,7 +45,7 @@
     <legend class="btnAddressData">Added Packs</legend>
     <div class="containerPeople">
         <div class="row">
-            <table id="tablePagosSelected" width="100%">
+            <table id="tableProvisionesDI" width="100%">
                 <thead>
                     <tr>
                         <th class="cellGeneral">Pack type</th>
@@ -51,7 +53,7 @@
                         <th class="cellGeneral">Delete</th>
                    </tr>
                 </thead>
-                <tbody id="tbodyPagosSelected">
+                <tbody id="tbodytableProvisionesDI">
                 </tbody>
             </table>
         </div>

@@ -2144,7 +2144,7 @@ function modalProvisions() {
   				showLoading(div, true);
 				$(this).load ("contract/modalProvisions" , function(){
 					showLoading(div, false);
-					//initEventosSellers();
+					initEventosProvisions();
 				});
 		},
 		autoOpen: false,
@@ -2173,6 +2173,47 @@ function modalProvisions() {
 	return dialogo;
 }
 
+function initEventosProvisions(){
+	$("#btnAddPovisionesDI").click(function(){
+		if ($("#montoProvisiones").val()<=0) {
+			alertify.error("the amount should be greater to zero");
+			errorInput("montoProvisiones", 2);
+		}else if($("#tiposPacksD").val()<=0){
+			alertify.error("choose a pack type");
+			errorInput("tiposPacksD", 2);
+		}else{
+			addProvisionesEventos();
+
+		}
+	});
+
+	$("#btnCleanAmountProvisiones").click(function(){
+		$("#montoProvisiones").val('');
+	});
+
+}
+
+function addProvisionesEventos(){
+	var td = "";
+	var IdTipoPack = $("#tiposPacksD").val();
+	var tipoPack = $("#tiposPacksD option:selected").text();
+	var monto = $("#montoProvisiones").val();
+		td = "<tr>";
+		td += "<td style='display:none'>"+IdTipoPack+"</td>";
+		td += "<td>"+tipoPack+"</td>";
+		td += "<td class='montoPacks'>"+monto+"</td>";
+		td += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
+		td += "</tr>";
+	$("#tbodytableProvisionesDI").append(td);
+
+	//totalDescPack();
+	//deleteElementTableFuncion("tablePackgSelected", totalDescPack);
+	deleteElementTableFuncion("tableProvisionesDI", addPro);
+}
+
+function addPro(){
+	alertify.success("deleted");
+}
 function getWeeks(id){
 	var div = "#tableCOccupationSelectedbody";
 	showLoading(div, true);

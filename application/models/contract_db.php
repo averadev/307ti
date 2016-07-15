@@ -607,7 +607,15 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
-
+    public function selectGifts(){
+        $this->db->select("pkGiftTypeId, GiftTypeDesc");
+        $this->db->from('tblGiftType');
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
     public function selectTypeGeneral($campos, $tabla){
         $this->db->select($campos);
         $this->db->from($tabla);

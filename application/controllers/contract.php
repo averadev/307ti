@@ -183,20 +183,20 @@ private function insertFinanciamiento($idContrato){
 
 public function updateFinanciamiento(){
 	if($this->input->is_ajax_request()) {
-		var_dump($_POST);
-		// $financiamiento = [
-		// 	"fkFactorId"	=> $_POST['factor'],
-		// 	"MonthlyPmtAmt" => $_POST['pagoMensual']
-		// ];
-		// $condicion = "fkResId = " . $_POST['idContrato'];
-		// $afectados = $this->contract_db->updateReturnId('tblResfin', $financiamiento, $condicion);
-		// if ($afectados>0) {
-		// 	$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados];
-		// 	echo json_encode($mensaje);
-		// }else{
-		// 	$mensaje = ["mesaje"=>"ocurrio un error"];	
-		// 	echo json_encode($mensaje);
-		// }
+		//var_dump($_POST);
+		$financiamiento = [
+			"fkFactorId"	=> $_POST['factor'],
+			"MonthlyPmtAmt" => $_POST['pagoMensual']
+		];
+		$condicion = "fkResId = " . $_POST['idContrato'];
+		$afectados = $this->contract_db->updateReturnId('tblResfin', $financiamiento, $condicion);
+		if ($afectados>0) {
+			$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados];
+			echo json_encode($mensaje);
+		}else{
+			$mensaje = ["mesaje"=>"ocurrio un error"];	
+			echo json_encode($mensaje);
+		}
 	}
 }
 
@@ -478,8 +478,8 @@ public function getPropertyStatus($IdStatus){
 
 public function getTypesGiftContract(){
 	if($this->input->is_ajax_request()) {
-		$campos = "pkGiftTypeId as ID, GiftTypeDesc";
-		$tabla = "tblGiftType";
+		$campos = "pkGiftId as ID, GiftDesc";
+		$tabla = "tblGift";
 		$typesGift = $this->contract_db->selectTypeGeneral($campos, $tabla);
 		echo json_encode($typesGift);
 	}
@@ -711,8 +711,10 @@ public function getFlagsContract(){
 
 	public function modalProvisions(){
 		if($this->input->is_ajax_request()) {
-			//$data['factores'] = $this->contract_db->selectFactors();
-			$this->load->view('contracts/dialogProvisionesContract');
+			$campos = "pkGiftId as ID, GiftDesc";
+			$tabla = "tblGift";
+			$data['typesGift'] = $this->contract_db->selectTypeGeneral($campos, $tabla);
+			$this->load->view('contracts/dialogProvisionesContract', $data);
 		}
 	}
 
