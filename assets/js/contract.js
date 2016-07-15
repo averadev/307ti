@@ -1140,7 +1140,6 @@ function modalEditContract(id){
 	    	$(this).load("contract/modalEdit?id="+id , function(){
 	 			showLoading('#dialog-Edit-Contract',false);
 	 			getDatosContract(id);
-				
 	 			setEventosEditarContrato(id);
 	    	});
 		},
@@ -1483,6 +1482,7 @@ function getArrayValuesSelectedColum(tabla, columna){
  * cambia los pantallas del modal con los tabs
  */
 function changeTabsModalContract(screen, id){
+	console.log("Este es el ID "+ id);
 	$('#tabsContrats .tabs-title').removeClass('active');
 	$('#tabsContrats li[attr-screen=' + screen + ']').addClass('active');
 	//muestra la pantalla selecionada
@@ -1708,6 +1708,7 @@ function tableOnclick(id){
 }
 
 function getAccounts( id, typeInfo, typeAcc ){
+	var id = getValueFromTableSelected("contracts", 1);
 	$.ajax({
 	    data:{
 	        idContrato: id,
