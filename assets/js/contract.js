@@ -2971,18 +2971,13 @@ function drawTableIdOcupacion(data, table){
 	var last = data[0].LastOccYear;
 	var rango = last - primero;
 	var bodyHTML = '';
-
 	for (var i = 0; i < data.length; i++) {
-        	bodyHTML += "<tr>";
-        	for (var j in data[i]) {
-        		bodyHTML+="<td>" + data[i][j] + "</td>";
-            	
-            };
-
-        	bodyHTML+="</tr>";
-   //      	for (var j = 0; j <= rango; j++) {
-			// 	bodyHTML+=	bodyHTML;
-			// }
+        	for(var j = 0; j < rango;j++){
+        		bodyHTML += "<tr>";
+        		bodyHTML+="<td>" + data[i].Intv + "</td>";
+        		bodyHTML+="<td>" + parseInt(primero + j) + "</td>";
+        		bodyHTML+="</tr>";
+        	} 	
         }
     $('#' + table).html(bodyHTML);
 }

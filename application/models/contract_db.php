@@ -498,6 +498,7 @@ class Contract_db extends CI_Model {
         $this->db->from('tblResInvt RI');
         $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
         $this->db->where('fkResId', $string);
+        //tblResOcc
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
