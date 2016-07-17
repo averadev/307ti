@@ -537,8 +537,6 @@
 									<th class="cellGeneral">Occupancy Type</th>
 									<th class="cellGeneral">Occupation Year</th>
 									<th class="cellGeneral">Week</th>
-									<th class="cellGeneral">First Year</th>
-									<th class="cellGeneral">Last Year</th>
 									<th></th>
 								</tr>
 							</thead>

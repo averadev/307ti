@@ -2974,10 +2974,15 @@ function drawTableIdOcupacion(data, table){
 	for (var i = 0; i < data.length; i++) {
         	for(var j = 0; j < rango;j++){
         		bodyHTML += "<tr>";
+        		bodyHTML+="<td>" + "week ocupancy"+ "</td>";
         		bodyHTML+="<td>" + data[i].Intv + "</td>";
         		bodyHTML+="<td>" + parseInt(primero + j) + "</td>";
         		bodyHTML+="</tr>";
         	} 	
         }
     $('#' + table).html(bodyHTML);
+}
+
+function pruebaAltaContrato(){
+	
 }
