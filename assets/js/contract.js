@@ -3035,24 +3035,43 @@ function makePeople(datos){
 	tablaPersonas(personas);
 }
 
-function getUnitidadesRandom(){
-	var unidades = ajaxUnidadesR();
+// function getUnitidadesRandom(){
+// 	var unidades = ajaxUnidadesR();
+// 	var frecuencias = ["Every Year", "Even Years", "Odd Years"];
+// 	var frequency = frecuencias[getRandomInt(0,2)]
+// 	var primero = 2016;
+// 	var ultimo = getRandomInt(2016, 2025);
+//     tablUnidadades(unidades, frequency, primero, ultimo);	
+// 	setValueUnitPrice();
+// }
+
+function recivePeople(datos){
+
 	var frecuencias = ["Every Year", "Even Years", "Odd Years"];
-	var frequency = $("#frequency option:selected" ).text();
+	var frequency = frecuencias[getRandomInt(0,2)]
 	var primero = 2016;
 	var ultimo = getRandomInt(2016, 2025);
-    tablUnidadades(unidades, frequency, primero, ultimo);	
+	var numeroUnidades = getRandomInt(1,6);
+	unidades = [];
+	for(var i = 0; i < numeroUnidades; i++){
+		unidades.push(datos[getRandomInt(1, datos.length)]);
+	}
+	console.table(unidades);
+	tablUnidadades(unidades, frequency, primero, ultimo);	
 	setValueUnitPrice();
 }
 
-function recivePeople(datos){
-	var numeroPersonas = getRandomInt(1,6);
-	personas = [];
-	for(var i = 0; i < numeroPersonas; i++){
-		personas.push(datos[getRandomInt(1, datos.items.length)]);
-	}
-	return personas;
-}
+/*
+var unidad = {};
+unidad.id = $(this).find('td').eq(1).text(),
+unidad.code = $(this).find('td').eq(2).text(),
+unidad.description = $(this).find('td').eq(3).text(),
+unidad.price = $(this).find('td').eq(4).text(),
+unidad.week = $(this).find('td').eq(5).text(),
+unidad.season = $(this).find('td').eq(6).text(),
+unidad.costoClosing = $(this).find('td').eq(7).text(),
+unidades.push(unidad);
+*/
 
 
 function ajaxUnidadesR(){
