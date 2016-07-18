@@ -21,6 +21,12 @@ $(document).on( 'click', '#btnRefinancingContract', function () {
 	showModalFin(id);
 });
 
+// $(document).on( 'click', '#btnSpecialDiscount', function () {
+// 	//showModalSpecialDiscount();
+// 	//peopleDialog = addPeopleDialog();
+// 	//peopleDialog.dialog( "open" );
+// });
+
 $(document).on( 'click', '#btnAddPeople', function () {
 	peopleDialog = addPeopleDialog();
 	peopleDialog.dialog( "open" );
@@ -128,6 +134,12 @@ $(document).on( 'click', '#btnAddPeople', function () {
 		var monto = $("#montoTotal").val();
 		cambiarCantidadP(monto);
 	});
+	$(document).on( 'change', '#descuentoEspecial', function () {
+		updateBalanceFinal();
+		// $("#montoTotal").val($(this).val());
+		// var monto = $("#montoTotal").val();
+		// cambiarCantidadP(monto);
+	});
 	$(document).on( 'change', "input[name='engancheR']:checked", function () {
 		var monto = $("#downpayment").val();
 		cambiarCantidadP(monto);
@@ -156,7 +168,8 @@ function updateBalanceFinal(){
 	var cashDiscount = getNumberTextInput("totalDiscountPacks");
 	var transferAmount = getNumberTextInput("amountTransfer");
 	var total = precioVenta + packReference + closingCost;
-	var descuento = downpayment+cashDiscount+transferAmount;
+	var descuentoEspecial = getNumberTextInput("descuentoEspecial");
+	var descuento = downpayment+cashDiscount+transferAmount+descuentoEspecial;
 	var balanceFinal = $("#financeBalance").val(total-descuento);
 }
 
@@ -520,7 +533,7 @@ function createNewContract(){
 				tipoVentaId : $("#typeSales").val(),
 				listPrice: $("#precioUnidad").val(),
 				salePrice: $("#precioVenta").val(),
-				specialDiscount:$("#totalDiscountPacks").val(),
+				specialDiscount:$("#descuentoEspecial").val(),
 				downpayment:$("#downpayment").val(),
 				amountTransfer:$("#amountTransfer").val(),
 				packPrice:sumarArray(getArrayValuesColumnTable("tableDescuentos", 2)),
@@ -2984,5 +2997,123 @@ function drawTableIdOcupacion(data, table){
 }
 
 function pruebaAltaContrato(){
-	
+	$("#legalName").val(makeRandonNames(13));
+	$("#selectLanguage").val(getRandomInt(1,2))
+	$("#TourID").val(0);
+	getPeopleRandom();
+
 }
+
+function makeRandonNames(num){
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+    for( var i=0; i < num; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function makePeople(datos){
+	var numeroPersonas = getRandomInt(1,6);
+	var personas = [];
+	for(var i = 0; i < numeroPersonas; i++){
+		var posicion = getRandomInt(1, datos.items.length);
+		var p = [
+			datos.items[posicion].ID,
+			datos.items[posicion].Name,
+			datos.items[posicion].LastName,
+			datos.items[posicion].Street
+		]
+		personas.push(p);
+	}
+
+	tablaPersonas(personas);
+}
+
+function getUnitidadesRandom(){
+	var unidades = ajaxUnidadesR();
+	var frecuencias = ["Every Year", "Even Years", "Odd Years"];
+	var frequency = $("#frequency option:selected" ).text();
+	var primero = 2016;
+	var ultimo = getRandomInt(2016, 2025);
+    tablUnidadades(unidades, frequency, primero, ultimo);	
+	setValueUnitPrice();
+}
+
+function recivePeople(datos){
+	var numeroPersonas = getRandomInt(1,6);
+	personas = [];
+	for(var i = 0; i < numeroPersonas; i++){
+		personas.push(datos[getRandomInt(1, datos.items.length)]);
+	}
+	return personas;
+}
+
+
+function ajaxUnidadesR(){
+	var ajaxData =  {
+		url: "contract/getUnidades",
+		tipo: "json",
+		datos: {
+			property:0,
+			unitType:0,
+			season:0,
+			interval:0,
+			view:0
+		},
+		funcionExito : recivePeople,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
+
+function getPeopleRandom(){
+	var ajaxData =  {
+		url: "people/getPeopleBySearch",
+		tipo: "json",
+		datos: {
+			search:'',
+			peopleId:false,
+			lastName:true,
+			name:true,
+			advanced:'',
+			typePeople:'',
+			page:0
+		},
+		funcionExito : makePeople,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
+
+
+
+
+/*
+legalName : $("#legalName").val().trim(),
+tourID : $("#TourID").val().trim(),
+idiomaID : $("#selectLanguage").val(),
+peoples: getValueTablePersonas(),
+types: typePeople(),
+unidades: getValueTableUnidades(),
+weeks: getArrayValuesColumnTable("tableUnidadesSelected", 6),
+firstYear :$("#firstYearWeeks").val().trim(),
+lastYear : $("#lastYearWeeks").val().trim(),
+tipoVentaId : $("#typeSales").val(),
+listPrice: $("#precioUnidad").val(),
+salePrice: $("#precioVenta").val(),
+specialDiscount:$("#totalDiscountPacks").val(),
+downpayment:$("#downpayment").val(),
+amountTransfer:$("#amountTransfer").val(),
+packPrice:sumarArray(getArrayValuesColumnTable("tableDescuentos", 2)),
+financeBalance: $("#financeBalance").val(),
+tablapagos: getValueTableDownpayment(),
+tablaPagosProgramados:getValueTableDownpaymentScheduled(),
+tablaPacks: getValueTablePacks(),
+viewId: 1
+*/

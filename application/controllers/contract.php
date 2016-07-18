@@ -147,7 +147,7 @@ private function insertPeoples($idContrato){
 }
 
 private function insertFinanciamiento($idContrato){
-	$porcentaje = intval(($_POST['specialDiscount']/$_POST['salePrice']))*100;
+	$porcentaje = floatval(($_POST['specialDiscount']/$_POST['salePrice']))*100;
 	$balanceFinal = intval($_POST['financeBalance']);
 	$porEnganche = intval(($_POST['downpayment']/$balanceFinal))*100;
 	$financiamiento = [

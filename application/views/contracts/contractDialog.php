@@ -194,12 +194,12 @@
                     <div class="small-3 columns">
                         <label id="" for="right-label" class="text-left">Special Discount</label>
                     </div>
-                    <div class="large-5 columns">
-                        <input class="round general" id="" type="text" placeholder="$0.00">
+                    <div class="large-5 columns end">
+                        <input class="round general" id="descuentoEspecial" type="text" placeholder="$0.00">
                     </div>
-                    <div class="large-4 columns">
-                        <a id="btnDiscountAmount" href="#" class="button postfix">Capture</a>
-                    </div>
+<!--                     <div class="large-4 columns">
+                        <a id="btnSpecialDiscount" href="#" class="button postfix">Capture</a>
+                    </div> -->
                 </div>
                 <div class="row">
                     <div class="small-12 columns">
