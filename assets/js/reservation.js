@@ -20,9 +20,9 @@ $(document).ready(function(){
 	var dialogEngancheRes = modalDepositDownpaymentRes();
 	var dialogScheduledPaymentsRes = modalScheduledPaymentsRes();
 	var dialogDiscountAmountRes = modalDiscountAmountRes();
-	/*var dialogEditContract = modalEditContract();
-	var dialogAddTour = addTourContract();
-	var dialogAccount = opcionAccount();*/
+	var dialogEditReservation = modalEditReservation();
+	/*var dialogAddTour = addTourContract();*/
+	var dialogAccount = opcionAccountRes();
 
 	$(document).on( 'click', '#newReservation', function () {
 		addReservation = createDialogReservation(addReservation);
@@ -34,6 +34,11 @@ $(document).ready(function(){
 		unidadResDialog.dialog( "open" );
 	});
 
+	$(document).on( 'click', '#btnRefinancingResevation', function () {
+		var id = getValueFromTableSelectedRes("reservationsTable", 1);
+		showModalFinRes(id);
+	});
+	
 	$(document).on( 'click', '#btnAddPeopleRes', function () {
          peopleResDialog = addPeopleResDialog();
          peopleResDialog.dialog( "open" );
@@ -48,35 +53,43 @@ $(document).ready(function(){
 	        
 	});
  	
- 	/*$(document).on( 'click', '#btnNewSeller', function () {
+ 	$(document).on( 'click', '#btnNewSellerRes', function () {
  		if (modalVendedores!=null) {
 	    		modalVendedores.dialog( "destroy" );
 	    	}
-	    	modalVendedores = modalSellers();
+	    	modalVendedores = modalSellersRes();
 	        modalVendedores.dialog( "open" );
 	 });
 
- 	 $(document).on( 'click', '#btnNewFile', function () {
+ 	 $(document).on( 'click', '#btnNewFileRes', function () {
  		if (modalNewFile!=null) {
 	    		modalNewFile.dialog( "destroy" );
 	    	}
-	    	modalNewFile = modalNewFileContract();
+	    	modalNewFile = modalNewFileContractRes();
 	        modalNewFile.dialog( "open" );
 	 });
-	$(document).on( 'click', '#btnNewProvision', function () {
+	$(document).on( 'click', '#btnNewProvisionRes', function () {
  		if (modalProvisiones!=null) {
 	    		modalProvisiones.dialog( "destroy" );
 	    	}
-	    	modalProvisiones = modalProvisions();
+	    	modalProvisiones = modalProvisionsRes();
 	        modalProvisiones.dialog( "open" );
 	 });
-	$(document).on( 'click', '#btnNewNote', function () {
+	$(document).on( 'click', '#btnNewNoteRes', function () {
  		if (modalNotas!=null) {
 	    		modalNotas.dialog( "destroy" );
 	    	}
-	    	modalNotas = modalAddNotas();
+	    	modalNotas = modalAddNotasRes();
 	        modalNotas.dialog( "open" );
-	 });*/
+	 });
+	
+	$(document).on( 'click', '#btnGetAllNotesRes', function () {
+ 		if (modalAllNotes!=null) {
+	    		modalAllNotes.dialog( "destroy" );
+	    	}
+	    	modalAllNotes = modalGetAllNotesRes();
+	        modalAllNotes.dialog( "open" );
+	 });
 	
 	$(document).on( 'click', '#btnPackReferenceRes', function () {
 		var dialogPackRes = PackReferenceRes();
@@ -98,12 +111,12 @@ $(document).ready(function(){
 		dialogDiscountAmountRes.dialog("open");
 	});
 	
-	/*$(document).on( 'click', '#btNewTransAcc, #btAddPayAcc', function () {
-		var dialogAccount = opcionAccount($(this).attr('attr_type'));
+	$(document).on( 'click', '#btNewTransAccRes, #btAddPayAccRes', function () {
+		var dialogAccount = opcionAccountRes($(this).attr('attr_type'));
 		dialogAccount.dialog("open");
 	});
 
-	$(document).on( 'click', '#btnAddTourID', function () {
+	/*$(document).on( 'click', '#btnAddTourID', function () {
 		var dialogAddTour = addTourContract();
 		dialogAddTour.dialog("open");
 	});
@@ -124,7 +137,7 @@ $(document).ready(function(){
 	});
 	
 	$('#btnfindRes').click(function(){
-		$('#contractstbody').empty();
+		$('#reservationstbody').empty();
 		getReservations();
 	});
 
@@ -150,8 +163,22 @@ $(document).ready(function(){
 		$("#financeBalanceRes").val(balanceFinal - transferido);
 	});
 	
-	//getDatailByID("contractstbody");
+	getDatailByIDRes("reservationstbody");
 });
+
+function ajaxSelectsRes(url,errorMsj, funcion, divSelect) {
+	$.ajax({
+		type: "POST",
+		url: url,
+		dataType:'json',
+		success: function(data){
+			funcion(data, divSelect);
+		},
+		error: function(){
+			alertify.error(errorMsj);
+		}
+	});
+}
 
 function updateBalanceFinalRes(){
 	var precioVenta = $("#precioVentaRes").val();
@@ -422,9 +449,8 @@ function getValueTableUnidadesSeleccionadasRes(){
 			unidad.description = $(this).find('td').eq(3).text(),
 			unidad.view = $(this).find('td').eq(4).text(),
 			unidad.floor = $(this).find('td').eq(5).text(),			
-			unidad.intv = $(this).find('td').eq(6).text(),
+			unidad.week = $(this).find('td').eq(6).text(),
 			unidad.season = $(this).find('td').eq(7).text(),
-			unidad.week = $(this).find('td').eq(8).text(),
 			unidades.push(unidad); 
 		}
 	});
@@ -474,9 +500,9 @@ function deleteElementTableFuncionRes(div, funcion){
 
 
 function getDetalleContratoByID(i){
-	showLoading('#contracts',true);
-	ajaxHTML('dialog-Edit-Contract', 'contract/modalEdit');
-    showModals('dialog-Edit-Contract', cleanAddPeople);
+	showLoading('#reservationsTable',true);
+	ajaxHTML('dialog-Edit-Reservation', 'contract/modalEdit');
+    showModals('dialog-Edit-Reservation', cleanAddPeople);
 }
 
 function getInputsByID(formData, divs){
@@ -967,9 +993,9 @@ function tablUnidadadesRes(unidades, frequency, primero, ultimo){
 		bodyHTML += "<td>"+unidades[i].view+"</td>";
 		bodyHTML += "<td>"+frequency+"</td>";
 		bodyHTML += "<td>"+unidades[i].floor+"</td>";
-		bodyHTML += "<td>"+unidades[i].intv+"</td>";
-		bodyHTML += "<td>"+unidades[i].season+"</td>";
+		//bodyHTML += "<td>"+unidades[i].intv+"</td>";
 		bodyHTML += "<td>"+unidades[i].week+"</td>";
+		bodyHTML += "<td>"+unidades[i].season+"</td>";
 		bodyHTML += "<td>"+primero+"</td>";
         bodyHTML += "<td>"+ultimo+"</td>";
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
@@ -1016,7 +1042,7 @@ function getValueFromTable(id, posicion){
 	return fullArray.eq(posicion).text().trim();
 }
 
-function getValueFromTableSelected(id, posicion){
+function getValueFromTableSelectedRes(id, posicion){
 	var array = $("#"+id+" .yellow").find("td");
 	return array.eq(posicion).text().trim();
 }
@@ -1032,12 +1058,115 @@ function setValueUnitPriceRes(){
 	$("#precioVentaRes").val(precio);
 }
 
+function getDatailByIDRes(id){
+	var pickedup;
+	$("#"+id).on("click", "tr", function(){
+		if (pickedup != null) {
+        	pickedup.removeClass("yellow");
+			var id = $(this).find("td").eq(1).text().trim();
+			//var id = getValueFromTableSelectedRes("reservationsTable, 1);
+            var dialogEditReservation = modalEditReservation(id);
+            dialogEditReservation.dialog("open");
+          }
+          $( this ).addClass("yellow");
+          pickedup = $(this);
+	});
+}
+
+function modalEditReservation(id){
+	showLoading('#dialog-Edit-Reservation',true);
+	dialogo = $("#dialog-Edit-Reservation").dialog ({
+  		open : function (event){
+	    	$(this).load("reservation/modalEdit?id="+id , function(){
+	 			showLoading('#dialog-Edit-Reservation',false);
+	 			getDatosReservation(id);
+	 			setEventosEditarReservation(id);
+	    	});
+		},
+		autoOpen: false,
+     	height: maxHeight,
+     	width: "50%",
+     	modal: true,
+     	buttons: [
+     // 	{
+	    //    	text: "Cancel",
+	    //    	"class": 'dialogModalButtonCancel',
+	    //    	click: function() {
+	    //      	$(this).dialog('close');
+	    //    }
+	   	// },
+	   	{
+       		text: "Close",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       			$(this).dialog('close');
+       		}
+     	}],
+     close: function() {
+    	$('#dialog-Edit-Reservation').empty();
+     }
+	});
+	return dialogo;
+}
+
+function calcularPackRes(){
+
+	var value = parseFloat($("#porcentajePack").val());
+	var valueQ = parseFloat($("#quantityPack").val());
+	var precioInicial = parseFloat($("#unitPricePack").val());
+	var precioFinal = parseFloat($("#finalPricePack").val());
+
+	$("#porcentajePack").on('keyup change click', function () {
+	    if(this.value !== value) {
+	    	value = this.value;
+	       var p = porcentajePackRes(this.value,precioInicial);
+	       $("#quantityPack").val(p);
+	       if(p+precioInicial>0){
+	       		$("#finalPricePack").val(p+precioInicial);
+	       }else{
+	       		$("#finalPricePack").val(precioInicial);
+	       }
+	    }        
+	});
+	$("#quantityPack").on('keyup change click', function () {
+	    if(this.value !== valueQ) {
+	    	 valueQ = parseFloat(this.value);
+	    	 var porcentaje = cantidadRes(valueQ, precioInicial);
+	    	 $("#porcentajePack").val(porcentaje.toFixed(3));
+	    	 if(valueQ+precioInicial>0){
+	    	 	$("#finalPricePack").val(precioInicial+valueQ);
+	    	 }else{
+	    	 	$("#finalPricePack").val(precioInicial);
+	    	 }
+	    }        
+	});
+}
+
+function porcentajePackRes(porcentaje, cantidad){
+	return parseFloat(porcentaje/100)*cantidad;
+}
+
+function cantidadRes(cantidad, precio){
+	return parseFloat((cantidad / precio)*100);
+}
+
 function selectMetodoPagoProgramadosRes(){
 	$('#tiposPagoProgramados').on('change', function() {
   		if(this.value == 2){
   			$("#datosTarjetaProgramados").show();
   		}else{
   			$("#datosTarjetaProgramados").hide();
+  		}
+  	});
+}
+
+////////////////////////////////////////////////////////////////
+function selectMetodoPagoRes(){
+	$('#tiposPago').on('change', function() {
+  		if(this.value == 2){
+  			$("#datosTarjeta").show();
+  		}else{
+  			$("#datosTarjeta").hide();
   		}
   	});
 }
@@ -1066,7 +1195,7 @@ function getUnidadesRes(){
 				alertify.success("Found "+ data.length);
 				drawTable(data, 'add', "details", "Unidades");
 			}else{
-				//$('#contractstbody').empty();
+				//$('#reservationstbody').empty();
 				alertify.error("No records found");
 			}
 		},
@@ -1198,17 +1327,6 @@ function totalDownpaymentRes(){
 	$("#finalPriceDownpayment").val(total);
 }
 
-////////////////////////////////////////////////////////////////
-function selectMetodoPagoRes(){
-	$('#tiposPago').on('change', function() {
-  		if(this.value == 2){
-  			$("#datosTarjeta").show();
-  		}else{
-  			$("#datosTarjeta").hide();
-  		}
-  	});
-}
-
 function totalDownpaymentPrgRes(){
 	var pagos = [];
 	totalCp = 0;
@@ -1247,45 +1365,404 @@ function totalDescPackMainRes(){
 	$("#totalDiscountPacksRes").val(totalCp);
 }
 
-function calcularPackRes(){
-
-	var value = parseFloat($("#porcentajePack").val());
-	var valueQ = parseFloat($("#quantityPack").val());
-	var precioInicial = parseFloat($("#unitPricePack").val());
-	var precioFinal = parseFloat($("#finalPricePack").val());
-
-	$("#porcentajePack").on('keyup change click', function () {
-	    if(this.value !== value) {
-	    	value = this.value;
-	       var p = porcentajePackRes(this.value,precioInicial);
-	       $("#quantityPack").val(p);
-	       if(p+precioInicial>0){
-	       		$("#finalPricePack").val(p+precioInicial);
-	       }else{
-	       		$("#finalPricePack").val(precioInicial);
-	       }
-	    }        
+function getArrayValuesColumnTable(tabla, columna){
+	var items=[];
+	$('#'+tabla+' tbody tr td:nth-child('+columna+')').each( function(){
+		if ($(this).text().replace(/\s+/g, " ")!="") {
+			items.push( $(this).text().replace(/\s+/g, " "));
+		}       
 	});
-	$("#quantityPack").on('keyup change click', function () {
-	    if(this.value !== valueQ) {
-	    	 valueQ = parseFloat(this.value);
-	    	 var porcentaje = cantidadRes(valueQ, precioInicial);
-	    	 $("#porcentajePack").val(porcentaje.toFixed(3));
-	    	 if(valueQ+precioInicial>0){
-	    	 	$("#finalPricePack").val(precioInicial+valueQ);
-	    	 }else{
-	    	 	$("#finalPricePack").val(precioInicial);
-	    	 }
-	    }        
+	return items;
+}
+
+function getArrayValuesSelectedColumRes(tabla, columna){
+	var items=[];
+	$('#'+tabla+' tbody tr.yellow td:nth-child('+columna+')').each( function(){
+	   items.push( $(this).text().replace(/\s+/g, " "));       
+	});
+	return items;
+}
+
+/**
+ * cambia los pantallas del modal con los tabs
+ */
+function changeTabsModalContractRes(screen, id){
+	$('#tabsContrats .tabs-title').removeClass('active');
+	$('#tabsContrats li[attr-screen=' + screen + ']').addClass('active');
+	//muestra la pantalla selecionada
+	$('#tabsContrats .tab-modal').hide();
+	$('#' + screen).show();
+	switch(screen){
+		case "tab-CGeneral":
+			//getDatosReservation(id);
+			break;
+		case "tab-CAccounts":
+			//getDatosContractAccounts(id);
+			getAccountsRes( id, "account", "sale" );
+			//getAccountsRes( id, "account", "maintenance" );
+			//getAccountsRes( id, "account", "loan" );
+			break;
+		case "tab-CVendors":
+			getDatosContractSellersRes(id);
+			break;
+		case "tab-CProvisions":
+			getDatosContractProvisionsRes(id);
+			break;
+		case "tab-COccupation":
+			getDatosContractOcupationRes(id);
+			break;
+		case "tab-CDocuments":
+			getDatosContractDocuments(id);
+			break;
+		case "tab-CNotes":
+			getDatosContractNotesRes(id);
+			break;
+		case "tab-CFlags":
+			getDatosContractFlagsRes(id);
+			break;
+		case "tab-CFiles":
+			getDatosContractFilesRes(id);
+			break;
+
+
+	}
+}
+
+function getDatosContractAccounts(id){
+	console.log("Cuentas " + id);
+}
+function getDatosContractSellersRes(id){
+	console.log("vendedores");
+	
+}
+function getDatosContractProvisionsRes(id){
+	console.log("Provisiones" + id);
+}
+function getDatosContractOcupationRes(id){
+	if ($("#tableCOccupationSelectedbodyRes").is(':empty')) {
+		getWeeksRes(id);	
+	}
+}
+function getDatosContractDocuments(id){
+	console.log("Documentos " + id);
+}
+function getDatosContractNotesRes(id){
+	if ($('#tableCNotesSelectedBodyRes').is(':empty')){
+  		getNotesRes(id);
+	}
+	
+}
+function getDatosContractFlagsRes(id){
+	if ($("#tableFlagsListBodyRes").is(':empty')) {
+		getTypesFlagsRes();
+	}
+	if ($("#flagsAsignedBodyRes").is(':empty')) {
+		getFlagsRes(id);
+		initEventosFlagsRes();
+	}
+}
+function getDatosContractFilesRes(id){
+	getFilesRes(id);
+}
+
+function initEventosFlagsRes(){
+	$("#btnSAveFlagsRes").click(function (){
+		var flags = getArrayValuesSelectedColumRes("tableFlagsListRes", 1).length;
+		if (flags>0) {
+			SaveFlagsContractRes();
+		}else{
+			alertify.error("You should pick one");
+		}
+		
+	});
+	$("#btnNextStatus").click(function(){
+		nextStatusContractRes();
+	});
+	//activeEvent('btnNextStatus', 'nextStatusContractRes');
+}
+
+function activeEventClick(id, funcionA){
+	$("#"+id).click(function(){
+		funcionA();
+	});
+}
+function deactiveEventClick(id){
+	console.log("desactivado");
+	$('#'+id).unbind('click');
+}
+
+function drawTableUnidades(data, funcion, cadena, table){
+    var headHTML = "<th>"+cadena+"</th>";
+    var bodyHTML = '';
+    //creación de la cabecera
+	for (var j in data[0]) {
+		if (j != "IDFloorPlan") {
+			headHTML+="<th>"+j+"</th>";
+		}
+    }
+    //creación del body
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+       	bodyHTML += '<td class="iconEdit" onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
+        for (var j in data[i]) {
+        	if (data[i][j] != data[i].IDFloorPlan) {
+        		if(data[i][j] == data[i].Description){
+        			bodyHTML+="<td IDFloorPlan="+data[i].IDFloorPlan+">" + data[i][j] + "</td>";
+        		}else if (data[i][j] != data[i].IDFloorPlan) {
+        			bodyHTML+="<td IDFloorPlan="+data[i].IDFloorPlan+">" + data[i][j] + "</td>";
+        		}
+        		else{
+        			bodyHTML+="<td>" + data[i][j] + "</td>";
+        		}
+        	}
+        };
+        bodyHTML+="</tr>";
+    }
+    $('#' + table + "thead" ).html(headHTML);
+    $('#' + table + "tbody" ).html(bodyHTML);
+    //pluginTables(table);
+}
+
+//var a = $('#tblUnidades tbody .yellow').html();
+//var b = $('#tableUnidadesSelected tbody').html(a);
+
+
+function getPeopleContract(id){
+	$.ajax({
+	    data:{
+	        idContrato: id
+	    },
+	    type: "POST",
+	    url: "contract/getPeopleContract",
+	    dataType:'json',
+	    success: function(data){
+	    	drawTableSinHeadReservation(data, "peoplesReservation");
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+function getUnitiesContract(id){
+	$.ajax({
+	    data:{
+	        idContrato: id
+	    },
+	    type: "POST",
+	    url: "contract/getUnitiesContract",
+	    dataType:'json',
+	    success: function(data){
+	    	drawTableSinHeadReservation(data, "tableUnidadesReservation");
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
 	});
 }
 
-function porcentajePackRes(porcentaje, cantidad){
-	return parseFloat(porcentaje/100)*cantidad;
+function drawTableSinHeadReservation(data, table){
+	var deleteButton = "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
+    var bodyHTML = '';
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        };
+        //bodyHTML += deleteButton;
+        bodyHTML+="</tr>";
+    }
+    $('#' + table).html(bodyHTML);
 }
 
-function cantidadRes(cantidad, precio){
-	return parseFloat((cantidad / precio)*100);
+function getDatosReservation(id){
+	$.ajax({
+	    data:{
+	        idReservation: id
+	    },
+	    type: "POST",
+	    url: "reservation/getDatosReservationById",
+	    dataType:'json',
+	    success: function(data){
+	    	drawTableSinHeadReservation(data["peoples"], "peoplesReservation");
+	    	drawTableSinHeadReservation(data["unities"], "tableUnidadesReservation");
+	    	drawTerminosVentaRes(data["terminosVenta"][0]);
+	    	drawTerminoFinanciamientoRes(data["terminosFinanciamiento"][0]);
+			var contraTemp = data["reservation"][0];
+			$('td.folioAccount').text(contraTemp.Folio);
+			setHeightModal('dialog-Edit-Reservation');
+			addFunctionalityRes();
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function addFunctionalityRes(){
+	var div = "peoplesReservation";
+	selectTableUnicoRes(div);
+	tableOnclickRes(div);
+}
+
+function tableOnclickRes(id){
+	$("#"+id).on("click", "tr", function(){
+		var idPeople = $(this).find("td").eq(0).text().trim();
+		showModalContractXD(idPeople);
+	});
+}
+
+function getAccountsRes( id, typeInfo, typeAcc ){
+	$.ajax({
+	    data:{
+	        idReservation: id,
+			typeInfo:typeInfo,
+			typeAcc: typeAcc
+	    },
+	    type: "POST",
+	    url: "reservation/getAccountsById",
+	    dataType:'json',
+	    success: function(data){
+			console.log(data)
+			
+			
+			//console.log(sales)
+			if(typeInfo == "account"){
+				var reservation = data["reservation"];
+				var frontDesk = data["frontDesk"];
+				//var loan = data["loan"];
+				var acc = data["acc"];
+				drawTable2(reservation, "tableAccountSeller", false, "");
+				//drawTable2(maintenance, "tableAccountMaintenance", false, "");
+				drawTable2(frontDesk, "tableAccountLoan", false, "");
+				setTableAccount(reservation, "");
+				setTableAccount(frontDesk, "");
+				//setTableAccount(loan, "");
+				/*if(typeAcc == "sale"){
+					drawTable2(sales, "tableAccountSeller", false, "");
+				}else if(typeAcc == "maintenance"){
+					drawTable2(sales, "tableAccountMaintenance", false, "");
+				}else if(typeAcc == "loan"){
+					drawTable2(sales, "tableAccountLoan", false, "");
+				}*/
+				
+				//setTableAccount(sales, "");
+				$('#btNewTransAccRes').data( 'idRes', id )
+				$('#btNewTransAccRes').data( 'idAcc', acc[0].fkAccId );
+				console.log(acc[0].fkAccId)
+			}else{
+				var acc = data["acc"];
+				if(acc.length > 0){
+					drawTable2(acc, "tabletPaymentAccoun", false, "");
+					$(".checkPayAcc").off( 'change' );
+					$(".checkPayAcc").on('change', function (){
+						var amoutCur = 0;
+						$("input[name='checkPayAcc[]']:checked").each(function(){
+							amoutCur = amoutCur + parseFloat($(this).val());
+						});
+						$('#amountSettledAcc').text( '$ ' + amoutCur.toFixed(4) );
+					});
+				}
+			}
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function setTableAccount(items){
+	var balance = 0, balanceDeposits = 0, balanceSales = 0, defeatedDeposits = 0, defeatedSales = 0;
+	for(i=0;i<items.length;i++){
+		var item = items[i];
+		var tempTotal = 0, tempTotal2 = 0;
+		if( item.Transaccion_Signo == 1 ){
+			tempTotal = parseFloat(item.AbsAmount);
+			tempTotal2 = parseFloat(item.Overdue_Amount);
+		}
+		if( item.Concept_Trxid.trim() == "Sale" ){
+			if(tempTotal2 != 0){
+				defeatedSales += tempTotal;
+			}else{
+				balanceSales += tempTotal;
+			}
+		}else{
+			if(tempTotal2 != 0){
+				defeatedDeposits += tempTotal;
+			}else{
+				balanceDeposits += tempTotal;
+			}
+		}
+	}
+	balance = balanceDeposits + balanceSales;
+	
+	$('td.balanceAccount').text('$ ' + balance.toFixed(2));
+	$('td.balanceDepAccount').text('$ ' + balanceDeposits.toFixed(2));
+	$('td.balanceSaleAccount').text('$ ' + balanceSales.toFixed(2));
+	$('td.defeatedDepAccount').text('$ ' + defeatedDeposits.toFixed(2));
+	$('td.defeatedSaleAccount').text('$ ' + defeatedSales.toFixed(2));
+	
+}
+
+function drawTerminosVentaRes(data){
+	var price = parseFloat(data.ListPrice).toFixed(2);
+	var semanas = data.WeeksNumber;
+	var packReference = parseFloat(data.PackPrice).toFixed(2);
+	var salePrice = parseFloat(data.NetSalePrice).toFixed(2);
+	var enganche = parseFloat(data.Deposit).toFixed(2);
+	var transferido = parseFloat(data.TransferAmt).toFixed(2);
+	var costoContract = parseFloat(data.ClosingFeeAmt).toFixed(2);
+	var packAmount = parseFloat(data.PackPrice).toFixed(2);
+	var balanceFinal = parseFloat(data.BalanceActual).toFixed(2);
+
+
+	$("#cventaPrice").text(price);
+	$("#cventaWeeks").text(semanas);
+	$("#cventaPackR").text(packReference);
+	$("#cventaSalePrice").text(salePrice);
+	$("#cventaHitch").text(enganche);
+	$("#cventaTransferA").text(transferido);
+	$("#cventaCostContract").text(costoContract);
+	$("#cventapackAmount").text(packAmount);
+	$("#cventaFinanced").text(balanceFinal);
+	$("#cventaAmountTransfer").text(enganche + transferido);
+}
+
+function drawTerminoFinanciamientoRes(data){
+	var balanceFinal  = data.FinanceBalance;
+	var pagoMensual = data.MonthlyPmtAmt;
+	var porEnganche = data.porcentaje;
+	//var balanceFinal = data.TotalFinanceAmt;
+
+	$("#cfbalanceFinanced").text(balanceFinal);
+	$("#cfPagoMensual").text(pagoMensual);
+	$("#cfEnganche").text(porEnganche);
+
+}
+
+function drawDataContract(data){
+	var numero = "["+data.Folio+"-"+data.ID+"]";
+	var nombreLegal= data.LegalName;
+	var titulo = numero + " " + nombreLegal;
+	var floorPlan = data.FloorPlan + ","+ data.FrequencyDesc;
+	var year ="Year: "+ data.FirstOccYear;
+	var status = "Status: " + data.StatusDesc;
+	$("#editContractTitle").text(titulo);
+	$("#editContracFloorPlan").text(floorPlan);
+	$("#editContracYear").text(year);
+	$("#editContracStatus").text(status);
+}
+
+function setEventosEditarReservation(id){
+	$('#tabsContrats .tabs-title').on('click', function() { 
+		changeTabsModalContractRes($(this).attr('attr-screen'), id);
+	});
+
+	$("#finTerminos").click(function(){
+		gotoDiv('ContenidoModalContractEdit', 'tourEditCon');
+	});
+	$("#ventaCondi").click(function(){
+		gotoDiv('ContenidoModalContractEdit', 'finTerminos');
+	});
 }
 
 function modalFinanciamientoRes() {
@@ -1323,6 +1800,49 @@ function modalFinanciamientoRes() {
      }
 	});
 	return dialogo;
+}
+
+function addHTMLModalFinRes(data){
+	$("#dialog-FinanciamientoRes").html(data);
+	initEventosFinanciamientoRes();
+}
+
+function showModalFinRes(id){
+	var ajaxData =  {
+		url: "reservation/modalFinanciamiento",
+		tipo: "html",
+		datos: {
+			idReservation: id
+		},
+		funcionExito : addHTMLModalFinRes,
+		funcionError: mensajeAlertify
+	};
+	var modalPropiedades = {
+		div: "dialog-FinanciamientoRes",
+		altura: maxHeight,
+		width: "50%",
+		onOpen: ajaxDATA,
+		onSave: createNewReservation,
+		botones :[{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+    			updateFinanciamientoRes(id);
+       		}
+     	}]
+	};
+
+	if (modalFin!=null) {
+		modalFin.dialog( "destroy" );
+	}
+	modalFin = modalGeneral2(modalPropiedades, ajaxData);
+	modalFin.dialog( "open" );
 }
 
 function updateFinanciamientoRes(id){
@@ -1374,14 +1894,791 @@ function initEventosFinanciamientoRes(){
 	});
 }
 
+function setUnitiesContractPrueba(){
+	$.ajax({
+	    data:{
+	        idContrato: 186
+	    },
+	    type: "POST",
+	    url: "contract/createSemanaOcupacion",
+	    dataType:'json',
+	    success: function(data){
+	    	//drawTableSinHead(data, "tableUnidadesContract");
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+
+function modalSellersRes() {
+	var div = "#dialog-SellersRes";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+  				showLoading(div, true);
+				$(this).load ("contract/modalSellers" , function(){
+					showLoading(div, false);
+					initEventosSellersRes();
+				});
+		},
+		autoOpen: false,
+     	height: maxHeight,
+     	width: "50%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Add",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+    			alertify.success("added employees");
+    			$(this).dialog('close');
+	       
+       		}
+     	}],
+     close: function() {
+    	$('#dialog-SellersRes').empty();
+     }
+	});
+	return dialogo;
+}
+
+function modalNewFileContractRes() {
+	var div = "#dialog-newFileRes";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+  				showLoading(div, true);
+				$(this).load ("reservation/modalAddFileReservation" , function(){
+					ajaxSelectsRes('contract/getDocType', 'try again', generalSelects, 'slcTypeFileUp');
+					showLoading(div, false);
+				});
+		},
+		autoOpen: false,
+     	height: maxHeight/2,
+     	width: "40%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Add",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+				var arrayInput = ["fileDescription","fileToUpload"];
+				var arraySelect = ["slcTypeFileUp"];
+				if(verifyFileRes( arrayInput, arraySelect )){
+					uploadFileContRes();
+				}else{
+					var id = "saveFileCont";
+					var form = $("#"+id);
+					var elem = new Foundation.Abide(form, {});
+					$('#'+id).foundation('validateForm');
+					alertify.success("Please fill required fields");
+				}
+				
+       		}
+     	}],
+     close: function() {
+     }
+	});
+	return dialogo;
+}
+
+function initEventosSellersRes(){
+	$("#btnSearchSeller").click(function(){
+		getSellersRes();
+	});
+	$("#btnCleanSearchSeller").click(function(){
+		$("#txtSearchSeller").val("");
+	});
+}
+
+function getSellersRes(){
+	var div = "#section-table-seller";
+	showLoading(div, true);
+	$.ajax({
+	    data:{
+	        idContrato: 186
+	    },
+	    type: "POST",
+	    url: "contract/getSellers",
+	    dataType:'json',
+	    success: function(data){
+	    	showLoading(div, false);
+	    	drawTableId(data,"tableSellerbody");
+	    	selectTable("tableSellerbody");
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function modalProvisionsRes() {
+	var div = "#dialog-ProvisionesRes";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+  				showLoading(div, true);
+				$(this).load ("contract/modalProvisions" , function(){
+					showLoading(div, false);
+					//initEventosSellersRes();
+				});
+		},
+		autoOpen: false,
+     	height: maxHeight/1.5,
+     	width: "40%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Save",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+    			alertify.success("added employees");
+    			$(this).dialog('close');
+	       
+       		}
+     	}],
+     close: function() {
+    	$('#dialog-SellersRes').empty();
+     }
+	});
+	return dialogo;
+}
+
+function getWeeksRes(id){
+	var div = "#tableCOccupationSelectedbodyRes";
+	showLoading(div, true);
+	$.ajax({
+	    data:{
+	        idreservation: id
+	    },
+	    type: "POST",
+	    url: "reservation/selectWeeksReservation",
+	    dataType:'json',
+	    success: function(data){
+	    	drawTableIdOcupacionRes(data,"tableCOccupationSelectedbodyRes");
+	    	selectTableRes("tableCOccupationSelectedbodyRes");
+			showLoading(div, false);
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function getTypesFlagsRes(id){
+	var div = "#tableFlagsListBodyRes";
+	showLoading(div, true);
+	$.ajax({
+	    data:{
+	        idReservation: id
+	    },
+	    type: "POST",
+	    url: "reservation/getTypesFlags",
+	    dataType:'json',
+	    success: function(data){
+	    	showLoading(div, false);
+	    	//console.table(data);
+	    	if (data) {
+	    		drawTableId(data,"tableFlagsListBodyRes");
+	    		selectTableRes("tableFlagsListBodyRes");
+	    	}else{
+	    		alertify.error("No records found");
+	    	}
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function modalAddNotasRes() {
+	var div = "#dialog-NotasRes";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+  				showLoading(div, true);
+				$(this).load ("contract/modalAddNotas" , function(){
+					showLoading(div, false);
+					//initEventosSellersRes();
+				});
+		},
+		autoOpen: false,
+     	height: maxHeight/1.5,
+     	width: "40%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Save",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       			SaveNotesRes();
+    			$(this).dialog('close');
+	       
+       		}
+     	}],
+     close: function() {
+    	//$('#dialog-SellersRes').empty();
+     }
+	});
+	return dialogo;
+}
+function modalGetAllNotesRes() {
+	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+	var div = "#dialog-NotasRes";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+  				showLoading(div, true);
+				$(this).load ("reservation/modalgetAllNotes?id="+id , function(){
+					showLoading(div, false);
+				});
+		},
+		autoOpen: false,
+     	height: maxHeight,
+     	width: "50%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Close",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	}],
+     close: function() {
+    	$(this).empty();
+     }
+	});
+	return dialogo;
+}
+
+function SaveNotesRes(){
+	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+	var noteType = $("#notesTypes").val();
+	var noteDescription = $("#NoteDescription").val();
+	$.ajax({
+	    data:{
+	        idReservation: id,
+	        noteType:noteType,
+	        noteDescription : noteDescription
+	    },
+	    type: "POST",
+	    url: "reservation/createNote",
+	    dataType:'json',
+	    success: function(data){
+	    	alertify.success(data['mensaje']);
+	    	getNotesRes(id);
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function getNotesRes(id){
+	var url = "reservation/getNotesReservation";
+	var div = "#tableCNotesSelectedBodyRes";
+	showLoading(div, true);
+	$.ajax({
+	    data:{
+	        idReservation: id
+	    },
+	    type: "POST",
+	    url: url,
+	    dataType:'json',
+	    success: function(data){
+	    	showLoading(div, false);
+	    	if (data) {
+	    		drawTableId(data,"tableCNotesSelectedBodyRes");
+	    	}else{
+	    		alertify.error("No records found");
+	    	}
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+function getFlagsRes(id){
+	var url = "reservation/getFlagsContract";
+	var div = "#flagsAsignedBodyRes";
+	showLoading(div, true);
+	$.ajax({
+	    data:{
+	        idReservation: id
+	    },
+	    type: "POST",
+	    url: url,
+	    dataType:'json',
+	    success: function(data){
+	    	showLoading(div, false);
+	    	if (data) {
+	    		drawTableId(data,"flagsAsignedBodyRes");
+	    	}else{
+	    		alertify.error("No records found");
+	    	}
+	    	
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function SaveFlagsContractRes(){
+
+	var flags = getArrayValuesSelectedColumRes("tableFlagsListRes", 1);
+	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+	$.ajax({
+	    data:{
+	        idReservation: id,
+	        flags:flags
+	    },
+	    type: "POST",
+	    url: "reservation/createFlags",
+	    dataType:'json',
+	    success: function(data){
+	    	alertify.success(data['mensaje']);
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+function nextStatusContractRes(){
+	deactiveEventClick("btnNextStatus");
+	$("#iNextStatus").addClass("fa-spin");
+	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+	$.ajax({
+	    data:{
+	        idContrato: id,
+	    },
+	    type: "POST",
+	    url: "contract/nextStatusContract",
+	    dataType:'json',
+	    success: function(data){
+	    	$("#iNextStatus").removeClass("fa-spin");
+	    	$("#editContracStatus").text("Status: "+data['status']);
+	    	alertify.success(data['mensaje']);
+	    		$("#btnNextStatus").click(function(){
+					nextStatusContractRes();
+				});
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function opcionAccountRes(attrType){
+	var div = "#dialog-accountsRes";
+	dialogo = $(div).dialog ({
+  		open : function (event){
+			
+			if ($(div).is(':empty')) {
+  				showLoading(div, true);
+				$(this).load ("contract/modalAccount" , function(){
+					showLoading(div, false);
+					//initEventosSellers();
+					$( "#dueDateAcc" ).Zebra_DatePicker({
+						format: 'm/d/Y',
+						show_icon: false,
+					});
+					$("#slcTransTypeAcc").attr('disabled', true);
+					setDataOpcionAccountRes(attrType);
+					getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
+					ajaxSelectsRes('contract/getTrxClass', 'try again', generalSelects, 'slcTrxClassAcc');
+				});
+			}else{
+				showLoading(div, true);
+				$("#slcTransTypeAcc").attr('disabled', true);
+				getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
+				setDataOpcionAccountRes(attrType);
+				showLoading(div, false);
+			}
+		},
+		autoOpen: false,
+     	height: maxHeight,
+     	width: "50%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Save",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+				var id = "saveAccCont";
+				var form = $("#"+id);
+				var elem = new Foundation.Abide(form, {});
+				var arrayInput = ["AmountAcc", "dueDateAcc"];
+				var arraySelect = ["slcTransTypeAcc", "slcTrxClassAcc"];
+				if(attrType == "addPayAcc"){
+					arraySelect = ["slcTransTypeAcc"];
+				}
+				if(!verifyAccount(arrayInput, arraySelect )){
+					$('#'+id).foundation('validateForm');
+					alertify.success("Please fill required fields (red)");
+				}else{
+					var amoutCur = 0;
+					$("input[name='checkPayAcc[]']:checked").each(function(){
+						amoutCur = amoutCur + parseFloat($(this).val());
+					});
+					if( amoutCur.toFixed(4) > parseFloat($('#AmountAcc').val().trim()).toFixed(4)){
+						var msg = "The stated amount does not cover all of the selected concepts.</br>A partial payment was stored.";
+						alertify.confirm(msg, function (e){
+							if(e){
+								saveAccContRes(attrType);
+							}
+						});
+					}else{
+						saveAccContRes(attrType);
+					}
+				}
+       		}
+     	}],
+     close: function() {
+    	//$('#dialog-ScheduledPayments').empty();
+     }
+	});
+	return dialogo;
+}
+
+function setDataOpcionAccountRes(attrType){
+	if(attrType == "newTransAcc"){
+		$('#grpTrxClassAcc').show();
+		$('#grpTablePayAcc').hide();
+	}else{
+		var trxType = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accType');
+		getAccountsRes( $('#btNewTransAccRes').data( 'idRes' ), "payment", trxType );
+		$('#grpTrxClassAcc').hide();
+		$('#grpTablePayAcc').show();
+	}
+	$('#accountIdAcc').text( $('#btNewTransAccRes').data( 'idAcc' ) );
+	$('#dueDateAcc').val(getCurrentDate());
+	$('#legalNameAcc').text($('#editContractTitle').text());
+	$('#balanceAcc').text($('.balanceAccount').text());
+}
+
+function saveAccContRes(attrType){
+	var idTrans = new Array();
+	var valTrans = new Array();
+	var trxClass = new Array();
+	if( attrType == "addPayAcc" ){
+		$('.checkPayAcc:checked').each( function() {
+			idTrans.push($(this).attr('id'));
+			valTrans.push($(this).val());
+			trxClass.push($(this).attr('trxclass'));
+		});
+	}
+	
+	//console.log($('#btNewTransAccRes').data( 'idRes' ));
+	showAlert(true,"Saving changes, please wait ....",'progressbar');
+	$.ajax({
+		data: {
+			attrType:attrType,
+			accId:$('#btNewTransAccRes').data( 'idAcc' ),
+			trxTypeId:$('#slcTransTypeAcc').val(),
+			trxClassID:$('#slcTrxClassAcc').val(),
+			amount:$('#AmountAcc').val(),
+			dueDt:$('#dueDateAcc').val(),
+			doc:$('#documentAcc').val(),
+			remark:$('#referenceAcc').val(),
+			idTrans:idTrans,
+			valTrans:valTrans,
+			trxClass:trxClass,
+		},type: "POST",
+		dataType:'json',
+		url: 'reservation/saveTransactionAcc'
+	}).done(function( data, textStatus, jqXHR ) {
+		console.log(data);
+		if( data.success ){
+			//alert("guardeishion");
+			//getDatailByID("contractstbody");
+			getAccountsRes( $('#btNewTransAccRes').data( 'idRes' ), "account", "" );
+			$("#dialog-accountsRes").dialog('close');
+			showAlert(false,"Saving changes, please wait ....",'progressbar');
+		}else{
+			$("#dialog-accountsRes").dialog('close');
+			showAlert(false,"Saving changes, please wait ....",'progressbar');
+			//alert("no transacenshion");
+		}
+	}).fail(function( jqXHR, textStatus, errorThrown ) {
+		//alert("no guardeishion");
+		//$("#dialog-accountsRes").dialog('close');
+		showAlert(false,"Saving changes, please wait ....",'progressbar');
+		alertify.error("Try Again");
+	});
+}
+
+function getTrxTypeRes(url, attrType, errorMsj, funcion, divSelect){
+	var trxType = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accType');
+	$.ajax({
+		type: "POST",
+		data: {
+			attrType:attrType,
+			trxType:trxType
+			
+		},
+		url: url,
+		dataType:'json',
+		success: function(data){
+			funcion(data, divSelect);
+			$("#slcTransTypeAcc").attr('disabled', false);
+		},
+		error: function(){
+			$("#slcTransTypeAcc").attr('disabled', false);
+			alertify.error(errorMsj);
+		}
+	});
+}
+
+function verifyAccount( inputArray, selectArray ){
+	var v = true;
+	for (var i = 0; i < inputArray.length; i++){
+		 if($('#'+inputArray[i]).val().trim().length <= 0){
+		 	v = false;
+		 }
+	}
+	
+	for (var i = 0; i < selectArray.length; i++){
+		if($('#'+selectArray[i]).val() == 0){
+		 	v = false;
+		}
+	}
+	
+	//AmountAcc
+	if( $('#grpTablePayAcc').is(":visible") ){
+		if( $("input[name='checkPayAcc[]']:checked").length == 0){
+			v = false;
+		}else{
+			var amoutCur = $('#amountSettledAcc').text();
+			amoutCur = amoutCur.replace("$", "");
+			amoutCur = parseFloat(amoutCur.trim());
+			if($('#AmountAcc').val().trim() > amoutCur){
+				v = false;
+				alertify.error("The amount of selected positions is less than the payment amount captured.");
+			}
+		}
+	}
+	
+	return v;
+}
+
+function uploadFileContRes(){
+	
+	showAlert(true,"Saving changes, please wait ....",'progressbar');
+	
+	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+	//creamos la variable Request 
+	if(window.XMLHttpRequest) {
+ 		var Req = new XMLHttpRequest(); 
+ 	}else if(window.ActiveXObject) { 
+ 		var Req = new ActiveXObject("Microsoft.XMLHTTP"); 
+ 	}	
+	
+	var data = new FormData(); 
+	
+	data.append('id',id);
+	data.append('description',$('#fileDescription').val().trim());
+	data.append('typeDoc',$('#slcTypeFileUp').val());
+		
+	//var ruta = new Array();
+		
+	var archivos = document.getElementById("fileToUpload");//Damos el valor del input tipo file
+ 	var archivo = archivos.files; //obtenemos los valores de la imagen
+	data.append('image',archivo[0]);
+	ruta = "assets/img/files/";
+	
+	//rutaJson = JSON.stringify(ruta);
+	data.append('ruta',ruta);
+		
+	//data.append('nameImage',$('#imagenName').val());
+		
+	//cargamos los parametros para enviar la imagen
+	Req.open("POST", "reservation/saveFile", true);
+		
+	//nos devuelve los resultados
+	Req.onload = function(Event) {
+		//Validamos que el status http sea ok 
+		if (Req.status == 200) {
+			/*var obj = JSON.parse(Req.responseText);
+			if(obj.success){
+				alertify.success(obj.message);
+			}else{
+				alertify.error("Try again");
+			}*/
+			alertify.success("File uploaded correctly");
+			getFilesRes(id);
+			var div = "#dialog-newFileRes";
+			$(div).dialog('close');
+			showAlert(false,"Saving changes, please wait ....",'progressbar');
+		} else { 
+			getFilesRes(id);
+			alertify.error("Try again");
+			var div = "#dialog-newFileRes";
+			$(div).dialog('close');
+			showAlert(false,"Saving changes, please wait ....",'progressbar');
+		} 	
+	};
+		
+	//Enviamos la petición 
+ 	Req.send(data);	
+}
+
+function getFilesRes(id){
+	var url = "reservation/getFilesReservation";
+	//var div = "#tableCFilesSelectedRes";
+	showLoading("#tableCFilesSelectedRes", true);
+	$.ajax({
+	    data:{
+	        idRes: id
+	    },
+	    type: "POST",
+	    url: url,
+	    dataType:'json',
+	    success: function(data){
+			console.log(data);
+			if(data.length > 0){
+				drawTable2(data, "tableCFilesSelectedRes", "deleteFileRes", "eliminar");
+			}else{
+				noResultsTable("contentTableFileRes", "tableCFilesSelectedRes", "No results found");
+			}
+			
+			showLoading("#tableCFilesSelectedRes", false);
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function deleteFileRes(idFile){
+	alertify.confirm("To delete the file?", function (e) {
+		if (e) {
+			showLoading("#tableCFilesSelectedRes", true);
+			$.ajax({
+				data:{
+					idFile: idFile
+				},
+				type: "POST",
+				url: "reservation/deleteFile",
+				dataType:'json',
+				success: function(data){
+					var id = getValueFromTableSelectedRes("contracts", 1);
+					getFilesRes(id);
+					showLoading("#tableCFilesSelectedRes", false);
+					alertify.success("deleted file");
+				},
+				error: function(){
+					alertify.error("Try again");
+					showLoading("#tableCFilesSelectedRes", false);
+				}
+			});
+			// user clicked "ok"
+		} else {
+			// user clicked "cancel"
+		}
+	});
+	//alert('id');
+}
+
+function verifyFileRes( inputArray, selectArray ){
+	
+	var v = true;
+	for (var i = 0; i < inputArray.length; i++){
+		 if($('#'+inputArray[i]).val().trim().length <= 0){
+		 	v = false;
+		 }
+	}
+	
+	for (var i = 0; i < selectArray.length; i++){
+		if($('#'+selectArray[i]).val() == 0){
+		 	v = false;
+		}
+	}
+	
+	if($('#fileToUpload').val().length > 0){
+		var archivos = document.getElementById("fileToUpload");//Damos el valor del input tipo file
+		var archivo = archivos.files; //obtenemos los valores de la imagen
+		var sizeByte = parseInt(archivo[0].size / 1024);
+		//var sizekiloByte = parseInt(sizeByte / 1024);
+		if( sizeByte > 2048){
+			v = false;
+			alertify.error("the file must not exceed 2 mb");
+		}
+	}
+	
+	return v;
+}
+
+function pruebas(){
+	$.ajax({
+	    data:{
+	        id: 2,
+	    },
+	    type: "POST",
+	    url: "people/peopleDetailView",
+	    dataType:'html',
+	    success: function(data){
+	    	console.table(data);
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function drawTableIdOcupacionRes(data, table){
+	console.table(data);
+	var primero = data[0].FirstOccYear;
+	var last = data[0].LastOccYear;
+	var rango = last - primero;
+	var bodyHTML = '';
+
+	for (var i = 0; i < data.length; i++) {
+        	bodyHTML += "<tr>";
+        	for (var j in data[i]) {
+        		bodyHTML+="<td>" + data[i][j] + "</td>";
+            	
+            };
+
+        	bodyHTML+="</tr>";
+   //      	for (var j = 0; j <= rango; j++) {
+			// 	bodyHTML+=	bodyHTML;
+			// }
+        }
+    $('#' + table).html(bodyHTML);
+}
+
 function getRateRes(){
+	console.log(unitReservacion[0].season)
 	$("#RateRes").attr('disabled', true);
 	var intDate = iniDateRes.split("/");
 	var occYear = intDate[2];
 	$.ajax({
 	    data:{
 			id:unitReservacion[0].id,
-			//season:unitReservacion[0].season,
+			season:unitReservacion[0].season,
 			occupancy:$('#occupancySalesRes').val(),
 			occYear:occYear
 		},

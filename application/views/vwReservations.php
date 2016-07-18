@@ -129,13 +129,13 @@
 			<div class="box-body" id="table-reservations" style="display: block;">
 				<div class="table" >
 					<table id="reservationsTable" style="width:100%;">
-						<thead>
+						<!--<thead>
 						</thead>
 						<tbody>
-						</tbody>
-						<!--<thead id="reservationsthead">
+						</tbody>-->
+						<thead id="reservationsthead">
 						</thead>
-						<tbody id="reservationstbody"></tbody>-->
+						<tbody id="reservationstbody"></tbody>
 					</table>
 				</div>
 				<div class="pagina" >
@@ -158,7 +158,7 @@
 
 
 <div id="dialog-Reservations"  title="Reservation > Create Reservation" style="display: none;"></div>
-<div id="dialog-Edit-Contract" title="Edit Contract" style="display: none;"></div>
+<div id="dialog-Edit-Reservation" title="Reservation > Edit Reservation" style="display: none;"></div>
 <div id="dialog-tourID" title="Tour ID" style="display: none;"></div>
 <div id="dialog-PeopleRes" title="Reservation > Create Reservation > Add People" style="display: none;"></div>
 <div id="dialog-UnidadesRes" title="Contract > Create Contract > Add Unidades" style="display: none;"></div>
@@ -168,9 +168,9 @@
 <div id="dialog-ScheduledPayments" title="Scheduled Payments" style="display: none;"></div>
 <div id="dialog-DiscountAmount" title="Discount Amount" style="display: none;"></div>
 <div id="dialog-FinanciamientoRes" title="Financing Terms" style="display: none;"></div>
-<div id="dialog-Sellers" title="Set Sellers" style="display: none;"></div>
-<div id="dialog-Provisiones" title="Add Provisions" style="display: none;"></div>
-<div id="dialog-Notas" title="Add Notes" style="display: none;"></div>
-<div id="dialog-accounts"  title="Accounts" style="display: none;"></div>
-<div id="dialog-newFile"  title="New File" style="display: none;"></div>
+<div id="dialog-SellersRes" title="Set Sellers" style="display: none;"></div>
+<div id="dialog-ProvisionesRes" title="Add Provisions" style="display: none;"></div>
+<div id="dialog-NotasRes" title="Add Notes" style="display: none;"></div>
+<div id="dialog-accountsRes"  title="Accounts" style="display: none;"></div>
+<div id="dialog-newFileRes"  title="New File" style="display: none;"></div>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>reservation.js"></script>

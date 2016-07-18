@@ -241,6 +241,42 @@ class Reservation extends CI_Controller {
 		}
 	}
 	
+	public function createNote(){
+		if($this->input->is_ajax_request()) {
+			$Note = [
+				"fkNoteTypeId" =>  $_POST['noteType'],
+				"fkResId"		=> $_POST['idReservation'],
+				"fkPeopleId"	=> $this->reservation_db->selectIdMainPeople($_POST['idReservation']),
+				"NoteDesc"		=> $_POST['noteDescription'],
+				"ynVI"			=> 1,
+				"Occyear"		=> "2016",
+				"ynActive"		=> 1,
+				"CrBy"			=> $this->nativesessions->get('id'),
+				"CrDt"			=> $this->getToday()
+			];
+			$this->reservation_db->insertReturnId('tblNote', $Note);
+			echo json_encode(["mensaje"=> "It was inserted correctly"]);
+		}
+	}
+	
+	public function createFlags(){
+		if($this->input->is_ajax_request()) {
+			$flags = $_POST["flags"];
+			for ($i=0; $i < sizeof($flags); $i++) { 
+				$flag = [
+					"fkResId"		=> $_POST['idReservation'],
+					"fkFlagId"		=> $flags[$i],
+					"ynActive"		=> 1,
+					"CrBy"			=> $this->nativesessions->get('id'),
+					"CrDt"			=> $this->getToday()
+				];
+				$this->reservation_db->insertReturnId('tblResFlag', $flag);
+			}
+			
+			echo json_encode(["mensaje"=> "It was inserted correctly"]);
+		}
+	}
+	
 	public function getReservations(){
 		if($this->input->is_ajax_request()) {
 			$sql = $this->getFilters($_POST, 'r.CrDt', 'Res');
@@ -260,6 +296,139 @@ class Reservation extends CI_Controller {
 				}
 			}
 			$message = array( 'items' => $reservations );
+			echo json_encode($message);
+		}
+	}
+	
+	public function saveFile(){
+		$message = "";
+		$result = $this->uploadFile($_FILES, $_POST['ruta']);
+		if($result != false){
+			$file = [
+				"fkDocTypeId" 	=> 	$_POST['typeDoc'],
+				"docPath" 		=> 	$result,
+				"docDesc" 		=> 	$_POST['description'],
+				"ynActive" 		=> 	1,
+				"CrBy"			=>	$this->nativesessions->get('id'),
+				"CrDt"			=>	$this->getToday(),
+				"MdBy"			=> 	$this->nativesessions->get('id'),
+				"MdDt"			=>	$this->getToday()
+			];
+			$idFile = $this->reservation_db->insertReturnId('tblDoc', $file);
+			
+			$fileRes = [
+				"fkResId" 		=> 	$_POST['id'],
+				"fkdocId" 		=> 	$idFile,
+				"ynActive" 		=> 	1,
+				"CrBy"			=>	$this->nativesessions->get('id'),
+				"CrDt"			=>	$this->getToday(),
+				"MdBy"			=> 	$this->nativesessions->get('id'),
+				"MdDt"			=>	$this->getToday()
+			];
+			$idFile = $this->reservation_db->insertReturnId('tblResDoc', $fileRes);
+			
+			$message = array('success' => true, 'message' => "File uploaded correctly", 'nameImage' => $result );
+		}else{
+			$message = array('success' => false, 'message' => "Try again");
+		}
+		echo json_encode($message);
+	}
+
+	public function deleteFile(){
+		
+		$file = [
+				//"pkDocId" 	=> $_POST['idFile'],
+				"ynActive" 	=> 0
+		];
+		$condicion = "pkDocId = " . $_POST['idFile'];
+		$data = $this->reservation_db->updateReturnId("tblDoc", $file, $condicion);
+		echo json_encode($data);
+
+	}
+	
+	public function saveTransactionAcc(){
+		if($this->input->is_ajax_request()) {
+			if($_POST['attrType'] == "newTransAcc"){
+				$debit = -1 * abs($_POST['amount']);
+				$transaction = [
+					"fkAccid" 			=> $_POST['accId'],
+					"fkTrxTypeId"		=> $_POST['trxTypeId'],
+					"fkTrxClassID"		=> $_POST['trxClassID'],
+					"Debit-"			=> $debit,
+					"Credit+"			=> 0,
+					"Amount"			=> $_POST['amount'],
+					"AbsAmount"			=> $_POST['amount'],
+					"Remark"			=> $_POST['remark'],
+					"Doc"				=> $_POST['doc'],
+					"DueDt"				=> $_POST['dueDt'],
+					"ynActive"			=> 1,
+					"CrBy"				=> $this->nativesessions->get('id'),
+					"CrDt"				=> $this->getToday(),
+					"MdBy"				=> $this->nativesessions->get('id'),
+					"MdDt"				=> $this->getToday()
+
+				];
+				$this->reservation_db->insertReturnId('tblAccTrx', $transaction);
+				$message= array('success' => true, 'message' => "transaction save");
+			}else{
+				$idTrans = $_POST['idTrans'];
+				$valTrans = $_POST['valTrans'];
+				$trxClass = $_POST['trxClass'];
+				$amount = floatval($_POST['amount']);
+				$update = array();
+				$insertTrx = array();
+				for($i = 0; $i<count($idTrans); $i++){
+					if($amount > 0){
+						$trans = floatval($valTrans[$i]);
+						$totalAmou = 0;
+						$totalAmou2 = 0;
+						if($trans == $amount){
+							$totalAmou2 = $trans;
+							$amount = 0;
+						}else if( $trans > $amount ){
+							$totalAmou2 = $amount;
+							$totalAmou = $trans - $amount;
+							$amount = 0;
+						}else if($trans < $amount){
+							$amount = $amount - $trans;
+							$totalAmou2 = $trans;
+						}
+						$totalAmou = str_replace(",", ".", $totalAmou);
+						$transU = array(
+							//'pkAccTrxId'	=>	$idTrans[$i],
+							'AbsAmount'		=>	$totalAmou,
+						);
+						$condicion = "pkAccTrxId = " . $idTrans[$i];
+						$this->reservation_db->updateReturnId( 'tblAccTrx', $transU, $condicion );
+						//array_push($update, $transU);
+						
+						$debit = floatval(-1 * abs($totalAmou2));
+						$debit = str_replace(",", ".", $debit);
+						$totalAmou2 = str_replace(",", ".", $totalAmou2);
+						$transI = array(
+							"fkAccid" 			=> $_POST['accId'],
+							"fkTrxTypeId"		=> $_POST['trxTypeId'],
+							"fkTrxClassID"		=> $trxClass[$i],
+							"Debit-"			=> $debit,
+							"Credit+"			=> 0,
+							"Amount"			=> $totalAmou2,
+							"AbsAmount"			=> $totalAmou2,
+							"Remark"			=> $_POST['remark'],
+							"Doc"				=> $_POST['doc'],
+							"DueDt"				=> $_POST['dueDt'],
+							"ynActive"			=> 1,
+							"CrBy"				=> $this->nativesessions->get('id'),
+							"CrDt"				=> $this->getToday(),
+							"MdBy"				=> $this->nativesessions->get('id'),
+							"MdDt"				=> $this->getToday()
+						);
+						$this->reservation_db->insertReturnId( 'tblAccTrx', $transI );
+						//array_push($insertTrx, $transI);
+					}
+				}
+				
+				$message= array('success' => true, 'message' => "transaction saveee");
+			}
 			echo json_encode($message);
 		}
 	}
@@ -312,6 +481,111 @@ class Reservation extends CI_Controller {
 		}
 	}
 	
+	public function getDatosReservationById(){
+		if($this->input->is_ajax_request()) {
+			$id = $_POST['idReservation'];
+			$datos =[
+				"reservation"=> $this->reservation_db->getReservations(null,$id),
+				"peoples" => $this->reservation_db->getPeopleReservation($id),
+				"unities" => $this->reservation_db->getUnitiesReservation($id),
+				"terminosVenta" => $this->reservation_db->getTerminosVentaReservation($id),
+				"terminosFinanciamiento" => $this->reservation_db->getTerminosFinanciamiento($id)
+			];
+			echo json_encode($datos);
+		}
+	}
+	
+	public function getAccountsById(){
+		if($this->input->is_ajax_request()) {
+			$id = $_POST['idReservation'];
+			$typeInfo = $_POST['typeInfo'];
+			$typeAcc = $_POST['typeAcc'];
+			$datos = array();
+			if($typeInfo == "account"){
+				$acc = $this->reservation_db->getAccByRes( $id );
+				$datos['acc'] = $acc;
+				$typeTr = array( 'reservation', 'frontDesk' );
+				foreach($typeTr as $tyTr){
+					$data = $this->reservation_db->getAccountsById( $id, $typeInfo, $tyTr);
+					foreach($data as $item){
+						$CurDate = strtotime(date("Y-m-d H:i:00",time()));
+						$dueDate = strtotime($item->Due_Date);
+						$item->Overdue_Amount = 0;
+						if( $dueDate <= $CurDate  ){
+							if( $item->Sign_transaction == 1 || $item->Sign_transaction == "1" ){
+								$item->Overdue_Amount = $item->AbsAmount;
+							}
+						}
+					}
+					$datos[$tyTr] = $data;
+				}
+				
+			}else{
+				$tyTr = $_POST['typeAcc'];
+				$data = $this->reservation_db->getAccountsById( $id, $typeInfo, $tyTr);
+				foreach($data as $item){
+					$item->inputAll = '<input type="checkbox" id="' . $item->ID . '" class="checkPayAcc" name="checkPayAcc[]" value="' . $item->AbsAmount . '" trxClass="' . $item->pkTrxClassid . '"  ><label for="checkFilter1">&nbsp;</label>';
+					unset($item->pkTrxClassid);
+				}
+				$datos['acc'] = $data;
+			}
+			echo json_encode($datos);
+		}
+	}
+	
+	public function getNotesReservation(){
+		if($this->input->is_ajax_request()) {
+			$ID = $_POST['idReservation'];
+			$notes = $this->reservation_db->selectNotes($ID);
+			echo json_encode($notes);
+		}
+	}
+	
+	public function selectWeeksReservation(){
+		if($this->input->is_ajax_request()) {
+			$id = $_POST['idreservation'];
+			$weeks = $this->reservation_db->selectWeeksReservation($id);
+			echo json_encode($weeks);
+		}
+	}
+	
+	public function modalgetAllNotes(){
+		if($this->input->is_ajax_request()) {
+			$idreservation = $_GET['id'];
+			$data['notes'] = $this->reservation_db->selectNotes($idreservation);
+			$this->load->view('contracts/dialogAllNotes', $data);
+		}
+	}
+	
+	public function getTypesFlags(){
+		if($this->input->is_ajax_request()){
+			$flags = $this->reservation_db->selecTypetFlags();
+			echo json_encode($flags);
+		}
+	}
+	
+	public function getFlagsContract(){
+		if($this->input->is_ajax_request()) {
+			$ID = $_POST['idReservation'];
+			$notes = $this->reservation_db->selectFlags($ID);
+			echo json_encode($notes);
+		}
+	}
+	
+	public function getFilesReservation(){
+		if($this->input->is_ajax_request()) {
+			$file = $this->reservation_db->getFilesReservation($_POST['idRes']);
+			echo json_encode($file);
+		}
+	}
+	
+	public function modalAddFileReservation(){
+		if($this->input->is_ajax_request()) {
+			//$data['notesType'] = $this->reservation_db->selectTypeNotas();
+			$this->load->view('contracts/dialogUploadFile');
+		}
+	}
+	
 	/*****************************************/
 	/**************** Vistas *****************/
 	/*****************************************/
@@ -336,12 +610,18 @@ class Reservation extends CI_Controller {
 	
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('reservations/reservationDialogEdit.php');
+			$id = $_GET['id'];
+			//$data['idTour'] = $this->reservation_db->selectIdTour($id);
+			$data['contract']= $this->reservation_db->getReservations(null,$id);
+			$data['flags'] = $this->reservation_db->selectFlags($id);
+			$this->load->view('reservations/reservationDialogEdit', $data);
 		}
 	}
 	
 	public function modalFinanciamiento(){
 		if($this->input->is_ajax_request()) {
+			$idReservation = $_POST['idReservation'];
+			$data['precio'] = $this->reservation_db->selectPriceFin($idReservation);
 			$data['factores'] = $this->reservation_db->selectFactors();
 			$this->load->view('reservations/reservationDialogFinanciamiento', $data);
 		}
@@ -416,6 +696,37 @@ class Reservation extends CI_Controller {
 		}else{
 			return false;
 		}
+	}
+	
+	private function uploadFile($files, $route){
+		//$route = "http://pmsweb.307ti.com/assets/img/files/";
+		
+		foreach ($files as $key) {
+    		if($key['error'] == UPLOAD_ERR_OK ){//Verificamos si se subio correctamente
+      			$name = $key['name'];//Obtenemos el nombre del archivo
+      			$temporal = $key['tmp_name']; //Obtenemos el nombre del archivo temporal
+      			$size= ($key['size'] / 1000)."Kb"; //Obtenemos el tamaño en KB
+				$tipo = $key['type']; //obtenemos el tipo de imagen
+				
+				$fecha = new DateTime();
+				
+				$nombreTimeStamp = "fileContact_" . $fecha->getTimestamp();
+				
+				$extension=explode(".",$name); 
+				$extension=$extension[count($extension)-1]; 
+        		$nombreTimeStamp = $nombreTimeStamp . "." . $extension;
+				
+				if(move_uploaded_file($temporal, $route . $nombreTimeStamp)){
+					return $nombreTimeStamp;
+				}else{
+					return false;
+				}
+				
+    		}else{
+				return false;
+    		}
+		}
+		return false;
 	}
 
 }

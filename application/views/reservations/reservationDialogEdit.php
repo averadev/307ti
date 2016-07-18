@@ -94,7 +94,7 @@
 				<div class="containerContract">
 					<div class="row">
 						<div class="small-12 columns">
-							<a id="btnAddPeople" class="button tiny"><i class="fa fa-user-plus">Refinancing contract</i></a>
+							<a id="btnRefinancingResevation" class="button tiny"><i class="fa fa-user-plus">Refinancing contract</i></a>
 						</div>
 						<table id="peopleContract" width="100%">
 							<thead>
@@ -238,13 +238,10 @@
 		<div class="tabsModal">
 			<ul class="tabs" id="tabsContratsAccounts"  data-tabs>
 				<li class="tabs-title active" attr-screen="tab-CASales" attr-accType="1" >
-					<a>Sales</a>
+					<a>Reservation</a>
 				</li>
-				<li class="tabs-title" attr-screen="tab-CAMaintenance" attr-accType="3">
-					<a>Maintenance</a>
-				</li>
-				<li class="tabs-title" attr-screen="tab-CALoan" attr-accType="2">
-					<a>Loan</a>
+				<li class="tabs-title" attr-screen="tab-CALoan" attr-accType="3">
+					<a>Front Desk</a>
 				</li>
 			</ul>
 		</div>
@@ -416,11 +413,11 @@
 				</div>
 			</div>
 			<div class="small-12 large-12 columns" style="padding-top:5px;">
-				<a id="btNewTransAcc" attr_type="newTransAcc" class="btn btn-primary btn-Search">
+				<a id="btNewTransAccRes" attr_type="newTransAcc" class="btn btn-primary btn-Search">
 					<div class="label">New Transaction</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
-				<a id="btAddPayAcc" attr_type="addPayAcc" class="btn btn-primary spanSelect">
+				<a id="btAddPayAccRes" attr_type="addPayAcc" class="btn btn-primary spanSelect">
 					<div class="label">Add Payment</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
@@ -454,7 +451,7 @@
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btnNewSeller" class="button tiny"><i class="fa fa-user-plus fa-lg">New seller</i></a>
+				<a id="btnNewSellerRes" class="button tiny"><i class="fa fa-user-plus fa-lg">New seller</i></a>
 				<a id="btnRemoveSeller" class="button tiny"><i class="fa fa-user-times fa-lg">Remove Sale People</i></a>
 			</div>
 		</form>
@@ -486,7 +483,7 @@
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btnNewProvision" class="button tiny"><i class="fa fa-plus-circle fa-lg">New Provision</i></a>
+				<a id="btnNewProvisionRes" class="button tiny"><i class="fa fa-plus-circle fa-lg">New Provision</i></a>
 			</div>
 		</form>
 	</div>
@@ -510,7 +507,7 @@
 									<th></th>
 								</tr>
 							</thead>
-							<tbody id="tableCOccupationSelectedbody"></tbody>
+							<tbody id="tableCOccupationSelectedbodyRes"></tbody>
 						</table>
 					</div>
 				</div>
@@ -565,14 +562,14 @@
 									
 								</tr>
 							</thead>
-							<tbody id="tableCNotesSelectedBody"></tbody>
+							<tbody id="tableCNotesSelectedBodyRes"></tbody>
 						</table>
 					</div>
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btnNewNote" class="button tiny"><i class="fa fa-plus-circle fa-lg">New Note</i></a>
-				<a id="btnGetAllNotes" class="button tiny"><i class="fa fa-sticky-note-o fa-lg">See all notes</i></a>
+				<a id="btnNewNoteRes" class="button tiny"><i class="fa fa-plus-circle fa-lg">New Note</i></a>
+				<a id="btnGetAllNotesRes" class="button tiny"><i class="fa fa-sticky-note-o fa-lg">See all notes</i></a>
 			</div>
 		</form>
 	</div>
@@ -583,7 +580,7 @@
 				<div class="containerContract">
 					<div class="row">
 						<div class="small-12 medium-6 large-6 columns">
-							<table id="tableFlagsList" width="100%" style="min-height:250px;">
+							<table id="tableFlagsListRes" width="100%" style="min-height:250px;">
 								<thead>
 									<tr class="trColspan" >
 										<th colspan="3" class="thColspan" >List of flags</th>
@@ -594,7 +591,7 @@
 										<th class="cellGeneral">Descripción</th>
 									</tr>
 								</thead>
-								<tbody id="tableFlagsListBody"></tbody>
+								<tbody id="tableFlagsListBodyRes"></tbody>
 							</table>
 						</div>
 						<div class="small-12 medium-6 large-6 columns">
@@ -609,14 +606,14 @@
 										<th class="cellGeneral">Descripción</th>
 									</tr>
 								</thead>
-								<tbody id="flagsAsignedBody"></tbody>
+								<tbody id="flagsAsignedBodyRes"></tbody>
 							</table>
 						</div>
 					</div>
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btnSAveFlags" class="button tiny"><i class="fa fa-save fa-lg">Save</i></a>
+				<a id="btnSAveFlagsRes" class="button tiny"><i class="fa fa-save fa-lg">Save</i></a>
 				<a id="btnNextStatus" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>Next Status</a>
 <!-- 				<i class="fa fa-refresh fa-spin fa-3x fa-fw"></i> -->
 			</div>
@@ -626,9 +623,9 @@
 	<div id="tab-CFiles" class="large-12 columns tab-modal" style="display:none;">
 		<form  data-abide='ajax'>
 			<fieldset class="fieldset">
-				<div class="containerContract" id="contentTableFile">
+				<div class="containerContract" id="contentTableFileRes">
 					<div class="row">
-						<table id="tableCFilesSelected" width="100%" >
+						<table id="tableCFilesSelectedRes" width="100%" >
 							<thead>
 								<tr class="trColspan" >
 									<th colspan="8" class="thColspan" >Notes</th>
@@ -648,7 +645,7 @@
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btnNewFile" class="btn btn-primary btn-Search">
+				<a id="btnNewFileRes" class="btn btn-primary btn-Search">
 					<div class="label">New file</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
