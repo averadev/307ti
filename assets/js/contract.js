@@ -2998,10 +2998,10 @@ function drawTableIdOcupacion(data, table){
 
 function pruebaAltaContrato(){
 	$("#legalName").val(makeRandonNames(13));
-	$("#selectLanguage").val(getRandomInt(1,2))
+	$("#selectLanguage").val(getRandomInt(2,2));
 	$("#TourID").val(0);
 	getPeopleRandom();
-
+	ajaxUnidadesR();
 }
 
 function makeRandonNames(num){
@@ -3054,8 +3054,18 @@ function recivePeople(datos){
 	var numeroUnidades = getRandomInt(1,6);
 	unidades = [];
 	for(var i = 0; i < numeroUnidades; i++){
-		unidades.push(datos[getRandomInt(1, datos.length)]);
+		var posicion = getRandomInt(1, datos.length);
+		var unidad = {};
+		unidad.id = datos[posicion].ID;
+		unidad.code = datos[posicion].UnitCode;
+		unidad.description = datos[posicion].FloorPlanDesc;
+		unidad.price = datos[posicion].Price;
+		unidad.week = datos[posicion].Week;
+		unidad.season = datos[posicion].SeasonDesc;
+		unidad.costoClosing = datos[posicion].ClosingCost;
+		unidades.push(unidad);
 	}
+
 	console.table(unidades);
 	tablUnidadades(unidades, frequency, primero, ultimo);	
 	setValueUnitPrice();
