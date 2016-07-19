@@ -183,7 +183,6 @@ private function insertFinanciamiento($idContrato){
 
 public function updateFinanciamiento(){
 	if($this->input->is_ajax_request()) {
-		//var_dump($_POST);
 		$financiamiento = [
 			"fkFactorId"	=> $_POST['factor'],
 			"MonthlyPmtAmt" => $_POST['pagoMensual']
@@ -406,10 +405,10 @@ public function nextStatusContract(){
 		$condicion = "pkResId = " . $id;
 		$afectados = $this->contract_db->updateReturnId('tblRes', $Res, $condicion);
 		if ($afectados>0) {
-			$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados, "status" => $this->getPropertyStatus($IdStatus)];
+			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $this->getPropertyStatus($IdStatus)];
 			echo json_encode($mensaje);
 		}else{
-			$mensaje = ["mesaje"=>"ocurrio un error", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
+			$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
 			echo json_encode($mensaje);
 		}
 	}

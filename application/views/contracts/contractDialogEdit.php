@@ -219,7 +219,7 @@
 								<td>$000,000.00</td>
 							</tr>
 							<tr>
-								<td>% Hitch</td>
+								<td>% Discount</td>
 								<td id="cfEnganche">$00.00</td>
 								<td>Total funding</td>
 								<td>$000,000.00</td>

@@ -555,8 +555,9 @@ function createNewContract(){
 					if (modalFin!=null) {
 						modalFin.dialog( "destroy" );
 					}
-					modalFin = modalFinanciamiento();
-					modalFin.dialog( "open" );
+					// modalFin = modalFinanciamiento();
+					// modalFin.dialog( "open" );
+					showModalFin(data['idContrato']);
 					$('#dialog-Weeks').empty();
 					$('#tablePeopleSelected tbody').empty();
 					$('#tableUnidadesSelected tbody').empty();
@@ -1797,38 +1798,39 @@ function setTableAccount(items){
 }
 
 function drawTerminosVenta(data){
-	var price = parseFloat(data.ListPrice).toFixed(2);
+	var price = parseFloat(data.ListPrice);
 	var semanas = data.WeeksNumber;
-	var packReference = parseFloat(data.PackPrice).toFixed(2);
-	var salePrice = parseFloat(data.NetSalePrice).toFixed(2);
-	var enganche = parseFloat(data.Deposit).toFixed(2);
-	var transferido = parseFloat(data.TransferAmt).toFixed(2);
-	var costoContract = parseFloat(data.ClosingFeeAmt).toFixed(2);
-	var packAmount = parseFloat(data.PackPrice).toFixed(2);
-	var balanceFinal = parseFloat(data.BalanceActual).toFixed(2);
+	var packReference = parseFloat(data.PackPrice);
+	var salePrice = parseFloat(data.NetSalePrice);
+	var enganche = parseFloat(data.Deposit);
+	var transferido = parseFloat(data.TransferAmt);
+	var costoContract = parseFloat(data.ClosingFeeAmt);
+	var packAmount = parseFloat(data.PackPrice);
+	var balanceFinal = parseFloat(data.BalanceActual);
 
 
-	$("#cventaPrice").text(price);
+	$("#cventaPrice").text(price.toFixed(2));
 	$("#cventaWeeks").text(semanas);
-	$("#cventaPackR").text(packReference);
-	$("#cventaSalePrice").text(salePrice);
-	$("#cventaHitch").text(enganche);
-	$("#cventaTransferA").text(transferido);
-	$("#cventaCostContract").text(costoContract);
-	$("#cventapackAmount").text(packAmount);
-	$("#cventaFinanced").text(balanceFinal);
+	$("#cventaPackR").text(packReference.toFixed(2));
+	$("#cventaSalePrice").text(salePrice.toFixed(2));
+	$("#cventaHitch").text(enganche.toFixed(2));
+	$("#cventaTransferA").text(transferido.toFixed(2));
+	$("#cventaCostContract").text(costoContract.toFixed(2));
+	$("#cventapackAmount").text(packAmount.toFixed(2));
+	$("#cventaFinanced").text(balanceFinal.toFixed(2));
 	$("#cventaAmountTransfer").text(enganche + transferido);
 }
 
 function drawTerminoFinanciamiento(data){
+	console.table(data);
 	var balanceFinal  = data.FinanceBalance;
 	var pagoMensual = data.MonthlyPmtAmt;
 	var porEnganche = data.porcentaje;
 	//var balanceFinal = data.TotalFinanceAmt;
 
-	$("#cfbalanceFinanced").text(balanceFinal);
-	$("#cfPagoMensual").text(pagoMensual);
-	$("#cfEnganche").text(porEnganche);
+	$("#cfbalanceFinanced").text(balanceFinal.toFixed(2));
+	$("#cfPagoMensual").text(pagoMensual.toFixed(2));
+	$("#cfEnganche").text(porEnganche.toFixed(2));
 
 }
 
@@ -2003,7 +2005,7 @@ function initEventosFinanciamiento(){
 		$("#pagoMF").text(pagoMensual);
 		$("#CargoCF").text("8.95");
 		var totalMensual = parseFloat(pagoMensual) + parseFloat(8.95);
-		$("#totalPagarF").text(totalMensual);
+		$("#totalPagarF").text(totalMensual.toFixed(2));
 
 	});
 	$('#terminosFinanciamientoF').on('change', function() {

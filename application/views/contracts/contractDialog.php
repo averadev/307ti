@@ -90,7 +90,7 @@
             </div>
             <!-- Unidades -->
             <div class="fieldset large-12 columns">
-                <legend class="btnAddressData">Unities</legend>
+                <legend class="btnAddressData">Units</legend>
                 <div class="containerPeople">
                     <div class="row">
                         <div class="small-12 columns">
