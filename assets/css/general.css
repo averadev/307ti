@@ -1698,3 +1698,6 @@ input.general.error, .caja.error{
 .oculto{
 	display: none;
 }
+.mayuscula{
+	text-transform:uppercase
+}

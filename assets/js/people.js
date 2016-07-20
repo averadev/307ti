@@ -80,7 +80,7 @@ $(document).ready(function(){
 	
 	//$(document).foundation();
 	//maxHeight
-	maxHeight = screen.height * .25;
+	maxHeight = screen.height * .10;
 	maxHeight = screen.height - maxHeight;
 	
 	createModalDialog();
@@ -119,7 +119,7 @@ function createModalDialog(){
 	dialogUser = $( "#dialog-User" ).dialog({
 		autoOpen: false,
 		height: maxHeight,
-		width: "50%",
+		width: "75%",
 		modal: true,
 		dialogClass: 'dialogModal',
 		buttons: [

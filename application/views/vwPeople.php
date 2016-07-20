@@ -194,7 +194,7 @@
 						<label id="alertName" for="right-label" class="text-left">Name</label>
 					</div>
 					<div class="small-12 large-9 columns">
-						<input type="text" id="textName" class="round general">
+						<input type="text" id="textName" class="round general mayuscula">
 					</div>
 				</div>
 				<!-- segundo nombre-->
@@ -203,7 +203,7 @@
 						<label id="alertMiddleName" for="right-label" class="text-left">Middle name</label>
 					</div>
 					<div class="small-12 large-9 columns">
-						<input type="text" id="textMiddleName" class="round general">
+						<input type="text" id="textMiddleName" class="round general mayuscula">
 					</div>
 				</div>
 				<!-- apellido paterno-->
@@ -212,7 +212,7 @@
 						<label id="alertLastName" for="right-label" class="text-left">Last name</label>
 					</div>
 					<div class="small-12 large-9 columns">
-						<input type="text" id="textLastName" class="round general">
+						<input type="text" id="textLastName" class="round general mayuscula">
 					</div>
 				</div>
 				<!-- apellido materno-->
@@ -221,7 +221,7 @@
 						<label for="right-label" class="text-left">Second last name</label>
 					</div>
 					<div class="small-12 large-9 columns">
-						<input type="text" id="TextSecondLastName" class="round general">
+						<input type="text" id="TextSecondLastName" class="round general mayuscula">
 					</div>
 				</div>
 				<!-- genero -->

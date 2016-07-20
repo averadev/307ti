@@ -52,7 +52,10 @@
                 <div href="#" class="btn-menu pr-color"></div>
             </div>
             <div class="menu-opt logo"><img src="<?php echo base_url().IMG; ?>logo/logo.jpg"/>
-            	<span class="headerTitle">THE TOWERS AT MULLET BAY</span>
+            	
+            </div>
+            <div class="menu-opt">
+                <span class="menu-opt headerTitle">THE TOWERS AT MULLET BAY</span>
             </div>
 			<div class="menu-config">
 				<img src="<?php echo base_url().IMG; ?>common/5.png" />
@@ -86,10 +89,10 @@
 					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/4.png"/></span>
 					<div class="label-menu-sel">Contract</div>
 				</div>
-				<div class="menu-sel" attr-screen="tours">
+<!-- 				<div class="menu-sel" attr-screen="tours">
 					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/4.png"/></span>
 					<div class="label-menu-sel">Tour</div>
-				</div>
+				</div> -->
                 <div class="menu-sel" attr-screen="inventory">
 					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/2.png"/></span>
 					<div class="label-menu-sel">Inventary</div>

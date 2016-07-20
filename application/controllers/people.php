@@ -73,11 +73,11 @@ class People extends CI_Controller {
 				
 				$insert = array(
 					'fkPeopleTypeId'	=> 18,
-					'Name'				=> $_POST['name'],
-					'SecondName'		=> $_POST['SecondName'],
-					'LName'				=> $_POST['lName'],
-					'LName2'			=> $_POST['lName2'],
-					'fkGenderId'			=> $_POST['gender'],
+					'Name'				=> strtoupper($_POST['name']),
+					'SecondName'		=> strtoupper($_POST['SecondName']),
+					'LName'				=> strtoupper($_POST['lName']),
+					'LName2'			=> strtoupper($_POST['lName2']),
+					'fkGenderId'		=> $_POST['gender'],
 					'BirthDayMonth'		=> $BirthDayMonth,
 					'BirthDayDay'		=> $BirthDayDay,
 					'BirthDayYear'		=> $BirthDayYear,

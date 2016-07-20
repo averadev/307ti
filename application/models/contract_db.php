@@ -609,8 +609,9 @@ class Contract_db extends CI_Model {
         }
     }
     public function selectGifts(){
-        $this->db->select("pkGiftTypeId, GiftTypeDesc");
-        $this->db->from('tblGiftType');
+        $this->db->select("G.GiftCode, G.GiftDesc ,RG.Amount");
+        $this->db->from('tblResGift RG');
+        $this->join("tblGift G","RG.pkResGiftId = G.pkGiftId", "inner");
         $this->db->where('ynActive', 1);
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
@@ -620,6 +621,17 @@ class Contract_db extends CI_Model {
     public function selectTypeGeneral($campos, $tabla){
         $this->db->select($campos);
         $this->db->from($tabla);
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
+
+    public function selectIdflags($id){
+        $this->db->select('fkFlagId');
+        $this->db->from('tblResflag');
+        $this->db->where('fkResId', $id);
         $this->db->where('ynActive', 1);
         $query = $this->db->get();
         if($query->num_rows() > 0 ){

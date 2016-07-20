@@ -24,7 +24,24 @@ class Contract extends CI_Controller {
 	}
 
 	public function pruebasContract(){
-		$this->load->view('contracts/contractDialog');
+		$asignadas = $this->contract_db->selectIdflags(775);
+		//var_dump($asignadas);
+		$a = [];
+		for ($i=0; $i < sizeof($asignadas); $i++) { 
+			 array_push($a, $asignadas[$i]->fkFlagId);
+		}
+		var_dump($a);
+		//echo $asignadas[0]->fkFlagId;
+		$banderas = $_POST['flags'];
+		for ($i=0; $i < sizeof($banderas); $i++) { 
+			if (!$this->comprubaArray($banderas[$i], $a)) {
+				echo $banderas[$i];
+			}else{
+				echo "ya existe";
+			}
+		}
+		
+		//$this->load->view('contracts/contractDialog');
 		// $idContrato = $_POST['idContrato'];
 		// $Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
 		// echo $Years[0]->FirstOccYear;
@@ -367,19 +384,50 @@ public function createNote(){
 public function createFlags(){
 	if($this->input->is_ajax_request()) {
 		$flags = $_POST["flags"];
+		$ID = $_POST['idContrato'];
+		$asignadas = $this->getArrayBanderas($ID);
 		for ($i=0; $i < sizeof($flags); $i++) { 
 			$flag = [
-				"fkResId"		=> $_POST['idContrato'],
+				"fkResId"		=> $ID,
 				"fkFlagId"		=> $flags[$i],
 				"ynActive"		=> 1,
 				"CrBy"			=> $this->nativesessions->get('id'),
 				"CrDt"			=> $this->getToday()
 			];
-			$this->contract_db->insertReturnId('tblResFlag', $flag);
+			if (!$this->comprubaArray($flags[$i], $asignadas)) {
+				$this->contract_db->insertReturnId('tblResFlag', $flag);
+			}
+			
 		}
-		
-		echo json_encode(["mensaje"=> "Se inserto Correctamente"]);
+		$respuesta = [
+			"mensaje"=> "Se inserto Correctamente",
+			"banderas" => $this->contract_db->selectFlags($ID)
+		];
+		echo json_encode($respuesta);
 	}
+}
+
+private function getArrayBanderas($ID){
+	$asignadas = $this->contract_db->selectIdflags($ID);
+	$flagsAsignadas = [];
+	for ($i=0; $i < sizeof($asignadas); $i++) { 
+		array_push($flagsAsignadas, $asignadas[$i]->fkFlagId);
+	}
+	return $flagsAsignadas;
+}
+
+private function comprubaArray($valor, $array){
+	if ($array) {
+		if (in_array($valor, $array)) {
+	    	return true;
+		}
+		else {
+		    return false;
+		}
+	}else{
+		return false;
+	}
+	
 }
 
 public function nextStatusContract(){
@@ -494,8 +542,8 @@ public function getNotesContract(){
 public function getFlagsContract(){
 	if($this->input->is_ajax_request()) {
 		$ID = $_POST['idContrato'];
-		$notes = $this->contract_db->selectFlags($ID);
-		echo json_encode($notes);
+		$flags = $this->contract_db->selectFlags($ID);
+		echo json_encode($flags);
 	}
 }
 //////////////////////////////////////////////////////

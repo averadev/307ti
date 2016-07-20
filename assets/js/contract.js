@@ -208,7 +208,7 @@ function showModalContract(){
 	var modalPropiedades = {
 		div: "dialog-Contract",
 		altura: maxHeight,
-		width: "50%",
+		width: "75%",
 		onOpen: ajaxDATA,
 		onSave: createNewContract,
 		botones :[{
@@ -259,7 +259,7 @@ function addTourContract(unidades){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "70%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -301,7 +301,7 @@ function addUnidadDialog() {
 		},
 		autoOpen: false,
 		height: maxHeight,
-		width: "50%",
+		width: "75%",
 		modal: true,
 		buttons: [{
 			text: "Cancel",
@@ -342,7 +342,7 @@ function addPeopleDialog() {
 		},
 		autoOpen: false,
 		height: maxHeight,
-		width: "50%",
+		width: "75%",
 		modal: true,
 		buttons: [{
 			text: "Cancel",
@@ -942,7 +942,7 @@ function modalDepositDownpayment(){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -987,7 +987,7 @@ function modalScheduledPayments() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -1031,7 +1031,7 @@ function modalDiscountAmount(){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -1159,16 +1159,9 @@ function modalEditContract(id){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [
-     // 	{
-	    //    	text: "Cancel",
-	    //    	"class": 'dialogModalButtonCancel',
-	    //    	click: function() {
-	    //      	$(this).dialog('close');
-	    //    }
-	   	// },
 	   	{
        		text: "Close",
        		"class": 'dialogModalButtonAccept',
@@ -1899,7 +1892,7 @@ function modalFinanciamiento() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -1942,7 +1935,7 @@ function showModalFin(id){
 	var modalPropiedades = {
 		div: "dialog-Financiamiento",
 		altura: maxHeight,
-		width: "50%",
+		width: "75%",
 		onOpen: ajaxDATA,
 		onSave: createNewContract,
 		botones :[{
@@ -2054,7 +2047,7 @@ function modalSellers() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -2321,7 +2314,7 @@ function modalGetAllNotes() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [{
 	       	text: "Close",
@@ -2430,6 +2423,7 @@ function SaveFlagsContract(){
 	    dataType:'json',
 	    success: function(data){
 	    	alertify.success(data['mensaje']);
+	    	drawTableId(data['banderas'],"flagsAsignedBody");
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -2506,7 +2500,7 @@ function opcionAccount(attrType){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -2853,7 +2847,7 @@ function showModalContractXD(id){
 	var modalPropiedades = {
 		div: "dialog-Contract",
 		altura: maxHeight,
-		width: "50%",
+		width: "75%",
 		onOpen: ajaxDATA,
 		onSave: createNewContract,
 		botones :[{
@@ -3123,7 +3117,16 @@ function getPeopleRandom(){
 }
 
 
-
+// var ajaxData =  {
+// 		url: "contract/pruebasContract",
+// 		tipo: "json",
+// 		datos: {
+// 			'flags': ["2", "3", "4"]
+// 		},
+// 		funcionExito : console.table,
+// 		funcionError: mensajeAlertify
+// 	};
+// 	ajaxDATA(ajaxData);
 
 /*
 legalName : $("#legalName").val().trim(),
