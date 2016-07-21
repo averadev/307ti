@@ -24,29 +24,15 @@ class Contract extends CI_Controller {
 	}
 
 	public function pruebasContract(){
-		$asignadas = $this->contract_db->selectIdflags(775);
-		//var_dump($asignadas);
-		$a = [];
-		for ($i=0; $i < sizeof($asignadas); $i++) { 
-			 array_push($a, $asignadas[$i]->fkFlagId);
-		}
-		var_dump($a);
-		//echo $asignadas[0]->fkFlagId;
-		$banderas = $_POST['flags'];
-		for ($i=0; $i < sizeof($banderas); $i++) { 
-			if (!$this->comprubaArray($banderas[$i], $a)) {
-				echo $banderas[$i];
-			}else{
-				echo "ya existe";
-			}
+		$variable = $_POST['gifts'];
+		for ($i=0; $i < sizeof($variable); $i++) { 
+			$GIFT = [
+				"fkResId" => 784,
+				"Amount" => $variable[$i]['amount']
+			];
+			var_dump($GIFT);
 		}
 		
-		//$this->load->view('contracts/contractDialog');
-		// $idContrato = $_POST['idContrato'];
-		// $Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
-		// echo $Years[0]->FirstOccYear;
-		// echo "<br>";
-		// echo $Years[0]->LastOccYear;
 	}
 
 	public function saveContract(){
@@ -58,6 +44,7 @@ class Contract extends CI_Controller {
 			$this->insertPeoples($idContrato);
 			$this->createUnidades($idContrato);
 			$this->createDownPayment($idContrato);
+			$this->createGifts($idContrato);
 			$balanceFinal = $this->insertFinanciamiento($idContrato);
 			$this->createSemanaOcupacion($idContrato);
 			echo  json_encode([
@@ -248,6 +235,13 @@ public function createSemanaOcupacion($idContrato){
 	}
 	//echo json_encode(["mensaje" => "Se ingresaron Correctamente"]);
 	//var_dump($Years);
+}
+
+private function createGifts(){
+	//$this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
+	foreach ($variable as $key => $value) {
+		# code...
+	}
 }
 
 private function createDownPayment($idContrato){

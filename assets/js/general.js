@@ -876,7 +876,24 @@ function modalGeneral2(propiedades, datosAjax) {
 	});
 	return dialogo;
 }
-
+function modalGeneral3(propiedades, datosAjax) {
+	showLoading("#"+propiedades.div,true);
+	dialogo = $("#"+propiedades.div).dialog ({
+  		open : function (event){
+  			propiedades.onOpen(datosAjax);
+  		},  			
+		autoOpen: false,
+     	height: propiedades.altura,
+     	width: propiedades.width,
+     	modal: true,
+     	buttons: propiedades.botones,
+     close: function() {
+    	$(this).empty();
+    	propiedades.cerrar();
+     }
+	});
+	return dialogo;
+}
 function modalXgeneral(){
 
 	var ajaxData =  {

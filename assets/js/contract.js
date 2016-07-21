@@ -20,13 +20,6 @@ $(document).on( 'click', '#btnRefinancingContract', function () {
 	var id = getValueFromTableSelected("contracts", 1);
 	showModalFin(id);
 });
-
-// $(document).on( 'click', '#btnSpecialDiscount', function () {
-// 	//showModalSpecialDiscount();
-// 	//peopleDialog = addPeopleDialog();
-// 	//peopleDialog.dialog( "open" );
-// });
-
 $(document).on( 'click', '#btnAddPeople', function () {
 	peopleDialog = addPeopleDialog();
 	peopleDialog.dialog( "open" );
@@ -128,21 +121,27 @@ $(document).on( 'click', '#btnAddPeople', function () {
 	$("#busquedaAvanazada").click(function(){
 		$("#avanzada").slideToggle("slow");
 	});
-
+	//Enganche
 	$(document).on( 'change', '#downpayment', function () {
 		$("#montoTotal").val($(this).val());
 		var monto = $("#montoTotal").val();
 		cambiarCantidadP(monto);
 	});
-	$(document).on( 'change', '#descuentoEspecial', function () {
-		updateBalanceFinal();
-		// $("#montoTotal").val($(this).val());
-		// var monto = $("#montoTotal").val();
-		// cambiarCantidadP(monto);
-	});
-	$(document).on( 'change', "input[name='engancheR']:checked", function () {
+	$(document).on('change', "input[name='engancheR']:checked", function () {
 		var monto = $("#downpayment").val();
 		cambiarCantidadP(monto);
+	});
+	//Descuento Especial
+	// $(document).on('change paste keyup', '#montoTotalDE', function () {
+	// 	updateBalanceFinal();
+	// });
+	$(document).on( 'change', '#descuentoEspecial', function () {
+		var monto = $("#descuentoEspecial").val();
+		cambiarCantidadDE(monto);
+	});
+	$(document).on( 'change', "input[name='especialDiscount']:checked", function () {
+		var monto = $("#descuentoEspecial").val();
+		cambiarCantidadDE(monto);
 	});
 	$(document).on('change', "#precioVenta", function () {
 		updateBalanceFinal();
@@ -168,7 +167,7 @@ function updateBalanceFinal(){
 	var cashDiscount = getNumberTextInput("totalDiscountPacks");
 	var transferAmount = getNumberTextInput("amountTransfer");
 	var total = precioVenta + packReference + closingCost;
-	var descuentoEspecial = getNumberTextInput("descuentoEspecial");
+	var descuentoEspecial = getNumberTextInput("montoTotalDE");
 	var descuento = downpayment+cashDiscount+transferAmount+descuentoEspecial;
 	var balanceFinal = $("#financeBalance").val(total-descuento);
 }
@@ -192,6 +191,18 @@ function cambiarCantidadP(monto){
 	}
 	updateBalanceFinal();
 }
+function cambiarCantidadDE(monto){
+	console.log(monto);
+	var seleccionado = $("input[name='especialDiscount']:checked").val();
+	var precioVenta = $("#precioVenta").val();
+	if (seleccionado == 'porcentaje') {
+		var porcentaje = precioVenta * (monto/100);
+		$("#montoTotalDE").val(porcentaje);
+	}else{
+		$("#montoTotalDE").val(monto);
+	}
+	updateBalanceFinal();
+}
 function createContractSelect(datos){
 	$("#dialog-Contract").html(datos);
 	ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
@@ -211,6 +222,7 @@ function showModalContract(){
 		width: "75%",
 		onOpen: ajaxDATA,
 		onSave: createNewContract,
+		cerrar : cerrarContract,
 		botones :[{
 			text: "Close",
 	       	"class": 'dialogModalButtonCancel',
@@ -236,13 +248,17 @@ function showModalContract(){
 				}
 			}
 		}]
-	};
+		};
 
 	if (addContract!=null) {
 		addContract.dialog( "destroy" );
 	}
-	addContract = modalGeneral2(modalPropiedades, ajaxData);
+	addContract = modalGeneral3(modalPropiedades, ajaxData);
 	addContract.dialog( "open" );
+}
+
+function cerrarContract(){
+	$('#dialog-DiscountAmount').empty();
 }
 function addTourContract(unidades){
 	var div = '#dialog-tourID';
@@ -402,7 +418,7 @@ function getContratos(){
 		success: function(data){
 			showLoading('#contracts',false);
 			if(data){
-				alertify.success("Found "+ data.length);
+				alertify.success("Found "+ data.length + " Contracts");
 				drawTable3(data, "details", "contracts");
 			}else{
 				$('#contractstbody').empty();
@@ -3121,7 +3137,7 @@ function getPeopleRandom(){
 // 		url: "contract/pruebasContract",
 // 		tipo: "json",
 // 		datos: {
-// 			'flags': ["2", "3", "4"]
+// 			'gifts': [{amount:"500", id:"1"},{amount:"600", id:"2"}]
 // 		},
 // 		funcionExito : console.table,
 // 		funcionError: mensajeAlertify

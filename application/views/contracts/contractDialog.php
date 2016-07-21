@@ -60,7 +60,6 @@
                 <div class="containerPeople">
                     <div class="row">
                         <div class="small-12 columns">
-                            <!--<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>-->
 							<a id="btnAddPeople" class="btn btn-primary spanSelect">
 								<div class="label">Add</div>
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
@@ -68,13 +67,12 @@
                         </div>
                         <div class="small-12 columns">
                             <table id="tablePeopleSelected" width="100%">
-                                <thead>
+                                <thead class="colorCrema">
                                 <tr>
                                     <th class="cellEdit" >ID</th>
                                     <th class="cellGeneral">Name</th>
                                     <th class="cellGeneral">Last Name</th>
                                     <th class="cellGeneral" >Address</th>
-<!--                                     <th class="cellGeneral" >Main</th> -->
                                     <th class="cellGeneral" >Primary</th>
                                     <th class="cellGeneral" >Beneficiary</th>
                                     <th></th>
@@ -102,7 +100,7 @@
                         </div>
                         <div class="small-12 columns table-section2">
                             <table id="tableUnidadesSelected" width="100%">
-                                <thead>
+                                <thead class="colorCrema">
                                     <tr>
                                         <th class="cellEdit" >Id</th>
                                         <th class="cellGeneral">Description</th>
@@ -148,7 +146,7 @@
                 </div>
                 <div class="small-12 columns">
                     <table id="tableFinanciamiento" class="small-12 columns">
-                        <thead>
+                        <thead class="colorCrema">
                         <tr>
                             <th class="cellEdit" >Folio</th>
                             <th class="cellGeneral">Legal Name</th>
@@ -191,33 +189,23 @@
                 </div>
                 <!--Montos a Descontar-->
                 <div class="row">
-                    <div class="small-3 columns">
-                        <label id="" for="right-label" class="text-left">Special Discount</label>
+                    <div class="large-3 columns">
+                        <label>Special Discount</label>
                     </div>
-                    <div class="large-5 columns end">
-                        <input class="round general" id="descuentoEspecial" type="text" placeholder="$0.00">
+                    <div class="large-2 columns end">
+                        <input class="round general" id="descuentoEspecial" required type="text" placeholder="$0.00"/>
                     </div>
-<!--                     <div class="large-4 columns">
-                        <a id="btnSpecialDiscount" href="#" class="button postfix">Capture</a>
-                    </div> -->
-                </div>
-                <div class="row">
-                    <div class="small-12 columns">
-                        <table id="" class="large-12 columns">
-                            <thead>
-                                <tr>
-                                    <th class="cellGeneral">pack type</th>
-                                    <th class="cellGeneral">amount</th>
-                                    <th class="cellGeneral">Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody id="">
-                                <tr><td colspan="10" ></td></tr>
-                            </tbody>
-                        </table>
+                    <div class="large-4 columns end">
+                        <input type="radio" name="especialDiscount" value="porcentaje" id="porcentajeDE"><label for="porcentaje">Percentage</label>
+                        <input checked type="radio" name="especialDiscount" value="cantidad" id="cantidadDE"><label for="cantidad">Amount</label>
+                    </div>
+                    <div class="large-1 columns">
+                        <label>Amount</label>
+                    </div>
+                    <div class="large-2 columns end">
+                        <input id="montoTotalDE" class="round general" type="text" placeholder="amount applied" />
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="large-3 columns">
                         <label>Downpayment</label>
@@ -233,7 +221,7 @@
                         <label>Amount</label>
                     </div>
                     <div class="large-2 columns end">
-                        <input id="montoTotal" class="round general" type="text" placeholder="%" />
+                        <input id="montoTotal" class="round general" type="text" placeholder="amount applied" />
                     </div>
 				</div>
                 <div class="row">
@@ -273,12 +261,11 @@
                 </div>
                 <div class="row">
 					<div class="small-12 columns">
-<!-- 						<p>Extras</p> -->
 						<table id="tableDescuentos" class="large-12 columns">
-							<thead>
+							<thead class="colorCrema">
 								<tr>
-									<th class="cellGeneral">pack type</th>
-									<th class="cellGeneral">amount</th>
+									<th class="cellGeneral">Gift Type</th>
+									<th class="cellGeneral">Amount</th>
 									<th class="cellGeneral">Delete</th>
 								</tr>
 							</thead>
@@ -299,9 +286,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div data-abide-error class="alert callout" style="display: none;">
-                <p><i class="fi-alert"></i> please fill required fields (red).</p>
-            </div> -->
         </form>
     </div>
 </div>

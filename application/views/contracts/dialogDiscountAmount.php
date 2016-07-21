@@ -2,7 +2,7 @@
 <form>
   <div class="row">
     <div class="small-3 columns">
-      <label for="legalName" class="text-left">Pack type</label>
+      <label for="legalName" class="text-left">Gift Type</label>
     </div>
     <div class="small-9 columns">
 		<div class="caja">
@@ -23,8 +23,6 @@
       <label for="legalName" class="text-left"></label>
     </div>
     <div class="small-9 columns">
-    <!--<a id="btnAddmontoPack" href="#" class="button postfix">Add</a>
-     <a id="btnCleanmontoPack" href="#" class="button postfix">clean</a>-->
 	 <a id="btnAddmontoPack" class="btn btn-primary btn-Search">
 			<div class="label">Add</div>
 			<img src="<?php echo base_url().IMG; ?>common/more.png"/>
