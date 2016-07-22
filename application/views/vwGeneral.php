@@ -109,9 +109,9 @@
 					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/4.png"/></span>
 					<div class="label-menu-sel">Billing</div>
 				</div>
-				<div class="menu-sel" attr-screen="collections">
-					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/4.png"/></span>
-					<div class="label-menu-sel">Collections</div>
+				<div class="menu-sel" attr-screen="collection">
+					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/1.png"/></span>
+					<div class="label-menu-sel">Collection</div>
 				</div>
                 <div class="menu-fix">&nbsp;</div>
             </div>

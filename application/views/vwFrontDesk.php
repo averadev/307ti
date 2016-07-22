@@ -29,7 +29,7 @@
 								<option value="section5">Report</option>
 							</select>
 						</fieldset>
-</div>
+					</div>
 				</div>
 				<!--filter-->
 				<div class="row sectionFrontDesk section1" style="display:none;">
