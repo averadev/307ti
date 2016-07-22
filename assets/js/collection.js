@@ -41,7 +41,7 @@ function modalEditColletion(id){
 	dialogo = $("#dialog-Edit-colletion").dialog ({
   		open : function (event){
 			$(this).load("collection/modalEdit?id="+id , function(){
-				
+				getGeneralInfoColl(id);
 			});
 	    	/*$(this).load("reservation/modalEdit?id="+id , function(){
 	 			showLoading('#dialog-Edit-Reservation',false);
@@ -113,4 +113,65 @@ function getCollection(){
 function getColletionById(id){
 	var editColletionDialog = modalEditColletion(id);
 	editColletionDialog.dialog("open");
+}
+
+function getGeneralInfoColl(id){
+	$.ajax({
+		data:{
+			id: id
+		},
+   		type: "POST",
+       	url: "collection/getGeneralInfo",
+		dataType:'json',
+		success: function(data){
+			console.log(data)
+			if(data.people.length > 0){
+				var people = data.people[0];
+				$('#idPeopleColl p').html(people.pkPeopleId);
+				$('#namePeopleColl p').html(people.Name);
+				$('#lastNPeopleColl p').html(people.LName + people.LName2);
+				$('#genderPeopleColl p').html(people.GenderDesc);
+				$('#birthdatePeopleColl p').html(people.BirthDayMonth + "-" + people.BirthDayDay + "-" + people.BirthDayYear);
+				$('#anniversaryPeopleColl p').html(people.Anniversary);
+				$('#nationalityPeopleColl p').html(people.Nationality);
+				$('#qualificationPeopleColl p').html(people.Qualification);
+				$('#initialsPeopleColl p').html(people.Initials);
+				//address
+				$('#StreeteopleColl p').html(people.Street1);
+				$('#Street2PeopleColl p').html(people.Street2);
+				$('#ZipCodePeopleColl p').html(people.ZipCode);
+				$('#CityPeopleColl p').html(people.City);
+				$('#StatePeopleColl p').html(people.StateDesc);
+				$('#CountryPeopleColl p').html(people.CountryDesc);
+				var emailHtml = "";
+				for(i=0;i<data.email.length;i++){
+					var email = data.email[i];
+					emailHtml += '<div class="small-12 medium-6 large-6 columns"><label class="text-left">Email:';
+					emailHtml += '<p>' + email.EmailDesc + '</p></label></div>';
+					emailHtml += '<div class="small-12 medium-6 large-6 columns"><label class="text-left">Type email:';
+					emailHtml += '<p>' + email.EmailTypeDesc + '</p></label></div>';
+				}
+				if(emailHtml != ""){
+					$('#emailPeopleColl').html(emailHtml);
+				}
+				var phoneHtml = "";
+				for(i=0;i<data.phone.length;i++){
+					var phone = data.phone[i];
+					phoneHtml += '<div class="small-12 medium-6 large-6 columns"><label class="text-left">Phone:';
+					phoneHtml += '<p>' + phone.AreaCode + ' ' + phone.PhoneDesc + '</p></label></div>';
+					phoneHtml += '<div class="small-12 medium-6 large-6 columns"><label class="text-left">Type phone:';
+					phoneHtml += '<p>' + phone.PhoneTypeDesc + '</p></label></div>';
+				}
+				if(phoneHtml != ""){
+					$('#phonePeopleColl').html(phoneHtml);
+				}
+			}
+			//console.log(data)
+			//showLoading('#section-Colletion',false);
+		},
+		error: function(){
+			noResultsTable("section-Colletion", "tableColletion", "Try again");
+			showLoading('#section-Colletion',false);
+		}
+    });
 }

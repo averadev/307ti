@@ -19,7 +19,9 @@
 			<legend>
 				Information about the person
 			</legend>
-			
+			<?php
+				$this->load->view('collection/collectionPeople');
+			?>
 		</fieldset>
 	</div>
 

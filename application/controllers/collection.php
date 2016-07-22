@@ -32,17 +32,39 @@ class collection extends CI_Controller {
 			$sql = $this->getFilters($_POST, '');
 			$collection = $this->collection_db->getCollection($sql);
 			$data = array_slice($collection, $page, 25);
+			if( count($data) > 0 ){
+				foreach( $data[0] as $key => $item ){
+					$keys[] = $key;
+				}
+				foreach( $data as $key => $item ){
+					foreach($keys as $ke){
+						if( is_null( $item->$ke ) ){
+							$item->$ke = "";
+						}
+					}
+				}
+			}
 			echo json_encode(array('items' => $data));
 			
 		}
 	}
 	
+	public function getGeneralInfo(){
+		if($this->input->is_ajax_request()){
+			$id = $_POST['id'];
+			$people = $this->collection_db->getPeople($id);
+			$email = array();
+			$phone = array();
+			if($people > 0){
+				$email = $this->collection_db->getEmail($people[0]->pkPeopleId);
+				$phone = $this->collection_db->getPhone($people[0]->pkPeopleId);
+			}
+			echo json_encode(array('people' => $people, 'email' => $email, 'phone' => $phone));
+		}
+	}
+	
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
-			$id = $_GET['id'];
-			//$data['idTour'] = $this->reservation_db->selectIdTour($id);
-			//$data['contract']= $this->reservation_db->getReservations(null,$id);
-			//$data['flags'] = $this->reservation_db->selectFlags($id);
 			$this->load->view('collection/collectionDialogEdit');
 		}
 	}

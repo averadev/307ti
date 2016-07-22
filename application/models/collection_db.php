@@ -94,37 +94,44 @@ Class collection_db extends CI_MODEL
 			}
 		}
 		
-		
 		return  $this->db->get()->result();
-        /*if (!is_null($filters)){
-            if($filters['words'] != false){
-                if ($filters['checks'] != false){
-                    $this->filterReservations($filters);
-                }
-            }
-			if($filters['dates'] != false){
-				if(isset($filters['dates']['startDateRes'])){
-                    $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) = ', $filters['dates']['startDateRes']);
-                }
-				if(isset($filters['dates']['endDateRes'])){
-                    $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) = ', $filters['dates']['endDateRes']);
-                }
-            }
-        }
-        if ($id!=NULL) {
-          $this->db->where('R.pkResId', $id);
-        }
-        if($sql!=""){
-           $this->db->where($sql, NULL);
-        }
-		$this->db->order_by('ID', 'DESC');
-        $query = $this->db->get();
-        if($query->num_rows() > 0 )
-        {
-            return $query->result();
-        }*/
 		
-		
+	}
+	
+	public function getPeople($id){
+		$this->db->distinct();
+        $this->db->limit(1);
+        $this->db->select('ac.pkAccTrxId, p.pkPeopleId, p.Name, p.LName, p.LName2, p.Initials');
+		$this->db->select('p.BirthDayDay, p.BirthDayMonth, p.BirthDayYear, p.Anniversary, p.Nationality, p.Qualification, g.GenderDesc');
+		$this->db->select('a.Street1, a.Street2, a.City, a.ZipCode, s.StateDesc, c.CountryDesc');
+		$this->db->from('tblAccTrx ac');
+        $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = ac.fkAccid and rpa.ynPrimaryPeople = 1');
+        $this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId');
+		$this->db->join('tblGender g', 'g.pkGenderId = p.fkGenderId','LEFT');
+		$this->db->join('tblPeopleAddress pa', 'pa.fkPeopleId = p.pkPeopleId');
+		$this->db->join('tblAddress a', 'a.pkAddressid = pa.fkAddressId');
+		$this->db->join('tblState s', 's.pkStateId = a.FkStateId');
+		$this->db->join('tblCountry c', 'c.pkCountryId = a.fkCountryId');
+		$this->db->where('ac.pkAccTrxId', $id);
+		return  $this->db->get()->result();
+	}
+	
+	public function getEmail($idPeople){
+		$this->db->select('e.pkEmail, e.EmailDesc, et.EmailTypeDesc');
+		$this->db->from('tblEmail e');
+        $this->db->join('tblPeopleEmail pe', 'pe.fkEmailId = e.pkEmail');
+		$this->db->join('tblEmailType et', 'et.pkEmailTypeId = e.fkEmailTypeId');
+		$this->db->where('pe.fkPeopleId', $idPeople);
+		return  $this->db->get()->result();
+	}
+	
+	public function getPhone($idPeople){
+		$this->db->select('p.pkPhoneId, p.PhoneDesc, p.AreaCode, pt.PhoneTypeDesc');
+		$this->db->from('tblPhone p');
+        $this->db->join('tblPeoplePhone pp', 'pp.fkPhoneId = p.pkPhoneId');
+		$this->db->join('tblPhoneType pt', 'pt.pkPhoneTypeId = p.fkPhoneTypeId');
+		$this->db->where('pp.fkPeopleId', $idPeople);
+		return  $this->db->get()->result();
 	}
 }
 //end model
