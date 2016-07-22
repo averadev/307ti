@@ -510,9 +510,7 @@
 									<th></th>
 								</tr>
 							</thead>
-							<tbody>
-								<tr></tr>
-							</tbody>
+							<tbody id="tablaGiftsbody"></tbody>
 						</table>
 					</div>
 				</div>

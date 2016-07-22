@@ -28,9 +28,10 @@ class Contract extends CI_Controller {
 		for ($i=0; $i < sizeof($variable); $i++) { 
 			$GIFT = [
 				"fkResId" => 784,
+				"fkGiftId" => $variable[$i]['id'],
 				"Amount" => $variable[$i]['amount']
 			];
-			var_dump($GIFT);
+			$this->contract_db->insertReturnId('tblResgift', $GIFT);
 		}
 		
 	}
@@ -237,11 +238,22 @@ public function createSemanaOcupacion($idContrato){
 	//var_dump($Years);
 }
 
-private function createGifts(){
-	//$this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
-	foreach ($variable as $key => $value) {
-		# code...
-	}
+private function createGifts($id){
+	$variable = $_POST['gifts'];
+		for ($i=0; $i < sizeof($variable); $i++) { 
+			$GIFT = [
+				"fkResId" => $id,
+				"fkGiftId" => $variable[$i]['id'],
+				"Amount" => $variable[$i]['amount']
+			];
+			$this->contract_db->insertReturnId('tblResgift', $GIFT);
+		}
+}
+
+public function getGiftsByID(){
+	$id = $_POST['gift'];
+	$GIFTS = $this->contract_db->selectGifts($id);
+	echo json_encode($GIFTS);
 }
 
 private function createDownPayment($idContrato){

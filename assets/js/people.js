@@ -818,15 +818,16 @@ function getInfoPeople(id){
 			id:id,
 		},
 		success: function(data){
+			console.table(data);
 			var item = data.item[0];
 			$('#textName').val(item.Name.trim().toUpperCase());
 			$('#textMiddleName').val(item.SecondName.trim());
 			$('#textLastName').val(item.LName.trim());
 			$('#TextSecondLastName').val(item.LName2.trim());
 			
-			if(item.Gender == "2"){
+			if(item.fkGenderId == "2"){
 				$('#RadioMale').prop("checked", true);
-			}else if(item.Gender == "1"){
+			}else if(item.fkGenderId == "1"){
 				$("#RadioFemale").prop("checked", true);
 			}
 			$('#textBirthdate').val(item.birthdate);

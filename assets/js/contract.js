@@ -556,7 +556,7 @@ function createNewContract(){
 				financeBalance: $("#financeBalance").val(),
 				tablapagos: getValueTableDownpayment(),
 				tablaPagosProgramados:getValueTableDownpaymentScheduled(),
-				tablaPacks: getValueTablePacks(),
+				gifts: getValueTablePacks(),
 				viewId: 1,
 			},
 			type: "POST",
@@ -1555,7 +1555,28 @@ function getDatosContractSellers(id){
 	
 }
 function getDatosContractProvisions(id){
-	console.log("Provisiones" + id);
+var ajaxData =  {
+		url: "contract/getGiftsByID",
+		tipo: "json",
+		datos: {
+			'gift': id
+		},
+		funcionExito : verDatos,
+		funcionError: mensajeAlertify
+	};
+	if ($("#tablaGiftsbody").is(':empty')) {
+			showLoading("#tablaGiftsbody", true);
+			ajaxDATA(ajaxData);
+		}
+}
+function verDatos(data){
+	if (data) {
+		drawTableSinHead(data, "tablaGiftsbody");
+	}else{
+		alertify.error("No records found");
+		showLoading("#tablaGiftsbody", false);
+	}
+	
 }
 function getDatosContractOcupation(id){
 	if ($("#tableCOccupationSelectedbody").is(':empty')) {
@@ -2185,7 +2206,7 @@ function modalProvisions() {
        		text: "Save",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-    			alertify.success("added employees");
+    			alertify.success("added");
     			$(this).dialog('close');
 	       
        		}

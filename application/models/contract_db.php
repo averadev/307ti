@@ -608,11 +608,12 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
-    public function selectGifts(){
+    public function selectGifts($id){
         $this->db->select("G.GiftCode, G.GiftDesc ,RG.Amount");
         $this->db->from('tblResGift RG');
-        $this->join("tblGift G","RG.pkResGiftId = G.pkGiftId", "inner");
-        $this->db->where('ynActive', 1);
+        $this->db->join("tblGift G","RG.pkResGiftId = G.pkGiftId", "inner");
+        $this->db->where('RG.fkResId', $id);
+        $this->db->where('RG.ynActive', 1);
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
