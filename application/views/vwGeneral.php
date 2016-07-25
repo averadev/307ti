@@ -95,7 +95,7 @@
 				</div> -->
                 <div class="menu-sel" attr-screen="inventory">
 					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/2.png"/></span>
-					<div class="label-menu-sel">Inventary</div>
+					<div class="label-menu-sel">Inventory</div>
 				</div>
 				<div class="menu-sel" attr-screen="frontDesk">
 					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/1.png"/></span>

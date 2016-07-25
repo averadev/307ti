@@ -820,10 +820,10 @@ function getInfoPeople(id){
 		success: function(data){
 			console.table(data);
 			var item = data.item[0];
-			$('#textName').val(item.Name.trim().toUpperCase());
-			$('#textMiddleName').val(item.SecondName.trim());
-			$('#textLastName').val(item.LName.trim());
-			$('#TextSecondLastName').val(item.LName2.trim());
+			$('#textName').val(item.Name.toUpperCase());
+			$('#textMiddleName').val(item.SecondName);
+			$('#textLastName').val(item.LName);
+			$('#TextSecondLastName').val(item.LName2);
 			
 			if(item.fkGenderId == "2"){
 				$('#RadioMale').prop("checked", true);
@@ -862,7 +862,9 @@ function getInfoPeople(id){
 			$('#textPhone3').val(item.phone3.trim());
 			$('#textEmail1').val(item.email1.trim());
 			$('#textEmail2').val(item.email2.trim());
-			
+			$("#textPhone1").mask("(999) 999-9999");
+			$("#textPhone2").mask("(999) 999-9999");
+			$("#textPhone3").mask("(999) 999-9999");
 			$('#textTypeSeller').empty();
 			$('#textTypeSeller').append('<option value="0" code="0">Select a type of seller</option>');
 			for(i=0;i<data.peopleType.length;i++){

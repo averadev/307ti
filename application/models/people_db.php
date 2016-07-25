@@ -138,7 +138,7 @@ Class people_db extends CI_MODEL
     * Obtiene la informacion de la persona por id
     */
 	public function getPeopleById($id){
-		$this->db->select('tblPeople.pkPeopleId, tblPeople.fkPeopleTypeId, tblPeople.Name, tblPeople.SecondName, tblPeople.LName, tblPeople.LName2');
+		$this->db->select('tblPeople.pkPeopleId, tblPeople.fkPeopleTypeId, RTRIM(tblPeople.Name) as Name, RTRIM(tblPeople.SecondName) as SecondName, RTRIM(tblPeople.LName) as LName, RTRIM(tblPeople.LName2) as LName2');
 		$this->db->select('tblPeople.fkGenderId, tblPeople.BirthDayMonth, tblPeople.BirthDayDay, tblPeople.BirthDayYear, tblPeople.Initials');
 		$this->db->select('CONVERT(VARCHAR(11),tblPeople.Anniversary,101) as Anniversary, tblPeople.Qualification, tblPeople.Nationality');
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');

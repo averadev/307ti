@@ -10,7 +10,7 @@
 					</span>
 				</div>
 				<h3 class="box-title">
-					<span>Inventary Search</span>
+					<span>Inventory Search</span>
 				</h3>
 			</div>
 			<!-- body search-->

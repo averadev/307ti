@@ -429,9 +429,9 @@ class People extends CI_Controller {
 			if(is_null(!$item->LName2) or $item->LName2 != "                         " ){
 				$arrayData[$cont]['LastName'] = $arrayData[$cont]['LastName'] . " " . $item->LName2;
 			}
-			if($item->fkGenderId == "M"){
+			if($item->fkGenderId == "2"){
 				$arrayData[$cont]['Gender'] = "Male";
-			}else if($item->fkGenderId == "F"){
+			}else if($item->fkGenderId == "1"){
 				$arrayData[$cont]['Gender'] = "Famale";
 			}else{
 				$arrayData[$cont]['Gender'] = "unknown";
