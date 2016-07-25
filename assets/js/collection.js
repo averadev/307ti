@@ -41,11 +41,16 @@ function modalEditColletion(id){
 	dialogo = $("#dialog-Edit-colletion").dialog ({
   		open : function (event){
 			$(this).load("collection/modalEdit?id="+id , function(){
-				getGeneralInfoColl(id);
+				getInfoColl(id);
+				/*$('#tabsCollection .tabs-title').off();
+				$('#tabsCollection .tabs-title').on('click', function() { 
+					changeTabsModalCollection($(this).attr('attr-screen'), id);
+				});
+				getGeneralInfoColl(id);*/
 			});
 	    	/*$(this).load("reservation/modalEdit?id="+id , function(){
 	 			showLoading('#dialog-Edit-Reservation',false);
-	 			getDatosReservation(id);
+	 			getDatosReservation(id); 
 	 			setEventosEditarReservation(id);
 	    	});*/
 		},
@@ -115,6 +120,46 @@ function getColletionById(id){
 	editColletionDialog.dialog("open");
 }
 
+
+function getInfoColl(id){
+	showLoading('#dialog-Edit-colletion',true);
+	$.ajax({
+		data:{
+			id: id
+		},
+   		type: "POST",
+       	url: "collection/getInfoColl",
+		dataType:'json',
+		success: function(data){
+			if(data.items.length > 0){
+				var item = data.items[0];
+				$('#dialog-Edit-colletion').data('accId', item.fkAccId);
+				$('#dialog-Edit-colletion').data('peopleId', item.fkPeopleId);
+				$('#dialog-Edit-colletion').data('resId', item.fkResId);
+				$('#dialog-Edit-colletion').data('accTrxId', item.pkAccTrxId);
+				$('#dialog-Edit-colletion').data('accType', item.AccTypeCode);
+				showLoading('#dialog-Edit-colletion',false);
+				$('#tabsCollection .tabs-title').off();
+				$('#tabsCollection .tabs-title').on('click', function() { 
+					changeTabsModalCollection($(this).attr('attr-screen'), id);
+				});
+				getGeneralInfoColl(id);
+			}else{
+				alertify.error("no results found");
+				$("#dialog-Edit-colletion").dialog('close');
+				showLoading('#dialog-Edit-colletion',false);
+			}
+			showLoading('#dialog-Edit-colletion',false);
+			//console.log(data);
+		},
+		error: function(){
+			alertify.error("try again");
+			$("#dialog-Edit-colletion").dialog('close');
+			showLoading('#dialog-Edit-colletion',false);
+		}
+    });
+}
+
 function getGeneralInfoColl(id){
 	$.ajax({
 		data:{
@@ -124,7 +169,6 @@ function getGeneralInfoColl(id){
        	url: "collection/getGeneralInfo",
 		dataType:'json',
 		success: function(data){
-			console.log(data)
 			if(data.people.length > 0){
 				var people = data.people[0];
 				$('#idPeopleColl p').html(people.pkPeopleId);
@@ -165,6 +209,70 @@ function getGeneralInfoColl(id){
 				if(phoneHtml != ""){
 					$('#phonePeopleColl').html(phoneHtml);
 				}
+			}
+			if(data.res.length > 0){
+				var res = data.res[0];
+				$('#idResColl p').html(res.pkResId);
+				$('#FolioResColl p').html(res.Folio);
+				$('#typeResColl p').html(res.ResTypeDesc);
+				$('#legalNameResColl p').html(res.LegalName);
+				$('#firstOccColl p').html(res.FirstOccYear);
+				$('#lastOccColl p').html(res.LastOccYear);
+			}
+			//console.log(data)
+			//showLoading('#section-Colletion',false);
+		},
+		error: function(){
+			noResultsTable("section-Colletion", "tableColletion", "Try again");
+			showLoading('#section-Colletion',false);
+		}
+    });
+}
+
+/**
+ * cambia los pantallas del modal con los tabs
+ */
+function changeTabsModalCollection(screen, id){
+	/*//console.log("Este es el ID "+ id);
+	$('#tabsContrats .tabs-title').removeClass('active');
+	$('#tabsContrats li[attr-screen=' + screen + ']').addClass('active');
+	//muestra la pantalla selecionada
+	$('#tabsContrats .tab-modal').hide();
+	$('#' + screen).show();*/
+	switch(screen){
+		case "tab-CollGeneral":
+			break;
+		case "tab-CollAccounts":
+			var typeAcc = $('#dialog-Edit-colletion').data('accType');
+			$("#tab-CollAccounts").load("collection/modalAcc?typeAcc="+typeAcc , function(){
+				//getAccounts("",);
+			});
+			//getDatosContractAccounts(id);
+			//getAccounts( id, "account", "sale" );
+			//getAccounts( id, "account", "maintenance" );
+			//getAccounts( id, "account", "loan" );
+			break;
+	}
+}
+
+function getTypeAccColl(id){
+	/*$('#dialog-Edit-colletion').data('accId', item.fkAccId);
+	$('#dialog-Edit-colletion').data('peopleId', item.fkPeopleId);
+	$('#dialog-Edit-colletion').data('resId', item.fkResId);
+	$('#dialog-Edit-colletion').data('accTrxId', item.pkAccTrxId);*/
+	console.log(id);
+	$.ajax({
+		data:{
+			id: id
+		},
+   		type: "POST",
+       	url: "collection/getTypeAccColl",
+		dataType:'json',
+		success: function(data){
+			console.log(data)
+			if(data.items.length > 0){
+				var item = data.items[0];
+				
 			}
 			//console.log(data)
 			//showLoading('#section-Colletion',false);

@@ -45,8 +45,13 @@ class collection extends CI_Controller {
 				}
 			}
 			echo json_encode(array('items' => $data));
-			
 		}
+	}
+	
+	public function getInfoColl(){
+		$id = $_POST['id'];
+		$items = $this->collection_db->getInfoColl($id);
+		echo json_encode(array('items' => $items));
 	}
 	
 	public function getGeneralInfo(){
@@ -59,13 +64,25 @@ class collection extends CI_Controller {
 				$email = $this->collection_db->getEmail($people[0]->pkPeopleId);
 				$phone = $this->collection_db->getPhone($people[0]->pkPeopleId);
 			}
-			echo json_encode(array('people' => $people, 'email' => $email, 'phone' => $phone));
+			$res = $this->collection_db->getRes($id);
+			echo json_encode(array('people' => $people, 'email' => $email, 'phone' => $phone, 'res' => $res));
 		}
 	}
 	
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
 			$this->load->view('collection/collectionDialogEdit');
+		}
+	}
+	
+	public function modalAcc(){
+		if($this->input->is_ajax_request()) {
+			$typeAcc = $_GET['typeAcc'];
+			if( $typeAcc == "SAL" || $typeAcc == "LOA" || $typeAcc == "FEE"){
+				$this->load->view('collection/collectionConTx');
+			}else if( $typeAcc == "FDK" || $typeAcc == "RES"){
+				$this->load->view('collection/collectionResTx');
+			}
 		}
 	}
 	

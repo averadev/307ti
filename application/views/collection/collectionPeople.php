@@ -1,4 +1,4 @@
-<div class="containerCollection">
+<div class="containerCollection" id="contPeopleColl">
 	<div class="row">
 		<div class="small-12 medium-6 large-4 columns">
 			<label class="text-left" id="idPeopleColl">Id:

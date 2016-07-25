@@ -98,6 +98,18 @@ Class collection_db extends CI_MODEL
 		
 	}
 	
+	public function getInfoColl($id){
+		$this->db->distinct();
+        $this->db->limit(1);
+		$this->db->select('at1.pkAccTrxId, rpa.fkResId, rpa.fkAccId, rpa.fkPeopleId, act.AccTypeCode');
+		$this->db->from('tblAccTrx at1');
+		$this->db->join('tblAcc a', 'a.pkAccId = at1.fkAccid');
+		$this->db->join('tblAcctype act', 'act.pkAcctypeId = a.fkAccTypeId');
+		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = at1.fkAccid  and rpa.ynPrimaryPeople = 1');
+		$this->db->where('at1.pkAccTrxId', $id);
+		return  $this->db->get()->result();
+	}
+	
 	public function getPeople($id){
 		$this->db->distinct();
         $this->db->limit(1);
@@ -133,5 +145,18 @@ Class collection_db extends CI_MODEL
 		$this->db->where('pp.fkPeopleId', $idPeople);
 		return  $this->db->get()->result();
 	}
+	
+	public function getRes($id){
+		$this->db->distinct();
+        $this->db->limit(1);
+        $this->db->select('ac.pkAccTrxId, r.pkResId, r.Folio, r.FirstOccYear, r.LastOccYear, r.LegalName, rt.ResTypeDesc, r.fkResTypeId');
+		$this->db->from('tblAccTrx ac');
+        $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = ac.fkAccid and rpa.ynPrimaryPeople = 1');
+        $this->db->join('tblRes r', 'r.pkResId = rpa.fkResId and r.pkResRelatedId is Null');
+		$this->db->join('tblResType rt', 'rt.pkResTypeId = r.fkResTypeId');
+		$this->db->where('ac.pkAccTrxId', $id);
+		return  $this->db->get()->result();
+	}
+	
 }
 //end model

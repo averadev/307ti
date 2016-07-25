@@ -237,10 +237,10 @@
 	<div id="tab-CAccounts" class="large-12 columns tab-modal" style="display:none;">
 		<div class="tabsModal">
 			<ul class="tabs" id="tabsContratsAccounts"  data-tabs>
-				<li class="tabs-title active" attr-screen="tab-CASales" attr-accType="1" >
+				<li class="tabs-title active" attr-screen="tab-CASales" attr-accType="6" >
 					<a>Reservation</a>
 				</li>
-				<li class="tabs-title" attr-screen="tab-CALoan" attr-accType="3">
+				<li class="tabs-title" attr-screen="tab-CALoan" attr-accType="5">
 					<a>Front Desk</a>
 				</li>
 			</ul>
