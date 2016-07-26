@@ -13,7 +13,7 @@
       <label for="downpaymentGastos" class="text-left">Closing Cost</label>
     </div>
     <div class="small-9 columns">
-       <input class="round general" id="downpaymentGastos" type="number" name="downpaymentGastos" min="0" value="999">
+       <input class="round general" id="downpaymentGastos" type="number" name="downpaymentGastos" min="0" value="">
     </div>
   </div>
   <div class="row">

@@ -539,7 +539,7 @@
 							</div>
 						</div>
 						<!-- tipo de vendedor -->
-					<!-- 	<div class="row" style="margin-bottom:10px;">
+<div class="row" style="margin-bottom:10px;">
 							<div class="small-3 columns">
 								<label id="alertTypeSeller" for="textTypeSeller" class="text-left">Payroll account</label>
 							</div>
@@ -552,7 +552,7 @@
 							</div>
 						</div> -->
 						<!-- Nómina-->
-<!-- 						<div class="row">
+				<div class="row">
 							<div class="small-3 columns">
 								<label id="alertRoster" for="textRoster" class="text-left">Payroll type</label>
 							</div>

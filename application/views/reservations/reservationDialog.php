@@ -106,7 +106,6 @@
                     </div>
 					<div class="small-4 columns">
 						<label for="RateRes" class="text-left">Rate</label>
-						<!--<input id="RateRes" name="RateRes" type="text" class="round general" placeholder="Rate" />-->
 						<div class="caja" >
 							<select id="RateRes" class="input-group-field round">
 							</select>

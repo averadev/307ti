@@ -133,6 +133,21 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->order_by('tblCalendar.pkCalendarId ASC');
 		return  $this->db->get()->result();
 	}
+
+	    private function filtersgetFrontDesk($filters){
+
+        $string = $filters['words']['stringTour'];
+
+        if (isset($filters['checks']['personaId'])){
+            $this->db->where('pkPeopleId', $string);
+        }
+        if (isset($filters['checks']['nombre'])){
+            $this->db->where('Name', $string);
+        }
+        if (isset($filters['checks']['apellido'])){
+            $this->db->where('LName', $string);
+        }
+    }
 	
 	public function getCalendary($filters){
 		$this->db->select("tblCalendar.pkCalendarId,CONVERT(VARCHAR(11),tblCalendar.Date,106) as Date2");

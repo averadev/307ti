@@ -123,18 +123,15 @@ $(document).on( 'click', '#btnAddPeople', function () {
 	});
 	//Enganche
 	$(document).on( 'change', '#downpayment', function () {
-		$("#montoTotal").val($(this).val());
+		$("#montoTotal").val($("#downpayment").val());
 		var monto = $("#montoTotal").val();
 		cambiarCantidadP(monto);
 	});
 	$(document).on('change', "input[name='engancheR']:checked", function () {
-		var monto = $("#downpayment").val();
+		$("#montoTotal").val($("#downpayment").val());
+		var monto = $("#montoTotal").val();
 		cambiarCantidadP(monto);
 	});
-	//Descuento Especial
-	// $(document).on('change paste keyup', '#montoTotalDE', function () {
-	// 	updateBalanceFinal();
-	// });
 	$(document).on( 'change', '#descuentoEspecial', function () {
 		var monto = $("#descuentoEspecial").val();
 		cambiarCantidadDE(monto);
@@ -163,13 +160,14 @@ function updateBalanceFinal(){
 	var precioVenta = getNumberTextInput("precioVenta");
 	var packReference = getNumberTextInput("packReference");
 	var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
-	var downpayment = getNumberTextInput("downpayment");
+	var downpayment = getNumberTextInput("montoTotal");
 	var cashDiscount = getNumberTextInput("totalDiscountPacks");
 	var transferAmount = getNumberTextInput("amountTransfer");
 	var total = precioVenta + packReference + closingCost;
 	var descuentoEspecial = getNumberTextInput("montoTotalDE");
 	var descuento = downpayment+cashDiscount+transferAmount+descuentoEspecial;
 	var balanceFinal = $("#financeBalance").val(total-descuento);
+	console.log("se ejecuto update balanceFinal")
 }
 
 function getNumberTextInput(div){
@@ -181,11 +179,12 @@ function getNumberTextInput(div){
 	}
 }	
 function cambiarCantidadP(monto){
+	console.log(monto);
 	var seleccionado = $("input[name='engancheR']:checked").val();
 	var precioVenta = $("#precioVenta").val();
-	if (seleccionado == 'porcentaje') {
+	if (seleccionado == "porcentaje") {
 		var porcentaje = precioVenta * (monto/100);
-		$("#montoTotal").val(porcentaje);
+		$("#montoTotal").val(porcentaje.toFixed(2));
 	}else{
 		$("#montoTotal").val(monto);
 	}
@@ -1313,7 +1312,9 @@ function selectMetodoPagoProgramados(){
 
 
 function initEventosDownpayment(){
-	var precioUnidad = $("#downpayment").val();
+	var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
+	$("#downpaymentGastos").val(closingCost);
+	var precioUnidad = $("#montoTotal").val();
 	if (precioUnidad>0) {
 		var precioUnidadPack = $("#downpaymentPrice").val(precioUnidad);
 	}else{

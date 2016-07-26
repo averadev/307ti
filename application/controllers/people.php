@@ -181,7 +181,7 @@ class People extends CI_Controller {
 				$idPeople = $_POST['id'];
 				
 				$typePeople;
-				if($_POST['typeSeller'] != 0){
+				if(!empty($_POST['typeSeller'])){
 					$typePeople = $_POST['typeSeller'];
 				}else{
 					$typePeople = 17;

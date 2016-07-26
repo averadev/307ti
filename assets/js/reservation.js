@@ -3,7 +3,7 @@ var iniDateRes = null;
 var endDateRes = null;
 
 $(document).ready(function(){
-	maxHeight = screen.height * .25;
+	maxHeight = screen.height * .10;
 	maxHeight = screen.height - maxHeight;
 	
 	//dateField
@@ -227,7 +227,7 @@ function createDialogReservation(addReservation) {
 		},
 		autoOpen: false,
 		height: maxHeight,
-		width: "50%",
+		width: "75%",
 		modal: true,
 		buttons: [{
 			text: "Cancel",
@@ -288,7 +288,7 @@ function addUnidadResDialog(){
 		},
 		autoOpen: false,
 		height: maxHeight,
-		width: "50%",
+		width: "75%",
 		modal: true,
 		buttons: [{
 			text: "Cancel",
@@ -330,7 +330,7 @@ function addPeopleResDialog(){
 		},
 		autoOpen: false,
 		height: maxHeight,
-		width: "50%",
+		width: "75%",
 		modal: true,
 		buttons: [{
 			text: "Cancel",
@@ -867,7 +867,7 @@ function modalDepositDownpaymentRes(){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -913,7 +913,7 @@ function modalScheduledPaymentsRes() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -958,7 +958,7 @@ function modalDiscountAmountRes(){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -1085,7 +1085,7 @@ function modalEditReservation(id){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [
      // 	{
@@ -1777,7 +1777,7 @@ function modalFinanciamientoRes() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -1820,7 +1820,7 @@ function showModalFinRes(id){
 	var modalPropiedades = {
 		div: "dialog-FinanciamientoRes",
 		altura: maxHeight,
-		width: "50%",
+		width: "75%",
 		onOpen: ajaxDATA,
 		onSave: createNewReservation,
 		botones :[{
@@ -1924,7 +1924,7 @@ function modalSellersRes() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -2152,7 +2152,7 @@ function modalGetAllNotesRes() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [{
 	       	text: "Close",
@@ -2315,7 +2315,7 @@ function opcionAccountRes(attrType){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: "75%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
