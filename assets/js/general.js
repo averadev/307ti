@@ -917,3 +917,25 @@ function modalXgeneral(){
 	modalNuevoxD = modalGeneral2(modalPropiedades, ajaxData);
 	modalNuevoxD.dialog( "open" );
 }
+
+function makeRandonNames(num){
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+    for( var i=0; i < num; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function setDate(id){
+	document.getElementById(id).valueAsDate = new Date();
+}
+
+function getRandomNumber(length) {
+	return Math.floor(Math.pow(10, length-1) + Math.random() * 9 * Math.pow(10, length-1));
+}

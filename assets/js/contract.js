@@ -1311,9 +1311,6 @@ function selectMetodoPagoProgramados(){
         });
     }
 
-function setDate(id){
-	document.getElementById(id).valueAsDate = new Date();
-}
 
 function initEventosDownpayment(){
 	var precioUnidad = $("#downpayment").val();
@@ -3037,19 +3034,7 @@ function pruebaAltaContrato(){
 	ajaxUnidadesR();
 }
 
-function makeRandonNames(num){
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-    for( var i=0; i < num; i++ )
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    return text;
-}
-
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 function makePeople(datos){
 	var numeroPersonas = getRandomInt(1,6);

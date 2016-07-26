@@ -331,7 +331,7 @@ function saveUserData(id, isClosed){
 			gender:gender,
 			WeddingAnniversary:$('#textWeddingAnniversary').val().trim(),
 			nationality:$('#textNationality').val(),
-			qualification:$('#textQualification').val().trim(),
+			qualification:$('#textQualification').val(),
 			street:$('#textStreet').val().trim(),
 			colony:$('#textColony').val().trim(),
 			city:$('#textCity').val().trim(),
@@ -1096,3 +1096,65 @@ function deleteTableInv(table){
 	$('#' + table).hide();
 }
 
+function tesCreatePeople(){
+	$("#textName").val(randomNames());
+	$("#textMiddleName").val(randomNames());
+	$("#textLastName").val(ramdomLastName());
+	$("#TextSecondLastName").val(ramdomLastName());
+	setRandomGender();
+	$("#textWeddingAnniversary").val(randomDate);
+	$("#textBirthdate").val(randomDate);
+	$("#textNationality").val("Mexican");
+	$("#textQualification").val(getRandomInt(1,4));
+	$("#textStreet").val(makeRandonNames(7));
+	$("#textColony").val(makeRandonNames(7))
+	$("#textCountry").val(41);
+	$("#textState").val(957);
+	$("#textCity").val("Cancun");
+	$("#textPostalCode").val(getRandomNumber(5));
+	$("#textPhone1").val(getRandomNumber(10));
+	$("#textPhone1").val(getRandomNumber(10));
+	$("#textPhone2").val(getRandomNumber(10));
+	$("#textEmail1").val(getRandomEmail());
+}
+
+function randomNames(){
+	var posicionRandom = getRandomInt(0,14);
+	var Gender = getRandomInt(0,1);
+	var mensNames = ["Santiago", "Sebastián", "Diego", "Nicolás", "Samuel", "Alejandro", "Daniel", "Mateos", "Ángel", "Matias", "Gabriel", "David", "Fernando", "Eduardo", "Javier"];
+	var womensNames = ["Agatha", "Agustina", "Belisa", "Bella", "Carine", "Cloé", "Damaris", "Eleana", "Eunice", "Galilea", "Helena", "Imelda", "Jenny", "Joselin", "Keyla", "Leonor"];
+	if (Gender) {
+		return mensNames[posicionRandom];
+	}else{
+		return womensNames[posicionRandom];
+	}
+	
+}
+
+function ramdomLastName(){
+	var posicionRandom = getRandomInt(0,14);
+	var lastNames = ["GUERRERO","LEON", "BLANCO", "MARIN", "NUÑEZ", "PRIETO", "FLORES", "REYES", "DURAN", "CARMONA", "ROMAN", "SOTO", "VELASCO", "BRAVO", "ROJAS", "GALLARDO", "SAEZ"];
+	return lastNames[posicionRandom];
+}
+
+function setRandomGender(){
+	var posicion = getRandomInt(0,1);
+	console.log(posicion);
+	if (posicion == 0) {
+		$("#RadioFemale").prop( "checked", true );
+	}else{
+		$("#RadioMale").prop( "checked", true );
+	}
+}
+
+function randomDate(){
+	var days = getRandomInt(1,29);
+	var months = getRandomInt(1,12);
+	var years = getRandomInt(1950, 1996);
+	return fecha = months + "/" + days + "/" + years;
+}
+
+function getRandomEmail(){
+	var name = makeRandonNames(7);
+	return  name + "@" + "gmail.com";
+}
