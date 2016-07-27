@@ -1761,7 +1761,8 @@ function getAccounts( id, typeInfo, typeAcc ){
 	    url: "contract/getAccountsById",
 	    dataType:'json',
 	    success: function(data){
-			var sales = data["sales"];
+			var sales = data["sale"];
+			console.table(data["acc"]);
 			if(typeInfo == "account"){
 				if(typeAcc == "sale"){
 					drawTable2(sales, "tableAccountSeller", false, "");
@@ -1773,7 +1774,7 @@ function getAccounts( id, typeInfo, typeAcc ){
 				
 				setTableAccount(sales, "");
 				$('#btNewTransAcc').data( 'idRes', id )
-				$('#btNewTransAcc').data( 'idAcc', sales[0].AccID );
+				$('#btNewTransAcc').data( 'idAcc', data["acc"][0].fkAccId );
 			}else{
 				drawTable2(sales, "tabletPaymentAccoun", false, "");
 				$(".checkPayAcc").off( 'change' );

@@ -626,7 +626,7 @@
 							</table>
 						</div>
 						<div class="small-12 medium-6 large-6 columns">
-							<table id="tableCNotesAssignedSelected" width="100%" style="min-height:250px;">
+							<table id="tableCNotesAssignedSelected" width="100%">
 								<thead>
 									<tr class="trColspan" >
 										<th colspan="3" class="thColspan" >Assigned flags</th>
