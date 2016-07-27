@@ -94,7 +94,7 @@
                         <div class="small-12 columns">
                             <!--<a id="btnAddUnidades" href="#" class="button tiny"><i class="fa fa-home"></i></a>-->
 							<a id="btnAddUnidades" class="btn btn-primary spanSelect">
-								<div class="label">Add</div>
+								<div class="label">ADD NEW UNIT</div>
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
                         </div>

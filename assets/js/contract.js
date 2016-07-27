@@ -366,7 +366,7 @@ function addPeopleDialog() {
 				$(this).dialog('close');
 			}
 		},{
-			text: "add",
+			text: "Add",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
 				if(selectAllPeople()){
