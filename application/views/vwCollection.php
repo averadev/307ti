@@ -176,5 +176,6 @@
 </div>
 
 <div id="dialog-Edit-colletion" title="Colletion" style="display: none;"></div>
+<div id="dialog-accountsColl" title="Colletion accounts" style="display: none;"></div>
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>collection.js"></script>

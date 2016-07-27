@@ -1,12 +1,12 @@
 <div class="tabsModal">
 			<ul class="tabs" id="tabsContratsAccounts"  data-tabs>
-				<li class="tabs-title active" attr-screen="tab-CASales" attr-accType="1" >
+				<li class="tabs-title active" attr-screen="tab-CollSales" attr-accType="1" >
 					<a>Sales</a>
 				</li>
-				<li class="tabs-title" attr-screen="tab-CAMaintenance" attr-accType="3">
+				<li class="tabs-title" attr-screen="tab-CollMaintenance" attr-accType="3">
 					<a>Maintenance</a>
 				</li>
-				<li class="tabs-title" attr-screen="tab-CALoan" attr-accType="2">
+				<li class="tabs-title" attr-screen="tab-CollLoan" attr-accType="2">
 					<a>Loan</a>
 				</li>
 			</ul>
@@ -14,10 +14,10 @@
 		<!-- contenido del modal -->
 		<div class="ModalContractAccounts">
 			<!-- ventas-->
-			<div id="tab-CASales" class="large-12 columns tab-modal" style="display:inline;">
+			<div id="tab-CollSales" class="large-12 columns tab-modal" style="display:inline;">
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
-						<table class="tableAccountResult" id="tableSaleAccRes" style="margin-top:16px;">
+						<table class="tableAccountResult" id="tableSaleAccColl" style="margin-top:16px;">
 							<tbody>
 								<tr>
 									<td >Folio Contract</td>
@@ -74,10 +74,10 @@
 				</div>
 			</div>
 			<!-- mantenimiento -->
-			<div id="tab-CAMaintenance" class="large-12 columns tab-modal" style="display:none;">
+			<div id="tab-CollMaintenance" class="large-12 columns tab-modal" style="display:none;">
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
-						<table class="tableAccountResult" id="tableMainteAccRes" style="margin-top:16px;">
+						<table class="tableAccountResult" id="tableMainteAccColl" style="margin-top:16px;">
 							<tbody>
 								<tr>
 									<td>Folio Contract</td>
@@ -122,10 +122,10 @@
 				</div>
 			</div>
 			<!-- Misceláneos -->
-			<div id="tab-CALoan" class="large-12 columns tab-modal" style="display:none;">
+			<div id="tab-CollLoan" class="large-12 columns tab-modal" style="display:none;">
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
-						<table class="tableAccountResult" id="tableLoanAccRes" style="margin-top:16px;">
+						<table class="tableAccountResult" id="tableLoanAccColl" style="margin-top:16px;">
 							<tbody>
 								<tr>
 									<td>Folio Contract</td>
@@ -179,11 +179,11 @@
 				</div>
 			</div>
 			<div class="small-12 large-12 columns" style="padding-top:5px;">
-				<a id="btNewTransAcc" attr_type="newTransAcc" class="btn btn-primary btn-Search">
+				<a id="btNewTransAccColl" attr_type="newTransAcc" class="btn btn-primary btn-Search">
 					<div class="label">New Transaction</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
-				<a id="btAddPayAcc" attr_type="addPayAcc" class="btn btn-primary spanSelect">
+				<a id="btAddPayAccColl" attr_type="addPayAcc" class="btn btn-primary spanSelect">
 					<div class="label">Add Payment</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>

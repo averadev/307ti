@@ -158,5 +158,88 @@ Class collection_db extends CI_MODEL
 		return  $this->db->get()->result();
 	}
 	
+	public function getAccByRes($id){
+        $this->db->select("fkAccId");
+        $this->db->from('tblResPeopleAcc');
+		$this->db->where('fkResId = ', $id);
+        $query = $this->db->get();
+		return $query->result();
+    }
+	
+	public function getAccountsById( $id, $typeInfo, $typeAcc ){
+        $this->db->distinct();
+		if($typeInfo == "account"){
+			$this->db->select('att.pkAccTrxId as ID, att.ynActive as Active');
+			$this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Sign_transaction, att.fkAccId as AccID');
+			$this->db->select('tc.TrxClassDesc as Concept_Trxid');
+			$this->db->select('att.CrDt as Creation_Date, att.DueDt as Due_Date, att.Amount, att.AbsAmount, 0 as Overdue_Amount');
+			$this->db->select('att.Doc as Document, att.Remark as Reference');
+		}else{
+			$this->db->select('0 as inputAll');
+			$this->db->select('att.pkAccTrxId as ID');
+			$this->db->select('tt.TrxTypeCode as Code');
+			$this->db->select('tc.pkTrxClassid, tc.TrxClassDesc as Concept_Trxid');
+			$this->db->select('att.DueDt as Due_Date, att.Amount, att.AbsAmount');
+		}
+        $this->db->from('tblAccTrx att');
+        $this->db->join('tblAcc a', 'a.pkAccId = att.fkAccId');
+        $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId');
+        $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = att.fkTrxTypeId');
+		$this->db->join('tblTrxClass tc', 'tc.pkTrxClassid = att.fkTrxClassID');
+		$this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
+        $this->db->where('rpa.fkResId', $id);
+		if($typeAcc == "reservation"){
+			$this->db->where('attt.fkAccTypeId = 6');
+		}else if($typeAcc == "frontDesk"){
+			$this->db->where('attt.fkAccTypeId = 5');
+		}
+		if($typeInfo == "payment"){
+			$this->db->where('tt.TrxSign = 1');
+			$this->db->where('attt.fkAccTypeId = ', $typeAcc);
+			$this->db->where('att.AbsAmount > 0');
+		}
+		$query = $this->db->get();
+		return $query->result();
+    }
+	
+	public function selectTrxType($type, $trxType){
+		$this->db->distinct();
+        $this->db->select("tt.pkTrxTypeId as ID, tt.TrxTypeDesc");
+        $this->db->from('TblTrxType tt');
+		$this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
+		if($type == "newTransAcc"){
+			$this->db->where('attt.fkAccTypeId = ', $trxType);
+		}else if($type == "addPayAcc"){
+			$this->db->where('TrxSign = -1');
+		}
+		//$this->db->where('TrxSign = -1');
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+	
+	public function selectTrxClass(){
+        $this->db->select("pkTrxClassid as ID, TrxClassDesc");
+        $this->db->from('tblTrxClass');
+		$this->db->where('TrxSign = 1');
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+	
+	public function insertReturnId($table, $data){
+        $this->db->insert($table, $data);
+        return $this->db->insert_id();
+    }
+    public function updateReturnId($table, $data, $condicion){
+        $this->db->where($condicion);
+        $this->db->update($table, $data);
+        return $this->db->affected_rows();
+    }
+	
 }
 //end model
