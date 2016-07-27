@@ -40,7 +40,7 @@ class FrontDesk extends CI_Controller {
 			$total = 0;
 			$sql = $this->getFilters($_POST, 'r.fkStatusId');
 			$data = $this->frontDesk_db->getFrontDesk($sql);
-			
+			//echo json_encode($data);
 			$calendary = $this->frontDesk_db->getCalendary($sql);
 			$color = array("", "cellOwners", "cellRentals", "cellOwnersLoan", "cellNoChange");
 			$res = array();
@@ -74,7 +74,7 @@ class FrontDesk extends CI_Controller {
 					$res[$p]['values'][$p2]['from'] = $item->pkCalendarId;
 					$res[$p]['values'][$p2]['to'] = $item->pkCalendarId;
 					$res[$p]['values'][$p2]['people'] = $item->Name . " " . $item->LName . " " . $item->LName2;
-					$res[$p]['values'][$p2]['occType'] =$color[$item->fkOccTypeId];
+					$res[$p]['values'][$p2]['occType'] = $color[intval($item->fkOccTypeId)];
 					$res[$p]['values'][$p2]['ResConf'] = $item->ResConf;
 					$res[$p]['values'][$p2]['dateFrom'] = $item->Date2;
 					$res[$p]['values'][$p2]['dateTo'] = $item->DateEnd;

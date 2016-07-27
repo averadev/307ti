@@ -56,7 +56,7 @@ Class frontDesk_db extends CI_MODEL
 		$endDate = $endDate . " from tblResOcc ro2";
 		$endDate = $endDate . " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId";
 		$endDate = $endDate . " where ro2.fkResId = ro.fkResId ORDER By ro2.fkCalendarId desc) as DateEnd";
-		$this->db->select("tblCalendar.pkCalendarId,CONVERT(VARCHAR(11),tblCalendar.Date,106) as Date2");
+		$this->db->select("tblCalendar.pkCalendarId, CONVERT(VARCHAR(11),tblCalendar.Date,106) as Date2");
 		$this->db->select($endDate);
 		$this->db->select("DATEPART(day, tblCalendar.Date) as day");
 		$this->db->select("ro.pkResOccId, ro.fkResId, ro.fkResInvtId, ro.NightId, ro.fkOccTypeId");
@@ -134,7 +134,7 @@ Class frontDesk_db extends CI_MODEL
 		return  $this->db->get()->result();
 	}
 
-	    private function filtersgetFrontDesk($filters){
+	private function filtersgetFrontDesk($filters){
 
         $string = $filters['words']['stringTour'];
 

@@ -32,7 +32,7 @@
 					</div>
 				</div>
 				<!--filter-->
-				<div class="row sectionFrontDesk section1" style="display:none;">
+				<div class="row sectionFrontDesk section1">
 					<div class="small-12 medium-8 large-12 columns"> 
 						<fieldset class="large-12 columns fieldsetFilter">
 							<legend class="legendSearch">Choose the filters</legend>
@@ -143,7 +143,7 @@
 				</div>
 				
 				<!-- Housekeeping Configuration -->
-				<div class="row sectionFrontDesk section3">
+				<div class="row sectionFrontDesk section3" style="display:none;">
 					<div class="small-12 medium-8 large-12 columns"> 
 						<fieldset class="large-12 columns fieldsetFilter">
 							<label>Status</label>

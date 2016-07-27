@@ -80,8 +80,12 @@ $(function() {
 	dateYear = $("#dateYearFront").data('Zebra_DatePicker');
 	dateUnitHK = $("#dateHKConfig").data('Zebra_DatePicker');
 	dateHKLookUp = $("#dateHKLookUp").data('Zebra_DatePicker');
-	$('#dateArrivalFront').val("04/13/2016");
-	//$('#dateHKConfig').val(getCurrentDate());
+	//$('#dateArrivalFront').val("04/13/2016");
+	$('#dateArrivalFront').val(getCurrentDate());
+	$('#dateHKConfig').val(getCurrentDate());
+	$('#dateHKLookUp').val(getCurrentDate());
+	$('#dateArrivalReport').val(getCurrentDate());
+	
 	FloorplanFD =  $('#textFloorPlanHKConfig').multipleSelect({
 		width: '100%',
 		placeholder: "Select a floor plan",
@@ -192,7 +196,7 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 			}else{
 				switch(section) {
 					case "section1":
-						
+						alertify.error("No data found");
 					break;
 					case "section3":
 						noResultsTable("table-frontDesk", "tableHKConfiguration", "no results found");
@@ -399,6 +403,9 @@ function showSection(section){
 }
 
 function createTableLookUp(data){
+	if (data) {
+
+	}
 	$('.showReservation').off();
 			var headYearHTML = "";
 			var headMonthHTML = "";

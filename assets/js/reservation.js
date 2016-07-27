@@ -302,9 +302,14 @@ function addUnidadResDialog(){
 			click: function() {
 				var unidades = getValueTableUnidadesSeleccionadasRes();
 				if (unidades.length == 1) {
-					$(this).dialog('close');
-					var dialogWeeksRes = getWeeksResDialog(unidades);
-					dialogWeeksRes.dialog("open");
+					console.log("Ok es uno");
+					var intDate = iniDateRes.split("/");
+					intDate = intDate[2];
+					var endDate = endDateRes.split("/");
+					endDate = endDate[2];
+					var frequency = "every Year";
+	       			tablUnidadadesRes(unidades, frequency, intDate, endDate);
+	       			$(this).dialog('close');
 				}else{
 					alertify.error("Find and click only one unit");
 				}
@@ -985,6 +990,10 @@ function modalDiscountAmountRes(){
 }
 
 function tablUnidadadesRes(unidades, frequency, primero, ultimo){
+	console.log(frequency);
+	console.log(primero);
+	console.log(ultimo);
+	console.table(unidades);
 	var bodyHTML = '';
 	for (var i = 0; i < unidades.length; i++) {
 		bodyHTML += "<tr>";

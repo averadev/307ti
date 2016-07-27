@@ -2616,7 +2616,7 @@ function saveAccCont(attrType){
 	$.ajax({
 		data: {
 			attrType:attrType,
-			accId:$('#btNewTransAcc').data( 'idAcc' ),
+			accId:$('#btNewTransAcc').data('idAcc'),
 			trxTypeId:$('#slcTransTypeAcc').val(),
 			trxClassID:$('#slcTrxClassAcc').val(),
 			amount:$('#AmountAcc').val(),

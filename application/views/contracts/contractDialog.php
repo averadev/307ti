@@ -61,7 +61,7 @@
                     <div class="row">
                         <div class="small-12 columns">
 							<a id="btnAddPeople" class="btn btn-primary spanSelect">
-								<div class="label">Add</div>
+								<div class="label">ADD NEW PERSON</div>
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
                         </div>
