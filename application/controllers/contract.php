@@ -239,7 +239,8 @@ public function createSemanaOcupacion($idContrato){
 }
 
 private function createGifts($id){
-	$variable = $_POST['gifts'];
+	if (!empty($_POST['gifts'])) {
+		$variable = $_POST['gifts'];
 		for ($i=0; $i < sizeof($variable); $i++) { 
 			$GIFT = [
 				"fkResId" => $id,
@@ -248,6 +249,8 @@ private function createGifts($id){
 			];
 			$this->contract_db->insertReturnId('tblResgift', $GIFT);
 		}
+	}
+	
 }
 
 public function getGiftsByID(){

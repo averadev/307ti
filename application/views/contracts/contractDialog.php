@@ -56,14 +56,16 @@
 						</div>
 					</div>
                 </div>
-
+            </div>
+             <div class="fieldset large-12 columns">
+              <legend class="btnAddressData">Peoples</legend>
                 <div class="containerPeople">
                     <div class="row">
                         <div class="small-12 columns">
-							<a id="btnAddPeople" class="btn btn-primary spanSelect">
-								<div class="label">ADD NEW PERSON</div>
-								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
-							</a>
+                            <a id="btnAddPeople" class="btn btn-primary spanSelect">
+                                <div class="label">Add</div>
+                                <img src="<?php echo base_url().IMG; ?>common/more.png"/>
+                            </a>
                         </div>
                         <div class="small-12 columns">
                             <table id="tablePeopleSelected" width="100%">
@@ -79,26 +81,26 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-									<tr><td colspan="10" ></td></tr>
-								</tbody>
+                                    <tr><td colspan="10" ></td></tr>
+                                </tbody>
                         </table>
                         </div>
                     </div>
                 </div>
             </div>
+
             <!-- Unidades -->
             <div class="fieldset large-12 columns">
                 <legend class="btnAddressData">Units</legend>
                 <div class="containerPeople">
                     <div class="row">
                         <div class="small-12 columns">
-                            <!--<a id="btnAddUnidades" href="#" class="button tiny"><i class="fa fa-home"></i></a>-->
 							<a id="btnAddUnidades" class="btn btn-primary spanSelect">
-								<div class="label">ADD NEW UNIT</div>
+								<div class="label">Add</div>
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
                         </div>
-                        <div class="small-12 columns table-section2">
+                        <div class="small-12 columns">
                             <table id="tableUnidadesSelected" width="100%">
                                 <thead class="colorCrema">
                                     <tr>

@@ -751,7 +751,7 @@ function searchPeople(page){
 				total = total + 1
 				if(page == 0){
 					$('#paginationPeople').val(true);
-					loadPaginatorPeople( total );
+					loadPaginatorPeople(total);
 				}
 				drawTable2(data.items,"tablePeople","showModal","Edit");
 				
@@ -762,7 +762,6 @@ function searchPeople(page){
 					}else if(typePeople == "superior"){
 						markRowTableFrontDesk( "tablePeople", "tablePeopleSupeSelectedHKC" );
 					}
-					//frontDesk:markRowTableFrontDesk("tablePeople");
 				}
 			}else{
 				noResultsPeople("section-table-people", "tablePeople", "No results found");

@@ -1704,3 +1704,7 @@ input.general.error, .caja.error{
 .colorCrema{
 	background: #fde7be;
 }
+
+.header-fixed {
+    position: fixed;
+}

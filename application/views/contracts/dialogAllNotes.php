@@ -1,54 +1,33 @@
+<div class="row">
+	<div class="large-12 columns">
+	<table>
+    	<thead class="colorCrema">
+        	<tr>
+            	<th class="cellEdit">ID</th>
+                <th class="cellGeneral">Note type</th>
+                <th class="cellGeneral">Creation date</th>
+                <th class="cellGeneral">Created by</th>
+                <th class="cellGeneral">Note</th>   
+            </tr>
+		</thead>
+		<tbody>
 <?php
 if (!empty($notes)){
     foreach($notes as $item){?>
-    <div class="row">
-    <div class="large-12 columns">
-        <fieldset class="fieldset notes">
-        <div class="row">
-          <div class="row">
-
-            <div class="small-3 columns">
-              <label for="downpaymentPrice" class="text-left">Code</label>
-            </div>
-            <div class="small-9 columns">
-               <p><?php echo $item->pkNoteId ?></p>
-            </div>
-
-             <div class="small-3 columns">
-              <label for="downpaymentPrice" class="text-left">Note Type</label>
-            </div>
-            <div class="small-9 columns">
-               <p><?php echo $item->NoteTypeDesc ?></p>
-            </div>
-
-             <div class="small-3 columns">
-              <label for="downpaymentPrice" class="text-left">Create Date</label>
-            </div>
-            <div class="small-9 columns">
-               <p><?php echo $item->CrDt ?></p>
-            </div>
-
-            <div class="small-3 columns">
-              <label for="downpaymentPrice" class="text-left">Create By</label>
-            </div>
-            <div class="small-9 columns">
-               <p><?php echo $item->CrBy ?></p>
-            </div>
-            <div class="small-3 columns">
-              <label for="downpaymentPrice" class="text-left">Description</label>
-            </div>
-            <div class="small-9 columns">
-               <p><?php echo $item->NoteDesc ?></p>
-            </div>
-      </div>
-        </div>
-    </fieldset>
-        </div>
-    </div>
-
+	<tr>
+	    <td><?php echo $item->pkNoteId ?></td>
+	    <td><?php echo $item->NoteTypeDesc ?></td>
+	    <td><?php echo $item->CrDt ?></td>
+	    <td><?php echo $item->CrBy ?></td>
+	    <td><?php echo $item->NoteDesc ?></td>
+	</tr>
 <?php
 }
 }else{
     echo "No notes";
 }
 ?>
+		</tbody>
+	</table>
+	</div>
+</div>

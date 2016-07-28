@@ -103,12 +103,12 @@ $(document).on( 'click', '#btnAddPeople', function () {
 	$(document).on( 'click', '#btnDeleteTourID', function () {
 		$('#TourID').val('0');
 	});
-	$(document).on( 'click', '#btnAddmontoDownpaymentPrg', function () {
-		if($("#montoDownpaymentPrg").val()>0){
-			tableDownpaymentSelectedPrg();
-			totalDownpaymentPrg();
-		}
-	});
+	// $(document).on( 'click', '#btnAddmontoDownpaymentPrg', function () {
+	// 	if($("#montoDownpaymentPrg").val()>0){
+	// 		tableDownpaymentSelectedPrg();
+	// 		totalDownpaymentPrg();
+	// 	}
+	// });
 	$('#btnCleanWord').click(function (){
 		$('#stringContrat').val('');
 	});
@@ -484,8 +484,8 @@ function saveContract() {
 }
 function verifyContract(){
 	var value = true;
-	var id = "saveDataContract";
 	var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta"];
+	var id = "saveDataContract";
 	var form = $("#"+id);
 	var elem = new Foundation.Abide(form, {});
 
@@ -532,7 +532,9 @@ function verifyContractALL(){
 	return value;
 }
 function createNewContract(){
-
+		var id = "saveDataContract";
+		var form = $("#"+id);
+		var elem = new Foundation.Abide(form, {});
 		showAlert(true,"Saving changes, please wait ....",'progressbar');
 		$.ajax({
 			data: {
@@ -969,10 +971,10 @@ function modalDepositDownpayment(){
        		text: "ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			var deposito = $("#finalPriceDownpayment").val();
-       			var total = $("#downpaymentTotal").val();
+       			var deposito = parseFloat($("#finalPriceDownpayment").val());
+       			var total = parseFloat($("#downpaymentTotal").val());
        			if (deposito>total) {
-       				alertify.error("la cantidad es mayor al total")
+       				alertify.error("Amount is greater than total to pay")
        			}else{
        				$("#depositoEnganche").val(deposito);
        				$(this).dialog('close');	
@@ -997,7 +999,7 @@ function modalScheduledPayments() {
 				});
   			}else{
 				$(this).dialog('open');
-				initEventosDownpaymentProgramados();
+				//initEventosDownpaymentProgramados();
   			}
 		},
 		autoOpen: false,
@@ -1014,13 +1016,13 @@ function modalScheduledPayments() {
        		text: "ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			var totalProgramado = $("#totalProgramado").val();
-       			var totalInicial = $("#downpaymentProgramado").val();
-       			if (totalProgramado==totalInicial) {
+       			var totalProgramado = getNumberTextInput("totalProgramado"); 
+       			var totalInicial = getNumberTextInput("downpaymentProgramado");
+       			if (totalProgramado == totalInicial) {
        				$("#scheduledPayments").val($("#totalProgramado").val());
        				$(this).dialog('close');
        			}else{
-       				alertify.error("verifica los pagos")
+       				alertify.error("Verify total to pay");
        			}
 				
        		}
@@ -1325,15 +1327,20 @@ function initEventosDownpayment(){
 	setDate("datePayDawnpayment");
 	
 	$('#btnAddmontoDownpayment').click(function (){
-		if($("#montoDownpayment").val()>0){
-			tableDownpaymentSelected();
+		var amount = getNumberTextInput("montoDownpayment");
+		var added = getNumberTextInput("downpaymentTotal");
+
+		if(amount>0 && amount <= added){
+			tableDownpaymentSelected(amount);
 			totalDownpayment();
-			//$("#montoDownpayment").val(0);
+			
 		}else{
-			alertify.error("the amount should be greater to zero and minus than the amount total");
+			alertify.error("The amount should be greater to zero and minus than total amount");
 			errorInput("montoDownpayment", 2);
 		}
+		$("#montoDownpayment").val(0);
 	});
+
 	$('#btnCleanmontoDownpayment').click(function (){
 		$("#montoDownpayment").val(0);
 	});
@@ -1341,14 +1348,32 @@ function initEventosDownpayment(){
 }
 
 function initEventosDownpaymentProgramados(){
-	var downpayment = $("#downpayment").val();
+	var downpayment = $("#downpaymentTotal").val();
 	var deposit = $("#depositoEnganche").val();
+	$("#montoDownpaymentPrg").val(0);
 	$("#downpaymentProgramado").val(downpayment-deposit);
 	selectMetodoPagoProgramados();
 	setDate("datePaymentPrg");
+
 	$('#btnCleanmontoDownpaymentPrg').click(function (){
 		$("#montoDownpaymentPrg").val(0);
 	});
+
+	$('#btnAddmontoDownpaymentPrg').click(function () {
+		var amount = getNumberTextInput("montoDownpaymentPrg"); 
+		var total = getNumberTextInput("downpaymentProgramado");
+		if(amount>0 && amount <= total){
+			tableDownpaymentSelectedPrg();
+			totalDownpaymentPrg();
+		}else{
+			alertify.error("The amount should be greater to zero and minus than total amount");
+		}
+	});
+
+	if($("#montoDownpaymentPrg").val()>0){
+			tableDownpaymentSelectedPrg();
+			totalDownpaymentPrg();
+		}
 }
 
 function initEventosDiscount(){

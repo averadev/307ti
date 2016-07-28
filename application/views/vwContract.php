@@ -120,7 +120,7 @@
 						<tbody id="contractstbody"></tbody>
 					</table>
 				</div>
-				<div class="pagina" >
+<!-- 				<div class="pagina" >
 					<div class="pages">
 						<div class="pagination" id="paginationPeople">
 							<a href="#" class="first" data-action="first">&laquo;</a>
@@ -131,7 +131,7 @@
 						</div>
 						<input type="hidden" id="paginationPeople" value="true" />
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>
@@ -143,7 +143,7 @@
 <div id="dialog-Edit-Contract" title="Edit Contract" style="display: none;"></div>
 <div id="dialog-tourID" title="Tour ID" style="display: none;"></div>
 <div id="dialog-People" title="Contract > Create Contract > Add People" style="display: none;"></div>
-<div id="dialog-Unidades" title="Contract > Create Contract > Add Unidades" style="display: none;"></div>
+<div id="dialog-Unidades" title="Contract > Create Contract > Add Units" style="display: none;"></div>
 <div id="dialog-Weeks" title="Weeks" style="display: none;"></div>
 <div id="dialog-Pack" title="Pack Reference" style="display: none;"></div>
 <div id="dialog-Downpayment" title="Downpayment" style="display: none;"></div>
@@ -152,7 +152,7 @@
 <div id="dialog-Financiamiento" title="Financing Terms" style="display: none;"></div>
 <div id="dialog-Sellers" title="Set Sellers" style="display: none;"></div>
 <div id="dialog-Provisiones" title="Add Provisions" style="display: none;"></div>
-<div id="dialog-Notas" title="Add Notes" style="display: none;"></div>
+<div id="dialog-Notas" title="All Notes" style="display: none;"></div>
 <div id="dialog-accounts"  title="Accounts" style="display: none;"></div>
 <div id="dialog-newFile"  title="New File" style="display: none;"></div>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>contract.js"></script>

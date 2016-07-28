@@ -538,9 +538,9 @@
 
 <div id="dialog-Edit-Reservations" title="Summary Reservation" style="display: none;"></div>
 <div id="dialog-HKConfig" title="HouseKeepingConfiguration " style="display: none;"></div>
-<div id="dialog-people-hkConfig" title="people " style="display: none;"></div>
-<div id="dialog-unit-hkConfig" title="unit " style="display: none;"></div>
-<div id="dialog-edit-HKStatus" title="hk status" style="display: none;"></div>
+<div id="dialog-people-hkConfig" title="People " style="display: none;"></div>
+<div id="dialog-unit-hkConfig" title="Unit " style="display: none;"></div>
+<div id="dialog-edit-HKStatus" title="HK status" style="display: none;"></div>
 
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>frontDesk.js"></script>
