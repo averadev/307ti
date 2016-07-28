@@ -82,34 +82,40 @@
 							<!-- Past Due Days -->
 							<div class="small-12 large-3 columns">
 								<label id="alertPastDueDateColl" for="PastDueDateColl" class="text-left">Past Due Days
-									<div class="input-group date" >
-										<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-										<input type="text" id="PastDueDateColl" class="txtSearch input-group-field roundRight" readonly/>
-									</div>
+									<input type="number" id="PastDueDateColl" class="txtSearch"/>
 								</label>
 							</div>
 							<!-- next   -->
-							<div class="small-12 large-3 columns">
+							<!--<div class="small-12 large-3 columns">
 								<label id="alertNextIntDateColl" for="NextIntDateColl" class="text-left">Next interaction Date
 									<div class="input-group date" >
 										<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
 										<input type="text" id="NextIntDateColl" class="txtSearch input-group-field roundRight" readonly/>
 									</div>
 								</label>
-							</div>
+							</div>-->
 							<!-- trx Amt -->
-							<div class="small-12 large-3 columns">
+							<div class="small-12 large-3 columns float-left">
 								<label id="alertTrxAmtColl" for="TrxAmtColl" class="text-left">Amt
 									<input type="text" id="TrxAmtColl" class="txtSearch"/>
 								</label>
 							</div>
-							
+							<div class="small-12 large-3 columns" style="padding-top:25px;">
+								<a id="btnCollSearch" class="btn btn-primary btn-Search">
+									<div class="label">Search</div>
+									<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+								</a>
+								<a id="btnCollCleanSearch" class="btn btn-primary spanSelect">
+									<div class="label">Clean</div>
+									<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+								</a>
+							</div>
 						</div>
 					</div>
 					<div class="small-12 medium-12 large-12 columns">
 						<div class="row">
 							<!-- status -->
-							<div class="small-12 large-3 columns">
+							<!--<div class="small-12 large-3 columns">
 								<label id="alertStatusColl" for="StatusColl" class="text-left">Status
 									<div class="caja" >
 										<select id="StatusColl" class="txtSearch input-group-field round">
@@ -124,23 +130,14 @@
 										</select>
 									</div>
 								</label>
-							</div>
+							</div>-->
 							<!-- Asigned to -->
-							<div class="small-12 large-3 columns">
+							<!--<div class="small-12 large-3 columns">
 								<label id="alertAsignedToColl" for="AsignedToColl" class="text-left">Asigned to
 									<input type="text" id="AsignedToColl" class="txtSearch"/>
 								</label>
-							</div>
-							<div class="small-12 large-6 columns" style="padding-top:25px;">
-								<a id="btnCollSearch" class="btn btn-primary btn-Search">
-									<div class="label">Search</div>
-									<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
-								</a>
-								<a id="btnCollCleanSearch" class="btn btn-primary spanSelect">
-									<div class="label">Clean</div>
-									<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
-								</a>
-							</div>
+							</div>-->
+							
 						</div>
 					</div>
 				</div>

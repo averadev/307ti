@@ -42,7 +42,8 @@ Class collection_db extends CI_MODEL
         $this->db->select('at1.pkAccTrxId as ID, r.Folio, tt.TrxTypeDesc as trxType, at1.Amount, CONVERT(VARCHAR(11),at1.DueDt,106) as dueDate');
         $this->db->select('DATEDIFF(day, CONVERT(VARCHAR(11),at1.DueDt,106), CONVERT(VARCHAR(11),GETDATE(),106)) AS DiffDate');
 		$this->db->select('att.AccTypeDesc as accType,  ( ph.PhoneDesc + ph.AreaCode ) AS Phone, em.EmailDesc as Email');
-		$this->db->select("CONVERT(VARCHAR(11), il.NextInteractionDueDt, 106) as NextInteractionDate, s.StatusDesc as Status, (p2.Name + ' ' + p2.LName) as Asigned_To");
+		//$this->db->select("CONVERT(VARCHAR(11)");
+		//$this->db->select("CONVERT(VARCHAR(11), il.NextInteractionDueDt, 106) as NextInteractionDate, s.StatusDesc as Status, (p2.Name + ' ' + p2.LName) as Asigned_To");
 		$this->db->from('tblAccTrx at1');
         $this->db->join('tblAcc a', 'a.pkAccId = at1.fkAccid');
         $this->db->join('tblAcctype att', 'att.pkAcctypeId = a.fkAccTypeId');
@@ -54,9 +55,9 @@ Class collection_db extends CI_MODEL
 		$this->db->join('tblPhone ph', 'ph.pkPhoneId = pph.fkPhoneId');
 		$this->db->join('tblPeopleEmail pem', 'pem.fkPeopleId = p.pkPeopleId and pem.ynPrimaryEmail = 1');
 		$this->db->join('tblEmail em', 'em.pkEmail = pem.fkEmailId');
-		$this->db->join('tblInteractionLog il', 'il.fkAccTrxId =  at1.pkAccTrxId', 'LEFT');
-		$this->db->join('tblStatus s', 's.pkStatusId = il.fkStatusId', 'LEFT');
-		$this->db->join('tblPeople p2', 'p2.pkPeopleId = il.fkPeopleId', 'LEFT');
+		//$this->db->join('tblInteractionLog il', 'il.fkAccTrxId =  at1.pkAccTrxId', 'LEFT');
+		//$this->db->join('tblStatus s', 's.pkStatusId = il.fkStatusId', 'LEFT');
+		//$this->db->join('tblPeople p2', 'p2.pkPeopleId = il.fkPeopleId', 'LEFT');
 		if (!is_null($filters)){
 			if($filters['words'] != false){
 				if(isset($filters['words']['TrxIdColl'])){
@@ -68,10 +69,18 @@ Class collection_db extends CI_MODEL
 				if(isset($filters['words']['TrxAmtColl'])){
 					$this->db->where('at1.Amount', $filters['words']['TrxAmtColl']);
 				}
-				if(isset($filters['words']['AsignedToColl'])){
+				if(isset($filters['words']['PastDueDateColl'])){
+					if(!isset($filters['dates']['DueDateColl'])){
+						$this->db->where(" DATEDIFF(day, CONVERT(VARCHAR(11),at1.DueDt,106), CONVERT(VARCHAR(11),GETDATE(),106)) = ", $filters['words']['PastDueDateColl']);
+					}else{
+						$date = $filters['dates']['DueDateColl'];
+						$this->db->where(" DATEDIFF(day, CONVERT(VARCHAR(11),'" . $date . "',106), CONVERT(VARCHAR(11),GETDATE(),106)) = ", $filters['words']['PastDueDateColl']);
+					}
+				}
+				/*if(isset($filters['words']['AsignedToColl'])){
 					$name =  $filters['words']['AsignedToColl'];
 					$this->db->where('p2.Name LIKE \'%'.$name.'%\' or p2.LName LIKE \'%'.$name.'%\'', NULL);
-				}
+				}*/
 			}
 			if($filters['options'] != false){
 				if(isset($filters['options']['TrxTypeColl'])){
@@ -80,17 +89,17 @@ Class collection_db extends CI_MODEL
 				if(isset($filters['options']['AccTypeColl'])){
 					$this->db->where('att.pkAcctypeId', $filters['options']['AccTypeColl']);
 				}
-				if(isset($filters['options']['StatusColl'])){
+				/*if(isset($filters['options']['StatusColl'])){
 					$this->db->where('s.pkStatusId', $filters['options']['StatusColl']);
-				}
+				}*/
 			}
 			if($filters['dates'] != false){
 				if(isset($filters['dates']['DueDateColl'])){
 					$this->db->where('CONVERT(VARCHAR(10),at1.DueDt,101)', $filters['dates']['DueDateColl']);
 				}
-				if(isset($filters['dates']['NextIntDateColl'])){
+				/*if(isset($filters['dates']['NextIntDateColl'])){
 					$this->db->where('CONVERT(VARCHAR(10),il.NextInteractionDueDt,101)', $filters['dates']['NextIntDateColl']);
-				}
+				}*/
 			}
 		}
 		
