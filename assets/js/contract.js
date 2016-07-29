@@ -973,8 +973,8 @@ function modalDepositDownpayment(){
        		text: "ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			var deposito = parseFloat($("#finalPriceDownpayment").val());
-       			var total = parseFloat($("#downpaymentTotal").val());
+       			var deposito = getNumberTextInput("finalPriceDownpayment");
+       			var total = getNumberTextInput("downpaymentTotal");
        			if (deposito>total) {
        				alertify.error("Amount is greater than total to pay")
        			}else{
