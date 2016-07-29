@@ -12,6 +12,7 @@ class Contract extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->helper('url');
+		$this->load->helper('validation');
 		$this->load->database('default');
 		$this->load->model('contract_db');
 		$this->load->library('nativesessions');
@@ -24,21 +25,26 @@ class Contract extends CI_Controller {
 	}
 
 	public function pruebasContract(){
-		$variable = $_POST['gifts'];
-		for ($i=0; $i < sizeof($variable); $i++) { 
-			$GIFT = [
-				"fkResId" => 784,
-				"fkGiftId" => $variable[$i]['id'],
-				"Amount" => $variable[$i]['amount']
-			];
-			$this->contract_db->insertReturnId('tblResgift', $GIFT);
+		$dataContract = $_POST['dataContract'];
+		$messages =  allDataContract($dataContract);
+		if (sizeof($messages)>0) {
+			echo json_encode($messages);
+		}else{
+			echo "guardar contracto";
 		}
 		
+			// $GIFT = [
+			// 	"fkResId" => 784,
+			// 	"fkGiftId" => $variable['id'],
+			// 	"Amount" => $variable['amount']
+			// ];
+			// var_dump($GIFT);
+			//$this->contract_db->insertReturnId('tblResgift', $GIFT);
 	}
 
 	public function saveContract(){
 
-		if($this->input->is_ajax_request()){
+		if($this->input->is_ajax_request()){	
 			ini_set('max_execution_time', 120);
 			$idContrato = $this->createContract();
 			$this->insertOcupacion($idContrato);
@@ -56,29 +62,31 @@ class Contract extends CI_Controller {
 	}
 }
 
+
 private function createContract(){
-	$Contract = [
-		"fkResTypeId"               => $this->contract_db->selectRestType('Cont'),
-		"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('RG'),
-		"fkLanguageId"              => $_POST['idiomaID'],
-        "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
-        "pkResRelatedId"            => null,
-        "FirstOccYear"              => $_POST['firstYear'],
-        "LastOccYear"               => $_POST['lastYear'],
-        "ResCode"                   => "",
-        "ResConf"                   => "",
-        "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
-        "LegalName"                 => $_POST['legalName'],
-        "Folio"                     => $this->contract_db->select_Folio(),
-        "fkTourId"                  => $_POST['tourID'],
-        "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
-        "fkInvtTypeId"          	=> $this->contract_db->selectInvtTypeId('CU'),
-		"fkStatusId"				=> 1,
-        "ynActive"                  => 1,
-        "CrBy"                      => $this->nativesessions->get('id'),
-        "CrDt"						=> $this->getToday()
+		$Contract = [
+			"fkResTypeId"               => $this->contract_db->selectRestType('Cont'),
+			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('RG'),
+			"fkLanguageId"              => $_POST['idiomaID'],
+		    "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
+		    "pkResRelatedId"            => null,
+		    "FirstOccYear"              => $_POST['firstYear'],
+		    "LastOccYear"               => $_POST['lastYear'],
+		    "ResCode"                   => "",
+		    "ResConf"                   => "",
+		    "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
+		    "LegalName"                 => $_POST['legalName'],
+		    "Folio"                     => $this->contract_db->select_Folio(),
+		    "fkTourId"                  => $_POST['tourID'],
+		    "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
+		    "fkInvtTypeId"          	=> $this->contract_db->selectInvtTypeId('CU'),
+			"fkStatusId"				=> 1,
+		    "ynActive"                  => 1,
+		    "CrBy"                      => $this->nativesessions->get('id'),
+		    "CrDt"						=> $this->getToday()
 	];
 	return $this->contract_db->insertReturnId('tblRes', $Contract);
+
 }
 
 private function insertOcupacion($idContrato){
@@ -206,7 +214,6 @@ public function updateFinanciamiento(){
 
 public function createSemanaOcupacion($idContrato){
 
-	//$idContrato = $_POST['idContrato'];
 	$Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
 
 	$Unidades = [];
@@ -230,12 +237,9 @@ public function createSemanaOcupacion($idContrato){
 				"CrBy"          => $this->nativesessions->get('id'),
 				"CrDt"			=> $this->getToday()
 			];
-			//array_push($json, $OcupacionTable);
 			$this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
 		 }
 	}
-	//echo json_encode(["mensaje" => "Se ingresaron Correctamente"]);
-	//var_dump($Years);
 }
 
 private function createGifts($id){
