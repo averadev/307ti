@@ -301,6 +301,7 @@ function addUnidadResDialog(){
 			"class": 'dialogModalButtonAccept',
 			click: function() {
 				var unidades = getValueTableUnidadesSeleccionadasRes();
+				console.log(unidades)
 				if (unidades.length == 1) {
 					console.log("Ok es uno");
 					var intDate = iniDateRes.split("/");
@@ -576,16 +577,17 @@ function createNewReservation(){
 			$("#selectLanguageRes").addClass('is-invalid-input');
 			alertify.error("Choose a language");
 		}else{
+			var unidadRes = getValueTableUnidadesRes();
 			showAlert(true,"Saving changes, please wait ....",'progressbar');
 			$.ajax({
 					data: {
 						idiomaID : $("#selectLanguageRes").val(),
 						peoples: getValueTablePersonasRes(),
 						types: typePeopleRes(),
-						unidades: getValueTableUnidadesRes(),
+						unidades: unidadRes,
 						weeks: getArrayValuesColumnTableRes("tableUnidadesResSelected", 6),
-						firstYear :$("#firstYearWeeks").val().trim(),
-						lastYear : $("#lastYearWeeks").val().trim(),
+						firstYear : unidadRes[0].fyear,
+						lastYear : unidadRes[0].lyear,
 						tipoVentaId : $("#occupancySalesRes").val(),
 						listPrice: $("#precioUnidadRes").val(),
 						salePrice: $("#precioVentaRes").val(),
@@ -681,12 +683,13 @@ function getValueTableUnidadesRes(){
 			var unidad = {};
 			unidad.id = $(this).find('td').eq(0).text(),
 			unidad.floorPlan = $(this).find('td').eq(1).text(),
-			unidad.price = $(this).find('td').eq(2).text(),
+			unidad.view = $(this).find('td').eq(2).text(),
 			unidad.frequency = $(this).find('td').eq(3).text(),
-			unidad.season = $(this).find('td').eq(4).text(),
-			unidad.week = $(this).find('td').eq(5).text(),
-			unidad.fyear = $(this).find('td').eq(6).text(),
-			unidad.lyear = $(this).find('td').eq(7).text()
+			unidad.floor = $(this).find('td').eq(4).text(),
+			unidad.season = $(this).find('td').eq(5).text(),
+			unidad.week = $(this).find('td').eq(6).text(),
+			unidad.fyear = $(this).find('td').eq(7).text(),
+			unidad.lyear = $(this).find('td').eq(8).text()
 			unidades.push(unidad); 
 		}
 	});
@@ -1003,8 +1006,8 @@ function tablUnidadadesRes(unidades, frequency, primero, ultimo){
 		bodyHTML += "<td>"+frequency+"</td>";
 		bodyHTML += "<td>"+unidades[i].floor+"</td>";
 		//bodyHTML += "<td>"+unidades[i].intv+"</td>";
-		bodyHTML += "<td>"+unidades[i].week+"</td>";
 		bodyHTML += "<td>"+unidades[i].season+"</td>";
+		bodyHTML += "<td>"+unidades[i].week+"</td>";
 		bodyHTML += "<td>"+primero+"</td>";
         bodyHTML += "<td>"+ultimo+"</td>";
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";

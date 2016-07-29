@@ -77,7 +77,6 @@
                                         <th class="cellGeneral">View</th>
                                         <th class="cellGeneral">Frequency</th>
                                         <th class="cellGeneral">floor</th>
-                                        <th class="cellGeneral">intv</th>
 										<th class="cellGeneral">Season</th>
 										<th class="cellGeneral"># Week</th>
                                         <th class="cellGeneral">First Year OCC</th>
