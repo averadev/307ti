@@ -341,9 +341,11 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 		$this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
         $this->db->where('rpa.fkResId', $id);
 		if($typeAcc == "reservation"){
-			$this->db->where('attt.fkAccTypeId = 6');
+			//$this->db->where('attt.fkAccTypeId = 6');
+			$this->db->where('a.fkAccTypeId = 6');
 		}else if($typeAcc == "frontDesk"){
-			$this->db->where('attt.fkAccTypeId = 5');
+			//$this->db->where('attt.fkAccTypeId = 5');
+			$this->db->where('a.fkAccTypeId = 5');
 		}
 		if($typeInfo == "payment"){
 			$this->db->where('tt.TrxSign = 1');
@@ -384,9 +386,14 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
     }
 	
 	public function getAccByRes($id){
-        $this->db->select("fkAccId");
-        $this->db->from('tblResPeopleAcc');
-		$this->db->where('fkResId = ', $id);
+		//$this->db->distinct();
+        $this->db->select( "rpa.fkAccId, RTRIM(att.AccTypeDesc) as accType" );
+        $this->db->from( 'tblResPeopleAcc rpa' );
+		$this->db->join( 'tblAcc a', 'a.pkAccId = rpa.fkAccId' );
+		$this->db->join( 'tblAcctype att', 'att.pkAcctypeId = a.fkAccTypeId' );
+		$this->db->where( 'rpa.fkResId = ', $id );
+		$this->db->where( 'rpa.ynPrimaryPeople = 1' );
+		$this->db->order_by('att.pkAcctypeId ASC');
         $query = $this->db->get();
 		return $query->result();
     }
@@ -657,7 +664,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 		$this->db->where('rt.fkFloorPlanID', $floorPlan);
 		//$this->db->where('rt.fkFloorId', $floor);
 		$this->db->where('rt.fkViewId', $view);
-		//$this->db->where('rt.fkSeasonId', $season);
+		$this->db->where('rt.fkSeasonId', $season);
         $query = $this->db->get();
 		return $query->result();
 	}

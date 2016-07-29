@@ -343,7 +343,6 @@ function drawTable2(data, table ,funcion, cadena, option){
 		heightScroll = 250;
 	}
 	$('#' + table ) .on( 'order.dt',  function (event, a){
-		console.log(a);
 	}).DataTable({
 		"scrollY": heightScroll - 50,
 		"scrollX": true,

@@ -158,8 +158,6 @@ class Reservation extends CI_Controller {
 		}
 	}
 	
-	
-	
 	private function insertFinanciamiento($idContrato){
 		$porcentaje = intval(($_POST['specialDiscount']/$_POST['salePrice']))*100;
 		$balanceFinal = intval($_POST['financeBalance']);
@@ -374,6 +372,7 @@ class Reservation extends CI_Controller {
 		if($this->input->is_ajax_request()) {
 			if($_POST['attrType'] == "newTransAcc"){
 				$debit = -1 * abs($_POST['amount']);
+				//$TrxSign = $this->reservation_db->getTrxTrxSign($_POST['trxTypeId']);
 				$transaction = [
 					"fkAccid" 			=> $_POST['accId'],
 					"fkTrxTypeId"		=> $_POST['trxTypeId'],
@@ -472,16 +471,18 @@ class Reservation extends CI_Controller {
 			$unidades = $this->reservation_db->getUnidades($filtros);
 			$noUnidades = $this->reservation_db->getUnidadesOcc($filtros);
 			$unitDelete = array();
-			foreach( $unidades as $item ){
+			foreach( $unidades as $key => $item ){
 				foreach( $noUnidades as $item2 ){
 					if($item2->pkUnitId == $item->ID){
-						//unset($item);
-						//break;
+						$unitDelete[] = $key;
 					}
 				}
 			}
-			//unset($unidades[0]);
-			echo json_encode($unidades);
+			foreach( $unitDelete as $item ){
+				unset( $unidades[$item] );
+			}
+			$unidades = array_values($unidades);
+			echo json_encode(array('items' => $unidades, 'items2' => $noUnidades, 'items3' => $unitDelete));
 		}
 	}
 	
@@ -497,8 +498,8 @@ class Reservation extends CI_Controller {
 			$data = $this->reservation_db->getInfoRateUnit($_POST['id']);
 			if(count($data) > 0){
 				$item = $data[0];
-				//$season = $this->reservation_db->selectIdSeason($_POST['season']);
-				$season = 0;
+				$season = $_POST['season'];
+				//$season = 0;
 				$RateType = $this->reservation_db->getRateType( $item->fkFloorPlanId, $item->fkFloorId, $item->fkViewId, $season, $_POST['occupancy'], $_POST['occYear'] );
 				echo json_encode($RateType);
 			}
@@ -543,7 +544,6 @@ class Reservation extends CI_Controller {
 					}
 					$datos[$tyTr] = $data;
 				}
-				
 			}else{
 				$tyTr = $_POST['typeAcc'];
 				$data = $this->reservation_db->getAccountsById( $id, $typeInfo, $tyTr);

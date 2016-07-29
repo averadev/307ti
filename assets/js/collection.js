@@ -364,7 +364,6 @@ function opcionAccountColl(attrType){
   				showLoading(div, true);
 				$(this).load ("contract/modalAccount" , function(){
 					showLoading(div, false);
-					initEventosSellersColl();
 					$( "#dueDateAcc" ).Zebra_DatePicker({
 						format: 'm/d/Y',
 						show_icon: false,

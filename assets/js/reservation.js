@@ -219,10 +219,6 @@ function createDialogReservation(addReservation) {
 				$(document).on( 'change', '#RateRes', function () {
 					setValueUnitPriceRes();
 				});
-				/*(document).on( 'change', '#RateRes', function () {
-					console.log("holnasjkasjkasjk")
-					setValueUnitPriceRes();
-				});*/
 	    	});
 		},
 		autoOpen: false,
@@ -301,9 +297,7 @@ function addUnidadResDialog(){
 			"class": 'dialogModalButtonAccept',
 			click: function() {
 				var unidades = getValueTableUnidadesSeleccionadasRes();
-				console.log(unidades)
 				if (unidades.length == 1) {
-					console.log("Ok es uno");
 					var intDate = iniDateRes.split("/");
 					intDate = intDate[2];
 					var endDate = endDateRes.split("/");
@@ -377,7 +371,6 @@ function getReservations(){
        	url: "reservation/getReservations",
 		dataType:'json',
 		success: function(data){
-			console.log(data)
 			if( data.items ){
 				alertify.success("Found "+ data.length);
 				drawTable2(data.items,"reservationsTable","edit","editRes");
@@ -993,10 +986,6 @@ function modalDiscountAmountRes(){
 }
 
 function tablUnidadadesRes(unidades, frequency, primero, ultimo){
-	console.log(frequency);
-	console.log(primero);
-	console.log(ultimo);
-	console.table(unidades);
 	var bodyHTML = '';
 	for (var i = 0; i < unidades.length; i++) {
 		bodyHTML += "<tr>";
@@ -1204,10 +1193,9 @@ function getUnidadesRes(){
 			console.log(data)
 			showLoading('#tblUnidadesRes',false);
 			if(data != null){
-				alertify.success("Found "+ data.length);
-				drawTable(data, 'add', "details", "Unidades");
+				alertify.success("Found "+ data.items.length);
+				drawTable(data.items, 'add', "details", "Unidades");
 			}else{
-				//$('#reservationstbody').empty();
 				alertify.error("No records found");
 			}
 		},
@@ -1408,7 +1396,7 @@ function changeTabsModalContractRes(screen, id){
 		case "tab-CGeneral":
 			//getDatosReservation(id);
 			break;
-		case "tab-CAccounts":
+		case "tab-RAccounts":
 			//getDatosContractAccounts(id);
 			getAccountsRes( id, "account", "sale" );
 			//getAccountsRes( id, "account", "maintenance" );
@@ -1634,33 +1622,18 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 	    url: "reservation/getAccountsById",
 	    dataType:'json',
 	    success: function(data){
-			console.log(data)
-			
-			
-			//console.log(sales)
 			if(typeInfo == "account"){
 				var reservation = data["reservation"];
 				var frontDesk = data["frontDesk"];
-				//var loan = data["loan"];
 				var acc = data["acc"];
 				drawTable2(reservation, "tableAccountSeller", false, "");
-				//drawTable2(maintenance, "tableAccountMaintenance", false, "");
 				drawTable2(frontDesk, "tableAccountLoan", false, "");
-				setTableAccount(reservation, "");
-				setTableAccount(frontDesk, "");
-				//setTableAccount(loan, "");
-				/*if(typeAcc == "sale"){
-					drawTable2(sales, "tableAccountSeller", false, "");
-				}else if(typeAcc == "maintenance"){
-					drawTable2(sales, "tableAccountMaintenance", false, "");
-				}else if(typeAcc == "loan"){
-					drawTable2(sales, "tableAccountLoan", false, "");
-				}*/
-				
-				//setTableAccount(sales, "");
+				setTableAccountRes( reservation, "tableReservationAccRes" );
+				setTableAccountRes( frontDesk, "tableFrontDeskAccRes" );
 				$('#btNewTransAccRes').data( 'idRes', id )
 				$('#btNewTransAccRes').data( 'idAcc', acc[0].fkAccId );
-				console.log(acc[0].fkAccId)
+				$('#btNewTransAccRes').data( 'idAccFront', acc[0].fkAccId );
+				$('#btNewTransAccRes').data( 'idAccRes', acc[1].fkAccId );
 			}else{
 				var acc = data["acc"];
 				if(acc.length > 0){
@@ -1682,12 +1655,12 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 	});
 }
 
-function setTableAccount(items){
+function setTableAccountRes(items, table){
 	var balance = 0, balanceDeposits = 0, balanceSales = 0, defeatedDeposits = 0, defeatedSales = 0;
 	for(i=0;i<items.length;i++){
 		var item = items[i];
 		var tempTotal = 0, tempTotal2 = 0;
-		if( item.Transaccion_Signo == 1 ){
+		if( item.Sign_transaction == 1 ){
 			tempTotal = parseFloat(item.AbsAmount);
 			tempTotal2 = parseFloat(item.Overdue_Amount);
 		}
@@ -1707,11 +1680,11 @@ function setTableAccount(items){
 	}
 	balance = balanceDeposits + balanceSales;
 	
-	$('td.balanceAccount').text('$ ' + balance.toFixed(2));
-	$('td.balanceDepAccount').text('$ ' + balanceDeposits.toFixed(2));
-	$('td.balanceSaleAccount').text('$ ' + balanceSales.toFixed(2));
-	$('td.defeatedDepAccount').text('$ ' + defeatedDeposits.toFixed(2));
-	$('td.defeatedSaleAccount').text('$ ' + defeatedSales.toFixed(2));
+	$('#' + table +  ' tbody tr td.balanceAccount').text('$ ' + balance.toFixed(2));
+	$('#' + table +  ' tbody tr td.balanceDepAccount').text('$ ' + balanceDeposits.toFixed(2));
+	$('#' + table +  ' tbody tr td.balanceSaleAccount').text('$ ' + balanceSales.toFixed(2));
+	$('#' + table +  ' tbody tr td.defeatedDepAccount').text('$ ' + defeatedDeposits.toFixed(2));
+	$('#' + table +  ' tbody tr td.defeatedSaleAccount').text('$ ' + defeatedSales.toFixed(2));
 	
 }
 
@@ -2302,7 +2275,6 @@ function opcionAccountRes(attrType){
 	var div = "#dialog-accountsRes";
 	dialogo = $(div).dialog ({
   		open : function (event){
-			
 			if ($(div).is(':empty')) {
   				showLoading(div, true);
 				$(this).load ("contract/modalAccount" , function(){
@@ -2376,16 +2348,20 @@ function opcionAccountRes(attrType){
 }
 
 function setDataOpcionAccountRes(attrType){
+	var accType = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accType');
 	if(attrType == "newTransAcc"){
 		$('#grpTrxClassAcc').show();
 		$('#grpTablePayAcc').hide();
 	}else{
-		var trxType = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accType');
-		getAccountsRes( $('#btNewTransAccRes').data( 'idRes' ), "payment", trxType );
+		getAccountsRes( $('#btNewTransAccRes').data( 'idRes' ), "payment", accType );
 		$('#grpTrxClassAcc').hide();
 		$('#grpTablePayAcc').show();
 	}
-	$('#accountIdAcc').text( $('#btNewTransAccRes').data( 'idAcc' ) );
+	if(accType == 6){
+		$('#accountIdAcc').text( $('#btNewTransAccRes').data( 'idAccRes' ) );
+	}else if(accType == 5){
+		$('#accountIdAcc').text( $('#btNewTransAccRes').data( 'idAccFront' ) );
+	}
 	$('#dueDateAcc').val(getCurrentDate());
 	$('#legalNameAcc').text($('#editContractTitle').text());
 	$('#balanceAcc').text($('.balanceAccount').text());
@@ -2402,13 +2378,18 @@ function saveAccContRes(attrType){
 			trxClass.push($(this).attr('trxclass'));
 		});
 	}
-	
-	//console.log($('#btNewTransAccRes').data( 'idRes' ));
 	showAlert(true,"Saving changes, please wait ....",'progressbar');
+	var accType = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accType');
+	var accId = 0;
+	if(accType == 6){
+		accId = $('#btNewTransAccRes').data( 'idAccRes' );
+	}else if(accType == 5){
+		accId = $('#btNewTransAccRes').data( 'idAccFront' );
+	}
 	$.ajax({
 		data: {
 			attrType:attrType,
-			accId:$('#btNewTransAccRes').data( 'idAcc' ),
+			accId:accId,
 			trxTypeId:$('#slcTransTypeAcc').val(),
 			trxClassID:$('#slcTrxClassAcc').val(),
 			amount:$('#AmountAcc').val(),
@@ -2422,7 +2403,6 @@ function saveAccContRes(attrType){
 		dataType:'json',
 		url: 'reservation/saveTransactionAcc'
 	}).done(function( data, textStatus, jqXHR ) {
-		console.log(data);
 		if( data.success ){
 			//alert("guardeishion");
 			//getDatailByID("contractstbody");
@@ -2443,7 +2423,7 @@ function saveAccContRes(attrType){
 }
 
 function getTrxTypeRes(url, attrType, errorMsj, funcion, divSelect){
-	var trxType = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accType');
+	var trxType = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accType');
 	$.ajax({
 		type: "POST",
 		data: {
@@ -2569,7 +2549,6 @@ function getFilesRes(id){
 	    url: url,
 	    dataType:'json',
 	    success: function(data){
-			console.log(data);
 			if(data.length > 0){
 				drawTable2(data, "tableCFilesSelectedRes", "deleteFileRes", "eliminar");
 			}else{
@@ -2661,7 +2640,6 @@ function pruebas(){
 }
 
 function drawTableIdOcupacionRes(data, table){
-	console.table(data);
 	var primero = data[0].FirstOccYear;
 	var last = data[0].LastOccYear;
 	var rango = last - primero;
@@ -2683,7 +2661,6 @@ function drawTableIdOcupacionRes(data, table){
 }
 
 function getRateRes(){
-	console.log(unitReservacion[0].season)
 	$("#RateRes").attr('disabled', true);
 	var intDate = iniDateRes.split("/");
 	var occYear = intDate[2];
