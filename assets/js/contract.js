@@ -1879,14 +1879,14 @@ function drawTerminosVenta(data){
 
 function drawTerminoFinanciamiento(data){
 	console.table(data);
-	var balanceFinal  = data.FinanceBalance;
-	var pagoMensual = data.MonthlyPmtAmt;
-	var porEnganche = data.porcentaje;
-	//var balanceFinal = data.TotalFinanceAmt;
+	var balanceFinal  = parseFloat(data.FinanceBalance);
+	var pagoMensual = parseFloat(data.MonthlyPmtAmt);
+	var porEnganche = parseFloat(data.porcentaje);
+	var balanceFinal = parseFloat(data.TotalFinanceAmt);
 
-	$("#cfbalanceFinanced").text(balanceFinal.toFixed(2));
-	$("#cfPagoMensual").text(pagoMensual.toFixed(2));
-	$("#cfEnganche").text(porEnganche.toFixed(2));
+	$("#cfbalanceFinanced").text(balanceFinal);
+	$("#cfPagoMensual").text(pagoMensual);
+	$("#cfEnganche").text(porEnganche);
 
 }
 
