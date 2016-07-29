@@ -479,9 +479,6 @@ function ajaxSelects(url,errorMsj, funcion, divSelect) {
 	});
 }
 
-function saveContract() {
-	console.log("ok esto es genial");
-}
 function verifyContract(){
 	var value = true;
 	var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta"];
@@ -511,7 +508,8 @@ function verifyTablesContract(){
 }
 function verifyLanguage(){
 	var value = true;
-	if($("#selectLanguage").val()=="0"){
+	var languageValue = getNumberTextInput("selectLanguage");
+	if(languageValue == 0){
 		value = false;
 		gotoDiv("contentModalContract", "selectLanguage");
 		$("#selectLanguage").addClass('is-invalid-input');
@@ -538,15 +536,15 @@ function createNewContract(){
 		showAlert(true,"Saving changes, please wait ....",'progressbar');
 		$.ajax({
 			data: {
+				idiomaID : $("#selectLanguage").val(),
+				firstYear :$("#firstYearWeeks").val().trim(),
+				lastYear : $("#lastYearWeeks").val().trim(),
 				legalName : $("#legalName").val().trim(),
 				tourID : $("#TourID").val().trim(),
-				idiomaID : $("#selectLanguage").val(),
 				peoples: getValueTablePersonas(),
 				types: typePeople(),
 				unidades: getValueTableUnidades(),
 				weeks: getArrayValuesColumnTable("tableUnidadesSelected", 6),
-				firstYear :$("#firstYearWeeks").val().trim(),
-				lastYear : $("#lastYearWeeks").val().trim(),
 				tipoVentaId : $("#typeSales").val(),
 				listPrice: $("#precioUnidad").val(),
 				salePrice: $("#precioVenta").val(),
@@ -572,8 +570,6 @@ function createNewContract(){
 					if (modalFin!=null) {
 						modalFin.dialog( "destroy" );
 					}
-					// modalFin = modalFinanciamiento();
-					// modalFin.dialog( "open" );
 					showModalFin(data['idContrato']);
 					$('#dialog-Weeks').empty();
 					$('#tablePeopleSelected tbody').empty();
@@ -891,12 +887,18 @@ function getWeeksDialog(unidades){
        		text: "ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			var frequency = $("#frequency option:selected" ).text();
-       			var primero = $("#firstYearWeeks").val();
-       			var ultimo = $("#lastYearWeeks").val();
-       			tablUnidadades(unidades, frequency, primero, ultimo);	
-       			$(this).dialog('close');
-       			setValueUnitPrice();
+       			var Valorfrequency = getNumberTextInput("frequency");
+       			if (Valorfrequency == 0) {
+       				alertify.error("You should choose a frequency");
+       			}else{
+       				var frequency = $("#frequency option:selected" ).text();
+       				var primero = $("#firstYearWeeks").val();
+	       			var ultimo = $("#lastYearWeeks").val();
+	       			tablUnidadades(unidades, frequency, primero, ultimo);	
+	       			$(this).dialog('close');
+	       			setValueUnitPrice();
+       			}
+       			
        		}
      	}],
      close: function() {
@@ -3042,7 +3044,7 @@ function drawTableIdOcupacion(data, table){
 	var rango = last - primero;
 	var bodyHTML = '';
 	for (var i = 0; i < data.length; i++) {
-        	for(var j = 0; j < rango;j++){
+        	for(var j = 0; j <= rango;j++){
         		bodyHTML += "<tr>";
         		bodyHTML+="<td>" + "week ocupancy"+ "</td>";
         		bodyHTML+="<td>" + data[i].Intv + "</td>";
@@ -3166,16 +3168,24 @@ function getPeopleRandom(){
 }
 
 
-// var ajaxData =  {
-// 		url: "contract/pruebasContract",
-// 		tipo: "json",
-// 		datos: {
-// 			'gifts': [{amount:"500", id:"1"},{amount:"600", id:"2"}]
-// 		},
-// 		funcionExito : console.table,
-// 		funcionError: mensajeAlertify
-// 	};
-// 	ajaxDATA(ajaxData);
+function testContract(){
+	var ajaxData =  {
+		url: "contract/pruebasContract",
+		tipo: "json",
+		datos: {
+			dataContract:{
+				idiomaID: "2",
+				firstYear: "2016",
+				lastYear: "2017",
+				legalName: "FaustinoLoeza",
+				tourID: "0"
+			},
+		},
+		funcionExito : console.table,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
 
 /*
 legalName : $("#legalName").val().trim(),

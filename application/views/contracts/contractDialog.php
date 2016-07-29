@@ -195,7 +195,7 @@
                         <label>Special Discount</label>
                     </div>
                     <div class="large-2 columns end">
-                        <input class="round general" id="descuentoEspecial" required type="text" placeholder="$0.00"/>
+                        <input class="round general" id="descuentoEspecial" type="text" placeholder="$0.00"/>
                     </div>
                     <div class="large-4 columns end">
                         <input type="radio" name="especialDiscount" value="porcentaje" id="porcentajeDE"><label for="porcentaje">Percentage</label>
