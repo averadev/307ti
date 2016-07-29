@@ -25,21 +25,10 @@ class Contract extends CI_Controller {
 	}
 
 	public function pruebasContract(){
-		$dataContract = $_POST['dataContract'];
-		$messages =  allDataContract($dataContract);
-		if (sizeof($messages)>0) {
-			echo json_encode($messages);
-		}else{
-			echo "guardar contracto";
-		}
-		
-			// $GIFT = [
-			// 	"fkResId" => 784,
-			// 	"fkGiftId" => $variable['id'],
-			// 	"Amount" => $variable['amount']
-			// ];
-			// var_dump($GIFT);
-			//$this->contract_db->insertReturnId('tblResgift', $GIFT);
+		$datos = $_POST['dataContract'];
+		var_dump($datos);
+		echo "<br>";
+		echo json_encode($_POST['dataContract']);
 	}
 
 	public function saveContract(){

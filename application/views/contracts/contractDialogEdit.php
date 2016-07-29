@@ -524,7 +524,7 @@
 	<div id="tab-COccupation" class="large-12 columns tab-modal" style="display:none;">
 		<form  data-abide='ajax'>
 			<fieldset class="fieldset">
-				<div class="containerContract">
+				<div class="containerContract" style="height: 400px;overflow: scroll;">
 					<div class="row">
 						<table id="tableCOccupationSelected" width="100%">
 							<thead>

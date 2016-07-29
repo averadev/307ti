@@ -548,7 +548,7 @@ function createNewContract(){
 				tipoVentaId : $("#typeSales").val(),
 				listPrice: $("#precioUnidad").val(),
 				salePrice: $("#precioVenta").val(),
-				specialDiscount:$("#descuentoEspecial").val(),
+				specialDiscount:$("#montoTotalDE").val(),
 				downpayment:$("#downpayment").val(),
 				amountTransfer:$("#amountTransfer").val(),
 				packPrice:sumarArray(getArrayValuesColumnTable("tableDescuentos", 2)),
@@ -3038,21 +3038,30 @@ function manageDatosPeople(data){
 
 
 function drawTableIdOcupacion(data, table){
-	console.table(data);
 	var primero = data[0].FirstOccYear;
 	var last = data[0].LastOccYear;
 	var rango = last - primero;
+	console.log(rango);
 	var bodyHTML = '';
 	for (var i = 0; i < data.length; i++) {
-        	for(var j = 0; j <= rango;j++){
+        	for(var j = 0; j <= rango; j++){
+        		var year = primero + j;
         		bodyHTML += "<tr>";
         		bodyHTML+="<td>" + "week ocupancy"+ "</td>";
+        		bodyHTML+="<td>" + year + "</td>";
         		bodyHTML+="<td>" + data[i].Intv + "</td>";
-        		bodyHTML+="<td>" + parseInt(primero + j) + "</td>";
         		bodyHTML+="</tr>";
         	} 	
         }
     $('#' + table).html(bodyHTML);
+    selectTableUnico("tableCOccupationSelectedbody");
+
+	$("#"+"tableCOccupationSelected").on("click", "tr", function(){
+    	var year = $(this).find("td").eq(1).text().trim();
+    	var week = $(this).find("td").eq(2).text().trim();
+    	console.log(year);
+    	console.log(week);
+	});
 }
 
 function pruebaAltaContrato(){
@@ -3173,13 +3182,19 @@ function testContract(){
 		url: "contract/pruebasContract",
 		tipo: "json",
 		datos: {
-			dataContract:{
+			dataContract:[{
 				idiomaID: "2",
 				firstYear: "2016",
 				lastYear: "2017",
 				legalName: "FaustinoLoeza",
 				tourID: "0"
-			},
+			},{
+				idiomaID: "2",
+				firstYear: "2016",
+				lastYear: "2017",
+				legalName: "FaustinoLoeza",
+				tourID: "0"
+			}],
 		},
 		funcionExito : console.table,
 		funcionError: mensajeAlertify
