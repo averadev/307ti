@@ -37,7 +37,8 @@ class Contract extends CI_Controller {
 			ini_set('max_execution_time', 120);
 			$idContrato = $this->createContract();
 			$this->insertOcupacion($idContrato);
-			$this->insertPeoples($idContrato);
+			$acc = $this->createAcc();
+			$this->insertPeoples($idContrato, $acc);
 			$this->createUnidades($idContrato);
 			$this->createDownPayment($idContrato);
 			$this->createGifts($idContrato);
@@ -131,20 +132,41 @@ private function createUnidades($idContrato){
 	}
 }
 
-private function insertPeoples($idContrato){
-	$rango = intval(sizeof($_POST['peoples']));
-	for($i = 0; $i < $rango; $i++){
-		$personas = [
-			"fkResId"    		=> $idContrato,	
-			"fkPeopleId"        => $_POST['peoples'][$i]["id"],
-			"fkAccId"           => $this->contract_db->selectIdAccType('FDK'),
-			"ynPrimaryPeople"   => $_POST['peoples'][$i]['primario'],
-			"ynBenficiary"		=> $_POST['peoples'][$i]['beneficiario'],
-			"ynActive"          => 1,
-			"CrBy"             	=> $this->nativesessions->get('id'),
-			"CrDt"				=> $this->getToday()
+private function createAcc(){
+	$typeAcc = ['1','2','3'];
+	$resultAcc = array();
+	for($i =0; $i< count($typeAcc); $i++){
+		$cuenta = [
+			"fkAccTypeId"     	=> $typeAcc[$i],
+			"fkCompanyId"    	=> 1,
+			"AccCode"       	=> 1000,
+			"ynActive"		 	=> 1,
+			"CrBy"      		=> $this->nativesessions->get('id'),
+			"CrDt"   			=> $this->getToday(),
+			"MdBy" 				=> $this->nativesessions->get('id'),
+			"MdDt"  			=> $this->getToday()
 		];
-		$this->contract_db->insertReturnId('tblResPeopleAcc ', $personas);
+		$resultAcc[$i] = $this->contract_db->insertReturnId('tblAcc', $cuenta);
+	}
+	return $resultAcc;
+}
+
+private function insertPeoples($idContrato, $acc){
+	$rango = intval(sizeof($_POST['peoples']));
+	for($j=0; $j < count($acc); $j++){
+		for($i = 0; $i < $rango; $i++){
+			$personas = [
+				"fkResId"    		=> $idContrato,	
+				"fkPeopleId"        => $_POST['peoples'][$i]["id"],
+				"fkAccId"           => $acc[$j],
+				"ynPrimaryPeople"   => $_POST['peoples'][$i]['primario'],
+				"ynBenficiary"		=> $_POST['peoples'][$i]['beneficiario'],
+				"ynActive"          => 1,
+				"CrBy"             	=> $this->nativesessions->get('id'),
+				"CrDt"				=> $this->getToday()
+			];
+			$this->contract_db->insertReturnId('tblResPeopleAcc ', $personas);
+		}
 	}
 }
 
