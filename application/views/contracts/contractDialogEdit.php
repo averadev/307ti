@@ -184,7 +184,7 @@
 							<tr>
 								<td>Pack amount</td>
 								<td id="cventapackAmount">$000,000.00</td>
-								<td>Balance to be financed</td>
+								<td>Balance to Finance</td>
 								<td id="cventaFinanced">$00.00</td>
 							</tr>
 						</tbody>
@@ -207,26 +207,26 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td>Balance to be Financed</td>
+								<td>Balance to Finance</td>
 								<td id="cfbalanceFinanced">$00.00</td>
-								<td>Type of funding</td>
-								<td>$00.00</td>
+								<td>Type of Finance</td>
+								<td id="typeFinance"></td>
 							</tr>
 							<tr>
-								<td>Monthly payment</td>
+								<td>Monthly Payment</td>
 								<td id="cfPagoMensual">$00.00</td>
-								<td>Cost collection</td>
-								<td>$000,000.00</td>
+								<td>Collection Cost</td>
+								<td id="CollectionCost"></td>
 							</tr>
 							<tr>
 								<td>% Discount</td>
 								<td id="cfEnganche">$00.00</td>
 								<td>Total funding</td>
-								<td>$000,000.00</td>
+								<td id="totalFounding"></td>
 							</tr>
 							<tr>
-								<td>Total monthly payment</td>
-								<td>$000,000.00</td>
+								<td>Total Monthly Payment</td>
+								<td id="totalMonthlyPayment"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -238,7 +238,7 @@
 					<img class="imgCollapseFieldset" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>
 					Tour
 				</legend>
-				<div class="row" id="editOr" style="display:none;">
+				<div class="row">
 					<div class="small-12 medium-8 large-6 columns">
 						<!-- Tour ID-->
 						<div class="row">

@@ -177,7 +177,15 @@ function getNumberTextInput(div){
 	}else{
 		return 0;
 	}
-}	
+}
+function getNumberTextString(div){
+	var valor = $("#"+div).text();
+	if(valor){
+		return parseFloat(valor);
+	}else{
+		return 0;
+	}
+}		
 function cambiarCantidadP(monto){
 	console.log(monto);
 	var seleccionado = $("input[name='engancheR']:checked").val();
@@ -542,16 +550,15 @@ function createNewContract(){
 				legalName : $("#legalName").val().trim(),
 				tourID : $("#TourID").val().trim(),
 				peoples: getValueTablePersonas(),
-				types: typePeople(),
 				unidades: getValueTableUnidades(),
 				weeks: getArrayValuesColumnTable("tableUnidadesSelected", 6),
 				tipoVentaId : $("#typeSales").val(),
 				listPrice: $("#precioUnidad").val(),
 				salePrice: $("#precioVenta").val(),
 				specialDiscount:$("#montoTotalDE").val(),
-				downpayment:$("#downpayment").val(),
+				downpayment:$("#montoTotal").val(),
 				amountTransfer:$("#amountTransfer").val(),
-				packPrice:sumarArray(getArrayValuesColumnTable("tableDescuentos", 2)),
+				packPrice:sumarArray(getArrayValuesColumnTable("tableDescuentos", 3)),
 				financeBalance: $("#financeBalance").val(),
 				tablapagos: getValueTableDownpayment(),
 				tablaPagosProgramados:getValueTableDownpaymentScheduled(),
@@ -1748,6 +1755,9 @@ function getDatosContract(id){
 	    url: "contract/getDatosContractById",
 	    dataType:'json',
 	    success: function(data){
+
+	    	var c = parseFloat(data['CollectionCost']);
+	    	$("#CollectionCost").text(c);
 	    	drawTableSinHead(data["peoples"], "peoplesContract");
 	    	drawTableSinHead(data["unities"], "tableUnidadesContract");
 	    	drawTerminosVenta(data["terminosVenta"][0]);
@@ -1878,7 +1888,6 @@ function drawTerminosVenta(data){
 }
 
 function drawTerminoFinanciamiento(data){
-	console.table(data);
 	var balanceFinal  = parseFloat(data.FinanceBalance);
 	var pagoMensual = parseFloat(data.MonthlyPmtAmt);
 	var porEnganche = parseFloat(data.porcentaje);
@@ -1887,6 +1896,9 @@ function drawTerminoFinanciamiento(data){
 	$("#cfbalanceFinanced").text(balanceFinal);
 	$("#cfPagoMensual").text(pagoMensual);
 	$("#cfEnganche").text(porEnganche);
+	$("#typeFinance").text(data.FactorDesc);
+	$("#totalFounding").text(balanceFinal);
+	$("#totalMonthlyPayment").text(pagoMensual);
 
 }
 
@@ -1943,42 +1955,40 @@ function setEventosEditarContrato(id){
 
 
 
-function modalFinanciamiento() {
-	var div = "#dialog-Financiamiento";
-	dialogo = $(div).dialog ({
-  		open : function (event){
-  				showLoading(div, true);
-				$(this).load ("contract/modalFinanciamiento" , function(){
-					showLoading(div, false);
-					initEventosFinanciamiento();
-				});
-		},
-		autoOpen: false,
-     	height: maxHeight,
-     	width: "75%",
-     	modal: true,
-     	buttons: [{
-	       	text: "Cancel",
-	       	"class": 'dialogModalButtonCancel',
-	       	click: function() {
-	         	$(this).dialog('close');
-	       }
-	   	},{
-       		text: "ok",
-       		"class": 'dialogModalButtonAccept',
-       		click: function() {
-    			//alertify.success("Financiamiento guardado");
-    			updateFinanciamiento(421);
-    			//$(this).dialog('close');
+// function modalFinanciamiento() {
+// 	var div = "#dialog-Financiamiento";
+// 	dialogo = $(div).dialog ({
+//   		open : function (event){
+//   				showLoading(div, true);
+// 				$(this).load ("contract/modalFinanciamiento" , function(){
+// 					showLoading(div, false);
+// 					initEventosFinanciamiento();
+// 				});
+// 		},
+// 		autoOpen: false,
+//      	height: maxHeight,
+//      	width: "75%",
+//      	modal: true,
+//      	buttons: [{
+// 	       	text: "Cancel",
+// 	       	"class": 'dialogModalButtonCancel',
+// 	       	click: function() {
+// 	         	$(this).dialog('close');
+// 	       }
+// 	   	},{
+//        		text: "ok",
+//        		"class": 'dialogModalButtonAccept',
+//        		click: function() {
+//     			updateFinanciamiento(421);
 	       
-       		}
-     	}],
-     close: function() {
-    	//$('#dialog-ScheduledPayments').empty();
-     }
-	});
-	return dialogo;
-}
+//        		}
+//      	}],
+//      close: function() {
+//     	//$('#dialog-ScheduledPayments').empty();
+//      }
+// 	});
+// 	return dialogo;
+// }
 function addHTMLModalFin(data){
 	$("#dialog-Financiamiento").html(data);
 	initEventosFinanciamiento();
@@ -2046,6 +2056,7 @@ function updateFinanciamiento(id){
 }
 
 function initEventosFinanciamiento(){
+
 	setDate("fechaPrimerPagoF");
 	var palabras = $("#terminosFinanciamientoF option:selected").text();
 		palabras = palabras.split(",");
@@ -2053,14 +2064,15 @@ function initEventosFinanciamiento(){
 		$("#tasaInteresF").text(palabras[1]);
 
 	$("#btnCalcularF").click(function(){
-		var pagoTotal = parseFloat($("#balanceFinanciarF").text());
+		var pagoTotal = getNumberTextString("balanceFinanciarF");
 		var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
 		var interes = parseFloat($("#tasaInteresF").text().split("%")[0]);
 		var pagoMensual = parseFloat(pagoTotal / meses);
-		var pagoMensual = (pagoMensual).toFixed(2);
+		var pagoMensual = parseFloat(pagoMensual.toFixed(2)) + (interes * 10);
+
 		$("#pagoMF").text(pagoMensual);
-		$("#CargoCF").text("8.95");
-		var totalMensual = parseFloat(pagoMensual) + parseFloat(8.95);
+		var cargo = getNumberTextInput("CargoCF");
+		var totalMensual = parseFloat(pagoMensual) + parseFloat(cargo);
 		$("#totalPagarF").text(totalMensual.toFixed(2));
 
 	});

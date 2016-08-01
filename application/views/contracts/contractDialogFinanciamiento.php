@@ -2,7 +2,7 @@
 <form>
   <div class="row">
     <div class="small-3 columns">
-      <label for="totalContracF" class="text-left">Total contract</label>
+      <label for="totalContracF" class="text-left">Total Contract</label>
     </div>
     <div class="small-9 columns">
        <p id="totalContracF"><?php echo $precio[0]->totalFinanceAmt; ?></p>
@@ -18,7 +18,7 @@
   </div>
   <div class="row">
     <div class="small-3 columns">
-      <label for="fechaPrimerPagoF" class="text-left">Fecha primer pago</label>
+      <label for="fechaPrimerPagoF" class="text-left">Payment Date</label>
     </div>
     <div class="small-9 columns">
        <input class="round general" id="fechaPrimerPagoF" type="date" name="fechaPrimerPagoF">
@@ -26,7 +26,7 @@
   </div>
   <div class="row">
     <div class="small-3 columns">
-      <label for="terminosFinanciamientoF" class="text-left">Terminos de financiamiento</label>
+      <label for="terminosFinanciamientoF" class="text-left">Financing Terms</label>
     </div>
     <div class="small-9 columns">
 		<div class="caja">
@@ -78,14 +78,14 @@
                 <thead>
                     <tr>
                         <th class="cellEdit" >Payment</th>
-                        <th class="cellGeneral">Charge collection</th>
+                        <th class="cellGeneral">Collection Fee Amount</th>
                         <th class="cellGeneral">Total to Pay</th>
                    </tr>
                 </thead>
                 <tbody id="tbodyPagosSelected">
                 <tr>
                     <td id="pagoMF">0.00</td>
-                    <td id="CargoCF">0.00</td>
+                    <td id="CargoCF"><?php echo floatval($CostCollection);?></td>
                     <td id="totalPagarF">0.00</td>
                 </tr>
                 </tbody>

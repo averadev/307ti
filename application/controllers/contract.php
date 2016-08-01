@@ -172,7 +172,7 @@ private function insertFinanciamiento($idContrato){
 		"MonthlyPmtAmt"            	=> 0,
 		"BalanceActual"           	=> $balanceFinal,
 		"ynClosingfee"            	=> 1,
-		"ClosingFeeAmt"           	=> 100,
+		"ClosingFeeAmt"           	=> $_POST['closingCost'],
 		"OtherFeeAmt"           	=> 0,
 		"ynReFin"           		=> false,
 		"ynAvailable"           	=> 1,
@@ -633,7 +633,8 @@ public function getFlagsContract(){
 				"peoples" => $this->contract_db->getPeopleContract($id),
 				"unities" => $this->contract_db->getUnitiesContract($id),
 				"terminosVenta" => $this->contract_db->getTerminosVentaContract($id),
-				"terminosFinanciamiento" => $this->contract_db->getTerminosFinanciamiento($id)
+				"terminosFinanciamiento" => $this->contract_db->getTerminosFinanciamiento($id),
+				"CollectionCost" => $this->contract_db->selectCostCollection()
 			];
 			echo json_encode($datos);
 		}
@@ -748,6 +749,7 @@ public function getFlagsContract(){
 			$idContrato = $_POST['idContrato'];
 			$data['precio'] = $this->contract_db->selectPriceFin($idContrato);
 			$data['factores'] = $this->contract_db->selectFactors();
+			$data['CostCollection'] = $this->contract_db->selectCostCollection();
 			$this->load->view('contracts/contractDialogFinanciamiento', $data);
 		}
 	}

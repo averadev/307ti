@@ -410,6 +410,19 @@ class Contract_db extends CI_Model {
             return $row->pkFloorPlanID;
         }
     }
+    public function selectCostCollection(){
+        $this->db->select('CollectionFeeAmt');
+        $this->db->from('tblPropertyFolio');
+        $this->db->where('pkPropertyFolioId', 1);
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->CollectionFeeAmt;
+        }
+    }
 
     public function selectFactors(){
         $this->db->select("pkFactorId as ID, FactorCode, FactorDesc");
@@ -701,8 +714,9 @@ class Contract_db extends CI_Model {
     }
 
     public function getTerminosFinanciamiento($id){
-        $this->db->select("R.FinanceBalance, R.MonthlyPmtAmt, R.DownPmt% as porcentaje , R.TotalFinanceAmt");
+        $this->db->select("R.FinanceBalance, R.MonthlyPmtAmt, R.DownPmt% as porcentaje , R.TotalFinanceAmt,F.FactorDesc");
         $this->db->from("tblResFin R");
+        $this->db->join('tblFactor F', 'R.fkFactorId = F.pkFactorId', 'inner');
         $this->db->where('R.fkResId', $id);
         $query = $this->db->get();
         if($query->num_rows() > 0 )
