@@ -33,8 +33,14 @@ $(document).ready(function() {
 	});
 	
 	$(document).on( 'click', '#btNewTransAccColl, #btAddPayAccColl', function () {
-		var dialogAccount = opcionAccountColl($(this).attr('attr_type'));
-		dialogAccount.dialog("open");
+		var accCode = $('#tab-CollAccounts .tabsModal .tabs .active').attr('attr-accCode');
+		var idAccColl = $('#dialog-Edit-colletion').data( 'idAcc' + accCode );
+		if(idAccColl != undefined){
+			var dialogAccount = opcionAccountColl($(this).attr('attr_type'));
+			dialogAccount.dialog("open");
+		}else{
+			alertify.error('No acc found');
+		}
 	});
 	
 	//$('#textInvStartDate').val(getCurrentDate())
@@ -136,7 +142,6 @@ function getInfoColl(id){
        	url: "collection/getInfoColl",
 		dataType:'json',
 		success: function(data){
-			//console.log(data)
 			if(data.items.length > 0){
 				var item = data.items[0];
 				$('#dialog-Edit-colletion').data('accId', item.fkAccId);
@@ -156,7 +161,6 @@ function getInfoColl(id){
 				showLoading('#dialog-Edit-colletion',false);
 			}
 			showLoading('#dialog-Edit-colletion',false);
-			//console.log(data);
 		},
 		error: function(){
 			alertify.error("try again");
@@ -225,7 +229,6 @@ function getGeneralInfoColl(id){
 				$('#firstOccColl p').html(res.FirstOccYear);
 				$('#lastOccColl p').html(res.LastOccYear);
 			}
-			//console.log(data)
 			//showLoading('#section-Colletion',false);
 		},
 		error: function(){
@@ -239,7 +242,7 @@ function getGeneralInfoColl(id){
  * cambia los pantallas del modal con los tabs
  */
 function changeTabsModalCollection(screen, id){
-	/*//console.log("Este es el ID "+ id);
+	/*
 	$('#tabsContrats .tabs-title').removeClass('active');
 	$('#tabsContrats li[attr-screen=' + screen + ']').addClass('active');
 	//muestra la pantalla selecionada
@@ -251,13 +254,8 @@ function changeTabsModalCollection(screen, id){
 		case "tab-CollAccounts":
 			var typeAcc = $('#dialog-Edit-colletion').data('accType');
 			$("#tab-CollAccounts").load("collection/modalAcc?typeAcc="+typeAcc , function(){
-				//getAccounts("",);
 				getAccountsColl( "account" );
 			});
-			//getDatosContractAccounts(id);
-			//getAccounts( id, "account", "sale" );
-			//getAccounts( id, "account", "maintenance" );
-			//getAccounts( id, "account", "loan" );
 			break;
 	}
 }
@@ -273,31 +271,47 @@ function getAccountsColl(typeInfo){
 	    url: "collection/getAccountsById",
 	    dataType:'json',
 	    success: function(data){
-			console.log(data);
 			if(typeInfo == "account"){
 				var typeAcc = $('#dialog-Edit-colletion').data('accType').trim();
+				var acc = data.items["acc"];
 				if( typeAcc == "SAL" || typeAcc == "LOA" || typeAcc == "FEE"){
 					var sale = data.items["sale"];
 					var maintenance = data.items["maintenance"];
 					var loan = data.items["loan"];
-					drawTable2(sale, "tableAccountSeller", false, "");
-					drawTable2(maintenance, "tableAccountMaintenance", false, "");
-					drawTable2(loan, "tableAccountLoan", false, "");
-					setTableAccountColl(sale, "tableSaleAccColl");
-					setTableAccountColl(maintenance, "tableMainteAccColl");
-					setTableAccountColl(loan, "tableLoanAccColl");
+					if(sale.length > 0){
+						drawTable2(sale, "tableAccountSeller", false, "");
+						setTableAccountColl(sale, "tableSaleAccColl");
+					}
+					if(maintenance.length > 0){
+						drawTable2(maintenance, "tableAccountMaintenance", false, "");
+						setTableAccountColl(maintenance, "tableMainteAccColl");
+					}
+					if(loan.length > 0){
+						drawTable2(loan, "tableAccountLoan", false, "");
+						setTableAccountColl(loan, "tableLoanAccColl");
+					}
+					for( i=0; i<acc.length; i++ ){
+						var nameSafe = acc[i].accType;
+						$('#dialog-Edit-colletion').data( 'idAcc' + nameSafe, acc[i].fkAccId );
+						
+					}
 				}else if( typeAcc == "FDK" || typeAcc == "RES"){
 					var reservation = data.items["reservation"];
 					var frontDesk = data.items["frontDesk"];
-					drawTable2(reservation, "tableAccountSeller", false, "");
-					drawTable2(frontDesk, "tableAccountLoan", false, "");
-					setTableAccountColl(reservation, "");
-					setTableAccountColl(frontDesk, "");
+					if(reservation.length > 0){
+						drawTable2(reservation, "tableAccountSeller", false, "");
+						setTableAccountColl(reservation, "tableResAccColl");
+					}
+					if(frontDesk.length > 0){
+						drawTable2(frontDesk, "tableAccountLoan", false, "");
+						setTableAccountColl(frontDesk, "tableFrontAccColl");
+					}
+					for( i = 0; i < acc.length; i++ ){
+						var nameSafe = acc[i].accType;
+						$('#dialog-Edit-colletion').data('idAcc' + nameSafe, acc[i].fkAccId );
+						//$('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accType');
+					}
 				}
-				var acc = data.items["acc"];
-				
-				//drawTable2(reservation, "tableAccountSeller", false, "");
-				//drawTable2(frontDesk, "tableAccountLoan", false, "");
 			}else{
 				var acc = data.items["acc"];
 				if(acc.length > 0){
@@ -321,13 +335,10 @@ function getAccountsColl(typeInfo){
 }
 
 function setTableAccountColl(items, table){
-	//console.log(items)
 	var balance = 0, balanceDeposits = 0, balanceSales = 0, defeatedDeposits = 0, defeatedSales = 0;
 	for(i=0;i<items.length;i++){
 		var item = items[i];
-		//console.log(item.Sign_transaction)
 		var tempTotal = 0, tempTotal2 = 0;
-		//console.log(item.Transaccion_Signo);
 		if( item.Sign_transaction == 1 ){
 			tempTotal = parseFloat(item.AbsAmount);
 			tempTotal2 = parseFloat(item.Overdue_Amount);
@@ -347,12 +358,13 @@ function setTableAccountColl(items, table){
 		}
 	}
 	balance = balanceDeposits + balanceSales;
-	//console.log(balance)
 	$('#' + table +  ' tbody tr td.balanceAccount').text('$ ' + balance.toFixed(2));
 	$('#' + table +  ' tbody tr td.balanceDepAccount').text('$ ' + balanceDeposits.toFixed(2));
 	$('#' + table +  ' tbody tr td.balanceSaleAccount').text('$ ' + balanceSales.toFixed(2));
 	$('#' + table +  ' tbody tr td.defeatedDepAccount').text('$ ' + defeatedDeposits.toFixed(2));
 	$('#' + table +  ' tbody tr td.defeatedSaleAccount').text('$ ' + defeatedSales.toFixed(2));
+	$('#' + table +  ' tbody tr td.folioAccount').text( $('#FolioResColl p').text() );
+	
 }
 
 function opcionAccountColl(attrType){
@@ -462,6 +474,8 @@ function getSellersColl(){
 }
 
 function setDataOpcionAccountColl(attrType){
+	//var accType = $('#tab-CollAccounts .tabsModal .tabs .active').attr('attr-accType');
+	var accCode = $('#tab-CollAccounts .tabsModal .tabs .active').attr('attr-accCode');
 	if(attrType == "newTransAcc"){
 		$('#grpTrxClassAcc').show();
 		$('#grpTablePayAcc').hide();
@@ -471,7 +485,10 @@ function setDataOpcionAccountColl(attrType){
 		$('#grpTrxClassAcc').hide();
 		$('#grpTablePayAcc').show();
 	}
-	$('#accountIdAcc').text( $('#dialog-Edit-colletion').data('accId') );
+	var idAccColl = $('#dialog-Edit-colletion').data( 'idAcc' + accCode );
+	if( idAccColl != undefined ){
+		$('#accountIdAcc').text( idAccColl );
+	}
 	$('#dueDateAcc').val(getCurrentDate());
 	$('#legalNameAcc').text($('#editContractTitle').text());
 	$('#balanceAcc').text($('.balanceAccount').text());
@@ -556,13 +573,13 @@ function saveAccContRes(attrType){
 			trxClass.push($(this).attr('trxclass'));
 		});
 	}
-	
-	//console.log($('#btNewTransAccRes').data( 'idRes' ));
+	var accCode = $('#tab-CollAccounts .tabsModal .tabs .active').attr('attr-accCode');
+	var idAccColl = $('#dialog-Edit-colletion').data( 'idAcc' + accCode );
 	showAlert(true,"Saving changes, please wait ....",'progressbar');
 	$.ajax({
 		data: {
 			attrType:attrType,
-			accId:$('#dialog-Edit-colletion').data( 'accId' ),
+			accId:idAccColl,
 			trxTypeId:$('#slcTransTypeAcc').val(),
 			trxClassID:$('#slcTrxClassAcc').val(),
 			amount:$('#AmountAcc').val(),
@@ -576,9 +593,7 @@ function saveAccContRes(attrType){
 		dataType:'json',
 		url: 'collection/saveTransactionAcc'
 	}).done(function( data, textStatus, jqXHR ) {
-		console.log(data);
 		if( data.success ){
-			//getDatailByID("contractstbody");
 			getAccountsColl( "account" );
 			$("#dialog-accountsColl").dialog('close');
 			showAlert(false,"Saving changes, please wait ....",'progressbar');

@@ -411,6 +411,19 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 		return $query->result();
 	}
 	
+	public function getTrxTrxSign($id){
+		$this->db->select("d.pkDocId as ID, d.docPath as Path, d.docDesc as Description");
+		$this->db->select("dt.DocTypeDesc");
+		$this->db->select("rd.CrDt as Date");
+        $this->db->from('tblDoc d');
+		$this->db->join('tblDocType dt', 'dt.pkDocTypeId = d.fkDocTypeId');
+		$this->db->join('tblResDoc rd', 'rd.fkdocId = d.pkDocId');
+		$this->db->where('rd.fkResId = ', $id);
+		$this->db->where('d.ynActive = 1');
+        $query = $this->db->get();
+		return $query->result();
+	}
+	
 	/////////////////////////
 	
 	public function selectIdFrequency($string){

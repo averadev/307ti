@@ -1631,7 +1631,6 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 				setTableAccountRes( reservation, "tableReservationAccRes" );
 				setTableAccountRes( frontDesk, "tableFrontDeskAccRes" );
 				$('#btNewTransAccRes').data( 'idRes', id )
-				$('#btNewTransAccRes').data( 'idAcc', acc[0].fkAccId );
 				$('#btNewTransAccRes').data( 'idAccFront', acc[0].fkAccId );
 				$('#btNewTransAccRes').data( 'idAccRes', acc[1].fkAccId );
 			}else{

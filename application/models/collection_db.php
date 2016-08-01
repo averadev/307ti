@@ -168,10 +168,14 @@ Class collection_db extends CI_MODEL
 	}
 	
 	public function getAccByRes($id){
-        $this->db->select("fkAccId");
-        $this->db->from('tblResPeopleAcc');
-		$this->db->where('fkResId = ', $id);
-        $query = $this->db->get();
+		$this->db->select( "rpa.fkAccId, RTRIM(att.AccTypeCode) as accType" );
+        $this->db->from( 'tblResPeopleAcc rpa' );
+		$this->db->join( 'tblAcc a', 'a.pkAccId = rpa.fkAccId' );
+		$this->db->join( 'tblAcctype att', 'att.pkAcctypeId = a.fkAccTypeId' );
+		$this->db->where( 'rpa.fkResId = ', $id );
+		$this->db->where( 'rpa.ynPrimaryPeople = 1' );
+		$this->db->order_by('att.pkAcctypeId ASC');
+		$query = $this->db->get();
 		return $query->result();
     }
 	
@@ -197,10 +201,16 @@ Class collection_db extends CI_MODEL
 		$this->db->join('tblTrxClass tc', 'tc.pkTrxClassid = att.fkTrxClassID');
 		$this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
         $this->db->where('rpa.fkResId', $id);
-		if($typeAcc == "reservation"){
-			$this->db->where('attt.fkAccTypeId = 6');
+		if($typeAcc == "sale"){
+			$this->db->where('a.fkAccTypeId = 1');
+		}else if($typeAcc == "maintenance"){
+			$this->db->where('a.fkAccTypeId = 3');
+		}else if($typeAcc == "loan"){
+			$this->db->where('a.fkAccTypeId = 2');
+		}else if($typeAcc == "reservation"){
+			$this->db->where('a.fkAccTypeId = 6');
 		}else if($typeAcc == "frontDesk"){
-			$this->db->where('attt.fkAccTypeId = 5');
+			$this->db->where('a.fkAccTypeId = 5');
 		}
 		if($typeInfo == "payment"){
 			$this->db->where('tt.TrxSign = 1');

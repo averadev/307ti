@@ -17,7 +17,7 @@
                         <label for="accountIdAcc" class="text-left titleBold">Account ID:</label>
                     </div>
                     <div class="small-8 columns">
-                        <label id="accountIdAcc" for="accountIdAcc" class="text-left">15556</label>
+                        <label id="accountIdAcc" for="accountIdAcc" class="text-left">000</label>
                     </div>
                 </div>
 				<div class="row">

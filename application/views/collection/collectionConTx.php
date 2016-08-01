@@ -1,12 +1,12 @@
 <div class="tabsModal">
 			<ul class="tabs" id="tabsContratsAccounts"  data-tabs>
-				<li class="tabs-title active" attr-screen="tab-CollSales" attr-accType="1" >
+				<li class="tabs-title active" attr-screen="tab-CollSales" attr-accType="1" attr-accCode="SAL" >
 					<a>Sales</a>
 				</li>
-				<li class="tabs-title" attr-screen="tab-CollMaintenance" attr-accType="3">
+				<li class="tabs-title" attr-screen="tab-CollMaintenance" attr-accType="3" attr-accCode="FEE" >
 					<a>Maintenance</a>
 				</li>
-				<li class="tabs-title" attr-screen="tab-CollLoan" attr-accType="2">
+				<li class="tabs-title" attr-screen="tab-CollLoan" attr-accType="2" attr-accCode="LOA" >
 					<a>Loan</a>
 				</li>
 			</ul>
