@@ -550,6 +550,7 @@ function createNewContract(){
 				legalName : $("#legalName").val().trim(),
 				tourID : $("#TourID").val().trim(),
 				peoples: getValueTablePersonas(),
+				types: 	typePeople(),
 				unidades: getValueTableUnidades(),
 				weeks: getArrayValuesColumnTable("tableUnidadesSelected", 6),
 				tipoVentaId : $("#typeSales").val(),
@@ -564,6 +565,8 @@ function createNewContract(){
 				tablaPagosProgramados:getValueTableDownpaymentScheduled(),
 				gifts: getValueTablePacks(),
 				viewId: 1,
+				closingCost: sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7))
+				//totalDiscountPacks
 			},
 			type: "POST",
 			dataType:'json',
