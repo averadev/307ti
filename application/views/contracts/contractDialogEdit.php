@@ -269,13 +269,13 @@
 	<div id="tab-CAccounts" class="large-12 columns tab-modal" style="display:none;">
 		<div class="tabsModal">
 			<ul class="tabs" id="tabsContratsAccounts"  data-tabs>
-				<li class="tabs-title active" attr-screen="tab-CASales" attr-accType="1" >
+				<li class="tabs-title active" attr-screen="tab-CASales" attr-accType="1" attr-accCode="SAL" >
 					<a>Sales</a>
 				</li>
-				<li class="tabs-title" attr-screen="tab-CAMaintenance" attr-accType="3">
+				<li class="tabs-title" attr-screen="tab-CAMaintenance" attr-accType="3" attr-accCode="FEE" >
 					<a>Maintenance</a>
 				</li>
-				<li class="tabs-title" attr-screen="tab-CALoan" attr-accType="2">
+				<li class="tabs-title" attr-screen="tab-CALoan" attr-accType="2" attr-accCode="LOA" >
 					<a>Loan</a>
 				</li>
 			</ul>
@@ -349,16 +349,28 @@
 						<table class="tableAccountResult" id="tableMainteAccRes" style="margin-top:16px;">
 							<tbody>
 								<tr>
-									<td>Folio Contract</td>
+									<td >Folio Contract</td>
 									<td class="folioAccount">00000</td>
 									<td></td>
 									<td></td>
 								</tr>
 								<tr>
-									<td>Balance Maintenance</td>
+									<td>Balance</td>
+									<td class="balanceAccount">$000,000.00</td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td>Balance of Deposits</td>
 									<td class="balanceDepAccount">$000,000.00</td>
-									<td>Defeated Maintenance</td>
+									<td>Defeated Deposits</td>
 									<td class="defeatedDepAccount">$000,000.00</td>
+								</tr>
+								<tr>
+									<td>Balance Sales</td>
+									<td class="balanceSaleAccount">$000,000.00</td>
+									<td>Defeated Sales</td>
+									<td class="defeatedSaleAccount">$000,000.00</td>
 								</tr>
 							</tbody>
 						</table>
@@ -397,14 +409,14 @@
 						<table class="tableAccountResult" id="tableLoanAccRes" style="margin-top:16px;">
 							<tbody>
 								<tr>
-									<td>Folio Contract</td>
-									<td>00000</td>
+									<td >Folio Contract</td>
+									<td class="folioAccount">00000</td>
 									<td></td>
 									<td></td>
 								</tr>
 								<tr>
-									<td>Miscellaneous balance</td>
-									<td class="folioAccount">$000,000.00</td>
+									<td>Balance</td>
+									<td class="balanceAccount">$000,000.00</td>
 									<td></td>
 									<td></td>
 								</tr>

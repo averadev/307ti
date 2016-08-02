@@ -92,8 +92,15 @@ $(document).on( 'click', '#btnAddPeople', function () {
 	});
 	
 	$(document).on( 'click', '#btNewTransAcc, #btAddPayAcc', function () {
-		var dialogAccount = opcionAccount($(this).attr('attr_type'));
-		dialogAccount.dialog("open");
+		var accCode = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accCode');
+		var idAccColl = $('#btNewTransAcc').data( 'idAcc' + accCode );
+		if(idAccColl != undefined){
+			var dialogAccount = opcionAccount($(this).attr('attr_type'));
+			dialogAccount.dialog("open");
+		}else{
+			alertify.error('No acc found');
+		}
+		
 	});
 
 	$(document).on( 'click', '#btnAddTourID', function () {
@@ -1553,8 +1560,8 @@ function changeTabsModalContract(screen, id){
 		case "tab-CAccounts":
 			//getDatosContractAccounts(id);
 			getAccounts( id, "account", "sale" );
-			getAccounts( id, "account", "maintenance" );
-			getAccounts( id, "account", "loan" );
+			/*getAccounts( id, "account", "maintenance" );
+			getAccounts( id, "account", "loan" );*/
 			break;
 		case "tab-CVendors":
 			getDatosContractSellers(id);
@@ -1801,7 +1808,31 @@ function getAccounts( id, typeInfo, typeAcc ){
 	    url: "contract/getAccountsById",
 	    dataType:'json',
 	    success: function(data){
-			var sales = data["sale"];
+			console.log(data);
+			if(typeInfo == "account"){
+				var sale = data["sale"];
+				var maintenance = data["maintenance"];
+				var loan = data["loan"];
+				var acc = data["acc"];
+				if( sale.length > 0 ){
+					drawTable2( sale, "tableAccountSeller", false, "" );
+					setTableAccount( sale, "tableSaleAccRes" );
+				}
+				if( maintenance.length > 0 ){
+					drawTable2( maintenance, "tableAccountMaintenance", false, "" );
+					setTableAccount( maintenance, "tableMainteAccRes" );
+				}
+				if( loan.length > 0 ){
+					drawTable2( loan, "tableAccountLoan", false, "" );
+					setTableAccount( loan, "tableLoanAccRes" );
+				}
+				for( i=0; i<acc.length; i++ ){
+					var nameSafe = acc[i].accType;
+					$('#btNewTransAcc').data( 'idAcc' + nameSafe, acc[i].fkAccId );	
+				}
+				//console.log( $('#btNewTransAcc').data() );
+			}
+			/*var sales = data["sale"];
 			console.table(data["acc"]);
 			if(typeInfo == "account"){
 				if(typeAcc == "sale"){
@@ -1825,7 +1856,7 @@ function getAccounts( id, typeInfo, typeAcc ){
 					});
 					$('#amountSettledAcc').text( '$ ' + amoutCur.toFixed(4) );
 				});
-			}
+			}*/
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -1833,12 +1864,13 @@ function getAccounts( id, typeInfo, typeAcc ){
 	});
 }
 
-function setTableAccount(items){
+function setTableAccount(items, table){
+	//console.log(items)
 	var balance = 0, balanceDeposits = 0, balanceSales = 0, defeatedDeposits = 0, defeatedSales = 0;
 	for(i=0;i<items.length;i++){
 		var item = items[i];
 		var tempTotal = 0, tempTotal2 = 0;
-		if( item.Transaccion_Signo == 1 ){
+		if( item.Sign_transaction == 1 ){
 			tempTotal = parseFloat(item.AbsAmount);
 			tempTotal2 = parseFloat(item.Overdue_Amount);
 		}
@@ -1858,11 +1890,11 @@ function setTableAccount(items){
 	}
 	balance = balanceDeposits + balanceSales;
 	
-	$('td.balanceAccount').text('$ ' + balance.toFixed(2));
-	$('td.balanceDepAccount').text('$ ' + balanceDeposits.toFixed(2));
-	$('td.balanceSaleAccount').text('$ ' + balanceSales.toFixed(2));
-	$('td.defeatedDepAccount').text('$ ' + defeatedDeposits.toFixed(2));
-	$('td.defeatedSaleAccount').text('$ ' + defeatedSales.toFixed(2));
+	$('#' + table +  ' tbody tr td.balanceAccount').text('$ ' + balance.toFixed(2));
+	$('#' + table +  ' tbody tr td.balanceDepAccount').text('$ ' + balanceDeposits.toFixed(2));
+	$('#' + table +  ' tbody tr td.balanceSaleAccount').text('$ ' + balanceSales.toFixed(2));
+	$('#' + table +  ' tbody tr td.defeatedDepAccount').text('$ ' + defeatedDeposits.toFixed(2));
+	$('#' + table +  ' tbody tr td.defeatedSaleAccount').text('$ ' + defeatedSales.toFixed(2));
 	
 }
 
@@ -2653,13 +2685,14 @@ function saveAccCont(attrType){
 			trxClass.push($(this).attr('trxclass'));
 		});
 	}
-	
+	var accCode = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accCode');
+	var idAccCon = $('#btNewTransAcc').data( 'idAcc' + accCode );
 	//console.log($('#btNewTransAcc').data( 'idRes' ));
 	showAlert(true,"Saving changes, please wait ....",'progressbar');
 	$.ajax({
 		data: {
 			attrType:attrType,
-			accId:$('#btNewTransAcc').data('idAcc'),
+			accId:idAccCon,
 			trxTypeId:$('#slcTransTypeAcc').val(),
 			trxClassID:$('#slcTrxClassAcc').val(),
 			amount:$('#AmountAcc').val(),
