@@ -828,6 +828,7 @@ class Contract_db extends CI_Model {
         /*$this->db->select("fkAccId");
         $this->db->from('tblResPeopleAcc');
 		$this->db->where('fkResId = ', $id);*/
+		$this->db->select( "rpa.fkAccId, RTRIM(att.AccTypeCode) as accType" );
         $this->db->from( 'tblResPeopleAcc rpa' );
 		$this->db->join( 'tblAcc a', 'a.pkAccId = rpa.fkAccId' );
 		$this->db->join( 'tblAcctype att', 'att.pkAcctypeId = a.fkAccTypeId' );
