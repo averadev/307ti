@@ -652,6 +652,9 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
+    public function deleteFlag($id){
+        $this->db->delete('tblResFlag', array('pkResflagId' => $id));
+    }
 
     public function getUnidades($filters){
 

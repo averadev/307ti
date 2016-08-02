@@ -99,7 +99,7 @@
 						<table id="peopleContract" width="100%">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >People</th>
+									<th colspan="8" class="thColspan colorCrema" >People</th>
 								</tr> 
 								<tr>
 									<th class="cellEdit" >ID</th>
@@ -122,19 +122,15 @@
                         <table id="tableUnidades" width="100%">
                             <thead>
 								<tr class="trColspan">
-									<th colspan="9">Units</th>
+									<th colspan="9" class="colorCrema">Units</th>
 								</tr>
 								<tr>
-									<!-- <th class="cellEdit oculto">ID</th>
-									<th class="cellEdit oculto">Frequency</th> -->
 									<th class="cellEdit" >Code</th>
 									<th class="cellGeneral">Description</th>
 									<th class="cellGeneral">Price</th>
 									<th class="cellGeneral" ># Week</th>
 									<th class="cellGeneral" >Fisrt Year OCC</th>
 									<th class="cellGeneral" >Last Year OCC</th>
-<!-- 									<th class="cellGeneral" >Frequency</th> -->
-<!-- 									<th></th> -->
 								</tr>
 							</thead>
 							<tbody id="tableUnidadesContract"></tbody>
@@ -153,7 +149,7 @@
 					<table class="tableAccountResult">
 						<thead>
 							<tr class="trColspan">
-								<th colspan="4">Results</th>
+								<th colspan="4" class="colorCrema">Results</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -202,7 +198,7 @@
 					<table class="tableAccountResult">
 						<thead>
 							<tr class="trColspan">
-								<th colspan="4">Results</th>
+								<th colspan="4" class="colorCrema">Results</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -481,7 +477,7 @@
 						<table id="tableSellerSelected" width="100%" style="min-height:250px;">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Sales People</th>
+									<th colspan="8" class="thColspan colorCrema" >Sales People</th>
 								</tr> 
 								<tr>
 									<th class="cellEdit" >ID</th>
@@ -513,7 +509,7 @@
 						<table id="tableProvisionsSelected" width="100%" style="min-height:250px;">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Gifts</th>
+									<th colspan="8" class="thColspan colorCrema" >Gifts</th>
 								</tr> 
 								<tr>
 									<th class="cellGeneral">Code</th>
@@ -541,7 +537,7 @@
 						<table id="tableCOccupationSelected" width="100%">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Occupancy</th>
+									<th colspan="8" class="thColspan colorCrema" >Occupancy</th>
 								</tr> 
 								<tr>
 									<th class="cellGeneral">Occupancy Type</th>
@@ -566,7 +562,7 @@
 						<table id="tableCDocumentsSelected" width="100%" style="min-height:250px;">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Occupancy</th>
+									<th colspan="8" class="thColspan colorCrema" >Documents</th>
 								</tr> 
 								<tr>
 									<th class="cellEdit"></th>
@@ -594,7 +590,7 @@
 						<table id="tableCNotesSelected" width="100%">
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Notes</th>
+									<th colspan="8" class="thColspan colorCrema" >Notes</th>
 								</tr> 
 								<tr>
 									<th class="cellEdit">ID</th>
@@ -619,6 +615,10 @@
 	<!-- Banderas -->
 	<div id="tab-CFlags" class="large-12 columns tab-modal" style="display:none;">
 		<form  data-abide='ajax'>
+				<div class="small-12 medium-12 large-12 columns" > 
+				<!-- <a id="btnSAveFlags" class="button tiny"><i class="fa fa-save fa-lg">Save</i></a> -->
+				<a id="btnNextStatus" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>Next Status</a>
+			</div>
 			<fieldset class="fieldset">
 				<div class="containerContract">
 					<div class="row">
@@ -626,12 +626,13 @@
 							<table id="tableFlagsList" width="100%" style="min-height:250px;">
 								<thead>
 									<tr class="trColspan" >
-										<th colspan="3" class="thColspan" >List of flags</th>
+										<th colspan="4" class="thColspan colorCrema" >List of flags</th>
 									</tr> 
 									<tr>
 										<th class="cellGeneral">ID</th>
 										<th class="cellGeneral">Code</th>
 										<th class="cellGeneral">Descripción</th>
+										<th class="cellGeneral">ADD</th>
 									</tr>
 								</thead>
 								<tbody id="tableFlagsListBody"></tbody>
@@ -641,9 +642,10 @@
 							<table id="tableCNotesAssignedSelected" width="100%">
 								<thead>
 									<tr class="trColspan" >
-										<th colspan="3" class="thColspan" >Assigned flags</th>
+										<th colspan="4" class="thColspan colorCrema" >Assigned flags</th>
 									</tr> 
 									<tr>
+										<th class="cellGeneral">DELETE</th>
 										<th class="cellGeneral">ID</th>
 										<th class="cellGeneral">Code</th>
 										<th class="cellGeneral">Descripción</th>
@@ -655,11 +657,7 @@
 					</div>
 				</div>
 			</fieldset>
-			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btnSAveFlags" class="button tiny"><i class="fa fa-save fa-lg">Save</i></a>
-				<a id="btnNextStatus" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>Next Status</a>
-<!-- 				<i class="fa fa-refresh fa-spin fa-3x fa-fw"></i> -->
-			</div>
+
 		</form>
 	</div>
 	<!-- archivos -->
@@ -671,7 +669,7 @@
 						<table id="tableCFilesSelected" width="100%" >
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Notes</th>
+									<th colspan="8" class="thColspan colorCrema" >Files</th>
 								</tr> 
 								<tr>
 									<th class="cellGeneral">Id</th>

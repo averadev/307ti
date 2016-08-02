@@ -165,12 +165,12 @@ $(document).on( 'click', '#btnAddPeople', function () {
 function updateBalanceFinal(){
 	//PrecioVenta + PackReference + ClosingCost-DownPayment-CashDiscount-TransferAmount
 	var precioVenta = getNumberTextInput("precioVenta");
-	var packReference = getNumberTextInput("packReference");
+	//var packReference = getNumberTextInput("packReference");
 	var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
 	var downpayment = getNumberTextInput("montoTotal");
 	var cashDiscount = getNumberTextInput("totalDiscountPacks");
 	var transferAmount = getNumberTextInput("amountTransfer");
-	var total = precioVenta + packReference + closingCost;
+	var total = precioVenta + closingCost;
 	var descuentoEspecial = getNumberTextInput("montoTotalDE");
 	var descuento = downpayment+cashDiscount+transferAmount+descuentoEspecial;
 	var balanceFinal = $("#financeBalance").val(total-descuento);
@@ -193,12 +193,14 @@ function getNumberTextString(div){
 		return 0;
 	}
 }		
-function cambiarCantidadP(monto){
-	console.log(monto);
+function cambiarCantidadP(monto)
+{
 	var seleccionado = $("input[name='engancheR']:checked").val();
-	var precioVenta = $("#precioVenta").val();
+	var precioVenta = getNumberTextInput("precioVenta"); 
+	var descuento = getNumberTextInput("montoTotalDE");
+	var total = precioVenta - descuento;
 	if (seleccionado == "porcentaje") {
-		var porcentaje = precioVenta * (monto/100);
+		var porcentaje = total * (monto/100);
 		$("#montoTotal").val(porcentaje.toFixed(2));
 	}else{
 		$("#montoTotal").val(monto);
@@ -1655,7 +1657,6 @@ function initEventosFlags(){
 		}else{
 			alertify.error("You should pick one");
 		}
-		
 	});
 	$("#btnNextStatus").click(function(){
 		nextStatusContract();
@@ -2366,8 +2367,8 @@ function getTypesFlags(id){
 	    	showLoading(div, false);
 	    	console.table(data);
 	    	if (data) {
-	    		drawTableId(data,"tableFlagsListBody");
-	    		selectTable("tableFlagsListBody");
+	    		drawTableFlags(data,"tableFlagsListBody");
+	    		saveFlags("tableFlagsListBody");
 	    	}else{
 	    		alertify.error("No records found");
 	    	}
@@ -2376,6 +2377,42 @@ function getTypesFlags(id){
 	        alertify.error("Try again");
 	    }
 	});
+}
+function saveFlags(div){
+	var pickedup;
+	$("#"+div).on("click", "tr", function(){
+          if (pickedup != null) {
+              pickedup.removeClass("yellow");
+          }
+          $( this ).addClass("yellow");
+          pickedup = $(this);
+          saveFlag();
+	});
+}
+function saveFlag(){
+	var flags = getArrayValuesSelectedColum("tableFlagsList", 1).length;
+	if (flags>0) {
+		SaveFlagsContract();
+	}
+}
+
+function deleteSelectTable(table){
+	$('#'+table+' tr').each( function(){
+		$(this).removeClass("yellow");
+	});
+}
+
+function drawTableFlags(data, table){
+    var bodyHTML = '';
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        }
+        bodyHTML+="<td>" + '<i class="fa fa-long-arrow-right fa-2x" aria-hidden="true"></i>' + "</td>";
+        bodyHTML+="</tr>";
+    }
+    $('#' + table).html(bodyHTML);
 }
 function modalAddNotas() {
 	var div = "#dialog-Notas";
@@ -2507,7 +2544,7 @@ function getFlags(id){
 	    success: function(data){
 	    	showLoading(div, false);
 	    	if (data) {
-	    		drawTableId(data,"flagsAsignedBody");
+	    		drawTableFlagsAsigned(data,"flagsAsignedBody");
 	    	}else{
 	    		alertify.error("No records found");
 	    	}
@@ -2533,13 +2570,65 @@ function SaveFlagsContract(){
 	    dataType:'json',
 	    success: function(data){
 	    	alertify.success(data['mensaje']);
-	    	drawTableId(data['banderas'],"flagsAsignedBody");
+	    	drawTableFlagsAsigned(data['banderas'],"flagsAsignedBody");
 	    },
 	    error: function(){
 	        alertify.error("Try again");
 	    }
 	});
 }
+
+function drawTableFlagsAsigned(data, table){
+	var bodyHTML = '';
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+        bodyHTML +="<td>" + '<i class="fa fa-long-arrow-left fa-2x" aria-hidden="true"></i>' + "</td>";
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        };
+        bodyHTML+="</tr>";
+    }
+    $('#' + table).html(bodyHTML);
+    deleteSelectFlag("flagsAsignedBody");
+}
+function drawTableFlagsAsignedFlags(data){
+	var bodyHTML = '';
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+        bodyHTML +="<td>" + '<i class="fa fa-long-arrow-left fa-2x" aria-hidden="true"></i>' + "</td>";
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        };
+        bodyHTML+="</tr>";
+    }
+    $('#' + 'flagsAsignedBody').html(bodyHTML);
+    deleteSelectFlag("flagsAsignedBody");
+}
+
+function deleteSelectFlag(div){
+
+	var pickedup;
+	$("#"+div).on("click", "tr", function(){
+		var id = $(this).find('td').eq(1).text();
+        $(this).closest("tr").remove();
+          deleteFlag(id);
+	});
+
+}
+
+function deleteFlag(id){
+	var datos =  {
+		url: "contract/deleteFlag",
+		tipo: "html",
+		datos: {
+			id:id
+		},
+		funcionExito : drawTableFlagsAsignedFlags,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(datos);
+}
+
 function nextStatusContract(){
 	deactiveEventClick("btnNextStatus");
 	$("#iNextStatus").addClass("fa-spin");
@@ -2564,22 +2653,6 @@ function nextStatusContract(){
 	    }
 	});
 }
-// function selectStatusContract(){
-// 	$.ajax({
-// 	    data:{
-// 	        id: 2,
-// 	    },
-// 	    type: "POST",
-// 	    url: "contract/getPropertyStatus",
-// 	    dataType:'json',
-// 	    success: function(data){
-// 	    	$("#editContracStatus").text(data['propiedad']);
-// 	    },
-// 	    error: function(){
-// 	        alertify.error("Try again");
-// 	    }
-// 	});
-// }
 /*** modal Account ***/
 function opcionAccount(attrType){
 	var div = "#dialog-accounts";
@@ -2857,7 +2930,8 @@ function getFiles(id){
 			if(data.length > 0){
 				drawTable2(data, "tableCFilesSelected", "deleteFile", "eliminar");
 			}else{
-				noResultsTable("contentTableFile", "tableCFilesSelected", "No results found");
+				//noResultsTable("contentTableFile", "tableCFilesSelected", "No results found");
+				alertify.error("No Results Found");
 			}
 			
 			showLoading("#tableCFilesSelected", false);
@@ -3249,27 +3323,3 @@ function testContract(){
 	};
 	ajaxDATA(ajaxData);
 }
-
-/*
-legalName : $("#legalName").val().trim(),
-tourID : $("#TourID").val().trim(),
-idiomaID : $("#selectLanguage").val(),
-peoples: getValueTablePersonas(),
-types: typePeople(),
-unidades: getValueTableUnidades(),
-weeks: getArrayValuesColumnTable("tableUnidadesSelected", 6),
-firstYear :$("#firstYearWeeks").val().trim(),
-lastYear : $("#lastYearWeeks").val().trim(),
-tipoVentaId : $("#typeSales").val(),
-listPrice: $("#precioUnidad").val(),
-salePrice: $("#precioVenta").val(),
-specialDiscount:$("#totalDiscountPacks").val(),
-downpayment:$("#downpayment").val(),
-amountTransfer:$("#amountTransfer").val(),
-packPrice:sumarArray(getArrayValuesColumnTable("tableDescuentos", 2)),
-financeBalance: $("#financeBalance").val(),
-tablapagos: getValueTableDownpayment(),
-tablaPagosProgramados:getValueTableDownpaymentScheduled(),
-tablaPacks: getValueTablePacks(),
-viewId: 1
-*/

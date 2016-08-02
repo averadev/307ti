@@ -424,7 +424,20 @@ public function createFlags(){
 			
 		}
 		$respuesta = [
-			"mensaje"=> "Se inserto Correctamente",
+			"mensaje"=> "Save Correctly",
+			"banderas" => $this->contract_db->selectFlags($ID)
+		];
+		echo json_encode($respuesta);
+	}
+}
+
+public function deleteFlag(){
+	if($this->input->is_ajax_request()) {
+		$ID = $_POST['id'];
+		$idContrato = $_POST['idContrato'];
+	 	$this->db->delete('tblResFlag', array('pkResflagId' => $ID));
+	 	$respuesta = [
+			"mensaje"=> "Delete Correctly",
 			"banderas" => $this->contract_db->selectFlags($ID)
 		];
 		echo json_encode($respuesta);
