@@ -1832,32 +1832,20 @@ function getAccounts( id, typeInfo, typeAcc ){
 					$('#btNewTransAcc').data( 'idAcc' + nameSafe, acc[i].fkAccId );	
 				}
 				//console.log( $('#btNewTransAcc').data() );
-			}
-			/*var sales = data["sale"];
-			console.table(data["acc"]);
-			if(typeInfo == "account"){
-				if(typeAcc == "sale"){
-					drawTable2(sales, "tableAccountSeller", false, "");
-				}else if(typeAcc == "maintenance"){
-					drawTable2(sales, "tableAccountMaintenance", false, "");
-				}else if(typeAcc == "loan"){
-					drawTable2(sales, "tableAccountLoan", false, "");
-				}
-				
-				setTableAccount(sales, "");
-				$('#btNewTransAcc').data( 'idRes', id )
-				$('#btNewTransAcc').data( 'idAcc', data["acc"][0].fkAccId );
 			}else{
-				drawTable2(sales, "tabletPaymentAccoun", false, "");
-				$(".checkPayAcc").off( 'change' );
-				$(".checkPayAcc").on('change', function (){
-					var amoutCur = 0;
-					$("input[name='checkPayAcc[]']:checked").each(function(){
-						amoutCur = amoutCur + parseFloat($(this).val());
+				var acc = data["acc"];
+				if(acc.length > 0){
+					drawTable2(acc, "tabletPaymentAccoun", false, "");
+					$(".checkPayAcc").off( 'change' );
+					$(".checkPayAcc").on('change', function (){
+						var amoutCur = 0;
+						$("input[name='checkPayAcc[]']:checked").each(function(){
+							amoutCur = amoutCur + parseFloat($(this).val());
+						});
+						$('#amountSettledAcc').text( '$ ' + amoutCur.toFixed(4) );
 					});
-					$('#amountSettledAcc').text( '$ ' + amoutCur.toFixed(4) );
-				});
-			}*/
+				}
+			}
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -2741,7 +2729,9 @@ function setDataOpcionAccount(attrType){
 		$('#grpTrxClassAcc').hide();
 		$('#grpTablePayAcc').show();
 	}
-	$('#accountIdAcc').text( $('#btNewTransAcc').data( 'idAcc' ) );
+	var accCode = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accCode');
+	var idAccColl = $('#btNewTransAcc').data( 'idAcc' + accCode );
+	$('#accountIdAcc').text( idAccColl );
 	$('#dueDateAcc').val(getCurrentDate());
 	$('#legalNameAcc').text($('#editContractTitle').text());
 	$('#balanceAcc').text($('.balanceAccount').text());
