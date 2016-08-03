@@ -38,6 +38,7 @@ class Contract extends CI_Controller {
 			$idContrato = $this->createContract();
 			$this->insertOcupacion($idContrato);
 			$acc = $this->createAcc();
+			//$this->insertTarjeta($idContrato, $acc);
 			$this->insertPeoples($idContrato, $acc);
 			$this->createUnidades($idContrato);
 			$this->createDownPayment($idContrato);
@@ -52,6 +53,16 @@ class Contract extends CI_Controller {
 	}
 }
 
+private function insertTarjeta($id, $type){
+	$tarjeta = [
+		"fkAccTypeId" => $_POST['card']['type'],
+		"fkAccId" => $type,
+		"CCNumber" => $_POST['card']['number'],
+		"expDate" => $_POST['card']['dateExpiration'],
+		"ZIP" => $_POST['card']['poscode'],
+		"Code" => $_POST['card']['code']
+	];
+}
 
 private function createContract(){
 		$Contract = [
@@ -434,11 +445,11 @@ public function createFlags(){
 public function deleteFlag(){
 	if($this->input->is_ajax_request()) {
 		$ID = $_POST['id'];
-		$idContrato = $_POST['idContrato'];
+		$idContrato = $_POST['idContrat'];
 	 	$this->db->delete('tblResFlag', array('pkResflagId' => $ID));
 	 	$respuesta = [
-			"mensaje"=> "Delete Correctly",
-			"banderas" => $this->contract_db->selectFlags($ID)
+			"mensaje" => "Delete Correctly",
+			"banderas" => $this->contract_db->selectFlags($idContrato)
 		];
 		echo json_encode($respuesta);
 	}

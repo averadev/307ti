@@ -52,13 +52,22 @@
                         <input class="round general" type="text" id="numeroTarjeta" name="numeroTarjeta" class="general" required>
                     </div>
                 </div>
+                <!-- Numero de tarjeta-->
+                <div class="row" >
+                    <div class="small-3 columns">
+                        <label for="cardType" class="text-left">Card Type</label>
+                    </div>
+                    <div class="small-9 columns">
+                        <input class="round general" type="text" id="cardType" name="cardType" class="general" required>
+                    </div>
+                </div>
                 <!-- fecha de expiracion-->
                 <div class="row">
                     <div class="small-3 columns">
                         <label  for="dateExpiracion" class="text-left">Expiration Date</label>
                     </div>
                     <div class="small-9 columns">
-                        <input class="round general" type="text" id="dateExpiracion" name="dateExpiracion" class="general" required>
+                        <input class="round general" type="date" id="dateExpiracion" name="dateExpiracion" class="general" required>
                     </div>
                 </div>
                  <!-- Codigo Postal-->

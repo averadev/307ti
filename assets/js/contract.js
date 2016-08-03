@@ -575,6 +575,7 @@ function createNewContract(){
 				gifts: getValueTablePacks(),
 				viewId: 1,
 				closingCost: sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7))
+				card: datosCard()
 				//totalDiscountPacks
 			},
 			type: "POST",
@@ -1286,7 +1287,7 @@ function calcularDepositDownpayment(){
 ////////////////////////////////////////////////////////////////
 function selectMetodoPago(){
 	$('#tiposPago').on('change', function() {
-  		if(this.value == 2){
+  		if(this.value != 1 && this.value != 5){
   			$("#datosTarjeta").show();
   		}else{
   			$("#datosTarjeta").hide();
@@ -1366,6 +1367,51 @@ function initEventosDownpayment(){
 		$("#montoDownpayment").val(0);
 	});
 	
+	$('#numeroTarjeta').on('change', function() {
+	$("#numeroTarjeta").val(splitNumberTarjeta());
+
+	  $('#numeroTarjeta').validateCreditCard(function(result) {
+	  	if (result.valid) {
+	  		$("#cardType").val(result.card_type.name);
+	  		$("#numeroTarjeta").removeClass('is-invalid-input');
+
+	  	}else{
+	  		$("#numeroTarjeta").addClass('is-invalid-input');
+	  	}
+        });
+	});
+	  
+}
+
+function datosCard(){
+	var tipoPago = $("#tiposPago").val();
+	if(tipoPago != 1 && tipoPago != 5){
+		var datos = {};
+		datos.number = $('#numeroTarjeta').val().replace(/[^\d]/g, '');
+		datos.type = $("#cardType").val();
+		datos.dateExpiration = $("#dateExpiracion").val();
+		datos.poscode = $("#codigoPostal").val();
+		datos.code = $("#codigoTarjeta").val();
+		return datos
+	}else{
+		return null;
+	}
+	
+}
+
+function splitNumberTarjeta(){
+	var n =   $('#numeroTarjeta').val().replace(/[^\d]/g, '');
+	var numero = n.match(/.{1,4}/g);
+	var tarjeta = "";
+	for(var i = 0; i < numero.length; i++)
+	{
+		if (i!= numero.length-1) {
+			tarjeta += numero[i] + "-";
+		}else{
+			tarjeta += numero[i];
+		}
+	}
+	return tarjeta;
 }
 
 function initEventosDownpaymentProgramados(){
@@ -2353,7 +2399,6 @@ function getTypesFlags(id){
 	    dataType:'json',
 	    success: function(data){
 	    	showLoading(div, false);
-	    	console.table(data);
 	    	if (data) {
 	    		drawTableFlags(data,"tableFlagsListBody");
 	    		saveFlags("tableFlagsListBody");
@@ -2559,6 +2604,7 @@ function SaveFlagsContract(){
 	    success: function(data){
 	    	alertify.success(data['mensaje']);
 	    	drawTableFlagsAsigned(data['banderas'],"flagsAsignedBody");
+	    	//deleteSelectFlag("flagsAsignedBody");
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -2566,7 +2612,9 @@ function SaveFlagsContract(){
 	});
 }
 
+
 function drawTableFlagsAsigned(data, table){
+	console.table(data);
 	var bodyHTML = '';
     for (var i = 0; i < data.length; i++) {
         bodyHTML += "<tr>";
@@ -2577,39 +2625,30 @@ function drawTableFlagsAsigned(data, table){
         bodyHTML+="</tr>";
     }
     $('#' + table).html(bodyHTML);
+    $('#flagsAsignedBody').off('click');
     deleteSelectFlag("flagsAsignedBody");
 }
 function drawTableFlagsAsignedFlags(data){
-	var bodyHTML = '';
-    for (var i = 0; i < data.length; i++) {
-        bodyHTML += "<tr>";
-        bodyHTML +="<td>" + '<i class="fa fa-long-arrow-left fa-2x" aria-hidden="true"></i>' + "</td>";
-        for (var j in data[i]) {
-            bodyHTML+="<td>" + data[i][j] + "</td>";
-        };
-        bodyHTML+="</tr>";
-    }
-    $('#' + 'flagsAsignedBody').html(bodyHTML);
-    deleteSelectFlag("flagsAsignedBody");
+	alertify.success(data['mensaje']);
+	//drawTableFlagsAsigned(data['banderas'],"flagsAsignedBody");
 }
 
 function deleteSelectFlag(div){
-
-	var pickedup;
 	$("#"+div).on("click", "tr", function(){
 		var id = $(this).find('td').eq(1).text();
         $(this).closest("tr").remove();
-          deleteFlag(id);
+        deleteFlag(id);
 	});
-
 }
 
 function deleteFlag(id){
+	var idContrat = getValueFromTableSelected("contracts", 1);
 	var datos =  {
 		url: "contract/deleteFlag",
-		tipo: "html",
+		tipo: "json",
 		datos: {
-			id:id
+			id:id,
+			idContrat:idContrat
 		},
 		funcionExito : drawTableFlagsAsignedFlags,
 		funcionError: mensajeAlertify
