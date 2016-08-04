@@ -20,7 +20,7 @@ class Reservation_db extends CI_Model {
         $this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = r.pkResId');
         $this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId');
-		$this->db->join('tblEmployee em', 'em.fkPeopleId = p.pkPeopleId');
+		$this->db->join('tblEmployee em', 'em.fkPeopleId = p.pkPeopleId', 'LEFT');
         $this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId');
 		//$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
 		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
@@ -39,12 +39,18 @@ class Reservation_db extends CI_Model {
                 }
             }
 			if($filters['dates'] != false){
-				if(isset($filters['dates']['startDateRes'])){
-                    $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) = ', $filters['dates']['startDateRes']);
-                }
-				if(isset($filters['dates']['endDateRes'])){
-                    $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) = ', $filters['dates']['endDateRes']);
-                }
+				if( isset($filters['dates']['startDateRes']) && isset($filters['dates']['endDateRes']) ){
+					$this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) >= ', $filters['dates']['startDateRes']);
+					$this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) <= ', $filters['dates']['endDateRes']);
+				}
+				else{
+					if(isset($filters['dates']['startDateRes'])){
+						$this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) = ', $filters['dates']['startDateRes']);
+					}
+					if(isset($filters['dates']['endDateRes'])){
+						$this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) = ', $filters['dates']['endDateRes']);
+					}
+				}
             }
         }
         if ($id!=NULL) {

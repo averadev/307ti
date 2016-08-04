@@ -237,10 +237,10 @@
 	<div id="tab-RAccounts" class="large-12 columns tab-modal" style="display:none;">
 		<div class="tabsModal">
 			<ul class="tabs" id="tabsContratsAccounts"  data-tabs>
-				<li class="tabs-title active" attr-screen="tab-RARes" attr-accType="6" >
+				<li class="tabs-title active" attr-screen="tab-RARes" attr-accType="6" attr-accCode="RES" >
 					<a>Reservation</a>
 				</li>
-				<li class="tabs-title" attr-screen="tab-RAFrontDesk" attr-accType="5">
+				<li class="tabs-title" attr-screen="tab-RAFrontDesk" attr-accType="5" attr-accCode="FDK" >
 					<a>Front Desk</a>
 				</li>
 			</ul>

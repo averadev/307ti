@@ -112,8 +112,14 @@ $(document).ready(function(){
 	});
 	
 	$(document).on( 'click', '#btNewTransAccRes, #btAddPayAccRes', function () {
-		var dialogAccount = opcionAccountRes($(this).attr('attr_type'));
-		dialogAccount.dialog("open");
+		var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
+		var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
+		if(idAccColl != undefined){
+			var dialogAccount = opcionAccountRes($(this).attr('attr_type'));
+			dialogAccount.dialog("open");
+		}else{
+			alertify.error('No acc found');
+		}
 	});
 
 	/*$(document).on( 'click', '#btnAddTourID', function () {
@@ -1645,9 +1651,6 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 					$('#btNewTransAccRes').data( 'idAcc' + nameSafe, acc[i].fkAccId );	
 				}
 				$('#btNewTransAccRes').data( 'idRes', id )
-				console.log( $('#btNewTransAccRes').data() );
-				//$('#btNewTransAccRes').data( 'idAccFront', acc[0].fkAccId );
-				//$('#btNewTransAccRes').data( 'idAccRes', acc[1].fkAccId );
 			}else{
 				var acc = data["acc"];
 				if(acc.length > 0){
@@ -2394,16 +2397,18 @@ function saveAccContRes(attrType){
 	}
 	showAlert(true,"Saving changes, please wait ....",'progressbar');
 	var accType = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accType');
-	var accId = 0;
-	if(accType == 6){
+	//var accId = 0;
+	/*if(accType == 6){
 		accId = $('#btNewTransAccRes').data( 'idAccRes' );
 	}else if(accType == 5){
 		accId = $('#btNewTransAccRes').data( 'idAccFront' );
-	}
+	}*/
+	var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
+		var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
 	$.ajax({
 		data: {
 			attrType:attrType,
-			accId:accId,
+			accId:idAccColl,
 			trxTypeId:$('#slcTransTypeAcc').val(),
 			trxClassID:$('#slcTrxClassAcc').val(),
 			amount:$('#AmountAcc').val(),
