@@ -25,10 +25,28 @@ class Contract extends CI_Controller {
 	}
 
 	public function pruebasContract(){
-		$datos = $_POST['dataContract'];
-		var_dump($datos);
-		echo "<br>";
-		echo json_encode($_POST['dataContract']);
+		$datos = $_POST['card'];
+		if ($datos) {
+			$Card = [
+				"fkCcTypeId" => intval($datos['type']),
+				"fkAccId" => 1,
+				"CCNumber" => $datos['number'],
+				"expDate" => $datos['dateExpiration'],
+				"ZIP" => $datos['poscode'],
+				"Code" => $datos['code'],
+				"ynActive" => 1,
+				"CrBy" => $this->nativesessions->get('id'),
+				"CrDt" => $this->getToday()
+			];
+			//var_dump($Card);
+			$Id = $this->contract_db->insertReturnId('tblAcccc', $Card);
+			if ($Id) {
+				echo json_encode(["mensaje" => "Se ingreso correctamente la tarjeta"]);
+			}else{
+				echo json_encode(["mensaje" => "Ocurrio un error"]);
+			}
+		}
+		
 	}
 
 	public function saveContract(){
@@ -38,7 +56,7 @@ class Contract extends CI_Controller {
 			$idContrato = $this->createContract();
 			$this->insertOcupacion($idContrato);
 			$acc = $this->createAcc();
-			//$this->insertTarjeta($idContrato, $acc);
+			$this->insertTarjeta($idContrato, $acc);
 			$this->insertPeoples($idContrato, $acc);
 			$this->createUnidades($idContrato);
 			$this->createDownPayment($idContrato);
@@ -54,19 +72,32 @@ class Contract extends CI_Controller {
 }
 
 private function insertTarjeta($id, $type){
-	$tarjeta = [
-		"fkAccTypeId" => $_POST['card']['type'],
-		"fkAccId" => $type,
-		"CCNumber" => $_POST['card']['number'],
-		"expDate" => $_POST['card']['dateExpiration'],
-		"ZIP" => $_POST['card']['poscode'],
-		"Code" => $_POST['card']['code']
-	];
+
+	$datos = $_POST['card'];
+	if ($datos) {
+		$Card = [
+			"fkCcTypeId" => intval($datos['type']),
+			"fkAccId" => 1,
+			"CCNumber" => $datos['number'],
+			"expDate" => $datos['dateExpiration'],
+			"ZIP" => $datos['poscode'],
+			"Code" => $datos['code'],
+			"ynActive" => 1,
+			"CrBy" => $this->nativesessions->get('id'),
+			"CrDt" => $this->getToday()
+		];
+		return $this->contract_db->insertReturnId('tblAcccc', $Card);
+	}
+	// if ($Id) {
+	// 	echo json_encode(["mensaje" => "Se ingreso correctamente la tarjeta"]);
+	// }else{
+	// 	echo json_encode(["mensaje" => "Ocurrio un error"]);
+	// }
 }
 
 private function createContract(){
 		$Contract = [
-			"fkResTypeId"               => $this->contract_db->selectRestType('Cont'),
+			"fkResTypeId"               => $this->contract_db->selectRestType('ContFx'),
 			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('RG'),
 			"fkLanguageId"              => $_POST['idiomaID'],
 		    "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
@@ -92,15 +123,15 @@ private function createContract(){
 
 private function insertOcupacion($idContrato){
 	$rango = intval($_POST['lastYear']-$_POST['firstYear']);
-	for($i =0; $i< $rango; $i++){
+	for($i =0; $i<= $rango; $i++){
 			$Ocupacion = [
 			"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
 			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
 			"fkLanguageId"              => $_POST['idiomaID'],
 	        "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
 	        "pkResRelatedId"            => $idContrato,
-	        "FirstOccYear"              => $_POST['firstYear'],
-	        "LastOccYear"               => $_POST['lastYear'],
+	        "FirstOccYear"              => intval($_POST['firstYear'])+ $i,
+	        "LastOccYear"               => intval($_POST['firstYear'])+ $i,
 	        "ResCode"                   => "",
 	        "ResConf"                   => "",
 	        "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
@@ -741,7 +772,8 @@ public function getFlagsContract(){
 //////////////////////////////////////////////////////
 	public function modalContract(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('contracts/contractDialog');
+			$datos['languages'] = $this->contract_db->getLanguages();
+			$this->load->view('contracts/contractDialog', $datos);
 		}
 	}
 
@@ -759,7 +791,10 @@ public function getFlagsContract(){
 
 	public function modalDepositDownpayment(){
 		if($this->input->is_ajax_request()) {
+			$campos = "pkCcTypeId as ID, CcTypeDesc";
+			$tabla = "tblCctype";
 			$data["paymentTypes"] = $this->contract_db->selectPaymentType();
+			$data["creditCardType"] = $this->contract_db->selectTypeGeneral($campos, $tabla);
 			$this->load->view('contracts/dialogDepositDownpayment', $data);
 		}
 	}

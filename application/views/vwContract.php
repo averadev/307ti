@@ -145,7 +145,7 @@
 <div id="dialog-People" title="Contract > Create Contract > Add People" style="display: none;"></div>
 <div id="dialog-Unidades" title="Contract > Create Contract > Add Units" style="display: none;"></div>
 <div id="dialog-Weeks" title="Weeks" style="display: none;"></div>
-<div id="dialog-Pack" title="Pack Reference" style="display: none;"></div>
+<div id="dialog-Pack" title="Extras" style="display: none;"></div>
 <div id="dialog-Downpayment" title="Downpayment" style="display: none;"></div>
 <div id="dialog-ScheduledPayments" title="Scheduled Payments" style="display: none;"></div>
 <div id="dialog-DiscountAmount" title="Discount Amount" style="display: none;"></div>

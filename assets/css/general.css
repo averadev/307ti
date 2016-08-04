@@ -1708,3 +1708,10 @@ input.general.error, .caja.error{
 .header-fixed {
     position: fixed;
 }
+
+select option {
+    margin:40px;
+    background: rgb(253, 231, 190);
+    color:black;
+    text-shadow:0 1px 0 rgba(0,0,0,0.4);
+}

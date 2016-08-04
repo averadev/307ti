@@ -489,6 +489,20 @@ function generalSelects(data, div){
     $("#"+div).html(select);
 }
 
+function generalSelectsDefault(data, div){
+     var select = '';
+    for (var i = 0; i < data.length; i++) {
+        select += '<option value="'+data[i].ID+'">';
+        for (var j in data[i]) {
+            if(data[i][j] != data[i].ID){
+                select+= data[i][j].trim();
+            }
+        };
+        select+='</option>';
+    }
+    $("#"+div).html(select);
+}
+
 function ajaxHTML(div, url){
     if ($('#'+div).html().trim() == ""){
         $.ajax({

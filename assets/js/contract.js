@@ -110,12 +110,6 @@ $(document).on( 'click', '#btnAddPeople', function () {
 	$(document).on( 'click', '#btnDeleteTourID', function () {
 		$('#TourID').val('0');
 	});
-	// $(document).on( 'click', '#btnAddmontoDownpaymentPrg', function () {
-	// 	if($("#montoDownpaymentPrg").val()>0){
-	// 		tableDownpaymentSelectedPrg();
-	// 		totalDownpaymentPrg();
-	// 	}
-	// });
 	$('#btnCleanWord').click(function (){
 		$('#stringContrat').val('');
 	});
@@ -220,9 +214,12 @@ function cambiarCantidadDE(monto){
 	updateBalanceFinal();
 }
 function createContractSelect(datos){
+
 	$("#dialog-Contract").html(datos);
-	ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
-	ajaxSelects('contract/getSaleTypes','try again', generalSelects, 'typeSales');
+	
+	//ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
+	ajaxSelects('contract/getSaleTypes','try again', generalSelectsDefault, 'typeSales');
+	//$('#selectLanguage option:eq(1)').prop('selected', 1);
 }
 function showModalContract(){
 	var ajaxData =  {
@@ -300,7 +297,7 @@ function addTourContract(unidades){
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			var tourID = getValueFromTableSelected("tours", 1);
@@ -320,7 +317,7 @@ function addUnidadDialog() {
 				showLoading(div,true);
 				$(this).load ("contract/modalUnidades" , function(){
 		    		showLoading(div,false);
-		    		ajaxSelects('contract/getProperties','try again', generalSelects, 'property');
+		    		ajaxSelects('contract/getProperties','try again', generalSelectsDefault, 'property');
 	    			ajaxSelects('contract/getUnitTypes','try again', generalSelects, 'unitType');
 	    			ajaxSelects('contract/getViewsType','try again', generalSelects, 'unitView');
 	    			ajaxSelects('contract/getSeasons','try again', generalSelects, 'season');
@@ -342,7 +339,7 @@ function addUnidadDialog() {
 				$(this).dialog('close');
 			}
 		},{
-			text: "add",
+			text: "Add",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
 				var unidades = getValueTableUnidadesSeleccionadas();
@@ -574,7 +571,7 @@ function createNewContract(){
 				tablaPagosProgramados:getValueTableDownpaymentScheduled(),
 				gifts: getValueTablePacks(),
 				viewId: 1,
-				closingCost: sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7))
+				closingCost: sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7)),
 				card: datosCard()
 				//totalDiscountPacks
 			},
@@ -887,7 +884,7 @@ function getWeeksDialog(unidades){
   		open : function (event){
 	    	$(this).load ("contract/modalWeeks", function(){
 	    		showLoading('#dialog-Weeks', false);
-	    		ajaxSelects('contract/getFrequencies','try again', generalSelects, 'frequency');
+	    		ajaxSelects('contract/getFrequencies','try again', generalSelectsDefault, 'frequency');
 	    		$("#weeksNumber").val(1);
 	    		setYear("firstYearWeeks", 0);
 	    		setYear("lastYearWeeks", 25);
@@ -904,7 +901,7 @@ function getWeeksDialog(unidades){
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			var Valorfrequency = getNumberTextInput("frequency");
@@ -956,7 +953,7 @@ function PackReference(){
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			$("#precioVenta").val($("#finalPricePack").val());
@@ -974,10 +971,7 @@ function modalDepositDownpayment(){
 	showLoading('#dialog-Downpayment', true);
 	dialogo = $("#dialog-Downpayment").dialog ({
   		open : function (event){
-	    	$(this).load ("contract/modalDepositDownpayment" , function(){
-	    		showLoading('#dialog-Downpayment', false);
-	    		initEventosDownpayment();
-	    	});
+	    	getPlantillaDownpayment();
 		},
 		autoOpen: false,
      	height: maxHeight,
@@ -990,18 +984,19 @@ function modalDepositDownpayment(){
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			var deposito = getNumberTextInput("finalPriceDownpayment");
        			var total = getNumberTextInput("downpaymentTotal");
-       			if (deposito>total) {
-       				alertify.error("Amount is greater than total to pay")
+       			if (deposito>total || deposito<= 0) {
+       				alertify.error("Please Verify Total to Pay");
+       			}else if(!isCreditCardValid()){
+					alertify.error("Please Verify your Credit Card");
        			}else{
        				$("#depositoEnganche").val(deposito);
        				$(this).dialog('close');	
        			}
-       			
        		}
      	}],
      close: function() {
@@ -1009,6 +1004,62 @@ function modalDepositDownpayment(){
 	});
 	return dialogo;
 }
+
+function isCreditCardValid(){
+	var payType = $("#tiposPago").val();
+	if (payType == "1" || payType == "5") {
+		return true;
+	}else{
+		var R = true;
+		var creditCard = datosCard();
+		if (creditCard) {
+			for(var key in creditCard)
+			{
+				 if(!creditCard[key]) {
+				 	R = false;
+				 }
+			}
+			return R;
+		}else{
+			return false;
+		}
+	}
+}
+
+function recorrerObjeto(){
+	var creditCard = datosCard();
+	if (creditCard) {
+		for(var key in creditCard)
+		{
+			 if(creditCard.hasOwnProperty(key) && creditCard[key]) {
+			 	return true;
+			 }else{
+			 	return false;
+			 }
+		}
+	}else{
+		return false;
+	}
+}
+
+function getPlantillaDownpayment(){
+		var ajaxData =  {
+		url: "contract/modalDepositDownpayment",
+		tipo: "html",
+		datos: {},
+		funcionExito : addHTMLDownpayment,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
+
+function addHTMLDownpayment(datos){
+	showLoading('#dialog-Downpayment', false);
+	$("#dialog-Downpayment").html(datos);
+	initEventosDownpayment();
+}
+
+
 function modalScheduledPayments() {
 	var div = "#dialog-ScheduledPayments";
 	dialogo = $(div).dialog ({
@@ -1035,7 +1086,7 @@ function modalScheduledPayments() {
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			var totalProgramado = getNumberTextInput("totalProgramado"); 
@@ -1079,7 +1130,7 @@ function modalDiscountAmount(){
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			$("#totalDiscountPacks").val($("#totalDescPack").val());	
@@ -1322,7 +1373,7 @@ function selectMetodoPagoProgramados(){
 				showLoading('#tblUnidades',false);
                 if(data != null){
                     alertify.success("Found "+ data.length);
-                    drawTable(data, 'add', "details", "Unidades");
+                    drawTable(data, 'add', "Details", "Unidades");
                 }else{
                     $('#contractstbody').empty();
                     alertify.error("No records found");
@@ -1372,7 +1423,7 @@ function initEventosDownpayment(){
 
 	  $('#numeroTarjeta').validateCreditCard(function(result) {
 	  	if (result.valid) {
-	  		$("#cardType").val(result.card_type.name);
+	  		//$("#cardType").val(result.card_type.name);
 	  		$("#numeroTarjeta").removeClass('is-invalid-input');
 
 	  	}else{
@@ -1388,7 +1439,7 @@ function datosCard(){
 	if(tipoPago != 1 && tipoPago != 5){
 		var datos = {};
 		datos.number = $('#numeroTarjeta').val().replace(/[^\d]/g, '');
-		datos.type = $("#cardType").val();
+		datos.type = $("#cardTypes").val();
 		datos.dateExpiration = $("#dateExpiracion").val();
 		datos.poscode = $("#codigoPostal").val();
 		datos.code = $("#codigoTarjeta").val();
@@ -1401,17 +1452,22 @@ function datosCard(){
 
 function splitNumberTarjeta(){
 	var n =   $('#numeroTarjeta').val().replace(/[^\d]/g, '');
-	var numero = n.match(/.{1,4}/g);
-	var tarjeta = "";
-	for(var i = 0; i < numero.length; i++)
-	{
-		if (i!= numero.length-1) {
-			tarjeta += numero[i] + "-";
-		}else{
-			tarjeta += numero[i];
+	if (n) {
+		var numero = n.match(/.{1,4}/g);
+		var tarjeta = "";
+		for(var i = 0; i < numero.length; i++)
+		{
+			if (i!= numero.length-1) {
+				tarjeta += numero[i] + "-";
+			}else{
+				tarjeta += numero[i];
+			}
 		}
+		return tarjeta;
+	}else{
+		return "";
 	}
-	return tarjeta;
+	
 }
 
 function initEventosDownpaymentProgramados(){
@@ -2088,7 +2144,7 @@ function showModalFin(id){
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
     			updateFinanciamiento(id);
@@ -3333,22 +3389,15 @@ function testContract(){
 		url: "contract/pruebasContract",
 		tipo: "json",
 		datos: {
-			dataContract:[{
-				idiomaID: "2",
-				firstYear: "2016",
-				lastYear: "2017",
-				legalName: "FaustinoLoeza",
-				tourID: "0"
-			},{
-				idiomaID: "2",
-				firstYear: "2016",
-				lastYear: "2017",
-				legalName: "FaustinoLoeza",
-				tourID: "0"
-			}],
+			card:datosCard()
 		},
-		funcionExito : console.table,
+		funcionExito : table,
 		funcionError: mensajeAlertify
 	};
 	ajaxDATA(ajaxData);
+}
+
+function table(datos){
+	alertify.success(datos[mensaje]);
+	console.table(datos);
 }

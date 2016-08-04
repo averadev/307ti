@@ -58,7 +58,16 @@
                         <label for="cardType" class="text-left">Card Type</label>
                     </div>
                     <div class="small-9 columns">
-                        <input class="round general" type="text" id="cardType" name="cardType" class="general" required>
+                          <div class="caja">
+                            <select id="cardTypes" class="input-group-field round">
+                                  <?php
+                                      foreach($creditCardType as $item){?>
+                                          <option value="<?php echo $item->ID; ?>"><?php echo $item->CcTypeDesc; ?></option>
+                                          <?php
+                                      }
+                                  ?>
+                            </select>
+                          </div>
                     </div>
                 </div>
                 <!-- fecha de expiracion-->

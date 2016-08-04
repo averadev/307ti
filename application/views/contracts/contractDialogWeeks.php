@@ -12,7 +12,7 @@
         </div>
         <div class="row">
             <div class="small-3 columns">
-                <label for="legalName" class="text-left">Firts Year</label>
+                <label for="legalName" class="text-left">Firt Year</label>
             </div>
             <div class="small-9 columns">
                 <input class="round general" id="firstYearWeeks" type="number" name="quantity" min="2016" max="2099">

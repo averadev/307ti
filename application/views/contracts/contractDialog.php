@@ -28,9 +28,17 @@
                         <label  for="selectLanguage" class="text-left">Language</label>
                     </div>
                     <div class="small-9 columns">
-						<div class="caja" >
-							<select required class="input-group-field round" id="selectLanguage" form="saveDataContract"></select>
-						</div>
+
+                        <div class="caja">
+                            <select required class="input-group-field round" id="selectLanguage" form="saveDataContract">
+                                  <?php
+                                      foreach($languages as $item){?>
+                                          <option value="<?php echo $item->ID; ?>"><?php echo $item->LanguageDesc; ?></option>
+                                          <?php
+                                      }
+                                  ?>
+                            </select>
+                          </div>
                     </div>
                 </div>
                 <!-- Tour ID-->
@@ -58,7 +66,7 @@
                 </div>
             </div>
              <div class="fieldset large-12 columns">
-              <legend class="btnAddressData">Peoples</legend>
+              <legend class="btnAddressData">People</legend>
                 <div class="containerPeople">
                     <div class="row">
                         <div class="small-12 columns">
@@ -283,7 +291,7 @@
                         <input id="amountTransfer" class="round general" type="text" placeholder="$0.00">
                     </div>
                     <div class="small-6 columns">
-                        <label>Balance financed</label>
+                        <label>Balance to be Financed</label>
                         <input id="financeBalance" class="round general" type="text" placeholder="$0.00">
                     </div>
                 </div>
