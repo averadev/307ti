@@ -550,7 +550,7 @@
 									</select>
 								</div>
 							</div>
-						</div> -->
+						</div> 
 						<!-- Nómina-->
 				<div class="row">
 							<div class="small-3 columns">
@@ -565,7 +565,7 @@
 									</select>
 								</div>
 							</div>
-						</div> -->
+						</div> 
 						<div class="rdoField">
 							<input type="checkbox" class="EmployeePeople" value="active" id="checkPeopleEmployee" />
 							<label for="checkPeopleEmployee">Active</label>

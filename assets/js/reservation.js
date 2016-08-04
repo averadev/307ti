@@ -1612,6 +1612,7 @@ function tableOnclickRes(id){
 }
 
 function getAccountsRes( id, typeInfo, typeAcc ){
+	console.log(id)
 	$.ajax({
 	    data:{
 	        idReservation: id,
@@ -1622,17 +1623,31 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 	    url: "reservation/getAccountsById",
 	    dataType:'json',
 	    success: function(data){
+			console.log(data)
 			if(typeInfo == "account"){
 				var reservation = data["reservation"];
 				var frontDesk = data["frontDesk"];
 				var acc = data["acc"];
-				drawTable2(reservation, "tableAccountSeller", false, "");
-				drawTable2(frontDesk, "tableAccountLoan", false, "");
-				setTableAccountRes( reservation, "tableReservationAccRes" );
-				setTableAccountRes( frontDesk, "tableFrontDeskAccRes" );
+				if(reservation.length > 0){
+					drawTable2(reservation, "tableAccountSeller", false, "");
+					setTableAccountRes( reservation, "tableReservationAccRes" );
+				}else{
+					alertify.error('no results found')
+				}
+				if(frontDesk.length > 0){
+					drawTable2(frontDesk, "tableAccountLoan", false, "");
+					setTableAccountRes( frontDesk, "tableFrontDeskAccRes" );
+				}else{
+					alertify.error('no results found')
+				}
+				for( i=0; i<acc.length; i++ ){
+					var nameSafe = acc[i].accType;
+					$('#btNewTransAccRes').data( 'idAcc' + nameSafe, acc[i].fkAccId );	
+				}
 				$('#btNewTransAccRes').data( 'idRes', id )
-				$('#btNewTransAccRes').data( 'idAccFront', acc[0].fkAccId );
-				$('#btNewTransAccRes').data( 'idAccRes', acc[1].fkAccId );
+				console.log( $('#btNewTransAccRes').data() );
+				//$('#btNewTransAccRes').data( 'idAccFront', acc[0].fkAccId );
+				//$('#btNewTransAccRes').data( 'idAccRes', acc[1].fkAccId );
 			}else{
 				var acc = data["acc"];
 				if(acc.length > 0){

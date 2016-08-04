@@ -414,5 +414,10 @@ Class frontDesk_db extends CI_MODEL
 		return  $this->db->get()->result();
 	}
 	
+	public function changeStatusUnit($data){
+		$this->db->where('pkUnitHKStatusId = 5');
+		$this->db->update("tblUnitHKStatus", $data);
+	}
+	
 }
 //end model

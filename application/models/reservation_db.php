@@ -387,7 +387,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 	
 	public function getAccByRes($id){
 		//$this->db->distinct();
-        $this->db->select( "rpa.fkAccId, RTRIM(att.AccTypeDesc) as accType" );
+        $this->db->select( "rpa.fkAccId, RTRIM(att.AccTypeCode) as accType" );
         $this->db->from( 'tblResPeopleAcc rpa' );
 		$this->db->join( 'tblAcc a', 'a.pkAccId = rpa.fkAccId' );
 		$this->db->join( 'tblAcctype att', 'att.pkAcctypeId = a.fkAccTypeId' );
