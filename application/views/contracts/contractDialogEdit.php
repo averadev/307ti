@@ -584,7 +584,7 @@
 	<!-- tabs notas -->
 	<div id="tab-CNotes" class="large-12 columns tab-modal" style="display:none;">
 		<form  data-abide='ajax'>
-			<fieldset class="fieldset editBox">
+			<fieldset class="fieldset editBox" id="fieldsetNoteCon">
 				<div class="containerContract">
 					<div class="row">
 						<table id="tableCNotesSelected" width="100%">
