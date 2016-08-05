@@ -1020,8 +1020,14 @@ function clonePeople(){
 	$("#idPeople").removeData("pkPeopleId");
 	$("#idPeople").removeData("pkEmployeeId");
 	$('#textName').val("");
-	$('#textLastName').val("");
+	//$('#textLastName').val("");
+	$('#textMiddleName').val("");
+	$('#TextSecondLastName').val("");
+	$('#textNationality').val(0);
+	$('#textQualification').val(0);
+	$('.RadioGender').prop('checked', false)
 	$('#textBirthdate').val("");
+	$('#textWeddingAnniversary').val("");
 	
 	$('#textEmail1').val("");
 	$('#textEmail2').val("");
