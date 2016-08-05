@@ -60,7 +60,7 @@ class Contract_db extends CI_Model {
         $this->db->join('tblFrequency FR', 'FR.pkFrequencyId = RI.fkFrequencyId');
         $this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId');
         $this->db->join('tblResFin RF', 'RF.fkResId = R.pkResId');
-        $this->db->where('R.fkResTypeId', '5');
+        $this->db->where('R.fkResTypeId', '10');
         $this->db->order_by('ID', 'DESC');
         if (!is_null($filters)) {
             if($filters['dates'] != false) {
@@ -437,7 +437,7 @@ class Contract_db extends CI_Model {
     }
 
     public function selectPriceFin($id){
-        $this->db->select('totalFinanceAmt,financeBalance');
+        $this->db->select('CAST(totalFinanceAmt AS FLOAT) as totalFinanceAmt,CAST(financeBalance AS FLOAT) as financeBalance');
         $this->db->from('tblResfin');
         $this->db->where('fkResId', $id);
         $query = $this->db->get();

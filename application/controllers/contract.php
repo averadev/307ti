@@ -25,27 +25,31 @@ class Contract extends CI_Controller {
 	}
 
 	public function pruebasContract(){
-		$datos = $_POST['card'];
-		if ($datos) {
-			$Card = [
-				"fkCcTypeId" => intval($datos['type']),
-				"fkAccId" => 1,
-				"CCNumber" => $datos['number'],
-				"expDate" => $datos['dateExpiration'],
-				"ZIP" => $datos['poscode'],
-				"Code" => $datos['code'],
-				"ynActive" => 1,
-				"CrBy" => $this->nativesessions->get('id'),
-				"CrDt" => $this->getToday()
-			];
-			//var_dump($Card);
-			$Id = $this->contract_db->insertReturnId('tblAcccc', $Card);
-			if ($Id) {
-				echo json_encode(["mensaje" => "Se ingreso correctamente la tarjeta"]);
-			}else{
-				echo json_encode(["mensaje" => "Ocurrio un error"]);
-			}
-		}
+		// $datos = $_POST['card'];
+		// if ($datos) {
+		// 	$Card = [
+		// 		"fkCcTypeId" => intval($datos['type']),
+		// 		"fkAccId" => 1,
+		// 		"CCNumber" => $datos['number'],
+		// 		"expDate" => $datos['dateExpiration'],
+		// 		"ZIP" => $datos['poscode'],
+		// 		"Code" => $datos['code'],
+		// 		"ynActive" => 1,
+		// 		"CrBy" => $this->nativesessions->get('id'),
+		// 		"CrDt" => $this->getToday()
+		// 	];
+		// 	//var_dump($Card);
+		// 	$Id = $this->contract_db->insertReturnId('tblAcccc', $Card);
+		// 	if ($Id) {
+		// 		echo json_encode(["mensaje" => "Se ingreso correctamente la tarjeta"]);
+		// 	}else{
+		// 		echo json_encode(["mensaje" => "Ocurrio un error"]);
+		// 	}
+		// }
+		echo json_encode([
+			"mensaje" => 'Contract Save',
+			"balance" => $this->contract_db->selectPriceFin(1977)[0]
+			]);
 		
 	}
 
@@ -63,8 +67,10 @@ class Contract extends CI_Controller {
 			$this->createGifts($idContrato);
 			$balanceFinal = $this->insertFinanciamiento($idContrato);
 			$this->createSemanaOcupacion($idContrato);
+
 			echo  json_encode([
 				"mensaje" => 'Contract Save',
+				"balance" => $this->contract_db->selectPriceFin($idContrato)[0],
 				"status" => 1,
 				"idContrato" =>$idContrato,
 				"balanceFinal" => $balanceFinal]);
@@ -215,7 +221,12 @@ private function insertPeoples($idContrato, $acc){
 private function insertFinanciamiento($idContrato){
 	$porcentaje = floatval(($_POST['specialDiscount']/$_POST['salePrice']))*100;
 	$balanceFinal = intval($_POST['financeBalance']);
-	$porEnganche = intval(($_POST['downpayment']/$balanceFinal))*100;
+	if ($balanceFinal == 0) {
+		$porEnganche = 0;
+	}else{
+		$porEnganche = intval(($_POST['downpayment']/$balanceFinal))*100;
+	}
+	
 	$financiamiento = [
 		"fkResId"                   => $idContrato,
 		"fkFinMethodId"    			=> $this->contract_db->selectIdMetodoFin('RG'),
@@ -230,7 +241,7 @@ private function insertFinanciamiento($idContrato){
 		"TransferAmt"               => $_POST['amountTransfer'],
 		"PackPrice"                 => $_POST['packPrice'],
 		"FinanceBalance"            => $balanceFinal,
-		"TotalFinanceAmt"           => $balanceFinal + 100,
+		"TotalFinanceAmt"           => $balanceFinal,
 		"DownPmtAmt"            	=> $_POST['downpayment'],
 		"DownPmt%"           		=> $porEnganche,
 		"MonthlyPmtAmt"            	=> 0,

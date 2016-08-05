@@ -563,6 +563,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 	public function selectView(){
         $this->db->select("pkViewId as ID, ViewDesc");
         $this->db->from('tblView');
+        $this->db->where('ynActive', 1);
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {

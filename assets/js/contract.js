@@ -141,38 +141,16 @@ $(document).on( 'click', '#btnAddPeople', function () {
 		var monto = $("#descuentoEspecial").val();
 		cambiarCantidadDE(monto);
 	});
-	// $(document).on('change', "#precioVenta", function () {
-	// 	updateBalanceFinal();
-	// });
-	// $(document).on('change', "#precioVenta", function () {
-	// 	updateBalanceFinal();
-	// });
 	$(document).on('change', "#amountTransfer", function () {
 		var balanceFinal = $("#financeBalance").val();
 		var transferido = $("#amountTransfer").val();
 		$("#financeBalance").val(balanceFinal - transferido);
 	});
-
-	// var dialogEditContract = modalEditContract(224);
-	// dialogEditContract.dialog("open");
 	
 	getDatailByID("contractstbody");
 });
 
 function updateBalanceFinal(){
-	/*//PrecioVenta + PackReference + ClosingCost-DownPayment-CashDiscount-TransferAmount
-	-var precioVenta = getNumberTextInput("precioVenta");
-	//var packReference = getNumberTextInput("packReference");
-	//var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
-	-var downpayment = getNumberTextInput("montoTotal");
-	var cashDiscount = getNumberTextInput("totalDiscountPacks");
-	var transferAmount = getNumberTextInput("amountTransfer");
-	var total = precioVenta;
-	var descuentoEspecial = getNumberTextInput("montoTotalDE");
-	var descuento = downpayment+cashDiscount+transferAmount+descuentoEspecial;
-	var balanceFinal = $("#financeBalance").val(total-descuento);
-	console.log("se ejecuto update balanceFinal");
-	//depositoEnganche , scheduledPayments*/
 	var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
 	var precioVenta = getNumberTextInput("precioVenta");
 
@@ -607,7 +585,10 @@ function createNewContract(){
 					if (modalFin!=null) {
 						modalFin.dialog( "destroy" );
 					}
-					showModalFin(data['idContrato']);
+					if (data['balance'].financeBalance >0) {
+						showModalFin(data['idContrato']);
+					}
+					
 					$('#dialog-Weeks').empty();
 					$('#tablePeopleSelected tbody').empty();
 					$('#tableUnidadesSelected tbody').empty();
@@ -2103,42 +2084,6 @@ function setEventosEditarContrato(id){
 	});
 }
 
-
-
-// function modalFinanciamiento() {
-// 	var div = "#dialog-Financiamiento";
-// 	dialogo = $(div).dialog ({
-//   		open : function (event){
-//   				showLoading(div, true);
-// 				$(this).load ("contract/modalFinanciamiento" , function(){
-// 					showLoading(div, false);
-// 					initEventosFinanciamiento();
-// 				});
-// 		},
-// 		autoOpen: false,
-//      	height: maxHeight,
-//      	width: "75%",
-//      	modal: true,
-//      	buttons: [{
-// 	       	text: "Cancel",
-// 	       	"class": 'dialogModalButtonCancel',
-// 	       	click: function() {
-// 	         	$(this).dialog('close');
-// 	       }
-// 	   	},{
-//        		text: "ok",
-//        		"class": 'dialogModalButtonAccept',
-//        		click: function() {
-//     			updateFinanciamiento(421);
-	       
-//        		}
-//      	}],
-//      close: function() {
-//     	//$('#dialog-ScheduledPayments').empty();
-//      }
-// 	});
-// 	return dialogo;
-// }
 function addHTMLModalFin(data){
 	$("#dialog-Financiamiento").html(data);
 	initEventosFinanciamiento();
@@ -2171,7 +2116,13 @@ function showModalFin(id){
        		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-    			updateFinanciamiento(id);
+       			var totaltoPay = getNumberTextString("totalPagarF");
+       			if (totaltoPay>0) {
+       				updateFinanciamiento(id);
+    				$(this).dialog('close');
+       			}else{
+       				alertify.error("Please Calculate the Monthly Payment");
+       			}
        		}
      	}]
 	};
@@ -3413,7 +3364,7 @@ function testContract(){
 		url: "contract/pruebasContract",
 		tipo: "json",
 		datos: {
-			card:datosCard()
+			//card:datosCard()
 		},
 		funcionExito : table,
 		funcionError: mensajeAlertify
@@ -3422,6 +3373,12 @@ function testContract(){
 }
 
 function table(datos){
-	alertify.success(datos[mensaje]);
+	console.table(datos['balance']);
+	console.log(datos['balance'].financeBalance);
+	if (datos['balance'].financeBalance >0) {
+		console.log("lo voy a mostrar");
+	}else{
+		console.log("no lo muestro");
+	}
 	console.table(datos);
 }
