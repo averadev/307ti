@@ -552,7 +552,7 @@
 							</div>
 						</div> 
 						<!-- Nómina-->
-				<div class="row">
+						<!--<div class="row">
 							<div class="small-3 columns">
 								<label id="alertRoster" for="textRoster" class="text-left">Payroll type</label>
 							</div>
@@ -565,7 +565,7 @@
 									</select>
 								</div>
 							</div>
-						</div> 
+						</div> -->
 						<div class="rdoField">
 							<input type="checkbox" class="EmployeePeople" value="active" id="checkPeopleEmployee" />
 							<label for="checkPeopleEmployee">Active</label>

@@ -1703,6 +1703,8 @@ function changeTabsModalContract(screen, id){
 			break;
 		case "tab-CNotes":
 			getDatosContractNotes(id);
+			var heightNote = $('#tab-CNotes').height();
+			$('#fieldsetNoteCon').height( heightNote + "px" );
 			break;
 		case "tab-CFlags":
 			getDatosContractFlags(id);

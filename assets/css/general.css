@@ -1684,7 +1684,7 @@ input.general.error, .caja.error{
 	border: 5px solid #00837A;
 }
 .editBox{
-	max-height: 250px;
+	max-height: 550px;
     overflow: scroll;
 }
 .headerTitle{
