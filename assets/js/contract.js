@@ -141,9 +141,12 @@ $(document).on( 'click', '#btnAddPeople', function () {
 		var monto = $("#descuentoEspecial").val();
 		cambiarCantidadDE(monto);
 	});
-	$(document).on('change', "#precioVenta", function () {
-		updateBalanceFinal();
-	});
+	// $(document).on('change', "#precioVenta", function () {
+	// 	updateBalanceFinal();
+	// });
+	// $(document).on('change', "#precioVenta", function () {
+	// 	updateBalanceFinal();
+	// });
 	$(document).on('change', "#amountTransfer", function () {
 		var balanceFinal = $("#financeBalance").val();
 		var transferido = $("#amountTransfer").val();
@@ -157,18 +160,35 @@ $(document).on( 'click', '#btnAddPeople', function () {
 });
 
 function updateBalanceFinal(){
-	//PrecioVenta + PackReference + ClosingCost-DownPayment-CashDiscount-TransferAmount
-	var precioVenta = getNumberTextInput("precioVenta");
+	/*//PrecioVenta + PackReference + ClosingCost-DownPayment-CashDiscount-TransferAmount
+	-var precioVenta = getNumberTextInput("precioVenta");
 	//var packReference = getNumberTextInput("packReference");
-	var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
-	var downpayment = getNumberTextInput("montoTotal");
+	//var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
+	-var downpayment = getNumberTextInput("montoTotal");
 	var cashDiscount = getNumberTextInput("totalDiscountPacks");
 	var transferAmount = getNumberTextInput("amountTransfer");
-	var total = precioVenta + closingCost;
+	var total = precioVenta;
 	var descuentoEspecial = getNumberTextInput("montoTotalDE");
 	var descuento = downpayment+cashDiscount+transferAmount+descuentoEspecial;
 	var balanceFinal = $("#financeBalance").val(total-descuento);
-	console.log("se ejecuto update balanceFinal")
+	console.log("se ejecuto update balanceFinal");
+	//depositoEnganche , scheduledPayments*/
+	var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
+	var precioVenta = getNumberTextInput("precioVenta");
+
+	var descuentoEspecial = getNumberTextInput("montoTotalDE");
+	var deposito = getNumberTextInput("depositoEnganche");
+	var pagosProgramados = getNumberTextInput("scheduledPayments");
+
+
+	var descuentoEfectivo = getNumberTextInput("totalDiscountPacks"); 
+	var transferencia = getNumberTextInput("amountTransfer");
+
+	var descuento = descuentoEspecial + deposito + pagosProgramados + descuentoEfectivo + transferencia;
+	var costoTotal = precioVenta + closingCost;
+	var total = costoTotal - descuento;
+	$("#financeBalance").val(total);
+	
 }
 
 function getNumberTextInput(div){
@@ -199,7 +219,7 @@ function cambiarCantidadP(monto)
 	}else{
 		$("#montoTotal").val(monto);
 	}
-	updateBalanceFinal();
+	//updateBalanceFinal();
 }
 function cambiarCantidadDE(monto){
 	console.log(monto);
@@ -995,7 +1015,8 @@ function modalDepositDownpayment(){
 					alertify.error("Please Verify your Credit Card");
        			}else{
        				$("#depositoEnganche").val(deposito);
-       				$(this).dialog('close');	
+       				$(this).dialog('close');
+       				updateBalanceFinal();	
        			}
        		}
      	}],
@@ -1094,6 +1115,7 @@ function modalScheduledPayments() {
        			if (totalProgramado == totalInicial) {
        				$("#scheduledPayments").val($("#totalProgramado").val());
        				$(this).dialog('close');
+       				updateBalanceFinal();
        			}else{
        				alertify.error("Verify total to pay");
        			}
