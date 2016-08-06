@@ -420,11 +420,14 @@ Class frontDesk_db extends CI_MODEL
 	
 	public function getUnitsOcc(){
 		$this->db->distinct();
-		$this->db->select('ri.fkUnitId, ro.fkCalendarId, (select top 1 ro2.fkCalendarId from tblResOcc ro2 where ro2.fkResId = ro.fkResId and ro2.fkResInvtId = ro.fkResInvtId ORDER BY ro2.fkCalendarId DESC ) as lastDate');
+		/*$this->db->select('ri.fkUnitId, ro.fkCalendarId, (select top 1 ro2.fkCalendarId from tblResOcc ro2 where ro2.fkResId = ro.fkResId and ro2.fkResInvtId = ro.fkResInvtId ORDER BY ro2.fkCalendarId DESC ) as lastDate');
 		$this->db->from('tblResOcc ro ');
 		$this->db->join('tblResInvt ri', 'ri.pkResInvtId = ro.fkResInvtId', 'inner');
-		$this->db->where(" ro.fkCalendarId = ( SELECT top 1 c2.pkCalendarId FROM tblCalendar c2 where CONVERT(VARCHAR(10), c2.[Date], 110) = CONVERT(VARCHAR(10), GETDATE(), 110) )");
+		$this->db->where(" ro.fkCalendarId = ( SELECT top 1 c2.pkCalendarId FROM tblCalendar c2 where CONVERT(VARCHAR(10), c2.[Date], 110) = CONVERT(VARCHAR(10), GETDATE(), 110) )");*/
 		//$this->db->where(" ro.fkCalendarId = 207 ");
+		$this->db->select('u.pkUnitId');
+		$this->db->select('( SELECT TOP 1 hkS.fkHkStatusId  from tblUnitHKStatus hkS where hkS.fkUnitId = u.pkUnitId ) as hkstatus');
+		$this->db->from('tblUnit u');
 		return  $this->db->get()->result();
 	}
 	

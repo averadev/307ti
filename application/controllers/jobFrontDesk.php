@@ -25,13 +25,18 @@ class JobFrontDesk extends CI_Controller {
 		
 		foreach( $units as $item ){
 			$hkCode = 1;
-			if($item->fkCalendarId == $item->lastDate){
+			/*if($item->fkCalendarId == $item->lastDate){
 				$hkCode = 4;
+			}*/
+			
+			$status = 2;
+			if( $item->hkstatus == 5 ){
+				$status = $item->hkstatus;
 			}
 			
 			$insert = array(
-				'fkUnitId' 			=> $item->fkUnitId,
-				'fkHkStatusId'		=> 2,
+				'fkUnitId' 			=> $item->pkUnitId,
+				'fkHkStatusId'		=> $status,
 				'fkHkCodeId' 		=> $hkCode,
 				'fkHkServicetype'	=> 1,
 				'ynActive' 			=> 1,
