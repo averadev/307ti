@@ -267,7 +267,7 @@ public function updateFinanciamiento(){
 		];
 		$condicion = "fkResId = " . $IDContrato;
 		$afectados = $this->contract_db->updateReturnId('tblResfin', $financiamiento, $condicion);
-		insertTransacciones($IDContrato);
+		//insertTransacciones($IDContrato);
 		if ($afectados>0) {
 			$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados];
 			echo json_encode($mensaje);
