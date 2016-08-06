@@ -156,13 +156,21 @@ $(document).ready(function(){
 		var monto = $("#montoTotalRes").val();
 		cambiarCantidadPRes(monto);
 	});
-	$(document).on( 'change', "input[name='engancheR']:checked", function () {
+	$(document).on( 'change', "input[name='engancheRRes']:checked", function () {
 		var monto = $("#downpaymentRes").val();
 		cambiarCantidadPRes(monto);
 	});
-	$(document).on('change', "#precioVentaRes", function () {
-		updateBalanceFinalRes();
+	$(document).on( 'change', '#descuentoEspecialRes', function () {
+		var monto = $("#descuentoEspecialRes").val();
+		cambiarCantidadDERes(monto);
 	});
+	$(document).on( 'change', "input[name='especialDiscount']:checked", function () {
+		var monto = $("#descuentoEspecialRes").val();
+		cambiarCantidadDERes(monto);
+	});
+	/*$(document).on('change', "#precioVentaRes", function () {
+		updateBalanceFinalRes();
+	});*/
 	$(document).on('change', "#amountTransferRes", function () {
 		var balanceFinal = $("#financeBalanceRes").val();
 		var transferido = $("#amountTransferRes").val();
@@ -187,19 +195,68 @@ function ajaxSelectsRes(url,errorMsj, funcion, divSelect) {
 }
 
 function updateBalanceFinalRes(){
-	var precioVenta = $("#precioVentaRes").val();
+	/*var precioVenta = $("#precioVentaRes").val();
 	var enganche = $("#montoTotalRes").val();
-	var balanceFinal = $("#financeBalanceRes").val(precioVenta - enganche);
+	var balanceFinal = $("#financeBalanceRes").val(precioVenta - enganche);*/
+	
+	var closingCost = sumarArrayRes(getArrayValuesColumnTable("tableUnidadesResSelected", 7));
+	var precioVenta = getNumberTextInputRes("precioVentaRes");
+
+	var descuentoEspecial = getNumberTextInputRes("montoTotalDERes");
+	var deposito = getNumberTextInputRes("depositoEngancheRes");
+	var pagosProgramados = getNumberTextInputRes("scheduledPaymentsRes");
+
+
+	var descuentoEfectivo = getNumberTextInputRes("totalDiscountPacksRes"); 
+	var transferencia = getNumberTextInputRes("amountTransferRes");
+
+	var descuento = descuentoEspecial + deposito + pagosProgramados + descuentoEfectivo + transferencia;
+	var costoTotal = precioVenta + closingCost;
+	var total = costoTotal - descuento;
+	$("#financeBalanceRes").val(total);
+	
+}
+
+function getNumberTextInputRes(div){
+	var valor = $("#"+div).val();
+	if(valor){
+		return parseFloat(valor);
+	}else{
+		return 0;
+	}
 }
 
 function cambiarCantidadPRes(monto){
-	var seleccionado = $("input[name='engancheR']:checked").val();
+	/*var seleccionado = $("input[name='engancheRRes']:checked").val();
 	var precioVenta = $("#precioVentaRes").val();
 	if (seleccionado == 'porcentaje') {
 		var porcentaje = precioVenta * (monto/100);
 		$("#montoTotalRes").val(porcentaje);
 	}else{
 		$("#montoTotalRes").val(monto);
+	}
+	updateBalanceFinalRes();*/
+	var seleccionado = $("input[name='engancheRRes']:checked").val();
+	var precioVenta = getNumberTextInputRes("precioVentaRes"); 
+	var descuento = getNumberTextInputRes("montoTotalDERes");
+	var total = precioVenta - descuento;
+	if (seleccionado == "porcentaje") {
+		var porcentaje = total * (monto/100);
+		$("#montoTotalRes").val(porcentaje.toFixed(2));
+	}else{
+		$("#montoTotalRes").val(monto);
+	}
+}
+
+function cambiarCantidadDERes(monto){
+	console.log(monto);
+	var seleccionado = $("input[name='especialDiscount']:checked").val();
+	var precioVenta = $("#precioVenta").val();
+	if (seleccionado == 'porcentaje') {
+		var porcentaje = precioVenta * (monto/100);
+		$("#montoTotalDERes").val(porcentaje);
+	}else{
+		$("#montoTotalDERes").val(monto);
 	}
 	updateBalanceFinalRes();
 }
@@ -377,6 +434,7 @@ function getReservations(){
        	url: "reservation/getReservations",
 		dataType:'json',
 		success: function(data){
+			console.log(data);
 			if( data.items ){
 				alertify.success("Found "+ data.length);
 				drawTable2(data.items,"reservationsTable","edit","editRes");
@@ -853,7 +911,8 @@ function PackReferenceRes(){
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			$("#precioVentaRes").val($("#finalPricePack").val());
-       			$("#packReference").val($("#quantityPack").val());
+       			$("#packReferenceRes").val($("#quantityPack").val());
+				updateBalanceFinalRes();
        			$(this).dialog('close');
        		}
      	}],
@@ -864,13 +923,14 @@ function PackReferenceRes(){
 }
 
 function modalDepositDownpaymentRes(){
-	showLoading('#dialog-Downpayment', true);
-	dialogo = $("#dialog-Downpayment").dialog ({
+	showLoading('#dialog-DownpaymentRes', true);
+	dialogo = $("#dialog-DownpaymentRes").dialog ({
   		open : function (event){
-	    	$(this).load ("contract/modalDepositDownpayment" , function(){
-	    		showLoading('#dialog-Downpayment', false);
+	    	/*$(this).load ("contract/modalDepositDownpayment" , function(){
+	    		showLoading('#dialog-DownpaymentRes', false);
 	    		initEventosDownpaymentRes();
-	    	});
+	    	});*/
+			getPlantillaDownpaymentRes();
 		},
 		autoOpen: false,
      	height: maxHeight,
@@ -886,13 +946,24 @@ function modalDepositDownpaymentRes(){
        		text: "ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			var deposito = $("#finalPriceDownpayment").val();
+       			/*var deposito = $("#finalPriceDownpayment").val();
        			var total = $("#downpaymentTotal").val();
        			if (deposito>total) {
        				alertify.error("la cantidad es mayor al total")
        			}else{
        				$("#depositoEngancheRes").val(deposito);
        				$(this).dialog('close');	
+       			}*/
+				var deposito = getNumberTextInputRes("finalPriceDownpayment");
+       			var total = getNumberTextInputRes("downpaymentTotal");
+       			if (deposito>total || deposito<= 0) {
+       				alertify.error("Please Verify Total to Pay");
+       			}else if(!isCreditCardValidRes()){
+					alertify.error("Please Verify your Credit Card");
+       			}else{
+       				$("#depositoEngancheRes").val(deposito);
+       				$(this).dialog('close');
+       				updateBalanceFinalRes();	
        			}
        			
        		}
@@ -901,6 +972,44 @@ function modalDepositDownpaymentRes(){
      }
 	});
 	return dialogo;
+}
+
+function isCreditCardValidRes(){
+	var payType = $("#tiposPago").val();
+	if (payType == "1" || payType == "5") {
+		return true;
+	}else{
+		var R = true;
+		var creditCard = datosCard();
+		if (creditCard) {
+			for(var key in creditCard)
+			{
+				 if(!creditCard[key]) {
+				 	R = false;
+				 }
+			}
+			return R;
+		}else{
+			return false;
+		}
+	}
+}
+
+function getPlantillaDownpaymentRes(){
+		var ajaxData =  {
+		url: "contract/modalDepositDownpayment",
+		tipo: "html",
+		datos: {},
+		funcionExito : addHTMLDownpaymentRes,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
+
+function addHTMLDownpaymentRes(datos){
+	showLoading('#dialog-DownpaymentRes', false);
+	$("#dialog-DownpaymentRes").html(datos);
+	initEventosDownpayment();
 }
 
 function modalScheduledPaymentsRes() {
@@ -915,7 +1024,7 @@ function modalScheduledPaymentsRes() {
 				});
   			}else{
 				$(this).dialog('open');
-				initEventosDownpaymentProgramadosRes();
+				//initEventosDownpaymentProgramadosRes();
   			}
 		},
 		autoOpen: false,
@@ -935,7 +1044,7 @@ function modalScheduledPaymentsRes() {
        			var totalProgramado = $("#totalProgramado").val();
        			var totalInicial = $("#downpaymentProgramado").val();
        			if (totalProgramado==totalInicial) {
-       				$("#scheduledPayments").val($("#totalProgramado").val());
+       				$("#scheduledPaymentsRes").val($("#totalProgramado").val());
        				$(this).dialog('close');
        			}else{
        				alertify.error("verifica los pagos")
@@ -1123,6 +1232,7 @@ function calcularPackRes(){
 	var precioInicial = parseFloat($("#unitPricePack").val());
 	var precioFinal = parseFloat($("#finalPricePack").val());
 
+	$("#porcentajePack").off();
 	$("#porcentajePack").on('keyup change click', function () {
 	    if(this.value !== value) {
 	    	value = this.value;
@@ -1242,13 +1352,39 @@ function initEventosDownpaymentRes(){
 }
 
 function initEventosDownpaymentProgramadosRes(){
-	var downpayment = $("#downpaymentRes").val();
+	/*var downpayment = $("#downpaymentRes").val();
 	$("#downpaymentProgramado").val(downpayment);
 	selectMetodoPagoProgramadosRes();
 	setDateRes("datePaymentPrg");
 	$('#btnCleanmontoDownpaymentPrg').click(function (){
 		$("#montoDownpaymentPrg").val(0);
+	});*/
+	var downpayment = $("#downpaymentTotal").val();
+	var deposit = $("#depositoEngancheRes").val();
+	$("#montoDownpaymentPrg").val(0);
+	$("#downpaymentProgramado").val(downpayment-deposit);
+	selectMetodoPagoProgramadosRes();
+	setDate("datePaymentPrg");
+
+	$('#btnCleanmontoDownpaymentPrg').click(function (){
+		$("#montoDownpaymentPrg").val(0);
 	});
+
+	$('#btnAddmontoDownpaymentPrg').click(function () {
+		var amount = getNumberTextInput("montoDownpaymentPrg"); 
+		var total = getNumberTextInput("downpaymentProgramado");
+		if(amount>0 && amount <= total){
+			tableDownpaymentSelectedPrg();
+			totalDownpaymentPrg();
+		}else{
+			alertify.error("The amount should be greater to zero and minus than total amount");
+		}
+	});
+
+	if($("#montoDownpaymentPrg").val()>0){
+		tableDownpaymentSelectedPrg();
+		totalDownpaymentPrg();
+	}
 }
 
 function initEventosDiscountRes(){
@@ -1530,7 +1666,7 @@ function drawTableUnidades(data, funcion, cadena, table){
 }
 
 //var a = $('#tblUnidades tbody .yellow').html();
-//var b = $('#tableUnidadesSelected tbody').html(a);
+//var b = $('#tableUnidadesResSelected tbody').html(a);
 
 
 function getPeopleContract(id){

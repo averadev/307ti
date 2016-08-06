@@ -151,7 +151,7 @@
 						<label>Discount</label>
 					</div>
                     <div class="large-5 columns end">
-						<input class="round general" readonly name="packReference" id="packReference" type="text" value="0">
+						<input class="round general" readonly name="packReferenceRes" id="packReferenceRes" type="text" value="0">
                     </div>
 					<div class="large-4 columns end">
 						<a id="btnPackReferenceRes" href="#" class="button postfix">Capture</a>
@@ -165,7 +165,25 @@
 						<input class="round general" readonly required type="text" id="precioVentaRes" name="precioVentaRes" placeholder="$0.00" />
                     </div>
                 </div>
-
+				<!--Montos a Descontar-->
+                <div class="row">
+                    <div class="large-3 columns">
+                        <label>Special Discount</label>
+                    </div>
+                    <div class="large-2 columns end">
+                        <input class="round general" id="descuentoEspecialRes" type="text" placeholder="$0.00"/>
+                    </div>
+                    <div class="large-4 columns end">
+                        <input type="radio" name="especialDiscountRes" value="porcentaje" id="porcentajeDE"><label for="porcentaje">Percentage</label>
+                        <input checked type="radio" name="especialDiscountRes" value="cantidad" id="cantidadDE"><label for="cantidad">Amount</label>
+                    </div>
+                    <div class="large-1 columns">
+                        <label>Amount</label>
+                    </div>
+                    <div class="large-2 columns end">
+                        <input id="montoTotalDERes" class="round general" type="text" placeholder="amount applied" />
+                    </div>
+                </div>
                 <div class="row">
                     <div class="large-3 columns">
                         <label>Downpayment</label>
@@ -174,8 +192,8 @@
 						<input class="round general" id="downpaymentRes" required type="text" placeholder="$0.00"/>
                     </div>
                     <div class="large-4 columns end">
-                        <input type="radio" name="engancheR" value="porcentaje" id="porcentaje"><label for="porcentaje">Percentage</label>
-                        <input checked type="radio" name="engancheR" value="cantidad" id="cantidad"><label for="cantidad">Amount</label>
+                        <input type="radio" name="engancheRRes" value="porcentaje" id="porcentaje"><label for="porcentaje">Percentage</label>
+                        <input checked type="radio" name="engancheRRes" value="cantidad" id="cantidad"><label for="cantidad">Amount</label>
                     </div>
                     <div class="large-1 columns">
                         <label>Amount</label>
@@ -201,7 +219,7 @@
                         <label id="alertLastName" for="right-label" class="text-left">Scheduled Payments</label>
                     </div>
 					<div class="small-5 columns">
-						<input class="round general" id="scheduledPayments" type="text" placeholder="$0.00">
+						<input class="round general" id="scheduledPaymentsRes" type="text" placeholder="$0.00">
 					</div>
 					<div class="small-4 columns">
 						<a id="btnScheduledPaymentsRes" href="#" class="button postfix">Capture</a>

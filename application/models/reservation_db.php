@@ -76,13 +76,13 @@ class Reservation_db extends CI_Model {
         $this->db->from('tblUnit U');
         $this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
         $this->db->join('tblProperty P', 'P.pkPropertyId = U.fkPropertyId', 'inner');
-		$this->db->join('tblView V', 'U.fkViewId = V.pkViewId', 'inner');
+		$this->db->join('tblView V', 'U.fkViewId = V.pkViewId and V.ynActive = 1', 'inner');
 		$this->db->join('tblFloor F', 'F.pkFloorId = U.fkFloorId', 'inner');
 		if (!empty($filters['guestsAdult'])) {
-            $this->db->where('FP.MaxAdults', $filters['guestsAdult']);
+            $this->db->where('FP.MaxAdults >= ', $filters['guestsAdult']);
         }
 		if (!empty($filters['guestChild'])) {
-            $this->db->where('FP.MaxKids', $filters['guestChild']);
+            $this->db->where('FP.MaxKids >= ', $filters['guestChild']);
         }
 		if (!empty($filters['floorPlan'])) {
             $this->db->where('FP.pkFloorPlanID', $filters['floorPlan']);
@@ -563,7 +563,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 	public function selectView(){
         $this->db->select("pkViewId as ID, ViewDesc");
         $this->db->from('tblView');
-        $this->db->where('ynActive', 1);
+		$this->db->where('ynActive = 1');
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {
