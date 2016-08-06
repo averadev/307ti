@@ -200,14 +200,14 @@ function cambiarCantidadP(monto)
 	//updateBalanceFinal();
 }
 function cambiarCantidadDE(monto){
-	console.log(monto);
+	var m = parseFloat(monto);
 	var seleccionado = $("input[name='especialDiscount']:checked").val();
 	var precioVenta = $("#precioVenta").val();
 	if (seleccionado == 'porcentaje') {
-		var porcentaje = precioVenta * (monto/100);
+		var porcentaje = precioVenta * (m/100);
 		$("#montoTotalDE").val(porcentaje);
 	}else{
-		$("#montoTotalDE").val(monto);
+		$("#montoTotalDE").val(m);
 	}
 	updateBalanceFinal();
 }
@@ -241,21 +241,12 @@ function showModalContract(){
 	         	$(this).dialog('close');
 	         }
 		},{
-			text: "Save and Close",
-			"class": 'dialogModalButtonAccept',
-			click: function() {
-				if (verifyContractALL()) {
-					createNewContract();
-					$(this).dialog('close');
-				}
-				
-			}
-		},{
 			text: "Save",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
 				if (verifyContractALL()) {
 					createNewContract();
+					$(this).dialog('close');
 				}
 			}
 		}]
@@ -558,11 +549,11 @@ function createNewContract(){
 				unidades: getValueTableUnidades(),
 				weeks: getArrayValuesColumnTable("tableUnidadesSelected", 6),
 				tipoVentaId : $("#typeSales").val(),
-				listPrice: $("#precioUnidad").val(),
-				salePrice: $("#precioVenta").val(),
-				specialDiscount:$("#montoTotalDE").val(),
-				downpayment:$("#montoTotal").val(),
-				amountTransfer:$("#amountTransfer").val(),
+				listPrice: getNumberTextInput("precioUnidad"),
+				salePrice: getNumberTextInput("precioVenta"),
+				specialDiscount: getNumberTextInput("montoTotalDE"),
+				downpayment:getNumberTextInput("montoTotal"),
+				amountTransfer:getNumberTextInput("amountTransfer"),
 				packPrice:sumarArray(getArrayValuesColumnTable("tableDescuentos", 3)),
 				financeBalance: $("#financeBalance").val(),
 				tablapagos: getValueTableDownpayment(),
@@ -582,9 +573,6 @@ function createNewContract(){
 					elem.resetForm();
 					var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta", "downpayment"];
 					clearInputsById(arrayWords);
-					if (modalFin!=null) {
-						modalFin.dialog( "destroy" );
-					}
 					if (data['balance'].financeBalance >0) {
 						showModalFin(data['idContrato']);
 					}
@@ -1066,16 +1054,12 @@ function modalScheduledPayments() {
 	var div = "#dialog-ScheduledPayments";
 	dialogo = $(div).dialog ({
   		open : function (event){
-  			if ($(div).is(':empty')) {
-  				showLoading(div, true);
-				$(this).load ("contract/ScheduledPayments" , function(){
-					showLoading(div, false);
-					initEventosDownpaymentProgramados();
-				});
-  			}else{
-				$(this).dialog('open');
-				//initEventosDownpaymentProgramados();
-  			}
+  			showLoading(div, true);
+			$(this).load ("contract/ScheduledPayments" , function(){
+				showLoading(div, false);
+				initEventosDownpaymentProgramados();
+			});
+
 		},
 		autoOpen: false,
      	height: maxHeight,
@@ -1997,7 +1981,8 @@ function setTableAccount(items, table){
 function drawTerminosVenta(data){
 	var price = parseFloat(data.ListPrice);
 	var semanas = data.WeeksNumber;
-	var packReference = parseFloat(data.PackPrice);
+	//var packReference = parseFloat(data.PackPrice);
+	var SpecialDiscount = parseFloat(data.SpecialDiscount);
 	var salePrice = parseFloat(data.NetSalePrice);
 	var enganche = parseFloat(data.Deposit);
 	var transferido = parseFloat(data.TransferAmt);
@@ -2008,14 +1993,14 @@ function drawTerminosVenta(data){
 
 	$("#cventaPrice").text(price.toFixed(2));
 	$("#cventaWeeks").text(semanas);
-	$("#cventaPackR").text(packReference.toFixed(2));
+	$("#cventaPackR").text(SpecialDiscount.toFixed(2));
 	$("#cventaSalePrice").text(salePrice.toFixed(2));
 	$("#cventaHitch").text(enganche.toFixed(2));
 	$("#cventaTransferA").text(transferido.toFixed(2));
 	$("#cventaCostContract").text(costoContract.toFixed(2));
 	$("#cventapackAmount").text(packAmount.toFixed(2));
 	$("#cventaFinanced").text(balanceFinal.toFixed(2));
-	$("#cventaAmountTransfer").text(enganche + transferido);
+	//$("#cventaAmountTransfer").text(transferido);
 }
 
 function drawTerminoFinanciamiento(data){
