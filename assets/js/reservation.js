@@ -199,7 +199,9 @@ function updateBalanceFinalRes(){
 	var enganche = $("#montoTotalRes").val();
 	var balanceFinal = $("#financeBalanceRes").val(precioVenta - enganche);*/
 	
-	var closingCost = sumarArrayRes(getArrayValuesColumnTable("tableUnidadesResSelected", 7));
+	//var closingCost = sumarArrayRes(getArrayValuesColumnTable("tableUnidadesResSelected", 7));
+	var closingCost = $('#RateRes').val();
+	
 	var precioVenta = getNumberTextInputRes("precioVentaRes");
 
 	var descuentoEspecial = getNumberTextInputRes("montoTotalDERes");
@@ -1009,7 +1011,7 @@ function getPlantillaDownpaymentRes(){
 function addHTMLDownpaymentRes(datos){
 	showLoading('#dialog-DownpaymentRes', false);
 	$("#dialog-DownpaymentRes").html(datos);
-	initEventosDownpayment();
+	initEventosDownpaymentRes();
 }
 
 function modalScheduledPaymentsRes() {
@@ -1041,15 +1043,23 @@ function modalScheduledPaymentsRes() {
        		text: "ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			var totalProgramado = $("#totalProgramado").val();
+       			/*var totalProgramado = $("#totalProgramado").val();
        			var totalInicial = $("#downpaymentProgramado").val();
        			if (totalProgramado==totalInicial) {
        				$("#scheduledPaymentsRes").val($("#totalProgramado").val());
        				$(this).dialog('close');
        			}else{
        				alertify.error("verifica los pagos")
+       			}*/
+				var totalProgramado = getNumberTextInputRes("totalProgramado"); 
+       			var totalInicial = getNumberTextInputRes("downpaymentProgramado");
+       			if (totalProgramado == totalInicial) {
+       				$("#scheduledPaymentsRes").val($("#totalProgramado").val());
+       				$(this).dialog('close');
+       				updateBalanceFinalRes();
+       			}else{
+       				alertify.error("Verify total to pay");
        			}
-				
        		}
      	}],
      close: function() {
@@ -1164,14 +1174,19 @@ function getValueFromTableSelectedRes(id, posicion){
 }
 
 function setValueUnitPriceRes(){
-	var value = $('#RateRes').val();
+	/*var value = $('#RateRes').val();
 	var date1 = new Date(iniDateRes);
 	var date2 = new Date(endDateRes);
 	var dayDif = date2.getTime() - date1.getTime();
 	var day = Math.round(dayDif/(1000 * 60 * 60 * 24));
 	var precio = value * day;
 	$("#precioUnidadRes").val(precio);
+	$("#precioVentaRes").val(precio);*/
+	var precio = //sumarArrayRes(getArrayValuesColumnTableRes("tableUnidadesResSelected", 3));
+	precio = $('#RateRes').val();
+	$("#precioUnidadRes").val(precio);
 	$("#precioVentaRes").val(precio);
+	updateBalanceFinalRes();
 }
 
 function getDatailByIDRes(id){
@@ -1371,10 +1386,10 @@ function initEventosDownpaymentProgramadosRes(){
 	});
 
 	$('#btnAddmontoDownpaymentPrg').click(function () {
-		var amount = getNumberTextInput("montoDownpaymentPrg"); 
-		var total = getNumberTextInput("downpaymentProgramado");
+		var amount = getNumberTextInputRes("montoDownpaymentPrg"); 
+		var total = getNumberTextInputRes("downpaymentProgramado");
 		if(amount>0 && amount <= total){
-			tableDownpaymentSelectedPrg();
+			tableDownpaymentSelectedPrgRes();
 			totalDownpaymentPrg();
 		}else{
 			alertify.error("The amount should be greater to zero and minus than total amount");
@@ -1382,7 +1397,7 @@ function initEventosDownpaymentProgramadosRes(){
 	});
 
 	if($("#montoDownpaymentPrg").val()>0){
-		tableDownpaymentSelectedPrg();
+		tableDownpaymentSelectedPrgRes();
 		totalDownpaymentPrg();
 	}
 }

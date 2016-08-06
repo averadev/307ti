@@ -426,7 +426,8 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->where(" ro.fkCalendarId = ( SELECT top 1 c2.pkCalendarId FROM tblCalendar c2 where CONVERT(VARCHAR(10), c2.[Date], 110) = CONVERT(VARCHAR(10), GETDATE(), 110) )");*/
 		//$this->db->where(" ro.fkCalendarId = 207 ");
 		$this->db->select('u.pkUnitId');
-		$this->db->select('( SELECT TOP 1 hkS.fkHkStatusId  from tblUnitHKStatus hkS where hkS.fkUnitId = u.pkUnitId ) as hkstatus');
+		$this->db->select('( SELECT TOP 1 hkS.fkHkStatusId  from tblUnitHKStatus hkS where hkS.fkUnitId = u.pkUnitId ORDER BY hkS.fkCalendarID DESC ) as hkstatus');
+		$this->db->select('( SELECT TOP 1 pf.ynHkDirty from tblPropertyFolio pf where pf.fkPropertyId = u.fkPropertyId and pf.fkFolioTypeID = 2) as hkDirty');
 		$this->db->from('tblUnit u');
 		return  $this->db->get()->result();
 	}

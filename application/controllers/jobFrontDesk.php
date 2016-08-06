@@ -29,26 +29,27 @@ class JobFrontDesk extends CI_Controller {
 				$hkCode = 4;
 			}*/
 			
-			$status = 2;
+			/*$status = 2;
 			if( $item->hkstatus == 5 ){
 				$status = $item->hkstatus;
+			}*/
+			if( ( $item->hkstatus == 1 && $item->hkDirty == 1 ) or is_null( $item->hkstatus ) == true ){
+				echo $item->pkUnitId . " and " . $item->hkstatus . "</br>";
+				$insert = array(
+					'fkUnitId' 			=> $item->pkUnitId,
+					'fkHkStatusId'		=> 2,
+					'fkHkCodeId' 		=> $hkCode,
+					'fkHkServicetype'	=> 1,
+					'ynActive' 			=> 1,
+					'CrBy' 				=> 0,
+					'CrDt' 				=> $this->getToday(),
+					'MdBy' 				=> 0,
+					'MdDt' 				=> $this->getToday(),
+					'fkCalendarID' 		=> $calendar[0]->pkCalendarId,
+					'fkOccStatusID' 	=> 3,
+				);
+				//$this->frontDesk_db->insert( $insert, 'tblUnitHKStatus' );
 			}
-			
-			$insert = array(
-				'fkUnitId' 			=> $item->pkUnitId,
-				'fkHkStatusId'		=> $status,
-				'fkHkCodeId' 		=> $hkCode,
-				'fkHkServicetype'	=> 1,
-				'ynActive' 			=> 1,
-				'CrBy' 				=> 0,
-				'CrDt' 				=> $this->getToday(),
-				'MdBy' 				=> 0,
-				'MdDt' 				=> $this->getToday(),
-				'fkCalendarID' 		=> $calendar[0]->pkCalendarId,
-				'fkOccStatusID' 	=> 3,
-			);
-			
-			$this->frontDesk_db->insert( $insert, 'tblUnitHKStatus' );
 		}
 	}
 	
