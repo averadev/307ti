@@ -260,12 +260,14 @@ private function insertFinanciamiento($idContrato){
 
 public function updateFinanciamiento(){
 	if($this->input->is_ajax_request()) {
+		$IDContrato = $_POST['idContrato'];
 		$financiamiento = [
 			"fkFactorId"	=> $_POST['factor'],
 			"MonthlyPmtAmt" => $_POST['pagoMensual']
 		];
-		$condicion = "fkResId = " . $_POST['idContrato'];
+		$condicion = "fkResId = " . $IDContrato;
 		$afectados = $this->contract_db->updateReturnId('tblResfin', $financiamiento, $condicion);
+		insertTransacciones($IDContrato);
 		if ($afectados>0) {
 			$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados];
 			echo json_encode($mensaje);
@@ -274,6 +276,26 @@ public function updateFinanciamiento(){
 			echo json_encode($mensaje);
 		}
 	}
+}
+
+private function insertTransacciones(){
+	$transaction = [
+		"fkAccid" 			=> $_POST['accId'],  //la cuenta
+		"fkTrxTypeId"		=> $_POST['trxTypeId'], //lista
+		"fkTrxClassID"		=> $_POST['trxClassID'], // vendedor
+		"Debit-"			=> $debit, // si es negativo se inserta en debit
+		"Credit+"			=> 0,	//si es positivo se inserta credit
+		"Amount"			=> $_POST['amount'], //cantidad
+		"AbsAmount"			=> $_POST['amount'], //cantidad se actualiza
+		"Remark"			=> '', //
+		"Doc"				=> '',
+		"DueDt"				=> $_POST['dueDt'], //fecha a pagar --fecha vencimiento
+		"ynActive"			=> 1,
+		"CrBy"				=> $this->nativesessions->get('id'),
+		"CrDt"				=> $this->getToday(),
+		"MdBy"				=> $this->nativesessions->get('id'),
+		"MdDt"				=> $this->getToday()
+		];
 }
 
 public function createSemanaOcupacion($idContrato){
@@ -376,9 +398,9 @@ public function createNote(){
 			if($_POST['attrType'] == "newTransAcc"){
 				$debit = -1 * abs($_POST['amount']);
 				$transaction = [
-					"fkAccid" 			=> $_POST['accId'],
-					"fkTrxTypeId"		=> $_POST['trxTypeId'],
-					"fkTrxClassID"		=> $_POST['trxClassID'],
+					"fkAccid" 			=> $_POST['accId'],  //la cuenta
+					"fkTrxTypeId"		=> $_POST['trxTypeId'], //lista
+					"fkTrxClassID"		=> $_POST['trxClassID'], // vendedor
 					"Debit-"			=> $debit,
 					"Credit+"			=> 0,
 					"Amount"			=> $_POST['amount'],

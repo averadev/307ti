@@ -425,7 +425,7 @@ class Contract_db extends CI_Model {
     }
 
     public function selectFactors(){
-        $this->db->select("pkFactorId as ID, FactorCode, FactorDesc");
+        $this->db->select("pkFactorId as ID,CAST(Factorfin AS Float)as Factorfin , FactorDesc");
         $this->db->from('tblFactor');
         $this->db->where('ynActive', 1);
         $this->db->order_by('Months', 'ASC');

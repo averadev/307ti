@@ -34,7 +34,7 @@
             <?php
                 foreach($factores as $item){
                     ?>
-                        <option value="<?php echo $item->ID; ?>" code="<?php echo $item->FactorCode; ?>"><?php echo $item->FactorDesc; ?></option>
+                        <option value="<?php echo $item->ID; ?>" code="<?php echo floatval($item->Factorfin); ?>"><?php echo $item->FactorDesc; ?></option>
                     <?php
                     }
             ?>

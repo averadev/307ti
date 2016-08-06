@@ -2122,12 +2122,14 @@ function showModalFin(id){
 function updateFinanciamiento(id){
 	var fechaPP = $("#fechaPrimerPagoF").val();
     var factor = $("#terminosFinanciamientoF").val();
-    var pagoMensual = getArrayValuesColumnTable("tablePagosSelected", 3);
+    var pagoMensual = getArrayValuesColumnTable("tablePagosSelected", 3)[0];
+    var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
 	$.ajax({
 	    data:{
 	        idContrato: id,
 	        factor:factor,
-	        pagoMensual: pagoMensual[0]
+	        pagoMensual: pagoMensual,
+	        meses : meses
 	    },
 	    type: "POST",
 	    url: "contract/updateFinanciamiento",
@@ -2150,11 +2152,14 @@ function initEventosFinanciamiento(){
 		$("#tasaInteresF").text(palabras[1]);
 
 	$("#btnCalcularF").click(function(){
+		var factor = $("#terminosFinanciamientoF option:selected").attr("code");
+		var factor = parseFloat(factor.replace(",", "."));
 		var pagoTotal = getNumberTextString("balanceFinanciarF");
 		var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
-		var interes = parseFloat($("#tasaInteresF").text().split("%")[0]);
-		var pagoMensual = parseFloat(pagoTotal / meses);
-		var pagoMensual = parseFloat(pagoMensual.toFixed(2)) + (interes * 10);
+		var interes = (factor + 1);
+		//var interes = parseFloat($("#tasaInteresF").text().split("%")[0]);
+		var pagoMensual = parseFloat((pagoTotal*interes) / meses);
+		var pagoMensual = parseFloat(pagoMensual.toFixed(2));
 
 		$("#pagoMF").text(pagoMensual);
 		var cargo = getNumberTextInput("CargoCF");
