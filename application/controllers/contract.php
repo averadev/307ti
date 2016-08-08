@@ -23,33 +23,42 @@ class Contract extends CI_Controller {
 			$this->load->view('vwContract');
 		}
 	}
-
+/*$date = new DateTime("2016-08-23");
+$i= 1;
+$date->modify("+".$i." month");
+$fechaActual = $date->format('Y-m-d H:i:s');
+echo $fechaActual;*/
 	public function pruebasContract(){
-		// $datos = $_POST['card'];
-		// if ($datos) {
-		// 	$Card = [
-		// 		"fkCcTypeId" => intval($datos['type']),
-		// 		"fkAccId" => 1,
-		// 		"CCNumber" => $datos['number'],
-		// 		"expDate" => $datos['dateExpiration'],
-		// 		"ZIP" => $datos['poscode'],
-		// 		"Code" => $datos['code'],
-		// 		"ynActive" => 1,
-		// 		"CrBy" => $this->nativesessions->get('id'),
-		// 		"CrDt" => $this->getToday()
-		// 	];
-		// 	//var_dump($Card);
-		// 	$Id = $this->contract_db->insertReturnId('tblAcccc', $Card);
-		// 	if ($Id) {
-		// 		echo json_encode(["mensaje" => "Se ingreso correctamente la tarjeta"]);
-		// 	}else{
-		// 		echo json_encode(["mensaje" => "Ocurrio un error"]);
-		// 	}
-		// }
-		echo json_encode([
-			"mensaje" => 'Contract Save',
-			"balance" => $this->contract_db->selectPriceFin(1977)[0]
-			]);
+		$IDContrato = $_POST['idContrato'];
+		$pagoMensual = $_POST['pagoMensual'];
+		$meses = intval($_POST['meses']);
+		$fecha =  new DateTime($_POST['fecha']);
+		for ($i=0; $i < $meses; $i++) { 
+			$transaction = [
+				"fkAccid" 			=> $_POST['accId'],  //la cuenta
+				"fkTrxTypeId"		=> 1,//$_POST['trxTypeId'], //lista
+				"fkTrxClassID"		=> 1,//$_POST['trxClassID'], // vendedor
+				"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
+				"Credit+"			=> 0,	//si es positivo se inserta credit
+				"Amount"			=> $_POST['amount'], //cantidad
+				"AbsAmount"			=> $_POST['amount'], //cantidad se actualiza
+				"Remark"			=> '', //
+				"Doc"				=> '',
+				"DueDt"				=> date('Y-m-d', strtotime("+".$i." month"));, //fecha a pagar --fecha vencimiento
+				"ynActive"			=> 1,
+				"CrBy"				=> $this->nativesessions->get('id'),
+				"CrDt"				=> $this->getToday(),
+				"MdBy"				=> $this->nativesessions->get('id'),
+				"MdDt"				=> $this->getToday()
+			];
+			$this->contract_db->insertReturnId('tblAccTrx', $transaction);
+		}
+		
+				$message= array('success' => true, 'message' => "transaction save");
+		// echo json_encode([
+		// 	"mensaje" => 'Contract Save',
+		// 	"balance" => $this->contract_db->selectPriceFin(1977)[0]
+		// 	]);
 		
 	}
 
@@ -94,11 +103,6 @@ private function insertTarjeta($id, $type){
 		];
 		return $this->contract_db->insertReturnId('tblAcccc', $Card);
 	}
-	// if ($Id) {
-	// 	echo json_encode(["mensaje" => "Se ingreso correctamente la tarjeta"]);
-	// }else{
-	// 	echo json_encode(["mensaje" => "Ocurrio un error"]);
-	// }
 }
 
 private function createContract(){

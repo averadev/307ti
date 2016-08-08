@@ -2124,23 +2124,23 @@ function updateFinanciamiento(id){
     var factor = $("#terminosFinanciamientoF").val();
     var pagoMensual = getArrayValuesColumnTable("tablePagosSelected", 3)[0];
     var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
-	$.ajax({
-	    data:{
-	        idContrato: id,
+    var ajaxData =  {
+		url: "contract/updateFinanciamiento",
+		tipo: "json",
+		datos: {
+			idContrato: id,
 	        factor:factor,
 	        pagoMensual: pagoMensual,
 	        meses : meses
-	    },
-	    type: "POST",
-	    url: "contract/updateFinanciamiento",
-	    dataType:'json',
-	    success: function(data){
-	    	alertify.success(data['mensaje']);
-	    },
-	    error: function(){
-	        alertify.error("Try again");
-	    }
-	});
+		},
+		funcionExito : afterUpdateFinanciamiento,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
+
+function afterUpdateFinanciamiento(data){
+	alertify.success(data['mensaje']);
 }
 
 function initEventosFinanciamiento(){
@@ -2810,7 +2810,6 @@ function saveAccCont(attrType){
 	}
 	var accCode = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accCode');
 	var idAccCon = $('#btNewTransAcc').data( 'idAcc' + accCode );
-	//console.log($('#btNewTransAcc').data( 'idRes' ));
 	showAlert(true,"Saving changes, please wait ....",'progressbar');
 	$.ajax({
 		data: {
@@ -2831,19 +2830,14 @@ function saveAccCont(attrType){
 	}).done(function( data, textStatus, jqXHR ) {
 		console.log(data);
 		if( data.success ){
-			//alert("guardeishion");
-			//getDatailByID("contractstbody");
 			getAccounts( $('#btNewTransAcc').data( 'idRes' ), "account", "" );
 			$("#dialog-accounts").dialog('close');
 			showAlert(false,"Saving changes, please wait ....",'progressbar');
 		}else{
 			$("#dialog-accounts").dialog('close');
 			showAlert(false,"Saving changes, please wait ....",'progressbar');
-			//alert("no transacenshion");
 		}
 	}).fail(function( jqXHR, textStatus, errorThrown ) {
-		//alert("no guardeishion");
-		//$("#dialog-accounts").dialog('close');
 		showAlert(false,"Saving changes, please wait ....",'progressbar');
 		alertify.error("Try Again");
 	});
@@ -3361,14 +3355,33 @@ function testContract(){
 	};
 	ajaxDATA(ajaxData);
 }
+function testContract2(){
+	var fechaPP = "2016-08-23";
+	var id = 2775;
+    var pagoMensual = getArrayValuesColumnTable("tablePagosSelected", 3)[0];
+    var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
+    var ajaxData =  {
+		url: "contract/updateFinanciamiento",
+		tipo: "json",
+		datos: {
+			idContrato: id,
+	        pagoMensual: pagoMensual,
+	        meses : meses,
+	        fecha: fechaPP
+		},
+		funcionExito : afterUpdateFinanciamiento,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
 
 function table(datos){
-	console.table(datos['balance']);
-	console.log(datos['balance'].financeBalance);
-	if (datos['balance'].financeBalance >0) {
-		console.log("lo voy a mostrar");
-	}else{
-		console.log("no lo muestro");
-	}
-	console.table(datos);
+	// console.table(datos['balance']);
+	// console.log(datos['balance'].financeBalance);
+	// if (datos['balance'].financeBalance >0) {
+	// 	console.log("lo voy a mostrar");
+	// }else{
+	// 	console.log("no lo muestro");
+	// }
+	// console.table(datos);
 }
