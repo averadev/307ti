@@ -558,6 +558,7 @@ function createNewContract(){
 				financeBalance: $("#financeBalance").val(),
 				tablapagos: getValueTableDownpayment(),
 				tablaPagosProgramados:getValueTableDownpaymentScheduled(),
+				tablaDownpayment : getValueTableDownpayment(),
 				gifts: getValueTablePacks(),
 				viewId: 1,
 				closingCost: sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7)),
@@ -620,6 +621,20 @@ function getValueTablePacks(){
 
 function getValueTableDownpaymentScheduled(){
 	var tabla = "tablePagosPrgSelected";
+	var pagos = [];
+	$('#'+tabla+' tbody tr').each( function(){
+		if ($(this).text().replace(/\s+/g, " ")!="") {
+			var pago = {};
+			pago.date = $(this).find('td').eq(0).text(),
+			pago.type = $(this).find('td').eq(1).text(),
+			pago.amount = $(this).find('td').eq(2).text()
+			pagos.push(pago); 
+		}
+	});
+	return pagos;
+}
+function getValueTableDownpayment(){
+	var tabla = "tablePagosSelected";
 	var pagos = [];
 	$('#'+tabla+' tbody tr').each( function(){
 		if ($(this).text().replace(/\s+/g, " ")!="") {
@@ -1033,7 +1048,7 @@ function recorrerObjeto(){
 }
 
 function getPlantillaDownpayment(){
-		var ajaxData =  {
+	var ajaxData =  {
 		url: "contract/modalDepositDownpayment",
 		tipo: "html",
 		datos: {},
@@ -1376,9 +1391,9 @@ function selectMetodoPagoProgramados(){
 function initEventosDownpayment(){
 	var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
 	$("#downpaymentGastos").val(closingCost);
-	var precioUnidad = $("#montoTotal").val();
-	if (precioUnidad>0) {
-		var precioUnidadPack = $("#downpaymentPrice").val(precioUnidad);
+	var Downpayment = getNumberTextInput('montoTotal');
+	if (Downpayment > 0) {
+		var precioUnidadPack = $("#downpaymentPrice").val(Downpayment);
 	}else{
 		var precioUnidadPack = $("#downpaymentPrice").val(0);
 	}
@@ -2122,7 +2137,7 @@ function showModalFin(id){
 function updateFinanciamiento(id){
 	var fechaPP = $("#fechaPrimerPagoF").val();
     var factor = $("#terminosFinanciamientoF").val();
-    var pagoMensual = getArrayValuesColumnTable("tablePagosSelected", 3)[0];
+    var pagoMensual = getArrayValuesColumnTable("tablePagosSelectedFin", 3)[0];
     var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
     var ajaxData =  {
 		url: "contract/updateFinanciamiento",
@@ -2131,7 +2146,8 @@ function updateFinanciamiento(id){
 			idContrato: id,
 	        factor:factor,
 	        pagoMensual: pagoMensual,
-	        meses : meses
+	        meses : meses,
+	        fecha: fechaPP
 		},
 		funcionExito : afterUpdateFinanciamiento,
 		funcionError: mensajeAlertify
@@ -3358,10 +3374,10 @@ function testContract(){
 function testContract2(){
 	var fechaPP = "2016-08-23";
 	var id = 2775;
-    var pagoMensual = getArrayValuesColumnTable("tablePagosSelected", 3)[0];
-    var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
+    var pagoMensual = 800;
+    var meses = 12;
     var ajaxData =  {
-		url: "contract/updateFinanciamiento",
+		url: "contract/pruebasContract",
 		tipo: "json",
 		datos: {
 			idContrato: id,

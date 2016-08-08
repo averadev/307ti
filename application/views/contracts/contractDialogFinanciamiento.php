@@ -74,7 +74,7 @@
     <legend class="btnAddressData">Monthly Payment</legend>
     <div class="containerPeople">
         <div class="row">
-            <table id="tablePagosSelected" width="100%">
+            <table id="tablePagosSelectedFin" width="100%">
                 <thead>
                     <tr>
                         <th class="cellEdit" >Payment</th>
@@ -82,7 +82,7 @@
                         <th class="cellGeneral">Total to Pay</th>
                    </tr>
                 </thead>
-                <tbody id="tbodyPagosSelected">
+                <tbody id="tbodyPagosSelectedFin">
                 <tr>
                     <td id="pagoMF">0.00</td>
                     <td id="CargoCF"><?php echo floatval($CostCollection);?></td>

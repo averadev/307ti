@@ -398,6 +398,32 @@ class Contract_db extends CI_Model {
         }
     }
 
+    public function getTrxTypeContrac($string){
+        $this->db->select('pktrxTypeId');
+        $this->db->from('tbltrxtype');
+        $this->db->where('TrxTypeDesc', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pktrxTypeId;
+        }
+    }
+
+    public function getACCIDByContracID($idContrato){
+        $this->db->select('pkAccID');
+        $this->db->from('tblAcc a');
+        $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId and rpa.fkResId='.$idContrato, 'inner');
+        $this->db->where('a.fkAccTypeId = 1');
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkAccID;
+        }
+    }
+
     public function selectIdFloorPlan($string){
         $this->db->select('pkFloorPlanID');
         $this->db->from('tblFloorPlan');

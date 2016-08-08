@@ -34,17 +34,19 @@ echo $fechaActual;*/
 		$meses = intval($_POST['meses']);
 		$fecha =  new DateTime($_POST['fecha']);
 		for ($i=0; $i < $meses; $i++) { 
+			$fecha->modify("+".$i." month");
+			$fechaActual = $fecha->format('Y-m-d H:i:s');
 			$transaction = [
-				"fkAccid" 			=> $_POST['accId'],  //la cuenta
+				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($IDContrato),  //la cuenta
 				"fkTrxTypeId"		=> 1,//$_POST['trxTypeId'], //lista
 				"fkTrxClassID"		=> 1,//$_POST['trxClassID'], // vendedor
 				"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
 				"Credit+"			=> 0,	//si es positivo se inserta credit
-				"Amount"			=> $_POST['amount'], //cantidad
-				"AbsAmount"			=> $_POST['amount'], //cantidad se actualiza
+				"Amount"			=> $_POST['pagoMensual'], //cantidad
+				"AbsAmount"			=> $_POST['pagoMensual'], //cantidad se actualiza
 				"Remark"			=> '', //
 				"Doc"				=> '',
-				"DueDt"				=> date('Y-m-d', strtotime("+".$i." month"));, //fecha a pagar --fecha vencimiento
+				"DueDt"				=> $fechaActual,
 				"ynActive"			=> 1,
 				"CrBy"				=> $this->nativesessions->get('id'),
 				"CrDt"				=> $this->getToday(),
@@ -54,7 +56,8 @@ echo $fechaActual;*/
 			$this->contract_db->insertReturnId('tblAccTrx', $transaction);
 		}
 		
-				$message= array('success' => true, 'message' => "transaction save");
+		$message= array('success' => true, 'message' => "transaction save");
+		echo json_encode($message);
 		// echo json_encode([
 		// 	"mensaje" => 'Contract Save',
 		// 	"balance" => $this->contract_db->selectPriceFin(1977)[0]
@@ -72,7 +75,8 @@ echo $fechaActual;*/
 			$this->insertTarjeta($idContrato, $acc);
 			$this->insertPeoples($idContrato, $acc);
 			$this->createUnidades($idContrato);
-			$this->createDownPayment($idContrato);
+			$this->insertScheduledPaymentsTrx($idContrato);
+			$this->insertDownpayment($idContrato);
 			$this->createGifts($idContrato);
 			$balanceFinal = $this->insertFinanciamiento($idContrato);
 			$this->createSemanaOcupacion($idContrato);
@@ -271,7 +275,7 @@ public function updateFinanciamiento(){
 		];
 		$condicion = "fkResId = " . $IDContrato;
 		$afectados = $this->contract_db->updateReturnId('tblResfin', $financiamiento, $condicion);
-		//insertTransacciones($IDContrato);
+		$this->insertTransacciones();
 		if ($afectados>0) {
 			$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados];
 			echo json_encode($mensaje);
@@ -283,25 +287,96 @@ public function updateFinanciamiento(){
 }
 
 private function insertTransacciones(){
-	$transaction = [
-		"fkAccid" 			=> $_POST['accId'],  //la cuenta
-		"fkTrxTypeId"		=> $_POST['trxTypeId'], //lista
-		"fkTrxClassID"		=> $_POST['trxClassID'], // vendedor
-		"Debit-"			=> $debit, // si es negativo se inserta en debit
-		"Credit+"			=> 0,	//si es positivo se inserta credit
-		"Amount"			=> $_POST['amount'], //cantidad
-		"AbsAmount"			=> $_POST['amount'], //cantidad se actualiza
-		"Remark"			=> '', //
-		"Doc"				=> '',
-		"DueDt"				=> $_POST['dueDt'], //fecha a pagar --fecha vencimiento
-		"ynActive"			=> 1,
-		"CrBy"				=> $this->nativesessions->get('id'),
-		"CrDt"				=> $this->getToday(),
-		"MdBy"				=> $this->nativesessions->get('id'),
-		"MdDt"				=> $this->getToday()
+	$IDContrato = $_POST['idContrato'];
+	$pagoMensual = $_POST['pagoMensual'];
+	$meses = intval($_POST['meses']);
+	$fecha =  new DateTime($_POST['fecha']);
+	
+	for ($i=0; $i < $meses; $i++) { 
+		$transaction = [
+			"fkAccid" 			=> $this->contract_db->getACCIDByContracID($IDContrato),  //la cuenta
+			"fkTrxTypeId"		=> 1,//$_POST['trxTypeId'], //lista
+			"fkTrxClassID"		=> 1,//$_POST['trxClassID'], // vendedor
+			"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
+			"Credit+"			=> 0,	//si es positivo se inserta credit
+			"Amount"			=> $_POST['pagoMensual'], //cantidad
+			"AbsAmount"			=> $_POST['pagoMensual'], //cantidad se actualiza
+			"Remark"			=> '', //
+			"Doc"				=> '',
+			"DueDt"				=> date('Y-m-d', strtotime("+".$i." month")), //fecha a pagar --fecha vencimiento
+			"ynActive"			=> 1,
+			"CrBy"				=> $this->nativesessions->get('id'),
+			"CrDt"				=> $this->getToday(),
+			"MdBy"				=> $this->nativesessions->get('id'),
+			"MdDt"				=> $this->getToday()
 		];
+		$this->contract_db->insertReturnId('tblAccTrx', $transaction);
+	}
 }
 
+private function insertScheduledPaymentsTrx($idContrato){
+	if(!empty($_POST['tablaPagosProgramados'])){
+		$pagos = sizeof($_POST['tablaPagosProgramados']);
+	}else{
+		$pagos = 0;
+	}
+
+	if ($pagos>0) {
+	
+		for ($i=0; $i < $pagos; $i++) {
+			$transaction = [
+				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
+				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContrac($_POST['tablaPagosProgramados'][$i]["type"]),
+				"fkTrxClassID"		=> 1,//$_POST['trxClassID'], // vendedor
+				"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
+				"Credit+"			=> 0,//si es positivo se inserta credit
+				"Amount"			=> $_POST['tablaPagosProgramados'][$i]["amount"], //cantidad
+				"AbsAmount"			=> $_POST['tablaPagosProgramados'][$i]["amount"], //cantidad se actualiza
+				"Remark"			=> '', //
+				"Doc"				=> '',
+				"DueDt"				=> $_POST['tablaPagosProgramados'][$i]["date"],
+				"ynActive"			=> 1,
+				"CrBy"				=> $this->nativesessions->get('id'),
+				"CrDt"				=> $this->getToday(),
+				"MdBy"				=> $this->nativesessions->get('id'),
+				"MdDt"				=> $this->getToday()
+			];
+			$this->contract_db->insertReturnId('tblAccTrx', $transaction);
+		}
+	}
+}
+
+private function insertDownpayment($idContrato){
+	if(!empty($_POST['tablaDownpayment'])){
+			$pagos = sizeof($_POST['tablaDownpayment']);
+		}else{
+			$pagos = 0;
+		}
+
+		if ($pagos>0) {
+		
+			for ($i=0; $i < $pagos; $i++) {
+				$transaction = [
+					"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
+					"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContrac($_POST['tablaDownpayment'][$i]["type"]),
+					"fkTrxClassID"		=> 1,//$_POST['trxClassID'], // vendedor
+					"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
+					"Credit+"			=> 0,//si es positivo se inserta credit
+					"Amount"			=> $_POST['tablaDownpayment'][$i]["amount"], //cantidad
+					"AbsAmount"			=> $_POST['tablaDownpayment'][$i]["amount"], //cantidad se actualiza
+					"Remark"			=> '', //
+					"Doc"				=> '',
+					"DueDt"				=> $_POST['tablaPagosProgramados'][$i]["date"],
+					"ynActive"			=> 1,
+					"CrBy"				=> $this->nativesessions->get('id'),
+					"CrDt"				=> $this->getToday(),
+					"MdBy"				=> $this->nativesessions->get('id'),
+					"MdDt"				=> $this->getToday()
+				];
+				$this->contract_db->insertReturnId('tblAccTrx', $transaction);
+			}
+		}	
+}
 public function createSemanaOcupacion($idContrato){
 
 	$Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
