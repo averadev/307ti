@@ -713,4 +713,14 @@ class People extends CI_Controller {
 		$this->load->view('people/peopleDialog.php');
 	}
 	
+	/*
+	SELECT r.pkResId as ResId, r.Folio, r.ResCode, rt.ResTypeDesc
+FROM tblRes r
+INNER JOIN tblResPeopleAcc rpa on rpa.fkResId = r.pkResId
+INNER JOIN tblResType rt on rt.pkResTypeId = r.fkResTypeId
+INNER JOIN tblResInvt ri on ri.fkResId = r.pkResId
+--INNER JOIN tblResInvt ri on ri.fkResId = r.pkResId
+where ( r.fkResTypeId = 6 or r.fkResTypeId = 7 or r.fkResTypeId = 9 ) and rpa.fkPeopleId = 2 and rpa.ynActive = 1 and r.pkResRelatedId is NULL
+*/
+	
 }
