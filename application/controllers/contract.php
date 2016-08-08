@@ -44,7 +44,7 @@ echo $fechaActual;*/
 				"AbsAmount"			=> $_POST['amount'], //cantidad se actualiza
 				"Remark"			=> '', //
 				"Doc"				=> '',
-				"DueDt"				=> date('Y-m-d', strtotime("+".$i." month"));, //fecha a pagar --fecha vencimiento
+				"DueDt"				=> date('Y-m-d', strtotime("+".$i." month")), //fecha a pagar --fecha vencimiento
 				"ynActive"			=> 1,
 				"CrBy"				=> $this->nativesessions->get('id'),
 				"CrDt"				=> $this->getToday(),

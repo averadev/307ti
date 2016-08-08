@@ -710,6 +710,16 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }*/
     }
 	
+	public function selectPaymentType(){
+        $this->db->select("T.pkTrxTypeId as ID, RTRIM(T.TrxTypeDesc) as Type");
+        $this->db->from('tbltrxtype T');
+        $this->db->where('fkTrxClassid', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
+	
 	public function getFilesReservation($id){
 		$this->db->select("d.pkDocId as ID, d.docPath as Path, d.docDesc as Description");
 		$this->db->select("dt.DocTypeDesc");
@@ -722,6 +732,16 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $query = $this->db->get();
 		return $query->result();
 	}
+	
+	public function selectTypeGeneral($campos, $tabla){
+        $this->db->select($campos);
+        $this->db->from($tabla);
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
 	
     //
     private function filterReservations($filters){
