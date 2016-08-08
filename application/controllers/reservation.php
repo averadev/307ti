@@ -651,6 +651,17 @@ class Reservation extends CI_Controller {
 		}
 	}
 	
+	public function modalDepositDownpayment(){
+		if($this->input->is_ajax_request()) {
+			$campos = "pkCcTypeId as ID, CcTypeDesc";
+			$tabla = "tblCctype";
+			$data["paymentTypes"] = $this->reservation_db->selectPaymentType();
+			$data["creditCardType"] = $this->reservation_db->selectTypeGeneral($campos, $tabla);
+			$this->load->view('reservations/dialogDepositDownpayment', $data);
+		}
+	}
+	
+	
 	/*****************************************/
 	/**********Funciones genericas************/
 	/*****************************************/

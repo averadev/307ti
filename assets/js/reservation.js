@@ -129,12 +129,12 @@ $(document).ready(function(){
 	$(document).on( 'click', '#btnDeleteTourID', function () {
 		$('#TourID').val('0');
 	});*/
-	$(document).on( 'click', '#btnAddmontoDownpaymentPrg', function () {
+	/*$(document).on( 'click', '#btnAddmontoDownpaymentPrg', function () {
 		if($("#montoDownpaymentPrg").val()>0){
 			tableDownpaymentSelectedPrgRes();
 			totalDownpaymentPrgRes();
 		}
-	});
+	});*/
 	$('#btnCleanWordRes').click(function (){
 		$( "#stringRes, #startDateRes, #endDateRes" ).val("");
 		$("#nombreRes").prop("checked", true);
@@ -200,8 +200,8 @@ function updateBalanceFinalRes(){
 	var balanceFinal = $("#financeBalanceRes").val(precioVenta - enganche);*/
 	
 	//var closingCost = sumarArrayRes(getArrayValuesColumnTable("tableUnidadesResSelected", 7));
-	var closingCost = $('#RateRes').val();
-	
+	//var closingCost = $('#RateRes').val();
+	//var closingCost = sumarArrayRes(getArrayValuesColumnTable("tableUnidadesSelected", 7));
 	var precioVenta = getNumberTextInputRes("precioVentaRes");
 
 	var descuentoEspecial = getNumberTextInputRes("montoTotalDERes");
@@ -213,7 +213,7 @@ function updateBalanceFinalRes(){
 	var transferencia = getNumberTextInputRes("amountTransferRes");
 
 	var descuento = descuentoEspecial + deposito + pagosProgramados + descuentoEfectivo + transferencia;
-	var costoTotal = precioVenta + closingCost;
+	var costoTotal = precioVenta; //+ closingCost;
 	var total = costoTotal - descuento;
 	$("#financeBalanceRes").val(total);
 	
@@ -358,7 +358,7 @@ function addUnidadResDialog(){
 				$(this).dialog('close');
 			}
 		},{
-			text: "add",
+			text: "Add",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
 				var unidades = getValueTableUnidadesSeleccionadasRes();
@@ -404,7 +404,7 @@ function addPeopleResDialog(){
 				$(this).dialog('close');
 			}
 		},{
-			text: "add",
+			text: "Add",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
 				if(selectAllPeopleRes()){
@@ -860,7 +860,7 @@ function getWeeksResDialog(unidades){
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			var frequency = $("#frequency option:selected" ).text();
@@ -909,7 +909,7 @@ function PackReferenceRes(){
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			$("#precioVentaRes").val($("#finalPricePack").val());
@@ -945,19 +945,11 @@ function modalDepositDownpaymentRes(){
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			/*var deposito = $("#finalPriceDownpayment").val();
-       			var total = $("#downpaymentTotal").val();
-       			if (deposito>total) {
-       				alertify.error("la cantidad es mayor al total")
-       			}else{
-       				$("#depositoEngancheRes").val(deposito);
-       				$(this).dialog('close');	
-       			}*/
 				var deposito = getNumberTextInputRes("finalPriceDownpayment");
-       			var total = getNumberTextInputRes("downpaymentTotal");
+       			var total = getNumberTextInputRes("downpaymentPrice");
        			if (deposito>total || deposito<= 0) {
        				alertify.error("Please Verify Total to Pay");
        			}else if(!isCreditCardValidRes()){
@@ -999,7 +991,7 @@ function isCreditCardValidRes(){
 
 function getPlantillaDownpaymentRes(){
 		var ajaxData =  {
-		url: "contract/modalDepositDownpayment",
+		url: "reservation/modalDepositDownpayment",
 		tipo: "html",
 		datos: {},
 		funcionExito : addHTMLDownpaymentRes,
@@ -1040,7 +1032,7 @@ function modalScheduledPaymentsRes() {
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			/*var totalProgramado = $("#totalProgramado").val();
@@ -1093,7 +1085,7 @@ function modalDiscountAmountRes(){
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			$("#totalDiscountPacksRes").val($("#totalDescPackRes").val());	
@@ -1295,7 +1287,7 @@ function selectMetodoPagoProgramadosRes(){
 ////////////////////////////////////////////////////////////////
 function selectMetodoPagoRes(){
 	$('#tiposPago').on('change', function() {
-  		if(this.value == 2){
+  		if(this.value != 1 && this.value != 5){
   			$("#datosTarjeta").show();
   		}else{
   			$("#datosTarjeta").hide();
@@ -1341,7 +1333,11 @@ function setDateRes(id){
 }
 
 function initEventosDownpaymentRes(){
-	var precioUnidad = $("#downpaymentRes").val();
+	
+	//var closingCost = sumarArrayRes(getArrayValuesColumnTable("tableUnidadesResSelected", 7));
+	//closingCost = 350
+	//$("#downpaymentGastos").val(closingCost);
+	var precioUnidad = $("#montoTotalRes").val();
 	if (precioUnidad>0) {
 		var precioUnidadPack = $("#downpaymentPrice").val(precioUnidad);
 	}else{
@@ -1349,20 +1345,60 @@ function initEventosDownpaymentRes(){
 	}
 	calcularDepositDownpaymentRes();
 	selectMetodoPagoRes();
-	setDateRes("datePayDawnpayment");
+	setDate("datePayDawnpayment");
 	
 	$('#btnAddmontoDownpayment').click(function (){
-		if($("#montoDownpayment").val()>0){
-			tableDownpaymentSelectedRes();
+		var amount = getNumberTextInputRes("montoDownpayment");
+		var added = getNumberTextInputRes("downpaymentPrice");
+
+		if(amount>0 && amount <= added){
+			tableDownpaymentSelectedRes(amount);
 			totalDownpaymentRes();
+			
 		}else{
-			alertify.error("the amount should be greater to zero and minus than the amount total");
+			alertify.error("The amount should be greater to zero and minus than total amount");
 			errorInput("montoDownpayment", 2);
 		}
+		$("#montoDownpayment").val(0);
 	});
+
 	$('#btnCleanmontoDownpayment').click(function (){
 		$("#montoDownpayment").val(0);
 	});
+	
+	$('#numeroTarjeta').on('change', function() {
+	$("#numeroTarjeta").val(splitNumberTarjetaRes());
+
+	  $('#numeroTarjeta').validateCreditCard(function(result) {
+	  	if (result.valid) {
+	  		//$("#cardType").val(result.card_type.name);
+	  		$("#numeroTarjeta").removeClass('is-invalid-input');
+
+	  	}else{
+	  		$("#numeroTarjeta").addClass('is-invalid-input');
+	  	}
+        });
+	});
+	
+}
+
+function splitNumberTarjetaRes(){
+	var n =   $('#numeroTarjeta').val().replace(/[^\d]/g, '');
+	if (n) {
+		var numero = n.match(/.{1,4}/g);
+		var tarjeta = "";
+		for(var i = 0; i < numero.length; i++)
+		{
+			if (i!= numero.length-1) {
+				tarjeta += numero[i] + "-";
+			}else{
+				tarjeta += numero[i];
+			}
+		}
+		return tarjeta;
+	}else{
+		return "";
+	}
 	
 }
 
@@ -1374,7 +1410,7 @@ function initEventosDownpaymentProgramadosRes(){
 	$('#btnCleanmontoDownpaymentPrg').click(function (){
 		$("#montoDownpaymentPrg").val(0);
 	});*/
-	var downpayment = $("#downpaymentTotal").val();
+	var downpayment = $("#downpaymentPrice").val();
 	var deposit = $("#depositoEngancheRes").val();
 	$("#montoDownpaymentPrg").val(0);
 	$("#downpaymentProgramado").val(downpayment-deposit);
@@ -1429,9 +1465,9 @@ function PacksAddsRes(){
 
 function calcularDepositDownpaymentRes(){
 	var total = parseFloat($("#downpaymentPrice").val());
-	var value = parseFloat($("#downpaymentGastos").val());
-	$("#downpaymentTotal").val(value+total);
-	$("#downpaymentGastos").on('keyup change click', function () {
+	//var value = parseFloat($("#downpaymentGastos").val());
+	//$("#downpaymentTotal").val(value+total);
+	/*$("#downpaymentGastos").on('keyup change click', function () {
 	    if(this.value !== value) {
 	    	value = parseFloat(this.value);
 	       if(value+total>0){
@@ -1440,7 +1476,7 @@ function calcularDepositDownpaymentRes(){
 	       		$("#downpaymentTotal").val(total);
 	       }
 	    }        
-	});
+	});*/
 }
 
 function tableDownpaymentSelectedPrgRes(){
@@ -1939,7 +1975,7 @@ function modalFinanciamientoRes() {
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
     			//alertify.success("Financiamiento guardado");
@@ -1983,7 +2019,7 @@ function showModalFinRes(id){
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "ok",
+       		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
     			updateFinanciamientoRes(id);
