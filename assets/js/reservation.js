@@ -420,7 +420,13 @@ function addPeopleResDialog(){
 }
 
 function getReservations(){
-	showLoading('#reservationsTable',true);
+	//noResultsTable("table-reservations", "reservationsTable", "no results found");}
+	noResults( '#table-reservations', false );
+	showLoading( '#table-reservations', true );
+	
+	noResults('#table-reservations',false);
+	showLoading( '#table-frontDesk', true );
+	
     var filters = getFiltersCheckboxs('filtro_reservations');
     var arrayDate = ["startDateRes", "endDateRes"];
     var dates = getDates(arrayDate);
@@ -436,18 +442,17 @@ function getReservations(){
        	url: "reservation/getReservations",
 		dataType:'json',
 		success: function(data){
-			console.log(data);
 			if( data.items ){
 				alertify.success("Found "+ data.length);
 				drawTable2(data.items,"reservationsTable","edit","editRes");
 			}else{
 				noResultsTable("table-reservations", "reservationsTable", "no results found");
 			}
-			showLoading('#reservationsTable',false);
+			showLoading('#table-reservations',false);
 		},
 		error: function(){
 			alertify.error("Try again");
-			showLoading('#reservationsTable',false);
+			showLoading('#table-reservations',false);
 		}
     });
 }
@@ -1426,7 +1431,7 @@ function initEventosDownpaymentProgramadosRes(){
 		var total = getNumberTextInputRes("downpaymentProgramado");
 		if(amount>0 && amount <= total){
 			tableDownpaymentSelectedPrgRes();
-			totalDownpaymentPrg();
+			totalDownpaymentPrgRes();
 		}else{
 			alertify.error("The amount should be greater to zero and minus than total amount");
 		}
@@ -1434,7 +1439,7 @@ function initEventosDownpaymentProgramadosRes(){
 
 	if($("#montoDownpaymentPrg").val()>0){
 		tableDownpaymentSelectedPrgRes();
-		totalDownpaymentPrg();
+		totalDownpaymentPrgRes();
 	}
 }
 
