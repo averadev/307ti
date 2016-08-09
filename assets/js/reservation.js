@@ -664,18 +664,30 @@ function createNewReservation(){
 						weeks: getArrayValuesColumnTableRes("tableUnidadesResSelected", 6),
 						firstYear : unidadRes[0].fyear,
 						lastYear : unidadRes[0].lyear,
-						tipoVentaId : $("#occupancySalesRes").val(),
-						listPrice: $("#precioUnidadRes").val(),
-						salePrice: $("#precioVentaRes").val(),
-						specialDiscount:$("#totalDiscountPacksRes").val(),
-						downpayment:$("#downpaymentRes").val(),
-						amountTransfer:$("#amountTransferRes").val(),
-						packPrice:sumarArrayRes(getArrayValuesColumnTableRes("tableDescuentosRes", 2)),
+						tipoVentaId : $("#occupancySalesRes").val(), // pendiente
+						listPrice: getNumberTextInputRes("#precioUnidadRes"),
+						salePrice: getNumberTextInputRes("#precioVentaRes"),
+						specialDiscount:getNumberTextInputRes("#montoTotalDERes"),
+						downpayment:getNumberTextInputRes("#montoTotalRes"),
+						amountTransfer:getNumberTextInputRes("#amountTransferRes"),
+						packPrice:sumarArrayRes(getArrayValuesColumnTableRes("tableDescuentosRes", 3)),
 						financeBalance: $("#financeBalanceRes").val(),
 						tablapagos: getValueTableDownpaymentRes(),
 						tablaPagosProgramados:getValueTableDownpaymentScheduledRes(),
-						tablaPacks: getValueTablePacksRes(),
+						//tablaPacks: getValueTablePacksRes(),
+						extras: getNumberTextInputRes("packReferenceRes"),
+						tablaDownpayment : getValueTableDownpaymentRes(),
+						gifts: getValueTablePacksRes(),
 						viewId: 1,
+						
+						/*
+				tipoVentaId : $("#typeSales").val(),
+				gifts: getValueTablePacks(),
+				viewId: 1,
+				closingCost: sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7)),
+				card: datosCard()*/
+						
+						
 					},
 					type: "POST",
 					dataType:'json',

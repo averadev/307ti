@@ -148,7 +148,7 @@
 				</div>
 				<div class="row">
 					<div class="small-3 columns">
-						<label>Discount</label>
+						<label>Extras</label>
 					</div>
                     <div class="large-5 columns end">
 						<input class="round general" readonly name="packReferenceRes" id="packReferenceRes" type="text" value="0">
