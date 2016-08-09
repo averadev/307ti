@@ -75,10 +75,10 @@
 							<legend class="legendSearch" >Select Period</legend>
 							<div class="row">
 								<div class="medium-3 columns">
-									<input id="startDateContract" class="round" type="date" placeholder="Fecha Inicial">
+									<input id="startDateContract" class="round" type="text" placeholder="Fecha Inicial">
 								</div>
 								<div class="medium-3 columns">
-									<input id="endDateContract" class="round" type="date"  placeholder="Fecha final">
+									<input id="endDateContract" class="round" type="text"  placeholder="Fecha final">
 								</div>
 								<div class="medium-3 columns">
 									<input id="stringContrat" type="text" class="round" placeholder="Search Field" name="search"  required>

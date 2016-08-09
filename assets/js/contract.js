@@ -11,6 +11,9 @@ $(document).ready(function(){
 	var dialogEditContract = modalEditContract();
 	var dialogAddTour = addTourContract();
 	var dialogAccount = opcionAccount();
+	//alertify.success("Found "+ 50);
+
+	initDatesContract();
 
 
 $(document).on( 'click', '#newContract', function () {
@@ -150,6 +153,17 @@ $(document).on( 'click', '#btnAddPeople', function () {
 	getDatailByID("contractstbody");
 });
 
+function initDatesContract(){
+	$( "#startDateContract" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
+	$( "#endDateContract" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
+}
+
 function updateBalanceFinal(){
 	var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
 	var precioVenta = getNumberTextInput("precioVenta");
@@ -202,7 +216,7 @@ function cambiarCantidadP(monto)
 function cambiarCantidadDE(monto){
 	var m = parseFloat(monto);
 	var seleccionado = $("input[name='especialDiscount']:checked").val();
-	var precioVenta = $("#precioVenta").val();
+	var precioVenta = getNumberTextInput('precioVenta');
 	if (seleccionado == 'porcentaje') {
 		var porcentaje = precioVenta * (m/100);
 		$("#montoTotalDE").val(porcentaje);
@@ -212,12 +226,8 @@ function cambiarCantidadDE(monto){
 	updateBalanceFinal();
 }
 function createContractSelect(datos){
-
 	$("#dialog-Contract").html(datos);
-	
-	//ajaxSelects('contract/getLanguages','try again', generalSelects, 'selectLanguage');
 	ajaxSelects('contract/getSaleTypes','try again', generalSelectsDefault, 'typeSales');
-	//$('#selectLanguage option:eq(1)').prop('selected', 1);
 }
 function showModalContract(){
 	var ajaxData =  {
@@ -551,6 +561,7 @@ function createNewContract(){
 				tipoVentaId : $("#typeSales").val(),
 				listPrice: getNumberTextInput("precioUnidad"),
 				salePrice: getNumberTextInput("precioVenta"),
+				extras: getNumberTextInput("packReference"),
 				specialDiscount: getNumberTextInput("montoTotalDE"),
 				downpayment:getNumberTextInput("montoTotal"),
 				amountTransfer:getNumberTextInput("amountTransfer"),
@@ -1389,6 +1400,17 @@ function selectMetodoPagoProgramados(){
 
 
 function initEventosDownpayment(){
+
+	$( "#datePayDawnpayment" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
+	$( "#dateExpiracion" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
+	
+	$('#datePayDawnpayment').val(getCurrentDate());
 	var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
 	$("#downpaymentGastos").val(closingCost);
 	var Downpayment = getNumberTextInput('montoTotal');
@@ -1473,12 +1495,17 @@ function splitNumberTarjeta(){
 }
 
 function initEventosDownpaymentProgramados(){
+
+	$( "#datePaymentPrg" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
+	$('#datePaymentPrg').val(getCurrentDate())
 	var downpayment = $("#downpaymentTotal").val();
 	var deposit = $("#depositoEnganche").val();
 	$("#montoDownpaymentPrg").val(0);
 	$("#downpaymentProgramado").val(downpayment-deposit);
 	selectMetodoPagoProgramados();
-	setDate("datePaymentPrg");
 
 	$('#btnCleanmontoDownpaymentPrg').click(function (){
 		$("#montoDownpaymentPrg").val(0);
@@ -1915,7 +1942,8 @@ function getAccounts( id, typeInfo, typeAcc ){
 	    url: "contract/getAccountsById",
 	    dataType:'json',
 	    success: function(data){
-			console.log(data);
+			$("#balanceDepAccount").text(parseFloat(data["downpayment"]));
+			$("#balanceAccount").text(parseFloat(data["balance"]));
 			if(typeInfo == "account"){
 				var sale = data["sale"];
 				var maintenance = data["maintenance"];

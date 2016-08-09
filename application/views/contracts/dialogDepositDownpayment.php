@@ -76,7 +76,7 @@
                         <label  for="dateExpiracion" class="text-left">Expiration Date</label>
                     </div>
                     <div class="small-9 columns">
-                        <input class="round general" type="date" id="dateExpiracion" name="dateExpiracion" class="general" required>
+                        <input class="round general" type="text" id="dateExpiracion" name="dateExpiracion" class="general" required>
                     </div>
                 </div>
                  <!-- Codigo Postal-->
