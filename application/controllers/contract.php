@@ -90,7 +90,7 @@ echo $fechaActual;*/
 }
 
 
-private function makeTransactions($id){
+private function makeTransactions($idContrato){
 	$this->insertDownpayment($idContrato);
 	$this->insertScheduledPaymentsTrx($idContrato);
 }
@@ -419,7 +419,7 @@ private function insertESDtransaction($idContrato){
 		$this->contract_db->insertReturnId('tblAccTrx', $transaction);
 }
 private function insertDownpaymentransaction($idContrato){
-		$pagoN = (-1 * abs($_POST['downpayment']);
+		$pagoN = (-1 * abs($_POST['downpayment']));
 		$transaction = [
 			"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('DWP'),
