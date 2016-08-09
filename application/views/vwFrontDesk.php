@@ -405,7 +405,7 @@
 									<th colspan="4" class="panelLeftHead last"></th>
 								</tr>
 								<tr class="gHeaderDay" id="day">
-									<th class="panelLeftHead">
+									<th class="panelLeftHead" style="width:200px;">
 										Type
 										<div class="orderField" attr-field="fpi.FloorPlanDesc">
 											<span class="orderRow" attr-order="asc" ><i class="fa fa-caret-up"></i></span>

@@ -48,15 +48,33 @@ Class frontDesk_db extends CI_MODEL
 		return  $this->db->get()->result();
 	}
 	
+	public function getAllUnits(){
+		$this->db->distinct();
+		$this->db->select('u.pkUnitId, RTRIM(u.UnitCode) as unit, RTRIM(fp.FloorPlanDesc) as FloorPlan, RTRIM(v.ViewDesc) as views, RTRIM(hks.HKStatusDesc) as hkStatus');
+		$this->db->from('tblUnit u');
+		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = u.fkFloorPlanId', 'inner');
+		$this->db->join('tblView v', 'v.pkViewId = u.fkViewId', 'inner');
+		$this->db->join('tblUnitHKStatus uhks', 'uhks.fkUnitId = u.pkUnitId and uhks.fkCalendarID = ( select top 1 uhks2.fkCalendarID from tblUnitHKStatus uhks2 where uhks2.fkUnitId = uhks.fkUnitId ORDER BY uhks2.fkCalendarID DESC )', 'left');
+		$this->db->join('tblHKStatus hks', 'hks.pkHKStatusId = uhks.fkHkStatusId', 'left');
+		//$this->db->where("CONVERT(VARCHAR(10), c.[Date], 110) = CONVERT(VARCHAR(10), GETDATE(), 110)");
+		return  $this->db->get()->result();
+	}
+	
 	/**
 	* obtiene la lista de tblStatusType
 	**/
 	public function getFrontDesk($filters){
+		
+		$iniDate = "(SELECT top 1 CONVERT(VARCHAR(11),c2.Date,106)";
+		$iniDate = $iniDate . " from tblResOcc ro2";
+		$iniDate = $iniDate . " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId";
+		$iniDate = $iniDate . " where ro2.fkResId = ro.fkResId ORDER By ro2.fkCalendarId asc) as DateIni";
 		$endDate = "(SELECT top 1 CONVERT(VARCHAR(11),c2.Date,106)";
 		$endDate = $endDate . " from tblResOcc ro2";
 		$endDate = $endDate . " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId";
 		$endDate = $endDate . " where ro2.fkResId = ro.fkResId ORDER By ro2.fkCalendarId desc) as DateEnd";
 		$this->db->select("tblCalendar.pkCalendarId, CONVERT(VARCHAR(11),tblCalendar.Date,106) as Date2");
+		$this->db->select($iniDate);
 		$this->db->select($endDate);
 		$this->db->select("DATEPART(day, tblCalendar.Date) as day");
 		$this->db->select("ro.pkResOccId, ro.fkResId, ro.fkResInvtId, ro.NightId, ro.fkOccTypeId");
@@ -81,7 +99,8 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = u.fkFloorPlanId', 'LEFT');
 		$this->db->join('tblUnitHKStatus uhks', 'uhks.fkUnitId = u.pkUnitId and (uhks.fkCalendarID = tblCalendar.pkCalendarId or uhks.fkCalendarID = (SELECT MAX( uhks2.fkCalendarID ) FROM tblUnitHKStatus uhks2 WHERE uhks2.fkUnitId = u.pkUnitId ) )', 'LEFT');
 		$this->db->join('tblHKStatus hks', 'hks.pkHKStatusId = uhks.fkHkStatusId', 'LEFT');
-		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = ro.fkResId and rpa.ynPrimaryPeople = 1', 'LEFT');
+		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = ro.fkResId', 'LEFT');
+		//$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = ro.fkResId and rpa.ynPrimaryPeople = 1', 'LEFT');
 		$this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId', 'LEFT');
 		if($filters['words'] != false){
 			if (isset($filters['words']['textUnitCodeFront'])){
@@ -100,11 +119,11 @@ Class frontDesk_db extends CI_MODEL
 		if($filters['dates'] != false){
 			if (isset($filters['dates']['dateArrivalFront']) && !isset($filters['dates']['dateDepartureFront']) ){
 				$date = $filters['dates']['dateArrivalFront'];
-				$this->db->where("((select top 1 ro2.NightId from tblCalendar c3 LEFT JOIN tblResOcc ro2 on ro2.fkCalendarId = c3.pkCalendarId where ro.fkResId = ro2.fkResId and c3.Date = CONVERT(VARCHAR(10),'" . $date . "',101) ) = 1)");
+				//$this->db->where("((select top 1 ro2.NightId from tblCalendar c3 LEFT JOIN tblResOcc ro2 on ro2.fkCalendarId = c3.pkCalendarId where ro.fkResId = ro2.fkResId and c3.Date = CONVERT(VARCHAR(10),'" . $date . "',101) ) = 1)");
 				$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),'" . $date . "',101) and tblCalendar.Date <= DATEADD(day,10,CONVERT(VARCHAR(10),'" . $date . "',101))");			
 			}else if (!isset($filters['dates']['dateArrivalFront']) && isset($filters['dates']['dateDepartureFront']) ){
 				$date = $filters['dates']['dateDepartureFront'];
-				$this->db->where("((select top 1 ro2.NightId from tblCalendar c2 LEFT JOIN tblResOcc ro2 on ro2.fkCalendarId = c2.pkCalendarId where ro.fkResId = ro2.fkResId and c2.Date = DATEADD(day,-1,CONVERT(VARCHAR(10),'" . $date . "',101))) = (SELECT top 1 ro2.NightId from tblResOcc ro2 where ro2.fkResId = ro.fkResId ORDER BY ro2.NightId DESC ))");
+				//$this->db->where("((select top 1 ro2.NightId from tblCalendar c2 LEFT JOIN tblResOcc ro2 on ro2.fkCalendarId = c2.pkCalendarId where ro.fkResId = ro2.fkResId and c2.Date = DATEADD(day,-1,CONVERT(VARCHAR(10),'" . $date . "',101))) = (SELECT top 1 ro2.NightId from tblResOcc ro2 where ro2.fkResId = ro.fkResId ORDER BY ro2.NightId DESC ))");
 				$this->db->where("tblCalendar.Date >= DATEADD(day,-11,CONVERT(VARCHAR(10),'" . $date . "',101)) and tblCalendar.Date <= DATEADD(day,-1,CONVERT(VARCHAR(10),'" . $date . "',101))");
 			}else if (isset($filters['dates']['dateArrivalFront']) && isset($filters['dates']['dateDepartureFront'])){
 				$date = $filters['dates']['dateArrivalFront'];
@@ -114,7 +133,7 @@ Class frontDesk_db extends CI_MODEL
 				$condicionDate .= "((select top 1 ro2.NightId from tblCalendar c2 LEFT JOIN tblResOcc ro2 on ro2.fkCalendarId = c2.pkCalendarId ";
 				$condicionDate .= "where ro.fkResId = ro2.fkResId and c2.Date = DATEADD(day,-1,CONVERT(VARCHAR(10),'" . $date2 . "',101))) ";
 				$condicionDate .= "= (SELECT top 1 ro2.NightId from tblResOcc ro2 where ro2.fkResId = ro.fkResId ORDER BY ro2.NightId DESC )))";
-				$this->db->where($condicionDate);
+				//$this->db->where($condicionDate);
 				$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),'" . $date . "',101) and tblCalendar.Date <= DATEADD(day,-1,CONVERT(VARCHAR(10),'" . $date2 . "',101))");
 			}else if (isset($filters['dates']['textIntervalFront'])){
 				$date = $filters['dates']['textIntervalFront'];

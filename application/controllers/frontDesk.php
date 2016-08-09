@@ -39,6 +39,7 @@ class FrontDesk extends CI_Controller {
 		if($this->input->is_ajax_request()){
 			$total = 0;
 			$sql = $this->getFilters($_POST, 'r.fkStatusId');
+			$units = $this->frontDesk_db->getAllUnits();
 			$data = $this->frontDesk_db->getFrontDesk($sql);
 			//echo json_encode($data);
 			$calendary = $this->frontDesk_db->getCalendary($sql);
@@ -76,14 +77,14 @@ class FrontDesk extends CI_Controller {
 					$res[$p]['values'][$p2]['people'] = $item->Name . " " . $item->LName . " " . $item->LName2;
 					$res[$p]['values'][$p2]['occType'] = $color[intval($item->fkOccTypeId)];
 					$res[$p]['values'][$p2]['ResConf'] = $item->ResConf;
-					$res[$p]['values'][$p2]['dateFrom'] = $item->Date2;
+					$res[$p]['values'][$p2]['dateFrom'] = $item->DateIni;
 					$res[$p]['values'][$p2]['dateTo'] = $item->DateEnd;
 				}
 				$res[$p]['values'][$p2]['to'] = $item->pkCalendarId;
 				
 				$lastResId = $item->fkResId;
 			}
-			echo json_encode(array('items' => $res, 'dates' => $calendary));
+			echo json_encode(array('items' => $res, 'dates' => $calendary, 'units' => $units ));
 		}
 	}
 	

@@ -114,7 +114,6 @@ function getFrontDesk(order, page){
 	//var section = $('.SectionFrontDesk:checked').val();
 	var section = $('#typeSearchFrontDesk').val();
 	if(section == "section1"){
-		console.log("=S");
 		$('.rightPanel').remove();
 		$('.panelLeft').remove();
 		$('#tableFrontDesk tbody').empty();
@@ -151,9 +150,6 @@ function getFrontDesk(order, page){
 function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 	noResults('#table-frontDesk',false);
 	showLoading( '#table-frontDesk', true );
-	
-	console.log(dates)
-	
 	$.ajax({
 		data:{
 			filters:filters,
@@ -167,13 +163,17 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
        	url: url,
 		dataType:'json',
 		success: function(data){
-			console.table(data);
 			//var section = $('.SectionFrontDesk:checked').val();
 			var section = $('#typeSearchFrontDesk').val();
+			switch(section) {
+				case "section1":
+					createTableLookUp(data);
+				break;
+			}
 			if(data.items.length > 0){
 				switch(section) {
 					case "section1":
-						createTableLookUp(data);
+						//createTableLookUp(data);
 					break;
 					case "section2":
 						
@@ -196,7 +196,7 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 			}else{
 				switch(section) {
 					case "section1":
-						alertify.error("No data found");
+						alertify.error("No reservations found");
 					break;
 					case "section3":
 						noResultsTable("table-frontDesk", "tableHKConfiguration", "no results found");
@@ -394,7 +394,6 @@ function showReservation(){
 }
 
 function showSection(section){
-	console.log(section);
 	$('#generalPage').hide();
 	$('#paginationHKConfig').hide();
 	$('#paginationHKLookUp').hide();
@@ -403,10 +402,95 @@ function showSection(section){
 }
 
 function createTableLookUp(data){
-	if (data) {
-
-	}
+	
 	$('.showReservation').off();
+	var headYearHTML = "";
+	var headMonthHTML = "";
+	var headHTML = "";
+	var dates = data.dates;
+	var items = data.items;
+	var units = data.units;
+	
+	var existMoth = "";
+	var existYear = "";
+	console.table(items)
+	
+	for (var j in dates) {
+		if(existYear != dates[j].year ){
+			headYearHTML = "<th colspan='1' id='thYear" + dates[j].year + "' class='rightPanel'>"+dates[j].year+"</th>";
+			existYear = dates[j].year;
+			$('#tableFrontDesk .gHeaderYear').append(headYearHTML);
+		}else{
+			var colspan = $('#thYear' + dates[j].year ).attr('colspan');
+			$('#thYear' + dates[j].year ).attr('colspan', (parseInt(colspan) + 1));
+		}
+				
+		if(existMoth != dates[j].month ){
+			headMonthHTML = "<th colspan='1' id='thMonth" + dates[j].month + "' class='rightPanel'>"+dates[j].month+"</th>";
+			existMoth = dates[j].month;
+			$('#tableFrontDesk .gHeaderMonth').append(headMonthHTML);
+		}else{
+			var colspan = $('#thMonth' + dates[j].month ).attr('colspan');
+			$('#thMonth' + dates[j].month ).attr('colspan', (parseInt(colspan) + 1));
+		}
+				
+		headHTML+="<th id='"+dates[j].pkCalendarId+"' class='rightPanel'>"+dates[j].day+"</th>";
+	}		
+	$('#tableFrontDesk .gHeaderDay').append(headHTML);
+	
+	for(i=0;i<units.length;i++){
+		
+		var itemUnit = units[i]
+		bodyHTML = "<tr id='tr" + i + "'>";
+		bodyHTML+="<td nowrap class='panelLeft'>"+ itemUnit.FloorPlan +"</th>";
+		bodyHTML+="<td nowrap class='panelLeft' >"+ itemUnit.unit +"</th>";
+		bodyHTML+="<td nowrap class='panelLeft' >"+itemUnit.hkStatus+"</th>";
+		bodyHTML+="<td nowrap title='" + itemUnit.viewDesc + "' class='panelLeft last Tooltips'>"+itemUnit.views+"</th>";
+		bodyHTML += "</tr>";
+		$('#tableFrontDesk tbody').append(bodyHTML);
+		
+		for(j = 0;j<dates.length;j++){
+			bodyHTML="<td class='rightPanel' id='" + i + "-" + dates[j].pkCalendarId + "'></td>";
+			$('#tableFrontDesk tbody #tr' + i).append(bodyHTML);
+		}
+		
+		for(l=0;l<items.length;l++){
+			var item = items[l];
+			if( itemUnit.unit == item.unit ){
+				
+				for(k = 0;k<items[l].values.length;k++){
+					var values = items[l].values[k]
+					var valueToolTip = {Confirmation:values.ResConf, Room:item.unit, Guest:values.people, Arrival:values.dateFrom, Departure:values.dateTo};
+					var vToolTip = JSON.stringify(valueToolTip);
+					var exist = false;
+					
+					for(j = 0;j<dates.length;j++){
+						var totaltd = (values.to - values.from) + 1;
+						if(dates[j].pkCalendarId >= values.from && dates[j].pkCalendarId <= values.to){
+							if(exist == false){
+								$('#' + + i + "-" + dates[j].pkCalendarId).attr('colspan',totaltd);
+								$('#' + + i + "-" + dates[j].pkCalendarId).attr('titleCustom',vToolTip);
+								$('#' + + i + "-" + dates[j].pkCalendarId).attr('reservation',1);
+								$('#' + + i + "-" + dates[j].pkCalendarId).attr('class',values.occType + " rightPanel Tooltips showReservation");
+								$('#' + + i + "-" + dates[j].pkCalendarId).text(values.people);
+								exist = true;
+							}else{
+								$('#' + + i + "-" + dates[j].pkCalendarId).remove();
+							}
+						}
+					}
+				}
+				
+			}
+		}
+	}
+	
+	//console.log(items.length)
+	
+	$('.showReservation').on('click', function(){ showReservation() });
+	initializeTooltips('.Tooltips');
+	
+	/*$('.showReservation').off();
 			var headYearHTML = "";
 			var headMonthHTML = "";
 			var headHTML = "";
@@ -472,9 +556,6 @@ function createTableLookUp(data){
 								$('#' + + i + "-" + dates[j].pkCalendarId).attr('reservation',1);
 								$('#' + + i + "-" + dates[j].pkCalendarId).attr('class',values.occType + " rightPanel Tooltips showReservation");
 								$('#' + + i + "-" + dates[j].pkCalendarId).text(values.people);
-								/*bodyHTML="<td titleCustom='" +vToolTip +"' colspan='" + totaltd + "' class='" + values.occType + " rightPanel Tooltips'>" + values.people + "</td>";*/
-								//$('#tableFrontDesk tbody #tr' + i).append(bodyHTML);
-								
 								exist = true;
 							}else{
 								$('#' + + i + "-" + dates[j].pkCalendarId).remove();
@@ -484,9 +565,8 @@ function createTableLookUp(data){
 				}
 			}
 			
-			//$('#tableFrontDesk tbody').html(bodyHTML);
 			$('.showReservation').on('click', function(){ showReservation() });
-			initializeTooltips('.Tooltips');
+			initializeTooltips('.Tooltips');*/
 }
 
 function showHKConfiguration(id){
@@ -975,8 +1055,6 @@ function getHKstatusLookUp(filters){
        	url: "frontDesk/getHKstatusLookUp",
 		dataType:'json',
 		success: function(data){
-			console.log(data)
-			
 			$('#contentHKStatus').empty();
 			
 			var items = data.status;
@@ -1040,7 +1118,6 @@ function getStatusUnit(){
 		var status = {pkUnitHKStatusId:idUnitStatus, fkHkStatusId:idStatus};
 		rowStatus.push(status);
 	});
-	//console.log(rowStatus);
 	saveHKStatus(rowStatus)
 	
 }
@@ -1098,15 +1175,10 @@ function generateReportFrontDesk(){
 	words = JSON.stringify(words);
 	options = JSON.stringify(options);
 	
-	//dates = dates.serialize()
-	
 	url += "&filters=" + filters;
 	url += "&dates=" + dates;
 	url += "&words=" + words;
 	url += "&options=" + options;
-	
-	//console.log(url);
-	//console.log(filters);
 	createExcel(url)
 	
 }
