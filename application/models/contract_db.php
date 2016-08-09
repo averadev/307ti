@@ -410,6 +410,30 @@ class Contract_db extends CI_Model {
             return $row->pktrxTypeId;
         }
     }
+    public function getTrxTypeContracByDesc($string){
+        $this->db->select('pkTrxTypeId');
+        $this->db->from('tbltrxtype');
+        $this->db->where('TrxTypeCode', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkTrxTypeId;
+        }
+    }
+    public function gettrxConcept($string){
+        $this->db->select('pkTrxConceptId');
+        $this->db->from('tbltrxConcept');
+        $this->db->where('TrxConceptCode', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkTrxConceptId;
+        }
+    }
 
     public function getACCIDByContracID($idContrato){
         $this->db->select('pkAccID');
@@ -423,6 +447,34 @@ class Contract_db extends CI_Model {
             return $row->pkAccID;
         }
     }
+
+    public function getDownpaymentsContrac($string){
+        $this->db->select('sum(Amount) as downpayment');
+        $this->db->from('tblAccTrx');
+        $this->db->where('fkAccID', $string);
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->downpayment;
+        }
+    }
+
+    public function selectTotalFinance($id){
+        $this->db->select('TotalFinanceAmt as total');
+        $this->db->from('tblResFin');
+        $this->db->where('fkResId', $id);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->total;
+        }
+    }
+
 
     public function selectIdFloorPlan($string){
         $this->db->select('pkFloorPlanID');

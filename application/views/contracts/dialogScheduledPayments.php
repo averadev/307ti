@@ -71,7 +71,7 @@
       <label for="datePaymentPrg" class="text-left">Payment Date</label>
     </div>
     <div class="small-9 columns">
-       <input class="round general" id="datePaymentPrg" type="date" name="datePaymentPrg" min="2016" max="2099">
+       <input class="round general" id="datePaymentPrg" type="text" name="datePaymentPrg" min="2016" max="2099">
     </div>
   </div>
    <div class="row">
