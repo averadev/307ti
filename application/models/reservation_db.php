@@ -27,9 +27,9 @@ class Reservation_db extends CI_Model {
 		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = ri.fkFloorPlanId');
 		$this->db->join('tblView v', 'v.pkViewId = ri.fkViewId', 'LEFT');
 		$this->db->join('tblSeason s', 's.pkSeasonId = ri.fkSeassonId', 'LEFT');
-		$this->db->join('tblPeopleEmail pe', 'pe.fkPeopleId = p.pkPeopleId');
-		$this->db->join('tblEmail e', 'e.pkEmail = pe.fkEmailId');
-		//$this->db->where('rpa.ynPrimaryPeople', '1');
+		$this->db->join('tblPeopleEmail pe', 'pe.fkPeopleId = p.pkPeopleId', 'LEFT');
+		$this->db->join('tblEmail e', 'e.pkEmail = pe.fkEmailId', 'LEFT');
+		$this->db->where('rpa.ynPrimaryPeople', '1');
         $this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
 		
         if (!is_null($filters)){

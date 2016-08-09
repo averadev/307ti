@@ -534,18 +534,30 @@ function tablePeopleRes(personas){
 	var bodyHTML = '';
 	    //creación del body
     for (var i = 0; i < personas.length; i++) {
-        bodyHTML += "<tr>";
+		bodyHTML += "<tr>";
         for (var j in personas[i]) {
             bodyHTML+="<td>" + personas[i][j] + "</td>";
         };
-        bodyHTML += "<td><div class='rdoField'><input type='radio' name='primario'><label for='folio'>&nbsp;</label></div></td>";
-        bodyHTML += "<td><div class='rdoField'><input type='radio' name='secundario'><label for='folio'>&nbsp;</label></div></td>";
-        bodyHTML += "<td><div class='rdoField'><input type='radio' name='beneficiario'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><div class='rdoField'><input class='primy' value='"+i+"'  type='radio' name='peopleType1'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><div class='rdoField'><input class='benefy' value='"+i+"' type='checkbox' name='peopleType2'><label for='folio'>&nbsp;</label></div></td>";
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
         bodyHTML+="</tr>";
     }
     $('#tablePeopleResSelected tbody').append(bodyHTML);
-    deleteElementTableRes("tablePeopleResSelected");
+    defaultValuesRes();
+    onChangePrimaryRes();
+	deleteElementTableRes("tablePeopleResSelected");
+}
+
+function onChangePrimaryRes(){
+	$(".primy").change(function(){
+		//var selected = getIndexCheckbox();
+		checkAllBeneficiary(this.value);
+	});
+}
+function defaultValuesRes(){
+	$('.primy')[0].checked = true;
+	checkAllBeneficiary(0);
 }
 
 //reducir a una funcion
@@ -760,7 +772,7 @@ function getValueTableUnidadesRes(){
 	return unidades;
 }
 function getValueTablePersonasRes(){
-	var tabla = "tablePeopleResSelected";
+	/*var tabla = "tablePeopleResSelected";
 	var unidades = [];
 	var personas = [];
 	$('#'+tabla+' tbody tr').each( function(){
@@ -773,7 +785,23 @@ function getValueTablePersonasRes(){
 			personas.push(persona); 
 		}
 	});
+	return personas;*/
+	
+	var tabla = "tablePeopleResSelected";
+	var unidades = [];
+	var personas = [];
+	$('#'+tabla+' tbody tr').each( function(i){
+		if ($(this).text().replace(/\s+/g, " ")!="") {
+			var persona = {};
+			persona.id = $(this).find('td').eq(0).text(),
+			persona.primario = $(this).find('td').eq(4).find('input[name=peopleType1]').is(':checked'),
+			persona.beneficiario = $(this).find('td').eq(5).find('input[name=peopleType2]').is(':checked')
+			personas.push(persona);
+			console.log(i); 
+		}
+	});
 	return personas;
+	
 }
 
 function converCheked(val){

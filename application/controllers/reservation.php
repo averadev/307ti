@@ -147,8 +147,8 @@ class Reservation extends CI_Controller {
 					"fkPeopleId"        => $_POST['peoples'][$i]["id"],
 					"fkAccId"           => $acc[$j],
 					"ynPrimaryPeople"   => $_POST['peoples'][$i]['primario'],
-					"ynBenficiary"		=> $_POST['peoples'][$i]['secundario'],
-					"ynOther"			=> $_POST['peoples'][$i]['beneficiario'],
+					"ynBenficiary"		=> $_POST['peoples'][$i]['beneficiario'],
+					//"ynOther"			=> $_POST['peoples'][$i]['beneficiario'],
 					"ynActive"          => 1,
 					"CrBy"             	=> $this->nativesessions->get('id'),
 					"CrDt"				=> $this->getToday()
