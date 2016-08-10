@@ -29,16 +29,44 @@ class Reservation extends CI_Controller {
 			$idContrato = $this->createReservacion();
 			$this->insertOcupacion($idContrato);
 			$acc = $this->createAcc();
+			$this->insertTarjeta($idContrato, $acc);
 			$this->insertPeoples($idContrato, $acc);
+			$this->makeTransactions($idContrato);
 			$this->createUnidades($idContrato);
-			$this->createDownPayment($idContrato);
+			//$this->createDownPayment($idContrato);
+			$this->createGifts($idContrato);
 			$balanceFinal = $this->insertFinanciamiento($idContrato);
 			$this->createSemanaOcupacion($idContrato);
 			echo  json_encode([
 				"mensaje" => 'Reservation Save',
+				"balance" => $this->reservation_db->selectPriceFin($idContrato)[0],
 				"status" => 1,
 				"idContrato" =>$idContrato,
 				"balanceFinal" => $balanceFinal]);
+		}
+	}
+	
+	private function makeTransactions($idContrato){
+		$this->insertDownpayment($idContrato);
+		$this->insertScheduledPaymentsTrx($idContrato);
+	}
+
+	private function insertTarjeta($id, $type){
+
+		$datos = $_POST['card'];
+		if ($datos) {
+			$Card = [
+				"fkCcTypeId" => intval($datos['type']),
+				"fkAccId" => 1,
+				"CCNumber" => $datos['number'],
+				"expDate" => $datos['dateExpiration'],
+				"ZIP" => $datos['poscode'],
+				"Code" => $datos['code'],
+				"ynActive" => 1,
+				"CrBy" => $this->nativesessions->get('id'),
+				"CrDt" => $this->getToday()
+			];
+			return $this->reservation_db->insertReturnId('tblAcccc', $Card);
 		}
 	}
 	
@@ -193,6 +221,70 @@ class Reservation extends CI_Controller {
 		return $balanceFinal;
 	}
 	
+	private function insertScheduledPaymentsTrx($idContrato){
+		if(!empty($_POST['tablaPagosProgramados'])){
+			$pagos = sizeof($_POST['tablaPagosProgramados']);
+		}else{
+			$pagos = 0;
+		}
+
+		if ($pagos>0) {
+		
+			for ($i=0; $i < $pagos; $i++) {
+				$transaction = [
+					"fkAccid" 			=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
+					"fkTrxTypeId"		=> $this->reservation_db->getTrxTypeContrac($_POST['tablaPagosProgramados'][$i]["type"]),
+					"fkTrxClassID"		=> 1,//$_POST['trxClassID'], // vendedor
+					"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
+					"Credit+"			=> 0,//si es positivo se inserta credit
+					"Amount"			=> $_POST['tablaPagosProgramados'][$i]["amount"], //cantidad
+					"AbsAmount"			=> $_POST['tablaPagosProgramados'][$i]["amount"], //cantidad se actualiza
+					"Remark"			=> '', //
+					"Doc"				=> '',
+					"DueDt"				=> $_POST['tablaPagosProgramados'][$i]["date"],
+					"ynActive"			=> 1,
+					"CrBy"				=> $this->nativesessions->get('id'),
+					"CrDt"				=> $this->getToday(),
+					"MdBy"				=> $this->nativesessions->get('id'),
+					"MdDt"				=> $this->getToday()
+				];
+				$this->reservation_db->insertReturnId('tblAccTrx', $transaction);
+			}
+		}
+	}
+	
+	private function insertDownpayment($idContrato){
+		if(!empty($_POST['tablaDownpayment'])){
+			$pagos = sizeof($_POST['tablaDownpayment']);
+		}else{
+			$pagos = 0;
+		}
+
+		if ($pagos>0) {
+		
+			for ($i=0; $i < $pagos; $i++) {
+				$transaction = [
+					"fkAccid" 			=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
+					"fkTrxTypeId"		=> $this->reservation_db->getTrxTypeContracByDesc('DWP'),
+					"fkTrxClassID"		=> $this->reservation_db->gettrxConcept('DWP'),
+					"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
+					"Credit+"			=> 0,//si es positivo se inserta credit
+					"Amount"			=> $_POST['tablaDownpayment'][$i]["amount"], //cantidad
+					"AbsAmount"			=> $_POST['tablaDownpayment'][$i]["amount"], //cantidad se actualiza
+					"Remark"			=> '', //
+					"Doc"				=> '',
+					"DueDt"				=> $_POST['tablaPagosProgramados'][$i]["date"],
+					"ynActive"			=> 1,
+					"CrBy"				=> $this->nativesessions->get('id'),
+					"CrDt"				=> $this->getToday(),
+					"MdBy"				=> $this->nativesessions->get('id'),
+					"MdDt"				=> $this->getToday()
+				];
+				$this->reservation_db->insertReturnId('tblAccTrx', $transaction);
+			}
+		}	
+	}
+	
 	public function updateFinanciamiento(){
 		if($this->input->is_ajax_request()) {
 			$financiamiento = [
@@ -237,6 +329,21 @@ class Reservation extends CI_Controller {
 				$this->reservation_db->insertReturnId('tblResOcc', $OcupacionTable);
 			 }
 		}
+	}
+	
+	private function createGifts($id){
+		if (!empty($_POST['gifts'])) {
+			$variable = $_POST['gifts'];
+			for ($i=0; $i < sizeof($variable); $i++) { 
+				$GIFT = [
+					"fkResId" => $id,
+					"fkGiftId" => $variable[$i]['id'],
+					"Amount" => $variable[$i]['amount']
+				];
+				$this->reservation_db->insertReturnId('tblResgift', $GIFT);
+			}
+		}
+		
 	}
 	
 	private function createDownPayment($idContrato){
@@ -647,7 +754,8 @@ class Reservation extends CI_Controller {
 			$idReservation = $_POST['idReservation'];
 			$data['precio'] = $this->reservation_db->selectPriceFin($idReservation);
 			$data['factores'] = $this->reservation_db->selectFactors();
-			$this->load->view('reservations/reservationDialogFinanciamiento', $data);
+			$data['CostCollection'] = $this->reservation_db->selectCostCollection();
+			$this->load->view('reservations/reservationDialogFinanciamiento', $data);			
 		}
 	}
 	

@@ -560,6 +560,20 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
 	
+	public function selectCostCollection(){
+        $this->db->select('CollectionFeeAmt');
+        $this->db->from('tblPropertyFolio');
+        $this->db->where('pkPropertyFolioId', 1);
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->CollectionFeeAmt;
+        }
+    }
+	
 	public function selectView(){
         $this->db->select("pkViewId as ID, ViewDesc");
         $this->db->from('tblView');
@@ -584,7 +598,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
     }
 	
 	public function selectPriceFin($id){
-        $this->db->select('totalFinanceAmt,financeBalance');
+        $this->db->select('CAST(totalFinanceAmt AS FLOAT) as totalFinanceAmt,CAST(financeBalance AS FLOAT) as financeBalance');
         $this->db->from('tblResfin');
         $this->db->where('fkResId', $id);
         $query = $this->db->get();
@@ -740,6 +754,58 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
+        }
+    }
+	
+	public function getACCIDByContracID($idContrato){
+        $this->db->select('pkAccID');
+        $this->db->from('tblAcc a');
+        $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId and rpa.fkResId='.$idContrato, 'inner');
+        $this->db->where('a.fkAccTypeId = 6');
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkAccID;
+        }
+    }
+	
+	public function getTrxTypeContrac($string){
+        $this->db->select('pktrxTypeId');
+        $this->db->from('tbltrxtype');
+        $this->db->where('TrxTypeDesc', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pktrxTypeId;
+        }
+    }
+
+	public function getTrxTypeContracByDesc($string){
+        $this->db->select('pkTrxTypeId');
+        $this->db->from('tbltrxtype');
+        $this->db->where('TrxTypeCode', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkTrxTypeId;
+        }
+    }
+	
+	public function gettrxConcept($string){
+        $this->db->select('pkTrxConceptId');
+        $this->db->from('tbltrxConcept');
+        $this->db->where('TrxConceptCode', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkTrxConceptId;
         }
     }
 	

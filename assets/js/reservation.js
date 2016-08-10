@@ -303,6 +303,8 @@ function createDialogReservation(addReservation) {
 					createNewReservation();
 					$(this).dialog('close');
 					alertify.success("Se guardo correctamente");
+					iniDateRes = null;
+					endDateRes = null;
 			}
 		},
 			{
@@ -310,10 +312,14 @@ function createDialogReservation(addReservation) {
 				"class": 'dialogModalButtonAccept',
 				click: function() {
 					createNewReservation();
+					iniDateRes = null;
+					endDateRes = null;
 				}
 			}],
 		close: function() {
 			$('#dialog-Reservations').empty();
+			iniDateRes = null;
+			endDateRes = null;
 		}
 	});
 	return dialog;
@@ -664,12 +670,12 @@ function createNewReservation(){
 						weeks: getArrayValuesColumnTableRes("tableUnidadesResSelected", 6),
 						firstYear : unidadRes[0].fyear,
 						lastYear : unidadRes[0].lyear,
-						tipoVentaId : $("#occupancySalesRes").val(), // pendiente
-						listPrice: getNumberTextInputRes("#precioUnidadRes"),
-						salePrice: getNumberTextInputRes("#precioVentaRes"),
-						specialDiscount:getNumberTextInputRes("#montoTotalDERes"),
-						downpayment:getNumberTextInputRes("#montoTotalRes"),
-						amountTransfer:getNumberTextInputRes("#amountTransferRes"),
+						tipoVentaId : $("occupancySalesRes").val(), // pendiente
+						listPrice: getNumberTextInputRes("precioUnidadRes"),
+						salePrice: getNumberTextInputRes("precioVentaRes"),
+						specialDiscount:getNumberTextInputRes("montoTotalDERes"),
+						downpayment:getNumberTextInputRes("montoTotalRes"),
+						amountTransfer:getNumberTextInputRes("amountTransferRes"),
 						packPrice:sumarArrayRes(getArrayValuesColumnTableRes("tableDescuentosRes", 3)),
 						financeBalance: $("#financeBalanceRes").val(),
 						tablapagos: getValueTableDownpaymentRes(),
@@ -679,15 +685,10 @@ function createNewReservation(){
 						tablaDownpayment : getValueTableDownpaymentRes(),
 						gifts: getValueTablePacksRes(),
 						viewId: 1,
-						
+						card: datosCardRes()
 						/*
-				tipoVentaId : $("#typeSales").val(),
-				gifts: getValueTablePacks(),
-				viewId: 1,
-				closingCost: sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7)),
-				card: datosCard()*/
-						
-						
+							tipoVentaId : $("#typeSales").val()
+						*/
 					},
 					type: "POST",
 					dataType:'json',
@@ -1019,7 +1020,7 @@ function isCreditCardValidRes(){
 		return true;
 	}else{
 		var R = true;
-		var creditCard = datosCard();
+		var creditCard = datosCardRes();
 		if (creditCard) {
 			for(var key in creditCard)
 			{
@@ -1211,16 +1212,12 @@ function getValueFromTableSelectedRes(id, posicion){
 }
 
 function setValueUnitPriceRes(){
-	/*var value = $('#RateRes').val();
+	var value = $('#RateRes').val();
 	var date1 = new Date(iniDateRes);
 	var date2 = new Date(endDateRes);
 	var dayDif = date2.getTime() - date1.getTime();
 	var day = Math.round(dayDif/(1000 * 60 * 60 * 24));
 	var precio = value * day;
-	$("#precioUnidadRes").val(precio);
-	$("#precioVentaRes").val(precio);*/
-	var precio = //sumarArrayRes(getArrayValuesColumnTableRes("tableUnidadesResSelected", 3));
-	precio = $('#RateRes').val();
 	$("#precioUnidadRes").val(precio);
 	$("#precioVentaRes").val(precio);
 	updateBalanceFinalRes();
@@ -1427,6 +1424,22 @@ function initEventosDownpaymentRes(){
 	
 }
 
+function datosCardRes(){
+	var tipoPago = $("#tiposPago").val();
+	if(tipoPago != 1 && tipoPago != 5){
+		var datos = {};
+		datos.number = $('#numeroTarjeta').val().replace(/[^\d]/g, '');
+		datos.type = $("#cardTypes").val();
+		datos.dateExpiration = $("#dateExpiracion").val();
+		datos.poscode = $("#codigoPostal").val();
+		datos.code = $("#codigoTarjeta").val();
+		return datos
+	}else{
+		return null;
+	}
+	
+}
+
 function splitNumberTarjetaRes(){
 	var n =   $('#numeroTarjeta').val().replace(/[^\d]/g, '');
 	if (n) {
@@ -1455,12 +1468,17 @@ function initEventosDownpaymentProgramadosRes(){
 	$('#btnCleanmontoDownpaymentPrg').click(function (){
 		$("#montoDownpaymentPrg").val(0);
 	});*/
+	$( "#datePaymentPrg" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
+	$('#datePaymentPrg').val(getCurrentDate())
 	var downpayment = $("#downpaymentPrice").val();
 	var deposit = $("#depositoEngancheRes").val();
 	$("#montoDownpaymentPrg").val(0);
 	$("#downpaymentProgramado").val(downpayment-deposit);
 	selectMetodoPagoProgramadosRes();
-	setDate("datePaymentPrg");
+	//setDate("datePaymentPrg");
 
 	$('#btnCleanmontoDownpaymentPrg').click(function (){
 		$("#montoDownpaymentPrg").val(0);
