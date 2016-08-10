@@ -422,16 +422,16 @@ class Contract_db extends CI_Model {
             return $row->pkTrxTypeId;
         }
     }
-    public function gettrxConcept($string){
-        $this->db->select('pkTrxConceptId');
-        $this->db->from('tbltrxConcept');
-        $this->db->where('TrxConceptCode', $string);
+    public function gettrxClassID($string){
+        $this->db->select('pkTrxClassId');
+        $this->db->from('tbltrxclass');
+        $this->db->where('TrxClassCode', $string);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )
         {
             $row = $query->row();
-            return $row->pkTrxConceptId;
+            return $row->pkTrxClassId;
         }
     }
 
@@ -835,7 +835,7 @@ class Contract_db extends CI_Model {
         }
     }
 	
-	public function getAccountsById( $id, $typeInfo, $typeAcc ){
+	public function getAccountsById($id, $typeInfo, $typeAcc ){
         $this->db->distinct();
 		if($typeInfo == "account"){
 			$this->db->select('att.pkAccTrxId as ID, att.ynActive as Active');
@@ -906,9 +906,6 @@ class Contract_db extends CI_Model {
     }
 	
 	public function getAccByRes($id){
-        /*$this->db->select("fkAccId");
-        $this->db->from('tblResPeopleAcc');
-		$this->db->where('fkResId = ', $id);*/
 		$this->db->select( "rpa.fkAccId, RTRIM(att.AccTypeCode) as accType" );
         $this->db->from( 'tblResPeopleAcc rpa' );
 		$this->db->join( 'tblAcc a', 'a.pkAccId = rpa.fkAccId' );

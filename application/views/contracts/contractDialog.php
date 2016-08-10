@@ -120,11 +120,11 @@
                                         <th class="cellGeneral"># Week</th>
                                         <th class="cellGeneral">First Year OCC</th>
                                         <th class="cellGeneral">Last Year OCC</th>
-                                        <th class="cellGeneral"></th>
+                                        <th></th>
                                     </tr>
                                 </thead>
 								<tbody>
-									<tr><td colspan="10" ></td></tr>
+									<tr><td colspan="12" ></td></tr>
 								</tbody>
                             </table>
                         </div>
@@ -182,19 +182,27 @@
 					<div class="small-3 columns">
 						<label>Extras</label>
 					</div>
-                    <div class="large-5 columns end">
+                    <div class="small-5 columns end">
 						<input class="round general" readonly name="packReference" id="packReference" type="text" value="0">
                     </div>
-					<div class="large-4 columns end">
+					<div class="small-4 columns end">
 						<a id="btnPackReference" href="#" class="button postfix">Capture</a>
 					</div>
 				</div>
-				<div class="row border-bottom">
+				<div class="row">
 					<div class="small-3 columns">
 						<label>Sale Price</label>
 					</div>
                     <div class="large-5 columns end">
 						<input class="round general" readonly required type="text" id="precioVenta" name="precioVENTA" placeholder="$0.00" />
+                    </div>
+                </div>
+                <div class="row border-bottom">
+                    <div class="small-3 columns">
+                        <label>Closing Cost</label>
+                    </div>
+                    <div class="large-5 columns end">
+                        <input class="round general" readonly required type="text" id="closingCostLabel" name="closingCostLabel" placeholder="$0.00" />
                     </div>
                 </div>
                 <!--Montos a Descontar-->
@@ -213,7 +221,7 @@
                         <label>Amount</label>
                     </div>
                     <div class="large-2 columns end">
-                        <input id="montoTotalDE" class="round general" type="text" placeholder="amount applied" />
+                        <input id="montoTotalDE" readonly class="round general" type="text" placeholder="amount applied" />
                     </div>
                 </div>
                 <div class="row">
@@ -231,14 +239,14 @@
                         <label>Amount</label>
                     </div>
                     <div class="large-2 columns end">
-                        <input id="montoTotal" class="round general" type="text" placeholder="amount applied" />
+                        <input id="montoTotal" readonly class="round general" type="text" placeholder="amount applied" />
                     </div>
 				</div>
                 <div class="row">
                     <div class="small-3 columns">
                         <label for="depositoEnganche" class="text-left">Deposit</label>
                     </div>
-                    <div class="large-5 columns">
+                    <div class="small-5 columns">
                         <input readonly type="text" id="depositoEnganche" name="depositoEnganche" class="round general" required>
                     </div>
 					<div class="small-4 columns">
@@ -251,7 +259,7 @@
                         <label id="alertLastName" for="right-label" class="text-left">Scheduled Payments</label>
                     </div>
 					<div class="small-5 columns">
-						<input class="round general" id="scheduledPayments" type="text" placeholder="$0.00">
+						<input class="round general" readonly id="scheduledPayments" type="text" placeholder="$0.00">
 					</div>
 					<div class="small-4 columns">
 						<a id="btnScheduledPayments" href="#" class="button postfix">Capture</a>
@@ -262,10 +270,10 @@
                     <div class="small-3 columns">
                         <label id="alertLastName" for="right-label" class="text-left">Cash Discount</label>
                     </div>
-					<div class="large-5 columns">
+					<div class="small-5 columns">
 						<input class="round general" id="totalDiscountPacks" type="text" placeholder="$0.00">
 					</div>
-					<div class="large-4 columns">
+					<div class="small-4 columns">
 						<a id="btnDiscountAmount" href="#" class="button postfix">Capture</a>
 					</div>
                 </div>

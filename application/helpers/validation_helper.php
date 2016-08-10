@@ -43,3 +43,19 @@ if (! function_exists('allDataContract')) {
 	}
 }
 
+if (! function_exists('valideteNumber')) {
+	
+	function valideteNumber($numero){
+		if (!empty($numero) && is_numeric($numero)) {
+			$precio = floatval($numero);
+			if($precio == -0){
+				return 0;
+			}
+		}
+		else{
+			$precio = 0;
+		}
+		return $precio;
+	}
+}
+

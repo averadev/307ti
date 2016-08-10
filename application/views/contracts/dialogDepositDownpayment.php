@@ -104,7 +104,7 @@
       <label for="datePayDawnpayment" class="text-left">Payment Date</label>
     </div>
     <div class="small-9 columns">
-       <input class="round general" id="datePayDawnpayment" type="date" name="datePayDawnpayment" min="2016" max="2099">
+       <input class="round general" id="datePayDawnpayment" type="text" name="datePayDawnpayment" min="2016" max="2099">
     </div>
   </div>
    <div class="row">

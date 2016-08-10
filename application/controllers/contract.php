@@ -91,7 +91,14 @@ echo $fechaActual;*/
 
 
 private function makeTransactions($idContrato){
-	$this->insertDownpayment($idContrato);
+	
+	$this->insertPricetransaction($idContrato);
+	$this->insertExtrastransaction($idContrato);
+	$this->insertESDtransaction($idContrato);
+	$this->insertDownpaymentransaction($idContrato);
+	$this->insertDeposittransaction($idContrato);
+	$this->insertClosingCosttransaction($idContrato);
+	$this->insertPagosDownpayment($idContrato);
 	$this->insertScheduledPaymentsTrx($idContrato);
 }
 
@@ -280,7 +287,7 @@ public function updateFinanciamiento(){
 		];
 		$condicion = "fkResId = " . $IDContrato;
 		$afectados = $this->contract_db->updateReturnId('tblResfin', $financiamiento, $condicion);
-		$this->insertTransacciones();
+		$this->insertTransaccionesCredito();
 		if ($afectados>0) {
 			$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados];
 			echo json_encode($mensaje);
@@ -291,7 +298,7 @@ public function updateFinanciamiento(){
 	}
 }
 
-private function insertTransacciones(){
+private function insertTransaccionesCredito(){
 	$IDContrato = $_POST['idContrato'];
 	$pagoMensual = $_POST['pagoMensual'];
 	$meses = intval($_POST['meses']);
@@ -302,8 +309,8 @@ private function insertTransacciones(){
 		$fechaActual = $fecha->format('Y-m-d H:i:s');
 		$transaction = [
 			"fkAccid" 			=> $this->contract_db->getACCIDByContracID($IDContrato),  //la cuenta
-			"fkTrxTypeId"		=> 1,//$_POST['trxTypeId'], //lista
-			"fkTrxClassID"		=> 1,//$_POST['trxClassID'], // vendedor
+			"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('SCP'),//$_POST['trxTypeId'], //lista
+			"fkTrxClassID"		=> $this->contract_db->gettrxClassID('LOA'),//$_POST['trxClassID'], // vendedor
 			"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
 			"Credit+"			=> 0,	//si es positivo se inserta credit
 			"Amount"			=> $_POST['pagoMensual'], //cantidad
@@ -321,6 +328,183 @@ private function insertTransacciones(){
 	}
 }
 
+
+
+private function insertPricetransaction($idContrato){
+
+	$precio = valideteNumber($_POST['listPrice']);
+	$transaction = [
+		"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
+		"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('PRI'),
+		"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SAL'),
+		"Debit-"		=> 0,
+		"Credit+"		=> 0,
+		"Amount"		=> $precio,
+		"AbsAmount"		=> 0,
+		"Remark"		=> '', //
+		"Doc"			=> '',
+		"DueDt"			=> $this->getToday(),
+		"ynActive"		=> 1,
+		"CrBy"			=> $this->nativesessions->get('id'),
+		"CrDt"			=> $this->getToday(),
+		"MdBy"			=> $this->nativesessions->get('id'),
+		"MdDt"			=> $this->getToday()
+	];
+	$this->contract_db->insertReturnId('tblAccTrx', $transaction);
+}
+private function insertExtrastransaction($idContrato){
+
+	$precio = valideteNumber($_POST['extras']);
+	$numero = 0;
+	if ($precio>0) {
+		$classID = $this->contract_db->gettrxClassID('PAY');
+	}else{
+		$numero =  -1 * (abs($precio));
+		$classID = $this->contract_db->gettrxClassID('LOA');
+		
+	}
+	$transaction = [
+		"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
+		"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('EXC'),
+		"fkTrxClassID"	=> $classID,
+		"Debit-"		=> $numero,
+		"Credit+"		=> 0,
+		"Amount"		=> abs($precio), 
+		"AbsAmount"		=> abs($precio),
+		"Remark"		=> '', //
+		"Doc"			=> '',
+		"DueDt"			=> $this->getToday(),
+		"ynActive"		=> 1,
+		"CrBy"			=> $this->nativesessions->get('id'),
+		"CrDt"			=> $this->getToday(),
+		"MdBy"			=> $this->nativesessions->get('id'),
+		"MdDt"			=> $this->getToday()
+	];
+	$this->contract_db->insertReturnId('tblAccTrx', $transaction);
+}
+
+private function insertESDtransaction($idContrato){
+	
+	$precio = valideteNumber($_POST['specialDiscount']);
+	$precio =  -1 * (abs($precio));
+	$transaction = [
+		"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
+		"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('sDisc'),
+		"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SAL'),
+		"Debit-"		=> $precio,
+		"Credit+"		=> 0,
+		"Amount"		=> abs($precio), 
+		"AbsAmount"		=> abs($precio),
+		"Remark"		=> '', //
+		"Doc"			=> '',
+		"DueDt"			=> $this->getToday(),
+		"ynActive"		=> 1,
+		"CrBy"			=> $this->nativesessions->get('id'),
+		"CrDt"			=> $this->getToday(),
+		"MdBy"			=> $this->nativesessions->get('id'),
+		"MdDt"			=> $this->getToday()
+	];
+	$this->contract_db->insertReturnId('tblAccTrx', $transaction);
+}
+private function insertDownpaymentransaction($idContrato){
+		$precio = valideteNumber($_POST['downpayment']);
+		$transaction = [
+			"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
+			"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('DWP'),
+			"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SCH'),
+			"Debit-"		=> 0,
+			"Credit+"		=> 0,
+			"Amount"		=> 0, 
+			"AbsAmount"		=> 0,
+			"Remark"		=> '', //
+			"Doc"			=> '',
+			"DueDt"			=> $this->getToday(),
+			"ynActive"		=> 1,
+			"CrBy"			=> $this->nativesessions->get('id'),
+			"CrDt"			=> $this->getToday(),
+			"MdBy"			=> $this->nativesessions->get('id'),
+			"MdDt"			=> $this->getToday()
+		];
+		$this->contract_db->insertReturnId('tblAccTrx', $transaction);
+}
+private function insertDeposittransaction($idContrato){
+		$precio = valideteNumber($_POST['deposito']);
+		$precio =  -1 * (abs($precio));
+		$transaction = [
+			"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
+			"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('DEP'),
+			"fkTrxClassID"	=> $this->contract_db->gettrxClassID('PAY'),
+			"Debit-"		=> $precio,
+			"Credit+"		=> 0,
+			"Amount"		=> abs($precio), 
+			"AbsAmount"		=> abs($precio),
+			"Remark"		=> '', //
+			"Doc"			=> '',
+			"DueDt"			=> $this->getToday(),
+			"ynActive"		=> 1,
+			"CrBy"			=> $this->nativesessions->get('id'),
+			"CrDt"			=> $this->getToday(),
+			"MdBy"			=> $this->nativesessions->get('id'),
+			"MdDt"			=> $this->getToday()
+		];
+		$this->contract_db->insertReturnId('tblAccTrx', $transaction);
+}
+private function insertClosingCosttransaction($idContrato){
+
+	$precio = valideteNumber($_POST['closingCost']);
+	$transaction = [
+		"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
+		"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('CFE'),
+		"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SAL'),
+		"Debit-"		=> 0,
+		"Credit+"		=> 0,
+		"Amount"		=> $precio, 
+		"AbsAmount"		=> 0,
+		"Remark"		=> '', //
+		"Doc"			=> '',
+		"DueDt"			=> $this->getToday(),
+		"ynActive"		=> 1,
+		"CrBy"			=> $this->nativesessions->get('id'),
+		"CrDt"			=> $this->getToday(),
+		"MdBy"			=> $this->nativesessions->get('id'),
+		"MdDt"			=> $this->getToday()
+	];
+	$this->contract_db->insertReturnId('tblAccTrx', $transaction);
+}
+private function insertPagosDownpayment($idContrato){
+	if(!empty($_POST['tablaDownpayment'])){
+			$pagos = sizeof($_POST['tablaDownpayment']);
+		}else{
+			$pagos = 0;
+		}
+
+	if ($pagos>0) {
+		
+		for ($i=0; $i < $pagos; $i++) {
+			$precio = valideteNumber($_POST['tablaDownpayment'][$i]["amount"]);
+			$precio =  -1 * (abs($precio));
+
+			$transaction = [
+				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato), 
+				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('SCP'),
+				"fkTrxClassID"		=> $this->contract_db->gettrxClassID('SCH'),
+				"Debit-"			=> $precio,
+				"Credit+"			=> 0,
+				"Amount"			=> abs($precio), 
+				"AbsAmount"			=> abs($precio),
+				"Remark"			=> '', 
+				"Doc"				=> '',
+				"DueDt"				=> $_POST['tablaPagosProgramados'][$i]["date"],
+				"ynActive"			=> 1,
+				"CrBy"				=> $this->nativesessions->get('id'),
+				"CrDt"				=> $this->getToday(),
+				"MdBy"				=> $this->nativesessions->get('id'),
+				"MdDt"				=> $this->getToday()
+			];
+			$this->contract_db->insertReturnId('tblAccTrx', $transaction);
+		}
+	}	
+}
 private function insertScheduledPaymentsTrx($idContrato){
 	if(!empty($_POST['tablaPagosProgramados'])){
 		$pagos = sizeof($_POST['tablaPagosProgramados']);
@@ -331,14 +515,15 @@ private function insertScheduledPaymentsTrx($idContrato){
 	if ($pagos>0) {
 	
 		for ($i=0; $i < $pagos; $i++) {
+			$precio = valideteNumber($_POST['tablaPagosProgramados'][$i]["amount"]);
 			$transaction = [
-				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
-				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContrac($_POST['tablaPagosProgramados'][$i]["type"]),
-				"fkTrxClassID"		=> 1,//$_POST['trxClassID'], // vendedor
-				"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
-				"Credit+"			=> 0,//si es positivo se inserta credit
-				"Amount"			=> $_POST['tablaPagosProgramados'][$i]["amount"], //cantidad
-				"AbsAmount"			=> $_POST['tablaPagosProgramados'][$i]["amount"], //cantidad se actualiza
+				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato),
+				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('SCP'),
+				"fkTrxClassID"		=> $this->contract_db->gettrxClassID('SCH'),
+				"Debit-"			=> 0,
+				"Credit+"			=> 0,
+				"Amount"			=> $precio, 
+				"AbsAmount"			=> $precio,
 				"Remark"			=> '', //
 				"Doc"				=> '',
 				"DueDt"				=> $_POST['tablaPagosProgramados'][$i]["date"],
@@ -351,124 +536,6 @@ private function insertScheduledPaymentsTrx($idContrato){
 			$this->contract_db->insertReturnId('tblAccTrx', $transaction);
 		}
 	}
-}
-
-private function insertPricetransaction($idContrato){
-	if(!empty($_POST['listPrice'])){
-		$transaction = [
-			"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
-			"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('PRI'),
-			"fkTrxClassID"	=> $this->contract_db->gettrxConcept('SAL'),
-			"Debit-"		=> 0,
-			"Credit+"		=> 0,
-			"Amount"		=> $_POST['listPrice'],
-			"AbsAmount"		=> 0,
-			"Remark"		=> '', //
-			"Doc"			=> '',
-			"DueDt"			=> $this->getToday(),
-			"ynActive"		=> 1,
-			"CrBy"			=> $this->nativesessions->get('id'),
-			"CrDt"			=> $this->getToday(),
-			"MdBy"			=> $this->nativesessions->get('id'),
-			"MdDt"			=> $this->getToday()
-		];
-		$this->contract_db->insertReturnId('tblAccTrx', $transaction);
-	}
-}
-private function insertExtrastransaction($idContrato){
-	
-		$transaction = [
-			"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
-			"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('EXC'),
-			"fkTrxClassID"	=> $this->contract_db->gettrxConcept('SAL'),
-			"Debit-"		=> 0,
-			"Credit+"		=> 0,
-			"Amount"		=> $_POST['extras'], 
-			"AbsAmount"		=> 0,
-			"Remark"		=> '', //
-			"Doc"			=> '',
-			"DueDt"			=> $this->getToday(),
-			"ynActive"		=> 1,
-			"CrBy"			=> $this->nativesessions->get('id'),
-			"CrDt"			=> $this->getToday(),
-			"MdBy"			=> $this->nativesessions->get('id'),
-			"MdDt"			=> $this->getToday()
-		];
-		$this->contract_db->insertReturnId('tblAccTrx', $transaction);
-}
-
-private function insertESDtransaction($idContrato){
-	
-		$transaction = [
-			"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
-			"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('sDisc'),
-			"fkTrxClassID"	=> $this->contract_db->gettrxConcept('SAL'),
-			"Debit-"		=> 0,
-			"Credit+"		=> 0,
-			"Amount"		=> $_POST['specialDiscount'], 
-			"AbsAmount"		=> $_POST['specialDiscount'],
-			"Remark"		=> '', //
-			"Doc"			=> '',
-			"DueDt"			=> $this->getToday(),
-			"ynActive"		=> 1,
-			"CrBy"			=> $this->nativesessions->get('id'),
-			"CrDt"			=> $this->getToday(),
-			"MdBy"			=> $this->nativesessions->get('id'),
-			"MdDt"			=> $this->getToday()
-		];
-		$this->contract_db->insertReturnId('tblAccTrx', $transaction);
-}
-private function insertDownpaymentransaction($idContrato){
-		$pagoN = (-1 * abs($_POST['downpayment']));
-		$transaction = [
-			"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
-			"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('DWP'),
-			"fkTrxClassID"	=> $this->contract_db->gettrxConcept('DWP'),
-			"Debit-"		=> $pagoN,
-			"Credit+"		=> 0,
-			"Amount"		=> 0, 
-			"AbsAmount"		=> $_POST['downpayment'],
-			"Remark"		=> '', //
-			"Doc"			=> '',
-			"DueDt"			=> $this->getToday(),
-			"ynActive"		=> 1,
-			"CrBy"			=> $this->nativesessions->get('id'),
-			"CrDt"			=> $this->getToday(),
-			"MdBy"			=> $this->nativesessions->get('id'),
-			"MdDt"			=> $this->getToday()
-		];
-		$this->contract_db->insertReturnId('tblAccTrx', $transaction);
-}
-private function insertDownpayment($idContrato){
-	if(!empty($_POST['tablaDownpayment'])){
-			$pagos = sizeof($_POST['tablaDownpayment']);
-		}else{
-			$pagos = 0;
-		}
-
-		if ($pagos>0) {
-		
-			for ($i=0; $i < $pagos; $i++) {
-				$transaction = [
-					"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
-					"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('DWP'),
-					"fkTrxClassID"		=> $this->contract_db->gettrxConcept('DWP'),
-					"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
-					"Credit+"			=> 0,//si es positivo se inserta credit
-					"Amount"			=> $_POST['tablaDownpayment'][$i]["amount"], //cantidad
-					"AbsAmount"			=> $_POST['tablaDownpayment'][$i]["amount"], //cantidad se actualiza
-					"Remark"			=> '', //
-					"Doc"				=> '',
-					"DueDt"				=> $_POST['tablaPagosProgramados'][$i]["date"],
-					"ynActive"			=> 1,
-					"CrBy"				=> $this->nativesessions->get('id'),
-					"CrDt"				=> $this->getToday(),
-					"MdBy"				=> $this->nativesessions->get('id'),
-					"MdDt"				=> $this->getToday()
-				];
-				$this->contract_db->insertReturnId('tblAccTrx', $transaction);
-			}
-		}	
 }
 public function createSemanaOcupacion($idContrato){
 

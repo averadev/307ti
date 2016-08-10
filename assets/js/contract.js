@@ -127,22 +127,16 @@ $(document).on( 'click', '#btnAddPeople', function () {
 	});
 	//Enganche
 	$(document).on( 'change', '#downpayment', function () {
-		$("#montoTotal").val($("#downpayment").val());
-		var monto = $("#montoTotal").val();
-		cambiarCantidadP(monto);
+		updateDownpayment();
 	});
 	$(document).on('change', "input[name='engancheR']:checked", function () {
-		$("#montoTotal").val($("#downpayment").val());
-		var monto = $("#montoTotal").val();
-		cambiarCantidadP(monto);
+		updateDownpayment();
 	});
 	$(document).on( 'change', '#descuentoEspecial', function () {
-		var monto = $("#descuentoEspecial").val();
-		cambiarCantidadDE(monto);
+		updateDescuentoEspecial();
 	});
 	$(document).on( 'change', "input[name='especialDiscount']:checked", function () {
-		var monto = $("#descuentoEspecial").val();
-		cambiarCantidadDE(monto);
+		updateDescuentoEspecial();
 	});
 	$(document).on('change', "#amountTransfer", function () {
 		var balanceFinal = $("#financeBalance").val();
@@ -162,6 +156,25 @@ function initDatesContract(){
 		format: 'm/d/Y',
 		show_icon: false,
 	});
+}
+
+function updateDownpayment(){
+	var downpayment = getNumberTextInput("downpayment");
+	$("#montoTotal").val(downpayment.toFixed(2));
+	var monto = getNumberTextInput("montoTotal");
+	if (monto) {
+		cambiarCantidadP(monto);
+	}else{
+		$("#montoTotal").val(0);
+	}
+}
+function updateDescuentoEspecial(){
+	var monto = $("#descuentoEspecial").val();
+	if (monto) {
+		cambiarCantidadDE(monto);
+	}else{
+		$("#montoTotalDE").val(0);
+	}
 }
 
 function updateBalanceFinal(){
@@ -209,7 +222,7 @@ function cambiarCantidadP(monto)
 		var porcentaje = total * (monto/100);
 		$("#montoTotal").val(porcentaje.toFixed(2));
 	}else{
-		$("#montoTotal").val(monto);
+		$("#montoTotal").val(monto.toFixed(2));
 	}
 	//updateBalanceFinal();
 }
@@ -219,9 +232,9 @@ function cambiarCantidadDE(monto){
 	var precioVenta = getNumberTextInput('precioVenta');
 	if (seleccionado == 'porcentaje') {
 		var porcentaje = precioVenta * (m/100);
-		$("#montoTotalDE").val(porcentaje);
+		$("#montoTotalDE").val(porcentaje.toFixed(2));
 	}else{
-		$("#montoTotalDE").val(m);
+		$("#montoTotalDE").val(m.toFixed(2));
 	}
 	updateBalanceFinal();
 }
@@ -564,6 +577,7 @@ function createNewContract(){
 				extras: getNumberTextInput("packReference"),
 				specialDiscount: getNumberTextInput("montoTotalDE"),
 				downpayment:getNumberTextInput("montoTotal"),
+				deposito:getNumberTextInput("depositoEnganche"),
 				amountTransfer:getNumberTextInput("amountTransfer"),
 				packPrice:sumarArray(getArrayValuesColumnTable("tableDescuentos", 3)),
 				financeBalance: $("#financeBalance").val(),
@@ -1228,7 +1242,9 @@ function getValueFromTableSelected(id, posicion){
 }
 
 function setValueUnitPrice(){
+	var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
 	var precio = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 3));
+	$("#closingCostLabel").val(closingCost);
 	$("#precioUnidad").val(precio);
 	$("#precioVenta").val(precio);
 	updateBalanceFinal();
@@ -1281,15 +1297,16 @@ function modalEditContract(id){
 
 function calcularPack(){
 
-	var value = parseFloat($("#porcentajePack").val());
-	var valueQ = parseFloat($("#quantityPack").val());
-	var precioInicial = parseFloat($("#unitPricePack").val());
-	var precioFinal = parseFloat($("#finalPricePack").val());
+	var value = getNumberTextInput("porcentajePack");
+	var valueQ = getNumberTextInput("quantityPack");
+	var precioInicial = getNumberTextInput("unitPricePack");
+	var precioFinal = getNumberTextInput("finalPricePack");
 
 	$("#porcentajePack").on('keyup change click', function () {
+		console.log(this.value);
 	    if(this.value !== value) {
 	    	value = this.value;
-	       var p = porcentajePack(this.value,precioInicial);
+	      	var p = porcentajePack(this.value,precioInicial);
 	       $("#quantityPack").val(p);
 	       if(p+precioInicial>0){
 	       		$("#finalPricePack").val(p+precioInicial);
@@ -1299,16 +1316,18 @@ function calcularPack(){
 	    }        
 	});
 	$("#quantityPack").on('keyup change click', function () {
-	    if(this.value !== valueQ) {
-	    	 valueQ = parseFloat(this.value);
-	    	 var porcentaje = cantidad(valueQ, precioInicial);
-	    	 $("#porcentajePack").val(porcentaje.toFixed(3));
-	    	 if(valueQ+precioInicial>0){
-	    	 	$("#finalPricePack").val(precioInicial+valueQ);
-	    	 }else{
-	    	 	$("#finalPricePack").val(precioInicial);
-	    	 }
-	    }        
+		if (this.value) {
+			if(this.value !== valueQ) {
+		    	 valueQ = parseFloat(this.value);
+		    	 var porcentaje = cantidad(valueQ, precioInicial);
+		    	 $("#porcentajePack").val(porcentaje.toFixed(3));
+		    	 if(valueQ+precioInicial>0){
+		    	 	$("#finalPricePack").val(precioInicial+valueQ);
+		    	 }else{
+		    	 	$("#finalPricePack").val(precioInicial);
+		    	 }
+	    }      
+		}  
 	});
 }
 function porcentajePack(porcentaje, cantidad){
@@ -1421,7 +1440,6 @@ function initEventosDownpayment(){
 	}
 	calcularDepositDownpayment();
 	selectMetodoPago();
-	setDate("datePayDawnpayment");
 	
 	$('#btnAddmontoDownpayment').click(function (){
 		var amount = getNumberTextInput("montoDownpayment");
@@ -1942,7 +1960,7 @@ function getAccounts( id, typeInfo, typeAcc ){
 	    url: "contract/getAccountsById",
 	    dataType:'json',
 	    success: function(data){
-			$("#balanceDepAccount").text(parseFloat(data["downpayment"]));
+			//$("#balanceDepAccount").text(parseFloat(data["downpayment"]));
 			$("#balanceAccount").text(parseFloat(data["balance"]));
 			if(typeInfo == "account"){
 				var sale = data["sale"];
