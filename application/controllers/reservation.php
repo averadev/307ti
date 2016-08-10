@@ -71,6 +71,8 @@ class Reservation extends CI_Controller {
 	}
 	
 	private function createReservacion(){
+		$folioRes = $this->reservation_db->select_Folio();
+		
 		$Contract = [
 			"fkResTypeId"               => $this->reservation_db->selectRestType('Hot'),
 			"fkPaymentProcessTypeId"    => $this->reservation_db->selectPaymentProcessTypeId('RG'),
@@ -79,11 +81,11 @@ class Reservation extends CI_Controller {
 			"pkResRelatedId"            => null,
 			"FirstOccYear"              => $_POST['firstYear'],
 			"LastOccYear"               => $_POST['lastYear'],
-			"ResCode"                   => "",
-			"ResConf"                   => "",
+			"ResCode"                   => $_POST['tipoVentaId'] . $folioRes . substr($_POST['firstYear'],2,4),
+			"ResConf"                   => $_POST['tipoVentaId'] . $folioRes . substr($_POST['firstYear'],2,4),
 			"fkExchangeRateId"          => $this->reservation_db->selectExchangeRateId(),
 			//"LegalName"                 => $_POST['legalName'],
-			"Folio"                     => $this->reservation_db->select_Folio(),
+			"Folio"                     => $folioRes,
 			//"fkTourId"                  => $_POST['tourID'],
 			"fkSaleTypeId"              => $this->reservation_db->selectSaleTypeId('CU'),//
 			"fkInvtTypeId"          	=> $this->reservation_db->selectInvtTypeId('CU'),//

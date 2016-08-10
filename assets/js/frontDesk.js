@@ -95,6 +95,9 @@ $(function() {
 	});
 	activatePaginador('paginationHKConfig', gepPageFrontDesk);
 	activatePaginador('paginationHKLookUp', gepPageFrontDesk);
+	
+	var addReservation = null;
+	
 });
 
 function gepPageFrontDesk(page){
@@ -404,6 +407,7 @@ function showSection(section){
 function createTableLookUp(data){
 	
 	$('.showReservation').off();
+	$('.emptyUnitsFront').off();
 	var headYearHTML = "";
 	var headMonthHTML = "";
 	var headHTML = "";
@@ -413,7 +417,7 @@ function createTableLookUp(data){
 	
 	var existMoth = "";
 	var existYear = "";
-	console.table(items)
+	console.table(dates)
 	
 	for (var j in dates) {
 		if(existYear != dates[j].year ){
@@ -445,12 +449,12 @@ function createTableLookUp(data){
 		bodyHTML+="<td nowrap class='panelLeft'>"+ itemUnit.FloorPlan +"</th>";
 		bodyHTML+="<td nowrap class='panelLeft' >"+ itemUnit.unit +"</th>";
 		bodyHTML+="<td nowrap class='panelLeft' >"+itemUnit.hkStatus+"</th>";
-		bodyHTML+="<td nowrap title='" + itemUnit.viewDesc + "' class='panelLeft last Tooltips'>"+itemUnit.views+"</th>";
+		bodyHTML+="<td nowrap title='" + itemUnit.views + "' class='panelLeft last Tooltips'>" + itemUnit.viewsCode + "</th>";
 		bodyHTML += "</tr>";
 		$('#tableFrontDesk tbody').append(bodyHTML);
 		
 		for(j = 0;j<dates.length;j++){
-			bodyHTML="<td class='rightPanel' id='" + i + "-" + dates[j].pkCalendarId + "'></td>";
+			bodyHTML="<td class='rightPanel emptyUnitsFront' id='" + i + "-" + dates[j].pkCalendarId + "' day='" + dates[j].Date + "' unit='" + itemUnit.unit + "'></td>";
 			$('#tableFrontDesk tbody #tr' + i).append(bodyHTML);
 		}
 		
@@ -487,7 +491,9 @@ function createTableLookUp(data){
 	
 	//console.log(items.length)
 	
-	$('.showReservation').on('click', function(){ showReservation() });
+	$('.showReservation').on('click', function(){ showReservation(); });
+	$('.emptyUnitsFront').on('click', function(){ showNewReservation(this); });
+	
 	initializeTooltips('.Tooltips');
 	
 	/*$('.showReservation').off();
@@ -1186,4 +1192,27 @@ function generateReportFrontDesk(){
 function createExcel(url){
 	
 	window.location = "frontDesk/getReportFrontDesk" + url;
+}
+
+/**************reservation*********************/
+
+/**
+* @todo muestra formulario para nueva reservacion
+* @param selector objeto seleccionado del grid
+*/
+function showNewReservation(selector){
+	var unit = $(selector).attr('unit');
+	var day = $(selector).attr('day');
+	
+		var addReservation = null;
+		var unidadResDialog = addUnidadResDialog();
+		addReservation = createDialogReservation(addReservation);
+		addReservation.dialog("open");
+		if (unidadResDialog!=null) {
+			unidadResDialog.dialog( "destroy" );
+		}
+		unidadResDialog = addUnidadResDialog(day,unit);
+		unidadResDialog.dialog( "open" );
+	
+	
 }

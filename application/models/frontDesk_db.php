@@ -50,7 +50,7 @@ Class frontDesk_db extends CI_MODEL
 	
 	public function getAllUnits(){
 		$this->db->distinct();
-		$this->db->select('u.pkUnitId, RTRIM(u.UnitCode) as unit, RTRIM(fp.FloorPlanDesc) as FloorPlan, RTRIM(v.ViewDesc) as views, RTRIM(hks.HKStatusDesc) as hkStatus');
+		$this->db->select('u.pkUnitId, RTRIM(u.UnitCode) as unit, RTRIM(fp.FloorPlanDesc) as FloorPlan, RTRIM(v.ViewCode) as viewsCode, RTRIM(v.ViewDesc) as views, RTRIM(hks.HKStatusDesc) as hkStatus');
 		$this->db->from('tblUnit u');
 		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = u.fkFloorPlanId', 'inner');
 		$this->db->join('tblView v', 'v.pkViewId = u.fkViewId', 'inner');
@@ -169,7 +169,7 @@ Class frontDesk_db extends CI_MODEL
     }
 	
 	public function getCalendary($filters){
-		$this->db->select("tblCalendar.pkCalendarId,CONVERT(VARCHAR(11),tblCalendar.Date,106) as Date2");
+		$this->db->select("tblCalendar.pkCalendarId,CONVERT(VARCHAR(10),tblCalendar.Date,101) as Date, CONVERT(VARCHAR(11),tblCalendar.Date,106) as Date2");
 		$this->db->select("DATEPART(day, tblCalendar.Date) as day");
 		$this->db->select("DATENAME(month, tblCalendar.Date) as month");
 		$this->db->select("DATEPART(year, tblCalendar.Date) as year");

@@ -173,4 +173,5 @@
 <div id="dialog-NotasRes" title="Add Notes" style="display: none;"></div>
 <div id="dialog-accountsRes"  title="Accounts" style="display: none;"></div>
 <div id="dialog-newFileRes"  title="New File" style="display: none;"></div>
+
 <script type="text/javascript" src="<?php echo base_url().JS; ?>reservation.js"></script>

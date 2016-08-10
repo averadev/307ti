@@ -13,7 +13,7 @@ $(document).ready(function(){
 	});
 	
 	var addReservation = null;
-	var unidadResDialog = addUnidadResDialog();
+	var unidadResDialog = addUnidadResDialog( null, null );
     var peopleResDialog = addPeopleResDialog();
 	var dialogWeeksRes = getWeeksResDialog();
 	var dialogPackRes = PackReferenceRes();
@@ -24,35 +24,42 @@ $(document).ready(function(){
 	/*var dialogAddTour = addTourContract();*/
 	var dialogAccount = opcionAccountRes();
 
+	//$("#newReservation").off();
+	//$("#newReservation").on( 'click', function () {
+	$(document).off( 'click', '#newReservation');
 	$(document).on( 'click', '#newReservation', function () {
 		addReservation = createDialogReservation(addReservation);
 		addReservation.dialog("open");
 		if (unidadResDialog!=null) {
 			unidadResDialog.dialog( "destroy" );
 		}
-		unidadResDialog = addUnidadResDialog();
+		unidadResDialog = addUnidadResDialog( null, null );
 		unidadResDialog.dialog( "open" );
 	});
 
+	$(document).off( 'click', '#btnRefinancingResevation');
 	$(document).on( 'click', '#btnRefinancingResevation', function () {
 		var id = getValueFromTableSelectedRes("reservationsTable", 1);
 		showModalFinRes(id);
 	});
 	
+	$(document).off( 'click', '#btnAddPeopleRes');
 	$(document).on( 'click', '#btnAddPeopleRes', function () {
          peopleResDialog = addPeopleResDialog();
          peopleResDialog.dialog( "open" );
 	});
 
+	$(document).off( 'click', '#btnAddUnidadesRes');
 	$(document).on( 'click', '#btnAddUnidadesRes', function () {
 		if (unidadResDialog!=null) {
 			unidadResDialog.dialog( "destroy" );
 		}
-		unidadResDialog = addUnidadResDialog();
+		unidadResDialog = addUnidadResDialog( null, null );
 		unidadResDialog.dialog( "open" );
 	        
 	});
  	
+	$(document).off( 'click', '#btnNewSellerRes');
  	$(document).on( 'click', '#btnNewSellerRes', function () {
  		if (modalVendedores!=null) {
 	    		modalVendedores.dialog( "destroy" );
@@ -60,7 +67,8 @@ $(document).ready(function(){
 	    	modalVendedores = modalSellersRes();
 	        modalVendedores.dialog( "open" );
 	 });
-
+	
+	$(document).off( 'click', '#btnNewFileRes');
  	 $(document).on( 'click', '#btnNewFileRes', function () {
  		if (modalNewFile!=null) {
 	    		modalNewFile.dialog( "destroy" );
@@ -68,6 +76,8 @@ $(document).ready(function(){
 	    	modalNewFile = modalNewFileContractRes();
 	        modalNewFile.dialog( "open" );
 	 });
+	 
+	$(document).off( 'click', '#btnNewProvisionRes');
 	$(document).on( 'click', '#btnNewProvisionRes', function () {
  		if (modalProvisiones!=null) {
 	    		modalProvisiones.dialog( "destroy" );
@@ -75,6 +85,8 @@ $(document).ready(function(){
 	    	modalProvisiones = modalProvisionsRes();
 	        modalProvisiones.dialog( "open" );
 	 });
+	 
+	$(document).off( 'click', '#btnNewNoteRes');
 	$(document).on( 'click', '#btnNewNoteRes', function () {
  		if (modalNotas!=null) {
 	    		modalNotas.dialog( "destroy" );
@@ -83,6 +95,7 @@ $(document).ready(function(){
 	        modalNotas.dialog( "open" );
 	 });
 	
+	$(document).off( 'click', '#btnGetAllNotesRes');
 	$(document).on( 'click', '#btnGetAllNotesRes', function () {
  		if (modalAllNotes!=null) {
 	    		modalAllNotes.dialog( "destroy" );
@@ -91,26 +104,32 @@ $(document).ready(function(){
 	        modalAllNotes.dialog( "open" );
 	 });
 	
+	$(document).off( 'click', '#btnPackReferenceRes');
 	$(document).on( 'click', '#btnPackReferenceRes', function () {
 		var dialogPackRes = PackReferenceRes();
 		dialogPackRes.dialog("open");
 	});
 
+	//
+	$(document).off( 'click', '#btnDownpaymentRes');
 	$(document).on( 'click', '#btnDownpaymentRes', function () {
 		var dialogEngancheRes = modalDepositDownpaymentRes();
 		dialogEngancheRes.dialog("open");
 	});
 	
+	$(document).off( 'click', '#btnScheduledPaymentsRes');
 	$(document).on( 'click', '#btnScheduledPaymentsRes', function () {
 		var dialogScheduledPaymentsRes = modalScheduledPaymentsRes();
 		dialogScheduledPaymentsRes.dialog("open");
 	});
-
+	
+	$(document).off( 'click', '#btnDiscountAmountRes');
 	$(document).on( 'click', '#btnDiscountAmountRes', function () {
 		var dialogDiscountAmountRes = modalDiscountAmountRes();
 		dialogDiscountAmountRes.dialog("open");
 	});
 	
+	$(document).off( 'click', '#btNewTransAccRes');
 	$(document).on( 'click', '#btNewTransAccRes, #btAddPayAccRes', function () {
 		var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
 		var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
@@ -135,6 +154,7 @@ $(document).ready(function(){
 			totalDownpaymentPrgRes();
 		}
 	});*/
+	$( "#btnCleanWordRes").unbind( "click" );
 	$('#btnCleanWordRes').click(function (){
 		$( "#stringRes, #startDateRes, #endDateRes" ).val("");
 		$("#nombreRes").prop("checked", true);
@@ -142,28 +162,37 @@ $(document).ready(function(){
 		$("#advancedRes").hide("slow");
 	});
 	
+	$( "#btnfindRes").unbind( "click" );
 	$('#btnfindRes').click(function(){
 		$('#reservationstbody').empty();
 		getReservations();
 	});
 
+	$( "#advancedSearchRes").unbind( "click" );
 	$("#advancedSearchRes").click(function(){
 		$("#advancedRes").slideToggle("slow");
 	});
 	
+	$(document).off( 'change', '#downpaymentRes')
 	$(document).on( 'change', '#downpaymentRes', function () {
 		$("#montoTotalRes").val($(this).val());
 		var monto = $("#montoTotalRes").val();
 		cambiarCantidadPRes(monto);
 	});
+	
+	$(document).off( 'change', "input[name='engancheRRes']:checked")
 	$(document).on( 'change', "input[name='engancheRRes']:checked", function () {
 		var monto = $("#downpaymentRes").val();
 		cambiarCantidadPRes(monto);
 	});
+	
+	$(document).off( 'change', '#descuentoEspecialRes')
 	$(document).on( 'change', '#descuentoEspecialRes', function () {
 		var monto = $("#descuentoEspecialRes").val();
 		cambiarCantidadDERes(monto);
 	});
+	
+	$(document).off( 'change', "input[name='especialDiscount']:checked")
 	$(document).on( 'change', "input[name='especialDiscount']:checked", function () {
 		var monto = $("#descuentoEspecialRes").val();
 		cambiarCantidadDERes(monto);
@@ -171,6 +200,8 @@ $(document).ready(function(){
 	/*$(document).on('change', "#precioVentaRes", function () {
 		updateBalanceFinalRes();
 	});*/
+	
+	$(document).off( 'change', '#amountTransferRes')
 	$(document).on('change', "#amountTransferRes", function () {
 		var balanceFinal = $("#financeBalanceRes").val();
 		var transferido = $("#amountTransferRes").val();
@@ -264,7 +295,9 @@ function cambiarCantidadDERes(monto){
 }
 
 function createDialogReservation(addReservation) {
+	console.log($('#selectLanguageRes'));
 	var div = "#dialog-Reservations";
+	//console.log(div)
 	if (addReservation!=null) {
 	    	addReservation.dialog( "destroy" );
 	    }
@@ -320,12 +353,14 @@ function createDialogReservation(addReservation) {
 			$('#dialog-Reservations').empty();
 			iniDateRes = null;
 			endDateRes = null;
+			//$(this).dialog('destroy');
+			addReservation = null;
 		}
 	});
 	return dialog;
 }
 
-function addUnidadResDialog(){
+function addUnidadResDialog(arrivaDateUni, unit){
 	var div = "#dialog-UnidadesRes";
 	dialog = $( "#dialog-UnidadesRes" ).dialog({
 		open : function (event){
@@ -339,11 +374,15 @@ function addUnidadResDialog(){
 						format: 'm/d/Y',
 						show_icon: false,
 					});
+					if(arrivaDateUni != null){
+						$('#fromDateUnitRes').val(arrivaDateUni)
+					}
+					$('#btnGetUnidadesRes').unbind('click');
 					$('#btnGetUnidadesRes').click(function(){
 						if($('#fromDateUnitRes').val().trim().length > 0 && $('#fromDateUnitRes').val().trim().length > 0 ){
 							iniDateRes = $('#fromDateUnitRes').val();
 							endDateRes = $('#toDateUnitRes').val();
-							getUnidadesRes();
+							getUnidadesRes(unit);
 						}else{
 							alertify.error("Choose dates for the reservation");
 						}
@@ -670,7 +709,7 @@ function createNewReservation(){
 						weeks: getArrayValuesColumnTableRes("tableUnidadesResSelected", 6),
 						firstYear : unidadRes[0].fyear,
 						lastYear : unidadRes[0].lyear,
-						tipoVentaId : $("occupancySalesRes").val(), // pendiente
+						tipoVentaId : $("#occupancySalesRes").val(), // pendiente
 						listPrice: getNumberTextInputRes("precioUnidadRes"),
 						salePrice: getNumberTextInputRes("precioVentaRes"),
 						specialDiscount:getNumberTextInputRes("montoTotalDERes"),
@@ -1339,7 +1378,7 @@ function selectMetodoPagoRes(){
 
 /****************Unit*****************/
 
-function getUnidadesRes(){
+function getUnidadesRes(unit){
 	showLoading('#tblUnidadesRes',true);
 	$.ajax({
 		data:{
@@ -1350,6 +1389,7 @@ function getUnidadesRes(){
 			toDate:$('#toDateUnitRes').val(),
 			floorPlan:$('#floorPlanUnitRes').val(),
 			view:$('#viewUnitRes').val(),
+			unit:unit
 		},
 		type: "POST",
 		url: "reservation/getUnidades",

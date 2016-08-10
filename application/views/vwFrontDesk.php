@@ -536,11 +536,27 @@
 	
 </div>
 
-<div id="dialog-Edit-Reservations" title="Summary Reservation" style="display: none;"></div>
+<div id="dialog-Reservations"  title="Reservation > Create Reservation" style="display: none;"></div>
+<div id="dialog-Edit-Reservation" title="Reservation > Edit Reservation" style="display: none;"></div>
+<div id="dialog-tourID" title="Tour ID" style="display: none;"></div>
+<div id="dialog-PeopleRes" title="Reservation > Create Reservation > Add People" style="display: none;"></div>
+<div id="dialog-UnidadesRes" title="Reservation > Create Reservation > Add Unidades" style="display: none;"></div>
+<div id="dialog-WeeksRes" title="Weeks" style="display: none;"></div>
+<div id="dialog-Pack" title="Pack Reference" style="display: none;"></div>
+<div id="dialog-DownpaymentRes" title="Downpayment" style="display: none;"></div>
+<div id="dialog-ScheduledPayments" title="Scheduled Payments" style="display: none;"></div>
+<div id="dialog-DiscountAmount" title="Discount Amount" style="display: none;"></div>
+<div id="dialog-FinanciamientoRes" title="Financing Terms" style="display: none;"></div>
+<div id="dialog-SellersRes" title="Set Sellers" style="display: none;"></div>
+<div id="dialog-ProvisionesRes" title="Add Provisions" style="display: none;"></div>
+<div id="dialog-NotasRes" title="Add Notes" style="display: none;"></div>
+<div id="dialog-accountsRes"  title="Accounts" style="display: none;"></div>
+<div id="dialog-newFileRes"  title="New File" style="display: none;"></div>
 <div id="dialog-HKConfig" title="HouseKeepingConfiguration " style="display: none;"></div>
 <div id="dialog-people-hkConfig" title="People " style="display: none;"></div>
 <div id="dialog-unit-hkConfig" title="Unit " style="display: none;"></div>
 <div id="dialog-edit-HKStatus" title="HK status" style="display: none;"></div>
 
 
+<script type="text/javascript" src="<?php echo base_url().JS; ?>reservation.js"></script>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>frontDesk.js"></script>
