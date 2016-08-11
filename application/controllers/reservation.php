@@ -37,7 +37,7 @@ class Reservation extends CI_Controller {
 			//$this->createDownPayment($idContrato);
 			$this->createGifts($idContrato);
 			$balanceFinal = $this->insertFinanciamiento($idContrato);
-			$this->createSemanaOcupacion($idContrato);
+			$this->createSemanaOcupacion($idContrato, $_POST['iniDate'], $_POST['endDate']);
 			echo  json_encode([
 				"mensaje" => 'Reservation Save',
 				"balance" => $this->reservation_db->selectPriceFin($idContrato)[0],
@@ -48,9 +48,19 @@ class Reservation extends CI_Controller {
 	}
 	
 	private function makeTransactions($idContrato){
-		$this->insertDownpayment($idContrato);
+		//$this->insertDownpayment($idContrato);
+		//$this->insertScheduledPaymentsTrx($idContrato);
+		$this->insertPricetransaction($idContrato);
+		$this->insertExtrastransaction($idContrato);
+		$this->insertESDtransaction($idContrato);
+		$this->insertDownpaymentransaction($idContrato);
+		$this->insertDeposittransaction($idContrato);
+		//$this->insertClosingCosttransaction($idContrato);
+		$this->insertPagosDownpayment($idContrato);
 		$this->insertScheduledPaymentsTrx($idContrato);
 	}
+	
+	
 
 	private function insertTarjeta($id, $type){
 
@@ -128,7 +138,7 @@ class Reservation extends CI_Controller {
 	
 	private function createUnidades($idContrato){
 		$rango = intval(sizeof($_POST['unidades']));
-		$dias = sizeof($_POST['weeks']) * 7;
+		//$dias = sizeof($_POST['weeks']) * 7;
 		for($i =0; $i< $rango; $i++){
 			$Unidades = [
 				"fkResId"       => $idContrato,
@@ -139,7 +149,7 @@ class Reservation extends CI_Controller {
 				"fkSeassonId"   => $this->reservation_db->selectIdSeason($_POST['unidades'][$i]['season']),
 				"fkFrequencyId" => $this->reservation_db->selectIdFrequency($_POST['unidades'][$i]['frequency']),
 				"WeeksNumber"   => $_POST['weeks'][$i],
-				"NightsNumber"  => $dias,
+				"NightsNumber"  => $_POST['day'],
 				"FirstOccYear"  => $_POST['firstYear'],
 				"LastOccYear"   => $_POST['lastYear'],
 				"ynActive"      => 1,
@@ -276,7 +286,189 @@ class Reservation extends CI_Controller {
 					"AbsAmount"			=> $_POST['tablaDownpayment'][$i]["amount"], //cantidad se actualiza
 					"Remark"			=> '', //
 					"Doc"				=> '',
-					"DueDt"				=> $_POST['tablaPagosProgramados'][$i]["date"],
+					"DueDt"				=> $_POST['tablaDownpayment'][$i]["date"],
+					"ynActive"			=> 1,
+					"CrBy"				=> $this->nativesessions->get('id'),
+					"CrDt"				=> $this->getToday(),
+					"MdBy"				=> $this->nativesessions->get('id'),
+					"MdDt"				=> $this->getToday()
+				];
+				$this->reservation_db->insertReturnId('tblAccTrx', $transaction);
+			}
+		}	
+	}
+	
+	//trans
+	private function insertPricetransaction($idContrato){
+
+		$precio = valideteNumber($_POST['listPrice']);
+		$transaction = [
+			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
+			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('PRI'),
+			"fkTrxClassID"	=> $this->reservation_db->gettrxClassID('SAL'),
+			"Debit-"		=> 0,
+			"Credit+"		=> 0,
+			"Amount"		=> $precio,
+			"AbsAmount"		=> 0,
+			"Remark"		=> '', //
+			"Doc"			=> '',
+			"DueDt"			=> $this->getToday(),
+			"ynActive"		=> 1,
+			"CrBy"			=> $this->nativesessions->get('id'),
+			"CrDt"			=> $this->getToday(),
+			"MdBy"			=> $this->nativesessions->get('id'),
+			"MdDt"			=> $this->getToday()
+		];
+		$this->reservation_db->insertReturnId('tblAccTrx', $transaction);
+	}
+	
+	private function insertExtrastransaction($idContrato){
+
+		$precio = valideteNumber($_POST['extras']);
+		$numero = 0;
+		if ($precio>0) {
+			$classID = $this->reservation_db->gettrxClassID('PAY');
+		}else{
+			$numero =  -1 * (abs($precio));
+			$classID = $this->reservation_db->gettrxClassID('LOA');
+			
+		}
+		$transaction = [
+			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
+			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('EXC'),
+			"fkTrxClassID"	=> $classID,
+			"Debit-"		=> $numero,
+			"Credit+"		=> 0,
+			"Amount"		=> abs($precio), 
+			"AbsAmount"		=> abs($precio),
+			"Remark"		=> '', //
+			"Doc"			=> '',
+			"DueDt"			=> $this->getToday(),
+			"ynActive"		=> 1,
+			"CrBy"			=> $this->nativesessions->get('id'),
+			"CrDt"			=> $this->getToday(),
+			"MdBy"			=> $this->nativesessions->get('id'),
+			"MdDt"			=> $this->getToday()
+		];
+		$this->reservation_db->insertReturnId('tblAccTrx', $transaction);
+	}
+	
+	private function insertESDtransaction($idContrato){
+	
+		$precio = valideteNumber($_POST['specialDiscount']);
+		$precio =  -1 * (abs($precio));
+		$transaction = [
+			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
+			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('sDisc'),
+			"fkTrxClassID"	=> $this->reservation_db->gettrxClassID('SAL'),
+			"Debit-"		=> $precio,
+			"Credit+"		=> 0,
+			"Amount"		=> abs($precio), 
+			"AbsAmount"		=> abs($precio),
+			"Remark"		=> '', //
+			"Doc"			=> '',
+			"DueDt"			=> $this->getToday(),
+			"ynActive"		=> 1,
+			"CrBy"			=> $this->nativesessions->get('id'),
+			"CrDt"			=> $this->getToday(),
+			"MdBy"			=> $this->nativesessions->get('id'),
+			"MdDt"			=> $this->getToday()
+		];
+		$this->reservation_db->insertReturnId('tblAccTrx', $transaction);
+	}
+	
+	private function insertDownpaymentransaction($idContrato){
+		$precio = valideteNumber($_POST['downpayment']);
+		$transaction = [
+			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
+			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('DWP'),
+			"fkTrxClassID"	=> $this->reservation_db->gettrxClassID('SCH'),
+			"Debit-"		=> 0,
+			"Credit+"		=> 0,
+			"Amount"		=> 0, 
+			"AbsAmount"		=> 0,
+			"Remark"		=> '', //
+			"Doc"			=> '',
+			"DueDt"			=> $this->getToday(),
+			"ynActive"		=> 1,
+			"CrBy"			=> $this->nativesessions->get('id'),
+			"CrDt"			=> $this->getToday(),
+			"MdBy"			=> $this->nativesessions->get('id'),
+			"MdDt"			=> $this->getToday()
+		];
+		$this->reservation_db->insertReturnId('tblAccTrx', $transaction);
+	}
+	
+	private function insertDeposittransaction($idContrato){
+		$precio = valideteNumber($_POST['deposito']);
+		$precio =  -1 * (abs($precio));
+		$transaction = [
+			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
+			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('DEP'),
+			"fkTrxClassID"	=> $this->reservation_db->gettrxClassID('PAY'),
+			"Debit-"		=> $precio,
+			"Credit+"		=> 0,
+			"Amount"		=> abs($precio), 
+			"AbsAmount"		=> abs($precio),
+			"Remark"		=> '', //
+			"Doc"			=> '',
+			"DueDt"			=> $this->getToday(),
+			"ynActive"		=> 1,
+			"CrBy"			=> $this->nativesessions->get('id'),
+			"CrDt"			=> $this->getToday(),
+			"MdBy"			=> $this->nativesessions->get('id'),
+			"MdDt"			=> $this->getToday()
+		];
+		$this->reservation_db->insertReturnId('tblAccTrx', $transaction);
+	}
+	
+	private function insertClosingCosttransaction($idContrato){
+
+		$precio = valideteNumber($_POST['closingCost']);
+		$transaction = [
+			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
+			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('CFE'),
+			"fkTrxClassID"	=> $this->reservation_db->gettrxClassID('SAL'),
+			"Debit-"		=> 0,
+			"Credit+"		=> 0,
+			"Amount"		=> $precio, 
+			"AbsAmount"		=> 0,
+			"Remark"		=> '', //
+			"Doc"			=> '',
+			"DueDt"			=> $this->getToday(),
+			"ynActive"		=> 1,
+			"CrBy"			=> $this->nativesessions->get('id'),
+			"CrDt"			=> $this->getToday(),
+			"MdBy"			=> $this->nativesessions->get('id'),
+			"MdDt"			=> $this->getToday()
+		];
+		$this->reservation_db->insertReturnId('tblAccTrx', $transaction);
+	}
+	
+	private function insertPagosDownpayment($idContrato){
+		if(!empty($_POST['tablaDownpayment'])){
+				$pagos = sizeof($_POST['tablaDownpayment']);
+			}else{
+				$pagos = 0;
+			}
+
+		if ($pagos>0) {
+			
+			for ($i=0; $i < $pagos; $i++) {
+				$precio = valideteNumber($_POST['tablaDownpayment'][$i]["amount"]);
+				$precio =  -1 * (abs($precio));
+
+				$transaction = [
+					"fkAccid" 			=> $this->reservation_db->getACCIDByContracID($idContrato), 
+					"fkTrxTypeId"		=> $this->reservation_db->getTrxTypeContracByDesc('SCP'),
+					"fkTrxClassID"		=> $this->reservation_db->gettrxClassID('SCH'),
+					"Debit-"			=> $precio,
+					"Credit+"			=> 0,
+					"Amount"			=> abs($precio), 
+					"AbsAmount"			=> abs($precio),
+					"Remark"			=> '', 
+					"Doc"				=> '',
+					"DueDt"				=> $_POST['tablaDownpayment'][$i]["date"],
 					"ynActive"			=> 1,
 					"CrBy"				=> $this->nativesessions->get('id'),
 					"CrDt"				=> $this->getToday(),
@@ -306,25 +498,28 @@ class Reservation extends CI_Controller {
 		}
 	}
 	
-	public function createSemanaOcupacion($idContrato){
+	public function createSemanaOcupacion($idContrato, $iniDate, $endDate){
 		$Years = $this->reservation_db->selectYearsUnitiesContract($idContrato);
 
 		$Unidades = [];
 		$fYear = $Years[0]->FirstOccYear;
 		$lYear = $Years[0]->LastOccYear;
-		for ($i = $fYear; $i <= $lYear ; $i++) { 
-			array_push($Unidades, $this->reservation_db->selectUnitiesContract($idContrato, $i));
-		}
-		for ($i=0; $i < sizeof($Unidades); $i++) {
-			for ($j=0; $j < sizeof($Unidades[$i]); $j++) {
+		/*for ($i = $fYear; $i <= $lYear ; $i++) { 
+			array_push($Unidades, $this->reservation_db->selectUnitiesContract($idContrato, $i, $_POST['iniDate'], $_POST['endDate']));
+		}*/
+		$resInt =  $this->reservation_db->selectUnitiesContract($idContrato);
+		$idCalendar =  $this->reservation_db->selectDateCalendar( $iniDate, $endDate );
+		
+		for ($i=0; $i < sizeof($idCalendar); $i++) {
+			for ($j=0; $j < sizeof($resInt); $j++) {
 				$OcupacionTable = [
 					"fkResId"    	=> $idContrato,
-					"fkResInvtId"   => $Unidades[$i][$j]->pkResInvtId,
-					"OccYear"       => $Unidades[$i][$j]->Year,
-					"NightId"       => $Unidades[$i][$j]->fkDayOfWeekId,
+					"fkResInvtId"   => $resInt[$j]->pkResInvtId,
+					"OccYear"       => $idCalendar[$i]->Year,
+					"NightId"       => $idCalendar[$i]->fkDayOfWeekId,
 					"fkResTypeId"   => 5,
 					"fkOccTypeId"   => 1,
-					"fkCalendarId" 	=> $Unidades[$i][$j]->pkCalendarId,
+					"fkCalendarId" 	=> $idCalendar[$i]->pkCalendarId,
 					"ynActive"   	=> 1,
 					"CrBy"          => $this->nativesessions->get('id'),
 					"CrDt"			=> $this->getToday()

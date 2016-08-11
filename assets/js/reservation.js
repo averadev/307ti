@@ -311,7 +311,12 @@ function createDialogReservation(addReservation) {
 				ajaxSelectRes('reservation/getOccupancyTypes','try again', generalSelects, 'occupancySalesRes');
 				
 				$(document).on( 'change', '#occupancySalesRes', function () {
-					getRateRes();
+					var unidades = getValueTableUnidadesRes();
+					if (unidades.length<=0) {
+						alertify.error("You should add one unit or more");	
+					}else {
+						getRateRes();
+					}
 				});
 				
 				$(document).on( 'change', '#RateRes', function () {
@@ -333,31 +338,83 @@ function createDialogReservation(addReservation) {
 			text: "Save and close",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
-					createNewReservation();
-					$(this).dialog('close');
-					alertify.success("Se guardo correctamente");
-					iniDateRes = null;
-					endDateRes = null;
+					if (verifyContractALLRes()) {
+						createNewReservation();
+						$(this).dialog('close');
+					}
 			}
 		},
 			{
 				text: "Save",
 				"class": 'dialogModalButtonAccept',
 				click: function() {
-					createNewReservation();
-					iniDateRes = null;
-					endDateRes = null;
+					if (verifyContractALLRes()) {
+						createNewReservation();
+					}
 				}
 			}],
 		close: function() {
 			$('#dialog-Reservations').empty();
-			iniDateRes = null;
-			endDateRes = null;
+			
 			//$(this).dialog('destroy');
 			addReservation = null;
 		}
 	});
 	return dialog;
+}
+
+function verifyContractALLRes(){
+	var value = false;
+	if (verifyContractRes()) {
+		if (verifyTablesContractRes()) {
+			if (verifyLanguageRes()) {
+				value = true;
+			}
+			
+		}
+	}
+	return value;
+}
+
+function verifyContractRes(){
+	var value = true;
+	var arrayWords = ["depositoEngancheRes", "precioUnidadRes", "precioVentaRes"];
+	var id = "saveDataReservation";
+	var form = $("#"+id);
+	var elem = new Foundation.Abide(form, {});
+
+	if(!verifyInputsByIDRes(arrayWords)){
+		$('#'+id).foundation('validateForm');
+		alertify.success("Please fill required fields (red)");
+		value = false;
+	}
+	return value;
+}
+
+function verifyTablesContractRes(){
+	var value = true;
+	var unidades = getValueTableUnidadesRes();
+	var personas = getValueTablePersonasRes();
+	if (personas.length<=0) {
+		alertify.error("You should add one people or more");
+		value = false;
+	}else if (unidades.length<=0) {
+		alertify.error("You should add one unity or more");
+		value = false;
+	}
+	return value;
+}
+
+function verifyLanguageRes(){
+	var value = true;
+	var languageValue = getNumberTextInputRes("selectLanguageRes");
+	if(languageValue == 0){
+		value = false;
+		gotoDiv("contentModalReservation", "selectLanguageRes");
+		$("#selectLanguageRes").addClass('is-invalid-input');
+		alertify.error("Choose a language");
+	}
+	return value;
 }
 
 function addUnidadResDialog(arrivaDateUni, unit){
@@ -370,18 +427,27 @@ function addUnidadResDialog(arrivaDateUni, unit){
 		    		ajaxSelectRes('contract/getProperties','try again', generalSelects, 'propertyRes');
 	    			ajaxSelectRes('contract/getUnitTypes','try again', generalSelects, 'floorPlanUnitRes');
 					ajaxSelectRes('reservation/getView','try again', generalSelects, 'viewUnitRes');
-					$( "#fromDateUnitRes, #toDateUnitRes" ).Zebra_DatePicker({
+					$( "#fromDateUnitRes" ).Zebra_DatePicker({
 						format: 'm/d/Y',
 						show_icon: false,
+						direction: true,
+						pair: $('#toDateUnitRes'),
+					});
+					$( "#toDateUnitRes" ).Zebra_DatePicker({
+						format: 'm/d/Y',
+						show_icon: false,
+						direction: 1
 					});
 					if(arrivaDateUni != null){
 						$('#fromDateUnitRes').val(arrivaDateUni)
 					}
 					$('#btnGetUnidadesRes').unbind('click');
 					$('#btnGetUnidadesRes').click(function(){
-						if($('#fromDateUnitRes').val().trim().length > 0 && $('#fromDateUnitRes').val().trim().length > 0 ){
+						if($('#fromDateUnitRes').val().trim().length > 0 && $('#toDateUnitRes').val().trim().length > 0 ){
 							iniDateRes = $('#fromDateUnitRes').val();
 							endDateRes = $('#toDateUnitRes').val();
+							console.log(iniDateRes);
+							console.log(endDateRes);
 							getUnidadesRes(unit);
 						}else{
 							alertify.error("Choose dates for the reservation");
@@ -407,16 +473,18 @@ function addUnidadResDialog(arrivaDateUni, unit){
 			"class": 'dialogModalButtonAccept',
 			click: function() {
 				var unidades = getValueTableUnidadesSeleccionadasRes();
-				if (unidades.length == 1) {
+				if (unidades.length > 0) {
 					var intDate = iniDateRes.split("/");
 					intDate = intDate[2];
 					var endDate = endDateRes.split("/");
 					endDate = endDate[2];
 					var frequency = "every Year";
+					console.log(iniDateRes);
+					console.log(endDateRes);
 	       			tablUnidadadesRes(unidades, frequency, intDate, endDate);
 	       			$(this).dialog('close');
 				}else{
-					alertify.error("Find and click only one unit");
+					alertify.error("Search and click over for choose one");
 				}
 			}
 		}],
@@ -553,7 +621,7 @@ function getArrayValuesColumnTableRes(tabla, columna){
 
 function getValueTableUnidadesSeleccionadasRes(){
 	var unidadesId = getArrayValuesColumnTableRes("tableUnidadesResSelected", 1);
-	var semanas= getArrayValuesColumnTableRes("tableUnidadesResSelected", 6);
+	var semanas= getArrayValuesColumnTableRes("tableUnidadesResSelected", 7);
 	var tabla = "tblUnidadesRes";
 	var unidades = [];
 	$('#'+tabla+' tbody tr.yellow').each( function(){
@@ -699,14 +767,19 @@ function createNewReservation(){
 			alertify.error("Choose a language");
 		}else{
 			var unidadRes = getValueTableUnidadesRes();
+			var date1 = new Date(iniDateRes);
+			var date2 = new Date(endDateRes);
+			var dayDif = date2.getTime() - date1.getTime();
+			var day = Math.round(dayDif/(1000 * 60 * 60 * 24));
 			showAlert(true,"Saving changes, please wait ....",'progressbar');
+			console.log(iniDateRes)
 			$.ajax({
 					data: {
 						idiomaID : $("#selectLanguageRes").val(),
 						peoples: getValueTablePersonasRes(),
 						types: typePeopleRes(),
 						unidades: unidadRes,
-						weeks: getArrayValuesColumnTableRes("tableUnidadesResSelected", 6),
+						weeks: getArrayValuesColumnTableRes("tableUnidadesResSelected",7),
 						firstYear : unidadRes[0].fyear,
 						lastYear : unidadRes[0].lyear,
 						tipoVentaId : $("#occupancySalesRes").val(), // pendiente
@@ -724,10 +797,11 @@ function createNewReservation(){
 						tablaDownpayment : getValueTableDownpaymentRes(),
 						gifts: getValueTablePacksRes(),
 						viewId: 1,
-						card: datosCardRes()
-						/*
-							tipoVentaId : $("#typeSales").val()
-						*/
+						card: datosCardRes(),
+						deposito:getNumberTextInputRes("depositoEngancheRes"),
+						day:day,
+						iniDate:iniDateRes,
+						endDate:endDateRes,
 					},
 					type: "POST",
 					dataType:'json',
@@ -748,6 +822,13 @@ function createNewReservation(){
 						$('#tablePeopleResSelected tbody').empty();
 						$('#tableUnidadesResSelected tbody').empty();
 						alertify.success(data['mensaje']);
+						var tabCurrent = $('#tab-general .active').attr('attr-screen');
+						if(tabCurrent == "frontDesk"){
+							getFrontDesk("",1);
+						}else{
+							$('#reservationstbody').empty();
+							getReservations();
+						}
 					}
 					
 				})
@@ -953,6 +1034,8 @@ function getWeeksResDialog(unidades){
 				intDate = intDate[2];
 				var endDate = endDateRes.split("/");
 				endDate = endDate[2];
+				console.log(iniDateRes);
+							console.log(endDateRes);
        			//var primero = $("#firstYearWeeks").val();
        			//var ultimo = $("#lastYearWeeks").val();
        			tablUnidadadesRes(unidades, frequency, intDate, endDate);	
@@ -1455,9 +1538,9 @@ function initEventosDownpaymentRes(){
 	});
 	
 	$('#numeroTarjeta').on('change', function() {
-	$("#numeroTarjeta").val(splitNumberTarjetaRes());
+		$("#numeroTarjeta").val(splitNumberTarjetaRes());
 
-	  $('#numeroTarjeta').validateCreditCard(function(result) {
+	  /*$('#numeroTarjeta').validateCreditCard(function(result) {
 	  	if (result.valid) {
 	  		//$("#cardType").val(result.card_type.name);
 	  		$("#numeroTarjeta").removeClass('is-invalid-input');
@@ -1465,7 +1548,7 @@ function initEventosDownpaymentRes(){
 	  	}else{
 	  		$("#numeroTarjeta").addClass('is-invalid-input');
 	  	}
-        });
+        });*/
 	});
 	
 }

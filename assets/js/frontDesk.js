@@ -392,10 +392,6 @@ function modalHKConfig(id){
 	return dialog;
 }
 
-function showReservation(){
-	dialogEditContract.dialog('open');
-}
-
 function showSection(section){
 	$('#generalPage').hide();
 	$('#paginationHKConfig').hide();
@@ -417,7 +413,7 @@ function createTableLookUp(data){
 	
 	var existMoth = "";
 	var existYear = "";
-	console.table(dates)
+	console.log(items)
 	
 	for (var j in dates) {
 		if(existYear != dates[j].year ){
@@ -474,7 +470,7 @@ function createTableLookUp(data){
 							if(exist == false){
 								$('#' + + i + "-" + dates[j].pkCalendarId).attr('colspan',totaltd);
 								$('#' + + i + "-" + dates[j].pkCalendarId).attr('titleCustom',vToolTip);
-								$('#' + + i + "-" + dates[j].pkCalendarId).attr('reservation',1);
+								$('#' + + i + "-" + dates[j].pkCalendarId).attr('reservation',values.ResId);
 								$('#' + + i + "-" + dates[j].pkCalendarId).attr('class',values.occType + " rightPanel Tooltips showReservation");
 								$('#' + + i + "-" + dates[j].pkCalendarId).text(values.people);
 								exist = true;
@@ -489,9 +485,7 @@ function createTableLookUp(data){
 		}
 	}
 	
-	//console.log(items.length)
-	
-	$('.showReservation').on('click', function(){ showReservation(); });
+	$('.showReservation').on('click', function(){ showReservation(this); });
 	$('.emptyUnitsFront').on('click', function(){ showNewReservation(this); });
 	
 	initializeTooltips('.Tooltips');
@@ -585,7 +579,6 @@ function showHKConfiguration(id){
 		url: "frontDesk/getHKConfigurationById",
 		dataType:'json',
 		success: function(data){
-			//console.log(data);
 			if(data.items.length > 0){
 				var item = data.items[0];
 				$('.rowSpace').remove();
@@ -1190,7 +1183,6 @@ function generateReportFrontDesk(){
 }
 
 function createExcel(url){
-	
 	window.location = "frontDesk/getReportFrontDesk" + url;
 }
 
@@ -1213,6 +1205,11 @@ function showNewReservation(selector){
 		}
 		unidadResDialog = addUnidadResDialog(day,unit);
 		unidadResDialog.dialog( "open" );
-	
-	
+}
+
+function showReservation(selector){
+	//dialogEditContract.dialog('open');
+	var idRes = $(selector).attr('reservation');
+	 var dialogEditReservation = modalEditReservation(idRes);
+	dialogEditReservation.dialog("open");
 }

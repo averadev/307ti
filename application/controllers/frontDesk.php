@@ -60,12 +60,12 @@ class FrontDesk extends CI_Controller {
 						}
 					}
 					if(!$exist){
-						$res[$p]['resId'] = $item->fkResId;
+						$res[$p]['resId'] = $item->pkResId;
 						$res[$p]['type'] = $item->type;
 						$res[$p]['unit'] = $item->UnitCode;
 						$res[$p]['status'] = $item->HKStatusDesc;
-						$res[$p]['view'] = $item->ViewCode;
-						$res[$p]['viewDesc'] = $item->ViewDesc;
+						//$res[$p]['view'] = $item->ViewCode;
+						//$res[$p]['viewDesc'] = $item->ViewDesc;
 					}
 					if (isset($res[$p]['values'])){
 						$p2 = count($res[$p]['values']);
@@ -79,6 +79,7 @@ class FrontDesk extends CI_Controller {
 					$res[$p]['values'][$p2]['ResConf'] = $item->ResConf;
 					$res[$p]['values'][$p2]['dateFrom'] = $item->DateIni;
 					$res[$p]['values'][$p2]['dateTo'] = $item->DateEnd;
+					$res[$p]['values'][$p2]['ResId'] = $item->pkResId;
 				}
 				$res[$p]['values'][$p2]['to'] = $item->pkCalendarId;
 				

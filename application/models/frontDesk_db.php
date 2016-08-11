@@ -77,7 +77,7 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->select($iniDate);
 		$this->db->select($endDate);
 		$this->db->select("DATEPART(day, tblCalendar.Date) as day");
-		$this->db->select("ro.pkResOccId, ro.fkResId, ro.fkResInvtId, ro.NightId, ro.fkOccTypeId");
+		$this->db->select("ro.pkResOccId, ro.fkResId, ro.fkResInvtId, ro.NightId, ro.fkOccTypeId, r.pkResId");
 		$this->db->select("fpi.FloorPlanDesc as type");
 		$this->db->select("u.pkUnitId, u.UnitCode, u.fkPropertyId");
 		$this->db->select("fp.pkFloorPlanID, fp.FloorPlanDesc");

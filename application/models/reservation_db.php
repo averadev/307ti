@@ -610,18 +610,36 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
     
-    public function selectUnitiesContract($resId, $year){
-        $this->db->select("RI.pkResInvtId, RI.fkUnitId, RI.Intv, RI.FirstOccYear, RI.LastOccYear, C.pkCalendarId,C.fkDayOfWeekId, C.Year");
+	public function selectUnitiesContract($resId){
+       /* $this->db->select("RI.pkResInvtId, RI.fkUnitId, RI.Intv, RI.FirstOccYear, RI.LastOccYear, C.pkCalendarId,C.fkDayOfWeekId, C.Year");
         $this->db->from('tblResInvt RI');
         $this->db->join('tblCalendar C', 'C.Intv = RI.Intv', 'inner');
         $this->db->where('C.Year', $year);
         $this->db->where('fkResId', $resId);
         $this->db->order_by('intv', 'ASC');
+        $query = $this->db->get();*/
+		
+		$this->db->select("RI.pkResInvtId, RI.fkUnitId, RI.Intv, RI.FirstOccYear, RI.LastOccYear");
+		$this->db->from('tblResInvt RI');
+		$this->db->where('RI.fkResId', $resId);
+		$this->db->order_by('RI.Intv', 'ASC');
+		$query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
+	
+	public function selectDateCalendar($iniDate, $endDate){
+        $this->db->select("C.pkCalendarId,C.fkDayOfWeekId, C.Year");
+        $this->db->from('tblCalendar C');
+        $this->db->where("c.Date BETWEEN '" . $iniDate . "' and '" . $endDate . "'");
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
         }
     }
+   
+   
     public function selectYearsUnitiesContract($resId){
         $this->db->select("RI.FirstOccYear, RI.LastOccYear");
         $this->db->from('tblResInvt RI');
@@ -793,6 +811,19 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         {
             $row = $query->row();
             return $row->pkTrxTypeId;
+        }
+    }
+	
+	public function gettrxClassID($string){
+        $this->db->select('pkTrxClassId');
+        $this->db->from('tbltrxclass');
+        $this->db->where('TrxClassCode', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkTrxClassId;
         }
     }
 	
