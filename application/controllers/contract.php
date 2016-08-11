@@ -69,24 +69,80 @@ echo $fechaActual;*/
 
 		if($this->input->is_ajax_request()){	
 			ini_set('max_execution_time', 120);
-			$idContrato = $this->createContract();
-			$this->insertOcupacion($idContrato);
-			$acc = $this->createAcc();
-			$this->insertTarjeta($idContrato, $acc);
-			$this->insertPeoples($idContrato, $acc);
-			$this->makeTransactions($idContrato);
-			$this->createUnidades($idContrato);
-			$this->createGifts($idContrato);
-			$balanceFinal = $this->insertFinanciamiento($idContrato);
-			$this->createSemanaOcupacion($idContrato);
 
-			echo  json_encode([
-				"mensaje" => 'Contract Save',
-				"balance" => $this->contract_db->selectPriceFin($idContrato)[0],
-				"status" => 1,
-				"idContrato" =>$idContrato,
-				"balanceFinal" => $balanceFinal]);
-	}
+			/***
+
+				$this->db->trans_begin();
+
+				$this->db->query('AN SQL QUERY...');
+				$this->db->query('ANOTHER QUERY...');
+				$this->db->query('AND YET ANOTHER QUERY...');
+
+				if ($this->db->trans_status() === FALSE)
+				{
+				        $this->db->trans_rollback();
+				}
+				else
+				{
+				        $this->db->trans_commit();
+				}
+				try {
+
+				    // Code that might trigger the exception.
+
+				} catch (Exception $exception) {
+
+				    // Code to handle the exception.
+
+				}
+			***/
+
+
+			$Contrato = isValidateContract();
+			if ($Contrato['valido']) {
+				$idContrato = $this->createContract();
+				$this->insertContratoOcupacion($idContrato);
+				$acc = $this->createAcc();
+
+				$idContrato = $this->createContract();
+				$this->insertContratoOcupacion($idContrato);
+				$acc = $this->createAcc();
+				
+				if ($_POST['card']) {
+					$Tarjeta = isValidateCreditCard();
+					if ($Tarjeta['valido']) {
+						$this->insertTarjeta($idContrato, $acc);
+					}else{
+						$this->db->delete('tblRes', array('pkResId' => $idContrato));
+						$this->db->delete('tblRes', array('pkResRelatedId' => $idContrato));
+						echo  json_encode([
+							"mensaje" => $Tarjeta['mensajes'],
+							"status" => 0
+						]);
+					}
+				}
+				$this->insertPeoples($idContrato, $acc);
+				$this->makeTransactions($idContrato);
+				$this->createUnidades($idContrato);
+				$this->createGifts($idContrato);
+				$balanceFinal = $this->insertFinanciamiento($idContrato);
+				$this->createSemanaOcupacion($idContrato);
+				echo  json_encode([
+					"mensaje" => 'Contract Save',
+					"balance" => $this->contract_db->selectPriceFin($idContrato)[0],
+					"status" => 1,
+					"idContrato" =>$idContrato,
+					"balanceFinal" => $balanceFinal]);
+				
+
+			}else{
+				echo  json_encode([
+					"mensaje" => $Contrato['mensajes'],
+					"status" => 0
+					]);
+			}
+		}
+
 }
 
 
@@ -122,6 +178,7 @@ private function insertTarjeta($id, $type){
 }
 
 private function createContract(){
+
 		$Contract = [
 			"fkResTypeId"               => $this->contract_db->selectRestType('ContFx'),
 			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('RG'),
@@ -147,7 +204,8 @@ private function createContract(){
 
 }
 
-private function insertOcupacion($idContrato){
+private function insertContratoOcupacion($idContrato){
+
 	$rango = intval($_POST['lastYear']-$_POST['firstYear']);
 	for($i =0; $i<= $rango; $i++){
 			$Ocupacion = [
@@ -156,8 +214,8 @@ private function insertOcupacion($idContrato){
 			"fkLanguageId"              => $_POST['idiomaID'],
 	        "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
 	        "pkResRelatedId"            => $idContrato,
-	        "FirstOccYear"              => intval($_POST['firstYear'])+ $i,
-	        "LastOccYear"               => intval($_POST['firstYear'])+ $i,
+	        "FirstOccYear"              => $_POST['firstYear'] + $i,
+	        "LastOccYear"               => $_POST['firstYear'] + $i,
 	        "ResCode"                   => "",
 	        "ResConf"                   => "",
 	        "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
@@ -494,7 +552,7 @@ private function insertPagosDownpayment($idContrato){
 				"AbsAmount"			=> abs($precio),
 				"Remark"			=> '', 
 				"Doc"				=> '',
-				"DueDt"				=> $_POST['tablaPagosProgramados'][$i]["date"],
+				"DueDt"				=> $_POST['tablaDownpayment'][$i]["date"],
 				"ynActive"			=> 1,
 				"CrBy"				=> $this->nativesessions->get('id'),
 				"CrDt"				=> $this->getToday(),

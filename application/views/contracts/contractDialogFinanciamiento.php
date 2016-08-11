@@ -4,16 +4,16 @@
     <div class="small-3 columns">
       <label for="totalContracF" class="text-left">Total Contract</label>
     </div>
-    <div class="small-9 columns">
-       <p id="totalContracF"><?php echo $precio[0]->totalFinanceAmt; ?></p>
+    <div id="totalContracF" class="small-9 columns">
+       <span ><?php echo $precio[0]->totalFinanceAmt; ?></span>
     </div>
   </div>
   <div class="row">
     <div class="small-3 columns">
       <label for="balanceFinanciarF" class="text-left">Balance a financiar</label>
     </div>
-    <div class="small-9 columns">
-       <p id="balanceFinanciarF"><?php echo $precio[0]->financeBalance; ?></p>
+    <div id="balanceFinanciarF" class="small-9 columns">
+       </span><?php echo $precio[0]->financeBalance; ?></span>
     </div>
   </div>
   <div class="row">
@@ -21,7 +21,7 @@
       <label for="fechaPrimerPagoF" class="text-left">Payment Date</label>
     </div>
     <div class="small-9 columns">
-       <input class="round general" id="fechaPrimerPagoF" type="date" name="fechaPrimerPagoF">
+       <input class="round general" id="fechaPrimerPagoF" type="text" name="fechaPrimerPagoF">
     </div>
   </div>
   <div class="row">
@@ -47,7 +47,7 @@
       <label for="numeroMesesF" class="text-left"># Months</label>
     </div>
     <div class="small-9 columns">
-       <p id="numeroMesesF">0 Months</p>
+       <span id="numeroMesesF">0 Months</span>
     </div>
   </div>
    <div class="row">
@@ -55,7 +55,7 @@
       <label for="tasaInteresF" class="text-left">Interest Rate</label>
     </div>
     <div class="small-9 columns">
-       <p id="tasaInteresF">0%</p>
+       </span id="tasaInteresF">0%</span>
     </div>
   </div>
    <div class="row">

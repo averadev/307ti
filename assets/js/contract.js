@@ -253,7 +253,7 @@ function showModalContract(){
 	var modalPropiedades = {
 		div: "dialog-Contract",
 		altura: maxHeight,
-		width: "75%",
+		width: "70%",
 		onOpen: ajaxDATA,
 		onSave: createNewContract,
 		cerrar : cerrarContract,
@@ -342,7 +342,7 @@ function addUnidadDialog() {
 		},
 		autoOpen: false,
 		height: maxHeight,
-		width: "75%",
+		width: "70%",
 		modal: true,
 		buttons: [{
 			text: "Cancel",
@@ -383,7 +383,7 @@ function addPeopleDialog() {
 		},
 		autoOpen: false,
 		height: maxHeight,
-		width: "75%",
+		width: "70%",
 		modal: true,
 		buttons: [{
 			text: "Cancel",
@@ -607,7 +607,10 @@ function createNewContract(){
 					$('#tablePeopleSelected tbody').empty();
 					$('#tableUnidadesSelected tbody').empty();
 					alertify.success(data['mensaje']);
-				}}).fail(function( jqXHR, textStatus, errorThrown ) {
+				}else{
+					alertify.error(data["mensaje"]);
+				}
+			}).fail(function( jqXHR, textStatus, errorThrown ) {
 
 				});
 	
@@ -1004,7 +1007,7 @@ function modalDepositDownpayment(){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: "70%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -1103,7 +1106,7 @@ function modalScheduledPayments() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: "70%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -1148,7 +1151,7 @@ function modalDiscountAmount(){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: "70%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -1278,7 +1281,7 @@ function modalEditContract(id){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: "70%",
      	modal: true,
      	buttons: [
 	   	{
@@ -1573,7 +1576,7 @@ function getTypeGifts(){
 }
 
 function typesGift(data){
-	console.table(data);
+	//console.table(data);
 	generalSelects(data, "tiposPakc");
 }
 
@@ -2149,7 +2152,7 @@ function showModalFin(id){
 	var modalPropiedades = {
 		div: "dialog-Financiamiento",
 		altura: maxHeight,
-		width: "75%",
+		width: "70%",
 		onOpen: ajaxDATA,
 		onSave: createNewContract,
 		botones :[{
@@ -2207,7 +2210,12 @@ function afterUpdateFinanciamiento(data){
 
 function initEventosFinanciamiento(){
 
-	setDate("fechaPrimerPagoF");
+	//setDate("fechaPrimerPagoF");
+	$( "#fechaPrimerPagoF" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
+	$('#fechaPrimerPagoF').val(getCurrentDate());
 	var palabras = $("#terminosFinanciamientoF option:selected").text();
 		palabras = palabras.split(",");
 		$("#numeroMesesF").text(palabras[0]);
@@ -2216,10 +2224,9 @@ function initEventosFinanciamiento(){
 	$("#btnCalcularF").click(function(){
 		var factor = $("#terminosFinanciamientoF option:selected").attr("code");
 		var factor = parseFloat(factor.replace(",", "."));
-		var pagoTotal = getNumberTextString("balanceFinanciarF");
+		var pagoTotal = $('#balanceFinanciarF').text().trim();
 		var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
 		var interes = (factor + 1);
-		//var interes = parseFloat($("#tasaInteresF").text().split("%")[0]);
 		var pagoMensual = parseFloat((pagoTotal*interes) / meses);
 		var pagoMensual = parseFloat(pagoMensual.toFixed(2));
 
@@ -2275,7 +2282,7 @@ function modalSellers() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: "70%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -2577,7 +2584,7 @@ function modalGetAllNotes() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: "70%",
      	modal: true,
      	buttons: [{
 	       	text: "Close",
@@ -2633,7 +2640,7 @@ function getNotes(id){
 	    url: url,
 	    dataType:'json',
 	    success: function(data){
-	    	console.table(data);
+	    	//console.table(data);
 	    	showLoading(div, false);
 	    	if (data) {
 	    		drawTableId(data,"tableCNotesSelectedBody");
@@ -2697,7 +2704,7 @@ function SaveFlagsContract(){
 
 
 function drawTableFlagsAsigned(data, table){
-	console.table(data);
+	//console.table(data);
 	var bodyHTML = '';
     for (var i = 0; i < data.length; i++) {
         bodyHTML += "<tr>";
@@ -2793,7 +2800,7 @@ function opcionAccount(attrType){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: "70%",
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -3138,7 +3145,7 @@ function showModalContractXD(id){
 	var modalPropiedades = {
 		div: "dialog-Contract",
 		altura: maxHeight,
-		width: "75%",
+		width: "70%",
 		onOpen: ajaxDATA,
 		onSave: createNewContract,
 		botones :[{
@@ -3153,7 +3160,7 @@ function showModalContractXD(id){
 			click: function() {
 				if (verifyContractALL()) {
 					createNewContract();
-					$(this).dialog('close');
+					//$(this).dialog('close');
 				}
 				
 			}
@@ -3350,7 +3357,7 @@ function recivePeople(datos){
 		unidades.push(unidad);
 	}
 
-	console.table(unidades);
+	//console.table(unidades);
 	tablUnidadades(unidades, frequency, primero, ultimo);	
 	setValueUnitPrice();
 }

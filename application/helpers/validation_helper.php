@@ -59,3 +59,132 @@ if (! function_exists('valideteNumber')) {
 	}
 }
 
+if (! function_exists('valideteNumberINT')) {
+	
+	function valideteNumberINT($numero){
+		if (!empty($numero) && is_numeric($numero)) {
+			$precio = floatval($numero);
+			if($precio == -0){
+				return 0;
+			}
+		}
+		else{
+			$precio = 0;
+		}
+		return $precio;
+	}
+}
+
+if (! function_exists('valideteString')) {
+	
+	function valideteString($string){
+		if (!empty($string) && is_string($string)) {
+			$cadena = trim($string);
+		}
+		else{
+			$cadena = "";
+		}
+		return $cadena;
+	}
+}
+
+if (! function_exists('isValidateContract')) {
+	function isValidateContract(){
+		$Validacion = [
+			"valido" => true
+		];
+		$Mensajes = [];
+		$valido =  true;
+		if (isset($_POST['idiomaID'])) {
+			$_POST['idiomaID'] = valideteNumberINT($_POST['idiomaID']);
+		}else{
+			$Validacion["valido"] = false;
+			array_push($Mensajes, "Error in Language");
+		}
+		if (isset($_POST['firstYear'])) {
+			$_POST['firstYear'] = valideteNumberINT($_POST['firstYear']);
+		}else{
+			$Validacion["valido"] = false;
+			array_push($Mensajes, "Error in First Year");
+		}
+		if (isset($_POST['lastYear'])) {
+			$_POST['lastYear'] = valideteNumberINT($_POST['lastYear']);
+		}else{
+			$Validacion["valido"] = false;
+			array_push($Mensajes, "Error in Last Year");
+		}
+		if (isset($_POST['legalName'])) {
+			$_POST['legalName'] = valideteString($_POST['legalName']);
+		}else{
+			$Validacion["valido"] = false;
+			array_push($Mensajes, "Error in Name");
+		}
+		if (isset($_POST['tourID'])) {
+			$_POST['tourID'] = valideteNumberINT($_POST['tourID']);
+		}else{
+			$Validacion["valido"] = false;
+			array_push($Mensajes, "Error in tourID");
+		}
+		$Validacion["mensajes"] = $Mensajes;
+		return $Validacion;
+	}
+}
+
+if (! function_exists('isValidateCreditCard')) {
+	
+	function isValidateCreditCard(){
+			$datos = $_POST['card'];
+			$Mensajes = [];
+			$Validacion = [
+				"valido" => true
+			];
+			if (isset($datos['type'])) {
+					$datos['type'] = valideteNumberINT($datos['type']);
+			}else{
+				$Validacion["valido"] = false;
+				array_push($Mensajes, "Error in Type of Credit Card");
+			}
+
+			if (isset($datos['number'])) {
+				$datos['number'] = valideteString($datos['number']);
+				$numeroCC = strlen((string)$datos['number']);
+				if ($numeroCC > 16) {
+					$Validacion["valido"] = false;
+					array_push($Mensajes, "Error in Size of Credit Card");
+				}
+			}else{
+				$Validacion["valido"] = false;
+				array_push($Mensajes, "Error in number Credit Card");
+			}
+
+			if (!isset($datos['dateExpiration'])) {
+				$Validacion["valido"] = false;
+				array_push($Mensajes, "Error in Date Expiration of Credit card");
+			}
+			if (isset($datos['poscode'])) {
+				$datos['poscode'] = valideteNumberINT($datos['poscode']);
+				$numeroCC = strlen((string)$datos['poscode']);
+				if ($numeroCC > 9) {
+					$Validacion["valido"] = false;
+					array_push($Mensajes, "Error in Size of Postal Code");
+				}
+			}else{
+				$Validacion["valido"] = false;
+				array_push($Mensajes, "Error in Postal Code");
+			}
+			if (isset($datos['code'])) {
+				$datos['code'] = valideteNumberINT($datos['code']);
+				$numeroCC = strlen((string)$datos['code']);
+				if ($numeroCC > 3) {
+					$Validacion["valido"] = false;
+					array_push($Mensajes, "Error in Size of CVV Code");
+				}
+			}else{
+				$Validacion["valido"] = false;
+				array_push($Mensajes, "Error in CVV Code");
+			}
+			$Validacion["mensajes"] = $Mensajes;
+			return $Validacion;
+	}
+
+}
