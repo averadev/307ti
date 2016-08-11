@@ -739,11 +739,11 @@ function createNewReservation(){
 						elem.resetForm();
 						var arrayWords = ["depositoEngancheRes", "precioUnidadRes", "precioVentaRes", "downpaymentRes"];
 						clearInputsByIdRes(arrayWords);
-						 if (modalFinRes!=null) {
+						/*if (modalFinRes!=null) {
 				    		modalFinRes.dialog( "destroy" );
 				    	}
 				    	modalFinRes = modalFinResanciamientoRes();
-				        modalFinRes.dialog( "open" );
+				        modalFinRes.dialog( "open" );*/
 						$('#dialog-Weeks').empty();
 						$('#tablePeopleResSelected tbody').empty();
 						$('#tableUnidadesResSelected tbody').empty();
@@ -781,7 +781,7 @@ function getValueTablePacksRes(){
 		if ($(this).text().replace(/\s+/g, " ")!="") {
 			var pack = {};
 			pack.id = $(this).find('td').eq(0).text(),
-			pack.amount = $(this).find('td').eq(1).text()
+			pack.amount = $(this).find('td').eq(2).text()
 			packs.push(pack); 
 		}
 	});
@@ -1173,7 +1173,7 @@ function modalDiscountAmountRes(){
        		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			$("#totalDiscountPacksRes").val($("#totalDescPackRes").val());	
+       			$("#totalDiscountPacksRes").val($("#totalDescPack").val());	
        			var a = $('#tbodytablePackgSelected').html();
 				var b = $('#packSeleccionadosRes').html(a);
 				deleteElementTableFuncionRes("tableDescuentosRes", totalDescPackMainRes);
@@ -1419,6 +1419,13 @@ function initEventosDownpaymentRes(){
 	//var closingCost = sumarArrayRes(getArrayValuesColumnTable("tableUnidadesResSelected", 7));
 	//closingCost = 350
 	//$("#downpaymentGastos").val(closingCost);
+	
+	$( "#dateExpiracion, #datePayDawnpayment" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
+	$('#datePayDawnpayment').val(getCurrentDate())
+	
 	var precioUnidad = $("#montoTotalRes").val();
 	if (precioUnidad>0) {
 		var precioUnidadPack = $("#downpaymentPrice").val(precioUnidad);
@@ -1427,21 +1434,20 @@ function initEventosDownpaymentRes(){
 	}
 	calcularDepositDownpaymentRes();
 	selectMetodoPagoRes();
-	setDate("datePayDawnpayment");
 	
 	$('#btnAddmontoDownpayment').click(function (){
 		var amount = getNumberTextInputRes("montoDownpayment");
 		var added = getNumberTextInputRes("downpaymentPrice");
-
-		if(amount>0 && amount <= added){
-			tableDownpaymentSelectedRes(amount);
-			totalDownpaymentRes();
-			
-		}else{
-			alertify.error("The amount should be greater to zero and minus than total amount");
-			errorInput("montoDownpayment", 2);
+		if(ValidateDownpaymentRes()){
+			if(amount>0 && amount <= added){
+				tableDownpaymentSelectedRes(amount);
+				totalDownpaymentRes();
+				$("#montoDownpayment").val(0);
+			}else{
+				alertify.error("The amount should be greater to zero and minus than total amount");
+				errorInput("montoDownpayment", 2);
+			}
 		}
-		$("#montoDownpayment").val(0);
 	});
 
 	$('#btnCleanmontoDownpayment').click(function (){
@@ -1462,6 +1468,38 @@ function initEventosDownpaymentRes(){
         });
 	});
 	
+}
+
+function ValidateDownpaymentRes(){
+	var result = true;
+	if( $('#tiposPago').val() == 2 || $('#tiposPago').val() == 3 || $('#tiposPago').val() == 4 ){
+		if( $('#numeroTarjeta').val().trim().length > 19  ){
+			alertify.error('Card Number must be less than 17');
+			result = false;
+		}else if( $('#numeroTarjeta').val().trim().length == 0  ){
+			alertify.error('Select a Card Number');
+			result = false;
+		}
+		if( $('#codigoPostal').val().trim().length > 9  ){
+			alertify.error('The Postcode must be less than 10');
+			result = false;
+		}else if( $('#codigoPostal').val().trim().length == 0  ){
+			alertify.error('Select a Postcode');
+			result = false;
+		}
+		if( $('#codigoTarjeta').val().trim().length > 3  ){
+			alertify.error('The CVC must be less than 4');
+			result = false;
+		}else if( $('#codigoTarjeta').val().trim().length == 0  ){
+			alertify.error('Select a CVC');
+			result = false;
+		}
+		if( $('#dateExpiracion').val().trim().length == 0  ){
+			alertify.error('Select a date');
+			result = false;
+		}
+	}
+	return result;
 }
 
 function datosCardRes(){
@@ -1542,21 +1580,51 @@ function initEventosDownpaymentProgramadosRes(){
 }
 
 function initEventosDiscountRes(){
-	$("#btnAddmontoPack").click(function(){
+	/*$("#btnAddmontoPack").click(function(){
 		if ($("#montoPack").val()>0) {
 			PacksAddsRes();
 		}else{
 			alertify.error("the amount should be greater to zero");
 			errorInput("montoPack", 2);
 		}
+	});*/
+	getTypeGifts();
+	$("#btnAddmontoPack").click(function(){
+		if ($("#montoPack").val()<=0) {
+			alertify.error("the amount should be greater to zero");
+			errorInput("montoPack", 2);
+		}else if($("#tiposPakc").val()<=0){
+			alertify.error("choose a pack type");
+			errorInput("tiposPakc", 2);
+		}else{
+			PacksAddsRes();
+		}
 	});
+}
+
+function getTypeGifts(){
+	var ajaxDatos =  {
+		url: "contract/getTypesGiftContract",
+		tipo: "json",
+		datos: {},
+		funcionExito : typesGift,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxDatos);
+}
+
+function typesGift(data){
+	console.table(data);
+	generalSelects(data, "tiposPakc");
 }
 
 function PacksAddsRes(){
 	var td = "";
+	var IdTipoPack = $("#tiposPakc").val();
 	var tipoPack = $("#tiposPakc option:selected").text();
 	var monto = $("#montoPack").val();
 		td = "<tr>";
+		td += "<td style='display:none'>"+IdTipoPack+"</td>";
 		td += "<td>"+tipoPack+"</td>";
 		td += "<td class='montoPacks'>"+monto+"</td>";
 		td += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";

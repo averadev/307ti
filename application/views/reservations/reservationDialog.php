@@ -241,10 +241,10 @@
 					<div class="small-12 columns">
 						<p>Extras</p>
 						<table id="tableDescuentosRes" class="large-12 columns">
-							<thead>
+							<thead class="colorCrema">
 								<tr>
-									<th class="cellGeneral">pack type</th>
-									<th class="cellGeneral">amount</th>
+									<th class="cellGeneral">Gift Type</th>
+									<th class="cellGeneral">Amount</th>
 									<th class="cellGeneral">Delete</th>
 								</tr>
 							</thead>

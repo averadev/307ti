@@ -12,6 +12,7 @@ class Reservation extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->helper('url');
+		$this->load->helper('validation');
 		$this->load->database('default');
 		$this->load->model('reservation_db');
 		$this->load->library('nativesessions');
@@ -340,7 +341,7 @@ class Reservation extends CI_Controller {
 				$GIFT = [
 					"fkResId" => $id,
 					"fkGiftId" => $variable[$i]['id'],
-					"Amount" => $variable[$i]['amount']
+					"Amount" => floatval($variable[$i]['amount'])
 				];
 				$this->reservation_db->insertReturnId('tblResgift', $GIFT);
 			}
