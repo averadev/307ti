@@ -190,7 +190,7 @@ class FrontDesk extends CI_Controller {
 					//'fkUnitId'				=> $_POST['unit'],
 					'fkPeopleMaidId'		=> $_POST['maid'],
 					'fkPeopleSuperId'		=> $_POST['supervisor'],
-					//'fkHKServiceTypeId'		=> $_POST['serviceType'],
+					'fkHKServiceTypeId'		=> $_POST['serviceType'],
 					'Section'				=> $_POST['section'],
 					'MdDate'				=> $strHoy,
 					'MdBy'					=> $this->nativesessions->get('id'),
@@ -316,8 +316,12 @@ class FrontDesk extends CI_Controller {
 		}else if($_GET['type'] == "report"){
 			$data = $this->frontDesk_db->getHousekeepingReport($sql);
 		}
+		if(count($data) > 0){
+			$this->createExcel($data);
+		}else{
+			echo "No result found for your dhl query. please try again";
+		}
 		
-		$this->createExcel($data);
 	}
 	
 	private function createExcel($items){
