@@ -1068,6 +1068,16 @@ public function getFlagsContract(){
 		}
 	}
 
+	public function selectWeekDetail(){
+		if($this->input->is_ajax_request()) {
+			$idContrato = $_POST['idContrato'];
+			$year = $_POST['year'];
+			$week = $_POST['week'];
+			$data['weekDetail'] = $this->contract_db->selectWeekDetail($idContrato, $year, $week);
+			$this->load->view('contracts/dialogDetailWeek', $data);
+		}
+	}
+
 	public function selectWeeksContract(){
 		if($this->input->is_ajax_request()) {
 			$id = $_POST['idContrato'];

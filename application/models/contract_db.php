@@ -589,12 +589,26 @@ class Contract_db extends CI_Model {
         $this->db->from('tblResInvt RI');
         $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
         $this->db->where('fkResId', $string);
-        //tblResOcc
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
         }
     }
+     public function selectWeekDetail($idContrato, $year, $week){
+            $this->db->select("RO.OccYear,RO.NightId, RI.Intv, U.UnitCode, C.Date");
+            $this->db->from('tblResOcc RO');
+            $this->db->join('tblResInvt RI', 'RO.fkResInvtId = RI.pkResInvtId', 'inner');
+            $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
+            $this->db->join('tblCalendar C', 'RO.fkCalendarId = C.pkCalendarId', 'inner');
+            $this->db->where('RO.fkResID', $idContrato);
+            $this->db->where('RO.OccYear', $year);
+            $this->db->where('RI.Intv', $week);
+            $query = $this->db->get();
+            if($query->num_rows() > 0 ){
+                return $query->result();
+            }
+        }
+
     public function selectDocumentsContract($string){
         $this->db->select("RI.pkResInvtId, RI.fkUnitId,RI.Intv, RI.FirstOccYear, RI.LastOccYear ");
         $this->db->from('tblResInvt RI');

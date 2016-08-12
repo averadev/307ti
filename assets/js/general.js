@@ -9,6 +9,7 @@ var modalNewFile = null;
 var modalFin = null;
 var modalAllNotes = null;
 var modalNuevoxD = null;
+var dialogWeekDetail = null;
 $(function() {
 	
     // Button Dropdown Menu

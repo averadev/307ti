@@ -11,6 +11,7 @@ $(document).ready(function(){
 	var dialogEditContract = modalEditContract();
 	var dialogAddTour = addTourContract();
 	var dialogAccount = opcionAccount();
+	
 	//alertify.success("Found "+ 50);
 
 	initDatesContract();
@@ -281,6 +282,47 @@ function showModalContract(){
 	addContract = modalGeneral3(modalPropiedades, ajaxData);
 	addContract.dialog( "open" );
 }
+
+function showModalDetailWeek(){
+	var id = getValueFromTableSelected("contracts", 1);
+	var year = getValueFromTableSelected("tableCOccupationSelected", 1);
+	var week = getValueFromTableSelected("tableCOccupationSelected", 2);
+	var ajaxData =  {
+		url: "contract/selectWeekDetail",
+		tipo: "html",
+		datos: {
+			idContrato: id,
+			year: year,
+			week: week
+		},
+		funcionExito : addHTMLDetailWeek,
+		funcionError: mensajeAlertify
+	};
+	var modalPropiedades = {
+		div: "dialog-DetailWeek",
+		altura: maxHeight,
+		width: "70%",
+		onOpen: ajaxDATA,
+		onSave: createNewContract,
+		cerrar : cerrarContract,
+		botones :[{
+			text: "Close",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	         }
+		}]
+		};
+
+	if (dialogWeekDetail!=null) {
+		dialogWeekDetail.dialog( "destroy" );
+	}
+	dialogWeekDetail = modalGeneral2(modalPropiedades, ajaxData);
+	dialogWeekDetail.dialog( "open" );
+}
+function addHTMLDetailWeek(data){
+	$("#dialog-DetailWeek").html(data);
+} 
 
 function cerrarContract(){
 	$('#dialog-DiscountAmount').empty();
