@@ -70,6 +70,18 @@
 						</div>
                     </div>
                 </div>
+                <!-- Concept transition type -->
+                <div class="row">
+                    <div class="small-4 columns">
+                        <label for="CurrencyTrxClassAcc" class="text-left">Currency:</label>
+                    </div>
+                    <div class="small-8 columns">
+                        <div class="caja" >
+                            <select id="CurrencyTrxClassAcc" name="CurrencyTrxClassAcc" class="input-group-field round" required>
+                            </select>
+                        </div>
+                    </div>
+                </div>
 				<!-- Amount -->
 				<div class="row">
 					<div class="small-4 columns">

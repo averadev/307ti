@@ -108,7 +108,7 @@ class Contract_db extends CI_Model {
     }
         public function getUnitiesContract($string){
         $sql = "";
-        $this->db->select('U.UnitCode, RTRIM(TFP.floorPlanDesc) as description, CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price');
+        $this->db->select('U.pkUnitId,U.UnitCode, RTRIM(TFP.floorPlanDesc) as description, CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price');
         $this->db->select('RI.WeeksNumber, RI.FirstOccYear, RI.LastOccYear');
         $this->db->from('tblResInvt RI');
         $this->db->join('tblFloorplan TFP', 'RI.fkFloorPlanId = TFP.pkFloorPlanId', 'inner');
@@ -548,7 +548,15 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
-
+    public function selectEncabezado($resId){
+        $this->db->select("fkUnitId as ID, Intv");
+        $this->db->from('tblResInvt');
+        $this->db->where('fkResId', $resId);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
     public function selectIdTour($string){
         $this->db->select('fkTourId');
         $this->db->from('tblRes');
@@ -957,7 +965,8 @@ class Contract_db extends CI_Model {
         $string = $filters['words']['stringContrat'];
 
         if (isset($filters['checks']['personaId'])){
-            $this->db->like('pkPeopleId', $string);
+            $this->db->join('tblpeople P', 'P.pkPeopleId='.$string);
+            //$this->db->like('pkPeopleId', $string);
         }
         if (isset($filters['checks']['contrato'])){
             $this->db->like('pkResId', $string);
@@ -966,10 +975,7 @@ class Contract_db extends CI_Model {
             $this->db->like('LegalName', $string);
         }
         if (isset($filters['checks']['apellido'])){
-            $this->db->like('Lname', $string);
-        }
-        if (isset($filters['checks']['reservacionId'])){
-            $this->db->like('Lname', $string);
+            $this->db->like('LegalName', $string);
         }
         if (isset($filters['checks']['codEmpleado'])){
             $this->db->like('Lname', $string);

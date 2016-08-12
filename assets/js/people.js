@@ -9,7 +9,7 @@ var dataTablePeople = null;
 var dataTableReservationsPeople = null
 var maxHeight = 400;
 isSearch = true;
-var xhrPeople
+var xhrPeople;
 var idPeople = 0;
 
 /**************Index****************/
@@ -173,9 +173,9 @@ function createModalDialog(){
 			//$('.ui-dialog-titlebar').empty();
 		}
 	});
-	
 	//dialogUser.css('overflow', 'hidden');
 }
+
 
 /**
 * muestra el modal de personas
@@ -191,7 +191,7 @@ function showModal(id){
 	if(id == 0){
 		$('.dialogModalButtonSecondary').hide();
 		$("#tabsModalPeople").hide();
-		//$('#dialog-User .contentModal').css('height', "100%" );
+
 		dialogUser.dialog( "option", "title", "People > Create person" );
 		dialogUser.dialog('open');
 		$('#imgCloseModal').off();

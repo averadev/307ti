@@ -32,10 +32,10 @@
 								<input type="radio" name="filtro_contrato" value="apellido" id="apellido">
 								<label for="apellido">Last name</label>
 							</div>
-							<div class="rdoField">
+<!-- 							<div class="rdoField">
 								<input type="radio" name="filtro_contrato" value="reservacionId" id="reservacionId">
 								<label for="reservacionId">Reservation ID</label>
-							</div>
+							</div> -->
 							<div class="rdoField">
 									<input type="radio" name="filtro_contrato" value="folio" id="folio">
 									<label for="folio">Folio</label>

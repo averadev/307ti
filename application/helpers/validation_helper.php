@@ -46,6 +46,7 @@ if (! function_exists('allDataContract')) {
 if (! function_exists('valideteNumber')) {
 	
 	function valideteNumber($numero){
+		$numero = str_replace(",", ".", $numero);
 		if (!empty($numero) && is_numeric($numero)) {
 			$precio = floatval($numero);
 			if($precio == -0){

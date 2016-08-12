@@ -26,8 +26,8 @@
 <div class="row headerDescription headerGeneral" style="padding: 8px;">
 	<div class="small-12 medium-12 large-8 columns"  >
 		<label class="headerDescriptionTitle" id="editContractTitle"><?php  echo "[".$contract[0]->Folio ."-".$contract[0]->ID."]".$contract[0]->LegalName;?></label>
-		<label class="headerGeneral" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
-		<label class="headerGeneral" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
+		<label class="headerGeneral" id="editContracFloorPlan"><b><?php echo $contract[0]->FloorPlan ."/ Unit ". $encabezado[0]->ID ."/ Intv ".$encabezado[0]->Intv;?><b></label>
+		<label class="headerGeneral" id="editContracYear"><b>Year: <?php echo $contract[0]->FirstOccYear; ?></b></label>
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
 		<label class="headerGeneral" id="editContracStatus">Status: <?php echo $contract[0]->StatusDesc;?></label>
@@ -125,6 +125,7 @@
 									<th colspan="9" class="colorCrema">Units</th>
 								</tr>
 								<tr>
+									<th class="cellEdit">ID</th>
 									<th class="cellEdit" >Code</th>
 									<th class="cellGeneral">Description</th>
 									<th class="cellGeneral">Price</th>
@@ -156,7 +157,7 @@
 							<tr>
 								<td>Price</td>
 								<td id="cventaPrice">$00.00</td>
-								<td>Number of weeks</td>
+								<td>Units / Interval Sold</td>
 								<td id="cventaWeeks"></td>
 							</tr>
 							<tr>
@@ -263,7 +264,7 @@
 
 	<!-- tabs cuentas -->
 	<div id="tab-CAccounts" class="large-12 columns tab-modal" style="display:none;">
-		<div class="tabsModal">
+		<div>
 			<ul class="tabs" id="tabsContratsAccounts"  data-tabs>
 				<li class="tabs-title active" attr-screen="tab-CASales" attr-accType="1" attr-accCode="SAL" >
 					<a>Sales</a>
@@ -279,7 +280,7 @@
 		<!-- contenido del modal -->
 		<div class="ModalContractAccounts">
 			<!-- ventas-->
-			<div id="tab-CASales" class="large-12 columns tab-modal" style="display:inline;">
+			<div id="tab-CASales" class="large-12 columns" style="display:inline;">
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
 						<table class="tableAccountResult" id="tableSaleAccRes" style="margin-top:16px;">

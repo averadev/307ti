@@ -96,10 +96,12 @@ $(document).on( 'click', '#btnAddPeople', function () {
 	});
 	
 	$(document).on( 'click', '#btNewTransAcc, #btAddPayAcc', function () {
-		var accCode = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accCode');
+		var accCode = $('#tabsContratsAccounts .active').attr('attr-accCode');
 		var idAccColl = $('#btNewTransAcc').data( 'idAcc' + accCode );
 		if(idAccColl != undefined){
 			var dialogAccount = opcionAccount($(this).attr('attr_type'));
+			console.log($(this).attr('attr_type'));
+			console.log($('#btNewTransAcc').attr("attr_type"));
 			dialogAccount.dialog("open");
 		}else{
 			alertify.error('No acc found');
@@ -416,12 +418,14 @@ function addPeopleDialog() {
 	var div = "#dialog-People";	
 	dialog = $(div).dialog({
 		open : function (event){
+			if ($(div).is(':empty')) {
 				showLoading(div, true);
 				$(this).load ("people/index" , function(){
 		    		showLoading(div, false);
 		    		$("#dialog-User").hide();
 	            	selectTable("tablePeople");
 	    		});
+			}
 		},
 		autoOpen: false,
 		height: maxHeight,
@@ -444,7 +448,7 @@ function addPeopleDialog() {
 			}
 		}],
 		close: function() {
-			$('#dialog-People').empty();
+			$('#tablePeople tbody').empty();
 		}
 	});
 	return dialog;
@@ -961,7 +965,7 @@ function getWeeksDialog(unidades){
 	    		ajaxSelects('contract/getFrequencies','try again', generalSelectsDefault, 'frequency');
 	    		$("#weeksNumber").val(1);
 	    		setYear("firstYearWeeks", 0);
-	    		setYear("lastYearWeeks", 25);
+	    		setYear("lastYearWeeks", 10);
 	    	});
 		},
 		autoOpen: false,
@@ -1754,10 +1758,7 @@ function changeTabsModalContract(screen, id){
 			//getDatosContract(id);
 			break;
 		case "tab-CAccounts":
-			//getDatosContractAccounts(id);
 			getAccounts( id, "account", "sale" );
-			/*getAccounts( id, "account", "maintenance" );
-			getAccounts( id, "account", "loan" );*/
 			break;
 		case "tab-CVendors":
 			getDatosContractSellers(id);
@@ -2266,10 +2267,9 @@ function initEventosFinanciamiento(){
 	$("#btnCalcularF").click(function(){
 		var factor = $("#terminosFinanciamientoF option:selected").attr("code");
 		var factor = parseFloat(factor.replace(",", "."));
-		var pagoTotal = $('#balanceFinanciarF').text().trim();
+		var pagoTotal = parseFloat($('#balanceFinanciarF').text().trim());
 		var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
-		var interes = (factor + 1);
-		var pagoMensual = parseFloat((pagoTotal*interes) / meses);
+		var pagoMensual = parseFloat((pagoTotal*factor));
 		var pagoMensual = parseFloat(pagoMensual.toFixed(2));
 
 		$("#pagoMF").text(pagoMensual);
@@ -2814,6 +2814,7 @@ function nextStatusContract(){
 }
 /*** modal Account ***/
 function opcionAccount(attrType){
+	console.log();
 	var div = "#dialog-accounts";
 	dialogo = $(div).dialog ({
   		open : function (event){
@@ -2831,6 +2832,7 @@ function opcionAccount(attrType){
 					setDataOpcionAccount(attrType);
 					getTrxType('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
 					ajaxSelects('contract/getTrxClass', 'try again', generalSelects, 'slcTrxClassAcc');
+					ajaxSelects('contract/getCurrency', 'try again', generalSelects, 'CurrencyTrxClassAcc');
 				});
 			}else{
 				showLoading(div, true);
@@ -2858,7 +2860,7 @@ function opcionAccount(attrType){
 				var form = $("#"+id);
 				var elem = new Foundation.Abide(form, {});
 				var arrayInput = ["AmountAcc", "dueDateAcc"];
-				var arraySelect = ["slcTransTypeAcc", "slcTrxClassAcc"];
+				var arraySelect = ["slcTransTypeAcc", "slcTrxClassAcc", "CurrencyTrxClassAcc"];
 				if(attrType == "addPayAcc"){
 					arraySelect = ["slcTransTypeAcc"];
 				}
@@ -2919,7 +2921,7 @@ function saveAccCont(attrType){
 			trxClass.push($(this).attr('trxclass'));
 		});
 	}
-	var accCode = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accCode');
+	var accCode = $('#tab-CAccounts .active').attr('attr-accCode');
 	var idAccCon = $('#btNewTransAcc').data( 'idAcc' + accCode );
 	showAlert(true,"Saving changes, please wait ....",'progressbar');
 	$.ajax({
@@ -2928,6 +2930,7 @@ function saveAccCont(attrType){
 			accId:idAccCon,
 			trxTypeId:$('#slcTransTypeAcc').val(),
 			trxClassID:$('#slcTrxClassAcc').val(),
+			currency:$("#CurrencyTrxClassAcc").val().trim(),
 			amount:$('#AmountAcc').val(),
 			dueDt:$('#dueDateAcc').val(),
 			doc:$('#documentAcc').val(),
@@ -2955,7 +2958,7 @@ function saveAccCont(attrType){
 }
 
 function getTrxType(url, attrType, errorMsj, funcion, divSelect){
-	var trxType = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accType');
+	var trxType = $('#tab-CAccounts .active').attr('attr-accType');
 	$.ajax({
 		type: "POST",
 		data: {
@@ -3334,10 +3337,7 @@ function drawTableIdOcupacion(data, table){
     selectTableUnico("tableCOccupationSelectedbody");
 
 	$("#"+"tableCOccupationSelected").on("click", "tr", function(){
-    	var year = $(this).find("td").eq(1).text().trim();
-    	var week = $(this).find("td").eq(2).text().trim();
-    	console.log(year);
-    	console.log(week);
+    	showModalDetailWeek();
 	});
 }
 

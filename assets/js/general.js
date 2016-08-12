@@ -341,7 +341,7 @@ function drawTable2(data, table ,funcion, cadena, option){
 	var heightScroll = $('#' + table ).parents(".table").first();
 	heightScroll = heightScroll.height();
 	if(heightScroll == null){
-		heightScroll = 250;
+		heightScroll = 400;
 	}
 	$('#' + table ) .on( 'order.dt',  function (event, a){
 	}).DataTable({

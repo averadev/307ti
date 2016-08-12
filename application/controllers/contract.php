@@ -23,11 +23,6 @@ class Contract extends CI_Controller {
 			$this->load->view('vwContract');
 		}
 	}
-/*$date = new DateTime("2016-08-23");
-$i= 1;
-$date->modify("+".$i." month");
-$fechaActual = $date->format('Y-m-d H:i:s');
-echo $fechaActual;*/
 	public function pruebasContract(){
 		$IDContrato = $_POST['idContrato'];
 		$pagoMensual = $_POST['pagoMensual'];
@@ -122,10 +117,10 @@ private function makeTransactions($idContrato){
 	$this->insertPricetransaction($idContrato);
 	$this->insertExtrastransaction($idContrato);
 	$this->insertESDtransaction($idContrato);
-	$this->insertDownpaymentransaction($idContrato);
+	//$this->insertDownpaymentransaction($idContrato);
 	$this->insertDeposittransaction($idContrato);
 	$this->insertClosingCosttransaction($idContrato);
-	$this->insertPagosDownpayment($idContrato);
+	//$this->insertPagosDownpayment($idContrato);
 	$this->insertScheduledPaymentsTrx($idContrato);
 }
 
@@ -368,7 +363,7 @@ private function insertPricetransaction($idContrato){
 		"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SAL'),
 		"Debit-"		=> 0,
 		"Credit+"		=> 0,
-		"Amount"		=> $this->remplaceFloat($precio),
+		"Amount"		=> $precio,
 		"AbsAmount"		=> 0,
 		"Remark"		=> '', //
 		"Doc"			=> '',
@@ -398,8 +393,8 @@ private function insertExtrastransaction($idContrato){
 		"fkTrxClassID"	=> $classID,
 		"Debit-"		=> $this->remplaceFloat($numero),
 		"Credit+"		=> 0,
-		"Amount"		=> $this->remplaceFloat(abs($precio)), 
-		"AbsAmount"		=> $this->remplaceFloat(abs($precio)),
+		"Amount"		=> abs($precio), 
+		"AbsAmount"		=> abs($precio),
 		"Remark"		=> '', //
 		"Doc"			=> '',
 		"DueDt"			=> $this->getToday(),
@@ -422,8 +417,8 @@ private function insertESDtransaction($idContrato){
 		"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SAL'),
 		"Debit-"		=> $this->remplaceFloat($precio),
 		"Credit+"		=> 0,
-		"Amount"		=> $this->remplaceFloat(abs($precio)), 
-		"AbsAmount"		=> $this->remplaceFloat(abs($precio)),
+		"Amount"		=> abs($precio), 
+		"AbsAmount"		=> abs($precio),
 		"Remark"		=> '', //
 		"Doc"			=> '',
 		"DueDt"			=> $this->getToday(),
@@ -458,6 +453,9 @@ private function insertDownpaymentransaction($idContrato){
 }
 private function insertDeposittransaction($idContrato){
 		$precio = valideteNumber($_POST['deposito']);
+		$closingCost = valideteNumber($_POST['closingCost']);
+		$precio  =  $precio - $closingCost;
+
 		$precio =  -1 * (abs($precio));
 		$transaction = [
 			"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
@@ -465,8 +463,8 @@ private function insertDeposittransaction($idContrato){
 			"fkTrxClassID"	=> $this->contract_db->gettrxClassID('PAY'),
 			"Debit-"		=> $this->remplaceFloat($precio),
 			"Credit+"		=> 0,
-			"Amount"		=> $this->remplaceFloat(abs($precio)), 
-			"AbsAmount"		=> $this->remplaceFloat(abs($precio)),
+			"Amount"		=> abs($precio), 
+			"AbsAmount"		=> abs($precio),
 			"Remark"		=> '', //
 			"Doc"			=> '',
 			"DueDt"			=> $this->getToday(),
@@ -487,7 +485,7 @@ private function insertClosingCosttransaction($idContrato){
 		"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SAL'),
 		"Debit-"		=> 0,
 		"Credit+"		=> 0,
-		"Amount"		=> $this->remplaceFloat($precio), 
+		"Amount"		=> $precio, 
 		"AbsAmount"		=> 0,
 		"Remark"		=> '', //
 		"Doc"			=> '',
@@ -501,6 +499,7 @@ private function insertClosingCosttransaction($idContrato){
 	$this->contract_db->insertReturnId('tblAccTrx', $transaction);
 }
 private function insertPagosDownpayment($idContrato){
+
 	if(!empty($_POST['tablaDownpayment'])){
 			$pagos = sizeof($_POST['tablaDownpayment']);
 		}else{
@@ -511,6 +510,8 @@ private function insertPagosDownpayment($idContrato){
 		
 		for ($i=0; $i < $pagos; $i++) {
 			$precio = valideteNumber($_POST['tablaDownpayment'][$i]["amount"]);
+			$closingCost = valideteNumber($_POST['closingCost']);
+			$precio = $precio - $closingCost;
 			$precio =  -1 * (abs($precio));
 
 			$transaction = [
@@ -519,8 +520,8 @@ private function insertPagosDownpayment($idContrato){
 				"fkTrxClassID"		=> $this->contract_db->gettrxClassID('SCH'),
 				"Debit-"			=> $this->remplaceFloat($precio),
 				"Credit+"			=> 0,
-				"Amount"			=> $this->remplaceFloat(abs($precio)), 
-				"AbsAmount"			=> $this->remplaceFloat(abs($precio)),
+				"Amount"			=> abs($precio), 
+				"AbsAmount"			=> abs($precio),
 				"Remark"			=> '', 
 				"Doc"				=> '',
 				"DueDt"				=> $_POST['tablaDownpayment'][$i]["date"],
@@ -551,8 +552,8 @@ private function insertScheduledPaymentsTrx($idContrato){
 				"fkTrxClassID"		=> $this->contract_db->gettrxClassID('SCH'),
 				"Debit-"			=> 0,
 				"Credit+"			=> 0,
-				"Amount"			=> $this->remplaceFloat($precio), 
-				"AbsAmount"			=> $this->remplaceFloat($precio),
+				"Amount"			=> $precio, 
+				"AbsAmount"			=> $precio,
 				"Remark"			=> '', //
 				"Doc"				=> '',
 				"DueDt"				=> $_POST['tablaPagosProgramados'][$i]["date"],
@@ -676,6 +677,7 @@ public function createNote(){
 					"Remark"			=> $_POST['remark'],
 					"Doc"				=> $_POST['doc'],
 					"DueDt"				=> $_POST['dueDt'],
+					"fkCurrencyId"		=> $this->contract_db->selectIdCurrency($_POST['currency']),
 					"ynActive"			=> 1,
 					"CrBy"				=> $this->nativesessions->get('id'),
 					"CrDt"				=> $this->getToday(),
@@ -995,7 +997,14 @@ public function getFlagsContract(){
 			echo json_encode($trxClass);
 		}
 	}
-
+	public function getCurrency(){
+		if($this->input->is_ajax_request()) {
+			$campos = "CurrencyCode as ID, CurrencyDesc";
+			$tabla = "tblcurrency";
+			$currencies = $this->contract_db->selectTypeGeneral($campos, $tabla);
+			echo json_encode($currencies);
+		}
+	}
 	public function getFilesContract(){
 		if($this->input->is_ajax_request()) {
 			$file = $this->contract_db->getFilesContract($_POST['idRes']);
@@ -1137,6 +1146,7 @@ public function getFlagsContract(){
 			$data['idTour'] = $this->contract_db->selectIdTour($id);
 			$data['contract']= $this->contract_db->getContratos2(null,$id);
 			$data['flags'] = $this->contract_db->selectFlags($id);
+			$data['encabezado'] = $this->contract_db->selectEncabezado($id);
 			$this->load->view('contracts/contractDialogEdit', $data);
 		}
 	}
