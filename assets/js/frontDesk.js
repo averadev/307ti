@@ -79,11 +79,11 @@ $(function() {
 	dateDeparture = $("#dateDepartureFront").data('Zebra_DatePicker');
 	dateYear = $("#dateYearFront").data('Zebra_DatePicker');
 	dateUnitHK = $("#dateHKConfig").data('Zebra_DatePicker');
-	//dateHKLookUp = $("#dateHKLookUp").data('Zebra_DatePicker');
+	dateHKLookUp = $("#dateHKLookUp").data('Zebra_DatePicker');
 	//$('#dateArrivalFront').val("04/13/2016");
 	$('#dateArrivalFront').val(getCurrentDate());
-	//$('#dateHKConfig').val(getCurrentDate());
-	$('#dateHKLookUp').val(getCurrentDate());
+	$('#dateHKConfig').val(getCurrentDate());
+	//$('#dateHKLookUp').val(getCurrentDate());
 	$('#dateArrivalReport').val(getCurrentDate());
 	
 	FloorplanFD =  $('#textFloorPlanHKConfig').multipleSelect({
@@ -413,6 +413,7 @@ function createTableLookUp(data){
 	
 	var existMoth = "";
 	var existYear = "";
+	console.log(items)
 	
 	for (var j in dates) {
 		if(existYear != dates[j].year ){
@@ -488,6 +489,84 @@ function createTableLookUp(data){
 	$('.emptyUnitsFront').on('click', function(){ showNewReservation(this); });
 	
 	initializeTooltips('.Tooltips');
+	
+	/*$('.showReservation').off();
+			var headYearHTML = "";
+			var headMonthHTML = "";
+			var headHTML = "";
+			var dates = data.dates;
+			var items = data.items;
+			
+			var existMoth = "";
+			var existYear = "";
+			for (var j in dates) {
+				
+				if(existYear != dates[j].year ){
+					headYearHTML = "<th colspan='1' id='thYear" + dates[j].year + "' class='rightPanel'>"+dates[j].year+"</th>";
+					existYear = dates[j].year;
+					$('#tableFrontDesk .gHeaderYear').append(headYearHTML);
+				}else{
+					var colspan = $('#thYear' + dates[j].year ).attr('colspan');
+					$('#thYear' + dates[j].year ).attr('colspan', (parseInt(colspan) + 1));
+				}
+				
+				if(existMoth != dates[j].month ){
+					headMonthHTML = "<th colspan='1' id='thMonth" + dates[j].month + "' class='rightPanel'>"+dates[j].month+"</th>";
+					existMoth = dates[j].month;
+					$('#tableFrontDesk .gHeaderMonth').append(headMonthHTML);
+				}else{
+					var colspan = $('#thMonth' + dates[j].month ).attr('colspan');
+					$('#thMonth' + dates[j].month ).attr('colspan', (parseInt(colspan) + 1));
+				}
+				
+				headHTML+="<th id='"+dates[j].pkCalendarId+"' class='rightPanel'>"+dates[j].day+"</th>";
+			}
+			
+			$('#tableFrontDesk .gHeaderDay').append(headHTML);
+			
+			var bodyHTML = "";
+			for(i=0;i<items.length;i++){
+				
+				var item = items[i]
+				bodyHTML = "<tr id='tr" + i + "'>";
+				bodyHTML+="<td nowrap class='panelLeft'>"+item.type+"</th>";
+				bodyHTML+="<td nowrap class='panelLeft' >"+item.unit+"</th>";
+				bodyHTML+="<td nowrap class='panelLeft' >"+item.status+"</th>";
+				bodyHTML+="<td nowrap title='" + item.viewDesc + "' class='panelLeft last Tooltips'>"+item.view+"</th>";
+				bodyHTML += "</tr>";
+				$('#tableFrontDesk tbody').append(bodyHTML);
+				
+				for(j = 0;j<dates.length;j++){
+					bodyHTML="<td class='rightPanel' id='" + i + "-" + dates[j].pkCalendarId + "'></td>";
+					$('#tableFrontDesk tbody #tr' + i).append(bodyHTML);
+				}
+				
+				for(k = 0;k<items[i].values.length;k++){
+					var values = items[i].values[k]
+					var valueToolTip = {Confirmation:values.ResConf, Room:item.unit, Guest:values.people, Arrival:values.dateFrom, Departure:values.dateTo};
+					var vToolTip = JSON.stringify(valueToolTip);
+					var exist = false;
+					
+					for(j = 0;j<dates.length;j++){
+						var totaltd = (values.to - values.from) + 1;
+						if(dates[j].pkCalendarId >= values.from && dates[j].pkCalendarId <= values.to){
+							if(exist == false){
+								$('#' + + i + "-" + dates[j].pkCalendarId).attr('colspan',totaltd);
+								$('#' + + i + "-" + dates[j].pkCalendarId).attr('titleCustom',vToolTip);
+								$('#' + + i + "-" + dates[j].pkCalendarId).attr('reservation',1);
+								$('#' + + i + "-" + dates[j].pkCalendarId).attr('class',values.occType + " rightPanel Tooltips showReservation");
+								$('#' + + i + "-" + dates[j].pkCalendarId).text(values.people);
+								exist = true;
+							}else{
+								$('#' + + i + "-" + dates[j].pkCalendarId).remove();
+							}
+						}
+					}
+				}
+			}
+			
+			$('.showReservation').on('click', function(){ showReservation() });
+			initializeTooltips('.Tooltips');*/
 }
 
 function showHKConfiguration(id){
@@ -500,18 +579,10 @@ function showHKConfiguration(id){
 		url: "frontDesk/getHKConfigurationById",
 		dataType:'json',
 		success: function(data){
-			console.log(data)
 			if(data.items.length > 0){
 				var item = data.items[0];
 				$('.rowSpace').remove();
 				$('#textSectionHKC').val(item.Section);
-				/*while(true){
-					if( $('#SltServiceTypeHKC option').length != 0 ){
-						$('#SltServiceTypeHKC').val(item.fkHKServiceTypeId);
-						break;
-					}
-				}*/
-				$('#SltServiceTypeHKC').val(item.fkHKServiceTypeId);
 				var rowSelect = [];
 				var row = [item.MaidId, item.MaidName, item.MaidLName];
 				rowSelect.push(row);
@@ -520,12 +591,12 @@ function showHKConfiguration(id){
 				var row = [item.SuperId, item.SuperName, item.SuperLName];
 				rowSelect.push(row);
 				tableSelectHKC(rowSelect,"tablePeople","tablePeopleSupeSelectedHKC");
-				//$('#SltServiceTypeHKC').val(item.fkHKServiceTypeId);
+				$('#SltServiceTypeHKC').val(item.fkHKServiceTypeId);
 				var rowSelect = [];
 				var row = [item.pkUnitId, item.UnitCode, item.FloorPlanDesc, item.PropertyName];
 				rowSelect.push(row);
 				tableSelectHKC(rowSelect,"tblUnitHKC","tableUnitsSelectedHKC");
-				
+				$('#SltServiceTypeHKC').val(item.fkHKServiceTypeId);
 			}
 			showLoading('#dialog-HKConfig',false);
 			
@@ -1082,7 +1153,7 @@ function generateReportFrontDesk(){
 	var words = null;
 	var options = null;
 	var url = "";
-	var section = $('#typeSearchFrontDesk').val();
+	var section = $('.SectionFrontDesk:checked').val();
 	
 	if(section == "section4"){
 		filters = getFiltersCheckboxs('statusHKLookUp');
@@ -1103,13 +1174,10 @@ function generateReportFrontDesk(){
 	words = JSON.stringify(words);
 	options = JSON.stringify(options);
 	
-	
-	
 	url += "&filters=" + filters;
 	url += "&dates=" + dates;
 	url += "&words=" + words;
 	url += "&options=" + options;
-	
 	createExcel(url)
 	
 }

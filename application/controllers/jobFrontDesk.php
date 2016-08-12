@@ -34,7 +34,7 @@ class JobFrontDesk extends CI_Controller {
 				$status = $item->hkstatus;
 			}*/
 			if( ( $item->hkstatus == 1 && $item->hkDirty == 1 ) or is_null( $item->hkstatus ) == true ){
-				echo $item->pkUnitId . " and " . $item->hkstatus . "</br>";
+				//echo $item->pkUnitId . " and " . $item->hkstatus . "</br>";
 				$insert = array(
 					'fkUnitId' 			=> $item->pkUnitId,
 					'fkHkStatusId'		=> 2,
@@ -48,7 +48,7 @@ class JobFrontDesk extends CI_Controller {
 					'fkCalendarID' 		=> $calendar[0]->pkCalendarId,
 					'fkOccStatusID' 	=> 3,
 				);
-				//$this->frontDesk_db->insert( $insert, 'tblUnitHKStatus' );
+				$this->frontDesk_db->insert( $insert, 'tblUnitHKStatus' );
 			}
 		}
 	}
