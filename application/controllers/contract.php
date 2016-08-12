@@ -42,8 +42,8 @@ echo $fechaActual;*/
 				"fkTrxClassID"		=> 1,//$_POST['trxClassID'], // vendedor
 				"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
 				"Credit+"			=> 0,	//si es positivo se inserta credit
-				"Amount"			=> $_POST['pagoMensual'], //cantidad
-				"AbsAmount"			=> $_POST['pagoMensual'], //cantidad se actualiza
+				"Amount"			=> $this->remplaceFloat($_POST['pagoMensual']), //cantidad 70,555
+				"AbsAmount"			=> $this->remplaceFloat($_POST['pagoMensual']), //cantidad se actualiza
 				"Remark"			=> '', //
 				"Doc"				=> '',
 				"DueDt"				=> $fechaActual,
@@ -280,23 +280,23 @@ private function insertFinanciamiento($idContrato){
 		"fkResId"                   => $idContrato,
 		"fkFinMethodId"    			=> $this->contract_db->selectIdMetodoFin('RG'),
 		"fkFactorId"              	=> 0,
-		"ListPrice"             	=> $_POST['listPrice'],
-		"SpecialDiscount"           => $_POST['specialDiscount'],
+		"ListPrice"             	=> $this->remplaceFloat($_POST['listPrice']),
+		"SpecialDiscount"           => $this->remplaceFloat($_POST['specialDiscount']),
 		"SpecialDiscount%"          => $porcentaje,
 		"CashDiscount"             	=> $_POST['specialDiscount'],
-		"CashDiscount%"         	=> $porcentaje,
-		"NetSalePrice"              => $_POST['salePrice'],
-		"Deposit"              		=> $_POST['downpayment'],
-		"TransferAmt"               => $_POST['amountTransfer'],
-		"PackPrice"                 => $_POST['packPrice'],
-		"FinanceBalance"            => $balanceFinal,
-		"TotalFinanceAmt"           => $balanceFinal,
-		"DownPmtAmt"            	=> $_POST['downpayment'],
-		"DownPmt%"           		=> $porEnganche,
+		"CashDiscount%"         	=> $this->remplaceFloat($porcentaje),
+		"NetSalePrice"              => $this->remplaceFloat($_POST['salePrice']),
+		"Deposit"              		=> $this->remplaceFloat($_POST['downpayment']),
+		"TransferAmt"               => $this->remplaceFloat($_POST['amountTransfer']),
+		"PackPrice"                 => $this->remplaceFloat($_POST['packPrice']),
+		"FinanceBalance"            => $this->remplaceFloat($balanceFinal),
+		"TotalFinanceAmt"           => $this->remplaceFloat($balanceFinal),
+		"DownPmtAmt"            	=> $this->remplaceFloat($_POST['downpayment']),
+		"DownPmt%"           		=> $this->remplaceFloat($porEnganche),
 		"MonthlyPmtAmt"            	=> 0,
-		"BalanceActual"           	=> $balanceFinal,
+		"BalanceActual"           	=> $this->remplaceFloat($balanceFinal),
 		"ynClosingfee"            	=> 1,
-		"ClosingFeeAmt"           	=> $_POST['closingCost'],
+		"ClosingFeeAmt"           	=> $this->remplaceFloat($_POST['closingCost']),
 		"OtherFeeAmt"           	=> 0,
 		"ynReFin"           		=> false,
 		"ynAvailable"           	=> 1,
@@ -312,7 +312,7 @@ public function updateFinanciamiento(){
 		$IDContrato = $_POST['idContrato'];
 		$financiamiento = [
 			"fkFactorId"	=> $_POST['factor'],
-			"MonthlyPmtAmt" => $_POST['pagoMensual']
+			"MonthlyPmtAmt" => $this->remplaceFloat($_POST['pagoMensual'])
 		];
 		$condicion = "fkResId = " . $IDContrato;
 		$afectados = $this->contract_db->updateReturnId('tblResfin', $financiamiento, $condicion);
@@ -342,8 +342,8 @@ private function insertTransaccionesCredito(){
 			"fkTrxClassID"		=> $this->contract_db->gettrxClassID('LOA'),//$_POST['trxClassID'], // vendedor
 			"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
 			"Credit+"			=> 0,	//si es positivo se inserta credit
-			"Amount"			=> $_POST['pagoMensual'], //cantidad
-			"AbsAmount"			=> $_POST['pagoMensual'], //cantidad se actualiza
+			"Amount"			=> $this->remplaceFloat($_POST['pagoMensual']), //cantidad
+			"AbsAmount"			=> $this->remplaceFloat($_POST['pagoMensual']), //cantidad se actualiza
 			"Remark"			=> '', //
 			"Doc"				=> '',
 			"DueDt"				=> $fechaActual,//date('Y-m-d', strtotime("+".$i." month")), //fecha a pagar --fecha vencimiento
@@ -368,7 +368,7 @@ private function insertPricetransaction($idContrato){
 		"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SAL'),
 		"Debit-"		=> 0,
 		"Credit+"		=> 0,
-		"Amount"		=> $precio,
+		"Amount"		=> $this->remplaceFloat($precio),
 		"AbsAmount"		=> 0,
 		"Remark"		=> '', //
 		"Doc"			=> '',
@@ -396,10 +396,10 @@ private function insertExtrastransaction($idContrato){
 		"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 		"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('EXC'),
 		"fkTrxClassID"	=> $classID,
-		"Debit-"		=> $numero,
+		"Debit-"		=> $this->remplaceFloat($numero),
 		"Credit+"		=> 0,
-		"Amount"		=> abs($precio), 
-		"AbsAmount"		=> abs($precio),
+		"Amount"		=> $this->remplaceFloat(abs($precio)), 
+		"AbsAmount"		=> $this->remplaceFloat(abs($precio)),
 		"Remark"		=> '', //
 		"Doc"			=> '',
 		"DueDt"			=> $this->getToday(),
@@ -420,10 +420,10 @@ private function insertESDtransaction($idContrato){
 		"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 		"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('sDisc'),
 		"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SAL'),
-		"Debit-"		=> $precio,
+		"Debit-"		=> $this->remplaceFloat($precio),
 		"Credit+"		=> 0,
-		"Amount"		=> abs($precio), 
-		"AbsAmount"		=> abs($precio),
+		"Amount"		=> $this->remplaceFloat(abs($precio)), 
+		"AbsAmount"		=> $this->remplaceFloat(abs($precio)),
 		"Remark"		=> '', //
 		"Doc"			=> '',
 		"DueDt"			=> $this->getToday(),
@@ -463,10 +463,10 @@ private function insertDeposittransaction($idContrato){
 			"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('DEP'),
 			"fkTrxClassID"	=> $this->contract_db->gettrxClassID('PAY'),
-			"Debit-"		=> $precio,
+			"Debit-"		=> $this->remplaceFloat($precio),
 			"Credit+"		=> 0,
-			"Amount"		=> abs($precio), 
-			"AbsAmount"		=> abs($precio),
+			"Amount"		=> $this->remplaceFloat(abs($precio)), 
+			"AbsAmount"		=> $this->remplaceFloat(abs($precio)),
 			"Remark"		=> '', //
 			"Doc"			=> '',
 			"DueDt"			=> $this->getToday(),
@@ -487,7 +487,7 @@ private function insertClosingCosttransaction($idContrato){
 		"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SAL'),
 		"Debit-"		=> 0,
 		"Credit+"		=> 0,
-		"Amount"		=> $precio, 
+		"Amount"		=> $this->remplaceFloat($precio), 
 		"AbsAmount"		=> 0,
 		"Remark"		=> '', //
 		"Doc"			=> '',
@@ -517,10 +517,10 @@ private function insertPagosDownpayment($idContrato){
 				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato), 
 				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('SCP'),
 				"fkTrxClassID"		=> $this->contract_db->gettrxClassID('SCH'),
-				"Debit-"			=> $precio,
+				"Debit-"			=> $this->remplaceFloat($precio),
 				"Credit+"			=> 0,
-				"Amount"			=> abs($precio), 
-				"AbsAmount"			=> abs($precio),
+				"Amount"			=> $this->remplaceFloat(abs($precio)), 
+				"AbsAmount"			=> $this->remplaceFloat(abs($precio)),
 				"Remark"			=> '', 
 				"Doc"				=> '',
 				"DueDt"				=> $_POST['tablaDownpayment'][$i]["date"],
@@ -551,8 +551,8 @@ private function insertScheduledPaymentsTrx($idContrato){
 				"fkTrxClassID"		=> $this->contract_db->gettrxClassID('SCH'),
 				"Debit-"			=> 0,
 				"Credit+"			=> 0,
-				"Amount"			=> $precio, 
-				"AbsAmount"			=> $precio,
+				"Amount"			=> $this->remplaceFloat($precio), 
+				"AbsAmount"			=> $this->remplaceFloat($precio),
 				"Remark"			=> '', //
 				"Doc"				=> '',
 				"DueDt"				=> $_POST['tablaPagosProgramados'][$i]["date"],
@@ -1349,6 +1349,10 @@ public function getFlagsContract(){
     		}
 		}
 		return false;
+	}
+	
+	private function remplaceFloat($valor){
+		return str_replace(",", ".", $valor);
 	}
 	
 }
