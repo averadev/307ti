@@ -134,9 +134,9 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->select('P.pkPeopleId as ID, RTRIM(P.Name) as Name, RTRIM(P.LName) AS lastName');
         $this->db->select('RTRIM(AD.Street1) as address, PC.ynPrimaryPeople, PC.YnBenficiary');
         $this->db->from('tblResPeopleAcc PC');
-        $this->db->join('tblPeople P', 'P.pkPeopleId = PC.fkPeopleId');
-        $this->db->join('tblPeopleAddress PAD', 'PAD.fkPeopleId = P.pkPeopleId');
-        $this->db->join('tblAddress AD', 'AD.pkAddressid = PAD.fkAddressId');
+        $this->db->join('tblPeople P', 'P.pkPeopleId = PC.fkPeopleId', 'left');
+        $this->db->join('tblPeopleAddress PAD', 'PAD.fkPeopleId = P.pkPeopleId', 'left');
+        $this->db->join('tblAddress AD', 'AD.pkAddressid = PAD.fkAddressId', 'left');
         $this->db->where('fkResId', $string);
         $this->db->order_by('ID', 'DESC');
         $query = $this->db->get();
@@ -301,7 +301,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
     }
 	
 	public function getTerminosVentaReservation($id){
-        $this->db->select("R.ListPrice, R.PackPrice, R.Deposit, R.ClosingFeeAmt, R.NetSalePrice");
+        $this->db->select("R.ListPrice, R.PackPrice, R.SpecialDiscount, R.Deposit, R.ClosingFeeAmt, R.NetSalePrice");
         $this->db->select("R.TransferAmt, R.BalanceActual, RI.WeeksNumber");
         $this->db->from("tblResFin R");
         $this->db->join('tblResInvt RI', 'R.fkResId = RI.fkResId', 'inner');
@@ -314,8 +314,9 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
     }
 
     public function getTerminosFinanciamiento($id){
-        $this->db->select("R.FinanceBalance, R.MonthlyPmtAmt, R.DownPmt% as porcentaje , R.TotalFinanceAmt");
+        $this->db->select("R.FinanceBalance, R.MonthlyPmtAmt, R.DownPmt% as porcentaje , R.TotalFinanceAmt,F.FactorDesc");
         $this->db->from("tblResFin R");
+        $this->db->join('tblFactor F', 'R.fkFactorId = F.pkFactorId', 'left');
         $this->db->where('R.fkResId', $id);
         $query = $this->db->get();
         if($query->num_rows() > 0 )

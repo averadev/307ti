@@ -1375,13 +1375,6 @@ function modalEditReservation(id){
      	width: "75%",
      	modal: true,
      	buttons: [
-     // 	{
-	    //    	text: "Cancel",
-	    //    	"class": 'dialogModalButtonCancel',
-	    //    	click: function() {
-	    //      	$(this).dialog('close');
-	    //    }
-	   	// },
 	   	{
        		text: "Close",
        		"class": 'dialogModalButtonAccept',
@@ -2030,12 +2023,27 @@ function getDatosReservation(id){
 	    url: "reservation/getDatosReservationById",
 	    dataType:'json',
 	    success: function(data){
-	    	drawTableSinHeadReservation(data["peoples"], "peoplesReservation");
-	    	drawTableSinHeadReservation(data["unities"], "tableUnidadesReservation");
-	    	drawTerminosVentaRes(data["terminosVenta"][0]);
-	    	drawTerminoFinanciamientoRes(data["terminosFinanciamiento"][0]);
-			var contraTemp = data["reservation"][0];
-			$('td.folioAccount').text(contraTemp.Folio);
+			
+	
+			var c = parseFloat(data['CollectionCost']);
+	    	$("#CollectionCostRes").text(c);
+			if(data["peoples"].length > 0){
+				drawTableSinHeadReservation(data["peoples"], "peoplesReservation");
+			}
+	    	if(data["unities"].length > 0){
+				drawTableSinHeadReservation(data["unities"], "tableUnidadesReservation");
+			}
+	    	if(data["terminosFinanciamiento"].length > 0){
+				drawTerminoFinanciamientoRes(data["terminosFinanciamiento"][0]);
+			}
+			if(data["terminosVenta"].length > 0){
+				drawTerminosVentaRes(data["terminosVenta"][0]);
+			}
+			var contraTemp = 0;
+			if(data["reservation"].length > 0){
+				contraTemp = data["reservation"][0];
+				$('td.folioAccount').text(contraTemp.Folio);
+			}
 			setHeightModal('dialog-Edit-Reservation');
 			addFunctionalityRes();
 	    },
@@ -2059,7 +2067,6 @@ function tableOnclickRes(id){
 }
 
 function getAccountsRes( id, typeInfo, typeAcc ){
-	console.log(id)
 	$.ajax({
 	    data:{
 	        idReservation: id,
@@ -2149,7 +2156,8 @@ function setTableAccountRes(items, table){
 function drawTerminosVentaRes(data){
 	var price = parseFloat(data.ListPrice).toFixed(2);
 	var semanas = data.WeeksNumber;
-	var packReference = parseFloat(data.PackPrice).toFixed(2);
+	//var packReference = parseFloat(data.PackPrice).toFixed(2);
+	var SpecialDiscount = parseFloat(data.SpecialDiscount);
 	var salePrice = parseFloat(data.NetSalePrice).toFixed(2);
 	var enganche = parseFloat(data.Deposit).toFixed(2);
 	var transferido = parseFloat(data.TransferAmt).toFixed(2);
@@ -2157,28 +2165,34 @@ function drawTerminosVentaRes(data){
 	var packAmount = parseFloat(data.PackPrice).toFixed(2);
 	var balanceFinal = parseFloat(data.BalanceActual).toFixed(2);
 
-
-	$("#cventaPrice").text(price);
-	$("#cventaWeeks").text(semanas);
-	$("#cventaPackR").text(packReference);
-	$("#cventaSalePrice").text(salePrice);
-	$("#cventaHitch").text(enganche);
-	$("#cventaTransferA").text(transferido);
-	$("#cventaCostContract").text(costoContract);
-	$("#cventapackAmount").text(packAmount);
-	$("#cventaFinanced").text(balanceFinal);
-	$("#cventaAmountTransfer").text(enganche + transferido);
+	$("#cventaPriceRes").text(price);
+	$("#cventaWeeksRes").text(semanas);
+	//$("#cventaPackRRes").text(packReference);
+	$("#cventaSalePriceRes").text(salePrice);
+	$("#cventaHitchRes").text(enganche);
+	$("#cventaTransferARes").text(transferido);
+	$("#cventaCostContractRes").text(costoContract);
+	$("#cventapackAmountRes").text(packAmount);
+	$("#cventaFinancedRes").text(balanceFinal);
+	//$("#cventaAmountTransfer").text(enganche + transferido);
+	
+	
+	
+	
 }
 
 function drawTerminoFinanciamientoRes(data){
 	var balanceFinal  = data.FinanceBalance;
 	var pagoMensual = data.MonthlyPmtAmt;
 	var porEnganche = data.porcentaje;
-	//var balanceFinal = data.TotalFinanceAmt;
+	var balanceFinal = data.TotalFinanceAmt;
 
-	$("#cfbalanceFinanced").text(balanceFinal);
-	$("#cfPagoMensual").text(pagoMensual);
-	$("#cfEnganche").text(porEnganche);
+	$("#cfbalanceFinancedRes").text(balanceFinal);
+	$("#cfPagoMensualRes").text(pagoMensual);
+	$("#cfEngancheRes").text(porEnganche);
+	$("#typeFinanceRes").text(data.FactorDesc);
+	$("#totalFoundingRes").text(balanceFinal);
+	$("#totalMonthlyPaymentRes").text(pagoMensual);
 
 }
 
@@ -2346,7 +2360,7 @@ function setUnitiesContractPrueba(){
 	    url: "contract/createSemanaOcupacion",
 	    dataType:'json',
 	    success: function(data){
-	    	//drawTableSinHead(data, "tableUnidadesContract");
+	    	//drawTableSinHeadReservation(data, "tableUnidadesContract");
 	    },
 	    error: function(){
 	        alertify.error("Try again");

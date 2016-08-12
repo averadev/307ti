@@ -819,7 +819,8 @@ class Reservation extends CI_Controller {
 				"peoples" => $this->reservation_db->getPeopleReservation($id),
 				"unities" => $this->reservation_db->getUnitiesReservation($id),
 				"terminosVenta" => $this->reservation_db->getTerminosVentaReservation($id),
-				"terminosFinanciamiento" => $this->reservation_db->getTerminosFinanciamiento($id)
+				"terminosFinanciamiento" => $this->reservation_db->getTerminosFinanciamiento($id),
+				"CollectionCost" => $this->reservation_db->selectCostCollection()
 			];
 			echo json_encode($datos);
 		}

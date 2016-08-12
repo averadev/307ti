@@ -82,9 +82,9 @@ $(function() {
 	dateHKLookUp = $("#dateHKLookUp").data('Zebra_DatePicker');
 	//$('#dateArrivalFront').val("04/13/2016");
 	$('#dateArrivalFront').val(getCurrentDate());
-	$('#dateHKConfig').val(getCurrentDate());
+	//$('#dateHKConfig').val(getCurrentDate());
 	//$('#dateHKLookUp').val(getCurrentDate());
-	$('#dateArrivalReport').val(getCurrentDate());
+	//$('#dateArrivalReport').val(getCurrentDate());
 	
 	FloorplanFD =  $('#textFloorPlanHKConfig').multipleSelect({
 		width: '100%',
@@ -398,6 +398,9 @@ function showSection(section){
 	$('#paginationHKLookUp').hide();
 	$('#section-frontDesk .sectionFrontDesk, #section-frontDesk .tableSection').hide();
 	$('#section-frontDesk .' + section).toggle(500);
+	if( section == "section3" ){
+		getFrontDesk("",1);
+	}
 }
 
 function createTableLookUp(data){

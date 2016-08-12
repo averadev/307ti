@@ -158,33 +158,33 @@
 						<tbody>
 							<tr>
 								<td>Price</td>
-								<td id="cventaPrice">$00.00</td>
+								<td id="cventaPriceRes">$00.00</td>
 								<td>Number of weeks</td>
-								<td id="cventaWeeks"></td>
+								<td id="cventaWeeksRes"></td>
 							</tr>
 							<tr>
 								<td>Discount</td>
-								<td id="cventaPackR">$00.00</td>
+								<td id="cventaPackRRes">$00.00</td>
 								<td>Sale price</td>
-								<td id="cventaSalePrice">$00.00</td>
+								<td id="cventaSalePriceRes">$00.00</td>
 							</tr>
 							<tr>
 								<td>Deposit</td>
-								<td id="cventaHitch">$00.00</td>
+								<td id="cventaHitchRes">$00.00</td>
 								<td>Transferred amount</td>
-								<td id="cventaTransferA">$00.00</td>
+								<td id="cventaTransferARes">$00.00</td>
 							</tr>
 							<tr>
 								<td>Cost contract</td>
-								<td id="cventaCostContract">$00.00</td>
+								<td id="cventaCostContractRes">$00.00</td>
 								<td>Hook amount transferred more</td>
 								<td id="cventaAmountTransfer">$000,000.00</td>
 							</tr>
 							<tr>
 								<td>Pack amount</td>
-								<td id="cventapackAmount">$000,000.00</td>
+								<td id="cventapackAmountRes">$000,000.00</td>
 								<td>Balance to be financed</td>
-								<td id="cventaFinanced">$00.00</td>
+								<td id="cventaFinancedRes">$00.00</td>
 							</tr>
 						</tbody>
 					</table>
@@ -201,31 +201,31 @@
 					<table class="tableAccountResult">
 						<thead>
 							<tr class="trColspan">
-								<th colspan="4">Results</th>
+								<th colspan="4" class="colorCrema">Results</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>Balance to be Financed</td>
-								<td id="cfbalanceFinanced">$00.00</td>
-								<td>Type of funding</td>
-								<td>$00.00</td>
+								<td>Balance to Finance</td>
+								<td id="cfbalanceFinancedRes">$00.00</td>
+								<td>Type of Finance</td>
+								<td id="typeFinanceRes"></td>
 							</tr>
 							<tr>
-								<td>Monthly payment</td>
-								<td id="cfPagoMensual">$00.00</td>
-								<td>Cost collection</td>
-								<td>$000,000.00</td>
+								<td>Monthly Payment</td>
+								<td id="cfPagoMensualRes">$00.00</td>
+								<td>Collection Cost</td>
+								<td id="CollectionCostRes"></td>
 							</tr>
 							<tr>
-								<td>% Hitch</td>
-								<td id="cfEnganche">$00.00</td>
+								<td>% Discount</td>
+								<td id="cfEngancheRes">$00.00</td>
 								<td>Total funding</td>
-								<td>$000,000.00</td>
+								<td id="totalFoundingRes"></td>
 							</tr>
 							<tr>
-								<td>Total monthly payment</td>
-								<td>$000,000.00</td>
+								<td>Total Monthly Payment</td>
+								<td id="totalMonthlyPaymentRes"></td>
 							</tr>
 						</tbody>
 					</table>
