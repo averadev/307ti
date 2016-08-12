@@ -69,64 +69,34 @@ echo $fechaActual;*/
 
 		if($this->input->is_ajax_request()){	
 			ini_set('max_execution_time', 120);
-
-			/***
-
-				$this->db->trans_begin();
-
-				$this->db->query('AN SQL QUERY...');
-				$this->db->query('ANOTHER QUERY...');
-				$this->db->query('AND YET ANOTHER QUERY...');
-
-				if ($this->db->trans_status() === FALSE)
-				{
-				        $this->db->trans_rollback();
-				}
-				else
-				{
-				        $this->db->trans_commit();
-				}
-				try {
-
-				    // Code that might trigger the exception.
-
-				} catch (Exception $exception) {
-
-				    // Code to handle the exception.
-
-				}
-			***/
-
-
+			$VALIDO =[
+				"status" => true
+			];
 			$Contrato = isValidateContract();
 			if ($Contrato['valido']) {
 				$idContrato = $this->createContract();
 				$this->insertContratoOcupacion($idContrato);
 				$acc = $this->createAcc();
-
 				$idContrato = $this->createContract();
 				$this->insertContratoOcupacion($idContrato);
 				$acc = $this->createAcc();
-				
-				if ($_POST['card']) {
-					$Tarjeta = isValidateCreditCard();
-					if ($Tarjeta['valido']) {
-						$this->insertTarjeta($idContrato, $acc);
-					}else{
-						$this->db->delete('tblRes', array('pkResId' => $idContrato));
-						$this->db->delete('tblRes', array('pkResRelatedId' => $idContrato));
-						echo  json_encode([
-							"mensaje" => $Tarjeta['mensajes'],
-							"status" => 0
-						]);
-					}
-				}
 				$this->insertPeoples($idContrato, $acc);
 				$this->makeTransactions($idContrato);
 				$this->createUnidades($idContrato);
 				$this->createGifts($idContrato);
 				$balanceFinal = $this->insertFinanciamiento($idContrato);
 				$this->createSemanaOcupacion($idContrato);
+				if ($_POST['card']) {
+					$Tarjeta = isValidateCreditCard();
+					if ($Tarjeta['valido']) {
+						$this->insertTarjeta($idContrato, $acc);
+					}else{
+						echo  json_encode([
+							"mensaje" => $Tarjeta['mensajes'],
+							"status" => 0
+						]);
+					}
+				}
 				echo  json_encode([
 					"mensaje" => 'Contract Save',
 					"balance" => $this->contract_db->selectPriceFin($idContrato)[0],
@@ -136,9 +106,10 @@ echo $fechaActual;*/
 				
 
 			}else{
+				$VALIDO['status'] = false;
 				echo  json_encode([
 					"mensaje" => $Contrato['mensajes'],
-					"status" => 0
+					"status" => $VALIDO['status'],
 					]);
 			}
 		}
