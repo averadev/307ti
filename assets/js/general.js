@@ -293,21 +293,26 @@ function drawTable2(data, table ,funcion, cadena, option){
 		tabla.destroy();
 	}
 	
+	
+	
 	var headHTML = "<tr>";
 	if(funcion != false){ 
 		headHTML += "<th>"+cadena+"</th>";
 	}
     var bodyHTML = '';
 	
+	if( option != false ){
+		if(option.type == "input"){
+			console.log(option.title)
+			 headHTML+="<th>"+option.title+"</th>";
+		}
+	}
+	
     //creación de la cabecera
 	for (var j in data[0]) {
         headHTML+="<th>"+j+"</th>";
     }
-	if( option != false ){
-		if(option.type == "input"){
-			 headHTML+="<th>"+option.title+"</th>";
-		}
-	}
+	
 	
 	headHTML += "</tr>";
     //creación del body
@@ -316,9 +321,6 @@ function drawTable2(data, table ,funcion, cadena, option){
 		if(funcion != false){
 			bodyHTML += '<td class="iconEdit" nowrap onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
 		}
-        for (var j in data[i]) {
-            bodyHTML+="<td nowrap>" + data[i][j] + "</td>";
-        };
 		
 		if( option != false ){
 			if(option.type == "input"){
@@ -330,6 +332,12 @@ function drawTable2(data, table ,funcion, cadena, option){
 				bodyHTML+='<td nowrap><input name="' + option.name + '" type="checkbox" id="'+idOption+'" class="' + option.name + '" value="'+idOption+'"><label>&nbsp;</label></td>';
 			}
 		}
+		
+        for (var j in data[i]) {
+            bodyHTML+="<td nowrap>" + data[i][j] + "</td>";
+        };
+		
+		
 		
         bodyHTML+="</tr>";
     }

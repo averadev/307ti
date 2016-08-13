@@ -19,13 +19,14 @@
 				<div class="row">
 					<div class="small-12 medium-12 large-3 columns">
 						<fieldset class="large-12 columns fieldsetFilter" Id="sectionFilter" >
-							<legend class="legendSearch">Choose the type search</legend>
+							<legend class="legendSearch">Choose de Search Type</legend>
 							<!-- Type of Availability -->
 							<select id="typeSearchFrontDesk" class="txtSearch input-group-field round">
 								<option value="section1">Front Desk Look Up</option>
 <!-- 								<option value="section2">Housekeeping Job Config</option> -->
 								<option value="section3">Housekeeping Configuration</option>
 								<option value="section4">Housekeeping Lookup</option>
+								<option value="section6">Exchange Rate</option>
 								<option value="section5">Report</option>
 							</select>
 						</fieldset>
@@ -78,7 +79,7 @@
 									<label id="alertYearFront" class="text-left">Year
 										<div class="input-group date" id="" >
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-											<input type="text" id="dateYearFront" class="txtSearch input-group-field roundRight" readonly/>
+											<input type="text" id="dateYearFront" box="textIntervalFront" class="txtSearch input-group-field roundRight" readonly/>
 										</div>
 									</label>
 								</div>
@@ -267,7 +268,7 @@
 									</label>
 								</div>
 								<div class="small-12 large-3 columns">
-									<label id="alertIntervalFront" class="text-left">Interval
+									<label id="alertIntervalFront" class="text-left">Service type
 										<div class="caja" >
 											<select id="ServiceTypeLookUp" class="txtSearch input-group-field round">
 												<option value="0">Select a Service Type</option>
@@ -380,6 +381,54 @@
 						</fieldset>
 					</div>
 				</div>
+				
+				<div class="row sectionFrontDesk section6" style="display:none;">
+					<div class="small-12 medium-12 large-12 columns">
+						<!-- text Field dates -->
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row">
+								<!-- Arrival Date -->
+								<div class="small-12 large-3 columns">
+									<label id="alertArrivalFront" class="text-left">Arrival Date
+										<div class="input-group date" id="frontArrivalDate" >
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="dateArrivalExchange" class="txtSearch input-group-field roundRight" readonly/>
+										</div>
+									</label>
+								</div>
+								<!-- Departure Date -->
+								<div class="small-12 large-3 columns">
+									<label id="alertDepartureFront" class="text-left">Departure Date
+										<div class="input-group date" >
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="dateDepartureExchange" class="txtSearch input-group-field roundRight" readonly/>
+										</div>
+									</label>
+								</div>
+								<!-- Year -->
+								<div class="small-12 large-3 columns">
+									<label id="alertYearFront" class="text-left">Year
+										<div class="input-group date" id="" >
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="dateYearExchange" box="textIntervalExchange" class="txtSearch input-group-field roundRight" readonly/>
+										</div>
+									</label>
+								</div>
+								<!-- Interval -->
+								<div class="small-12 large-3 columns">
+									<label id="alertIntervalFront" class="text-left">Interval
+										<div class="caja" >
+											<select id="textIntervalExchange" class="txtSearch input-group-field round">
+												<option value="">Select a interval</option>
+											</select>
+										</div>
+									</label>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -552,7 +601,7 @@
 <div id="dialog-NotasRes" title="Add Notes" style="display: none;"></div>
 <div id="dialog-accountsRes"  title="Accounts" style="display: none;"></div>
 <div id="dialog-newFileRes"  title="New File" style="display: none;"></div>
-<div id="dialog-HKConfig" title="HouseKeepingConfiguration " style="display: none;"></div>
+<div id="dialog-HKConfig" title="HouseKeeping Configuration " style="display: none;"></div>
 <div id="dialog-people-hkConfig" title="People " style="display: none;"></div>
 <div id="dialog-unit-hkConfig" title="Unit " style="display: none;"></div>
 <div id="dialog-edit-HKStatus" title="HK status" style="display: none;"></div>

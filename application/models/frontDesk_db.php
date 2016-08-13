@@ -340,9 +340,9 @@ Class frontDesk_db extends CI_MODEL
 	/*************** Housekeeping Look Up******************/
 	
 	public function getHousekeepingLookUp($filters){
-	$this->db->select('cfg.pkUnitHKId as ID, u.unitcode as Unit, fp.FloorPlanDesc as Floor_plan, p.name as Maid_Name, p.lname as Maid_Last_Name, e.EmployeeCode as Employee_Code_Maid');
+	$this->db->select('cfg.pkUnitHKId as ID, hs.HKStatusDesc as Status, u.unitcode as Unit, fp.FloorPlanDesc as Floor_plan, p.name as Maid_Name, p.lname as Maid_Last_Name, e.EmployeeCode as Employee_Code_Maid');
 		$this->db->select('p2.name as Superior_Name, p2.lname as Superior_Last_Name, e2.EmployeeCode as Super_Employe_code, cfg.Date, cfg.section as Section, f.level as Floor, b.buildingDesc as Building');
-		$this->db->select('hkc.HkCodeDesc as Status_Unit, st.HkServiceTypeDesc as Service_Type, uhs.pkUnitHKStatusId as idStatus, hs.HKStatusDesc as Status');
+		$this->db->select('hkc.HkCodeDesc as Status_Unit, st.HkServiceTypeDesc as Service_Type, uhs.pkUnitHKStatusId as Status_id');
 		$this->db->from('tblUnitHkconfig cfg');
 		$this->db->join('tblunit u', 'u.pkunitid = cfg.fkUnitid', 'inner');
 		$this->db->join('tblUnithkstatus uhs', 'uhs.fkunitid = u.pkunitid and  uhs.fkCalendarID = (select top 1 uhs2.fkCalendarID  from tblUnithkstatus uhs2 where uhs2.fkUnitId = uhs.fkUnitId ORDER BY uhs2.fkCalendarID  DESC )', 'inner');

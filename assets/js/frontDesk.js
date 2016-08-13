@@ -13,6 +13,7 @@ var peopleDialogHK = addPeopleDialogHKC("");
 var unitDialogHK = addUnitDialogHKC();
 var chgStatusDialog = editHKStatus();
 
+
 var FloorplanFD;
 
 /**************Index****************/
@@ -51,27 +52,39 @@ var dateDeparture = null;
 var dateYear = null;
 var dateUnitHK = null;
 var dateHKLookUp = null;
+var dateDepartureER = null;
+var dateDepartureER = null;
+var dateYearER = null;
 
 $(function() {
 	
 	//dateField
-	datepickerZebra = $( "#dateArrivalFront, #dateDepartureFront, #dateHKConfig, #dateHKLookUp, #dateArrivalReport, #dateDepartureReport" ).Zebra_DatePicker({
+	datepickerZebra = $( "#dateArrivalFront, #dateDepartureFront, #dateHKConfig, #dateHKLookUp, #dateArrivalReport, #dateDepartureReport, #dateArrivalExchange, #dateDepartureExchange" ).Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false,
 		onSelect: function(date1, date2, date3, elements) {
 			dateYear.clear_date();
+			dateYearER.clear_date();
 			$('#textIntervalFront').html("<option value=''>Select a interval</option>");
+			$('#textIntervalExchange').html("<option value=''>Select a interval</option>");
 		},
 	});
 		
-	$( "#dateYearFront" ).Zebra_DatePicker({
+	$( "#dateYearFront, #dateYearExchange" ).Zebra_DatePicker({
 		format: 'Y',
 		view: 'years',
 		show_icon: false,
-		onSelect: function(year, elements) {
-			dateDeparture.clear_date();
-			dateArrival.clear_date();
-			getWeekByYear(year);
+		onSelect: function(year, date2, date3, elements) {
+			var selectorId = $(elements).attr('id');
+			var selectorBox = $(elements).attr('box');
+			if( selectorId == "dateYearFront"){
+				dateDeparture.clear_date();
+				dateArrival.clear_date();
+			}else{
+				dateDeparture.clear_date();
+				dateArrival.clear_date();
+			}
+			getWeekByYear( year, selectorId, selectorBox );
 		},
 	});
 	
@@ -80,6 +93,9 @@ $(function() {
 	dateYear = $("#dateYearFront").data('Zebra_DatePicker');
 	dateUnitHK = $("#dateHKConfig").data('Zebra_DatePicker');
 	dateHKLookUp = $("#dateHKLookUp").data('Zebra_DatePicker');
+	dateDepartureER = $("#dateArrivalExchange").data('Zebra_DatePicker');
+	dateDepartureER = $("#dateDepartureExchange").data('Zebra_DatePicker');
+	dateYearER = $("#dateYearExchange").data('Zebra_DatePicker');
 	//$('#dateArrivalFront').val("04/13/2016");
 	$('#dateArrivalFront').val(getCurrentDate());
 	//$('#dateHKConfig').val(getCurrentDate());
@@ -145,6 +161,12 @@ function getFrontDesk(order, page){
 		words = {};
 		options = {};
 		url = "frontDesk/getHousekeepingReport";
+	}else if(section == "section6"){
+		filters = "";
+		dates = getDates(["dateArrivalReport","dateDepartureReport"]);
+		words = {};
+		options = {};
+		url = "frontDesk/getHousekeepingReport";
 	}
 	
 	ajaxFrontDesk( url, filters, dates, words, options, order, page );
@@ -188,7 +210,7 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 						//alert( 'Column '+order[0][0]+' is the ordering column' );
 					break;
 					case "section4":
-						var option = {type:"input", input:"checkbox", title:"editStatus", name:"HKLookUpStatus", id:"idStatus"};
+						var option = {type:"input", input:"checkbox", title:"Change_status", name:"HKLookUpStatus", id:"Status_id"};
 						drawTable2( data.items,"tableHKLookUp","showModaFrontDesk","Edit", option );
 						paginadorFrontDesk(data.total,"paginationHKLookUp",0);
 					break;
@@ -228,7 +250,7 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 /**
 * obtiene los semanas dependiendo del año seleccionado
 */
-function getWeekByYear(year){
+function getWeekByYear(year, selectorId, selectorBox){
 	$.ajax({
 		type: "POST",
 		url: "frontDesk/getWeekByYear",
@@ -244,10 +266,11 @@ function getWeekByYear(year){
 					var item = items[i];
 					optionWeek += "<option value='" + item.date + "'>" + item.Intv + "</option>";
 				}
-				$('#textIntervalFront').html(optionWeek);
+				
+				$( '#' + selectorBox ).html(optionWeek);
 				optionWeek = null;
 			}else{
-				$('#textIntervalFront').html("<option value=''>intervals he not found</option>");
+				$( '#' + selectorBox ).html("<option value=''>intervals he not found</option>");
 			}
 		},
 		error: function(){
@@ -398,7 +421,7 @@ function showSection(section){
 	$('#paginationHKLookUp').hide();
 	$('#section-frontDesk .sectionFrontDesk, #section-frontDesk .tableSection').hide();
 	$('#section-frontDesk .' + section).toggle(500);
-	if( section == "section3" ){
+	if( section == "section3" || section == "section4" || section == "section5" ){
 		getFrontDesk("",1);
 	}
 }
@@ -1156,7 +1179,7 @@ function generateReportFrontDesk(){
 	var words = null;
 	var options = null;
 	var url = "";
-	var section = $('.SectionFrontDesk:checked').val();
+	var section = $('#typeSearchFrontDesk').val();
 	
 	if(section == "section4"){
 		filters = getFiltersCheckboxs('statusHKLookUp');

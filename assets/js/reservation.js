@@ -2175,10 +2175,6 @@ function drawTerminosVentaRes(data){
 	$("#cventapackAmountRes").text(packAmount);
 	$("#cventaFinancedRes").text(balanceFinal);
 	//$("#cventaAmountTransfer").text(enganche + transferido);
-	
-	
-	
-	
 }
 
 function drawTerminoFinanciamientoRes(data){
