@@ -580,6 +580,18 @@ class Contract_db extends CI_Model {
             return $row->Descripcion;
         }
     }
+    public function selectIDRes($id, $year){
+        $this->db->select('pkResId as ID');
+        $this->db->from('tblRes');
+        $this->db->where('FirstOccYear', $year);
+        $this->db->where('pkResrelatedId', $id);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->ID;
+        }
+    }
 
     public function selectMaxStatus(){
         $this->db->select('max(pkStatusId) as maximo');

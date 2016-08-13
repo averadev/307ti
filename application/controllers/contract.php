@@ -1050,7 +1050,9 @@ public function getFlagsContract(){
 			$idContrato = $_POST['idContrato'];
 			$year = $_POST['year'];
 			$week = $_POST['week'];
-			//$data['weekDetail'] = $this->contract_db->selectWeekDetail($idContrato, $year, $week);
+			$data['weekDetail'] = $this->contract_db->selectWeekDetail($idContrato, $year, $week);
+			//$id = $this->contract_db->selectIDRes($idContrato, $year);
+			//echo json_encode(["id" =>$id]);
 			$this->load->view('contracts/dialogDetailWeek', $data);
 		}
 	}

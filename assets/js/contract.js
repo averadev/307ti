@@ -321,6 +321,8 @@ function showModalDetailWeek(){
 	dialogWeekDetail.dialog( "open" );
 }
 function addHTMLDetailWeek(data){
+
+	//modalEditContract(data.id);
 	$("#dialog-DetailWeek").html(data);
 } 
 
