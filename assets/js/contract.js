@@ -287,9 +287,11 @@ function showModalDetailWeek(){
 	var id = getValueFromTableSelected("contracts", 1);
 	var year = getValueFromTableSelected("tableCOccupationSelected", 1);
 	var week = getValueFromTableSelected("tableCOccupationSelected", 2);
+	console.log(id);
+	console.log(year);
 	var ajaxData =  {
-		url: "contract/selectWeekDetail",
-		tipo: "html",
+		url: "contract/getResByContCon",
+		tipo: "json",
 		datos: {
 			idContrato: id,
 			year: year,
@@ -318,12 +320,12 @@ function showModalDetailWeek(){
 		dialogWeekDetail.dialog( "destroy" );
 	}
 	dialogWeekDetail = modalGeneral2(modalPropiedades, ajaxData);
-	dialogWeekDetail.dialog( "open" );
+	//dialogWeekDetail.dialog( "open" );
 }
 function addHTMLDetailWeek(data){
-
+	console.log(data)
 	//modalEditContract(data.id);
-	$("#dialog-DetailWeek").html(data);
+	//$("#dialog-DetailWeek").html(data);
 } 
 
 function cerrarContract(){

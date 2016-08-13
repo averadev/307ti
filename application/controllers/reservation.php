@@ -944,6 +944,15 @@ class Reservation extends CI_Controller {
 			//$data['idTour'] = $this->reservation_db->selectIdTour($id);
 			$data['contract']= $this->reservation_db->getReservations(null,$id);
 			$data['flags'] = $this->reservation_db->selectFlags($id);
+			$peticion = [
+				"tabla" 	=> 'tblRes',
+				"valor" 	=> 'fkStatusId',
+				"alias" 	=> 'ID',
+				"codicion"	=> 'pkResID',
+				"id"		=>	$id
+			];
+			$IdStatus = $this->reservation_db->propertyTable($peticion);
+			$data['statusNext'] = $this->reservation_db->selectNextStatusDesc(intval($IdStatus)+ 1);
 			$this->load->view('reservations/reservationDialogEdit', $data);
 		}
 	}

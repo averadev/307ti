@@ -642,7 +642,31 @@ class Contract_db extends CI_Model {
             if($query->num_rows() > 0 ){
                 return $query->result();
             }
-        }
+	}
+	
+	 public function getResByContCon($idContrato, $year){
+		$sql = "";
+        $this->db->distinct();
+        $this->db->select('R.pkResId as ID, R.folio as Folio, R.LegalName as LegalName, RTRIM(UT.FloorPlanDesc) as FloorPlan, FR.FrequencyDesc');
+        $this->db->select('ES.StatusDesc, RI.CrDt, R.FirstOccYear, R.LastOccYear, RF.ListPrice, RF.NetSalePrice as netsale');
+        $this->db->from('tblRes R');
+        $this->db->join('tblResinvt RI', 'RI.fkResId = R.pkResRelatedId');
+        $this->db->join('tblFloorPlan UT', 'UT.pkFloorPlanID = RI.fkFloorPlanId');
+        $this->db->join('tblFrequency FR', 'FR.pkFrequencyId = RI.fkFrequencyId');
+        $this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId');
+        $this->db->join('tblResFin RF', 'RF.fkResId = R.pkResRelatedId');
+        $this->db->where('R.fkResTypeId', '6');
+		$this->db->where('R.pkResRelatedId', $idContrato);
+		$this->db->where('R.FirstOccYear', $year);
+        $this->db->order_by('ID', 'DESC');
+        $query = $this->db->get();
+		 return $query->result();
+
+        /*if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }*/
+	}
 
     public function selectDocumentsContract($string){
         $this->db->select("RI.pkResInvtId, RI.fkUnitId,RI.Intv, RI.FirstOccYear, RI.LastOccYear ");

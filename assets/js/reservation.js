@@ -140,6 +140,12 @@ $(document).ready(function(){
 			alertify.error('No acc found');
 		}
 	});
+	
+	//$( "#btnNextStatusRes").unbind( "click" );
+	$(document).off( 'click', '#btnNextStatusRes');
+	$(document).on( 'click', '#btnNextStatusRes', function () {
+		nextStatusContractRes();
+	});
 
 	/*$(document).on( 'click', '#btnAddTourID', function () {
 		var dialogAddTour = addTourContract();
@@ -1915,10 +1921,7 @@ function initEventosFlagsRes(){
 		}
 		
 	});
-	$("#btnNextStatus").click(function(){
-		nextStatusContractRes();
-	});
-	//activeEvent('btnNextStatus', 'nextStatusContractRes');
+	//activeEvent('btnNextStatusRes', 'nextStatusContractRes');
 }
 
 function activeEventClick(id, funcionA){
@@ -2715,7 +2718,7 @@ function SaveFlagsContractRes(){
 	});
 }
 function nextStatusContractRes(){
-	deactiveEventClick("btnNextStatus");
+	deactiveEventClick("btnNextStatusRes");
 	$("#iNextStatus").addClass("fa-spin");
 	var id = getValueFromTableSelectedRes("reservationsTable", 1);
 	$.ajax({
@@ -2729,7 +2732,7 @@ function nextStatusContractRes(){
 	    	$("#iNextStatus").removeClass("fa-spin");
 	    	$("#editContracStatus").text("Status: "+data['status']);
 	    	alertify.success(data['mensaje']);
-	    		$("#btnNextStatus").click(function(){
+	    		$("#btnNextStatusRes").click(function(){
 					nextStatusContractRes();
 				});
 	    },

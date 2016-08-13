@@ -458,6 +458,35 @@ Class frontDesk_db extends CI_MODEL
 		return  $this->db->get()->result();
 	}
 	
+	/*************** Exchange Rate ******************/
+	
+	public function getExchangeRate($filters){
+		$this->db->select("c.pkCurrencyId as ID, CONVERT(VARCHAR(11),er.ValidFrom,106) as Valid_From");
+		$this->db->select('( select top 1 c2.CurrencyCode from tblCurrency c2 where c2.DefaultCurrency = 1 ) as Default_Currency');
+		$this->db->select('c.CurrencyCode as Code, c.CurrencyDesc as Currency, er.AmtFrom as Amount');
+		$this->db->select('c2.CurrencyDesc as Currency_Convertion, er.AmtTo as Currency_Amount');
+		$this->db->from('tblCurrency c');
+		$this->db->join('tblExchangeRate er', 'er.fkCurrencyFromId = c.pkCurrencyId', 'inner');
+		$this->db->join('tblCurrency c2', 'c2.pkCurrencyId = er.fkCurrencyToId', 'inner');
+		$this->db->where('c.ynActive = 1');
+		if($filters['dates'] != false){
+			if( isset( $filters['dates']['dateArrivalExchange'] ) ){
+				$date = $filters['dates']['dateArrivalExchange'];
+				$this->db->where("CONVERT(VARCHAR(11),er.ValidFrom,101) >= '" . $date . "'");
+			}
+			if( isset( $filters['dates']['dateDepartureExchange'] ) ){
+				$date = $filters['dates']['dateDepartureExchange'];
+				$this->db->where("CONVERT(VARCHAR(11),er.ValidFrom,101) <= '" . $date . "'");
+			}
+			if (isset($filters['dates']['textIntervalExchange'])){
+				$date = $filters['dates']['textIntervalExchange'];
+				$this->db->where("CONVERT(VARCHAR(11),er.ValidFrom,101) >= DATEADD(day,-10,CONVERT(VARCHAR(10),'" . $date . "',101)) and CONVERT(VARCHAR(11),er.ValidFrom,101) <= CONVERT(VARCHAR(10),'" . $date . "',101)");
+			}
+		}
+		return  $this->db->get()->result();
+	}
+	
+	
 	/*****************************/
 	/*********** Job *************/
 	/*****************************/

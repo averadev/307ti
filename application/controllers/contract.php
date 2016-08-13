@@ -1056,6 +1056,21 @@ public function getFlagsContract(){
 			$this->load->view('contracts/dialogDetailWeek', $data);
 		}
 	}
+	
+	/**** obtieien la info de las reservaciones ***/
+	public function getResByContCon(){
+		if($this->input->is_ajax_request()) {
+			$idContrato = $_POST['idContrato'];
+			$year = $_POST['year'];
+			$week = $_POST['week'];
+			//$data['weekDetail'] = $this->contract_db->selectWeekDetail($idContrato, $year, $week);
+			//$id = $this->contract_db->selectIDRes($idContrato, $year);
+			$data['reservacione'] = $this->contract_db->getResByContCon($idContrato, $year);
+			//echo json_encode(["id" =>$id]);
+			echo json_encode(["id" =>$data]);
+			//$this->load->view('contracts/dialogDetailWeek', $data);
+		}
+	}
 
 	public function selectWeeksContract(){
 		if($this->input->is_ajax_request()) {

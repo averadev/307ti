@@ -1724,3 +1724,7 @@ select option {
 	background:#dbebff;
 	cursor:pointer;
 }
+
+a#btnNextStatus , a#btnNextStatusRes{
+    float: right;
+}

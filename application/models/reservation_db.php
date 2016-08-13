@@ -11,7 +11,7 @@ class Reservation_db extends CI_Model {
         $sql = "";
         $this->db->distinct();
         $this->db->select('r.pkResId as ID, R.folio as Folio, r.ResConf as Confirmation_code, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name');
-        $this->db->select('ot.OccTypeDesc as Occ_type, fp.FloorPlanDesc as FloorPlan, v.ViewDesc as View_, s.SeasonDesc as Season, R.FirstOccYear');
+        $this->db->select('ot.OccTypeDesc as Occ_type, fp.FloorPlanDesc as FloorPlan, v.ViewDesc as View_, s.SeasonDesc as Season, R.FirstOccYear, ES.StatusDesc');
 		$this->db->select('r.CrBy as Create_by, r.CrDt as Create_date, r.MdBy as Modified_by, r.MdDt as Modified_date');
 		$this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
 		$this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
@@ -24,6 +24,7 @@ class Reservation_db extends CI_Model {
         $this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId');
 		//$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
 		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
+		$this->db->join('tblStatus ES', 'ES.pkStatusId = r.fkStatusId');
 		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = ri.fkFloorPlanId');
 		$this->db->join('tblView v', 'v.pkViewId = ri.fkViewId', 'LEFT');
 		$this->db->join('tblSeason s', 's.pkSeasonId = ri.fkSeassonId', 'LEFT');
@@ -838,6 +839,29 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         {
             $row = $query->row();
             return $row->pkTrxConceptId;
+        }
+    }
+	
+	 public function propertyTable($p){
+        $this->db->select($p['valor'] .' as '.  $p['alias']);
+        $this->db->from($p['tabla']);
+        $this->db->where($p['codicion'], $p['id']);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->$p['alias'];
+        }
+    }
+	
+	public function selectNextStatusDesc($idStatus){
+        $this->db->select('S.StatusDesc as Descripcion');
+        $this->db->from('tblStatus S');
+        $this->db->where('pkStatusId', $idStatus);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->Descripcion;
         }
     }
 	

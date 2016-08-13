@@ -81,8 +81,8 @@ $(function() {
 				dateDeparture.clear_date();
 				dateArrival.clear_date();
 			}else{
-				dateDeparture.clear_date();
-				dateArrival.clear_date();
+				dateDepartureER.clear_date();
+				dateDepartureER.clear_date();
 			}
 			getWeekByYear( year, selectorId, selectorBox );
 		},
@@ -162,11 +162,11 @@ function getFrontDesk(order, page){
 		options = {};
 		url = "frontDesk/getHousekeepingReport";
 	}else if(section == "section6"){
-		filters = "";
-		dates = getDates(["dateArrivalReport","dateDepartureReport"]);
-		words = {};
+		filters = {};
+		dates = getDates(["dateArrivalExchange","dateDepartureExchange","textIntervalExchange"]);
+		words = getWords(["textIntervalExchange"]);
 		options = {};
-		url = "frontDesk/getHousekeepingReport";
+		url = "frontDesk/getExchangeRate";
 	}
 	
 	ajaxFrontDesk( url, filters, dates, words, options, order, page );
@@ -188,6 +188,7 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
        	url: url,
 		dataType:'json',
 		success: function(data){
+			console.log(data);
 			//var section = $('.SectionFrontDesk:checked').val();
 			var section = $('#typeSearchFrontDesk').val();
 			switch(section) {
@@ -216,6 +217,9 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 					break;
 					case "section5":
 						drawTable2( data.items, "tableHKReport", false, "" );
+					break;
+					case "section6":
+						drawTable2( data.items, "tableExchangeRateFront", false, "" );
 					break;
 				}
 			}else{

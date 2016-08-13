@@ -429,6 +429,24 @@
 							</div>
 						</fieldset>
 					</div>
+					
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row">
+								<div class="small-12 large-6 columns end" style="padding-top:25px;">
+									<a id="btnSearchFrontExchange" class="btn btn-primary btn-Search searchFD">
+										<div class="label">Search</div>
+										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+									</a>
+									<a id="btnCleanFrontExchange" class="btn btn-primary spanSelect">
+										<div class="label">Clean</div>
+										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+									</a>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					
 				</div>
 				
 			</div>
@@ -540,6 +558,29 @@
 					
 					<div class="section5 tableSection" style="display:none;">
 						<table id="tableHKReport" style="width:100%">
+							<thead>
+								<tr>
+									<th>pk</th>
+									<th>unitCode</th>
+									<th>FloorPlan</th>
+									<th>MaidName</th>
+									<th>MaidLName</th>
+									<th>EmployeeCode</th>
+									<th>SuperName</th>
+									<th>SuperLName</th>
+									<th>EmployeeCode</th>
+									<th>Section</th>
+									<th>Floor</th>
+									<th>Building</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+					
+					<div class="section6 tableSection" style="display:none;">
+						<table id="tableExchangeRateFront" style="width:100%">
 							<thead>
 								<tr>
 									<th>pk</th>

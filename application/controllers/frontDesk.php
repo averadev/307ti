@@ -278,6 +278,25 @@ class FrontDesk extends CI_Controller {
 		}
 	}
 	
+	/***************************************/
+	/*********** Exchange Rate  ************/
+	/***************************************/
+	
+	public function getExchangeRate(){
+		if($this->input->is_ajax_request()){
+			$sql = $this->getFilters($_POST, '');
+			$page = $_POST['page'];
+			if($_POST['page'] == 0 || $_POST['page'] == "0"){
+				$page = 1;
+			}
+			$page = ($page - 1) * 25;
+			$data = $this->frontDesk_db->getExchangeRate($sql);
+			$total = count($data);
+			$data = array_slice($data, $page, 25);
+			echo json_encode(array('items' => $data, 'total' => $total,"aaa" => $sql));
+		}
+	}
+	
 	public function generateReport(){
 		if($this->input->is_ajax_request()){
 			//$this->createExcel();
@@ -323,6 +342,10 @@ class FrontDesk extends CI_Controller {
 		}
 		
 	}
+	
+	/***************************************/
+	/*********** general function **********/
+	/***************************************/
 	
 	private function createExcel($items){
 		
