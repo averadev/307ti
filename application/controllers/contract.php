@@ -175,7 +175,7 @@ private function insertContratoOcupacion($idContrato){
 	$rango = intval($_POST['lastYear']-$_POST['firstYear']);
 	for($i =0; $i<= $rango; $i++){
 			$Ocupacion = [
-			"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
+			"fkResTypeId"               => $this->contract_db->selectRestType('ContFx'),
 			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
 			"fkLanguageId"              => $_POST['idiomaID'],
 	        "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),

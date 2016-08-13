@@ -2512,7 +2512,6 @@ function getWeeks(id){
 	    success: function(data){
 	    	showLoading(div, false);
 	    	drawTableIdOcupacion(data,"tableCOccupationSelectedbody");
-	    	//selectTable("tableCOccupationSelectedbody");
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -3321,13 +3320,12 @@ function drawTableIdOcupacion(data, table){
 	var primero = data[0].FirstOccYear;
 	var last = data[0].LastOccYear;
 	var rango = last - primero;
-	console.log(rango);
 	var bodyHTML = '';
 	for (var i = 0; i < data.length; i++) {
         	for(var j = 0; j <= rango; j++){
         		var year = primero + j;
         		bodyHTML += "<tr>";
-        		bodyHTML+="<td>" + "week ocupancy"+ "</td>";
+        		bodyHTML+="<td>" + data[i].Descripcion + "</td>";
         		bodyHTML+="<td>" + year + "</td>";
         		bodyHTML+="<td>" + data[i].Intv + "</td>";
         		bodyHTML+="</tr>";
