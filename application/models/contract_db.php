@@ -549,9 +549,10 @@ class Contract_db extends CI_Model {
         }
     }
     public function selectEncabezado($resId){
-        $this->db->select("fkUnitId as ID, Intv");
-        $this->db->from('tblResInvt');
+        $this->db->select("U.UnitCode as ID, RI.Intv");
+        $this->db->from('tblResInvt RI');
         $this->db->where('fkResId', $resId);
+        $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
@@ -568,6 +569,18 @@ class Contract_db extends CI_Model {
             return $row->fkTourId;
         }
     }
+    public function selectNextStatusDesc($idStatus){
+        $this->db->select('S.StatusDesc as Descripcion');
+        $this->db->from('tblStatus S');
+        $this->db->where('pkStatusId', $idStatus);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->Descripcion;
+        }
+    }
+
     public function selectMaxStatus(){
         $this->db->select('max(pkStatusId) as maximo');
         $this->db->from('tblStatus S');
@@ -879,7 +892,7 @@ class Contract_db extends CI_Model {
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId');
         $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = att.fkTrxTypeId');
 		$this->db->join('tblTrxClass tc', 'tc.pkTrxClassid = att.fkTrxClassID');
-		$this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
+		//$this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
         $this->db->where('rpa.fkResId', $id);
 		if($typeAcc == "sale"){
 			//$this->db->where('attt.fkAccTypeId = 1');
@@ -930,7 +943,7 @@ class Contract_db extends CI_Model {
     }
 	
 	public function getAccByRes($id){
-		$this->db->select( "rpa.fkAccId, RTRIM(att.AccTypeCode) as accType" );
+		$this->db->select("rpa.fkAccId, RTRIM(att.AccTypeCode) as accType" );
         $this->db->from( 'tblResPeopleAcc rpa' );
 		$this->db->join( 'tblAcc a', 'a.pkAccId = rpa.fkAccId' );
 		$this->db->join( 'tblAcctype att', 'att.pkAcctypeId = a.fkAccTypeId' );

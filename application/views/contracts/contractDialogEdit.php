@@ -92,10 +92,13 @@
 				</legend>
 				<div class="containerContract">
 					<div class="row">
-						<div class="small-12 columns">
+						<div class="small-6 columns">
 							<a id="btnRefinancingContract" class="button tiny">
 							<i class="fa fa-user-plus">Refinancing contract</i></a>
 						</div>
+					<div class="small-6 columns" > 
+						<a id="btnNextStatus" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i><?php echo "Next Status: ".$statusNext; ?></a>
+					</div>
 						<table id="peopleContract" width="100%">
 							<thead>
 								<tr class="trColspan" >
@@ -616,10 +619,7 @@
 	<!-- Banderas -->
 	<div id="tab-CFlags" class="large-12 columns tab-modal" style="display:none;">
 		<form  data-abide='ajax'>
-				<div class="small-12 medium-12 large-12 columns" > 
-				<!-- <a id="btnSAveFlags" class="button tiny"><i class="fa fa-save fa-lg">Save</i></a> -->
-				<a id="btnNextStatus" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>Next Status</a>
-			</div>
+
 			<fieldset class="fieldset">
 				<div class="containerContract">
 					<div class="row">

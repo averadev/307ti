@@ -24,40 +24,7 @@ class Contract extends CI_Controller {
 		}
 	}
 	public function pruebasContract(){
-		$IDContrato = $_POST['idContrato'];
-		$pagoMensual = $_POST['pagoMensual'];
-		$meses = intval($_POST['meses']);
-		$fecha =  new DateTime($_POST['fecha']);
-		for ($i=0; $i < $meses; $i++) { 
-			$fecha->modify("+".$i." month");
-			$fechaActual = $fecha->format('Y-m-d H:i:s');
-			$transaction = [
-				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($IDContrato),  //la cuenta
-				"fkTrxTypeId"		=> 1,//$_POST['trxTypeId'], //lista
-				"fkTrxClassID"		=> 1,//$_POST['trxClassID'], // vendedor
-				"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
-				"Credit+"			=> 0,	//si es positivo se inserta credit
-				"Amount"			=> $this->remplaceFloat($_POST['pagoMensual']), //cantidad 70,555
-				"AbsAmount"			=> $this->remplaceFloat($_POST['pagoMensual']), //cantidad se actualiza
-				"Remark"			=> '', //
-				"Doc"				=> '',
-				"DueDt"				=> $fechaActual,
-				"ynActive"			=> 1,
-				"CrBy"				=> $this->nativesessions->get('id'),
-				"CrDt"				=> $this->getToday(),
-				"MdBy"				=> $this->nativesessions->get('id'),
-				"MdDt"				=> $this->getToday()
-			];
-			$this->contract_db->insertReturnId('tblAccTrx', $transaction);
-		}
-		
-		$message= array('success' => true, 'message' => "transaction save");
-		echo json_encode($message);
-		// echo json_encode([
-		// 	"mensaje" => 'Contract Save',
-		// 	"balance" => $this->contract_db->selectPriceFin(1977)[0]
-		// 	]);
-		
+		var_dump($_FILES);
 	}
 
 	public function saveContract(){
@@ -629,7 +596,7 @@ private function createDownPayment($idContrato){
 		for ($i=0; $i < $pagos; $i++) { 
 			$DownPayment = [
 				"fkResId"    	=> $idContrato,
-				"fkCurrencyId"  => $this->contract_db->selectIdCurrency('MXP'),
+				"fkCurrencyId"  => $this->contract_db->selectIdCurrency('USD'),
 				"DownPmtNum"    => $i + 1,
 				"DownPmtAmt"    => $_POST['tablaPagosProgramados'][$i]["amount"],
 				"DownPmtDueDt"  => $_POST['tablaPagosProgramados'][$i]["date"],
@@ -835,7 +802,8 @@ public function nextStatusContract(){
 		$condicion = "pkResId = " . $id;
 		$afectados = $this->contract_db->updateReturnId('tblRes', $Res, $condicion);
 		if ($afectados>0) {
-			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $this->getPropertyStatus($IdStatus)];
+			$next = $this->contract_db->selectNextStatusDesc(intval($IdStatus)+ 1);
+			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $this->getPropertyStatus($IdStatus), "next" => $next];
 			echo json_encode($mensaje);
 		}else{
 			$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
@@ -1082,7 +1050,7 @@ public function getFlagsContract(){
 			$idContrato = $_POST['idContrato'];
 			$year = $_POST['year'];
 			$week = $_POST['week'];
-			$data['weekDetail'] = $this->contract_db->selectWeekDetail($idContrato, $year, $week);
+			//$data['weekDetail'] = $this->contract_db->selectWeekDetail($idContrato, $year, $week);
 			$this->load->view('contracts/dialogDetailWeek', $data);
 		}
 	}
@@ -1147,6 +1115,15 @@ public function getFlagsContract(){
 			$data['contract']= $this->contract_db->getContratos2(null,$id);
 			$data['flags'] = $this->contract_db->selectFlags($id);
 			$data['encabezado'] = $this->contract_db->selectEncabezado($id);
+			$peticion = [
+				"tabla" 	=> 'tblRes',
+				"valor" 	=> 'fkStatusId',
+				"alias" 	=> 'ID',
+				"codicion"	=> 'pkResID',
+				"id"		=>	$id
+			];
+			$IdStatus = $this->contract_db->propertyTable($peticion);
+			$data['statusNext'] = $this->contract_db->selectNextStatusDesc(intval($IdStatus)+ 1);
 			$this->load->view('contracts/contractDialogEdit', $data);
 		}
 	}

@@ -100,8 +100,6 @@ $(document).on( 'click', '#btnAddPeople', function () {
 		var idAccColl = $('#btNewTransAcc').data( 'idAcc' + accCode );
 		if(idAccColl != undefined){
 			var dialogAccount = opcionAccount($(this).attr('attr_type'));
-			console.log($(this).attr('attr_type'));
-			console.log($('#btNewTransAcc').attr("attr_type"));
 			dialogAccount.dialog("open");
 		}else{
 			alertify.error('No acc found');
@@ -1306,7 +1304,6 @@ function getDatailByID(id){
 		if (pickedup != null) {
         	pickedup.removeClass("yellow");
 			var id = $(this).find("td").eq(1).text().trim();
-			//var id = getValueFromTableSelected("contracts", 1);
             var dialogEditContract = modalEditContract(id);
             dialogEditContract.dialog("open");
           }
@@ -1855,9 +1852,6 @@ function initEventosFlags(){
 			alertify.error("You should pick one");
 		}
 	});
-	$("#btnNextStatus").click(function(){
-		nextStatusContract();
-	});
 	//activeEvent('btnNextStatus', 'nextStatusContract');
 }
 
@@ -2006,13 +2000,15 @@ function getAccounts( id, typeInfo, typeAcc ){
 	    url: "contract/getAccountsById",
 	    dataType:'json',
 	    success: function(data){
-			//$("#balanceDepAccount").text(parseFloat(data["downpayment"]));
-			$("#balanceAccount").text(parseFloat(data["balance"]));
+	    	data["balance"] = parseFloat(data["balance"]);
+	    	data["downpayment"] = parseFloat(data["downpayment"]);
+			$("#balanceAccount").text(data["balance"]);
 			if(typeInfo == "account"){
 				var sale = data["sale"];
 				var maintenance = data["maintenance"];
 				var loan = data["loan"];
 				var acc = data["acc"];
+				var sale = parsearSALE(sale);
 				if( sale.length > 0 ){
 					drawTable2( sale, "tableAccountSeller", false, "" );
 					setTableAccount( sale, "tableSaleAccRes" );
@@ -2040,7 +2036,7 @@ function getAccounts( id, typeInfo, typeAcc ){
 						$("input[name='checkPayAcc[]']:checked").each(function(){
 							amoutCur = amoutCur + parseFloat($(this).val());
 						});
-						$('#amountSettledAcc').text( '$ ' + amoutCur.toFixed(4) );
+						$('#amountSettledAcc').text( '$ ' + amoutCur.toFixed(2) );
 					});
 				}
 			}
@@ -2049,6 +2045,15 @@ function getAccounts( id, typeInfo, typeAcc ){
 	        alertify.error("Try again");
 	    }
 	});
+}
+
+function parsearSALE(sales){
+	for(var i = 0; i < sales. length; i++){
+		sales[i].Amount = parseFloat(sales[i].Amount).toFixed(2);
+		sales[i].AbsAmount = parseFloat(sales[i].AbsAmount).toFixed(2);
+		sales[i].Overdue_Amount = parseFloat(sales[i].Overdue_Amount).toFixed(2);
+	}
+	return sales;	
 }
 
 function setTableAccount(items, table){
@@ -2173,6 +2178,9 @@ function setEventosEditarContrato(id){
 	});
 	$("#ventaCondi").click(function(){
 		gotoDiv('ContenidoModalContractEdit', 'finTerminos');
+	});
+	$("#btnNextStatus").click(function(){
+		nextStatusContract();
 	});
 }
 
@@ -2801,6 +2809,7 @@ function nextStatusContract(){
 	    success: function(data){
 	    	$("#iNextStatus").removeClass("fa-spin");
 	    	$("#editContracStatus").text("Status: "+data['status']);
+	    	$("#btnNextStatus").text("Next Status: "+data['next']);
 	    	alertify.success(data['mensaje']);
 	    		$("#btnNextStatus").click(function(){
 					nextStatusContract();
@@ -2813,7 +2822,6 @@ function nextStatusContract(){
 }
 /*** modal Account ***/
 function opcionAccount(attrType){
-	console.log();
 	var div = "#dialog-accounts";
 	dialogo = $(div).dialog ({
   		open : function (event){
@@ -2829,14 +2837,14 @@ function opcionAccount(attrType){
 					});
 					$("#slcTransTypeAcc").attr('disabled', true);
 					setDataOpcionAccount(attrType);
-					getTrxType('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
-					ajaxSelects('contract/getTrxClass', 'try again', generalSelects, 'slcTrxClassAcc');
-					ajaxSelects('contract/getCurrency', 'try again', generalSelects, 'CurrencyTrxClassAcc');
+					getTrxType('contract/getTrxType', attrType, 'try again', generalSelectsDefault, 'slcTransTypeAcc');
+					ajaxSelects('contract/getTrxClass', 'try again', generalSelectsDefault, 'slcTrxClassAcc');
+					ajaxSelects('contract/getCurrency', 'try again', generalSelectsDefault, 'CurrencyTrxClassAcc');
 				});
 			}else{
 				showLoading(div, true);
 				$("#slcTransTypeAcc").attr('disabled', true);
-				getTrxType('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
+				getTrxType('contract/getTrxType', attrType, 'try again', generalSelectsDefault, 'slcTransTypeAcc');
 				setDataOpcionAccount(attrType);
 				showLoading(div, false);
 			}
@@ -2896,12 +2904,12 @@ function setDataOpcionAccount(attrType){
 		$('#grpTrxClassAcc').show();
 		$('#grpTablePayAcc').hide();
 	}else{
-		var trxType = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accType');
+		var trxType = $('#tab-CAccounts .active').attr('attr-accType');
 		getAccounts( $('#btNewTransAcc').data( 'idRes' ), "payment", trxType );
 		$('#grpTrxClassAcc').hide();
 		$('#grpTablePayAcc').show();
 	}
-	var accCode = $('#tab-CAccounts .tabsModal .tabs .active').attr('attr-accCode');
+	var accCode = $('#tab-CAccounts .active').attr('attr-accCode');
 	var idAccColl = $('#btNewTransAcc').data( 'idAcc' + accCode );
 	$('#accountIdAcc').text( idAccColl );
 	$('#dueDateAcc').val(getCurrentDate());
@@ -3029,7 +3037,7 @@ function uploadFileCont(){
 	data.append('typeDoc',$('#slcTypeFileUp').val());
 		
 	//var ruta = new Array();
-		
+	//var archivos = $('#fileToUpload').prop('files')[0];	
 	var archivos = document.getElementById("fileToUpload");//Damos el valor del input tipo file
  	var archivo = archivos.files; //obtenemos los valores de la imagen
 	data.append('image',archivo[0]);
