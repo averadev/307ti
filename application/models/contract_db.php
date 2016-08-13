@@ -593,9 +593,11 @@ class Contract_db extends CI_Model {
         }
     }
     public function selectWeeksContract($string){
-        $this->db->select("RI.fkUnitId,RI.Intv, RI.FirstOccYear, RI.LastOccYear ");
+        $this->db->select("RTRIM(RT.ResTypeDesc) as Descripcion,RI.fkUnitId,RI.Intv, RI.FirstOccYear, RI.LastOccYear ");
         $this->db->from('tblResInvt RI');
         $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
+        $this->db->join('tblRes R', 'RI.fkResId = R.pkResId', 'inner');
+        $this->db->join('tblResType RT', 'R.fkResTypeId = RT.pkResTypeId', 'inner');
         $this->db->where('fkResId', $string);
         $query = $this->db->get();
         if($query->num_rows() > 0 ){

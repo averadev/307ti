@@ -19,7 +19,7 @@
 				<div class="row">
 					<div class="small-12 medium-12 large-3 columns">
 						<fieldset class="large-12 columns fieldsetFilter" Id="sectionFilter" >
-							<legend class="legendSearch">Choose the type search</legend>
+							<legend class="legendSearch">Choose Search Type</legend>
 							<!-- Type of Availability -->
 							<select id="typeSearchFrontDesk" class="txtSearch input-group-field round">
 								<option value="section1">Front Desk Look Up</option>
