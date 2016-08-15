@@ -44,11 +44,11 @@
 </div>
 <!-- tabs de los modales -->
 <div class="tabsModal">
-	<ul class="tabs" id="tabsContrats" data-tabs>
+	<ul class="tabs" id="tabsContratsRes" data-tabs>
 		<li class="tabs-title active" attr-screen="tab-CGeneral" >
 			<a>General</a>
 		</li>
-		<li class="tabs-title" attr-screen="tab-RAccounts">
+		<li class="tabs-title" attr-screen="tab-RAccounts" id="RAccounts">
 			<a>Accounts</a>
 		</li>
 		<li class="tabs-title" attr-screen="tab-CVendors">

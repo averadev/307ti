@@ -129,23 +129,29 @@ $(document).ready(function(){
 		dialogDiscountAmountRes.dialog("open");
 	});
 	
-	$(document).off( 'click', '#btNewTransAccRes');
-	$(document).on( 'click', '#btNewTransAccRes, #btAddPayAccRes', function () {
+	$(document).off( 'click', '#btNewTransAccRes'); 
+	$(document).on( 'click', '#btNewTransAccRes, #btAddPayAccRes', function ( ) {
 		var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
 		var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
+		var statusRes = $('#editContracStatus').attr( 'statusRes' );
 		if(idAccColl != undefined){
-			var dialogAccount = opcionAccountRes($(this).attr('attr_type'));
-			dialogAccount.dialog("open");
+			if( accCode == "FDK" && statusRes == "Inhouse" && $(this).attr('id') == "btNewTransAccRes" ){
+				alertify.error('You can not add transactions');
+			}else{
+				var dialogAccount = opcionAccountRes($(this).attr('attr_type'));
+				dialogAccount.dialog("open");
+			}
+			
 		}else{
 			alertify.error('No acc found');
 		}
 	});
 	
 	//$( "#btnNextStatusRes").unbind( "click" );
-	$(document).off( 'click', '#btnNextStatusRes');
+	/*$(document).off( 'click', '#btnNextStatusRes');
 	$(document).on( 'click', '#btnNextStatusRes', function () {
 		nextStatusContractRes();
-	});
+	});*/
 
 	/*$(document).on( 'click', '#btnAddTourID', function () {
 		var dialogAddTour = addTourContract();
@@ -1833,10 +1839,10 @@ function getArrayValuesSelectedColumRes(tabla, columna){
  * cambia los pantallas del modal con los tabs
  */
 function changeTabsModalContractRes(screen, id){
-	$('#tabsContrats .tabs-title').removeClass('active');
-	$('#tabsContrats li[attr-screen=' + screen + ']').addClass('active');
+	$('#tabsContratsRes .tabs-title').removeClass('active');
+	$('#tabsContratsRes li[attr-screen=' + screen + ']').addClass('active');
 	//muestra la pantalla selecionada
-	$('#tabsContrats .tab-modal').hide();
+	$('#tabsContratsRes .tab-modal').hide();
 	$('#' + screen).show();
 	switch(screen){
 		case "tab-CGeneral":
@@ -1919,7 +1925,6 @@ function initEventosFlagsRes(){
 		}else{
 			alertify.error("You should pick one");
 		}
-		
 	});
 	//activeEvent('btnNextStatusRes', 'nextStatusContractRes');
 }
@@ -1929,7 +1934,7 @@ function activeEventClick(id, funcionA){
 		funcionA();
 	});
 }
-function deactiveEventClick(id){
+function deactiveEventClickRes(id){
 	console.log("desactivado");
 	$('#'+id).unbind('click');
 }
@@ -2026,7 +2031,7 @@ function getDatosReservation(id){
 	    url: "reservation/getDatosReservationById",
 	    dataType:'json',
 	    success: function(data){
-			
+			console.log(data);
 	
 			var c = parseFloat(data['CollectionCost']);
 	    	$("#CollectionCostRes").text(c);
@@ -2046,6 +2051,7 @@ function getDatosReservation(id){
 			if(data["reservation"].length > 0){
 				contraTemp = data["reservation"][0];
 				$('td.folioAccount').text(contraTemp.Folio);
+				$('#editContracStatus').attr( 'statusRes', contraTemp.StatusDesc );
 			}
 			setHeightModal('dialog-Edit-Reservation');
 			addFunctionalityRes();
@@ -2209,7 +2215,7 @@ function drawDataContract(data){
 }
 
 function setEventosEditarReservation(id){
-	$('#tabsContrats .tabs-title').on('click', function() { 
+	$('#tabsContratsRes .tabs-title').on('click', function() { 
 		changeTabsModalContractRes($(this).attr('attr-screen'), id);
 	});
 
@@ -2218,6 +2224,9 @@ function setEventosEditarReservation(id){
 	});
 	$("#ventaCondi").click(function(){
 		gotoDiv('ContenidoModalContractEdit', 'finTerminos');
+	});
+	$("#btnNextStatusRes").click(function(){
+		nextStatusContractRes();
 	});
 }
 
@@ -2718,7 +2727,7 @@ function SaveFlagsContractRes(){
 	});
 }
 function nextStatusContractRes(){
-	deactiveEventClick("btnNextStatusRes");
+	deactiveEventClickRes("btnNextStatusRes");
 	$("#iNextStatus").addClass("fa-spin");
 	var id = getValueFromTableSelectedRes("reservationsTable", 1);
 	$.ajax({
@@ -2731,6 +2740,8 @@ function nextStatusContractRes(){
 	    success: function(data){
 	    	$("#iNextStatus").removeClass("fa-spin");
 	    	$("#editContracStatus").text("Status: "+data['status']);
+			$('#editContracStatus').attr( 'statusRes', data['status'] );
+			$('#btnNextStatusRes').text("Next Status: "+data['status']);
 	    	alertify.success(data['mensaje']);
 	    		$("#btnNextStatusRes").click(function(){
 					nextStatusContractRes();

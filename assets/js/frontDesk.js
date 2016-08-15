@@ -62,7 +62,7 @@ $(function() {
 	datepickerZebra = $( "#dateArrivalFront, #dateDepartureFront, #dateHKConfig, #dateHKLookUp, #dateArrivalReport, #dateDepartureReport, #dateArrivalExchange, #dateDepartureExchange" ).Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false,
-		onSelect: function(date1, date2, date3, elements) {
+		onSelect: function(date1, date2, date3, elements){
 			dateYear.clear_date();
 			dateYearER.clear_date();
 			$('#textIntervalFront').html("<option value=''>Select a interval</option>");
@@ -156,8 +156,9 @@ function getFrontDesk(order, page){
 		options = getWords(["ServiceTypeLookUp"]);
 		url = "frontDesk/getHousekeepingLookUp";
 	}else if(section == "section5"){
-		filters = getFiltersCheckboxs('checkReport');
-		dates = getDates(["dateArrivalReport","dateDepartureReport"]);
+		//filters = getFiltersCheckboxs('checkReport');
+		filters = {};
+		dates = getDates(["dateArrivalReport"]);
 		words = {};
 		options = {};
 		url = "frontDesk/getHousekeepingReport";
@@ -428,6 +429,12 @@ function showSection(section){
 	if( section == "section3" || section == "section4" || section == "section5" ){
 		getFrontDesk("",1);
 	}
+	if( section == "section3" || section == "section4" || section == "section5" ){
+		$('#newExchangeRate').show();
+	}else{
+		$('#newExchangeRate').hide();
+	}
+	
 }
 
 function createTableLookUp(data){
@@ -1192,8 +1199,9 @@ function generateReportFrontDesk(){
 		options = getWords(["ServiceTypeLookUp"]);
 		url = "?type=lookUp";
 	}else if(section == "section5"){
-		filters = getFiltersCheckboxs('checkReport');
-		dates = getDates(["dateArrivalReport","dateDepartureReport"]);
+		//filters = getFiltersCheckboxs('checkReport');
+		filters = {};
+		dates = getDates(["dateArrivalReport"]);
 		words = {};
 		options = {};
 		url = "?type=report";

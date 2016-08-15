@@ -12,6 +12,10 @@
 				<h3 class="box-title">
 					<span>FrontDesk</span>
 				</h3>
+				<a data-widget="newContrat" id="newExchangeRate" class="btn btn-new" style="display:none;">
+					<div class="label">New</div>
+					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+				</a>
 			</div>
 			<!-- body search-->
 			<div class="box-body box-filter" style="display: block;">
@@ -348,18 +352,18 @@
 										</div>
 									</label>
 								</div>
-								<div class="small-12 large-3 columns">
+								<!--<div class="small-12 large-3 columns">
 									<label id="" class="text-left">Date Departure
 										<div class="input-group date" id="frontArrivalDate" >
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
 											<input type="text" id="dateDepartureReport" class="txtSearch input-group-field roundRight" placeholder="Enter a date" readonly />
 										</div>
 									</label>
-								</div>
-								<div class="small-12 large-6 columns" style="padding-top:30px;">
+								</div>-->
+								<!--<div class="small-12 large-6 columns" style="padding-top:30px;">
 									<input name="checkReport" type="checkbox" id="reportBalance" class="checkReport">
 									<label for="reportBalance">Balances</label>
-								</div>
+								</div>-->
 							</div>
 						</fieldset>
 						<fieldset class="large-12 columns fieldsetFilter">
@@ -374,7 +378,7 @@
 										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 									</a>
 									<a id="btnHKREPORT" class="btn btn-primary btn-Search">
-										<div class="label">HK REPORT</div>
+										<div class="label">Export</div>
 										<img src="<?php echo base_url().IMG; ?>common/report.png"/>
 									</a>
 								</div>
