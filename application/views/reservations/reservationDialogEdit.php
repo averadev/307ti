@@ -30,7 +30,7 @@
 		<label class="headerGeneral" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
-		<label class="headerGeneral" id="editContracStatus">Status: <?php echo $contract[0]->StatusDesc;?></label>
+		<label class="headerGeneral" id="editReservationStatus">Status: <?php echo $contract[0]->StatusDesc;?></label>
 		
 		<!--<label class="headerGeneral">Flags: 
 		<?php
@@ -94,8 +94,9 @@
 				<div class="containerContract">
 					<div class="row">
 						<div class="small-12 columns">
-							<!--<a id="btnRefinancingResevation" class="button tiny"><i class="fa fa-user-plus">Refinancing contract</i></a>-->
-							<a id="btnNextStatusRes" class="button tiny"><i class="fa fa-refresh fa-lg"></i><?php echo "Next Status: ".$statusNext; ?></a>
+					<?php if ($statusNext) {
+					echo '<a id="btnNextStatusRes" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>'. "<span>Next Status: ".$statusNext.'</span></a>';
+					} ?> 
 							<!--<a id="btnNextStatus" class="btn btn-primary spanSelect">
 								<div class="label">Next Status</div>
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>

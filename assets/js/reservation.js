@@ -2726,11 +2726,16 @@ function nextStatusContractRes(){
 	        idContrato: id,
 	    },
 	    type: "POST",
-	    url: "contract/nextStatusContract",
+	    url: "reservation/nextStatusReservation",
 	    dataType:'json',
 	    success: function(data){
 	    	$("#iNextStatus").removeClass("fa-spin");
-	    	$("#editContracStatus").text("Status: "+data['status']);
+	    	$("#editReservationStatus").text("Status: "+data['status']);
+	    	if (data['next'] != null) {
+	    		$("#btnNextStatusRes span").text("Next Status: "+data['next']);
+	    	}else{
+	    		$("#btnNextStatusRes").remove();
+	    	}
 	    	alertify.success(data['mensaje']);
 	    		$("#btnNextStatusRes").click(function(){
 					nextStatusContractRes();
