@@ -271,10 +271,40 @@ class FrontDesk extends CI_Controller {
 				$page = 1;
 			}
 			$page = ($page - 1) * 25;
-			$data = $this->frontDesk_db->getHousekeepingReport($sql);
+			$unit = $this->frontDesk_db->getUnitReport($sql);
+			$unitOcc = $this->frontDesk_db->getUnitOccReport($sql);
+			foreach( $unit as $item ){
+				$item->Folio = "";
+				$item->ResConf = "";
+				$item->Intv = "";
+				$item->Name = "";
+				$item->Total_Consumptions = 0;
+				$item->Total_Payments = 0;
+				$item->Balance = 0;
+				foreach( $unitOcc as $item2 ){
+					if( $item2->pkUnitId == $item->pkUnitId ){
+						$item->Folio = $item2->Folio;
+						$item->ResConf = $item2->ResConf;
+						$item->Intv = $item2->Intv;
+						$item->Name = $item2->Name;
+						$trAcc = $this->frontDesk_db->getAccTrxReport($item2->pkResId);
+						foreach($trAcc as $item3){
+							if($item3->TrxSign == 1){
+								$item->Total_Consumptions = $item->Total_Consumptions + $item3->Amount;
+							}else if($item3->TrxSign == -1){
+								$item->Total_Payments = $item->Total_Payments + $item3->Amount;
+							}
+						}
+						$item->Balance = $item->Total_Consumptions - $item->Total_Payments;
+					}
+				}
+			}
+			$data = $unit;
+			
+			//$data = $this->frontDesk_db->getHousekeepingReport($sql);
 			$total = count($data);
 			$data = array_slice($data, $page, 25);
-			echo json_encode(array('items' => $data, 'total' => $total,"aaa" => $sql));
+			echo json_encode(array('items' => $unit, 'total' => $total,"aaa" => $sql));
 		}
 	}
 	
@@ -333,7 +363,37 @@ class FrontDesk extends CI_Controller {
 		if($_GET['type'] == "lookUp"){
 			$data = $this->frontDesk_db->getHousekeepingLookUp($sql);
 		}else if($_GET['type'] == "report"){
-			$data = $this->frontDesk_db->getHousekeepingReport($sql);
+			//$data = $this->frontDesk_db->getHousekeepingReport($sql);
+			
+			$data = $this->frontDesk_db->getUnitReport($sql);
+			$unitOcc = $this->frontDesk_db->getUnitOccReport($sql);
+			foreach( $data as $item ){
+				$item->Folio = "";
+				$item->ResConf = "";
+				$item->Intv = "";
+				$item->Name = "";
+				$item->Total_Consumptions = 0;
+				$item->Total_Payments = 0;
+				$item->Balance = 0;
+				foreach( $unitOcc as $item2 ){
+					if( $item2->pkUnitId == $item->pkUnitId ){
+						$item->Folio = $item2->Folio;
+						$item->ResConf = $item2->ResConf;
+						$item->Intv = $item2->Intv;
+						$item->Name = $item2->Name;
+						$trAcc = $this->frontDesk_db->getAccTrxReport($item2->pkResId);
+						foreach($trAcc as $item3){
+							if($item3->TrxSign == 1){
+								$item->Total_Consumptions = $item->Total_Consumptions + $item3->Amount;
+							}else if($item3->TrxSign == -1){
+								$item->Total_Payments = $item->Total_Payments + $item3->Amount;
+							}
+						}
+						$item->Balance = $item->Total_Consumptions - $item->Total_Payments;
+					}
+				}
+			}
+			
 		}
 		if(count($data) > 0){
 			$this->createExcel($data);

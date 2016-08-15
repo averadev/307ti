@@ -430,11 +430,12 @@ Class frontDesk_db extends CI_MODEL
 		/*if($filters['checks'] != false){
 			$this->db->where("( " . $filters['checks'] . ")");
 		}*/
-		$this->db->select('u.pkUnitId, u.UnitCode, hks.HKStatusDesc');
+		$this->db->select('u.pkUnitId, u.UnitCode, hks.HKStatusDesc, hkc.HkCodeDesc');
 		$this->db->from('tblUnit u');
 		$this->db->join('tblUnithkstatus uhs', 'uhs.fkunitid = u.pkunitid and  uhs.fkCalendarID = (select top 1 uhs2.fkCalendarID  from tblUnithkstatus uhs2 where uhs2.fkUnitId = uhs.fkUnitId ORDER BY uhs2.fkCalendarID  DESC )', 'inner');
 		$this->db->join('tblHKStatus hks', 'hks.pkHKStatusId = uhs.fkHkStatusId', 'inner');
-		if($filters['dates'] != false){
+		$this->db->join('tblHkCode hkc', 'hkc.pkHkCodeId = uhs.fkHkStatusId', 'inner');
+		/*if($filters['dates'] != false){
 			$this->db->join('tblResInvt ri', 'ri.fkUnitId = u.pkunitid', 'inner');
 			$this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId', 'inner');
 			$this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId', 'left');
@@ -442,6 +443,35 @@ Class frontDesk_db extends CI_MODEL
 				$date = $filters['dates']['dateArrivalReport'];
 				/*$this->db->where("ro.NightId = 1");
 				$this->db->where("CONVERT(VARCHAR(10),'" . $date . "',101) = CONVERT(VARCHAR(10),c.Date,101)");*/
+				/*$this->db->where("CONVERT(VARCHAR(10),'" . $date . "',101) = CONVERT(VARCHAR(10),c.Date,101)");
+			}
+			if(isset($filters['dates']['dateDepartureReport']) && !isset($filters['dates']['dateArrivalReport'])){
+				$date = $filters['dates']['dateDepartureReport'];
+				$this->db->where("CONVERT(VARCHAR(10),'" . $date . "',101) = CONVERT(VARCHAR(10),c.Date,101)");
+			}else if(isset($filters['dates']['dateArrivalReport']) && isset($filters['dates']['dateDepartureReport'])){
+				$date = $filters['dates']['dateArrivalReport'];
+				$date2 = $filters['dates']['dateDepartureReport'];
+				$this->db->where("CONVERT(VARCHAR(10),c.Date,101) BETWEEN CONVERT(VARCHAR(10),'" . $date . "',101) and CONVERT(VARCHAR(10),'" . $date2 . "',101)");
+			}
+		}*/
+		$this->db->order_by("u.unitcode ASC");
+		
+		return  $this->db->get()->result();
+	}
+	
+	public function getUnitReport( $filters ){
+		$this->db->distinct();
+		$this->db->select('u.pkUnitId, u.UnitCode, hks.HKStatusDesc, hkc.HkCodeDesc');
+		$this->db->from('tblUnit u');
+		$this->db->join('tblUnithkstatus uhs', 'uhs.fkunitid = u.pkunitid and  uhs.fkCalendarID = (select top 1 uhs2.fkCalendarID  from tblUnithkstatus uhs2 where uhs2.fkUnitId = uhs.fkUnitId ORDER BY uhs2.fkCalendarID  DESC )', 'inner');
+		$this->db->join('tblHKStatus hks', 'hks.pkHKStatusId = uhs.fkHkStatusId', 'inner');
+		$this->db->join('tblHkCode hkc', 'hkc.pkHkCodeId = uhs.fkHkStatusId', 'inner');
+		/*if($filters['dates'] != false){
+			$this->db->join('tblResInvt ri', 'ri.fkUnitId = u.pkunitid', 'inner');
+			$this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId', 'inner');
+			$this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId', 'left');
+			if(isset($filters['dates']['dateArrivalReport']) && !isset($filters['dates']['dateDepartureReport'])){
+				$date = $filters['dates']['dateArrivalReport'];
 				$this->db->where("CONVERT(VARCHAR(10),'" . $date . "',101) = CONVERT(VARCHAR(10),c.Date,101)");
 			}
 			if(isset($filters['dates']['dateDepartureReport']) && !isset($filters['dates']['dateArrivalReport'])){
@@ -452,9 +482,40 @@ Class frontDesk_db extends CI_MODEL
 				$date2 = $filters['dates']['dateDepartureReport'];
 				$this->db->where("CONVERT(VARCHAR(10),c.Date,101) BETWEEN CONVERT(VARCHAR(10),'" . $date . "',101) and CONVERT(VARCHAR(10),'" . $date2 . "',101)");
 			}
-		}
-		$this->db->order_by("u.unitcode ASC");
+		}*/
+		$this->db->order_by("u.pkUnitId ASC");
 		
+		return  $this->db->get()->result();
+	}
+	
+	public function getUnitOccReport( $filters ){
+		$this->db->distinct();
+		$this->db->select("u.pkUnitId, r.pkResId, r.Folio, r.ResConf, ri.Intv, ( RTRIM(p.Name) + ' ' + RTRIM(p.LName) + ' ' + RTRIM(p.LName2) ) as Name");
+		$this->db->from('tblRes r');
+		$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'inner');
+		$this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId', 'inner');
+		$this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId', 'inner');
+		$this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId', 'inner');
+		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = r.pkResId and rpa.ynPrimaryPeople = 1', 'inner');
+		$this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId', 'inner');
+		if($filters['dates'] != false){
+			$date = $filters['dates']['dateArrivalReport'];
+			$this->db->where("CONVERT(VARCHAR(10),c.Date,101) = '" . $date . "'");
+		}else{
+			$this->db->where("CONVERT(VARCHAR(10),c.Date,101) = CONVERT(VARCHAR(10), GETDATE() ,101)");
+		}
+		$this->db->order_by("u.pkUnitId ASC");
+		return  $this->db->get()->result();
+	}
+	
+	public function getAccTrxReport( $idRes ){
+		$this->db->distinct();
+		$this->db->select("atr.pkAccTrxId, atr.Amount, atr.AbsAmount, atr.fkAccid, tt.TrxSign");
+		$this->db->from('tblAccTrx atr');
+		$this->db->join('tblAcc a', 'a.pkAccId = atr.fkAccid', 'inner');
+		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId', 'inner');
+		$this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = atr.fkTrxTypeId', 'inner');
+		$this->db->where("rpa.fkResId", $idRes);
 		return  $this->db->get()->result();
 	}
 	
