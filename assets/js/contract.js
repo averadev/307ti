@@ -192,7 +192,7 @@ function updateBalanceFinal(){
 
 	var descuento = descuentoEspecial + deposito + pagosProgramados + descuentoEfectivo + transferencia;
 	var costoTotal = precioVenta + closingCost;
-	var total = costoTotal - descuento;
+	var total = (costoTotal - descuento).toFixed(2);
 	$("#financeBalance").val(total);
 	
 }
@@ -287,11 +287,9 @@ function showModalDetailWeek(){
 	var id = getValueFromTableSelected("contracts", 1);
 	var year = getValueFromTableSelected("tableCOccupationSelected", 1);
 	var week = getValueFromTableSelected("tableCOccupationSelected", 2);
-	console.log(id);
-	console.log(year);
 	var ajaxData =  {
 		url: "contract/getResByContCon",
-		tipo: "json",
+		tipo: "html",
 		datos: {
 			idContrato: id,
 			year: year,
@@ -320,12 +318,12 @@ function showModalDetailWeek(){
 		dialogWeekDetail.dialog( "destroy" );
 	}
 	dialogWeekDetail = modalGeneral2(modalPropiedades, ajaxData);
-	//dialogWeekDetail.dialog( "open" );
+	dialogWeekDetail.dialog( "open" );
 }
 function addHTMLDetailWeek(data){
-	console.log(data)
+	//console.table(data)
 	//modalEditContract(data.id);
-	//$("#dialog-DetailWeek").html(data);
+	$("#dialog-DetailWeek").html(data);
 } 
 
 function cerrarContract(){
@@ -1569,10 +1567,11 @@ function initEventosDownpaymentProgramados(){
 		show_icon: false,
 	});
 	$('#datePaymentPrg').val(getCurrentDate())
-	var downpayment = $("#downpaymentTotal").val();
-	var deposit = $("#depositoEnganche").val();
+	var downpayment = getNumberTextInput("downpaymentTotal");
+	var deposit = getNumberTextInput("depositoEnganche");
 	$("#montoDownpaymentPrg").val(0);
-	$("#downpaymentProgramado").val(downpayment-deposit);
+	var programado = (downpayment-deposit).toFixed(2);
+	$("#downpaymentProgramado").val(programado);
 	selectMetodoPagoProgramados();
 
 	$('#btnCleanmontoDownpaymentPrg').click(function (){
@@ -2747,7 +2746,12 @@ function SaveFlagsContract(){
 	    success: function(data){
 	    	alertify.success(data['mensaje']);
 	    	drawTableFlagsAsigned(data['banderas'],"flagsAsignedBody");
-	    	//deleteSelectFlag("flagsAsignedBody");
+	    	if (data["banderas"]) {
+	    		updateTagBanderas(data["banderas"]);
+	    	}else{
+	    		$("#flagsContracEdit").text("Flags:");
+	    	}
+	    	
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -2755,6 +2759,16 @@ function SaveFlagsContract(){
 	});
 }
 
+function updateTagBanderas(banderas){
+	var textoBanderas = "Flags: ";
+	for(var i = 0; i < banderas.length; i++){
+		textoBanderas += banderas[i].FlagDesc;
+		if (banderas.length != i) {
+			textoBanderas += ",";
+		}
+	}
+	$("#flagsContracEdit").text(textoBanderas);
+}
 
 function drawTableFlagsAsigned(data, table){
 	//console.table(data);
@@ -2773,7 +2787,12 @@ function drawTableFlagsAsigned(data, table){
 }
 function drawTableFlagsAsignedFlags(data){
 	alertify.success(data['mensaje']);
-	//drawTableFlagsAsigned(data['banderas'],"flagsAsignedBody");
+	if (data["banderas"]) {
+		updateTagBanderas(data["banderas"]);
+	}else{
+		$("#flagsContracEdit").text("Flags:");
+	}
+	
 }
 
 function deleteSelectFlag(div){
@@ -2813,7 +2832,12 @@ function nextStatusContract(){
 	    success: function(data){
 	    	$("#iNextStatus").removeClass("fa-spin");
 	    	$("#editContracStatus").text("Status: "+data['status']);
-	    	$("#btnNextStatus").text("Next Status: "+data['next']);
+	    	if (data['next'] != null) {
+	    		$("#btnNextStatus span").text("Next Status: "+data['next']);
+	    	}else{
+	    		$("#btnNextStatus").remove();
+	    	}
+	    	
 	    	alertify.success(data['mensaje']);
 	    		$("#btnNextStatus").click(function(){
 					nextStatusContract();

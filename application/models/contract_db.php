@@ -49,7 +49,7 @@ class Contract_db extends CI_Model {
         }
 
     }
-     function getContratos2($filters, $id){
+    function getContratos2($filters, $id){
         $sql = "";
         $this->db->distinct();
         $this->db->select('R.pkResId as ID, R.folio as Folio, R.LegalName as LegalName, RTRIM(UT.FloorPlanDesc) as FloorPlan, FR.FrequencyDesc');
@@ -572,12 +572,28 @@ class Contract_db extends CI_Model {
     public function selectNextStatusDesc($idStatus){
         $this->db->select('S.StatusDesc as Descripcion');
         $this->db->from('tblStatus S');
+        $this->db->join('tblStatusTypeStatus TS', 'S.pkStatusId = TS.fkStatusId', 'inner');
         $this->db->where('pkStatusId', $idStatus);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 ){
             $row = $query->row();
             return $row->Descripcion;
+        }
+    }
+    public function selectNextStatusDesc2($id){
+        $this->db->select('s.statusDesc');
+        $this->db->from('tblstatustypestatus sts');
+        $this->db->join('tblstatustype st', 'st.pkStatusTypeid = sts.fkStatusTypeId', 'inner');
+        $this->db->join('tblstatus s', 's.pkStatusId = sts.fkStatusId', 'inner');
+        $this->db->where('sts.fkStatusTypeId', 1);
+        $this->db->where('sts.Sequence', $id);
+        $this->db->order_by('sts.pkStatusTypeStatusId');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+           $row = $query->row();
+            return $row->statusDesc;
         }
     }
     public function selectIDRes($id, $year){
@@ -656,16 +672,15 @@ class Contract_db extends CI_Model {
         $this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId');
         $this->db->join('tblResFin RF', 'RF.fkResId = R.pkResRelatedId');
         $this->db->where('R.fkResTypeId', '6');
-		$this->db->where('R.pkResRelatedId', $idContrato);
+		$this->db->where('R.pkResrelatedId', $idContrato);
 		$this->db->where('R.FirstOccYear', $year);
         $this->db->order_by('ID', 'DESC');
         $query = $this->db->get();
-		 return $query->result();
 
-        /*if($query->num_rows() > 0 )
+        if($query->num_rows() > 0 )
         {
             return $query->result();
-        }*/
+        }
 	}
 
     public function selectDocumentsContract($string){
@@ -741,9 +756,10 @@ class Contract_db extends CI_Model {
         }
     }
     public function selectNotes($ID){
-        $this->db->select("N.pkNoteId, NT.NoteTypeDesc, N.NoteDesc, N.CrDt, N.CrBy");
+        $this->db->select("N.pkNoteId, NT.NoteTypeDesc, N.NoteDesc, N.CrDt, U.UserLogin");
         $this->db->from('tblNote N');
         $this->db->join('tblNoteType NT', 'N.fkNoteTypeId = NT.pkNoteTypeid', 'inner');
+        $this->db->join('tblUser U', 'N.CrBy = U.pkUserId', 'inner');
         $this->db->where('fkResId', $ID);
         $this->db->where('N.ynActive', 1);
         $query = $this->db->get();

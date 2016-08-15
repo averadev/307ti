@@ -39,9 +39,6 @@ class Contract extends CI_Controller {
 				$idContrato = $this->createContract();
 				$this->insertContratoOcupacion($idContrato);
 				$acc = $this->createAcc();
-				$idContrato = $this->createContract();
-				$this->insertContratoOcupacion($idContrato);
-				$acc = $this->createAcc();
 				$this->insertPeoples($idContrato, $acc);
 				$this->makeTransactions($idContrato);
 				$this->createUnidades($idContrato);
@@ -142,7 +139,7 @@ private function insertContratoOcupacion($idContrato){
 	$rango = intval($_POST['lastYear']-$_POST['firstYear']);
 	for($i =0; $i<= $rango; $i++){
 			$Ocupacion = [
-			"fkResTypeId"               => $this->contract_db->selectRestType('ContFx'),
+			"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
 			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
 			"fkLanguageId"              => $_POST['idiomaID'],
 	        "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
@@ -358,10 +355,10 @@ private function insertExtrastransaction($idContrato){
 		"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 		"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('EXC'),
 		"fkTrxClassID"	=> $classID,
-		"Debit-"		=> $this->remplaceFloat($numero),
+		"Debit-"		=> valideteNumber($numero),
 		"Credit+"		=> 0,
-		"Amount"		=> abs($precio), 
-		"AbsAmount"		=> abs($precio),
+		"Amount"		=> valideteNumber(abs($precio)), 
+		"AbsAmount"		=> valideteNumber(abs($precio)),
 		"Remark"		=> '', //
 		"Doc"			=> '',
 		"DueDt"			=> $this->getToday(),
@@ -382,10 +379,10 @@ private function insertESDtransaction($idContrato){
 		"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 		"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('sDisc'),
 		"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SAL'),
-		"Debit-"		=> $this->remplaceFloat($precio),
+		"Debit-"		=> valideteNumber($precio),
 		"Credit+"		=> 0,
-		"Amount"		=> abs($precio), 
-		"AbsAmount"		=> abs($precio),
+		"Amount"		=> valideteNumber(abs($precio)), 
+		"AbsAmount"		=> valideteNumber(abs($precio)),
 		"Remark"		=> '', //
 		"Doc"			=> '',
 		"DueDt"			=> $this->getToday(),
@@ -422,16 +419,15 @@ private function insertDeposittransaction($idContrato){
 		$precio = valideteNumber($_POST['deposito']);
 		$closingCost = valideteNumber($_POST['closingCost']);
 		$precio  =  $precio - $closingCost;
-
 		$precio =  -1 * (abs($precio));
 		$transaction = [
 			"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('DEP'),
 			"fkTrxClassID"	=> $this->contract_db->gettrxClassID('PAY'),
-			"Debit-"		=> $this->remplaceFloat($precio),
+			"Debit-"		=> valideteNumber($precio),
 			"Credit+"		=> 0,
-			"Amount"		=> abs($precio), 
-			"AbsAmount"		=> abs($precio),
+			"Amount"		=> valideteNumber(abs($precio)), 
+			"AbsAmount"		=> valideteNumber(abs($precio)),
 			"Remark"		=> '', //
 			"Doc"			=> '',
 			"DueDt"			=> $this->getToday(),
@@ -485,10 +481,10 @@ private function insertPagosDownpayment($idContrato){
 				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato), 
 				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('SCP'),
 				"fkTrxClassID"		=> $this->contract_db->gettrxClassID('SCH'),
-				"Debit-"			=> $this->remplaceFloat($precio),
+				"Debit-"			=> valideteNumber($precio),
 				"Credit+"			=> 0,
-				"Amount"			=> abs($precio), 
-				"AbsAmount"			=> abs($precio),
+				"Amount"			=> valideteNumber(abs($precio)), 
+				"AbsAmount"			=> valideteNumber(abs($precio)),
 				"Remark"			=> '', 
 				"Doc"				=> '',
 				"DueDt"				=> $_POST['tablaDownpayment'][$i]["date"],
@@ -802,8 +798,15 @@ public function nextStatusContract(){
 		$condicion = "pkResId = " . $id;
 		$afectados = $this->contract_db->updateReturnId('tblRes', $Res, $condicion);
 		if ($afectados>0) {
-			$next = $this->contract_db->selectNextStatusDesc(intval($IdStatus)+ 1);
-			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $this->getPropertyStatus($IdStatus), "next" => $next];
+			
+			if ($IdStatus< $maximo) {
+				$IdStatus = $IdStatus;
+			}else{
+				$IdStatus = $maximo;
+			}
+			$next = $this->contract_db->selectNextStatusDesc2(intval($IdStatus)+1);
+			$actual = $this->contract_db->selectNextStatusDesc2($IdStatus);
+			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $actual, "next" => $next];
 			echo json_encode($mensaje);
 		}else{
 			$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
@@ -1063,12 +1066,8 @@ public function getFlagsContract(){
 			$idContrato = $_POST['idContrato'];
 			$year = $_POST['year'];
 			$week = $_POST['week'];
-			//$data['weekDetail'] = $this->contract_db->selectWeekDetail($idContrato, $year, $week);
-			//$id = $this->contract_db->selectIDRes($idContrato, $year);
-			$data['reservacione'] = $this->contract_db->getResByContCon($idContrato, $year);
-			//echo json_encode(["id" =>$id]);
-			echo json_encode(["id" =>$data]);
-			//$this->load->view('contracts/dialogDetailWeek', $data);
+			$data['weekDetail'] = $this->contract_db->getResByContCon($idContrato, $year);
+			$this->load->view('contracts/dialogDetailWeek', $data);
 		}
 	}
 
@@ -1139,8 +1138,18 @@ public function getFlagsContract(){
 				"codicion"	=> 'pkResID',
 				"id"		=>	$id
 			];
+			$maximo = $this->contract_db->selectMaxStatus();
+
 			$IdStatus = $this->contract_db->propertyTable($peticion);
-			$data['statusNext'] = $this->contract_db->selectNextStatusDesc(intval($IdStatus)+ 1);
+			if ($IdStatus<$maximo) {
+				$IdStatus = $IdStatus;
+			}else{
+				$IdStatus = $maximo;
+			}
+			$next = $this->contract_db->selectNextStatusDesc2(intval($IdStatus)+1);
+			$actual = $this->contract_db->selectNextStatusDesc2($IdStatus);
+			
+			$data['statusNext'] = $next;
 			$this->load->view('contracts/contractDialogEdit', $data);
 		}
 	}

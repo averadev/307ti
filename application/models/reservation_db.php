@@ -864,6 +864,36 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->Descripcion;
         }
     }
+
+ public function selectNextStatusDesc2($id){
+        $this->db->select('s.statusDesc');
+        $this->db->from('tblstatustypestatus sts');
+        $this->db->join('tblstatustype st', 'st.pkStatusTypeid = sts.fkStatusTypeId', 'inner');
+        $this->db->join('tblstatus s', 's.pkStatusId = sts.fkStatusId', 'inner');
+        $this->db->where('sts.fkStatusTypeId', 2);
+        $this->db->where('sts.Sequence', $id);
+        $this->db->order_by('sts.pkStatusTypeStatusId');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+           $row = $query->row();
+            return $row->statusDesc;
+        }
+    }
+    public function selectMaxStatus(){
+        $this->db->select('max(PkStatusTypeStatusId) as maximo');
+        $this->db->from('tblstatustypestatus sts');
+        $this->db->join('tblstatustype st', 'st.pkStatusTypeid = sts.fkStatusTypeId', 'inner');
+        $this->db->join('tblstatus s', 's.pkStatusId = sts.fkStatusId', 'inner');
+        $this->db->where('st.pkStatusTypeid', 2);
+        $this->db->where('st.ynActive', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->maximo;
+        }
+    }
 	
     //
     private function filterReservations($filters){

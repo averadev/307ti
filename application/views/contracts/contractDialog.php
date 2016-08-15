@@ -300,7 +300,7 @@
                     </div>
                     <div class="small-6 columns">
                         <label>Balance to be Financed</label>
-                        <input id="financeBalance" class="round general" type="text" placeholder="$0.00">
+                        <input readonly id="financeBalance" class="round general" type="text" placeholder="$0.00">
                     </div>
                 </div>
             </div>

@@ -31,7 +31,7 @@
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
 		<label class="headerGeneral" id="editContracStatus">Status: <?php echo $contract[0]->StatusDesc;?></label>
-		<label class="headerGeneral">Flags: 
+		<label id="flagsContracEdit" class="headerGeneral">Flags: 
 		<?php
 			if (!empty($flags)) {
 				 foreach($flags as $item){
@@ -96,8 +96,11 @@
 							<a id="btnRefinancingContract" class="button tiny">
 							<i class="fa fa-user-plus">Refinancing contract</i></a>
 						</div>
-					<div class="small-6 columns" > 
-						<a id="btnNextStatus" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i><?php echo "Next Status: ".$statusNext; ?></a>
+					<div class="small-6 columns" >
+					<?php if ($statusNext) {
+					echo '<a id="btnNextStatus" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>'. "<span>Next Status: ".$statusNext.'</span></a>';
+					} ?> 
+	
 					</div>
 						<table id="peopleContract" width="100%">
 							<thead>

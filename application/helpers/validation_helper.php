@@ -56,7 +56,7 @@ if (! function_exists('valideteNumber')) {
 		else{
 			$precio = 0;
 		}
-		return $precio;
+		return  str_replace(",", ".", $precio);
 	}
 }
 
@@ -188,4 +188,11 @@ if (! function_exists('isValidateCreditCard')) {
 			return $Validacion;
 	}
 
+}
+
+if (! function_exists('remplaceFloat')) {
+	
+	function remplaceFloat($valor){
+		return str_replace(",", ".", $valor);
+	}
 }

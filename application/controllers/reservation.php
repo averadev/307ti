@@ -337,10 +337,10 @@ class Reservation extends CI_Controller {
 			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('EXC'),
 			"fkTrxClassID"	=> $classID,
-			"Debit-"		=> $numero,
+			"Debit-"		=> valideteNumber($numero),
 			"Credit+"		=> 0,
-			"Amount"		=> abs($precio), 
-			"AbsAmount"		=> abs($precio),
+			"Amount"		=> valideteNumber(abs($precio)), 
+			"AbsAmount"		=> valideteNumber(abs($precio)),
 			"Remark"		=> '', //
 			"Doc"			=> '',
 			"DueDt"			=> $this->getToday(),
@@ -361,10 +361,10 @@ class Reservation extends CI_Controller {
 			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('sDisc'),
 			"fkTrxClassID"	=> $this->reservation_db->gettrxClassID('SAL'),
-			"Debit-"		=> $precio,
+			"Debit-"		=> valideteNumber($precio),
 			"Credit+"		=> 0,
-			"Amount"		=> abs($precio), 
-			"AbsAmount"		=> abs($precio),
+			"Amount"		=> valideteNumber(abs($precio)), 
+			"AbsAmount"		=> valideteNumber(abs($precio)),
 			"Remark"		=> '', //
 			"Doc"			=> '',
 			"DueDt"			=> $this->getToday(),
@@ -406,10 +406,10 @@ class Reservation extends CI_Controller {
 			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('DEP'),
 			"fkTrxClassID"	=> $this->reservation_db->gettrxClassID('PAY'),
-			"Debit-"		=> $precio,
+			"Debit-"		=> valideteNumber($precio),
 			"Credit+"		=> 0,
-			"Amount"		=> abs($precio), 
-			"AbsAmount"		=> abs($precio),
+			"Amount"		=> valideteNumber(abs($precio)), 
+			"AbsAmount"		=> valideteNumber(abs($precio)),
 			"Remark"		=> '', //
 			"Doc"			=> '',
 			"DueDt"			=> $this->getToday(),
@@ -462,10 +462,10 @@ class Reservation extends CI_Controller {
 					"fkAccid" 			=> $this->reservation_db->getACCIDByContracID($idContrato), 
 					"fkTrxTypeId"		=> $this->reservation_db->getTrxTypeContracByDesc('SCP'),
 					"fkTrxClassID"		=> $this->reservation_db->gettrxClassID('SCH'),
-					"Debit-"			=> $precio,
+					"Debit-"			=> valideteNumber($precio),
 					"Credit+"			=> 0,
-					"Amount"			=> abs($precio), 
-					"AbsAmount"			=> abs($precio),
+					"Amount"			=> valideteNumber(abs($precio)), 
+					"AbsAmount"			=> valideteNumber(abs($precio)),
 					"Remark"			=> '', 
 					"Doc"				=> '',
 					"DueDt"				=> $_POST['tablaDownpayment'][$i]["date"],
@@ -951,6 +951,7 @@ class Reservation extends CI_Controller {
 				"codicion"	=> 'pkResID',
 				"id"		=>	$id
 			];
+			//$maximo = $this->reservation_db->selectMaxStatus();
 			$IdStatus = $this->reservation_db->propertyTable($peticion);
 			$data['statusNext'] = $this->reservation_db->selectNextStatusDesc(intval($IdStatus)+ 1);
 			$this->load->view('reservations/reservationDialogEdit', $data);

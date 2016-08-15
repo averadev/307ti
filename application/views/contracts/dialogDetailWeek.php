@@ -3,11 +3,15 @@
 	<table>
     	<thead class="colorCrema">
         	<tr>
-            	<th class="cellEdit">Year</th>
-                <th class="cellGeneral">NightId</th>
-                <th class="cellGeneral">Intv</th>
-                <th class="cellGeneral">Unit Code</th>
-                <th class="cellGeneral">Date</th>   
+            	<th class="cellEdit">ID</th>
+                <th class="cellGeneral">Folio</th>
+                <th class="cellGeneral">LegalName</th>
+                <th class="cellGeneral">FloorPlan</th>
+                <th class="cellGeneral">FrequencyDesc</th>
+                <th class="cellGeneral">StatusDesc</th>
+                <th class="cellGeneral">CrDt</th>      
+                <th class="cellGeneral">FirstOccYear</th>
+                <th class="cellGeneral">LastOccYear</th>   
             </tr>
 		</thead>
 		<tbody>
@@ -15,11 +19,15 @@
 if (!empty($weekDetail)){
     foreach($weekDetail as $item){?>
 	<tr>
-	    <td><?php echo $item->OccYear ?></td>
-	    <td><?php echo $item->NightId ?></td>
-	    <td><?php echo $item->Intv ?></td>
-	    <td><?php echo $item->UnitCode ?></td>
-	    <td><?php echo $item->Date ?></td>
+	    <td><?php echo $item->ID ?></td>
+	    <td><?php echo $item->Folio ?></td>
+	    <td><?php echo $item->LegalName ?></td>
+	    <td><?php echo $item->FloorPlan ?></td>
+	    <td><?php echo $item->FrequencyDesc ?></td>
+	    <td><?php echo $item->StatusDesc ?></td>
+	    <td><?php echo $item->CrDt ?></td>
+	    <td><?php echo $item->FirstOccYear ?></td>
+	    <td><?php echo $item->LastOccYear ?></td>
 	</tr>
 <?php
 }
