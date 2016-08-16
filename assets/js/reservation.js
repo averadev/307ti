@@ -1,6 +1,7 @@
 var unitReservacion = [];
 var iniDateRes = null;
 var endDateRes = null;
+var mocalCreditLimit = null;
 
 $(document).ready(function(){
 	maxHeight = screen.height * .10;
@@ -147,25 +148,48 @@ $(document).ready(function(){
 		}
 	});
 	
-	//$( "#btnNextStatusRes").unbind( "click" );
-	/*$(document).off( 'click', '#btnNextStatusRes');
-	$(document).on( 'click', '#btnNextStatusRes', function () {
-		nextStatusContractRes();
-	});*/
+	$(document).on( 'click', '#btAddCreditLimitRes', function(){
+		var ajaxData =  {
+			url: "reservation/modalCreditLimit",
+			tipo: "html",
+			datos: {},
+			funcionExito : addHTMLCreditLimit,
+			funcionError: mensajeAlertify
+		};
+	var modalPropiedades = {
+		div: "dialog-CreditLimit",
+		altura: 260,
+		width: 500,
+		onOpen: ajaxDATA,
+		onSave: createNewLimit,
+		botones :[{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       		if (true) {
+       			createNewLimit();
+       			$(this).dialog('close');
+       		}
+       		}
+     	}]
+	};
 
-	/*$(document).on( 'click', '#btnAddTourID', function () {
-		var dialogAddTour = addTourContract();
-		dialogAddTour.dialog("open");
-	});
-	$(document).on( 'click', '#btnDeleteTourID', function () {
-		$('#TourID').val('0');
-	});*/
-	/*$(document).on( 'click', '#btnAddmontoDownpaymentPrg', function () {
-		if($("#montoDownpaymentPrg").val()>0){
-			tableDownpaymentSelectedPrgRes();
-			totalDownpaymentPrgRes();
+
+
+		if (mocalCreditLimit!=null) {
+			mocalCreditLimit.dialog( "destroy" );
 		}
-	});*/
+		mocalCreditLimit = modalGeneral2(modalPropiedades, ajaxData);
+		mocalCreditLimit.dialog( "open" );
+	});
+
+
 	$( "#btnCleanWordRes").unbind( "click" );
 	$('#btnCleanWordRes').click(function (){
 		$( "#stringRes, #startDateRes, #endDateRes" ).val("");
@@ -222,6 +246,33 @@ $(document).ready(function(){
 	
 	getDatailByIDRes("reservationstbody");
 });
+
+function addHTMLCreditLimit(data){
+	$("#dialog-CreditLimit").html(data);
+	//initEventosFinanciamiento();
+}
+function createNewLimit (){
+	var accauntType = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
+	var accauntID = $('#btNewTransAccRes').data( 'idAcc' + accauntType );
+	var amount = $("#creditLimitResInput").val();
+	var ajaxData =  {
+		url: "reservation/updateCreditLimit",
+		tipo: "json",
+		datos: {
+			'accauntID': accauntID,
+			'accauntType': accauntType,
+			'amount': amount
+		},
+		funcionExito : mensajeLimit,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+	
+}
+
+function mensajeLimit(data){
+	alertify.success(data["mensaje"]);
+}
 
 function ajaxSelectsRes(url,errorMsj, funcion, divSelect) {
 	$.ajax({

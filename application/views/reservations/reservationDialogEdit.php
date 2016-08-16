@@ -26,12 +26,13 @@
 <div class="row headerDescription headerGeneral" style="padding: 8px;">
 	<div class="small-12 medium-12 large-8 columns"  >
 		<label class="headerDescriptionTitle small-12 columns" id="editContractTitle"><?php  echo "[".$contract[0]->Folio ."-".$contract[0]->ID;?></label>
+				<label class="headerGeneral small-12 columns" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
+		<label class="headerGeneral small-12 columns" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
 		<label class="headerGeneral small-6 columns" id="editContractTitle"><?php  echo "Expected Arrival: ". $contract[0]->arrivaDate;?></label>
 		<label class="headerGeneral small-6 columns" id="editContractTitle"><?php  echo "Check In: ";?></label>
 		<label class="headerGeneral small-6 columns" id="editContractTitle"><?php  echo "Expected Deperture: ".$contract[0]->depatureDate;?></label>
 		<label class="headerGeneral small-6 columns" id="editContractTitle"><?php  echo "Check Out: ";?></label>
-		<label class="headerGeneral small-12 columns" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
-		<label class="headerGeneral small-12 columns" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
+
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
 		<label class="headerGeneral" id="editReservationStatus">Status: <?php echo $statusActual;?></label>
@@ -261,8 +262,8 @@
 								<tr>
 									<td >Folio Reservation</td>
 									<td class="folioAccount">00000</td>
-									<td></td>
-									<td></td>
+									<td>Credit Limit</td>
+									<td id="creditLimitRes">$00.00</td>
 								</tr>
 								<tr>
 									<td>Balance</td>
@@ -376,6 +377,10 @@
 				</a>
 				<a id="btAddPayAccRes" attr_type="addPayAcc" class="btn btn-primary spanSelect">
 					<div class="label">Add Payment</div>
+					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+				</a>
+				<a id="btAddCreditLimitRes" attr_type="addLimitAcc" class="btn btn-primary spanSelect">
+					<div class="label">Credit Limit</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
 			</div>

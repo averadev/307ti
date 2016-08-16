@@ -1054,7 +1054,28 @@ public function nextStatusReservacion(){
 			$this->load->view('reservations/reservationDialogFinanciamiento', $data);			
 		}
 	}
-	
+	public function modalCreditLimit(){
+		if($this->input->is_ajax_request()) {
+			$this->load->view('reservations/dialogCreditLimtit');			
+		}
+	}
+	public function updateCreditLimit(){
+		if($this->input->is_ajax_request()) {
+			$financiamiento = [
+				"CrdLimit"	=> $_POST['amount'],
+			];
+			$condicion = "fkAccId = " . $_POST['accauntID'];
+
+			$afectados = $this->reservation_db->updateReturnId('tblRespeopleacc', $financiamiento, $condicion);
+			if ($afectados>0) {
+				$mensaje = ["mensaje"=>"It was successfully saved","afectados" => $afectados];
+				echo json_encode($mensaje);
+			}else{
+				$mensaje = ["mesaje"=>"an error occurred"];	
+				echo json_encode($mensaje);
+			}		
+		}
+	}
 	public function modalDepositDownpayment(){
 		if($this->input->is_ajax_request()) {
 			$campos = "pkCcTypeId as ID, CcTypeDesc";

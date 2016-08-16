@@ -76,7 +76,6 @@
 						<fieldset class="large-12 columns fieldsetFilter">
 							<div class="row">
 								<div class="medium-3 columns">
-									<!--<input id="startDateRes" class="round" type="date">-->
 									<label id="alertDepartureFront" class="text-left">Arrivate Date
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
@@ -85,7 +84,6 @@
 									</label>
 								</div>
 								<div class="medium-3 columns">
-									<!--<input id="endDateRes" class="round" type="date">-->
 									<label id="alertDepartureFront" class="text-left">Depature Date
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
@@ -97,6 +95,7 @@
 									<label id="alertDepartureFront" class="text-left">Enter the filter
 									<input id="stringRes" type="text" class="round" placeholder="Search Field" name="search"  required>
 								</div>
+								<legend class="legendSearch" style="color: white;">-</legend>
 								<div class="medium-3 columns ">
 									<a id="btnfindRes" class="btn btn-primary btn-Search">
 										<div class="label">Search</div>
@@ -173,5 +172,6 @@
 <div id="dialog-NotasRes" title="Add Notes" style="display: none;"></div>
 <div id="dialog-accountsRes"  title="Accounts" style="display: none;"></div>
 <div id="dialog-newFileRes"  title="New File" style="display: none;"></div>
+<div id="dialog-CreditLimit"  title="Credit Limit" style="display: none;"></div>
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>reservation.js"></script>
