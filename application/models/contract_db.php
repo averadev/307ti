@@ -52,7 +52,7 @@ class Contract_db extends CI_Model {
     function getContratos2($filters, $id){
         $sql = "";
         $this->db->distinct();
-        $this->db->select('R.pkResId as ID, R.folio as Folio, R.LegalName as LegalName, RTRIM(UT.FloorPlanDesc) as FloorPlan, FR.FrequencyDesc');
+        $this->db->select("R.pkResId as ID, cast(R.Prefix as varchar) + '-' + cast(R.Folio as varchar) as Folio,  R.LegalName as LegalName, RTRIM(UT.FloorPlanDesc) as FloorPlan, FR.FrequencyDesc");
         $this->db->select('ES.StatusDesc, RI.CrDt, R.FirstOccYear, R.LastOccYear, RF.ListPrice, RF.NetSalePrice as netsale');
         $this->db->from('tblRes R');
         $this->db->join('tblResinvt RI', 'RI.fkResId = R.pkResId');
@@ -142,6 +142,18 @@ class Contract_db extends CI_Model {
         {
             $row = $query->row();
             return $row->pkRestypeId;
+        }
+    }
+    public function selectPrefix(){
+        $this->db->select('Prefix');
+        $this->db->from('tblpropertyFolio');
+        $this->db->where('pkPropertyFolioId', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->Prefix;
         }
     }
     public function selectPaymentProcessTypeId($string){

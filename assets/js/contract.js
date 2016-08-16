@@ -469,12 +469,16 @@ function createNombreLegal(){
 
 
 function getContratos(){
+	//
 	showLoading('#contracts',true);
     var filters = getFiltersCheckboxs('filtro_contrato');
     var arrayDate = ["startDateContract", "endDateContract"];
     var dates = getDates(arrayDate);
     var arrayWords = ["stringContrat"];
     var words = getWords(arrayWords);
+    if (filters.folio) {
+    	words.stringContrat = words.stringContrat.replace("1-", "");
+    }
     $.ajax({
 		data:{
 			filters: filters,

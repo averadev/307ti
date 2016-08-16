@@ -121,6 +121,7 @@ private function createContract(){
 		    "ResConf"                   => "",
 		    "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
 		    "LegalName"                 => $_POST['legalName'],
+		    "Prefix"					=> $this->contract_db->selectPrefix(),
 		    "Folio"                     => $this->contract_db->select_Folio(),
 		    "fkTourId"                  => $_POST['tourID'],
 		    "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),

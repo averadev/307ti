@@ -960,6 +960,7 @@ class Reservation extends CI_Controller {
 			}
 			$next = $this->reservation_db->selectNextStatusDesc2(intval($IdStatus)+1);
 			$actual = $this->reservation_db->selectNextStatusDesc2($IdStatus);
+			//$arrivaDate = 
 			$data['statusActual']= $actual;
 			$data['statusNext'] = $next;
 			$this->load->view('reservations/reservationDialogEdit', $data);

@@ -25,21 +25,24 @@
 </div>
 <div class="row headerDescription headerGeneral" style="padding: 8px;">
 	<div class="small-12 medium-12 large-8 columns"  >
-		<label class="headerDescriptionTitle" id="editContractTitle"><?php  echo "[".$contract[0]->Folio ."-".$contract[0]->ID;?></label>
-		<label class="headerGeneral" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
-		<label class="headerGeneral" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
+		<label class="headerDescriptionTitle small-12 columns" id="editContractTitle"><?php  echo "[".$contract[0]->Folio ."-".$contract[0]->ID;?></label>
+		<label class="headerGeneral small-6 columns" id="editContractTitle"><?php  echo "Expected Arrival: ". $contract[0]->arrivaDate;?></label>
+		<label class="headerGeneral small-6 columns" id="editContractTitle"><?php  echo "Check In: ";?></label>
+		<label class="headerGeneral small-6 columns" id="editContractTitle"><?php  echo "Expected Deperture: ".$contract[0]->depatureDate;?></label>
+		<label class="headerGeneral small-6 columns" id="editContractTitle"><?php  echo "Check Out: ";?></label>
+		<label class="headerGeneral small-12 columns" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
+		<label class="headerGeneral small-12 columns" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
 		<label class="headerGeneral" id="editReservationStatus">Status: <?php echo $statusActual;?></label>
-		
-		<!--<label class="headerGeneral">Flags: 
+		<label class="headerGeneral">Flags: 
 		<?php
 			if (!empty($flags)) {
 				 foreach($flags as $item){
 			 		echo $item->FlagDesc.", ";
 			 	}
 			}
-		?></label>-->
+		?></label>
 	</div>
 </div>
 <!-- tabs de los modales -->
@@ -96,11 +99,7 @@
 						<div class="small-12 columns">
 					<?php if ($statusNext) {
 					echo '<a id="btnNextStatusRes" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>'. "<span>Next Status: ".$statusNext.'</span></a>';
-					} ?> 
-							<!--<a id="btnNextStatus" class="btn btn-primary spanSelect">
-								<div class="label">Next Status</div>
-								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
-							</a>-->
+					} ?>
 						</div>
 						<table id="peopleContract" width="100%">
 							<thead>
