@@ -360,10 +360,10 @@
 										</div>
 									</label>
 								</div>-->
-								<!--<div class="small-12 large-6 columns" style="padding-top:30px;">
-									<input name="checkReport" type="checkbox" id="reportBalance" class="checkReport">
-									<label for="reportBalance">Balances</label>
-								</div>-->
+								<div class="small-12 large-6 columns" style="padding-top:30px;">
+									<input name="checkReport" type="checkbox" id="checkReport" class="checkReport">
+									<label for="checkReport">Balances</label>
+								</div>
 							</div>
 						</fieldset>
 						<fieldset class="large-12 columns fieldsetFilter">

@@ -20,21 +20,51 @@ class JobFrontDesk extends CI_Controller {
     
 	public function index(){
 		//echo "hola";
-		$units  = $this->frontDesk_db->getUnitsOcc();
+		$units  = $this->frontDesk_db->getUnitsDes();
+		$unitsOcc  = $this->frontDesk_db->getUnitsOcc();
+		$unitsOccToday  = $this->frontDesk_db->getUnitsOcc();
 		$calendar = $this->frontDesk_db->getCalendaryCurrent();
+		
+		$unitActive = array();
+		$unitOcc = 0;
+		$cont = 0;
+		foreach($unitsOcc as $item){
+			if($item->pkUnitId == $unitOcc){
+				$unitActive[$cont - 1]['statusT'] = $item->StatusDesc;
+			}else{
+				$unitOcc = $item->pkUnitId;
+				$unitActive[$cont]['unit'] = $item->pkUnitId;
+				$unitActive[$cont]['statusY'] = $item->StatusDesc;
+				$cont++;
+			}
+		}
+		$today = $this->getonlyDate(0);
+		$yesterday = $this->getonlyDate(-1);
+		
+		foreach( $unitActive as $item2 ){
+				
+				/*if(isset($item2['statusT'])){
+					echo $item2['statusT'];
+					echo "</br>";
+				}*/
+				
+				
+			}
 		
 		foreach( $units as $item ){
 			$hkCode = 1;
-			/*if($item->fkCalendarId == $item->lastDate){
-				$hkCode = 4;
-			}*/
-			
-			/*$status = 2;
-			if( $item->hkstatus == 5 ){
-				$status = $item->hkstatus;
-			}*/
-			if( ( $item->hkstatus == 1 && $item->hkDirty == 1 ) or is_null( $item->hkstatus ) == true ){
-				//echo $item->pkUnitId . " and " . $item->hkstatus . "</br>";
+			$vacia = 0;
+			foreach( $unitActive as $item2 ){
+				if( $item->pkUnitId == $item2['unit'] ){
+					if(!isset($item2['statusT']) && $item2['statusY'] == "Inhouse" ){
+						$vacia = 0;
+					}else{
+						$vacia = 1;
+					}
+				}
+			}
+			if( ( $item->hkstatus == 1 && $item->hkDirty == 1 && $vacia == 0 ) or is_null( $item->hkstatus ) == true ){
+				
 				$insert = array(
 					'fkUnitId' 			=> $item->pkUnitId,
 					'fkHkStatusId'		=> 2,
@@ -54,6 +84,18 @@ class JobFrontDesk extends CI_Controller {
 	}
 	
 	private function getToday(){
+		$hoy = getdate();
+		$strHoy = $hoy["year"]."-".$hoy["mon"]."-".$hoy["mday"] . " " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
+		return $strHoy;
+	}
+	
+	private function getonlyDate($restarDay){
+		$date = date( "Y-m-d" );
+		$date = date( "m/d/Y", strtotime( $restarDay . " day", strtotime( $date ) ) ); 
+		return $date;
+	}
+	
+	private function getYesterday(){
 		$hoy = getdate();
 		$strHoy = $hoy["year"]."-".$hoy["mon"]."-".$hoy["mday"] . " " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
 		return $strHoy;

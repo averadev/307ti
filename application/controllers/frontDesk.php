@@ -272,38 +272,118 @@ class FrontDesk extends CI_Controller {
 			}
 			$page = ($page - 1) * 25;
 			$unit = $this->frontDesk_db->getUnitReport($sql);
-			$unitOcc = $this->frontDesk_db->getUnitOccReport($sql);
+			$unitsOcc = $this->frontDesk_db->getUnitOccReport($sql);
+			$data = $unit;
+			
+			$unitActive = array();
+			$unitOcc = 0;
+			$cont = 0;
+			$dateToday = $this->getonlyDate(0, null );
+			if(isset($sql['dates']['dateArrivalReport'])){
+				$dateToday = $_POST['dates']['dateArrivalReport'];
+			}
+			$dateYesterday = $this->getonlyDate(-1, $dateToday );
+			$dateTomorrow = $this->getonlyDate(1, $dateToday );
+			
+			foreach($unitsOcc as $item){
+				if($item->ResConf == "" ){
+					$item->ResConf = "No confirmation code";
+				}
+				if($item->pkUnitId == $unitOcc){
+					//$unitActive[$cont - 1]['statusT'] = $item->StatusDesc;
+					if($item->date1 == $dateYesterday){
+						$unitActive[$cont - 1]['res_yesterday'] = $item->ResConf;
+						$unitActive[$cont - 1]['resId_yesterday'] = $item->pkResId;
+					}else if($item->date1 == $dateToday){
+						$unitActive[$cont - 1]['res_today'] = $item->ResConf;
+						$unitActive[$cont - 1]['resId_today'] = $item->pkResId;
+					}else if($item->date1 == $dateTomorrow){
+						$unitActive[$cont - 1]['res_tomorrow'] = $item->ResConf;
+						$unitActive[$cont - 1]['resId_tomorrow'] = $item->pkResId;
+					}
+				}else{
+					$unitOcc = $item->pkUnitId;
+					$unitActive[$cont]['pkUnitId'] = $item->pkUnitId;
+					if($item->date1 == $dateYesterday){
+						$unitActive[$cont]['res_yesterday'] = $item->ResConf;
+						$unitActive[$cont]['resId_yesterday'] = $item->pkResId;
+					}else if($item->date1 == $dateToday){
+						$unitActive[$cont]['res_today'] = $item->ResConf;
+						$unitActive[$cont]['resId_today'] = $item->pkResId;
+					}else if($item->date1 == $dateTomorrow){
+						$unitActive[$cont]['res_tomorrow'] = $item->ResConf;
+						$unitActive[$cont]['resId_tomorrow'] = $item->pkResId;
+					}
+					$cont++;
+				}
+			}
+			
 			foreach( $unit as $item ){
+				$item->HKCode = "Empty & Empty";
 				$item->Folio = "";
-				$item->ResConf = "";
+				$item->res_yesterday = "";
+				$item->res_today = "";
+				$item->res_tomorrow = "";
 				$item->Intv = "";
-				$item->Name = "";
-				$item->Total_Consumptions = 0;
-				$item->Total_Payments = 0;
-				$item->Balance = 0;
-				foreach( $unitOcc as $item2 ){
-					if( $item2->pkUnitId == $item->pkUnitId ){
+				//$item->Name = "";
+				//$item->Total_Consumptions = 0;
+				//$item->Total_Payments = 0;
+				$Total_Consumptions = 0;
+				$Total_Payments = 0;
+				if( $sql['checks'] ){
+					$item->Balance = 0;
+				}
+				
+				foreach( $unitsOcc as $item2 ){
+					//
+					if( $item2->pkUnitId == $item->pkUnitId && $dateToday == $item2->date1 ){
 						$item->Folio = $item2->Folio;
-						$item->ResConf = $item2->ResConf;
+						$item->res_today = $item2->ResConf;
 						$item->Intv = $item2->Intv;
-						$item->Name = $item2->Name;
+						//$item->Name = $item2->Name;
 						$trAcc = $this->frontDesk_db->getAccTrxReport($item2->pkResId);
 						foreach($trAcc as $item3){
 							if($item3->TrxSign == 1){
-								$item->Total_Consumptions = $item->Total_Consumptions + $item3->Amount;
+								$Total_Consumptions = $Total_Consumptions + $item3->Amount;
 							}else if($item3->TrxSign == -1){
-								$item->Total_Payments = $item->Total_Payments + $item3->Amount;
+								$Total_Payments = $Total_Payments + $item3->Amount;
 							}
 						}
-						$item->Balance = $item->Total_Consumptions - $item->Total_Payments;
+						if( $sql['checks'] ){
+							$item->Balance = $Total_Consumptions - $Total_Payments;
+						}	
+					}
+				}
+				foreach($unitActive as $item3){
+					if($item->pkUnitId == $item3['pkUnitId']){
+						if( isset( $item3['res_yesterday'] ) ){
+							$item->res_yesterday = $item3['res_yesterday'];
+						}
+						if( isset( $item3['res_tomorrow'] ) ){
+							$item->res_tomorrow = $item3['res_tomorrow'];
+						}
+						if( isset( $item3['resId_yesterday'] ) && isset( $item3['resId_today'] ) ){
+							if( $item3['resId_yesterday'] == $item3['resId_today'] ){
+								$item->HKCode = "Occupied";
+							}else if( $item3['resId_yesterday'] != $item3['resId_today'] ){
+								$item->HKCode = "Departure & Arrival";
+							}
+							
+						}else if( !isset( $item3['resId_yesterday'] ) && isset( $item3['resId_today'] ) ){
+							$item->HKCode = "Empty & Arrival";
+						}else if( isset( $item3['resId_yesterday'] ) && !isset( $item3['resId_today'] ) ){
+							$item->HKCode = "Departure & Empty";
+						}else{
+							$item->HKCode = "Empty & Empty";
+						}
 					}
 				}
 			}
-			$data = $unit;
+			
 			
 			//$data = $this->frontDesk_db->getHousekeepingReport($sql);
 			$total = count($data);
-			$data = array_slice($data, $page, 25);
+			//$data = array_slice($data, $page, 25);
 			echo json_encode(array('items' => $unit, 'total' => $total,"aaa" => $sql));
 		}
 	}
@@ -363,10 +443,121 @@ class FrontDesk extends CI_Controller {
 		if($_GET['type'] == "lookUp"){
 			$data = $this->frontDesk_db->getHousekeepingLookUp($sql);
 		}else if($_GET['type'] == "report"){
+			
 			//$data = $this->frontDesk_db->getHousekeepingReport($sql);
 			
 			$data = $this->frontDesk_db->getUnitReport($sql);
-			$unitOcc = $this->frontDesk_db->getUnitOccReport($sql);
+			
+			//$unit = $this->frontDesk_db->getUnitReport($sql);
+			$unitsOcc = $this->frontDesk_db->getUnitOccReport($sql);
+			//$data = $unit;
+			
+			$unitActive = array();
+			$unitOcc = 0;
+			$cont = 0;
+			$dateToday = $this->getonlyDate(0, null );
+			if(isset($sql['dates']['dateArrivalReport'])){
+				$dateToday = $_POST['dates']['dateArrivalReport'];
+			}
+			$dateYesterday = $this->getonlyDate(-1, $dateToday );
+			$dateTomorrow = $this->getonlyDate(1, $dateToday );
+			
+			foreach($unitsOcc as $item){
+				if($item->ResConf == "" ){
+					$item->ResConf = "No confirmation code";
+				}
+				if($item->pkUnitId == $unitOcc){
+					//$unitActive[$cont - 1]['statusT'] = $item->StatusDesc;
+					if($item->date1 == $dateYesterday){
+						$unitActive[$cont - 1]['res_yesterday'] = $item->ResConf;
+						$unitActive[$cont - 1]['resId_yesterday'] = $item->pkResId;
+					}else if($item->date1 == $dateToday){
+						$unitActive[$cont - 1]['res_today'] = $item->ResConf;
+						$unitActive[$cont - 1]['resId_today'] = $item->pkResId;
+					}else if($item->date1 == $dateTomorrow){
+						$unitActive[$cont - 1]['res_tomorrow'] = $item->ResConf;
+						$unitActive[$cont - 1]['resId_tomorrow'] = $item->pkResId;
+					}
+				}else{
+					$unitOcc = $item->pkUnitId;
+					$unitActive[$cont]['pkUnitId'] = $item->pkUnitId;
+					if($item->date1 == $dateYesterday){
+						$unitActive[$cont]['res_yesterday'] = $item->ResConf;
+						$unitActive[$cont]['resId_yesterday'] = $item->pkResId;
+					}else if($item->date1 == $dateToday){
+						$unitActive[$cont]['res_today'] = $item->ResConf;
+						$unitActive[$cont]['resId_today'] = $item->pkResId;
+					}else if($item->date1 == $dateTomorrow){
+						$unitActive[$cont]['res_tomorrow'] = $item->ResConf;
+						$unitActive[$cont]['resId_tomorrow'] = $item->pkResId;
+					}
+					$cont++;
+				}
+			}
+			
+			
+			foreach( $data as $item ){
+				$item->HKCode = "Empty & Empty";
+				$item->Folio = "";
+				$item->res_yesterday = "";
+				$item->res_today = "";
+				$item->res_tomorrow = "";
+				$item->Intv = "";
+				//$item->Name = "";
+				//$item->Total_Consumptions = 0;
+				//$item->Total_Payments = 0;
+				$Total_Consumptions = 0;
+				$Total_Payments = 0;
+				if( $_GET['filters2'] == "true" ){
+					$item->Balance = 0;
+				}
+				
+				foreach( $unitsOcc as $item2 ){
+					//
+					if( $item2->pkUnitId == $item->pkUnitId && $dateToday == $item2->date1 ){
+						$item->Folio = $item2->Folio;
+						$item->res_today = $item2->ResConf;
+						$item->Intv = $item2->Intv;
+						//$item->Name = $item2->Name;
+						$trAcc = $this->frontDesk_db->getAccTrxReport($item2->pkResId);
+						foreach($trAcc as $item3){
+							if($item3->TrxSign == 1){
+								$Total_Consumptions = $Total_Consumptions + $item3->Amount;
+							}else if($item3->TrxSign == -1){
+								$Total_Payments = $Total_Payments + $item3->Amount;
+							}
+						}
+						if( $_GET['filters2'] == "true" ){
+							$item->Balance = $Total_Consumptions - $Total_Payments;
+						}	
+					}
+				}
+				foreach($unitActive as $item3){
+					if($item->pkUnitId == $item3['pkUnitId']){
+						if( isset( $item3['res_yesterday'] ) ){
+							$item->res_yesterday = $item3['res_yesterday'];
+						}
+						if( isset( $item3['res_tomorrow'] ) ){
+							$item->res_tomorrow = $item3['res_tomorrow'];
+						}
+						if( isset( $item3['resId_yesterday'] ) && isset( $item3['resId_today'] ) ){
+							if( $item3['resId_yesterday'] == $item3['resId_today'] ){
+								$item->HKCode = "Occupied";
+							}else if( $item3['resId_yesterday'] != $item3['resId_today'] ){
+								$item->HKCode = "Departure & Arrival";
+							}
+						}else if( !isset( $item3['resId_yesterday'] ) && isset( $item3['resId_today'] ) ){
+							$item->HKCode = "Empty & Arrival";
+						}else if( isset( $item3['resId_yesterday'] ) && !isset( $item3['resId_today'] ) ){
+							$item->HKCode = "Departure & Empty";
+						}else{
+							$item->HKCode = "Empty & Empty";
+						}
+					}
+				}
+			}
+			
+			/*$unitOcc = $this->frontDesk_db->getUnitOccReport($sql);
 			foreach( $data as $item ){
 				$item->Folio = "";
 				$item->ResConf = "";
@@ -392,7 +583,7 @@ class FrontDesk extends CI_Controller {
 						$item->Balance = $item->Total_Consumptions - $item->Total_Payments;
 					}
 				}
-			}
+			}*/
 			
 		}
 		if(count($data) > 0){
@@ -600,5 +791,13 @@ class FrontDesk extends CI_Controller {
 		}else{
 			return false;
 		}
+	}
+	
+	private function getonlyDate($restarDay, $date){
+		if($date == null){
+			$date = date( "Y-m-d" );
+		}
+		$date = date( "m/d/Y", strtotime( $restarDay . " day", strtotime( $date ) ) ); 
+		return $date;
 	}
 }

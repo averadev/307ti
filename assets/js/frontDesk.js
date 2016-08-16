@@ -156,8 +156,8 @@ function getFrontDesk(order, page){
 		options = getWords(["ServiceTypeLookUp"]);
 		url = "frontDesk/getHousekeepingLookUp";
 	}else if(section == "section5"){
-		//filters = getFiltersCheckboxs('checkReport');
-		filters = {};
+		filters = getFiltersCheckboxs('checkReport');
+		//filters = {};
 		dates = getDates(["dateArrivalReport"]);
 		words = {};
 		options = {};
@@ -1186,6 +1186,7 @@ function saveHKStatus(rowStatus){
 function generateReportFrontDesk(){
 	
 	var filters = null;
+	var filters2 = null;
 	var dates = null;
 	var words = null;
 	var options = null;
@@ -1194,13 +1195,14 @@ function generateReportFrontDesk(){
 	
 	if(section == "section4"){
 		filters = getFiltersCheckboxs('statusHKLookUp');
+		filters2 = {};
 		dates = getDates(["dateHKLookUp"]);
 		words = getWords(["textUnitHKConfig"]);
 		options = getWords(["ServiceTypeLookUp"]);
 		url = "?type=lookUp";
 	}else if(section == "section5"){
-		//filters = getFiltersCheckboxs('checkReport');
-		filters = {};
+		filters = getFiltersCheckboxs('checkReport');
+		filters2 = $('#checkReport').prop('checked');
 		dates = getDates(["dateArrivalReport"]);
 		words = {};
 		options = {};
@@ -1208,11 +1210,13 @@ function generateReportFrontDesk(){
 	}
 	
 	filters = JSON.stringify(filters);
+	filters2 = JSON.stringify(filters2);
 	dates = JSON.stringify(dates);
 	words = JSON.stringify(words);
 	options = JSON.stringify(options);
 	
 	url += "&filters=" + filters;
+	url += "&filters2=" + filters2;
 	url += "&dates=" + dates;
 	url += "&words=" + words;
 	url += "&options=" + options;

@@ -461,11 +461,11 @@ Class frontDesk_db extends CI_MODEL
 	
 	public function getUnitReport( $filters ){
 		$this->db->distinct();
-		$this->db->select('u.pkUnitId, u.UnitCode, hks.HKStatusDesc, hkc.HkCodeDesc');
+		$this->db->select('u.pkUnitId, u.UnitCode, hks.HKStatusDesc');
 		$this->db->from('tblUnit u');
 		$this->db->join('tblUnithkstatus uhs', 'uhs.fkunitid = u.pkunitid and  uhs.fkCalendarID = (select top 1 uhs2.fkCalendarID  from tblUnithkstatus uhs2 where uhs2.fkUnitId = uhs.fkUnitId ORDER BY uhs2.fkCalendarID  DESC )', 'inner');
 		$this->db->join('tblHKStatus hks', 'hks.pkHKStatusId = uhs.fkHkStatusId', 'inner');
-		$this->db->join('tblHkCode hkc', 'hkc.pkHkCodeId = uhs.fkHkStatusId', 'inner');
+		//$this->db->join('tblHkCode hkc', 'hkc.pkHkCodeId = uhs.fkHkStatusId', 'inner');
 		/*if($filters['dates'] != false){
 			$this->db->join('tblResInvt ri', 'ri.fkUnitId = u.pkunitid', 'inner');
 			$this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId', 'inner');
@@ -490,7 +490,7 @@ Class frontDesk_db extends CI_MODEL
 	
 	public function getUnitOccReport( $filters ){
 		$this->db->distinct();
-		$this->db->select("u.pkUnitId, r.pkResId, r.Folio, r.ResConf, ri.Intv, ( RTRIM(p.Name) + ' ' + RTRIM(p.LName) + ' ' + RTRIM(p.LName2) ) as Name");
+		$this->db->select("u.pkUnitId, r.pkResId, r.Folio, r.ResConf, ri.Intv, ( RTRIM(p.Name) + ' ' + RTRIM(p.LName) + ' ' + RTRIM(p.LName2) ) as Name, CONVERT(VARCHAR(10),c.Date,101) as date1");
 		$this->db->from('tblRes r');
 		$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'inner');
 		$this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId', 'inner');
@@ -500,9 +500,10 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId', 'inner');
 		if($filters['dates'] != false){
 			$date = $filters['dates']['dateArrivalReport'];
-			$this->db->where("CONVERT(VARCHAR(10),c.Date,101) = '" . $date . "'");
+			$this->db->where("CONVERT(VARCHAR(10),c.Date,101) BETWEEN CONVERT(VARCHAR(10), DATEADD(day,-1,'" . $date . "'),101) and CONVERT(VARCHAR(10), DATEADD(day,1,'" . $date . "'),101)");
 		}else{
-			$this->db->where("CONVERT(VARCHAR(10),c.Date,101) = CONVERT(VARCHAR(10), GETDATE() ,101)");
+			//$this->db->where("CONVERT(VARCHAR(10),c.Date,101) = CONVERT(VARCHAR(10), GETDATE() ,101)");
+			$this->db->where("CONVERT(VARCHAR(10),c.Date,101) BETWEEN CONVERT(VARCHAR(10), GETDATE() - 1 ,101) and CONVERT(VARCHAR(10), GETDATE() + 1 ,101)");
 		}
 		$this->db->order_by("u.pkUnitId ASC");
 		return  $this->db->get()->result();
@@ -552,7 +553,7 @@ Class frontDesk_db extends CI_MODEL
 	/*********** Job *************/
 	/*****************************/
 	
-	public function getUnitsOcc(){
+	public function getUnitsDes(){
 		$this->db->distinct();
 		/*$this->db->select('ri.fkUnitId, ro.fkCalendarId, (select top 1 ro2.fkCalendarId from tblResOcc ro2 where ro2.fkResId = ro.fkResId and ro2.fkResInvtId = ro.fkResInvtId ORDER BY ro2.fkCalendarId DESC ) as lastDate');
 		$this->db->from('tblResOcc ro ');
@@ -561,8 +562,22 @@ Class frontDesk_db extends CI_MODEL
 		//$this->db->where(" ro.fkCalendarId = 207 ");
 		$this->db->select('u.pkUnitId');
 		$this->db->select('( SELECT TOP 1 hkS.fkHkStatusId  from tblUnitHKStatus hkS where hkS.fkUnitId = u.pkUnitId ORDER BY hkS.fkCalendarID DESC ) as hkstatus');
-		$this->db->select('( SELECT TOP 1 pf.ynHkDirty from tblPropertyFolio pf where pf.fkPropertyId = u.fkPropertyId and pf.fkFolioTypeID = 2) as hkDirty');
+		$this->db->select('( SELECT TOP 1 pf.ynHKEmptyToDirty from tblProperty pf where pf.pkPropertyId = u.fkPropertyId ) as hkDirty');
 		$this->db->from('tblUnit u');
+		return  $this->db->get()->result();
+	}
+	
+	public function getUnitsOcc(){
+		$this->db->distinct();
+		$this->db->select("u.pkUnitId, s.StatusDesc, r.pkResId, CONVERT(VARCHAR(10),c.Date,101) as date1");
+		$this->db->from('tblRes r');
+		$this->db->join('tblStatus s', 's.pkStatusId = r.fkStatusId', 'inner');
+		$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'inner');
+		$this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId', 'inner');
+		$this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId', 'inner');
+		$this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId', 'inner');
+		$this->db->where("CONVERT(VARCHAR(10),c.Date,101) BETWEEN CONVERT(VARCHAR(10), GETDATE() - 1 ,101) and CONVERT(VARCHAR(10), GETDATE() ,101)");
+		//$this->db->order_by("u.pkUnitId DESC");
 		return  $this->db->get()->result();
 	}
 	
