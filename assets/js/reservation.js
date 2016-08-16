@@ -2739,18 +2739,12 @@ function nextStatusContractRes(){
 	    dataType:'json',
 	    success: function(data){
 	    	$("#iNextStatus").removeClass("fa-spin");
-<<<<<<< HEAD
-	    	$("#editReservationStatus").text("Status: "+data['status']);
+			$("#editReservationStatus").text("Status: "+data['status']);
 	    	if (data['next'] != null) {
 	    		$("#btnNextStatusRes span").text("Next Status: "+data['next']);
 	    	}else{
 	    		$("#btnNextStatusRes").remove();
 	    	}
-=======
-	    	$("#editContracStatus").text("Status: "+data['status']);
-			$('#editContracStatus').attr( 'statusRes', data['status'] );
-			$('#btnNextStatusRes').text("Next Status: "+data['status']);
->>>>>>> origin/master
 	    	alertify.success(data['mensaje']);
 	    		$("#btnNextStatusRes").click(function(){
 					nextStatusContractRes();

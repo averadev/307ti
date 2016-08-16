@@ -140,9 +140,7 @@ $(document).on( 'click', '#btnAddPeople', function () {
 		updateDescuentoEspecial();
 	});
 	$(document).on('change', "#amountTransfer", function () {
-		var balanceFinal = $("#financeBalance").val();
-		var transferido = $("#amountTransfer").val();
-		$("#financeBalance").val(balanceFinal - transferido);
+		updateBalanceFinal();
 	});
 	
 	getDatailByID("contractstbody");

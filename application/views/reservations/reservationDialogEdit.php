@@ -30,7 +30,7 @@
 		<label class="headerGeneral" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
-		<label class="headerGeneral" id="editReservationStatus">Status: <?php echo $contract[0]->StatusDesc;?></label>
+		<label class="headerGeneral" id="editReservationStatus">Status: <?php echo $statusActual;?></label>
 		
 		<!--<label class="headerGeneral">Flags: 
 		<?php

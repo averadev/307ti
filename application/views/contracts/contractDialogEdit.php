@@ -30,7 +30,7 @@
 		<label class="headerGeneral" id="editContracYear"><b>Year: <?php echo $contract[0]->FirstOccYear; ?></b></label>
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
-		<label class="headerGeneral" id="editContracStatus">Status: <?php echo $contract[0]->StatusDesc;?></label>
+		<label class="headerGeneral" id="editContracStatus">Status: <?php echo $statusActual;?></label>
 		<label id="flagsContracEdit" class="headerGeneral">Flags: 
 		<?php
 			if (!empty($flags)) {

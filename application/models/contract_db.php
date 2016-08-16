@@ -610,11 +610,12 @@ class Contract_db extends CI_Model {
     }
 
     public function selectMaxStatus(){
-        $this->db->select('max(pkStatusId) as maximo');
-        $this->db->from('tblStatus S');
-        $this->db->join('tblStatusTypeStatus TS', 'S.pkStatusId = TS.fkStatusId', 'inner');
-        $this->db->where('TS.fkStatusTypeId', 1);
-        $this->db->where('TS.ynActive', 1);
+        $this->db->select('max(PkStatusTypeStatusId) as maximo');
+        $this->db->from('tblstatustypestatus sts');
+        $this->db->join('tblstatustype st', 'st.pkStatusTypeid = sts.fkStatusTypeId', 'inner');
+        $this->db->join('tblstatus s', 's.pkStatusId = sts.fkStatusId', 'inner');
+        $this->db->where('st.pkStatusTypeid', 1);
+        $this->db->where('st.ynActive', 1);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 ){

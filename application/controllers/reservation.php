@@ -952,8 +952,6 @@ class Reservation extends CI_Controller {
 				"id"		=>	$id
 			];
 			$maximo = $this->reservation_db->selectMaxStatus();
-			//$IdStatus = $this->reservation_db->propertyTable($peticion);
-			//$data['statusNext'] = $this->reservation_db->selectNextStatusDesc(intval($IdStatus)+ 1);
 			$IdStatus = $this->reservation_db->propertyTable($peticion);
 			if ($IdStatus<$maximo) {
 				$IdStatus = $IdStatus;
@@ -962,6 +960,7 @@ class Reservation extends CI_Controller {
 			}
 			$next = $this->reservation_db->selectNextStatusDesc2(intval($IdStatus)+1);
 			$actual = $this->reservation_db->selectNextStatusDesc2($IdStatus);
+			$data['statusActual']= $actual;
 			$data['statusNext'] = $next;
 			$this->load->view('reservations/reservationDialogEdit', $data);
 		}

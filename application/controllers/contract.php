@@ -137,7 +137,7 @@ private function createContract(){
 private function insertContratoOcupacion($idContrato){
 
 	$rango = intval($_POST['lastYear']-$_POST['firstYear']);
-	for($i =0; $i<= $rango; $i++){
+	for($i =0; $i<= 10; $i++){
 			$Ocupacion = [
 			"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
 			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
@@ -787,7 +787,7 @@ public function nextStatusContract(){
 		];
 		$IdStatus = $this->contract_db->propertyTable($peticion);
 		$maximo = $this->contract_db->selectMaxStatus();
-		if ($IdStatus < $maximo) {
+		if ($IdStatus <= $maximo) {
 			$IdStatus += 1;
 		}
 		$Res = [
@@ -1148,7 +1148,7 @@ public function getFlagsContract(){
 			}
 			$next = $this->contract_db->selectNextStatusDesc2(intval($IdStatus)+1);
 			$actual = $this->contract_db->selectNextStatusDesc2($IdStatus);
-			
+			$data['statusActual']= $actual;
 			$data['statusNext'] = $next;
 			$this->load->view('contracts/contractDialogEdit', $data);
 		}
