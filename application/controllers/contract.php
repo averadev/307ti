@@ -24,7 +24,25 @@ class Contract extends CI_Controller {
 		}
 	}
 	public function pruebasContract(){
-		var_dump($_FILES);
+		
+	$precio = valideteNumber("10");
+	$Dolares = $this->contract_db->selectIdCurrency('USD');
+	$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+	$Euros  = $this->contract_db->selectIdCurrency('EUR');
+	$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+	$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
+	$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
+	$tipoCambioEuros = valideteNumber($tipoCambioEuros);
+	$euros = $precio * $tipoCambioEuros;
+	$florines = $precio * $tipoCambioFlorines;
+
+	echo $tipoCambioFlorines;
+	echo "<br>";
+	echo $tipoCambioEuros;
+	echo "<br>";
+	echo $euros;
+	echo "<br>";
+	echo $florines;
 	}
 
 	public function saveContract(){
@@ -322,6 +340,15 @@ private function insertTransaccionesCredito(){
 private function insertPricetransaction($idContrato){
 
 	$precio = valideteNumber($_POST['listPrice']);
+	$Dolares = $this->contract_db->selectIdCurrency('USD');
+	$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+	$Euros  = $this->contract_db->selectIdCurrency('EUR');
+	$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+	$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
+	$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
+	$tipoCambioEuros = valideteNumber($tipoCambioEuros);
+	$euros = $precio * $tipoCambioEuros;
+	$florines = $precio * $tipoCambioFlorines;
 	$transaction = [
 		"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 		"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('PRI'),
@@ -330,6 +357,8 @@ private function insertPricetransaction($idContrato){
 		"Credit+"		=> 0,
 		"Amount"		=> $precio,
 		"AbsAmount"		=> 0,
+		"Curr1Amt"		=> valideteNumber($euros),
+		"Curr2Amt"		=> valideteNumber($florines),
 		"Remark"		=> '', //
 		"Doc"			=> '',
 		"DueDt"			=> $this->getToday(),
@@ -344,6 +373,12 @@ private function insertPricetransaction($idContrato){
 private function insertExtrastransaction($idContrato){
 
 	$precio = valideteNumber($_POST['extras']);
+	$Dolares = $this->contract_db->selectIdCurrency('USD');
+	$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+	$Euros  = $this->contract_db->selectIdCurrency('EUR');
+	$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+	$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
+
 	$numero = 0;
 	if ($precio>0) {
 		$classID = $this->contract_db->gettrxClassID('LOA');
@@ -361,6 +396,8 @@ private function insertExtrastransaction($idContrato){
 		"Credit+"		=> 0,
 		"Amount"		=> valideteNumber(abs($precio)), 
 		"AbsAmount"		=> valideteNumber(abs($precio)),
+		"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
+		"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 		"Remark"		=> '', //
 		"Doc"			=> '',
 		"DueDt"			=> $this->getToday(),
@@ -376,7 +413,13 @@ private function insertExtrastransaction($idContrato){
 private function insertESDtransaction($idContrato){
 	
 	$precio = valideteNumber($_POST['specialDiscount']);
+	$Dolares = $this->contract_db->selectIdCurrency('USD');
+	$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+	$Euros  = $this->contract_db->selectIdCurrency('EUR');
+	$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+	$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
 	$precio =  -1 * (abs($precio));
+
 	$transaction = [
 		"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 		"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('sDisc'),
@@ -385,6 +428,8 @@ private function insertESDtransaction($idContrato){
 		"Credit+"		=> 0,
 		"Amount"		=> valideteNumber(abs($precio)), 
 		"AbsAmount"		=> valideteNumber(abs($precio)),
+		"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
+		"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 		"Remark"		=> '', //
 		"Doc"			=> '',
 		"DueDt"			=> $this->getToday(),
@@ -397,7 +442,13 @@ private function insertESDtransaction($idContrato){
 	$this->contract_db->insertReturnId('tblAccTrx', $transaction);
 }
 private function insertDownpaymentransaction($idContrato){
-		$precio = valideteNumber($_POST['downpayment']);
+	$precio = valideteNumber($_POST['downpayment']);
+	$Dolares = $this->contract_db->selectIdCurrency('USD');
+	$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+	$Euros  = $this->contract_db->selectIdCurrency('EUR');
+	$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+	$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
+
 		$transaction = [
 			"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('DWP'),
@@ -419,9 +470,15 @@ private function insertDownpaymentransaction($idContrato){
 }
 private function insertDeposittransaction($idContrato){
 		$precio = valideteNumber($_POST['deposito']);
-		//$closingCost = valideteNumber($_POST['closingCost']);
 		$precio  =  $precio;
 		$precio =  -1 * (abs($precio));
+
+	$Dolares = $this->contract_db->selectIdCurrency('USD');
+	$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+	$Euros  = $this->contract_db->selectIdCurrency('EUR');
+	$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+	$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
+
 		$transaction = [
 			"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('DEP'),
@@ -430,6 +487,8 @@ private function insertDeposittransaction($idContrato){
 			"Credit+"		=> 0,
 			"Amount"		=> valideteNumber(abs($precio)), 
 			"AbsAmount"		=> valideteNumber(abs($precio)),
+			"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
+			"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 			"Remark"		=> '', //
 			"Doc"			=> '',
 			"DueDt"			=> $this->getToday(),
@@ -444,6 +503,12 @@ private function insertDeposittransaction($idContrato){
 private function insertClosingCosttransaction($idContrato){
 
 	$precio = valideteNumber($_POST['closingCost']);
+	$Dolares = $this->contract_db->selectIdCurrency('USD');
+	$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+	$Euros  = $this->contract_db->selectIdCurrency('EUR');
+	$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+	$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
+
 	$transaction = [
 		"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 		"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('CFE'),
@@ -452,6 +517,8 @@ private function insertClosingCosttransaction($idContrato){
 		"Credit+"		=> 0,
 		"Amount"		=> $precio, 
 		"AbsAmount"		=> 0,
+		"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
+		"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 		"Remark"		=> '', //
 		"Doc"			=> '',
 		"DueDt"			=> $this->getToday(),
@@ -478,6 +545,11 @@ private function insertPagosDownpayment($idContrato){
 			$closingCost = valideteNumber($_POST['closingCost']);
 			$precio = $precio - $closingCost;
 			$precio =  -1 * (abs($precio));
+			$Dolares = $this->contract_db->selectIdCurrency('USD');
+			$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+			$Euros  = $this->contract_db->selectIdCurrency('EUR');
+			$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+			$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
 
 			$transaction = [
 				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato), 
@@ -511,6 +583,11 @@ private function insertScheduledPaymentsTrx($idContrato){
 	
 		for ($i=0; $i < $pagos; $i++) {
 			$precio = valideteNumber($_POST['tablaPagosProgramados'][$i]["amount"]);
+			$Dolares = $this->contract_db->selectIdCurrency('USD');
+			$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+			$Euros  = $this->contract_db->selectIdCurrency('EUR');
+			$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+			$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
 			$transaction = [
 				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato),
 				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('SCP'),
@@ -519,6 +596,8 @@ private function insertScheduledPaymentsTrx($idContrato){
 				"Credit+"			=> 0,
 				"Amount"			=> $precio, 
 				"AbsAmount"			=> $precio,
+				"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
+				"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 				"Remark"			=> '', //
 				"Doc"				=> '',
 				"DueDt"				=> $_POST['tablaPagosProgramados'][$i]["date"],

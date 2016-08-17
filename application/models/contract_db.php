@@ -231,6 +231,21 @@ class Contract_db extends CI_Model {
             return $row->pkExchangeRateId;
         }
     }
+    public function selectTypoCambio($MonedaActual,$ACovertir){
+        $this->db->select('ER.AmtTo as AMT');
+        $this->db->from('tblCurrency C');
+        $this->db->join('tblExchangeRate ER', 'C.pkCurrencyId = ER.fkCurrencyToId', 'inner');
+        $this->db->where('ER.fkCurrencyFromId', $MonedaActual);
+        $this->db->where('ER.fkCurrencyToId', $ACovertir);
+        $this->db->where('ER.ynActive', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->AMT;
+        }
+    }
 
     public function selectSaleTypeId($string){
         $this->db->select('pksaleTypeId');
@@ -944,6 +959,7 @@ class Contract_db extends CI_Model {
 			$this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Sign_transaction, att.fkAccId as AccID');
 			$this->db->select('tc.TrxClassDesc as Concept_Trxid');
 			$this->db->select('att.CrDt as Creation_Date, att.DueDt as Due_Date, att.Amount, att.AbsAmount, 0 as Overdue_Amount');
+            $this->db->select('att.Curr1Amt, att.Curr2Amt');
 			$this->db->select('att.Doc as Document, att.Remark as Reference');
 		}else{
 			$this->db->select('0 as inputAll');

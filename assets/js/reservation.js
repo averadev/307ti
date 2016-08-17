@@ -180,10 +180,15 @@ $(document).ready(function(){
        		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       		if (true) {
-       			createNewLimit();
-       			$(this).dialog('close');
-       		}
+       			var precio = $("#tableFrontDeskAccRes .balanceAccount").text();
+       			precio = parseFloat(precio.replace("$", "").trim());
+       			var creditLimit = getNumberTextStringRes("creditLimitRes");
+       			if (creditLimit > precio) {
+       				createNewLimit();
+       				$(this).dialog('close');
+       			}else{
+       				alertify.error("Verify the Amount");
+       			}
        		}
      	}]
 	};
@@ -336,7 +341,14 @@ function getNumberTextInputRes(div){
 		return 0;
 	}
 }
-
+function getNumberTextStringRes(div){
+	var valor = $("#"+div).text();
+	if(valor){
+		return parseFloat(valor);
+	}else{
+		return 0;
+	}
+}	
 function cambiarCantidadPRes(monto){
 	/*var seleccionado = $("input[name='engancheRRes']:checked").val();
 	var precioVenta = $("#precioVentaRes").val();

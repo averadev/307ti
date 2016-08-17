@@ -2070,6 +2070,8 @@ function setTableAccount(items, table){
 		if( item.Sign_transaction == 1 ){
 			tempTotal = parseFloat(item.AbsAmount);
 			tempTotal2 = parseFloat(item.Overdue_Amount);
+			console.log(tempTotal);
+			console.log(tempTotal2);
 		}
 		if( item.Concept_Trxid.trim() == "Sale" ){
 			if(tempTotal2 != 0){
@@ -2085,9 +2087,12 @@ function setTableAccount(items, table){
 			}
 		}
 	}
+	console.log(balanceDeposits);
+	console.log(balanceSales);
 	balance = balanceDeposits + balanceSales;
 	
 	$('#' + table +  ' tbody tr td.balanceAccount').text('$ ' + balance.toFixed(2));
+	console.log(balance);
 	$('#' + table +  ' tbody tr td.balanceDepAccount').text('$ ' + balanceDeposits.toFixed(2));
 	$('#' + table +  ' tbody tr td.balanceSaleAccount').text('$ ' + balanceSales.toFixed(2));
 	$('#' + table +  ' tbody tr td.defeatedDepAccount').text('$ ' + defeatedDeposits.toFixed(2));

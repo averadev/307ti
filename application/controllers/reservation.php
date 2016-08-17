@@ -302,6 +302,7 @@ class Reservation extends CI_Controller {
 	private function insertPricetransaction($idContrato){
 
 		$precio = valideteNumber($_POST['listPrice']);
+
 		$transaction = [
 			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('PRI'),
@@ -555,7 +556,7 @@ class Reservation extends CI_Controller {
 			for ($i=0; $i < $pagos; $i++) { 
 				$DownPayment = [
 					"fkResId"    	=> $idContrato,
-					"fkCurrencyId"  => $this->reservation_db->selectIdCurrency('MXP'),
+					"fkCurrencyId"  => $this->reservation_db->selectIdCurrency('USD'),
 					"DownPmtNum"    => $i + 1,
 					"DownPmtAmt"    => $_POST['tablaPagosProgramados'][$i]["amount"],
 					"DownPmtDueDt"  => $_POST['tablaPagosProgramados'][$i]["date"],
