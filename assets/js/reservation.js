@@ -129,7 +129,15 @@ $(document).ready(function(){
 		var dialogDiscountAmountRes = modalDiscountAmountRes();
 		dialogDiscountAmountRes.dialog("open");
 	});
-	
+	$(document).off('click', '#tabsContratsAccounts');
+	$(document).on( 'click', '#tabsContratsAccounts', function(){
+		var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
+		if (accCode == "FDK") {
+			$("#btAddCreditLimitRes").show();
+		}else{
+			$("#btAddCreditLimitRes").hide();
+		}
+	});
 	$(document).off( 'click', '#btNewTransAccRes'); 
 	$(document).on( 'click', '#btNewTransAccRes, #btAddPayAccRes', function ( ) {
 		var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
@@ -271,7 +279,14 @@ function createNewLimit (){
 }
 
 function mensajeLimit(data){
-	alertify.success(data["mensaje"]);
+	if (data['mensaje']) {
+		alertify.success(data["mensaje"]);
+	}
+	if (data['creditLimit']) {
+		$("#creditLimitRes").text(parseFloat(data['creditLimit']).toFixed(2));
+	}
+	
+	//creditLimitRes
 }
 
 function ajaxSelectsRes(url,errorMsj, funcion, divSelect) {
@@ -2181,6 +2196,7 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 }
 
 function setTableAccountRes(items, table){
+	console.table(items);
 	var balance = 0, balanceDeposits = 0, balanceSales = 0, defeatedDeposits = 0, defeatedSales = 0;
 	for(i=0;i<items.length;i++){
 		var item = items[i];
@@ -2205,7 +2221,7 @@ function setTableAccountRes(items, table){
 	}
 	balance = balanceDeposits + balanceSales;
 	
-	$('#' + table +  ' tbody tr td.balanceAccount').text('$ ' + balance.toFixed(2));
+	$('#' + table +  ' tbody tr td.balanceAccount').text('$ ' + balance);
 	$('#' + table +  ' tbody tr td.balanceDepAccount').text('$ ' + balanceDeposits.toFixed(2));
 	$('#' + table +  ' tbody tr td.balanceSaleAccount').text('$ ' + balanceSales.toFixed(2));
 	$('#' + table +  ' tbody tr td.defeatedDepAccount').text('$ ' + defeatedDeposits.toFixed(2));
@@ -2216,7 +2232,6 @@ function setTableAccountRes(items, table){
 function drawTerminosVentaRes(data){
 	var price = parseFloat(data.ListPrice).toFixed(2);
 	var semanas = data.WeeksNumber;
-	//var packReference = parseFloat(data.PackPrice).toFixed(2);
 	var SpecialDiscount = parseFloat(data.SpecialDiscount);
 	var salePrice = parseFloat(data.NetSalePrice).toFixed(2);
 	var enganche = parseFloat(data.Deposit).toFixed(2);
@@ -2247,7 +2262,8 @@ function drawTerminoFinanciamientoRes(data){
 	$("#cfPagoMensualRes").text(pagoMensual);
 	$("#cfEngancheRes").text(porEnganche);
 	$("#typeFinanceRes").text(data.FactorDesc);
-	$("#totalFoundingRes").text(balanceFinal);
+	$(".balanceAccount").text(balanceFinal);
+	console.log(balanceFinal);
 	$("#totalMonthlyPaymentRes").text(pagoMensual);
 
 }

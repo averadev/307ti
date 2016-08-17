@@ -346,10 +346,11 @@ private function insertExtrastransaction($idContrato){
 	$precio = valideteNumber($_POST['extras']);
 	$numero = 0;
 	if ($precio>0) {
-		$classID = $this->contract_db->gettrxClassID('PAY');
+		$classID = $this->contract_db->gettrxClassID('LOA');
 	}else{
 		$numero =  -1 * (abs($precio));
-		$classID = $this->contract_db->gettrxClassID('LOA');
+		$classID = $this->contract_db->gettrxClassID('PAY');
+		
 		
 	}
 	$transaction = [
@@ -418,8 +419,8 @@ private function insertDownpaymentransaction($idContrato){
 }
 private function insertDeposittransaction($idContrato){
 		$precio = valideteNumber($_POST['deposito']);
-		$closingCost = valideteNumber($_POST['closingCost']);
-		$precio  =  $precio - $closingCost;
+		//$closingCost = valideteNumber($_POST['closingCost']);
+		$precio  =  $precio;
 		$precio =  -1 * (abs($precio));
 		$transaction = [
 			"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta

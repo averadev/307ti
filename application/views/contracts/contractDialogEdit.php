@@ -178,12 +178,6 @@
 								<td>Transfer Amount</td>
 								<td id="cventaTransferA">$00.00</td>
 							</tr>
-<!-- 							<tr>
-								<td>Closing Cost</td>
-								<td id="cventaCostContract">$00.00</td>
-								<td>Hook Amount Transferred More</td>
-								<td id="cventaAmountTransfer">$00.00</td>
-							</tr> -->
 							<tr>
 								<td>Extras</td>
 								<td id="cventapackAmount">$00.00</td>

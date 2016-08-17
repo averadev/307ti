@@ -339,6 +339,18 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $query->result();
         }
     }
+    
+    public function selectFinanceBalance($idContrato){
+        $this->db->select("TotalFinanceAmt");
+        $this->db->from('tblResFin');
+        $this->db->where('fkResId ', $idContrato);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->TotalFinanceAmt;
+        }
+    }
 	
 	public function getAccountsById( $id, $typeInfo, $typeAcc ){
         $this->db->distinct();
@@ -853,6 +865,19 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         {
             $row = $query->row();
             return $row->pkTrxConceptId;
+        }
+    }
+    public function getCreditLimitActual($idAccount){
+        $this->db->select('CrdLimit');
+        $this->db->from('tblResPeopleAcc');
+        $this->db->where('fkAccId', $idAccount);
+        $this->db->where('ynPrimaryPeople', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->CrdLimit;
         }
     }
 	

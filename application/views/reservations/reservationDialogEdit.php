@@ -213,7 +213,7 @@
 						<tbody>
 							<tr>
 								<td>Balance to Finance</td>
-								<td id="cfbalanceFinancedRes">$00.00</td>
+								<td id="cfbalanceFinancedRes"></td>
 								<td>Type of Finance</td>
 								<td id="typeFinanceRes"></td>
 							</tr>
@@ -262,12 +262,12 @@
 								<tr>
 									<td >Folio Reservation</td>
 									<td class="folioAccount">00000</td>
-									<td>Credit Limit</td>
-									<td id="creditLimitRes">$00.00</td>
+									<td></td>
+									<td ></td>
 								</tr>
 								<tr>
 									<td>Balance</td>
-									<td class="balanceAccount">$000,000.00</td>
+									<td class="balanceAccount"><?php echo floatval($financeBalance);?></td>
 									<td></td>
 									<td></td>
 								</tr>
@@ -322,12 +322,12 @@
 								<tr>
 									<td >Folio Reservation</td>
 									<td class="folioAccount">00000</td>
-									<td></td>
-									<td></td>
+									<td>Credit Limit</td>
+									<td id="creditLimitRes"><?php echo floatval($creditLimit); ?></td>
 								</tr>
 								<tr>
 									<td>Balance</td>
-									<td class="balanceAccount">$000,000.00</td>
+									<td class="balanceAccount"><?php echo floatval($financeBalance);?></td>
 									<td></td>
 									<td></td>
 								</tr>
@@ -379,7 +379,7 @@
 					<div class="label">Add Payment</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
-				<a id="btAddCreditLimitRes" attr_type="addLimitAcc" class="btn btn-primary spanSelect">
+				<a id="btAddCreditLimitRes" style="display: none;" attr_type="addLimitAcc" class="btn btn-primary spanSelect">
 					<div class="label">Credit Limit</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>

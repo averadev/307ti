@@ -859,6 +859,7 @@ class Reservation extends CI_Controller {
 				}
 				$datos['acc'] = $data;
 			}
+			$datos['financeBalance']= $this->reservation_db->selectFinanceBalance($id);
 			echo json_encode($datos);
 		}
 	}
@@ -960,9 +961,13 @@ class Reservation extends CI_Controller {
 			}
 			$next = $this->reservation_db->selectNextStatusDesc2(intval($IdStatus)+1);
 			$actual = $this->reservation_db->selectNextStatusDesc2($IdStatus);
-			//$arrivaDate = 
+			$IDAccount = $this->reservation_db->getACCIDByContracID($id);
+			$creditLimit = $this->reservation_db->getCreditLimitActual($IDAccount);
+			$financeBalance = $this->reservation_db->selectFinanceBalance($id);
 			$data['statusActual']= $actual;
 			$data['statusNext'] = $next;
+			$data['creditLimit'] = $creditLimit;
+			$data['financeBalance'] = $financeBalance;
 			$this->load->view('reservations/reservationDialogEdit', $data);
 		}
 	}
@@ -1061,14 +1066,16 @@ public function nextStatusReservacion(){
 	}
 	public function updateCreditLimit(){
 		if($this->input->is_ajax_request()) {
+			$IDAccount = $_POST['accauntID'];
 			$financiamiento = [
-				"CrdLimit"	=> $_POST['amount'],
+				"CrdLimit"	=> remplaceFloat($_POST['amount']),
 			];
-			$condicion = "fkAccId = " . $_POST['accauntID'];
+			$condicion = "fkAccId = " . $IDAccount;
 
 			$afectados = $this->reservation_db->updateReturnId('tblRespeopleacc', $financiamiento, $condicion);
 			if ($afectados>0) {
-				$mensaje = ["mensaje"=>"It was successfully saved","afectados" => $afectados];
+				$actual = $this->reservation_db->getCreditLimitActual($IDAccount);
+				$mensaje = ["mensaje"=>"It was successfully saved","afectados" => $afectados, "creditLimit" => $actual];
 				echo json_encode($mensaje);
 			}else{
 				$mensaje = ["mesaje"=>"an error occurred"];	
