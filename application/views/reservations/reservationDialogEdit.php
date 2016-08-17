@@ -2,25 +2,25 @@
 <div class="row collapse headerGeneral" >
 	<div class="small-12 medium-12 large-12 columns headerModalBtn"  > 
 		<a id="btnFrontPage" class="btn btn-primary spanSelect">
-			<div class="label">Front Page</div>
+			<div class="label">Check Out</div>
 			<i class="fa fa-columns fa-lg"></i>
 		</a>
 		<a id="btnIWillPay" class="btn btn-primary spanSelect">
-			<div class="label">I will pay</div>
+			<div class="label">Farewell</div>
 			<i class="fa fa-money fa-lg"></i>
 		</a>
 		<a id="btnVoucher" class="btn btn-primary spanSelect">
-			<div class="label">Voucher</div>
+			<div class="label">Guest Infromation form</div>
 			<i class="fa fa-file-text-o fa-lg"></i>
 		</a>
-		<a id="btnDatasheet" class="btn btn-primary spanSelect">
+		<!--<a id="btnDatasheet" class="btn btn-primary spanSelect">
 			<div class="label">Data sheet</div>
 			<i class="fa fa-list-alt fa-lg"></i>
 		</a>
 		<a id="btnAccountStatus" class="btn btn-primary spanSelect">
 			<div class="label">Account status</div>
 			<i class="fa fa-credit-card fa-lg"></i>
-		</a>
+		</a>-->
 	</div>
 </div>
 <div class="row headerDescription headerGeneral" style="padding: 8px;">

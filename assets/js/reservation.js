@@ -2307,6 +2307,11 @@ function setEventosEditarReservation(id){
 	$("#btnNextStatusRes").click(function(){
 		nextStatusContractRes();
 	});
+	
+	$( "#btnFrontPage").unbind( "click" );
+	$("#btnFrontPage").click(function(){
+		generateReportRes(id);
+	});
 }
 
 function modalFinanciamientoRes() {
@@ -3253,4 +3258,11 @@ function getRateRes(){
 			$("#RateRes").attr('disabled', false);
 	    }
 	});
+}
+
+function generateReportRes(id){
+	
+	var url = "Pdfs/CheckOut?idRes=" + id;
+	window.open(url);
+	
 }
