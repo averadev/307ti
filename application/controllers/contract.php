@@ -563,7 +563,7 @@ private function insertPagosDownpayment($idContrato){
 
 			$transaction = [
 				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato), 
-				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('DE+'),
+				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('DE0'),
 				"fkTrxClassID"		=> $this->contract_db->gettrxClassID('DWP'),
 				"Debit-"			=> valideteNumber($precio),
 				"Credit+"			=> 0,
