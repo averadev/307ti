@@ -1138,9 +1138,9 @@ public function getFlagsContract(){
 						$dueDate = strtotime($item->Due_Date);
 						$item->Overdue_Amount = 0;
 						if( $dueDate <= $CurDate  ){
-							if( $item->Sign_transaction == 1 || $item->Sign_transaction == "1" ){
+							//if( $item->Sign_transaction == 1 || $item->Sign_transaction == "0" ){
 								$item->Overdue_Amount = $item->AbsAmount;
-							}
+							//}
 						}
 					}
 					$datos[$tyTr] = $data;
