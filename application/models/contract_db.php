@@ -973,7 +973,7 @@ class Contract_db extends CI_Model {
 			$this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Sign_transaction, att.fkAccId as AccID');
 			$this->db->select('tc.TrxClassDesc as Concept_Trxid');
 			$this->db->select('att.CrDt as Creation_Date, att.DueDt as Due_Date, att.Amount, att.AbsAmount, 0 as Overdue_Amount');
-            $this->db->select('att.Curr1Amt, att.Curr2Amt');
+            $this->db->select('att.Curr1Amt as Euros, att.Curr2Amt as Nederlands_Florins');
 			$this->db->select('att.Doc as Document, att.Remark as Reference');
 		}else{
 			$this->db->select('0 as inputAll');

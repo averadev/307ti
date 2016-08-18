@@ -2073,9 +2073,37 @@ function getAccounts( id, typeInfo, typeAcc ){
 
 function parsearSALE(sales){
 	for(var i = 0; i < sales. length; i++){
-		sales[i].Amount = parseFloat(sales[i].Amount).toFixed(2);
-		sales[i].AbsAmount = parseFloat(sales[i].AbsAmount).toFixed(2);
-		sales[i].Overdue_Amount = parseFloat(sales[i].Overdue_Amount).toFixed(2);
+		// sales[i].Amount = parseFloat(sales[i].Amount).toFixed(2);
+		// sales[i].AbsAmount = parseFloat(sales[i].AbsAmount).toFixed(2);
+		// sales[i].Overdue_Amount = parseFloat(sales[i].Overdue_Amount).toFixed(2);
+		// sales[i].Euros = parseFloat(sales[i].Euros).toFixed(2)
+		// sales[i].Nederlands_Florins = parseFloat(sales[i].Nederlands_Florins).toFixed(2);
+		if (sales[i].Amount !=".0000") {
+			sales[i].Amount = parseFloat(sales[i].Amount).toFixed(2);
+		}else{
+			sales[i].Amount = 0;
+		}
+		if (sales[i].AbsAmount !=".0000") {
+			sales[i].AbsAmount = parseFloat(sales[i].AbsAmount).toFixed(2);
+		}else{
+			sales[i].AbsAmount = 0;
+		}
+		if (sales[i].Overdue_Amount !=".0000") {
+			sales[i].Overdue_Amount = parseFloat(sales[i].Overdue_Amount).toFixed(2);
+		}else{
+			sales[i].Overdue_Amount = 0;
+		}
+		if (sales[i].Euros !=".0000") {
+			sales[i].Euros = parseFloat(sales[i].Euros).toFixed(2);
+		}else{
+			sales[i].Euros = 0;
+		}
+		if (sales[i].Nederlands_Florins !=".0000") {
+			sales[i].Nederlands_Florins = parseFloat(sales[i].Nederlands_Florins).toFixed(2);
+		}else{
+			sales[i].Nederlands_Florins = 0;
+		}
+		
 	}
 	return sales;	
 }
