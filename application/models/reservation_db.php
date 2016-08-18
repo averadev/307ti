@@ -277,6 +277,22 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
 
+    public function selectTypoCambio($MonedaActual, $ACovertir){
+        $this->db->select('ER.AmtTo as AMT');
+        $this->db->from('tblCurrency C');
+        $this->db->join('tblExchangeRate ER', 'C.pkCurrencyId = ER.fkCurrencyToId', 'inner');
+        $this->db->where('ER.fkCurrencyFromId', $MonedaActual);
+        $this->db->where('ER.fkCurrencyToId', $ACovertir);
+        $this->db->where('ER.ynActive', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->AMT;
+        }
+    }
+
     public function selectSaleTypeId($string){
         $this->db->select('pksaleTypeId');
         $this->db->from('tblSaleType');

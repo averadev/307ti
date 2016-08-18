@@ -303,6 +303,16 @@ class Reservation extends CI_Controller {
 
 		$precio = valideteNumber($_POST['listPrice']);
 
+		$Dolares = $this->reservation_db->selectIdCurrency('USD');
+		$Florinres  = $this->reservation_db->selectIdCurrency('NFL');
+		$Euros  = $this->reservation_db->selectIdCurrency('EUR');
+		$tipoCambioFlorines  = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+		$tipoCambioEuros = $this->reservation_db->selectTypoCambio($Dolares, $Euros);
+		$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
+		$tipoCambioEuros = valideteNumber($tipoCambioEuros);
+		$euros = $precio * $tipoCambioEuros;
+		$florines = $precio * $tipoCambioFlorines;
+
 		$transaction = [
 			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('PRI'),
@@ -311,6 +321,8 @@ class Reservation extends CI_Controller {
 			"Credit+"		=> 0,
 			"Amount"		=> $precio,
 			"AbsAmount"		=> 0,
+			"Curr1Amt"		=> valideteNumber($euros),
+			"Curr2Amt"		=> valideteNumber($florines),
 			"Remark"		=> '', //
 			"Doc"			=> '',
 			"DueDt"			=> $this->getToday(),

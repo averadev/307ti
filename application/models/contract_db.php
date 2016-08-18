@@ -231,7 +231,7 @@ class Contract_db extends CI_Model {
             return $row->pkExchangeRateId;
         }
     }
-    public function selectTypoCambio($MonedaActual,$ACovertir){
+    public function selectTypoCambio($MonedaActual, $ACovertir){
         $this->db->select('ER.AmtTo as AMT');
         $this->db->from('tblCurrency C');
         $this->db->join('tblExchangeRate ER', 'C.pkCurrencyId = ER.fkCurrencyToId', 'inner');
@@ -486,6 +486,20 @@ class Contract_db extends CI_Model {
         {
             $row = $query->row();
             return $row->downpayment;
+        }
+    }
+    public function getExtraContrac($idAccount){
+        $this->db->select('AT.Amount');
+        $this->db->from('tblAccTrx AT');
+        $this->db->join('tbltrxtype TT', 'AT.fkTrxTypeId = TT.pkTrxTypeId', 'inner');
+        $this->db->where('fkAccId', $idAccount);
+        $this->db->where('TT.TrxTypeCode', 'EXC');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->Amount;
         }
     }
 

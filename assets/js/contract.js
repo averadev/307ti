@@ -629,7 +629,7 @@ function createNewContract(){
 				amountTransfer:getNumberTextInput("amountTransfer"),
 				packPrice:sumarArray(getArrayValuesColumnTable("tableDescuentos", 3)),
 				financeBalance: $("#financeBalance").val(),
-				tablapagos: getValueTableDownpayment(),
+				//tablapagos: getValueTableDownpayment(),
 				tablaPagosProgramados:getValueTableDownpaymentScheduled(),
 				tablaDownpayment : getValueTableDownpayment(),
 				gifts: getValueTablePacks(),
@@ -726,6 +726,25 @@ function getValueTableDownpayment(){
 
 function getValueTableUnidades(){
 	var tabla = "tableUnidadesSelected";
+	var unidades = [];
+	$('#'+tabla+' tbody tr').each( function(){
+		if ($(this).text().replace(/\s+/g, " ")!="") {
+			var unidad = {};
+			unidad.id = $(this).find('td').eq(0).text(),
+			unidad.floorPlan = $(this).find('td').eq(1).text(),
+			unidad.price = $(this).find('td').eq(2).text(),
+			unidad.frequency = $(this).find('td').eq(3).text(),
+			unidad.season = $(this).find('td').eq(4).text(),
+			unidad.week = $(this).find('td').eq(5).text(),
+			unidad.fyear = $(this).find('td').eq(6).text(),
+			unidad.lyear = $(this).find('td').eq(7).text()
+			unidades.push(unidad); 
+		}
+	});
+	return unidades;
+}
+function getValueTableUnidadesSize(){
+	var tabla = "tableUnidades";
 	var unidades = [];
 	$('#'+tabla+' tbody tr').each( function(){
 		if ($(this).text().replace(/\s+/g, " ")!="") {
@@ -2111,16 +2130,16 @@ function drawTerminosVenta(data){
 	var costoContract = parseFloat(data.ClosingFeeAmt);
 	var packAmount = parseFloat(data.PackPrice);
 	var balanceFinal = parseFloat(data.BalanceActual);
-
+	var unidades = getValueTableUnidadesSize().length;
 
 	$("#cventaPrice").text(price.toFixed(2));
-	$("#cventaWeeks").text(semanas);
+	$("#cventaWeeks").text(unidades);
 	$("#cventaPackR").text(SpecialDiscount.toFixed(2));
 	$("#cventaSalePrice").text(salePrice.toFixed(2));
 	$("#cventaHitch").text(enganche.toFixed(2));
 	$("#cventaTransferA").text(transferido.toFixed(2));
 	$("#cventaCostContract").text(costoContract.toFixed(2));
-	$("#cventapackAmount").text(packAmount.toFixed(2));
+	//$("#cventapackAmount").text(packAmount.toFixed(2));
 	$("#cventaFinanced").text(balanceFinal.toFixed(2));
 	//$("#cventaAmountTransfer").text(transferido);
 }

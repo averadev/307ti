@@ -102,7 +102,7 @@ private function makeTransactions($idContrato){
 	//$this->insertDownpaymentransaction($idContrato);
 	$this->insertDeposittransaction($idContrato);
 	$this->insertClosingCosttransaction($idContrato);
-	//$this->insertPagosDownpayment($idContrato);
+	$this->insertPagosDownpayment($idContrato);
 	$this->insertScheduledPaymentsTrx($idContrato);
 }
 
@@ -314,14 +314,27 @@ private function insertTransaccionesCredito(){
 		$fecha =  new DateTime($_POST['fecha']);
 		$fecha->modify("+".$i." month");
 		$fechaActual = $fecha->format('Y-m-d H:i:s');
+		$precio = valideteNumber($_POST['pagoMensual']);
+		
+		$Dolares = $this->contract_db->selectIdCurrency('USD');
+		$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+		$Euros  = $this->contract_db->selectIdCurrency('EUR');
+		$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+		$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
+		$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
+		$tipoCambioEuros = valideteNumber($tipoCambioEuros);
+		$euros = $precio * $tipoCambioEuros;
+		$florines = $precio * $tipoCambioFlorines;
 		$transaction = [
 			"fkAccid" 			=> $this->contract_db->getACCIDByContracID($IDContrato),  //la cuenta
 			"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('SCP'),//$_POST['trxTypeId'], //lista
 			"fkTrxClassID"		=> $this->contract_db->gettrxClassID('LOA'),//$_POST['trxClassID'], // vendedor
 			"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
 			"Credit+"			=> 0,	//si es positivo se inserta credit
-			"Amount"			=> $this->remplaceFloat($_POST['pagoMensual']), //cantidad
-			"AbsAmount"			=> $this->remplaceFloat($_POST['pagoMensual']), //cantidad se actualiza
+			"Amount"			=> valideteNumber($precio), //cantidad
+			"AbsAmount"			=> valideteNumber($precio),
+			"Curr1Amt"			=> valideteNumber($euros),
+			"Curr2Amt"			=> valideteNumber($florines),
 			"Remark"			=> '', //
 			"Doc"				=> '',
 			"DueDt"				=> $fechaActual,//date('Y-m-d', strtotime("+".$i." month")), //fecha a pagar --fecha vencimiento
@@ -381,17 +394,14 @@ private function insertExtrastransaction($idContrato){
 
 	$numero = 0;
 	if ($precio>0) {
-		$classID = $this->contract_db->gettrxClassID('LOA');
+		$classID = $this->contract_db->gettrxClassID('SAL');
 	}else{
 		$numero =  -1 * (abs($precio));
-		$classID = $this->contract_db->gettrxClassID('PAY');
-		
-		
 	}
 	$transaction = [
 		"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 		"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('EXC'),
-		"fkTrxClassID"	=> $classID,
+		"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SAL'),
 		"Debit-"		=> valideteNumber($numero),
 		"Credit+"		=> 0,
 		"Amount"		=> valideteNumber(abs($precio)), 
@@ -452,7 +462,7 @@ private function insertDownpaymentransaction($idContrato){
 		$transaction = [
 			"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('DWP'),
-			"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SCH'),
+			"fkTrxClassID"	=> $this->contract_db->gettrxClassID('DWP'),
 			"Debit-"		=> 0,
 			"Credit+"		=> 0,
 			"Amount"		=> 0, 
@@ -553,12 +563,14 @@ private function insertPagosDownpayment($idContrato){
 
 			$transaction = [
 				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato), 
-				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('SCP'),
-				"fkTrxClassID"		=> $this->contract_db->gettrxClassID('SCH'),
+				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('DEP'),
+				"fkTrxClassID"		=> $this->contract_db->gettrxClassID('DWP'),
 				"Debit-"			=> valideteNumber($precio),
 				"Credit+"			=> 0,
 				"Amount"			=> valideteNumber(abs($precio)), 
 				"AbsAmount"			=> valideteNumber(abs($precio)),
+				"Curr1Amt"			=> valideteNumber($precio * $tipoCambioEuros),
+				"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 				"Remark"			=> '', 
 				"Doc"				=> '',
 				"DueDt"				=> $_POST['tablaDownpayment'][$i]["date"],
@@ -591,7 +603,7 @@ private function insertScheduledPaymentsTrx($idContrato){
 			$transaction = [
 				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato),
 				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('SCP'),
-				"fkTrxClassID"		=> $this->contract_db->gettrxClassID('SCH'),
+				"fkTrxClassID"		=> $this->contract_db->gettrxClassID('DWP'),
 				"Debit-"			=> 0,
 				"Credit+"			=> 0,
 				"Amount"			=> $precio, 
@@ -1229,6 +1241,8 @@ public function getFlagsContract(){
 			}
 			$next = $this->contract_db->selectNextStatusDesc2(intval($IdStatus)+1);
 			$actual = $this->contract_db->selectNextStatusDesc2($IdStatus);
+			$IDAccount  = $this->contract_db->getACCIDByContracID($id);
+			$data['extras'] = $this->contract_db->getExtraContrac($IDAccount);
 			$data['statusActual']= $actual;
 			$data['statusNext'] = $next;
 			$this->load->view('contracts/contractDialogEdit', $data);

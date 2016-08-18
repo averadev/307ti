@@ -180,7 +180,7 @@
 							</tr>
 							<tr>
 								<td>Extras</td>
-								<td id="cventapackAmount">$00.00</td>
+								<td id="cventapackAmount"><?php echo floatval($extras);?></td>
 								<td>Balance to Finance</td>
 								<td id="cventaFinanced">$00.00</td>
 							</tr>
