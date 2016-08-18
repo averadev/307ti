@@ -305,7 +305,7 @@
 								</tr>
 								<tr>
 									<td>Balance Sales</td>
-									<td class="balanceSaleAccount">$00.00</td>
+									<td class="balanceSaleAccount" id="balanceSaleAccount">$00.00</td>
 									<td>Past Due Amount</td>
 									<td class="defeatedSaleAccount">$00.00</td>
 								</tr>

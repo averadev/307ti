@@ -2126,6 +2126,10 @@ function setTableAccount(items, table){
 
 	var balance = 0, balanceDeposits = 0, balanceSales = 0, defeatedDeposits = 0, defeatedSales = 0;
 	var tempTotal = 0, tempTotal2 = 0;
+	var downpayment = 0;
+	var atrasado = 0;
+	var deuda = 0;
+	var sales = 0;
 	for(i=0;i<items.length;i++){
 		var item = items[i];
 		if( item.Sign_transaction == "1" ){
@@ -2134,17 +2138,25 @@ function setTableAccount(items, table){
 		if (item.Sign_transaction == "-1") {
 			tempTotal2 += parseFloat(item.Amount);
 		}
-		if( item.Concept_Trxid == "Down Payment" ){
-
+		if( item.Concept_Trxid.trim() == "Down Payment"){
+			downpayment += parseFloat(item.Amount);
+			atrasado += parseFloat(item.Overdue_Amount);
+		}
+		if( item.Concept_Trxid.trim() == "Sale"){
+			sales += parseFloat(item.Amount);
+		}
+		if (item.Concept_Trxid.trim() == "Loan") {
+			deuda += parseFloat(item.Amount);
 		}
 	}
 	balance = tempTotal - tempTotal2;
-	console.log(balance);
 	$('#balanceAccount').text('$ ' + balance.toFixed(2));
+	$('#balanceDepAccount').text('$ ' + downpayment.toFixed(2));
+	$('#balanceSaleAccount').text('$ ' + sales.toFixed(2));
 	// $('#' + table +  ' tbody tr td.balanceDepAccount').text('$ ' + balanceDeposits.toFixed(2));
 	// $('#' + table +  ' tbody tr td.balanceSaleAccount').text('$ ' + balanceSales.toFixed(2));
-	// $('#' + table +  ' tbody tr td.defeatedDepAccount').text('$ ' + defeatedDeposits.toFixed(2));
-	// $('#' + table +  ' tbody tr td.defeatedSaleAccount').text('$ ' + defeatedSales.toFixed(2));
+	$('#' + table +  ' tbody tr td.defeatedDepAccount').text('$ ' + atrasado.toFixed(2));
+	$('#' + table +  ' tbody tr td.defeatedSaleAccount').text('$ ' + deuda.toFixed(2));
 	
 }
 function setTableAccount12(items, table){
