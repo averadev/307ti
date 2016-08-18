@@ -608,8 +608,8 @@ private function insertScheduledPaymentsTrx($idContrato){
 				"Credit+"			=> 0,
 				"Amount"			=> $precio, 
 				"AbsAmount"			=> $precio,
-				"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
-				"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
+				"Curr1Amt"			=> valideteNumber($precio * $tipoCambioEuros),
+				"Curr2Amt"			=> valideteNumber($precio * $tipoCambioFlorines),
 				"Remark"			=> '', //
 				"Doc"				=> '',
 				"DueDt"				=> $_POST['tablaPagosProgramados'][$i]["date"],
@@ -722,14 +722,41 @@ public function createNote(){
 		if($this->input->is_ajax_request()) {
 			if($_POST['attrType'] == "newTransAcc"){
 				$debit = -1 * abs($_POST['amount']);
+				$Moneda = $_POST['currency'];
+				$precio = valideteNumber($_POST['amount']);
+				$Dolares = $this->contract_db->selectIdCurrency('USD');
+				$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+				$Euros  = $this->contract_db->selectIdCurrency('EUR');
+				if ($Moneda == 'USD') {
+					$tipoCambioDolares = 1;
+					$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+					$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
+					$precio = $precio * $tipoCambioDolares;
+				}
+				if ($Moneda == 'EUR') {
+					$tipoCambioDolares = $this->contract_db->selectTypoCambio($Euros, $Dolares);
+					$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Euros, $Florinres);
+					$tipoCambioEuros = 1;
+					$precio = $precio / $tipoCambioDolares;
+				}
+				if ($Moneda == 'NFL') {
+					$tipoCambioDolares = $this->contract_db->selectTypoCambio($Florinres, $Dolares);
+					$tipoCambioFlorines = 1;
+					$tipoCambioEuros = $this->contract_db->selectTypoCambio($Florinres, $Euros);
+					$precio = $precio / $tipoCambioDolares;
+				}
+				
+
 				$transaction = [
 					"fkAccid" 			=> $_POST['accId'],  //la cuenta
 					"fkTrxTypeId"		=> $_POST['trxTypeId'], //lista
 					"fkTrxClassID"		=> $_POST['trxClassID'], // vendedor
-					"Debit-"			=> $debit,
+					"Debit-"			=> valideteNumber($debit),
 					"Credit+"			=> 0,
-					"Amount"			=> $_POST['amount'],
-					"AbsAmount"			=> $_POST['amount'],
+					"Amount"			=> valideteNumber($precio),
+					"AbsAmount"			=> valideteNumber($precio),
+					"Curr1Amt"			=> valideteNumber($precio * $tipoCambioEuros),
+					"Curr2Amt"			=> valideteNumber($precio * $tipoCambioFlorines),
 					"Remark"			=> $_POST['remark'],
 					"Doc"				=> $_POST['doc'],
 					"DueDt"				=> $_POST['dueDt'],
@@ -800,7 +827,7 @@ public function createNote(){
 					}
 				}
 				
-				$message= array('success' => true, 'message' => "transaction saveee");
+				$message= array('success' => true, 'message' => "transaction save");
 			}
 			echo json_encode($message);
 		}
