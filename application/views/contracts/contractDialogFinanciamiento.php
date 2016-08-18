@@ -55,7 +55,7 @@
       <label for="tasaInteresF" class="text-left">Interest Rate</label>
     </div>
     <div class="small-9 columns">
-       </span id="tasaInteresF">0%</span>
+       <span id="tasaInteresF">0%</span>
     </div>
   </div>
    <div class="row">

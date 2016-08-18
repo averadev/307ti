@@ -522,7 +522,7 @@ private function insertClosingCosttransaction($idContrato){
 	$transaction = [
 		"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 		"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('CFE'),
-		"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SAL'),
+		"fkTrxClassID"	=> $this->contract_db->gettrxClassID('DWP'),
 		"Debit-"		=> 0,
 		"Credit+"		=> 0,
 		"Amount"		=> $precio, 
@@ -563,14 +563,14 @@ private function insertPagosDownpayment($idContrato){
 
 			$transaction = [
 				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato), 
-				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('DEP'),
+				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('DE+'),
 				"fkTrxClassID"		=> $this->contract_db->gettrxClassID('DWP'),
 				"Debit-"			=> valideteNumber($precio),
 				"Credit+"			=> 0,
 				"Amount"			=> valideteNumber(abs($precio)), 
 				"AbsAmount"			=> valideteNumber(abs($precio)),
 				"Curr1Amt"			=> valideteNumber($precio * $tipoCambioEuros),
-				"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
+				"Curr2Amt"			=> valideteNumber($precio * $tipoCambioFlorines),
 				"Remark"			=> '', 
 				"Doc"				=> '',
 				"DueDt"				=> $_POST['tablaDownpayment'][$i]["date"],

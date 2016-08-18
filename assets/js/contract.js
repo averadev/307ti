@@ -2072,12 +2072,26 @@ function getAccounts( id, typeInfo, typeAcc ){
 }
 
 function parsearSALE(sales){
+	var Balance = 0;
+
 	for(var i = 0; i < sales. length; i++){
+
 		// sales[i].Amount = parseFloat(sales[i].Amount).toFixed(2);
 		// sales[i].AbsAmount = parseFloat(sales[i].AbsAmount).toFixed(2);
 		// sales[i].Overdue_Amount = parseFloat(sales[i].Overdue_Amount).toFixed(2);
 		// sales[i].Euros = parseFloat(sales[i].Euros).toFixed(2)
 		// sales[i].Nederlands_Florins = parseFloat(sales[i].Nederlands_Florins).toFixed(2);
+		if( sales[i].Sign_transaction == "1" ){
+			console.log("+");
+			Balance += parseFloat(sales[i].Amount);
+			sales[i].Balance = Balance;
+		}
+		if( sales[i].Sign_transaction == "-1" ){
+			console.log("-");
+			Balance -= parseFloat(sales[i].Amount);
+			sales[i].Balance = Balance;
+			
+		}
 		if (sales[i].Amount !=".0000") {
 			sales[i].Amount = parseFloat(sales[i].Amount).toFixed(2);
 		}else{
@@ -2109,6 +2123,31 @@ function parsearSALE(sales){
 }
 
 function setTableAccount(items, table){
+
+	var balance = 0, balanceDeposits = 0, balanceSales = 0, defeatedDeposits = 0, defeatedSales = 0;
+	var tempTotal = 0, tempTotal2 = 0;
+	for(i=0;i<items.length;i++){
+		var item = items[i];
+		if( item.Sign_transaction == "1" ){
+			tempTotal += parseFloat(item.Amount);
+		}
+		if (item.Sign_transaction == "-1") {
+			tempTotal2 += parseFloat(item.Amount);
+		}
+		if( item.Concept_Trxid == "Down Payment" ){
+
+		}
+	}
+	balance = tempTotal - tempTotal2;
+	console.log(balance);
+	$('#balanceAccount').text('$ ' + balance.toFixed(2));
+	// $('#' + table +  ' tbody tr td.balanceDepAccount').text('$ ' + balanceDeposits.toFixed(2));
+	// $('#' + table +  ' tbody tr td.balanceSaleAccount').text('$ ' + balanceSales.toFixed(2));
+	// $('#' + table +  ' tbody tr td.defeatedDepAccount').text('$ ' + defeatedDeposits.toFixed(2));
+	// $('#' + table +  ' tbody tr td.defeatedSaleAccount').text('$ ' + defeatedSales.toFixed(2));
+	
+}
+function setTableAccount12(items, table){
 	//console.log(items)
 	var balance = 0, balanceDeposits = 0, balanceSales = 0, defeatedDeposits = 0, defeatedSales = 0;
 	for(i=0;i<items.length;i++){
@@ -2117,8 +2156,6 @@ function setTableAccount(items, table){
 		if( item.Sign_transaction == 1 ){
 			tempTotal = parseFloat(item.AbsAmount);
 			tempTotal2 = parseFloat(item.Overdue_Amount);
-			console.log(tempTotal);
-			console.log(tempTotal2);
 		}
 		if( item.Concept_Trxid.trim() == "Sale" ){
 			if(tempTotal2 != 0){
@@ -2134,12 +2171,9 @@ function setTableAccount(items, table){
 			}
 		}
 	}
-	console.log(balanceDeposits);
-	console.log(balanceSales);
 	balance = balanceDeposits + balanceSales;
 	
-	$('#' + table +  ' tbody tr td.balanceAccount').text('$ ' + balance.toFixed(2));
-	console.log(balance);
+	$('#balanceAccount').text('$ ' + balance.toFixed(2));
 	$('#' + table +  ' tbody tr td.balanceDepAccount').text('$ ' + balanceDeposits.toFixed(2));
 	$('#' + table +  ' tbody tr td.balanceSaleAccount').text('$ ' + balanceSales.toFixed(2));
 	$('#' + table +  ' tbody tr td.defeatedDepAccount').text('$ ' + defeatedDeposits.toFixed(2));
