@@ -2334,6 +2334,7 @@ function updateFinanciamiento(id){
     var factor = $("#terminosFinanciamientoF").val();
     var pagoMensual = getArrayValuesColumnTable("tablePagosSelectedFin", 3)[0];
     var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
+    var balanceActual = getNumberTextString("balanceFinanciarF");
     var ajaxData =  {
 		url: "contract/updateFinanciamiento",
 		tipo: "json",
@@ -2342,7 +2343,8 @@ function updateFinanciamiento(id){
 	        factor:factor,
 	        pagoMensual: pagoMensual,
 	        meses : meses,
-	        fecha: fechaPP
+	        fecha: fechaPP,
+	        balanceActual: balanceActual
 		},
 		funcionExito : afterUpdateFinanciamiento,
 		funcionError: mensajeAlertify

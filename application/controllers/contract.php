@@ -289,37 +289,44 @@ public function updateFinanciamiento(){
 
 private function insertTransaccionesCredito(){
 	$IDContrato = $_POST['idContrato'];
-	$pagoMensual = $_POST['pagoMensual'];
+	$pagoMensual = floatval($_POST['pagoMensual']);
 	$meses = intval($_POST['meses']);
-	
+	$total = $pagoMensual * $meses;
+	$balanceActual = floatval($_POST['balanceActual']);
+	if ($balanceActual < $total) {
+		$cantidad = $total - $balanceActual;
+		$this->insertFinanceCostTransacction($cantidad);
+	}
+
+	$Dolares = $this->contract_db->selectIdCurrency('USD');
+	$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+	$Euros  = $this->contract_db->selectIdCurrency('EUR');
+	$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+	$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
+	$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
+	$tipoCambioEuros = valideteNumber($tipoCambioEuros);
+
 	for ($i=0; $i < $meses; $i++) {
 		$fecha =  new DateTime($_POST['fecha']);
 		$fecha->modify("+".$i." month");
-		$fechaActual = $fecha->format('Y-m-d H:i:s');
+		$fechaActual = $fecha->format('Y-m-d');
 		$precio = valideteNumber($_POST['pagoMensual']);
-		
-		$Dolares = $this->contract_db->selectIdCurrency('USD');
-		$Florinres  = $this->contract_db->selectIdCurrency('NFL');
-		$Euros  = $this->contract_db->selectIdCurrency('EUR');
-		$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
-		$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
-		$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
-		$tipoCambioEuros = valideteNumber($tipoCambioEuros);
 		$euros = $precio * $tipoCambioEuros;
 		$florines = $precio * $tipoCambioFlorines;
+
 		$transaction = [
 			"fkAccid" 			=> $this->contract_db->getACCIDByContracID($IDContrato),  //la cuenta
 			"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('SCP'),//$_POST['trxTypeId'], //lista
 			"fkTrxClassID"		=> $this->contract_db->gettrxClassID('LOA'),//$_POST['trxClassID'], // vendedor
-			"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
-			"Credit+"			=> 0,	//si es positivo se inserta credit
-			"Amount"			=> valideteNumber($precio), //cantidad
+			"Debit-"			=> 0,
+			"Credit+"			=> 0,
+			"Amount"			=> valideteNumber($precio), 
 			"AbsAmount"			=> valideteNumber($precio),
 			"Curr1Amt"			=> valideteNumber($euros),
 			"Curr2Amt"			=> valideteNumber($florines),
 			"Remark"			=> '', //
 			"Doc"				=> '',
-			"DueDt"				=> $fechaActual,//date('Y-m-d', strtotime("+".$i." month")), //fecha a pagar --fecha vencimiento
+			"DueDt"				=> $fechaActual,
 			"ynActive"			=> 1,
 			"CrBy"				=> $this->nativesessions->get('id'),
 			"CrDt"				=> $this->getToday(),
@@ -330,6 +337,41 @@ private function insertTransaccionesCredito(){
 	}
 }
 
+private function insertFinanceCostTransacction($cantidad){
+	$IDContrato = $_POST['idContrato'];
+	$fecha =  new DateTime($_POST['fecha']);
+	$fechaActual = $fecha->format('Y-m-d');
+	$Dolares = $this->contract_db->selectIdCurrency('USD');
+	$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+	$Euros  = $this->contract_db->selectIdCurrency('EUR');
+	$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+	$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
+	$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
+	$tipoCambioEuros = valideteNumber($tipoCambioEuros);
+	$euros = $cantidad * $tipoCambioEuros;
+	$florines = $cantidad * $tipoCambioFlorines;
+
+	$transaction = [
+			"fkAccid" 			=> $this->contract_db->getACCIDByContracID($IDContrato),
+			"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('FCost'),
+			"fkTrxClassID"		=> $this->contract_db->gettrxClassID('LOA'),
+			"Debit-"			=> 0,
+			"Credit+"			=> 0,
+			"Amount"			=> valideteNumber($cantidad), 
+			"AbsAmount"			=> valideteNumber($cantidad),
+			"Curr1Amt"			=> valideteNumber($euros),
+			"Curr2Amt"			=> valideteNumber($florines),
+			"Remark"			=> '', //
+			"Doc"				=> '',
+			"DueDt"				=> $fechaActual,
+			"ynActive"			=> 1,
+			"CrBy"				=> $this->nativesessions->get('id'),
+			"CrDt"				=> $this->getToday(),
+			"MdBy"				=> $this->nativesessions->get('id'),
+			"MdDt"				=> $this->getToday()
+		];
+		$this->contract_db->insertReturnId('tblAccTrx', $transaction);
+}
 
 
 private function insertPricetransaction($idContrato){
