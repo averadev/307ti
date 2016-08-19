@@ -2865,7 +2865,6 @@ function updateTagBanderas(banderas){
 }
 
 function drawTableFlagsAsigned(data, table){
-	//console.table(data);
 	var bodyHTML = '';
     for (var i = 0; i < data.length; i++) {
         bodyHTML += "<tr>";
@@ -2876,8 +2875,8 @@ function drawTableFlagsAsigned(data, table){
         bodyHTML+="</tr>";
     }
     $('#' + table).html(bodyHTML);
-    $('#flagsAsignedBody').off('click');
-    deleteSelectFlag("flagsAsignedBody");
+    $('#'+table).off('click');
+    deleteSelectFlag(table);
 }
 function drawTableFlagsAsignedFlags(data){
 	alertify.success(data['mensaje']);
@@ -3015,8 +3014,9 @@ function opcionAccount(attrType){
        		}
      	}],
      close: function() {
-    	//$('#dialog-ScheduledPayments').empty();
-    	$("#AmountAcc").val("");
+    	$('#AmountAcc').val("");
+    	$('#documentAcc').val("");
+    	$('#referenceAcc').val("");
      }
 	});
 	return dialogo;

@@ -960,7 +960,6 @@ private function comprubaArray($valor, $array){
 	}else{
 		return false;
 	}
-	
 }
 
 public function nextStatusContract(){

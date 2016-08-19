@@ -2172,6 +2172,8 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 				var reservation = data["reservation"];
 				var frontDesk = data["frontDesk"];
 				var acc = data["acc"];
+				frontDesk = parsearFrontDesk(frontDesk);
+				reservation = parsearFrontDesk(reservation);
 				if(reservation.length > 0){
 					drawTable2(reservation, "tableAccountSeller", false, "");
 					setTableAccountRes( reservation, "tableReservationAccRes" );
@@ -2208,6 +2210,47 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 	        alertify.error("Try again");
 	    }
 	});
+}
+
+function parsearFrontDesk(frontDesk){
+	var Balance = 0;
+	for(var i = 0; i < frontDesk. length; i++){
+		if( frontDesk[i].Sign_transaction == "1" ){
+			Balance += parseFloat(frontDesk[i].Amount);
+			frontDesk[i].Balance = Balance.toFixed(2);
+		}
+		if( frontDesk[i].Sign_transaction == "-1" ){
+			Balance -= parseFloat(frontDesk[i].Amount);
+			frontDesk[i].Balance = Balance.toFixed(2);
+			
+		}
+		if (frontDesk[i].Amount !=".0000") {
+			frontDesk[i].Amount = parseFloat(frontDesk[i].Amount).toFixed(2);
+		}else{
+			frontDesk[i].Amount = 0;
+		}
+		if (frontDesk[i].AbsAmount !=".0000") {
+			frontDesk[i].AbsAmount = parseFloat(frontDesk[i].AbsAmount).toFixed(2);
+		}else{
+			frontDesk[i].AbsAmount = 0;
+		}
+		if (frontDesk[i].Overdue_Amount !=".0000") {
+			frontDesk[i].Overdue_Amount = parseFloat(frontDesk[i].Overdue_Amount).toFixed(2);
+		}else{
+			frontDesk[i].Overdue_Amount = 0;
+		}
+		if (frontDesk[i].Euros !=".0000") {
+			frontDesk[i].Euros = parseFloat(frontDesk[i].Euros).toFixed(2);
+		}else{
+			frontDesk[i].Euros = 0;
+		}
+		if (frontDesk[i].Nederlands_Florins !=".0000") {
+			frontDesk[i].Nederlands_Florins = parseFloat(frontDesk[i].Nederlands_Florins).toFixed(2);
+		}else{
+			frontDesk[i].Nederlands_Florins = 0;
+		}
+	}
+	return frontDesk;	
 }
 
 function setTableAccountRes(items, table){
@@ -2645,7 +2688,8 @@ function getTypesFlagsRes(id){
 	    	//console.table(data);
 	    	if (data) {
 	    		drawTableId(data,"tableFlagsListBodyRes");
-	    		selectTableRes("tableFlagsListBodyRes");
+	    		saveFlagsRes("tableFlagsListBodyRes");
+	    		//selectTableRes("tableFlagsListBodyRes");
 	    	}else{
 	    		alertify.error("No records found");
 	    	}
@@ -2654,6 +2698,23 @@ function getTypesFlagsRes(id){
 	        alertify.error("Try again");
 	    }
 	});
+}
+function saveFlagsRes(div){
+	var pickedup;
+	$("#"+div).on("click", "tr", function(){
+          if (pickedup != null) {
+              pickedup.removeClass("yellow");
+          }
+          $( this ).addClass("yellow");
+          pickedup = $(this);
+          saveFlagREs();
+	});
+}
+function saveFlagREs(){
+	var flags = getArrayValuesSelectedColumRes("tableFlagsListRes", 1).length;
+	if (flags>0) {
+		SaveFlagsContractRes();
+	}
 }
 
 function modalAddNotasRes() {
@@ -2780,7 +2841,7 @@ function getFlagsRes(id){
 	    success: function(data){
 	    	showLoading(div, false);
 	    	if (data) {
-	    		drawTableId(data,"flagsAsignedBodyRes");
+	    		drawTableFlagsAsignedRes(data,"flagsAsignedBodyRes");
 	    	}else{
 	    		alertify.error("No records found");
 	    	}
@@ -2790,6 +2851,52 @@ function getFlagsRes(id){
 	        alertify.error("Try again");
 	    }
 	});
+}
+
+function drawTableFlagsAsignedRes(data, table){
+	var bodyHTML = '';
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+        bodyHTML +="<td>" + '<i class="fa fa-long-arrow-left fa-2x" aria-hidden="true"></i>' + "</td>";
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        };
+        bodyHTML+="</tr>";
+    }
+    $('#' + table).html(bodyHTML);
+    $('#'+table).off('click');
+    deleteSelectFlagRes(table);
+}
+function deleteSelectFlagRes(div){
+	$("#"+div).on("click", "tr", function(){
+		var id = $(this).find('td').eq(1).text();
+        $(this).closest("tr").remove();
+        deleteFlag(id);
+        console.log("SE elimna");
+	});
+}
+function drawTableFlagsAsignedFlagsRes(data){
+	alertify.success(data['mensaje']);
+	if (data["banderas"]) {
+		updateTagBanderasRes(data["banderas"]);
+	}else{
+		$("#flagsReservationEdit").text("Flags:");
+	}
+	
+}
+function deleteFlag(id){
+	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+	var datos =  {
+		url: "reservation/deleteFlag",
+		tipo: "json",
+		datos: {
+			id:id,
+			idContrat:idContrat
+		},
+		funcionExito : drawTableFlagsAsignedFlagsRes,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(datos);
 }
 
 function SaveFlagsContractRes(){
@@ -2806,11 +2913,41 @@ function SaveFlagsContractRes(){
 	    dataType:'json',
 	    success: function(data){
 	    	alertify.success(data['mensaje']);
+	    	drawTableFlagsAsigned(data['banderas'],"flagsAsignedBodyRes");
+	    	if (data["banderas"]) {
+	    		updateTagBanderasRes(data["banderas"]);
+	    	}else{
+	    		$("#flagsReservationEdit").text("Flags:");
+	    	}
 	    },
 	    error: function(){
 	        alertify.error("Try again");
 	    }
 	});
+}
+function updateTagBanderasRes(banderas){
+	var textoBanderas = "Flags: ";
+	for(var i = 0; i < banderas.length; i++){
+		textoBanderas += banderas[i].FlagDesc;
+		if (banderas.length != i) {
+			textoBanderas += ",";
+		}
+	}
+	$("#flagsReservationEdit").text(textoBanderas);
+}
+function drawTableFlagsAsigned(data, table){
+	var bodyHTML = '';
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+        bodyHTML +="<td>" + '<i class="fa fa-long-arrow-left fa-2x" aria-hidden="true"></i>' + "</td>";
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        };
+        bodyHTML+="</tr>";
+    }
+    $('#' + table).html(bodyHTML);
+    $('#flagsAsignedBodyRes').off('click');
+    //deleteSelectFlag("flagsAsignedBodyRes");
 }
 function nextStatusContractRes(){
 	deactiveEventClickRes("btnNextStatusRes");
@@ -2857,13 +2994,14 @@ function opcionAccountRes(attrType){
 					});
 					$("#slcTransTypeAcc").attr('disabled', true);
 					setDataOpcionAccountRes(attrType);
-					getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
-					ajaxSelectsRes('contract/getTrxClass', 'try again', generalSelects, 'slcTrxClassAcc');
+					getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelectsDefault, 'slcTransTypeAcc');
+					ajaxSelectsRes('contract/getTrxClass', 'try again', generalSelectsDefault, 'slcTrxClassAcc');
+					ajaxSelectsRes('contract/getCurrency', 'try again', generalSelectsDefault, 'CurrencyTrxClassAcc');
 				});
 			}else{
 				showLoading(div, true);
 				$("#slcTransTypeAcc").attr('disabled', true);
-				getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
+				getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelectsDefault, 'slcTransTypeAcc');
 				setDataOpcionAccountRes(attrType);
 				showLoading(div, false);
 			}
@@ -2912,7 +3050,10 @@ function opcionAccountRes(attrType){
        		}
      	}],
      close: function() {
-    	//$('#dialog-ScheduledPayments').empty();
+    	$('#AmountAcc').val("");
+    	$('#documentAcc').val("");
+    	$('#referenceAcc').val("");
+    	
      }
 	});
 	return dialogo;
