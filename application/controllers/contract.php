@@ -761,6 +761,8 @@ public function createNote(){
 				$update = array();
 				$insertTrx = array();
 				for($i = 0; $i<count($idTrans); $i++){
+					//$precio = valideteNumber($_POST['amount']);
+					
 					if($amount > 0){
 						$trans = floatval($valTrans[$i]);
 						$totalAmou = 0;
@@ -776,6 +778,9 @@ public function createNote(){
 							$amount = $amount - $trans;
 							$totalAmou2 = $trans;
 						}
+						$Moneda = $_POST['currency'];
+						$conversion = $this->convertMoney($Moneda, $totalAmou);
+						$totalAmou = $conversion['precio'];
 						$totalAmou = str_replace(",", ".", $totalAmou);
 						$transU = array(
 							//'pkAccTrxId'	=>	$idTrans[$i],
@@ -784,7 +789,10 @@ public function createNote(){
 						$condicion = "pkAccTrxId = " . $idTrans[$i];
 						$this->contract_db->updateReturnId( 'tblAccTrx', $transU, $condicion );
 						//array_push($update, $transU);
-						
+						$conversion = $this->convertMoney($Moneda, $totalAmou2);
+						$totalAmou2 = $conversion['precio'];
+						$euros = str_replace(",", ".", $conversion['euro']);
+						$florines = str_replace(",", ".", $conversion['florines']);
 						$debit = floatval(-1 * abs($totalAmou2));
 						$debit = str_replace(",", ".", $debit);
 						$totalAmou2 = str_replace(",", ".", $totalAmou2);
@@ -796,6 +804,8 @@ public function createNote(){
 							"Credit+"			=> 0,
 							"Amount"			=> $totalAmou2,
 							"AbsAmount"			=> $totalAmou2,
+							"Curr1Amt"			=> $euros,
+							"Curr2Amt"			=> $florines,
 							"Remark"			=> $_POST['remark'],
 							"Doc"				=> $_POST['doc'],
 							"DueDt"				=> $_POST['dueDt'],
@@ -814,6 +824,39 @@ public function createNote(){
 			}
 			echo json_encode($message);
 		}
+	}
+	
+	private function convertMoney($Moneda,$precio){
+		$Dolares = $this->contract_db->selectIdCurrency('USD');
+		$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+		$Euros  = $this->contract_db->selectIdCurrency('EUR');
+		if ($Moneda == 'USD') {
+			$tipoCambioDolares = 1;
+			$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+			$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
+			$precio = valideteNumber($precio * $tipoCambioDolares);
+			$eurosConv = valideteNumber($precio * $tipoCambioEuros);
+			$florinesConv = valideteNumber($precio * $tipoCambioFlorines);
+		}
+		if ($Moneda == 'EUR') {
+			$tipoCambioDolares = $this->contract_db->selectTypoCambio($Euros, $Dolares);
+			$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+			$tipoCambioEuros = 1;
+			$precioDolares = valideteNumber($precio * $tipoCambioDolares);
+			$eurosConv = valideteNumber($precio * $tipoCambioEuros);
+			$florinesConv = valideteNumber($precioDolares * $tipoCambioFlorines);
+			$precio = $precioDolares;
+		}
+		if ($Moneda == 'NFL') {
+			$tipoCambioDolares = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+			$tipoCambioDolaresEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
+			$tipoCambioFlorines = 1;
+			$precioDolares = valideteNumber($precio / $tipoCambioDolares);
+			$florinesConv = valideteNumber($precio * $tipoCambioFlorines);
+			$eurosConv = valideteNumber($precioDolares * $tipoCambioDolaresEuros);
+			$precio = $precioDolares;
+		}
+		return array( 'precio' => $precio, 'euro' => $eurosConv, 'florines' => $florinesConv );
 	}
 
 public function createFlags(){
