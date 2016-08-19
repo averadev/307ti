@@ -12,4 +12,9 @@ class Pdf extends TCPDF
     {
         parent::__construct();
     }
+	
+	function __destruct()
+    {
+        parent::__destruct();
+    }
 }

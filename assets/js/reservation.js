@@ -181,9 +181,12 @@ $(document).ready(function(){
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			var precio = $("#tableFrontDeskAccRes .balanceAccount").text();
+			
        			precio = parseFloat(precio.replace("$", "").trim());
-       			var creditLimit = getNumberTextStringRes("creditLimitRes");
-       			if (creditLimit > precio) {
+       			var creditLimit = getNumberTextInputRes("creditLimitResInput");
+				console.log(creditLimit);
+				console.log(precio);
+       			if (creditLimit >= precio) {
        				createNewLimit();
        				$(this).dialog('close');
        			}else{
@@ -1974,7 +1977,7 @@ function getDatosContractOcupationRes(id){
 	}
 }
 function getDatosContractDocuments(id){
-	console.log("Documentos " + id);
+	getDocumentsRes(id);
 }
 function getDatosContractNotesRes(id){
 	if ($('#tableCNotesSelectedBodyRes').is(':empty')){
@@ -2307,10 +2310,10 @@ function setEventosEditarReservation(id){
 	$("#btnNextStatusRes").click(function(){
 		nextStatusContractRes();
 	});
-	
-	$( "#btnFrontPage").unbind( "click" );
-	$("#btnFrontPage").click(function(){
-		generateReportRes(id);
+
+	$('.btnReportRes').off('click');
+	$('.btnReportRes').on('click', function(){
+		generateReportRes(id, this);
 	});
 }
 
@@ -3134,6 +3137,32 @@ function getFilesRes(id){
 	});
 }
 
+function getDocumentsRes(id){
+	var url = "reservation/getFilesReservation";
+	//var div = "#tableCFilesSelectedRes";
+	showLoading("#tableCDocumentsSelected", true);
+	$.ajax({
+	    data:{
+	        idRes: id
+	    },
+	    type: "POST",
+	    url: url,
+	    dataType:'json',
+	    success: function(data){
+			if(data.length > 0){
+				drawTable2(data, "tableCDocumentsSelected", "deleteFileRes", "eliminar");
+			}else{
+				noResultsTable("contentTableFileRes", "tableCDocumentsSelected", "No results found");
+			}
+			
+			showLoading("#tableCDocumentsSelected", false);
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});
+}
+
 function deleteFileRes(idFile){
 	alertify.confirm("To delete the file?", function (e) {
 		if (e) {
@@ -3260,9 +3289,18 @@ function getRateRes(){
 	});
 }
 
-function generateReportRes(id){
-	
-	var url = "Pdfs/CheckOut?idRes=" + id;
+function generateReportRes(id, selector){
+	var type = $(selector).attr("attr_type");
+	var url = "";
+	if(type == "CheckOutRes"){
+		var url = "Pdfs/CheckOut?idRes=" + id;
+	}else if(type == "FarewellRes"){
+		var url = "Pdfs/Farewell?idRes=" + id;
+	}else if(type == "GuestInfromationRes"){
+		var url = "Pdfs/GuestInfromation?idRes=" + id;
+	}
+	else if(type == "Statement"){
+		var url = "Pdfs/Statement?idRes=" + id;
+	}
 	window.open(url);
-	
 }

@@ -1,26 +1,22 @@
 <div class="contentModalHeader">
 <div class="row collapse headerGeneral" >
 	<div class="small-12 medium-12 large-12 columns headerModalBtn"  > 
-		<a id="btnFrontPage" class="btn btn-primary spanSelect">
+		<a id="" class="btn btn-primary spanSelect btnReportRes" attr_type="CheckOutRes" >
 			<div class="label">Check Out</div>
 			<i class="fa fa-columns fa-lg"></i>
 		</a>
-		<a id="btnIWillPay" class="btn btn-primary spanSelect">
+		<a id="" class="btn btn-primary spanSelect btnReportRes" attr_type="FarewellRes" >
 			<div class="label">Farewell</div>
 			<i class="fa fa-money fa-lg"></i>
 		</a>
-		<a id="btnVoucher" class="btn btn-primary spanSelect">
+		<a id="" class="btn btn-primary spanSelect btnReportRes" attr_type="GuestInfromationRes">
 			<div class="label">Guest Infromation form</div>
 			<i class="fa fa-file-text-o fa-lg"></i>
 		</a>
-		<!--<a id="btnDatasheet" class="btn btn-primary spanSelect">
-			<div class="label">Data sheet</div>
-			<i class="fa fa-list-alt fa-lg"></i>
+		<a id="" class="btn btn-primary spanSelect btnReportRes" attr_type="Statement">
+			<div class="label">Statement</div>
+			<i class="fa fa-file-text-o fa-lg"></i>
 		</a>
-		<a id="btnAccountStatus" class="btn btn-primary spanSelect">
-			<div class="label">Account status</div>
-			<i class="fa fa-credit-card fa-lg"></i>
-		</a>-->
 	</div>
 </div>
 <div class="row headerDescription headerGeneral" style="padding: 8px;">
@@ -482,21 +478,20 @@
 			<fieldset class="fieldset">
 				<div class="containerContract">
 					<div class="row">
-						<table id="tableCDocumentsSelected" width="100%" style="min-height:250px;">
+						<table id="tableCDocumentsSelected" width="100%" >
 							<thead>
 								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >Occupancy</th>
+									<th colspan="8" class="thColspan" >Documents</th>
 								</tr> 
 								<tr>
-									<th class="cellEdit"></th>
-									<th class="cellGeneral">Creation date</th>
-									<th class="cellGeneral">Document type</th>
+									<th class="cellGeneral">Id</th>
+									<th class="cellGeneral">File</th>
+									<th class="cellGeneral">Description</th>
 									<th class="cellGeneral">User</th>
-									<th class="cellGeneral">Printed</th>
+									<th class="cellGeneral">Date</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr></tr>
 							</tbody>
 						</table>
 					</div>

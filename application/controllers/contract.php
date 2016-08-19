@@ -1134,12 +1134,20 @@ public function getFlagsContract(){
 				foreach($typeTr as $tyTr){
 					$data = $this->contract_db->getAccountsById( $id, $typeInfo, $tyTr);
 					foreach($data as $item){
-						$CurDate = strtotime(date("Y-m-d H:i:00",time()));
+						//$CurDate = strtotime(date("Y-m-d",time()));
+						//$CurDate = $this->getonlyDate(-1);
+						$CurDate = strtotime($this->getonlyDate(0));
+						//$CurDate = $this->getonlyDate(-1);
 						$dueDate = strtotime($item->Due_Date);
+						$item->currentDate = $this->getonlyDate(0);
 						$item->Overdue_Amount = 0;
 						if( $dueDate <= $CurDate  ){
 							//if( $item->Sign_transaction == 1 || $item->Sign_transaction == "0" ){
-								$item->Overdue_Amount = $item->AbsAmount;
+								if( $item->Sign_transaction == 1){
+									$item->Overdue_Amount = $item->AbsAmount;
+								}else if( $item->Sign_transaction == 0 && ($item->Concept_Trxid == "Down Payment" or $item->Type == "Schedule Payment") ){
+									$item->Overdue_Amount = $item->AbsAmount;
+								}
 							//}
 						}
 					}
@@ -1498,6 +1506,12 @@ public function getFlagsContract(){
 	
 	private function remplaceFloat($valor){
 		return str_replace(",", ".", $valor);
+	}
+	
+	private function getonlyDate($restarDay){
+		$date = date( "Y-m-d" );
+		$date = date( "m/d/Y", strtotime( $restarDay . " day", strtotime( $date ) ) ); 
+		return $date;
 	}
 	
 }
