@@ -974,7 +974,7 @@ class Reservation extends CI_Controller {
 			}
 			$next = $this->reservation_db->selectNextStatusDesc2(intval($IdStatus)+1);
 			$actual = $this->reservation_db->selectNextStatusDesc2($IdStatus);
-			$IDAccount = $this->reservation_db->getACCIDByContracID($id);
+			$IDAccount = $this->reservation_db->getACCIDByContracIDFDK($id);
 			$creditLimit = $this->reservation_db->getCreditLimitActual($IDAccount);
 			$financeBalance = $this->reservation_db->selectFinanceBalance($id);
 			$data['statusActual']= $actual;

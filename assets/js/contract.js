@@ -3014,6 +3014,7 @@ function opcionAccount(attrType){
      	}],
      close: function() {
     	//$('#dialog-ScheduledPayments').empty();
+    	$("#AmountAcc").val("");
      }
 	});
 	return dialogo;

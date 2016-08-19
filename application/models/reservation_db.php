@@ -831,7 +831,18 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkAccID;
         }
     }
-	
+	public function getACCIDByContracIDFDK($idContrato){
+        $this->db->select('pkAccID');
+        $this->db->from('tblAcc a');
+        $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId and rpa.fkResId='.$idContrato, 'inner');
+        $this->db->where('a.fkAccTypeId = 5');
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkAccID;
+        }
+    }
 	public function getTrxTypeContrac($string){
         $this->db->select('pktrxTypeId');
         $this->db->from('tbltrxtype');
