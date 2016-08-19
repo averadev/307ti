@@ -293,19 +293,19 @@
 								</tr>
 								<tr>
 									<td>Balance</td>
-									<td id="balanceAccount">$00.00</td>
+									<td class="balanceAccount">$00.00</td>
 									<td></td>
 									<td></td>
 								</tr>
 								<tr>
 									<td>Downpayment Balance</td>
-									<td id="balanceDepAccount">$00.00</td>
+									<td class="balanceDepAccount">$00.00</td>
 									<td> Downpaymet Past Due Amount</td>
 									<td class="defeatedDepAccount">$00.00</td>
 								</tr>
 								<tr>
 									<td>Balance Sales</td>
-									<td class="balanceSaleAccount" id="balanceSaleAccount">$00.00</td>
+									<td class="balanceSaleAccount">$00.00</td>
 									<td>Past Due Amount</td>
 									<td class="defeatedSaleAccount">$00.00</td>
 								</tr>

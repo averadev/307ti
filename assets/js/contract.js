@@ -2033,6 +2033,8 @@ function getAccounts( id, typeInfo, typeAcc ){
 				var loan = data["loan"];
 				var acc = data["acc"];
 				var sale = parsearSALE(sale);
+				var maintenance = parsearSALE(maintenance);
+				var loan = parsearSALE(loan);
 				if( sale.length > 0 ){
 					drawTable2( sale, "tableAccountSeller", false, "" );
 					setTableAccount( sale, "tableSaleAccRes" );
@@ -2073,14 +2075,7 @@ function getAccounts( id, typeInfo, typeAcc ){
 
 function parsearSALE(sales){
 	var Balance = 0;
-
 	for(var i = 0; i < sales. length; i++){
-
-		// sales[i].Amount = parseFloat(sales[i].Amount).toFixed(2);
-		// sales[i].AbsAmount = parseFloat(sales[i].AbsAmount).toFixed(2);
-		// sales[i].Overdue_Amount = parseFloat(sales[i].Overdue_Amount).toFixed(2);
-		// sales[i].Euros = parseFloat(sales[i].Euros).toFixed(2)
-		// sales[i].Nederlands_Florins = parseFloat(sales[i].Nederlands_Florins).toFixed(2);
 		if( sales[i].Sign_transaction == "1" ){
 			Balance += parseFloat(sales[i].Amount);
 			sales[i].Balance = Balance.toFixed(2);
@@ -2115,7 +2110,6 @@ function parsearSALE(sales){
 		}else{
 			sales[i].Nederlands_Florins = 0;
 		}
-		
 	}
 	return sales;	
 }
@@ -2150,9 +2144,9 @@ function setTableAccount(items, table){
 		}
 	}
 	balance = tempTotal - tempTotal2;
-	$('#balanceAccount').text('$ ' + balance.toFixed(2));
-	$('#balanceDepAccount').text('$ ' + downpayment.toFixed(2));
-	$('#balanceSaleAccount').text('$ ' + loan.toFixed(2));
+	$('#' + table +  ' tbody tr td.balanceAccount').text('$ ' + balance.toFixed(2));
+	$('#' + table +  ' tbody tr td.balanceDepAccount').text('$ ' + downpayment.toFixed(2));
+	$('#' + table +  ' tbody tr td.balanceSaleAccount').text('$ ' + loan.toFixed(2));
 	$('#' + table +  ' tbody tr td.defeatedDepAccount').text('$ ' + atrasadoDownpayment.toFixed(2));
 	$('#' + table +  ' tbody tr td.defeatedSaleAccount').text('$ ' + atrasadoLoan.toFixed(2));
 	
