@@ -131,6 +131,36 @@ if (! function_exists('isValidateContract')) {
 	}
 }
 
+if (! function_exists('isValidateReservation')) {
+	function isValidateReservation(){
+		$Validacion = [
+			"valido" => true
+		];
+		$Mensajes = [];
+		$valido =  true;
+		if (isset($_POST['idiomaID'])) {
+			$_POST['idiomaID'] = valideteNumberINT($_POST['idiomaID']);
+		}else{
+			$Validacion["valido"] = false;
+			array_push($Mensajes, "Error in Language");
+		}
+		if (isset($_POST['firstYear'])) {
+			$_POST['firstYear'] = valideteNumberINT($_POST['firstYear']);
+		}else{
+			$Validacion["valido"] = false;
+			array_push($Mensajes, "Error in First Year");
+		}
+		if (isset($_POST['lastYear'])) {
+			$_POST['lastYear'] = valideteNumberINT($_POST['lastYear']);
+		}else{
+			$Validacion["valido"] = false;
+			array_push($Mensajes, "Error in Last Year");
+		}
+		$Validacion["mensajes"] = $Mensajes;
+		return $Validacion;
+	}
+}
+
 if (! function_exists('isValidateCreditCard')) {
 	
 	function isValidateCreditCard(){

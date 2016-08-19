@@ -31,9 +31,13 @@ class Pdfs extends CI_Controller {
         //$html .= "<h2>Localidades de ".$prov."</h2><h4>Actualmente: ".count($provincias)." localidades</h4>";
         $html .= "<table width='100%'>";
         $html .= "<tr><th>Id localidad</th><th>Localidades</th></tr>";*/
-		
-		
-		//echo base_url();
+		/*echo $_SERVER['DOCUMENT_ROOT'];
+		echo "</br>";
+		echo $_SERVER['HTTP_HOST'];
+		echo "</br>";
+		echo str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
+		echo "</br>";
+		echo base_url();*/
 		
     }
 	
@@ -70,10 +74,10 @@ class Pdfs extends CI_Controller {
 			$body .= '<h4>Please note that your apartment must be left in an orderly condition in order not to have to enforce a maid cleaning surcharge. Have a good flight home!!</h5>';
 			
 			$title = "Check Out";
-			$saveFiler = "Dear_Owners_and_Guests" . $idRes;
+			$saveFiler = "CheckOut" . $idRes;
 			//var_dump($data);
 			
-			$this->createTableStyle("Dear Owners and Guests", $body, $title, $saveFiler, $idRes);
+			$this->createTableStyle("CheckOut", $body, $title, $saveFiler, $idRes);
 			
 		//}
 	}
@@ -226,7 +230,7 @@ class Pdfs extends CI_Controller {
 		
 		$title = "Guest Infromation form";
 		$saveFiler = "Guest_Infromation" . $idRes;
-		$this->createTableStyle("Guest Infromation form", $body, $title, $saveFiler);
+		$this->createTableStyle("Guest Infromation form", $body, $title, $saveFiler, $idRes);
 	}
 	
 	public function Statement(){
@@ -397,13 +401,16 @@ class Pdfs extends CI_Controller {
 		$saveFiler .= $date->getTimestamp() . ".pdf";
 		
 		//$nombre_archivo = utf8_decode(base_url() . "assets/pdf/" . $saveFiler);
-		$nombre_archivo = utf8_decode("C:/xampp/htdocs/307ti/assets/pdf/" . $saveFiler);
+		//$nombre_archivo = utf8_decode("C:/xampp/htdocs/307ti/assets/pdf/" . $saveFiler);
+		$nombre_archivo = utf8_decode($saveFiler);
+		$nombre_archivo = $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/" . $nombre_archivo;
+		//$nombre_archivo = $_SERVER['DOCUMENT_ROOT'] . "307ti/assets/pdf/" . $nombre_archivo;
 		$nombre_archivo2 = utf8_decode($saveFiler);
 		//$pdf->Output($nombre_archivo,'I');
 		//$pdf->Output($nombre_archivo,'F');
 		//print("hola");
 		
-		$pdf->Output($nombre_archivo,'F');
+		$pdf->Output($nombre_archivo,'FI');
 		
 		$saveDocument = array(
 			'fkDocTypeId' => 1,
@@ -429,7 +436,7 @@ class Pdfs extends CI_Controller {
 		);
 		$this->pdfs_db->insert($saveDocumentRes,"tblResDoc");
 		
-		$pdf->Output($nombre_archivo2,'I');
+		//$pdf->Output($nombre_archivo2,'I');
 		
 		$pdf = null;
 		//$pdf->Output($nombre_archivo2,'I');
@@ -447,88 +454,6 @@ class Pdfs extends CI_Controller {
 		
 		
 		//$this->generar2( $html, $title, $nombre_archivo, $name );
-		
-    }
-	
-	private function generar2( $html, $title, $saveFiler, $name ) {
-		
-		//echo $saveFiler;
-		
-		//$fp = fopen($saveFiler, "r");
-		$mi_pdf = 'archivos/documento.pdf';
-		header('Content-type: application/pdf');
-		header('Content-Disposition: attachment; filename="'.$saveFiler.'"');
-		readfile($saveFiler);
-        
-       /* $pdf2 = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
-        $pdf2->SetCreator(PDF_CREATOR);
-        $pdf2->SetAuthor('307ti');
-        $pdf2->SetTitle($name);
-        $pdf2->SetSubject('report');
-        $pdf2->SetKeywords('report');
- 
-		// datos por defecto de cabecera, se pueden modificar en el archivo tcpdf_config_alt.php de libraries/config
-		
-        //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 001', PDF_HEADER_STRING, array(0, 64, 255), array(0, 200, 128));
-		
-		//$logo = APPPATH."/third_party/logo.jpg";
-		$logo = "logo.jpg";
-		$headerString = " " . $this->nativesessions->get('username') .  " \n      " . $this->getonlyDate(0);
-		$pdf2->SetHeaderData($logo, 20, "     " . $title, "     " . $headerString,  array( 102,44,25 ), array( 102,44,25 ));
-        $pdf2->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
- 
-		// datos por defecto de cabecera, se pueden modificar en el archivo tcpdf_config.php de libraries/config
-        $pdf2->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf2->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
- 
-		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
-        //$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
- 
-		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
-        $pdf2->SetMargins(5, PDF_MARGIN_TOP, 5);
-        $pdf2->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf2->SetFooterMargin(PDF_MARGIN_FOOTER);
- 
-		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
-        $pdf2->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
- 
-		//relación utilizada para ajustar la conversión de los píxeles
-        $pdf2->setImageScale(PDF_IMAGE_SCALE_RATIO);
- 
- 
-		// ---------------------------------------------------------
-		// establecer el modo de fuente por defecto
-        $pdf2->setFontSubsetting(true);
- 
-		// Establecer el tipo de letra
- 
-		//Si tienes que imprimir carácteres ASCII estándar, puede utilizar las fuentes básicas como
-		// Helvetica para reducir el tamaño del archivo.
-        $pdf2->SetFont('freemono', '', 14, '', true);
- 
-		// Añadir una página
-		// Este método tiene varias opciones, consulta la documentación para más información.
-        $pdf2->AddPage();
- 
-		//fijar efecto de sombra en el texto
-        $pdf2->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
- 
-		// Imprimimos el texto con writeHTMLCell()
-        $pdf2->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
- 
-		// ---------------------------------------------------------
-		// Cerrar el documento PDF y preparamos la salida
-		// Este método tiene varias opciones, consulte la documentación para más información.
-		
-		$date = new DateTime();
-		
-		$saveFiler .= $date->getTimestamp() . ".pdf";
-		
-		//$nombre_archivo = utf8_decode(base_url() . "assets/pdf/" . $saveFiler);
-		//$nombre_archivo = utf8_decode("C:/xampp/htdocs/307ti/assets/pdf/" . $saveFiler);
-		$nombre_archivo2 = utf8_decode($saveFiler);
-		$pdf2->Output($nombre_archivo2,'I');
-		//$pdf2->Output($nombre_archivo,'F');*/
 		
     }
 	

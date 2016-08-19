@@ -263,6 +263,25 @@ $(document).ready(function(){
 	getDatailByIDRes("reservationstbody");
 });
 
+function updateDownpaymentRes(){
+	var downpayment = getNumberTextInput("downpaymentRes");
+	$("#montoTotalRes").val(downpayment.toFixed(2));
+	var monto = getNumberTextInput("montoTotalRes");
+	if (monto) {
+		cambiarCantidadP(monto);
+	}else{
+		$("#montoTotalRes").val(0);
+	}
+}
+function updateDescuentoEspecialRes(){
+	var monto = $("#descuentoEspecialRes").val();
+	if (monto) {
+		cambiarCantidadDE(monto);
+	}else{
+		$("#montoTotalDERes").val(0);
+	}
+}
+
 function addHTMLCreditLimit(data){
 	$("#dialog-CreditLimit").html(data);
 	//initEventosFinanciamiento();
@@ -312,19 +331,11 @@ function ajaxSelectsRes(url,errorMsj, funcion, divSelect) {
 }
 
 function updateBalanceFinalRes(){
-	/*var precioVenta = $("#precioVentaRes").val();
-	var enganche = $("#montoTotalRes").val();
-	var balanceFinal = $("#financeBalanceRes").val(precioVenta - enganche);*/
-	
-	//var closingCost = sumarArrayRes(getArrayValuesColumnTable("tableUnidadesResSelected", 7));
-	//var closingCost = $('#RateRes').val();
-	//var closingCost = sumarArrayRes(getArrayValuesColumnTable("tableUnidadesSelected", 7));
 	var precioVenta = getNumberTextInputRes("precioVentaRes");
 
 	var descuentoEspecial = getNumberTextInputRes("montoTotalDERes");
 	var deposito = getNumberTextInputRes("depositoEngancheRes");
 	var pagosProgramados = getNumberTextInputRes("scheduledPaymentsRes");
-
 
 	var descuentoEfectivo = getNumberTextInputRes("totalDiscountPacksRes"); 
 	var transferencia = getNumberTextInputRes("amountTransferRes");
@@ -386,6 +397,8 @@ function cambiarCantidadDERes(monto){
 	}
 	updateBalanceFinalRes();
 }
+
+
 
 function createDialogReservation(addReservation) {
 	console.log($('#selectLanguageRes'));
@@ -671,7 +684,7 @@ function selectAllPeopleRes(){
 	for (var i = 0; i < array.length; i++) {
 		var fullArray = $(array[i]).find("td");
 		if (personasSeleccionaDas.length>0) {
-			if (!isInArray(fullArray.eq(1).text().replace(/\s+/g, " ") ,personasSeleccionaDas)) {
+			if (!isInArrayRes(fullArray.eq(1).text().replace(/\s+/g, " ") ,personasSeleccionaDas)) {
 				persona = [
 					fullArray.eq(1).text().replace(/\s+/g, " "),
 					fullArray.eq(2).text().replace(/\s+/g, " "),
@@ -700,6 +713,10 @@ function selectAllPeopleRes(){
 		return true;
 	}
 	
+}
+
+function isInArrayRes(value, array) {
+  return array.indexOf(value) > -1;
 }
 
 function getArrayValuesColumnTableRes(tabla, columna){
@@ -895,6 +912,7 @@ function createNewReservation(){
 						day:day,
 						iniDate:iniDateRes,
 						endDate:endDateRes,
+						
 					},
 					type: "POST",
 					dataType:'json',
@@ -998,21 +1016,6 @@ function getValueTableUnidadesRes(){
 	return unidades;
 }
 function getValueTablePersonasRes(){
-	/*var tabla = "tablePeopleResSelected";
-	var unidades = [];
-	var personas = [];
-	$('#'+tabla+' tbody tr').each( function(){
-		if ($(this).text().replace(/\s+/g, " ")!="") {
-			var persona = {};
-			persona.id = $(this).find('td').eq(0).text(),
-			persona.primario = converCheked($(this).find('td').eq(4).find('input[name=primario]').filter(':checked').val()),
-			persona.secundario = converCheked($(this).find('td').eq(5).find('input[name=secundario]').filter(':checked').val()),
-			persona.beneficiario = converCheked($(this).find('td').eq(6).find('input[name=beneficiario]').filter(':checked').val())
-			personas.push(persona); 
-		}
-	});
-	return personas;*/
-	
 	var tabla = "tablePeopleResSelected";
 	var unidades = [];
 	var personas = [];
@@ -1027,7 +1030,6 @@ function getValueTablePersonasRes(){
 		}
 	});
 	return personas;
-	
 }
 
 function converCheked(val){
@@ -1271,16 +1273,16 @@ function modalScheduledPaymentsRes() {
 	var div = "#dialog-ScheduledPayments";
 	dialogo = $(div).dialog ({
   		open : function (event){
-  			if ($(div).is(':empty')) {
+  			//if ($(div).is(':empty')) {
   				showLoading(div, true);
 				$(this).load ("contract/ScheduledPayments" , function(){
 					showLoading(div, false);
 					initEventosDownpaymentProgramadosRes();
 				});
-  			}else{
+  			/*}else{
 				$(this).dialog('open');
 				//initEventosDownpaymentProgramadosRes();
-  			}
+  			}*/
 		},
 		autoOpen: false,
      	height: maxHeight,
@@ -1296,14 +1298,6 @@ function modalScheduledPaymentsRes() {
        		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			/*var totalProgramado = $("#totalProgramado").val();
-       			var totalInicial = $("#downpaymentProgramado").val();
-       			if (totalProgramado==totalInicial) {
-       				$("#scheduledPaymentsRes").val($("#totalProgramado").val());
-       				$(this).dialog('close');
-       			}else{
-       				alertify.error("verifica los pagos")
-       			}*/
 				var totalProgramado = getNumberTextInputRes("totalProgramado"); 
        			var totalInicial = getNumberTextInputRes("downpaymentProgramado");
        			if (totalProgramado == totalInicial) {
@@ -1708,13 +1702,6 @@ function splitNumberTarjetaRes(){
 }
 
 function initEventosDownpaymentProgramadosRes(){
-	/*var downpayment = $("#downpaymentRes").val();
-	$("#downpaymentProgramado").val(downpayment);
-	selectMetodoPagoProgramadosRes();
-	setDateRes("datePaymentPrg");
-	$('#btnCleanmontoDownpaymentPrg').click(function (){
-		$("#montoDownpaymentPrg").val(0);
-	});*/
 	$( "#datePaymentPrg" ).Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false,
@@ -1723,7 +1710,8 @@ function initEventosDownpaymentProgramadosRes(){
 	var downpayment = $("#downpaymentPrice").val();
 	var deposit = $("#depositoEngancheRes").val();
 	$("#montoDownpaymentPrg").val(0);
-	$("#downpaymentProgramado").val(downpayment-deposit);
+	var programado = (downpayment-deposit).toFixed(2);
+	$("#downpaymentProgramado").val(programado);
 	selectMetodoPagoProgramadosRes();
 	//setDate("datePaymentPrg");
 
@@ -1749,14 +1737,6 @@ function initEventosDownpaymentProgramadosRes(){
 }
 
 function initEventosDiscountRes(){
-	/*$("#btnAddmontoPack").click(function(){
-		if ($("#montoPack").val()>0) {
-			PacksAddsRes();
-		}else{
-			alertify.error("the amount should be greater to zero");
-			errorInput("montoPack", 2);
-		}
-	});*/
 	getTypeGifts();
 	$("#btnAddmontoPack").click(function(){
 		if ($("#montoPack").val()<=0) {
@@ -1783,7 +1763,6 @@ function getTypeGifts(){
 }
 
 function typesGift(data){
-	console.table(data);
 	generalSelects(data, "tiposPakc");
 }
 
@@ -2171,14 +2150,18 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 			if(typeInfo == "account"){
 				var reservation = data["reservation"];
 				var frontDesk = data["frontDesk"];
+				
+				
 				var acc = data["acc"];
 				if(reservation.length > 0){
+					var reservation = parsearSALERes(reservation);
 					drawTable2(reservation, "tableAccountSeller", false, "");
 					setTableAccountRes( reservation, "tableReservationAccRes" );
 				}else{
 					alertify.error('no results found')
 				}
 				if(frontDesk.length > 0){
+					var frontDesk = parsearSALERes(frontDesk);
 					drawTable2(frontDesk, "tableAccountLoan", false, "");
 					setTableAccountRes( frontDesk, "tableFrontDeskAccRes" );
 				}else{
@@ -2210,37 +2193,81 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 	});
 }
 
-function setTableAccountRes(items, table){
-	var balance = 0, balanceDeposits = 0, balanceSales = 0, defeatedDeposits = 0, defeatedSales = 0;
-	for(i=0;i<items.length;i++){
-		var item = items[i];
-		var tempTotal = 0, tempTotal2 = 0;
-		if( item.Sign_transaction == 1 ){
-			tempTotal = parseFloat(item.AbsAmount);
-			tempTotal2 = parseFloat(item.Overdue_Amount);
+function parsearSALERes(sales){
+	var Balance = 0;
+	for(var i = 0; i < sales.length; i++){
+		if( sales[i].Sign_transaction == "1" ){
+			Balance += parseFloat(sales[i].Amount);
+			sales[i].Balance = Balance.toFixed(2);
 		}
-		if( item.Concept_Trxid.trim() == "Sale" ){
-			if(tempTotal2 != 0){
-				defeatedSales += tempTotal;
-			}else{
-				balanceSales += tempTotal;
-			}
+		if( sales[i].Sign_transaction == "-1" ){
+			Balance -= parseFloat(sales[i].Amount);
+			sales[i].Balance = Balance.toFixed(2);
+			
+		}
+		if (sales[i].Amount !=".0000") {
+			sales[i].Amount = parseFloat(sales[i].Amount).toFixed(2);
 		}else{
-			if(tempTotal2 != 0){
-				defeatedDeposits += tempTotal;
-			}else{
-				balanceDeposits += tempTotal;
-			}
+			sales[i].Amount = 0;
+		}
+		if (sales[i].AbsAmount !=".0000") {
+			sales[i].AbsAmount = parseFloat(sales[i].AbsAmount).toFixed(2);
+		}else{
+			sales[i].AbsAmount = 0;
+		}
+		if (sales[i].Overdue_Amount !=".0000") {
+			sales[i].Overdue_Amount = parseFloat(sales[i].Overdue_Amount).toFixed(2);
+		}else{
+			sales[i].Overdue_Amount = 0;
+		}
+		if (sales[i].Euros !=".0000") {
+			sales[i].Euros = parseFloat(sales[i].Euros).toFixed(2);
+		}else{
+			sales[i].Euros = 0;
+		}
+		if (sales[i].Nederlands_Florins !=".0000") {
+			sales[i].Nederlands_Florins = parseFloat(sales[i].Nederlands_Florins).toFixed(2);
+		}else{
+			sales[i].Nederlands_Florins = 0;
 		}
 	}
-	balance = balanceDeposits + balanceSales;
-	
-	$('#' + table +  ' tbody tr td.balanceAccount').text('$ ' + balance);
-	$('#' + table +  ' tbody tr td.balanceDepAccount').text('$ ' + balanceDeposits.toFixed(2));
-	$('#' + table +  ' tbody tr td.balanceSaleAccount').text('$ ' + balanceSales.toFixed(2));
-	$('#' + table +  ' tbody tr td.defeatedDepAccount').text('$ ' + defeatedDeposits.toFixed(2));
-	$('#' + table +  ' tbody tr td.defeatedSaleAccount').text('$ ' + defeatedSales.toFixed(2));
-	
+	return sales;	
+}
+
+function setTableAccountRes(items, table){
+	var balance = 0, balanceDeposits = 0, balanceSales = 0, defeatedDeposits = 0, defeatedSales = 0;
+	var tempTotal = 0, tempTotal2 = 0;
+	var downpayment = 0;
+	var atrasadoDownpayment = 0;
+	var atrasadoLoan = 0;
+	var loan = 0;
+	var sales = 0;
+	for(i=0;i<items.length;i++){
+		var item = items[i];
+		if( item.Sign_transaction == "1" ){
+			tempTotal += parseFloat(item.Amount);
+		}
+		if (item.Sign_transaction == "-1") {
+			tempTotal2 += parseFloat(item.Amount);
+		}
+		if( item.Concept_Trxid.trim() == "Down Payment" && item.Type.trim() == "Schedule Payment"){
+			downpayment += parseFloat(item.Amount);
+			atrasadoDownpayment += parseFloat(item.Overdue_Amount);
+		}
+		if( item.Concept_Trxid.trim() == "Sale"){
+			sales += parseFloat(item.Amount);
+		}
+		if (item.Concept_Trxid.trim() == "Loan") {
+			loan += parseFloat(item.Amount);
+			atrasadoLoan += parseFloat(item.Overdue_Amount);
+		}
+	}
+	balance = tempTotal - tempTotal2;
+	$('#' + table +  ' tbody tr td.balanceAccount').text('$ ' + balance.toFixed(2));
+	$('#' + table +  ' tbody tr td.balanceDepAccount').text('$ ' + downpayment.toFixed(2));
+	$('#' + table +  ' tbody tr td.balanceSaleAccount').text('$ ' + loan.toFixed(2));
+	$('#' + table +  ' tbody tr td.defeatedDepAccount').text('$ ' + atrasadoDownpayment.toFixed(2));
+	$('#' + table +  ' tbody tr td.defeatedSaleAccount').text('$ ' + atrasadoLoan.toFixed(2));
 }
 
 function drawTerminosVentaRes(data){
@@ -2267,10 +2294,10 @@ function drawTerminosVentaRes(data){
 }
 
 function drawTerminoFinanciamientoRes(data){
-	var balanceFinal  = data.FinanceBalance;
-	var pagoMensual = data.MonthlyPmtAmt;
-	var porEnganche = data.porcentaje;
-	var balanceFinal = data.TotalFinanceAmt;
+	var balanceFinal  = parseFloat(data.FinanceBalance);
+	var pagoMensual = parseFloat(data.MonthlyPmtAmt);
+	var porEnganche = parseFloat(data.porcentaje);
+	var balanceFinal = parseFloat(data.TotalFinanceAmt);
 
 	$("#cfbalanceFinancedRes").text(balanceFinal);
 	$("#cfPagoMensualRes").text(pagoMensual);
@@ -2565,11 +2592,17 @@ function getSellersRes(){
 	    success: function(data){
 	    	showLoading(div, false);
 	    	drawTableId(data,"tableSellerbody");
-	    	selectTable("tableSellerbody");
+	    	selectTableRes("tableSellerbody");
 	    },
 	    error: function(){
 	        alertify.error("Try again");
 	    }
+	});
+}
+
+function selectTableRes(div){
+	$("#"+div).on("click", "tr", function(){
+		$(this).toggleClass("yellow");
 	});
 }
 
@@ -2580,7 +2613,7 @@ function modalProvisionsRes() {
   				showLoading(div, true);
 				$(this).load ("contract/modalProvisions" , function(){
 					showLoading(div, false);
-					//initEventosSellersRes();
+					initEventosProvisionsRes();
 				});
 		},
 		autoOpen: false,
@@ -2609,6 +2642,48 @@ function modalProvisionsRes() {
 	return dialogo;
 }
 
+function initEventosProvisionsRes(){
+	$("#btnAddPovisionesDI").click(function(){
+		if ($("#montoProvisiones").val()<=0) {
+			alertify.error("the amount should be greater to zero");
+			errorInput("montoProvisiones", 2);
+		}else if($("#tiposPacksD").val()<=0){
+			alertify.error("choose a pack type");
+			errorInput("tiposPacksD", 2);
+		}else{
+			addProvisionesEventosRes();
+
+		}
+	});
+
+	$("#btnCleanAmountProvisiones").click(function(){
+		$("#montoProvisiones").val('');
+	});
+
+}
+
+function addProvisionesEventosRes(){
+	var td = "";
+	var IdTipoPack = $("#tiposPacksD").val();
+	var tipoPack = $("#tiposPacksD option:selected").text();
+	var monto = $("#montoProvisiones").val();
+		td = "<tr>";
+		td += "<td style='display:none'>"+IdTipoPack+"</td>";
+		td += "<td>"+tipoPack+"</td>";
+		td += "<td class='montoPacks'>"+monto+"</td>";
+		td += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
+		td += "</tr>";
+	$("#tbodytableProvisionesDI").append(td);
+
+	//totalDescPack();
+	//deleteElementTableFuncion("tablePackgSelected", totalDescPack);
+	deleteElementTableFuncionRes( "tableProvisionesDI", addProRes );
+}
+
+function addProRes(){
+	alertify.success("deleted");
+}
+
 function getWeeksRes(id){
 	var div = "#tableCOccupationSelectedbodyRes";
 	showLoading(div, true);
@@ -2621,7 +2696,7 @@ function getWeeksRes(id){
 	    dataType:'json',
 	    success: function(data){
 	    	drawTableIdOcupacionRes(data,"tableCOccupationSelectedbodyRes");
-	    	selectTableRes("tableCOccupationSelectedbodyRes");
+	    	//selectTableRes("tableCOccupationSelectedbodyRes");
 			showLoading(div, false);
 	    },
 	    error: function(){
@@ -2642,10 +2717,11 @@ function getTypesFlagsRes(id){
 	    dataType:'json',
 	    success: function(data){
 	    	showLoading(div, false);
-	    	//console.table(data);
 	    	if (data) {
-	    		drawTableId(data,"tableFlagsListBodyRes");
-	    		selectTableRes("tableFlagsListBodyRes");
+	    		//drawTableId(data,"tableFlagsListBodyRes");
+	    		//selectTableRes("tableFlagsListBodyRes");
+				drawTableFlagsRes(data,"tableFlagsListBody");
+	    		saveFlagsRes("tableFlagsListBody");
 	    	}else{
 	    		alertify.error("No records found");
 	    	}
@@ -2654,6 +2730,37 @@ function getTypesFlagsRes(id){
 	        alertify.error("Try again");
 	    }
 	});
+}
+
+function saveFlagsRes(div){
+	var pickedup;
+	$("#"+div).on("click", "tr", function(){
+          if (pickedup != null) {
+              pickedup.removeClass("yellow");
+          }
+          $( this ).addClass("yellow");
+          pickedup = $(this);
+          saveFlagRes();
+	});
+}
+function saveFlagRes(){
+	var flags = getArrayValuesSelectedColum("tableFlagsList", 1).length;
+	if (flags>0) {
+		SaveFlagsContract();
+	}
+}
+
+function drawTableFlagsRes(data, table){
+    var bodyHTML = '';
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        }
+        bodyHTML+="<td>" + '<i class="fa fa-long-arrow-right fa-2x" aria-hidden="true"></i>' + "</td>";
+        bodyHTML+="</tr>";
+    }
+    $('#' + table).html(bodyHTML);
 }
 
 function modalAddNotasRes() {
@@ -2680,7 +2787,7 @@ function modalAddNotasRes() {
        		text: "Save",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			SaveNotesRes();
+       			SaveNotesContractRes();
     			$(this).dialog('close');
 	       
        		}
@@ -2720,7 +2827,7 @@ function modalGetAllNotesRes() {
 }
 
 function SaveNotesRes(){
-	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+	/*var id = getValueFromTableSelectedRes("reservationsTable", 1);
 	var noteType = $("#notesTypes").val();
 	var noteDescription = $("#NoteDescription").val();
 	$.ajax({
@@ -2735,6 +2842,31 @@ function SaveNotesRes(){
 	    success: function(data){
 	    	alertify.success(data['mensaje']);
 	    	getNotesRes(id);
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+	    }
+	});*/
+	var noteType = $("#notesTypes").val();
+	var noteDescription = $("#NoteDescription").val();
+}
+
+function SaveNotesContractRes(){
+	var id = getValueFromTableSelected("contracts", 1);
+	var noteType = $("#notesTypes").val();
+	var noteDescription = $("#NoteDescription").val();
+	$.ajax({
+	    data:{
+	        idContrato: id,
+	        noteType:noteType,
+	        noteDescription : noteDescription
+	    },
+	    type: "POST",
+	    url: "contract/createNote",
+	    dataType:'json',
+	    success: function(data){
+	    	alertify.success(data['mensaje']);
+	    	getNotes(id);
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -2780,7 +2912,8 @@ function getFlagsRes(id){
 	    success: function(data){
 	    	showLoading(div, false);
 	    	if (data) {
-	    		drawTableId(data,"flagsAsignedBodyRes");
+	    		//drawTableId(data,"flagsAsignedBodyRes");
+				drawTableFlagsAsignedRes(data,"flagsAsignedBody");
 	    	}else{
 	    		alertify.error("No records found");
 	    	}
@@ -2806,12 +2939,79 @@ function SaveFlagsContractRes(){
 	    dataType:'json',
 	    success: function(data){
 	    	alertify.success(data['mensaje']);
+	    	drawTableFlagsAsignedRes(data['banderas'],"flagsAsignedBody");
+	    	if (data["banderas"]) {
+	    		updateTagBanderasRes(data["banderas"]);
+	    	}else{
+	    		$("#flagsContracEdit").text("Flags:");
+	    	}
 	    },
 	    error: function(){
 	        alertify.error("Try again");
 	    }
 	});
 }
+
+function updateTagBanderasRes(banderas){
+	var textoBanderas = "Flags: ";
+	for(var i = 0; i < banderas.length; i++){
+		textoBanderas += banderas[i].FlagDesc;
+		if (banderas.length != i) {
+			textoBanderas += ",";
+		}
+	}
+	$("#flagsContracEdit").text(textoBanderas);
+}
+
+function drawTableFlagsAsignedRes(data, table){
+	//console.table(data);
+	var bodyHTML = '';
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+        bodyHTML +="<td>" + '<i class="fa fa-long-arrow-left fa-2x" aria-hidden="true"></i>' + "</td>";
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        };
+        bodyHTML+="</tr>";
+    }
+    $('#' + table).html(bodyHTML);
+    $('#flagsAsignedBody').off('click');
+    deleteSelectFlag("flagsAsignedBody");
+}
+
+function drawTableFlagsAsignedFlags(data){
+	alertify.success(data['mensaje']);
+	if (data["banderas"]) {
+		updateTagBanderas(data["banderas"]);
+	}else{
+		$("#flagsContracEdit").text("Flags:");
+	}
+	
+}
+
+function deleteSelectFlag(div){
+	$("#"+div).on("click", "tr", function(){
+		var id = $(this).find('td').eq(1).text();
+        $(this).closest("tr").remove();
+        deleteFlag(id);
+	});
+}
+
+function deleteFlag(id){
+	var idContrat = getValueFromTableSelected("contracts", 1);
+	var datos =  {
+		url: "contract/deleteFlag",
+		tipo: "json",
+		datos: {
+			id:id,
+			idContrat:idContrat
+		},
+		funcionExito : drawTableFlagsAsignedFlags,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(datos);
+}
+
 function nextStatusContractRes(){
 	deactiveEventClickRes("btnNextStatusRes");
 	$("#iNextStatus").addClass("fa-spin");
@@ -2859,6 +3059,7 @@ function opcionAccountRes(attrType){
 					setDataOpcionAccountRes(attrType);
 					getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
 					ajaxSelectsRes('contract/getTrxClass', 'try again', generalSelects, 'slcTrxClassAcc');
+					ajaxSelects('contract/getCurrency', 'try again', generalSelectsDefault, 'CurrencyTrxClassAcc');
 				});
 			}else{
 				showLoading(div, true);
@@ -2965,6 +3166,7 @@ function saveAccContRes(attrType){
 			accId:idAccColl,
 			trxTypeId:$('#slcTransTypeAcc').val(),
 			trxClassID:$('#slcTrxClassAcc').val(),
+			currency:$("#CurrencyTrxClassAcc").val().trim(),
 			amount:$('#AmountAcc').val(),
 			dueDt:$('#dueDateAcc').val(),
 			doc:$('#documentAcc').val(),

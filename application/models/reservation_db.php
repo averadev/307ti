@@ -374,7 +374,9 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 			$this->db->select('att.pkAccTrxId as ID, att.ynActive as Active');
 			$this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Sign_transaction, att.fkAccId as AccID');
 			$this->db->select('tc.TrxClassDesc as Concept_Trxid');
-			$this->db->select('att.CrDt as Creation_Date, att.DueDt as Due_Date, att.Amount, att.AbsAmount, 0 as Overdue_Amount');
+			$this->db->select('att.CrDt as Creation_Date, CONVERT(VARCHAR(10),att.DueDt,101) as Due_Date, att.Amount, att.AbsAmount, 0 as Overdue_Amount');
+            $this->db->select('0 as Balance');
+            $this->db->select('att.Curr1Amt as Euros, att.Curr2Amt as Nederlands_Florins');
 			$this->db->select('att.Doc as Document, att.Remark as Reference');
 		}else{
 			$this->db->select('0 as inputAll');
@@ -388,7 +390,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId');
         $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = att.fkTrxTypeId');
 		$this->db->join('tblTrxClass tc', 'tc.pkTrxClassid = att.fkTrxClassID');
-		$this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
+		//$this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
         $this->db->where('rpa.fkResId', $id);
 		if($typeAcc == "reservation"){
 			//$this->db->where('attt.fkAccTypeId = 6');
@@ -398,7 +400,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 			$this->db->where('a.fkAccTypeId = 5');
 		}
 		if($typeInfo == "payment"){
-			$this->db->where('tt.TrxSign = 1');
+			$this->db->where("tt.TrxTypeCode = 'SCP'");
 			$this->db->where('a.fkAccTypeId = ', $typeAcc);
 			$this->db->where('att.AbsAmount > 0');
 		}
@@ -831,6 +833,34 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkAccID;
         }
     }
+	
+	public function selectTotalFinance($id){
+        $this->db->select('TotalFinanceAmt as total');
+        $this->db->from('tblResFin');
+        $this->db->where('fkResId', $id);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->total;
+        }
+    }
+	
+	public function getDownpaymentsContrac($string){
+        $this->db->select('sum(Amount) as downpayment');
+        $this->db->from('tblAccTrx');
+        $this->db->where('fkAccID', $string);
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->downpayment;
+        }
+    }
+	
 	public function getACCIDByContracIDFDK($idContrato){
         $this->db->select('pkAccID');
         $this->db->from('tblAcc a');

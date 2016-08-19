@@ -27,33 +27,58 @@ class Reservation extends CI_Controller {
 	public function saveReservacion(){
 		if($this->input->is_ajax_request()){
 			ini_set('max_execution_time', 120);
-			$idContrato = $this->createReservacion();
-			$this->insertOcupacion($idContrato);
-			$acc = $this->createAcc();
-			$this->insertTarjeta($idContrato, $acc);
-			$this->insertPeoples($idContrato, $acc);
-			$this->makeTransactions($idContrato);
-			$this->createUnidades($idContrato);
-			//$this->createDownPayment($idContrato);
-			$this->createGifts($idContrato);
-			$balanceFinal = $this->insertFinanciamiento($idContrato);
-			$this->createSemanaOcupacion($idContrato, $_POST['iniDate'], $_POST['endDate']);
-			echo  json_encode([
-				"mensaje" => 'Reservation Save',
-				"balance" => $this->reservation_db->selectPriceFin($idContrato)[0],
-				"status" => 1,
-				"idContrato" =>$idContrato,
-				"balanceFinal" => $balanceFinal]);
+			$VALIDO =[
+				"status" => true
+			];
+			$Contrato = isValidateReservation();
+			
+			if ($Contrato['valido']) {
+			
+				$idContrato = $this->createReservacion();
+				$this->insertOcupacion($idContrato);
+				$acc = $this->createAcc();
+				//$this->insertTarjeta($idContrato, $acc);
+				$this->insertPeoples($idContrato, $acc);
+				$this->makeTransactions($idContrato);
+				$this->createUnidades($idContrato);
+				//$this->createDownPayment($idContrato);
+				$this->createGifts($idContrato);
+				$balanceFinal = $this->insertFinanciamiento($idContrato);
+				$this->createSemanaOcupacion($idContrato, $_POST['iniDate'], $_POST['endDate']);
+				if ($_POST['card']) {
+						$Tarjeta = isValidateCreditCard();
+						if ($Tarjeta['valido']) {
+							$this->insertTarjeta($idContrato, $acc);
+						}else{
+							echo  json_encode([
+								"mensaje" => $Tarjeta['mensajes'],
+								"status" => 0
+							]);
+						}
+				}
+				echo  json_encode([
+					"mensaje" => 'Reservation Save',
+					"balance" => $this->reservation_db->selectPriceFin($idContrato)[0],
+					"status" => 1,
+					"idContrato" =>$idContrato,
+					"balanceFinal" => $balanceFinal]
+				);
+			}else{
+				$VALIDO['status'] = false;
+				echo  json_encode([
+					"mensaje" => $Contrato['mensajes'],
+					"status" => $VALIDO['status'],
+					]);
+			}
 		}
+		
 	}
 	
 	private function makeTransactions($idContrato){
-		//$this->insertDownpayment($idContrato);
-		//$this->insertScheduledPaymentsTrx($idContrato);
 		$this->insertPricetransaction($idContrato);
 		$this->insertExtrastransaction($idContrato);
 		$this->insertESDtransaction($idContrato);
-		$this->insertDownpaymentransaction($idContrato);
+		//$this->insertDownpaymentransaction($idContrato);
 		$this->insertDeposittransaction($idContrato);
 		//$this->insertClosingCosttransaction($idContrato);
 		$this->insertPagosDownpayment($idContrato);
@@ -202,28 +227,32 @@ class Reservation extends CI_Controller {
 	private function insertFinanciamiento($idContrato){
 		$porcentaje = intval(($_POST['specialDiscount']/$_POST['salePrice']))*100;
 		$balanceFinal = intval($_POST['financeBalance']);
-		$porEnganche = intval(($_POST['downpayment']/$balanceFinal))*100;
+		if ($balanceFinal == 0) {
+			$porEnganche = 0;
+		}else{
+			$porEnganche = intval(($_POST['downpayment']/$balanceFinal))*100;
+		}
 		$financiamiento = [
 			"fkResId"                   => $idContrato,
 			"fkFinMethodId"    			=> $this->reservation_db->selectIdMetodoFin('RG'),
 			"fkFactorId"              	=> 0,
-			"ListPrice"             	=> $_POST['listPrice'],
-			"SpecialDiscount"           => $_POST['specialDiscount'],
+			"ListPrice"             	=> $this->remplaceFloat($_POST['listPrice']),
+			"SpecialDiscount"           => $this->remplaceFloat($_POST['specialDiscount']),
 			"SpecialDiscount%"          => $porcentaje,
 			"CashDiscount"             	=> $_POST['specialDiscount'],
-			"CashDiscount%"         	=> $porcentaje,
-			"NetSalePrice"              => $_POST['salePrice'],
-			"Deposit"              		=> $_POST['downpayment'],
-			"TransferAmt"               => $_POST['amountTransfer'],
-			"PackPrice"                 => $_POST['packPrice'],
-			"FinanceBalance"            => $balanceFinal,
-			"TotalFinanceAmt"           => $balanceFinal + 100,
-			"DownPmtAmt"            	=> $_POST['downpayment'],
-			"DownPmt%"           		=> $porEnganche,
+			"CashDiscount%"         	=> $this->remplaceFloat($porcentaje),
+			"NetSalePrice"              => $this->remplaceFloat($_POST['salePrice']),
+			"Deposit"              		=> $this->remplaceFloat($_POST['downpayment']),
+			"TransferAmt"               => $this->remplaceFloat($_POST['amountTransfer']),
+			"PackPrice"                 => $this->remplaceFloat($_POST['packPrice']),
+			"FinanceBalance"            => $this->remplaceFloat($balanceFinal),
+			"TotalFinanceAmt"           => $this->remplaceFloat($balanceFinal),
+			"DownPmtAmt"            	=> $this->remplaceFloat($_POST['downpayment']),
+			"DownPmt%"           		=> $this->remplaceFloat($porEnganche),
 			"MonthlyPmtAmt"            	=> 0,
-			"BalanceActual"           	=> $balanceFinal,
+			"BalanceActual"           	=> $this->remplaceFloat($balanceFinal),
 			"ynClosingfee"            	=> 1,
-			"ClosingFeeAmt"           	=> 100,
+			"ClosingFeeAmt"           	=> 0,
 			"OtherFeeAmt"           	=> 0,
 			"ynReFin"           		=> false,
 			"ynAvailable"           	=> 1,
@@ -244,14 +273,22 @@ class Reservation extends CI_Controller {
 		if ($pagos>0) {
 		
 			for ($i=0; $i < $pagos; $i++) {
+				$precio = valideteNumber($_POST['tablaPagosProgramados'][$i]["amount"]);
+				$Dolares = $this->reservation_db->selectIdCurrency('USD');
+				$Florinres  = $this->reservation_db->selectIdCurrency('NFL');
+				$Euros  = $this->reservation_db->selectIdCurrency('EUR');
+				$tipoCambioFlorines  = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+				$tipoCambioEuros = $this->reservation_db->selectTypoCambio($Dolares, $Euros);
 				$transaction = [
-					"fkAccid" 			=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
-					"fkTrxTypeId"		=> $this->reservation_db->getTrxTypeContrac($_POST['tablaPagosProgramados'][$i]["type"]),
-					"fkTrxClassID"		=> 1,//$_POST['trxClassID'], // vendedor
-					"Debit-"			=> 0,//$debit, // si es negativo se inserta en debit
-					"Credit+"			=> 0,//si es positivo se inserta credit
-					"Amount"			=> $_POST['tablaPagosProgramados'][$i]["amount"], //cantidad
-					"AbsAmount"			=> $_POST['tablaPagosProgramados'][$i]["amount"], //cantidad se actualiza
+					"fkAccid" 			=> $this->reservation_db->getACCIDByContracID($idContrato),
+					"fkTrxTypeId"		=> $this->reservation_db->getTrxTypeContracByDesc('SCP'),
+					"fkTrxClassID"		=> $this->reservation_db->gettrxClassID('DWP'),
+					"Debit-"			=> 0,
+					"Credit+"			=> 0,
+					"Amount"			=> $precio, 
+					"AbsAmount"			=> $precio,
+					"Curr1Amt"			=> valideteNumber($precio * $tipoCambioEuros),
+					"Curr2Amt"			=> valideteNumber($precio * $tipoCambioFlorines),
 					"Remark"			=> '', //
 					"Doc"				=> '',
 					"DueDt"				=> $_POST['tablaPagosProgramados'][$i]["date"],
@@ -263,7 +300,7 @@ class Reservation extends CI_Controller {
 				];
 				$this->reservation_db->insertReturnId('tblAccTrx', $transaction);
 			}
-		}
+	}
 	}
 	
 	private function insertDownpayment($idContrato){
@@ -338,22 +375,22 @@ class Reservation extends CI_Controller {
 	private function insertExtrastransaction($idContrato){
 
 		$precio = valideteNumber($_POST['extras']);
-		$numero = 0;
-		if ($precio>0) {
-			$classID = $this->reservation_db->gettrxClassID('PAY');
-		}else{
-			$numero =  -1 * (abs($precio));
-			$classID = $this->reservation_db->gettrxClassID('LOA');
-			
-		}
+		$Dolares = $this->reservation_db->selectIdCurrency('USD');
+		$Florinres  = $this->reservation_db->selectIdCurrency('NFL');
+		$Euros  = $this->reservation_db->selectIdCurrency('EUR');
+		$tipoCambioFlorines  = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+		$tipoCambioEuros = $this->reservation_db->selectTypoCambio($Dolares, $Euros);
+
 		$transaction = [
 			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('EXC'),
-			"fkTrxClassID"	=> $classID,
-			"Debit-"		=> valideteNumber($numero),
+			"fkTrxClassID"	=> $this->reservation_db->gettrxClassID('SAL'),
+			"Debit-"		=> 0,
 			"Credit+"		=> 0,
-			"Amount"		=> valideteNumber(abs($precio)), 
-			"AbsAmount"		=> valideteNumber(abs($precio)),
+			"Amount"		=> valideteNumber($precio), 
+			"AbsAmount"		=> valideteNumber($precio),
+			"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
+			"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 			"Remark"		=> '', //
 			"Doc"			=> '',
 			"DueDt"			=> $this->getToday(),
@@ -369,7 +406,13 @@ class Reservation extends CI_Controller {
 	private function insertESDtransaction($idContrato){
 	
 		$precio = valideteNumber($_POST['specialDiscount']);
+		$Dolares = $this->reservation_db->selectIdCurrency('USD');
+		$Florinres  = $this->reservation_db->selectIdCurrency('NFL');
+		$Euros  = $this->reservation_db->selectIdCurrency('EUR');
+		$tipoCambioFlorines  = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+		$tipoCambioEuros = $this->reservation_db->selectTypoCambio($Dolares, $Euros);
 		$precio =  -1 * (abs($precio));
+
 		$transaction = [
 			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('sDisc'),
@@ -378,6 +421,8 @@ class Reservation extends CI_Controller {
 			"Credit+"		=> 0,
 			"Amount"		=> valideteNumber(abs($precio)), 
 			"AbsAmount"		=> valideteNumber(abs($precio)),
+			"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
+			"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 			"Remark"		=> '', //
 			"Doc"			=> '',
 			"DueDt"			=> $this->getToday(),
@@ -414,7 +459,15 @@ class Reservation extends CI_Controller {
 	
 	private function insertDeposittransaction($idContrato){
 		$precio = valideteNumber($_POST['deposito']);
+		$precio  =  $precio;
 		$precio =  -1 * (abs($precio));
+
+		$Dolares = $this->reservation_db->selectIdCurrency('USD');
+		$Florinres  = $this->reservation_db->selectIdCurrency('NFL');
+		$Euros  = $this->reservation_db->selectIdCurrency('EUR');
+		$tipoCambioFlorines  = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+		$tipoCambioEuros = $this->reservation_db->selectTypoCambio($Dolares, $Euros);
+
 		$transaction = [
 			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('DEP'),
@@ -423,6 +476,8 @@ class Reservation extends CI_Controller {
 			"Credit+"		=> 0,
 			"Amount"		=> valideteNumber(abs($precio)), 
 			"AbsAmount"		=> valideteNumber(abs($precio)),
+			"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
+			"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 			"Remark"		=> '', //
 			"Doc"			=> '',
 			"DueDt"			=> $this->getToday(),
@@ -438,14 +493,22 @@ class Reservation extends CI_Controller {
 	private function insertClosingCosttransaction($idContrato){
 
 		$precio = valideteNumber($_POST['closingCost']);
+		$Dolares = $this->reservation_db->selectIdCurrency('USD');
+		$Florinres  = $this->reservation_db->selectIdCurrency('NFL');
+		$Euros  = $this->reservation_db->selectIdCurrency('EUR');
+		$tipoCambioFlorines  = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+		$tipoCambioEuros = $this->reservation_db->selectTypoCambio($Dolares, $Euros);
+
 		$transaction = [
 			"fkAccid"		=> $this->reservation_db->getACCIDByContracID($idContrato),  //la cuenta
 			"fkTrxTypeId"	=> $this->reservation_db->getTrxTypeContracByDesc('CFE'),
-			"fkTrxClassID"	=> $this->reservation_db->gettrxClassID('SAL'),
+			"fkTrxClassID"	=> $this->reservation_db->gettrxClassID('DWP'),
 			"Debit-"		=> 0,
 			"Credit+"		=> 0,
 			"Amount"		=> $precio, 
 			"AbsAmount"		=> 0,
+			"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
+			"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 			"Remark"		=> '', //
 			"Doc"			=> '',
 			"DueDt"			=> $this->getToday(),
@@ -460,25 +523,34 @@ class Reservation extends CI_Controller {
 	
 	private function insertPagosDownpayment($idContrato){
 		if(!empty($_POST['tablaDownpayment'])){
-				$pagos = sizeof($_POST['tablaDownpayment']);
-			}else{
-				$pagos = 0;
-			}
+			$pagos = sizeof($_POST['tablaDownpayment']);
+		}else{
+			$pagos = 0;
+		}
 
 		if ($pagos>0) {
 			
 			for ($i=0; $i < $pagos; $i++) {
 				$precio = valideteNumber($_POST['tablaDownpayment'][$i]["amount"]);
+				//$closingCost = valideteNumber($_POST['closingCost']);
+				$precio = $precio;
 				$precio =  -1 * (abs($precio));
+				$Dolares = $this->reservation_db->selectIdCurrency('USD');
+				$Florinres  = $this->reservation_db->selectIdCurrency('NFL');
+				$Euros  = $this->reservation_db->selectIdCurrency('EUR');
+				$tipoCambioFlorines  = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+				$tipoCambioEuros = $this->reservation_db->selectTypoCambio($Dolares, $Euros);
 
 				$transaction = [
 					"fkAccid" 			=> $this->reservation_db->getACCIDByContracID($idContrato), 
-					"fkTrxTypeId"		=> $this->reservation_db->getTrxTypeContracByDesc('SCP'),
-					"fkTrxClassID"		=> $this->reservation_db->gettrxClassID('SCH'),
+					"fkTrxTypeId"		=> $this->reservation_db->getTrxTypeContracByDesc('DE0'),
+					"fkTrxClassID"		=> $this->reservation_db->gettrxClassID('DWP'),
 					"Debit-"			=> valideteNumber($precio),
 					"Credit+"			=> 0,
 					"Amount"			=> valideteNumber(abs($precio)), 
 					"AbsAmount"			=> valideteNumber(abs($precio)),
+					"Curr1Amt"			=> valideteNumber($precio * $tipoCambioEuros),
+					"Curr2Amt"			=> valideteNumber($precio * $tipoCambioFlorines),
 					"Remark"			=> '', 
 					"Doc"				=> '',
 					"DueDt"				=> $_POST['tablaDownpayment'][$i]["date"],
@@ -844,7 +916,10 @@ class Reservation extends CI_Controller {
 			$id = $_POST['idReservation'];
 			$typeInfo = $_POST['typeInfo'];
 			$typeAcc = $_POST['typeAcc'];
+			$accId = $this->reservation_db->getACCIDByContracID($id);
 			$datos = array();
+			$datos['downpayment'] = $this->reservation_db->getDownpaymentsContrac($accId);
+			$datos['balance'] = $this->reservation_db->selectTotalFinance($id);
 			if($typeInfo == "account"){
 				$acc = $this->reservation_db->getAccByRes( $id );
 				$datos['acc'] = $acc;
@@ -852,17 +927,28 @@ class Reservation extends CI_Controller {
 				foreach($typeTr as $tyTr){
 					$data = $this->reservation_db->getAccountsById( $id, $typeInfo, $tyTr);
 					foreach($data as $item){
-						$CurDate = strtotime(date("Y-m-d H:i:00",time()));
+						//$CurDate = strtotime(date("Y-m-d",time()));
+						//$CurDate = $this->getonlyDate(-1);
+						$CurDate = strtotime($this->getonlyDate(0));
+						//$CurDate = $this->getonlyDate(-1);
 						$dueDate = strtotime($item->Due_Date);
+						//$item->currentDate = $this->getonlyDate(0);
+						$item->date1 = $CurDate;
+						$item->date2 = $dueDate;
 						$item->Overdue_Amount = 0;
-						if( $dueDate <= $CurDate  ){
-							if( $item->Sign_transaction == 1 || $item->Sign_transaction == "1" ){
-								$item->Overdue_Amount = $item->AbsAmount;
-							}
+						if( $dueDate < $CurDate  ){
+							//if( $item->Sign_transaction == 1 || $item->Sign_transaction == "0" ){
+								if( $item->Sign_transaction == 1){
+									$item->Overdue_Amount = $item->AbsAmount;
+								}else if( $item->Sign_transaction == 0 && ($item->Concept_Trxid == "Down Payment" or $item->Type == "Schedule Payment") ){
+									$item->Overdue_Amount = $item->AbsAmount;
+								}
+							//}
 						}
 					}
 					$datos[$tyTr] = $data;
 				}
+				
 			}else{
 				$tyTr = $_POST['typeAcc'];
 				$data = $this->reservation_db->getAccountsById( $id, $typeInfo, $tyTr);
@@ -871,8 +957,9 @@ class Reservation extends CI_Controller {
 					unset($item->pkTrxClassid);
 				}
 				$datos['acc'] = $data;
+				
 			}
-			$datos['financeBalance']= $this->reservation_db->selectFinanceBalance($id);
+			
 			echo json_encode($datos);
 		}
 	}
@@ -933,6 +1020,13 @@ class Reservation extends CI_Controller {
 	/*****************************************/
 	/**************** Vistas *****************/
 	/*****************************************/
+	
+	public function modalReservation(){
+		if($this->input->is_ajax_request()) {
+			$datos['languages'] = $this->reservation_db->getLanguages();
+			$this->load->view('reservations/reservationDialog');
+		}
+	}
 	
 	public function modal(){
 		if($this->input->is_ajax_request()) {
@@ -1033,8 +1127,8 @@ public function nextStatusReservacion(){
 			"codicion"	=> 'pkResID',
 			"id"		=>	$id
 		];
-		$IdStatus = $this->contract_db->propertyTable($peticion);
-		$maximo = $this->contract_db->selectMaxStatus();
+		$IdStatus = $this->reservation_db->propertyTable($peticion);
+		$maximo = $this->reservation_db->selectMaxStatus();
 		if ($IdStatus < $maximo) {
 			$IdStatus += 1;
 		}
@@ -1044,7 +1138,7 @@ public function nextStatusReservacion(){
 			"MdDt"			=> $this->getToday()
 		];
 		$condicion = "pkResId = " . $id;
-		$afectados = $this->contract_db->updateReturnId('tblRes', $Res, $condicion);
+		$afectados = $this->reservation_db->updateReturnId('tblRes', $Res, $condicion);
 		if ($afectados>0) {
 			
 			if ($IdStatus< $maximo) {
@@ -1052,8 +1146,8 @@ public function nextStatusReservacion(){
 			}else{
 				$IdStatus = $maximo;
 			}
-			$next = $this->contract_db->selectNextStatusDesc2(intval($IdStatus)+1);
-			$actual = $this->contract_db->selectNextStatusDesc2($IdStatus);
+			$next = $this->reservation_db->selectNextStatusDesc2(intval($IdStatus)+1);
+			$actual = $this->reservation_db->selectNextStatusDesc2($IdStatus);
 			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $actual, "next" => $next];
 			echo json_encode($mensaje);
 		}else{
@@ -1209,6 +1303,16 @@ public function nextStatusReservacion(){
 		return false;
 	}
 
+	private function remplaceFloat($valor){
+		return str_replace(",", ".", $valor);
+	}
+	
+	private function getonlyDate($restarDay){
+		$date = date( "Y-m-d" );
+		$date = date( "m/d/Y", strtotime( $restarDay . " day", strtotime( $date ) ) ); 
+		return $date;
+	}
+	
 }
 
 
