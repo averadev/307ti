@@ -2153,8 +2153,8 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 				
 				
 				var acc = data["acc"];
-				frontDesk = parsearFrontDesk(frontDesk);
-				reservation = parsearFrontDesk(reservation);
+				//frontDesk = parsearFrontDesk(frontDesk);
+				//reservation = parsearFrontDesk(reservation);
 				if(reservation.length > 0){
 					var reservation = parsearSALERes(reservation);
 					drawTable2(reservation, "tableAccountSeller", false, "");
@@ -2195,7 +2195,6 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 	});
 }
 
-<<<<<<< HEAD
 function parsearSALERes(sales){
 	var Balance = 0;
 	for(var i = 0; i < sales.length; i++){
@@ -2235,7 +2234,8 @@ function parsearSALERes(sales){
 		}
 	}
 	return sales;	
-=======
+}
+
 function parsearFrontDesk(frontDesk){
 	var Balance = 0;
 	for(var i = 0; i < frontDesk. length; i++){
@@ -2275,7 +2275,6 @@ function parsearFrontDesk(frontDesk){
 		}
 	}
 	return frontDesk;	
->>>>>>> b0140d8349002a960567938711bb2f78930e3f30
 }
 
 function setTableAccountRes(items, table){
@@ -2762,16 +2761,16 @@ function getTypesFlagsRes(id){
 	    success: function(data){
 	    	showLoading(div, false);
 	    	if (data) {
-<<<<<<< HEAD
+
 	    		//drawTableId(data,"tableFlagsListBodyRes");
 	    		//selectTableRes("tableFlagsListBodyRes");
-				drawTableFlagsRes(data,"tableFlagsListBody");
-	    		saveFlagsRes("tableFlagsListBody");
-=======
+				//drawTableFlagsRes(data,"tableFlagsListBody");
+	    		//saveFlagsRes("tableFlagsListBody");
+
 	    		drawTableId(data,"tableFlagsListBodyRes");
 	    		saveFlagsRes("tableFlagsListBodyRes");
 	    		//selectTableRes("tableFlagsListBodyRes");
->>>>>>> b0140d8349002a960567938711bb2f78930e3f30
+
 	    	}else{
 	    		alertify.error("No records found");
 	    	}
@@ -2979,12 +2978,12 @@ function getFlagsRes(id){
 	    success: function(data){
 	    	showLoading(div, false);
 	    	if (data) {
-<<<<<<< HEAD
+
 	    		//drawTableId(data,"flagsAsignedBodyRes");
-				drawTableFlagsAsignedRes(data,"flagsAsignedBody");
-=======
+				//drawTableFlagsAsignedRes(data,"flagsAsignedBody");
+
 	    		drawTableFlagsAsignedRes(data,"flagsAsignedBodyRes");
->>>>>>> b0140d8349002a960567938711bb2f78930e3f30
+
 	    	}else{
 	    		alertify.error("No records found");
 	    	}
@@ -3056,19 +3055,18 @@ function SaveFlagsContractRes(){
 	    dataType:'json',
 	    success: function(data){
 	    	alertify.success(data['mensaje']);
-<<<<<<< HEAD
-	    	drawTableFlagsAsignedRes(data['banderas'],"flagsAsignedBody");
+
+	    	/*drawTableFlagsAsignedRes(data['banderas'],"flagsAsignedBody");
 	    	if (data["banderas"]) {
 	    		updateTagBanderasRes(data["banderas"]);
 	    	}else{
-	    		$("#flagsContracEdit").text("Flags:");
-=======
+	    		$("#flagsContracEdit").text("Flags:");*/
+
 	    	drawTableFlagsAsigned(data['banderas'],"flagsAsignedBodyRes");
 	    	if (data["banderas"]) {
 	    		updateTagBanderasRes(data["banderas"]);
 	    	}else{
 	    		$("#flagsReservationEdit").text("Flags:");
->>>>>>> b0140d8349002a960567938711bb2f78930e3f30
 	    	}
 	    },
 	    error: function(){
@@ -3076,10 +3074,7 @@ function SaveFlagsContractRes(){
 	    }
 	});
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> b0140d8349002a960567938711bb2f78930e3f30
 function updateTagBanderasRes(banderas){
 	var textoBanderas = "Flags: ";
 	for(var i = 0; i < banderas.length; i++){
@@ -3088,17 +3083,16 @@ function updateTagBanderasRes(banderas){
 			textoBanderas += ",";
 		}
 	}
-<<<<<<< HEAD
+
 	$("#flagsContracEdit").text(textoBanderas);
 }
 
 function drawTableFlagsAsignedRes(data, table){
 	//console.table(data);
-=======
+
 	$("#flagsReservationEdit").text(textoBanderas);
 }
 function drawTableFlagsAsigned(data, table){
->>>>>>> b0140d8349002a960567938711bb2f78930e3f30
 	var bodyHTML = '';
     for (var i = 0; i < data.length; i++) {
         bodyHTML += "<tr>";
@@ -3109,7 +3103,7 @@ function drawTableFlagsAsigned(data, table){
         bodyHTML+="</tr>";
     }
     $('#' + table).html(bodyHTML);
-<<<<<<< HEAD
+
     $('#flagsAsignedBody').off('click');
     deleteSelectFlag("flagsAsignedBody");
 }
@@ -3147,11 +3141,11 @@ function deleteFlag(id){
 	ajaxDATA(datos);
 }
 
-=======
-    $('#flagsAsignedBodyRes').off('click');
-    deleteSelectFlag("flagsAsignedBodyRes");
-}
->>>>>>> b0140d8349002a960567938711bb2f78930e3f30
+
+   // $('#flagsAsignedBodyRes').off('click');
+   // deleteSelectFlag("flagsAsignedBodyRes");
+//}
+
 function nextStatusContractRes(){
 	deactiveEventClickRes("btnNextStatusRes");
 	$("#iNextStatus").addClass("fa-spin");
@@ -3197,15 +3191,15 @@ function opcionAccountRes(attrType){
 					});
 					$("#slcTransTypeAcc").attr('disabled', true);
 					setDataOpcionAccountRes(attrType);
-<<<<<<< HEAD
-					getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
+
+					/*getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
 					ajaxSelectsRes('contract/getTrxClass', 'try again', generalSelects, 'slcTrxClassAcc');
-					ajaxSelects('contract/getCurrency', 'try again', generalSelectsDefault, 'CurrencyTrxClassAcc');
-=======
+					ajaxSelects('contract/getCurrency', 'try again', generalSelectsDefault, 'CurrencyTrxClassAcc');*/
+
 					getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelectsDefault, 'slcTransTypeAcc');
 					ajaxSelectsRes('contract/getTrxClass', 'try again', generalSelectsDefault, 'slcTrxClassAcc');
 					ajaxSelectsRes('contract/getCurrency', 'try again', generalSelectsDefault, 'CurrencyTrxClassAcc');
->>>>>>> b0140d8349002a960567938711bb2f78930e3f30
+
 				});
 			}else{
 				showLoading(div, true);

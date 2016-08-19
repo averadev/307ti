@@ -799,20 +799,54 @@ private function comprubaArray($valor, $array){
 	
 	public function saveTransactionAcc(){
 		if($this->input->is_ajax_request()) {
+				$Moneda = $_POST['currency'];
+				$precio = valideteNumber($_POST['amount']);
+				$Dolares = $this->reservation_db->selectIdCurrency('USD');
+				$Florinres  = $this->reservation_db->selectIdCurrency('NFL');
+				$Euros  = $this->reservation_db->selectIdCurrency('EUR');
+				if ($Moneda == 'USD') {
+					$tipoCambioDolares = 1;
+					$tipoCambioFlorines  = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+					$tipoCambioEuros = $this->reservation_db->selectTypoCambio($Dolares, $Euros);
+					$precio = valideteNumber($precio * $tipoCambioDolares);
+					$euros = valideteNumber($precio * $tipoCambioEuros);
+					$florines = valideteNumber($precio * $tipoCambioFlorines);
+				}
+				if ($Moneda == 'EUR') {
+					$tipoCambioDolares = $this->reservation_db->selectTypoCambio($Euros, $Dolares);
+					$tipoCambioFlorines  = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+					$tipoCambioEuros = 1;
+					$precioDolares = valideteNumber($precio * $tipoCambioDolares);
+					$euros = valideteNumber($precio * $tipoCambioEuros);
+					$florines = valideteNumber($precioDolares * $tipoCambioFlorines);
+					$precio = $precioDolares;
+				}
+				if ($Moneda == 'NFL') {
+					$tipoCambioDolares = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+					$tipoCambioDolaresEuros = $this->reservation_db->selectTypoCambio($Dolares, $Euros);
+					$tipoCambioFlorines = 1;
+					$precioDolares = valideteNumber($precio / $tipoCambioDolares);
+					$florines = valideteNumber($precio * $tipoCambioFlorines);
+					$euros = valideteNumber($precioDolares * $tipoCambioDolaresEuros);
+					$precio = $precioDolares;
+				}
 			if($_POST['attrType'] == "newTransAcc"){
 				$debit = -1 * abs($_POST['amount']);
-				//$TrxSign = $this->reservation_db->getTrxTrxSign($_POST['trxTypeId']);
+				
 				$transaction = [
-					"fkAccid" 			=> $_POST['accId'],
-					"fkTrxTypeId"		=> $_POST['trxTypeId'],
-					"fkTrxClassID"		=> $_POST['trxClassID'],
-					"Debit-"			=> $debit,
+					"fkAccid" 			=> $_POST['accId'],  //la cuenta
+					"fkTrxTypeId"		=> $_POST['trxTypeId'], //lista
+					"fkTrxClassID"		=> $_POST['trxClassID'], // vendedor
+					"Debit-"			=> valideteNumber($debit),
 					"Credit+"			=> 0,
-					"Amount"			=> $_POST['amount'],
-					"AbsAmount"			=> $_POST['amount'],
+					"Amount"			=> $precio,
+					"AbsAmount"			=> $precio,
+					"Curr1Amt"			=> $euros,
+					"Curr2Amt"			=> $florines,
 					"Remark"			=> $_POST['remark'],
 					"Doc"				=> $_POST['doc'],
 					"DueDt"				=> $_POST['dueDt'],
+					"fkCurrencyId"		=> $this->reservation_db->selectIdCurrency($_POST['currency']),
 					"ynActive"			=> 1,
 					"CrBy"				=> $this->nativesessions->get('id'),
 					"CrDt"				=> $this->getToday(),
@@ -830,6 +864,8 @@ private function comprubaArray($valor, $array){
 				$update = array();
 				$insertTrx = array();
 				for($i = 0; $i<count($idTrans); $i++){
+					//$precio = valideteNumber($_POST['amount']);
+					
 					if($amount > 0){
 						$trans = floatval($valTrans[$i]);
 						$totalAmou = 0;
@@ -845,6 +881,9 @@ private function comprubaArray($valor, $array){
 							$amount = $amount - $trans;
 							$totalAmou2 = $trans;
 						}
+						$Moneda = $_POST['currency'];
+						$conversion = $this->convertMoney($Moneda, $totalAmou);
+						$totalAmou = $conversion['precio'];
 						$totalAmou = str_replace(",", ".", $totalAmou);
 						$transU = array(
 							//'pkAccTrxId'	=>	$idTrans[$i],
@@ -853,7 +892,10 @@ private function comprubaArray($valor, $array){
 						$condicion = "pkAccTrxId = " . $idTrans[$i];
 						$this->reservation_db->updateReturnId( 'tblAccTrx', $transU, $condicion );
 						//array_push($update, $transU);
-						
+						$conversion = $this->convertMoney($Moneda, $totalAmou2);
+						$totalAmou2 = $conversion['precio'];
+						$euros = str_replace(",", ".", $conversion['euro']);
+						$florines = str_replace(",", ".", $conversion['florines']);
 						$debit = floatval(-1 * abs($totalAmou2));
 						$debit = str_replace(",", ".", $debit);
 						$totalAmou2 = str_replace(",", ".", $totalAmou2);
@@ -865,6 +907,8 @@ private function comprubaArray($valor, $array){
 							"Credit+"			=> 0,
 							"Amount"			=> $totalAmou2,
 							"AbsAmount"			=> $totalAmou2,
+							"Curr1Amt"			=> $euros,
+							"Curr2Amt"			=> $florines,
 							"Remark"			=> $_POST['remark'],
 							"Doc"				=> $_POST['doc'],
 							"DueDt"				=> $_POST['dueDt'],
@@ -879,7 +923,7 @@ private function comprubaArray($valor, $array){
 					}
 				}
 				
-				$message= array('success' => true, 'message' => "transaction saveee");
+				$message= array('success' => true, 'message' => "transaction save");
 			}
 			echo json_encode($message);
 		}
@@ -1350,6 +1394,39 @@ public function nextStatusReservacion(){
 		$date = date( "Y-m-d" );
 		$date = date( "m/d/Y", strtotime( $restarDay . " day", strtotime( $date ) ) ); 
 		return $date;
+	}
+	
+	private function convertMoney($Moneda,$precio){
+		$Dolares = $this->reservation_db->selectIdCurrency('USD');
+		$Florinres  = $this->reservation_db->selectIdCurrency('NFL');
+		$Euros  = $this->reservation_db->selectIdCurrency('EUR');
+		if ($Moneda == 'USD') {
+			$tipoCambioDolares = 1;
+			$tipoCambioFlorines  = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+			$tipoCambioEuros = $this->reservation_db->selectTypoCambio($Dolares, $Euros);
+			$precio = valideteNumber($precio * $tipoCambioDolares);
+			$eurosConv = valideteNumber($precio * $tipoCambioEuros);
+			$florinesConv = valideteNumber($precio * $tipoCambioFlorines);
+		}
+		if ($Moneda == 'EUR') {
+			$tipoCambioDolares = $this->reservation_db->selectTypoCambio($Euros, $Dolares);
+			$tipoCambioFlorines  = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+			$tipoCambioEuros = 1;
+			$precioDolares = valideteNumber($precio * $tipoCambioDolares);
+			$eurosConv = valideteNumber($precio * $tipoCambioEuros);
+			$florinesConv = valideteNumber($precioDolares * $tipoCambioFlorines);
+			$precio = $precioDolares;
+		}
+		if ($Moneda == 'NFL') {
+			$tipoCambioDolares = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+			$tipoCambioDolaresEuros = $this->reservation_db->selectTypoCambio($Dolares, $Euros);
+			$tipoCambioFlorines = 1;
+			$precioDolares = valideteNumber($precio / $tipoCambioDolares);
+			$florinesConv = valideteNumber($precio * $tipoCambioFlorines);
+			$eurosConv = valideteNumber($precioDolares * $tipoCambioDolaresEuros);
+			$precio = $precioDolares;
+		}
+		return array( 'precio' => $precio, 'euro' => $eurosConv, 'florines' => $florinesConv );
 	}
 	
 }
