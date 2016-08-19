@@ -1122,9 +1122,11 @@ public function getFlagsContract(){
 						$CurDate = strtotime($this->getonlyDate(0));
 						//$CurDate = $this->getonlyDate(-1);
 						$dueDate = strtotime($item->Due_Date);
-						$item->currentDate = $this->getonlyDate(0);
+						//$item->currentDate = $this->getonlyDate(0);
+						$item->date1 = $CurDate;
+						$item->date2 = $dueDate;
 						$item->Overdue_Amount = 0;
-						if( $dueDate <= $CurDate  ){
+						if( $dueDate < $CurDate  ){
 							//if( $item->Sign_transaction == 1 || $item->Sign_transaction == "0" ){
 								if( $item->Sign_transaction == 1){
 									$item->Overdue_Amount = $item->AbsAmount;

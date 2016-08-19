@@ -264,7 +264,7 @@
 
 	<!-- tabs cuentas -->
 	<div id="tab-CAccounts" class="large-12 columns tab-modal" style="display:none;">
-		<div>
+		<div class="tabsModal">
 			<ul class="tabs" id="tabsContratsAccounts"  data-tabs>
 				<li class="tabs-title active" attr-screen="tab-CASales" attr-accType="1" attr-accCode="SAL" >
 					<a>Sales</a>
@@ -280,7 +280,7 @@
 		<!-- contenido del modal -->
 		<div class="ModalContractAccounts">
 			<!-- ventas-->
-			<div id="tab-CASales" class="large-12 columns" style="display:inline;">
+			<div id="tab-CASales" class="large-12 columns tab-modal" style="display:inline;">
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
 						<table class="tableAccountResult" id="tableSaleAccRes" style="margin-top:16px;">
