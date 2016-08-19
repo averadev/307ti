@@ -626,11 +626,11 @@ class Reservation extends CI_Controller {
 public function deleteFlag(){
 	if($this->input->is_ajax_request()) {
 		$ID = $_POST['id'];
-		$idContrato = $_POST['idContrat'];
+		$idReservation = $_POST['idReservation'];
 	 	$this->db->delete('tblResFlag', array('pkResflagId' => $ID));
 	 	$respuesta = [
 			"mensaje" => "Delete Correctly",
-			"banderas" => $this->contract_db->selectFlags($idContrato)
+			"banderas" => $this->reservation_db->selectFlags($idReservation)
 		];
 		echo json_encode($respuesta);
 	}

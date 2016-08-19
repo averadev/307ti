@@ -2871,7 +2871,7 @@ function deleteSelectFlagRes(div){
 	$("#"+div).on("click", "tr", function(){
 		var id = $(this).find('td').eq(1).text();
         $(this).closest("tr").remove();
-        deleteFlag(id);
+        deleteFlagRes(id);
         console.log("SE elimna");
 	});
 }
@@ -2884,14 +2884,14 @@ function drawTableFlagsAsignedFlagsRes(data){
 	}
 	
 }
-function deleteFlag(id){
-	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+function deleteFlagRes(id){
+	var idReservation = getValueFromTableSelectedRes("reservationsTable", 1);
 	var datos =  {
 		url: "reservation/deleteFlag",
 		tipo: "json",
 		datos: {
 			id:id,
-			idContrat:idContrat
+			idReservation: idReservation
 		},
 		funcionExito : drawTableFlagsAsignedFlagsRes,
 		funcionError: mensajeAlertify
@@ -2947,7 +2947,7 @@ function drawTableFlagsAsigned(data, table){
     }
     $('#' + table).html(bodyHTML);
     $('#flagsAsignedBodyRes').off('click');
-    //deleteSelectFlag("flagsAsignedBodyRes");
+    deleteSelectFlag("flagsAsignedBodyRes");
 }
 function nextStatusContractRes(){
 	deactiveEventClickRes("btnNextStatusRes");
