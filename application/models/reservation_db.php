@@ -886,6 +886,17 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
 
+    public function selectIdflags($id){
+        $this->db->select('fkFlagId');
+        $this->db->from('tblResflag');
+        $this->db->where('fkResId', $id);
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
+
 	public function getTrxTypeContracByDesc($string){
         $this->db->select('pkTrxTypeId');
         $this->db->from('tbltrxtype');

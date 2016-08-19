@@ -32,7 +32,7 @@
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
 		<label class="headerGeneral" id="editReservationStatus">Status: <?php echo $statusActual;?></label>
-		<label class="headerGeneral">Flags: 
+		<label class="headerGeneral" id="flagsReservationEdit">Flags: 
 		<?php
 			if (!empty($flags)) {
 				 foreach($flags as $item){
@@ -552,12 +552,13 @@
 							</table>
 						</div>
 						<div class="small-12 medium-6 large-6 columns">
-							<table id="tableCNotesAssignedSelected" width="100%" style="min-height:250px;">
+							<table id="tableCNotesAssignedSelected" width="100%">
 								<thead>
 									<tr class="trColspan" >
-										<th colspan="3" class="thColspan" >Assigned flags</th>
+										<th colspan="4" class="thColspan" >Assigned flags</th>
 									</tr> 
 									<tr>
+										<th class="cellGeneral">DELETE</th>
 										<th class="cellGeneral">ID</th>
 										<th class="cellGeneral">Code</th>
 										<th class="cellGeneral">Descripción</th>
@@ -569,10 +570,9 @@
 					</div>
 				</div>
 			</fieldset>
-			<div class="small-12 medium-12 large-12 columns" > 
+<!-- 			<div class="small-12 medium-12 large-12 columns" > 
 				<a id="btnSAveFlagsRes" class="button tiny"><i class="fa fa-save fa-lg">Save</i></a>
-<!-- 				<i class="fa fa-refresh fa-spin fa-3x fa-fw"></i> -->
-			</div>
+			</div> -->
 		</form>
 	</div>
 	<!-- archivos -->

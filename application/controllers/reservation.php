@@ -674,21 +674,60 @@ class Reservation extends CI_Controller {
 	public function createFlags(){
 		if($this->input->is_ajax_request()) {
 			$flags = $_POST["flags"];
+			$ID = $_POST['idReservation'];
+			$asignadas = $this->getArrayBanderas($ID);
 			for ($i=0; $i < sizeof($flags); $i++) { 
 				$flag = [
-					"fkResId"		=> $_POST['idReservation'],
+					"fkResId"		=> $ID,
 					"fkFlagId"		=> $flags[$i],
 					"ynActive"		=> 1,
 					"CrBy"			=> $this->nativesessions->get('id'),
 					"CrDt"			=> $this->getToday()
 				];
-				$this->reservation_db->insertReturnId('tblResFlag', $flag);
+				if (!$this->comprubaArray($flags[$i], $asignadas)) {
+					$this->reservation_db->insertReturnId('tblResFlag', $flag);
+				}
 			}
-			
-			echo json_encode(["mensaje"=> "It was inserted correctly"]);
+			$respuesta = [
+				"mensaje"=> "It was inserted correctly",
+				"banderas" => $this->reservation_db->selectFlags($ID)
+			];
+			echo json_encode($respuesta);
 		}
 	}
-	
+public function deleteFlag(){
+	if($this->input->is_ajax_request()) {
+		$ID = $_POST['id'];
+		$idReservation = $_POST['idReservation'];
+	 	$this->db->delete('tblResFlag', array('pkResflagId' => $ID));
+	 	$respuesta = [
+			"mensaje" => "Delete Correctly",
+			"banderas" => $this->reservation_db->selectFlags($idReservation)
+		];
+		echo json_encode($respuesta);
+	}
+}
+private function getArrayBanderas($ID){
+	$asignadas = $this->reservation_db->selectIdflags($ID);
+	$flagsAsignadas = [];
+	for ($i=0; $i < sizeof($asignadas); $i++) { 
+		array_push($flagsAsignadas, $asignadas[$i]->fkFlagId);
+	}
+	return $flagsAsignadas;
+}
+
+private function comprubaArray($valor, $array){
+	if ($array) {
+		if (in_array($valor, $array)) {
+	    	return true;
+		}
+		else {
+		    return false;
+		}
+	}else{
+		return false;
+	}
+}	
 	public function getReservations(){
 		if($this->input->is_ajax_request()) {
 			$sql = $this->getFilters($_POST, 'r.CrDt', 'Res');

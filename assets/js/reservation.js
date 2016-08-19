@@ -2153,6 +2153,8 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 				
 				
 				var acc = data["acc"];
+				frontDesk = parsearFrontDesk(frontDesk);
+				reservation = parsearFrontDesk(reservation);
 				if(reservation.length > 0){
 					var reservation = parsearSALERes(reservation);
 					drawTable2(reservation, "tableAccountSeller", false, "");
@@ -2193,6 +2195,7 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 	});
 }
 
+<<<<<<< HEAD
 function parsearSALERes(sales){
 	var Balance = 0;
 	for(var i = 0; i < sales.length; i++){
@@ -2232,6 +2235,47 @@ function parsearSALERes(sales){
 		}
 	}
 	return sales;	
+=======
+function parsearFrontDesk(frontDesk){
+	var Balance = 0;
+	for(var i = 0; i < frontDesk. length; i++){
+		if( frontDesk[i].Sign_transaction == "1" ){
+			Balance += parseFloat(frontDesk[i].Amount);
+			frontDesk[i].Balance = Balance.toFixed(2);
+		}
+		if( frontDesk[i].Sign_transaction == "-1" ){
+			Balance -= parseFloat(frontDesk[i].Amount);
+			frontDesk[i].Balance = Balance.toFixed(2);
+			
+		}
+		if (frontDesk[i].Amount !=".0000") {
+			frontDesk[i].Amount = parseFloat(frontDesk[i].Amount).toFixed(2);
+		}else{
+			frontDesk[i].Amount = 0;
+		}
+		if (frontDesk[i].AbsAmount !=".0000") {
+			frontDesk[i].AbsAmount = parseFloat(frontDesk[i].AbsAmount).toFixed(2);
+		}else{
+			frontDesk[i].AbsAmount = 0;
+		}
+		if (frontDesk[i].Overdue_Amount !=".0000") {
+			frontDesk[i].Overdue_Amount = parseFloat(frontDesk[i].Overdue_Amount).toFixed(2);
+		}else{
+			frontDesk[i].Overdue_Amount = 0;
+		}
+		if (frontDesk[i].Euros !=".0000") {
+			frontDesk[i].Euros = parseFloat(frontDesk[i].Euros).toFixed(2);
+		}else{
+			frontDesk[i].Euros = 0;
+		}
+		if (frontDesk[i].Nederlands_Florins !=".0000") {
+			frontDesk[i].Nederlands_Florins = parseFloat(frontDesk[i].Nederlands_Florins).toFixed(2);
+		}else{
+			frontDesk[i].Nederlands_Florins = 0;
+		}
+	}
+	return frontDesk;	
+>>>>>>> b0140d8349002a960567938711bb2f78930e3f30
 }
 
 function setTableAccountRes(items, table){
@@ -2718,10 +2762,16 @@ function getTypesFlagsRes(id){
 	    success: function(data){
 	    	showLoading(div, false);
 	    	if (data) {
+<<<<<<< HEAD
 	    		//drawTableId(data,"tableFlagsListBodyRes");
 	    		//selectTableRes("tableFlagsListBodyRes");
 				drawTableFlagsRes(data,"tableFlagsListBody");
 	    		saveFlagsRes("tableFlagsListBody");
+=======
+	    		drawTableId(data,"tableFlagsListBodyRes");
+	    		saveFlagsRes("tableFlagsListBodyRes");
+	    		//selectTableRes("tableFlagsListBodyRes");
+>>>>>>> b0140d8349002a960567938711bb2f78930e3f30
 	    	}else{
 	    		alertify.error("No records found");
 	    	}
@@ -2730,6 +2780,23 @@ function getTypesFlagsRes(id){
 	        alertify.error("Try again");
 	    }
 	});
+}
+function saveFlagsRes(div){
+	var pickedup;
+	$("#"+div).on("click", "tr", function(){
+          if (pickedup != null) {
+              pickedup.removeClass("yellow");
+          }
+          $( this ).addClass("yellow");
+          pickedup = $(this);
+          saveFlagREs();
+	});
+}
+function saveFlagREs(){
+	var flags = getArrayValuesSelectedColumRes("tableFlagsListRes", 1).length;
+	if (flags>0) {
+		SaveFlagsContractRes();
+	}
 }
 
 function saveFlagsRes(div){
@@ -2912,8 +2979,12 @@ function getFlagsRes(id){
 	    success: function(data){
 	    	showLoading(div, false);
 	    	if (data) {
+<<<<<<< HEAD
 	    		//drawTableId(data,"flagsAsignedBodyRes");
 				drawTableFlagsAsignedRes(data,"flagsAsignedBody");
+=======
+	    		drawTableFlagsAsignedRes(data,"flagsAsignedBodyRes");
+>>>>>>> b0140d8349002a960567938711bb2f78930e3f30
 	    	}else{
 	    		alertify.error("No records found");
 	    	}
@@ -2923,6 +2994,52 @@ function getFlagsRes(id){
 	        alertify.error("Try again");
 	    }
 	});
+}
+
+function drawTableFlagsAsignedRes(data, table){
+	var bodyHTML = '';
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+        bodyHTML +="<td>" + '<i class="fa fa-long-arrow-left fa-2x" aria-hidden="true"></i>' + "</td>";
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        };
+        bodyHTML+="</tr>";
+    }
+    $('#' + table).html(bodyHTML);
+    $('#'+table).off('click');
+    deleteSelectFlagRes(table);
+}
+function deleteSelectFlagRes(div){
+	$("#"+div).on("click", "tr", function(){
+		var id = $(this).find('td').eq(1).text();
+        $(this).closest("tr").remove();
+        deleteFlagRes(id);
+        console.log("SE elimna");
+	});
+}
+function drawTableFlagsAsignedFlagsRes(data){
+	alertify.success(data['mensaje']);
+	if (data["banderas"]) {
+		updateTagBanderasRes(data["banderas"]);
+	}else{
+		$("#flagsReservationEdit").text("Flags:");
+	}
+	
+}
+function deleteFlagRes(id){
+	var idReservation = getValueFromTableSelectedRes("reservationsTable", 1);
+	var datos =  {
+		url: "reservation/deleteFlag",
+		tipo: "json",
+		datos: {
+			id:id,
+			idReservation: idReservation
+		},
+		funcionExito : drawTableFlagsAsignedFlagsRes,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(datos);
 }
 
 function SaveFlagsContractRes(){
@@ -2939,11 +3056,19 @@ function SaveFlagsContractRes(){
 	    dataType:'json',
 	    success: function(data){
 	    	alertify.success(data['mensaje']);
+<<<<<<< HEAD
 	    	drawTableFlagsAsignedRes(data['banderas'],"flagsAsignedBody");
 	    	if (data["banderas"]) {
 	    		updateTagBanderasRes(data["banderas"]);
 	    	}else{
 	    		$("#flagsContracEdit").text("Flags:");
+=======
+	    	drawTableFlagsAsigned(data['banderas'],"flagsAsignedBodyRes");
+	    	if (data["banderas"]) {
+	    		updateTagBanderasRes(data["banderas"]);
+	    	}else{
+	    		$("#flagsReservationEdit").text("Flags:");
+>>>>>>> b0140d8349002a960567938711bb2f78930e3f30
 	    	}
 	    },
 	    error: function(){
@@ -2951,7 +3076,10 @@ function SaveFlagsContractRes(){
 	    }
 	});
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> b0140d8349002a960567938711bb2f78930e3f30
 function updateTagBanderasRes(banderas){
 	var textoBanderas = "Flags: ";
 	for(var i = 0; i < banderas.length; i++){
@@ -2960,11 +3088,17 @@ function updateTagBanderasRes(banderas){
 			textoBanderas += ",";
 		}
 	}
+<<<<<<< HEAD
 	$("#flagsContracEdit").text(textoBanderas);
 }
 
 function drawTableFlagsAsignedRes(data, table){
 	//console.table(data);
+=======
+	$("#flagsReservationEdit").text(textoBanderas);
+}
+function drawTableFlagsAsigned(data, table){
+>>>>>>> b0140d8349002a960567938711bb2f78930e3f30
 	var bodyHTML = '';
     for (var i = 0; i < data.length; i++) {
         bodyHTML += "<tr>";
@@ -2975,6 +3109,7 @@ function drawTableFlagsAsignedRes(data, table){
         bodyHTML+="</tr>";
     }
     $('#' + table).html(bodyHTML);
+<<<<<<< HEAD
     $('#flagsAsignedBody').off('click');
     deleteSelectFlag("flagsAsignedBody");
 }
@@ -3012,6 +3147,11 @@ function deleteFlag(id){
 	ajaxDATA(datos);
 }
 
+=======
+    $('#flagsAsignedBodyRes').off('click');
+    deleteSelectFlag("flagsAsignedBodyRes");
+}
+>>>>>>> b0140d8349002a960567938711bb2f78930e3f30
 function nextStatusContractRes(){
 	deactiveEventClickRes("btnNextStatusRes");
 	$("#iNextStatus").addClass("fa-spin");
@@ -3057,14 +3197,20 @@ function opcionAccountRes(attrType){
 					});
 					$("#slcTransTypeAcc").attr('disabled', true);
 					setDataOpcionAccountRes(attrType);
+<<<<<<< HEAD
 					getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
 					ajaxSelectsRes('contract/getTrxClass', 'try again', generalSelects, 'slcTrxClassAcc');
 					ajaxSelects('contract/getCurrency', 'try again', generalSelectsDefault, 'CurrencyTrxClassAcc');
+=======
+					getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelectsDefault, 'slcTransTypeAcc');
+					ajaxSelectsRes('contract/getTrxClass', 'try again', generalSelectsDefault, 'slcTrxClassAcc');
+					ajaxSelectsRes('contract/getCurrency', 'try again', generalSelectsDefault, 'CurrencyTrxClassAcc');
+>>>>>>> b0140d8349002a960567938711bb2f78930e3f30
 				});
 			}else{
 				showLoading(div, true);
 				$("#slcTransTypeAcc").attr('disabled', true);
-				getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
+				getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelectsDefault, 'slcTransTypeAcc');
 				setDataOpcionAccountRes(attrType);
 				showLoading(div, false);
 			}
@@ -3113,7 +3259,10 @@ function opcionAccountRes(attrType){
        		}
      	}],
      close: function() {
-    	//$('#dialog-ScheduledPayments').empty();
+    	$('#AmountAcc').val("");
+    	$('#documentAcc').val("");
+    	$('#referenceAcc').val("");
+    	
      }
 	});
 	return dialogo;
