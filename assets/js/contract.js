@@ -2082,14 +2082,12 @@ function parsearSALE(sales){
 		// sales[i].Euros = parseFloat(sales[i].Euros).toFixed(2)
 		// sales[i].Nederlands_Florins = parseFloat(sales[i].Nederlands_Florins).toFixed(2);
 		if( sales[i].Sign_transaction == "1" ){
-			console.log("+");
 			Balance += parseFloat(sales[i].Amount);
-			sales[i].Balance = Balance;
+			sales[i].Balance = Balance.toFixed(2);
 		}
 		if( sales[i].Sign_transaction == "-1" ){
-			console.log("-");
 			Balance -= parseFloat(sales[i].Amount);
-			sales[i].Balance = Balance;
+			sales[i].Balance = Balance.toFixed(2);
 			
 		}
 		if (sales[i].Amount !=".0000") {

@@ -25,24 +25,6 @@ class Contract extends CI_Controller {
 	}
 	public function pruebasContract(){
 		
-	$precio = valideteNumber("10");
-	$Dolares = $this->contract_db->selectIdCurrency('USD');
-	$Florinres  = $this->contract_db->selectIdCurrency('NFL');
-	$Euros  = $this->contract_db->selectIdCurrency('EUR');
-	$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
-	$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
-	$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
-	$tipoCambioEuros = valideteNumber($tipoCambioEuros);
-	$euros = $precio * $tipoCambioEuros;
-	$florines = $precio * $tipoCambioFlorines;
-
-	echo $tipoCambioFlorines;
-	echo "<br>";
-	echo $tipoCambioEuros;
-	echo "<br>";
-	echo $euros;
-	echo "<br>";
-	echo $florines;
 	}
 
 	public function saveContract(){
@@ -392,20 +374,14 @@ private function insertExtrastransaction($idContrato){
 	$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
 	$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
 
-	$numero = 0;
-	if ($precio>0) {
-		$classID = $this->contract_db->gettrxClassID('SAL');
-	}else{
-		$numero =  -1 * (abs($precio));
-	}
 	$transaction = [
 		"fkAccid"		=> $this->contract_db->getACCIDByContracID($idContrato),  //la cuenta
 		"fkTrxTypeId"	=> $this->contract_db->getTrxTypeContracByDesc('EXC'),
 		"fkTrxClassID"	=> $this->contract_db->gettrxClassID('SAL'),
-		"Debit-"		=> valideteNumber($numero),
+		"Debit-"		=> 0,
 		"Credit+"		=> 0,
-		"Amount"		=> valideteNumber(abs($precio)), 
-		"AbsAmount"		=> valideteNumber(abs($precio)),
+		"Amount"		=> valideteNumber($precio), 
+		"AbsAmount"		=> valideteNumber($precio),
 		"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
 		"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 		"Remark"		=> '', //
@@ -720,8 +696,6 @@ public function createNote(){
 
 	public function saveTransactionAcc(){
 		if($this->input->is_ajax_request()) {
-			if($_POST['attrType'] == "newTransAcc"){
-				$debit = -1 * abs($_POST['amount']);
 				$Moneda = $_POST['currency'];
 				$precio = valideteNumber($_POST['amount']);
 				$Dolares = $this->contract_db->selectIdCurrency('USD');
@@ -731,32 +705,41 @@ public function createNote(){
 					$tipoCambioDolares = 1;
 					$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
 					$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
-					$precio = $precio * $tipoCambioDolares;
+					$precio = valideteNumber($precio * $tipoCambioDolares);
+					$euros = valideteNumber($precio * $tipoCambioEuros);
+					$florines = valideteNumber($precio * $tipoCambioFlorines);
 				}
 				if ($Moneda == 'EUR') {
 					$tipoCambioDolares = $this->contract_db->selectTypoCambio($Euros, $Dolares);
-					$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Euros, $Florinres);
+					$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
 					$tipoCambioEuros = 1;
-					$precio = $precio / $tipoCambioDolares;
+					$precioDolares = valideteNumber($precio * $tipoCambioDolares);
+					$euros = valideteNumber($precio * $tipoCambioEuros);
+					$florines = valideteNumber($precioDolares * $tipoCambioFlorines);
+					$precio = $precioDolares;
 				}
 				if ($Moneda == 'NFL') {
-					$tipoCambioDolares = $this->contract_db->selectTypoCambio($Florinres, $Dolares);
+					$tipoCambioDolares = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+					$tipoCambioDolaresEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
 					$tipoCambioFlorines = 1;
-					$tipoCambioEuros = $this->contract_db->selectTypoCambio($Florinres, $Euros);
-					$precio = $precio / $tipoCambioDolares;
+					$precioDolares = valideteNumber($precio / $tipoCambioDolares);
+					$florines = valideteNumber($precio * $tipoCambioFlorines);
+					$euros = valideteNumber($precioDolares * $tipoCambioDolaresEuros);
+					$precio = $precioDolares;
 				}
+			if($_POST['attrType'] == "newTransAcc"){
+				$debit = -1 * abs($_POST['amount']);
 				
-
 				$transaction = [
 					"fkAccid" 			=> $_POST['accId'],  //la cuenta
 					"fkTrxTypeId"		=> $_POST['trxTypeId'], //lista
 					"fkTrxClassID"		=> $_POST['trxClassID'], // vendedor
 					"Debit-"			=> valideteNumber($debit),
 					"Credit+"			=> 0,
-					"Amount"			=> valideteNumber($precio),
-					"AbsAmount"			=> valideteNumber($precio),
-					"Curr1Amt"			=> valideteNumber($precio * $tipoCambioEuros),
-					"Curr2Amt"			=> valideteNumber($precio * $tipoCambioFlorines),
+					"Amount"			=> $precio,
+					"AbsAmount"			=> $precio,
+					"Curr1Amt"			=> $euros,
+					"Curr2Amt"			=> $florines,
 					"Remark"			=> $_POST['remark'],
 					"Doc"				=> $_POST['doc'],
 					"DueDt"				=> $_POST['dueDt'],

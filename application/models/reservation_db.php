@@ -789,7 +789,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 	public function selectPaymentType(){
         $this->db->select("T.pkTrxTypeId as ID, RTRIM(T.TrxTypeDesc) as Type");
         $this->db->from('tbltrxtype T');
-        $this->db->where('fkTrxClassid', 1);
+        $this->db->where('T.pkTrxTypeId <=', 5);
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();

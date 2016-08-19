@@ -2211,7 +2211,6 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 }
 
 function setTableAccountRes(items, table){
-	console.table(items);
 	var balance = 0, balanceDeposits = 0, balanceSales = 0, defeatedDeposits = 0, defeatedSales = 0;
 	for(i=0;i<items.length;i++){
 		var item = items[i];
