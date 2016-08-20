@@ -18,7 +18,7 @@ if (!empty($notes)){
 	    <td><?php echo $item->pkNoteId ?></td>
 	    <td><?php echo $item->NoteTypeDesc ?></td>
 	    <td><?php echo $item->CrDt ?></td>
-	    <td><?php echo $item->CrBy ?></td>
+	    <td><?php echo $item->UserLogin ?></td>
 	    <td><?php echo $item->NoteDesc ?></td>
 	</tr>
 <?php

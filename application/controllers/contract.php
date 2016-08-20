@@ -358,7 +358,7 @@ private function insertFinanceCostTransacction($cantidad){
 			"Debit-"			=> 0,
 			"Credit+"			=> 0,
 			"Amount"			=> valideteNumber($cantidad), 
-			"AbsAmount"			=> valideteNumber($cantidad),
+			"AbsAmount"			=> 0,
 			"Curr1Amt"			=> valideteNumber($euros),
 			"Curr2Amt"			=> valideteNumber($florines),
 			"Remark"			=> '', //
@@ -1145,6 +1145,12 @@ public function getFlagsContract(){
 	public function getTrxType(){
 		if($this->input->is_ajax_request()) {
 			$trxType = $this->contract_db->selectTrxType($_POST['attrType'],$_POST['trxType']);
+			echo json_encode($trxType);
+		}
+	}
+	public function getTrxTypeSigno(){
+		if($this->input->is_ajax_request()) {
+			$trxType = $this->contract_db->selectTrxTypeSigno($_POST['attrType'],$_POST['trxType']);
 			echo json_encode($trxType);
 		}
 	}
