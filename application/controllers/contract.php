@@ -358,7 +358,7 @@ private function insertFinanceCostTransacction($cantidad){
 			"Debit-"			=> 0,
 			"Credit+"			=> 0,
 			"Amount"			=> valideteNumber($cantidad), 
-			"AbsAmount"			=> valideteNumber($cantidad),
+			"AbsAmount"			=> 0,
 			"Curr1Amt"			=> valideteNumber($euros),
 			"Curr2Amt"			=> valideteNumber($florines),
 			"Remark"			=> '', //
@@ -803,7 +803,6 @@ public function createNote(){
 				$update = array();
 				$insertTrx = array();
 				for($i = 0; $i<count($idTrans); $i++){
-					//$precio = valideteNumber($_POST['amount']);
 					
 					if($amount > 0){
 						$trans = floatval($valTrans[$i]);
@@ -825,12 +824,16 @@ public function createNote(){
 						$totalAmou = $conversion['precio'];
 						$totalAmou = str_replace(",", ".", $totalAmou);
 						$transU = array(
-							//'pkAccTrxId'	=>	$idTrans[$i],
 							'AbsAmount'		=>	$totalAmou,
 						);
 						$condicion = "pkAccTrxId = " . $idTrans[$i];
-						$this->contract_db->updateReturnId( 'tblAccTrx', $transU, $condicion );
-						//array_push($update, $transU);
+						$ID = $this->contract_db->updateReturnId( 'tblAccTrx', $transU, $condicion );
+						if ($ID) {
+							array_push($insertTrx, $idTrans[$i]);
+						}
+					}
+
+				}
 						$conversion = $this->convertMoney($Moneda, $totalAmou2);
 						$totalAmou2 = $conversion['precio'];
 						$euros = str_replace(",", ".", $conversion['euro']);
@@ -841,11 +844,11 @@ public function createNote(){
 						$transI = array(
 							"fkAccid" 			=> $_POST['accId'],
 							"fkTrxTypeId"		=> $_POST['trxTypeId'],
-							"fkTrxClassID"		=> $trxClass[$i],
+							"fkTrxClassID"		=> $this->contract_db->gettrxClassID('PAY'),
 							"Debit-"			=> $debit,
 							"Credit+"			=> 0,
-							"Amount"			=> $totalAmou2,
-							"AbsAmount"			=> $totalAmou2,
+							"Amount"			=> valideteNumber($_POST['amount']),
+							"AbsAmount"			=> 0,
 							"Curr1Amt"			=> $euros,
 							"Curr2Amt"			=> $florines,
 							"Remark"			=> $_POST['remark'],
@@ -857,11 +860,19 @@ public function createNote(){
 							"MdBy"				=> $this->nativesessions->get('id'),
 							"MdDt"				=> $this->getToday()
 						);
-						$this->contract_db->insertReturnId( 'tblAccTrx', $transI );
-						//array_push($insertTrx, $transI);
-					}
-				}
-				
+						$IDPago = $this->contract_db->insertReturnId( 'tblAccTrx', $transI );
+						for ($i=0; $i < sizeof($insertTrx) ; $i++) { 
+							$pagos = [
+								"fkAccTrxId"	=> $insertTrx[$i],
+								"fkPayId"		=> $IDPago,
+								"Amount"		=> valideteNumber($_POST['amount']),
+								"ynActive"		=> 1,
+								"CrBy"			=> $this->nativesessions->get('id'),
+								"CrDt"			=> $this->getToday(),
+							];
+							$this->contract_db->insertReturnId( 'tblPayTrx', $pagos );
+						}
+								
 				$message= array('success' => true, 'message' => "transaction save");
 			}
 			echo json_encode($message);
@@ -1145,6 +1156,12 @@ public function getFlagsContract(){
 	public function getTrxType(){
 		if($this->input->is_ajax_request()) {
 			$trxType = $this->contract_db->selectTrxType($_POST['attrType'],$_POST['trxType']);
+			echo json_encode($trxType);
+		}
+	}
+	public function getTrxTypeSigno(){
+		if($this->input->is_ajax_request()) {
+			$trxType = $this->contract_db->selectTrxTypeSigno($_POST['attrType'],$_POST['trxType']);
 			echo json_encode($trxType);
 		}
 	}

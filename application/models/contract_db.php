@@ -1019,7 +1019,22 @@ class Contract_db extends CI_Model {
 		}else if($type == "addPayAcc"){
 			$this->db->where('TrxSign = -1');
 		}
-		//$this->db->where('TrxSign = -1');
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+    public function selectTrxTypeSigno($type, $trxType){
+        $this->db->distinct();
+        $this->db->select("tt.pkTrxTypeId as ID, tt.TrxTypeDesc, tt.TrxSign");
+        $this->db->from('TblTrxType tt');
+        $this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
+        if($type == "newTransAcc"){
+            $this->db->where('attt.fkAccTypeId = ', $trxType);
+        }else if($type == "addPayAcc"){
+            $this->db->where('TrxSign = -1');
+        }
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {

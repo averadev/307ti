@@ -961,3 +961,20 @@ function setDate(id){
 function getRandomNumber(length) {
 	return Math.floor(Math.pow(10, length-1) + Math.random() * 9 * Math.pow(10, length-1));
 }
+
+function getNumberTextInput(div){
+	var valor = $("#"+div).val();
+	if(valor){
+		return parseFloat(valor);
+	}else{
+		return 0;
+	}
+}
+function getNumberTextString(div){
+	var valor = $("#"+div).text();
+	if(valor){
+		return parseFloat(valor);
+	}else{
+		return 0;
+	}
+}

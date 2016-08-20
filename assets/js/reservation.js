@@ -3200,7 +3200,17 @@ function nextStatusContractRes(){
 	    }
 	});
 }
-
+function generalSelectsDefaultRes(data, div){
+	console.table(data);
+     var select = '';
+    for (var i = 0; i < data.length; i++) {
+        select += '<option value="'+data[i].ID+'" Signo="'+data[i].TrxSign+'">';
+        select += data[i].TrxTypeDesc;
+        select+='</option>';
+    }
+    $("#"+div).html(select);
+}
+//tt.pkTrxTypeId as ID, tt.TrxTypeDesc, tt.TrxSign
 function opcionAccountRes(attrType){
 	var div = "#dialog-accountsRes";
 	dialogo = $(div).dialog ({
@@ -3217,11 +3227,7 @@ function opcionAccountRes(attrType){
 					$("#slcTransTypeAcc").attr('disabled', true);
 					setDataOpcionAccountRes(attrType);
 
-					/*getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
-					ajaxSelectsRes('contract/getTrxClass', 'try again', generalSelects, 'slcTrxClassAcc');
-					ajaxSelects('contract/getCurrency', 'try again', generalSelectsDefault, 'CurrencyTrxClassAcc');*/
-
-					getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelectsDefault, 'slcTransTypeAcc');
+					getTrxTypeRes('contract/getTrxTypeSigno', attrType, 'try again', generalSelectsDefaultRes, 'slcTransTypeAcc');
 					ajaxSelectsRes('contract/getTrxClass', 'try again', generalSelectsDefault, 'slcTrxClassAcc');
 					ajaxSelectsRes('contract/getCurrency', 'try again', generalSelectsDefault, 'CurrencyTrxClassAcc');
 
@@ -3229,7 +3235,7 @@ function opcionAccountRes(attrType){
 			}else{
 				showLoading(div, true);
 				$("#slcTransTypeAcc").attr('disabled', true);
-				getTrxTypeRes('contract/getTrxType', attrType, 'try again', generalSelectsDefault, 'slcTransTypeAcc');
+				getTrxTypeRes('contract/getTrxTypeSigno', attrType, 'try again', generalSelectsDefaultRes, 'slcTransTypeAcc');
 				setDataOpcionAccountRes(attrType);
 				showLoading(div, false);
 			}
@@ -3248,33 +3254,44 @@ function opcionAccountRes(attrType){
        		text: "Save",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-				var id = "saveAccCont";
-				var form = $("#"+id);
-				var elem = new Foundation.Abide(form, {});
-				var arrayInput = ["AmountAcc", "dueDateAcc"];
-				var arraySelect = ["slcTransTypeAcc", "slcTrxClassAcc"];
-				if(attrType == "addPayAcc"){
-					arraySelect = ["slcTransTypeAcc"];
-				}
-				if(!verifyAccount(arrayInput, arraySelect )){
-					$('#'+id).foundation('validateForm');
-					alertify.success("Please fill required fields (red)");
-				}else{
-					var amoutCur = 0;
-					$("input[name='checkPayAcc[]']:checked").each(function(){
-						amoutCur = amoutCur + parseFloat($(this).val());
-					});
-					if( amoutCur.toFixed(4) > parseFloat($('#AmountAcc').val().trim()).toFixed(4)){
-						var msg = "The stated amount does not cover all of the selected concepts.</br>A partial payment was stored.";
-						alertify.confirm(msg, function (e){
-							if(e){
-								saveAccContRes(attrType);
-							}
-						});
-					}else{
-						saveAccContRes(attrType);
+       			var signo = $("#slcTransTypeAcc  option:selected").attr("Signo");
+       			var cantidad = $("#tableFrontDeskAccRes .balanceAccount").text().replace("$ ", "");
+       			cantidad = parseFloat(cantidad);
+       			var limiteCredito = $("#creditLimitRes").text().replace("$ ", "");
+       			limiteCredito = parseFloat(limiteCredito);
+       			var nuevoCantidad  = getNumberTextInput("AmountAcc");
+       			var nuevaAmount = nuevoCantidad + cantidad;
+       			if (signo == "1" && (nuevaAmount > limiteCredito)) {
+       				alertify.error("Credit limit Exceeded");
+       			}else{
+					var id = "saveAccCont";
+					var form = $("#"+id);
+					var elem = new Foundation.Abide(form, {});
+					var arrayInput = ["AmountAcc", "dueDateAcc"];
+					var arraySelect = ["slcTransTypeAcc", "slcTrxClassAcc"];
+					if(attrType == "addPayAcc"){
+						arraySelect = ["slcTransTypeAcc"];
 					}
-				}
+					if(!verifyAccount(arrayInput, arraySelect )){
+						$('#'+id).foundation('validateForm');
+						alertify.success("Please fill required fields (red)");
+					}else{
+						var amoutCur = 0;
+						$("input[name='checkPayAcc[]']:checked").each(function(){
+							amoutCur = amoutCur + parseFloat($(this).val());
+						});
+						if( amoutCur.toFixed(4) > parseFloat($('#AmountAcc').val().trim()).toFixed(4)){
+							var msg = "The stated amount does not cover all of the selected concepts.</br>A partial payment was stored.";
+							alertify.confirm(msg, function (e){
+								if(e){
+									saveAccContRes(attrType);
+								}
+							});
+						}else{
+							saveAccContRes(attrType);
+						}
+					}
+       			}
        		}
      	}],
      close: function() {
@@ -3286,6 +3303,8 @@ function opcionAccountRes(attrType){
 	});
 	return dialogo;
 }
+
+
 
 function setDataOpcionAccountRes(attrType){
 	var accType = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accType');

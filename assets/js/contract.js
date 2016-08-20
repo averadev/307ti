@@ -194,23 +194,7 @@ function updateBalanceFinal(){
 	$("#financeBalance").val(total);
 	
 }
-
-function getNumberTextInput(div){
-	var valor = $("#"+div).val();
-	if(valor){
-		return parseFloat(valor);
-	}else{
-		return 0;
-	}
-}
-function getNumberTextString(div){
-	var valor = $("#"+div).text();
-	if(valor){
-		return parseFloat(valor);
-	}else{
-		return 0;
-	}
-}		
+		
 function cambiarCantidadP(monto)
 {
 	var seleccionado = $("input[name='engancheR']:checked").val();
@@ -2083,7 +2067,6 @@ function parsearSALE(sales){
 		if( sales[i].Sign_transaction == "-1" ){
 			Balance -= parseFloat(sales[i].Amount);
 			sales[i].Balance = Balance.toFixed(2);
-			
 		}
 		if (sales[i].Amount !=".0000") {
 			sales[i].Amount = parseFloat(sales[i].Amount).toFixed(2);

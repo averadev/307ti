@@ -3,25 +3,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Reservation_db extends CI_Model {
 
-	public function __construct(){
+    public function __construct(){
         parent::__construct();
     }
-	
-	function getReservations($filters, $id){
+    
+    function getReservations($filters, $id){
         $sql = "";
         $this->db->distinct();
         $this->db->select('r.pkResId as ID, R.folio as Folio, r.ResConf as Confirmation_code, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name');
         $this->db->select('ot.OccTypeDesc as Occ_type, fp.FloorPlanDesc as FloorPlan, v.ViewDesc as View_, s.SeasonDesc as Season, R.FirstOccYear, ES.StatusDesc');
-		$this->db->select('r.CrBy as Create_by, r.CrDt as Create_date, r.MdBy as Modified_by, r.MdDt as Modified_date');
-		$this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
-		$this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
+        $this->db->select('r.CrBy as Create_by, r.CrDt as Create_date, r.MdBy as Modified_by, r.MdDt as Modified_date');
+        $this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
+        $this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
         $this->db->from('tblRes r');
         $this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId');
         $this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = r.pkResId');
         $this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId');
-		$this->db->join('tblEmployee em', 'em.fkPeopleId = p.pkPeopleId', 'LEFT');
+        $this->db->join('tblEmployee em', 'em.fkPeopleId = p.pkPeopleId', 'LEFT');
         $this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId');
+<<<<<<< HEAD
 		//$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
 		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
 		$this->db->join('tblStatusTypeStatus STS', 'STS.Sequence = r.fkStatusId and STS.fkStatusTypeId = 2');
@@ -34,25 +35,39 @@ class Reservation_db extends CI_Model {
 		$this->db->where('rpa.ynPrimaryPeople', '1');
         $this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7 or r.fkResTypeId = 10)');
 		
+=======
+        //$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
+        $this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
+        $this->db->join('tblStatusTypeStatus STS', 'STS.Sequence = r.fkStatusId and STS.fkStatusTypeId = 2');
+        $this->db->join('tblStatus ES', 'ES.pkStatusId = STS.fkStatusId ');
+        $this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = ri.fkFloorPlanId');
+        $this->db->join('tblView v', 'v.pkViewId = ri.fkViewId', 'LEFT');
+        $this->db->join('tblSeason s', 's.pkSeasonId = ri.fkSeassonId', 'LEFT');
+        $this->db->join('tblPeopleEmail pe', 'pe.fkPeopleId = p.pkPeopleId', 'LEFT');
+        $this->db->join('tblEmail e', 'e.pkEmail = pe.fkEmailId', 'LEFT');
+        $this->db->where('rpa.ynPrimaryPeople', '1');
+        $this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
+        
+>>>>>>> origin/master
         if (!is_null($filters)){
             if($filters['words'] != false){
                 if ($filters['checks'] != false){
                     $this->filterReservations($filters);
                 }
             }
-			if($filters['dates'] != false){
-				if( isset($filters['dates']['startDateRes']) && isset($filters['dates']['endDateRes']) ){
-					$this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) >= ', $filters['dates']['startDateRes']);
-					$this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) <= ', $filters['dates']['endDateRes']);
-				}
-				else{
-					if(isset($filters['dates']['startDateRes'])){
-						$this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) = ', $filters['dates']['startDateRes']);
-					}
-					if(isset($filters['dates']['endDateRes'])){
-						$this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) = ', $filters['dates']['endDateRes']);
-					}
-				}
+            if($filters['dates'] != false){
+                if( isset($filters['dates']['startDateRes']) && isset($filters['dates']['endDateRes']) ){
+                    $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) >= ', $filters['dates']['startDateRes']);
+                    $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) <= ', $filters['dates']['endDateRes']);
+                }
+                else{
+                    if(isset($filters['dates']['startDateRes'])){
+                        $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) = ', $filters['dates']['startDateRes']);
+                    }
+                    if(isset($filters['dates']['endDateRes'])){
+                        $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) = ', $filters['dates']['endDateRes']);
+                    }
+                }
             }
         }
         if ($id!=NULL) {
@@ -61,35 +76,35 @@ class Reservation_db extends CI_Model {
         if($sql!=""){
            $this->db->where($sql, NULL);
         }
-		$this->db->order_by('ID', 'DESC');
+        $this->db->order_by('ID', 'DESC');
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {
             return $query->result();
         }
     }
-	
-	public function getUnidades($filters){
-		$arrivaDate = $filters['fromDate'];
-		$depurateDate = $filters['toDate'];
+    
+    public function getUnidades($filters){
+        $arrivaDate = $filters['fromDate'];
+        $depurateDate = $filters['toDate'];
         $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(FP.FloorPlanDesc) as Floor_Plan, V.ViewDesc as View, F.pkFloorId as Floor');
         $this->db->select("(select TOP 1 c2.Intv from tblCalendar c2 where c2.Date = '" .$arrivaDate . "' ) as Week");
-		$this->db->select("(select TOP 1 c2.fkSeasonId from tblCalendar c2 where c2.Date = '" .$arrivaDate . "' ) as Season");
+        $this->db->select("(select TOP 1 c2.fkSeasonId from tblCalendar c2 where c2.Date = '" .$arrivaDate . "' ) as Season");
         $this->db->from('tblUnit U');
         $this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
         $this->db->join('tblProperty P', 'P.pkPropertyId = U.fkPropertyId', 'inner');
-		$this->db->join('tblView V', 'U.fkViewId = V.pkViewId and V.ynActive = 1', 'inner');
-		$this->db->join('tblFloor F', 'F.pkFloorId = U.fkFloorId', 'inner');
-		if (!empty($filters['guestsAdult'])) {
+        $this->db->join('tblView V', 'U.fkViewId = V.pkViewId and V.ynActive = 1', 'inner');
+        $this->db->join('tblFloor F', 'F.pkFloorId = U.fkFloorId', 'inner');
+        if (!empty($filters['guestsAdult'])) {
             $this->db->where('FP.MaxAdults >= ', $filters['guestsAdult']);
         }
-		if (!empty($filters['guestChild'])) {
+        if (!empty($filters['guestChild'])) {
             $this->db->where('FP.MaxKids >= ', $filters['guestChild']);
         }
-		if (!empty($filters['floorPlan'])) {
+        if (!empty($filters['floorPlan'])) {
             $this->db->where('FP.pkFloorPlanID', $filters['floorPlan']);
         }
-		if (!empty($filters['view'])) {
+        if (!empty($filters['view'])) {
             $this->db->where('V.pkViewId', $filters['view']);
         }
         if (!empty($filters['property'])) {
@@ -98,39 +113,39 @@ class Reservation_db extends CI_Model {
         }
         $this->db->order_by('U.pkUnitId', 'ASC');
         $query = $this->db->get();
-		return $query->result();
-		/*if($query->num_rows() > 0 )
-		{
-			
-		}*/
+        return $query->result();
+        /*if($query->num_rows() > 0 )
+        {
+            
+        }*/
     }
-	
-	public function getUnidadesOcc($filters){
-		$arrivaDate = $filters['fromDate'];
-		$depurateDate = $filters['toDate'];
-		$where = "(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = ri.fkResId ORDER BY ro2.fkCalendarId ASC) 
+    
+    public function getUnidadesOcc($filters){
+        $arrivaDate = $filters['fromDate'];
+        $depurateDate = $filters['toDate'];
+        $where = "(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = ri.fkResId ORDER BY ro2.fkCalendarId ASC) 
 between '" . $arrivaDate . "' and '" . $depurateDate . "'";
-		$where .= " or ";
-		$where .= "(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = ri.fkResId ORDER BY ro2.fkCalendarId DESC)
+        $where .= " or ";
+        $where .= "(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = ri.fkResId ORDER BY ro2.fkCalendarId DESC)
 between '" . $arrivaDate . "' and '" . $depurateDate . "'";
-		$this->db->distinct();
+        $this->db->distinct();
         $this->db->select('u.pkUnitId');
         $this->db->from('tblUnit u');
         $this->db->join('tblResInvt ri', 'ri.fkUnitId = u.pkUnitId', 'inner');
         $this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId', 'inner');
-		$this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId', 'inner');
-		 $this->db->where($where);
+        $this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId', 'inner');
+         $this->db->where($where);
         $this->db->order_by('u.pkUnitId', 'ASC');
         $query = $this->db->get();
-		return $query->result();
+        return $query->result();
         /*if($query->num_rows() > 0 )
         {
             return $query->result();
         }*/
-		
-	}
-	
-	public function getPeopleReservation($string){
+        
+    }
+    
+    public function getPeopleReservation($string){
         $sql = "";
         $this->db->distinct();
         $this->db->select('P.pkPeopleId as ID, RTRIM(P.Name) as Name, RTRIM(P.LName) AS lastName');
@@ -149,7 +164,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
        
-	public function getUnitiesReservation($string){
+    public function getUnitiesReservation($string){
         $sql = "";
         $this->db->select('U.UnitCode, RTRIM(TFP.floorPlanDesc) as description, CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price');
         $this->db->select('RI.WeeksNumber, RI.FirstOccYear, RI.LastOccYear');
@@ -167,15 +182,15 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $query->result();
         }
     }
-	
-	public function createContract(){
+    
+    public function createContract(){
 
         $restTypeId = $this->selectRestType();
         $paymentProcessTypeId = $this->selectPaymentProcessTypeId();
         $languageId = $this->selectlanguageId();
         $resRelated = NUll;
     }
-	
+    
     public function selectRestType($string){
         $this->db->select('pkRestypeId');
         $this->db->from('tblResType');
@@ -319,8 +334,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkinvtTypeId;
         }
     }
-	
-	public function select_Folio(){
+    
+    public function select_Folio(){
         $this->db->select('MAX(Folio)+1 as Folio');
         $this->db->from('tblRes');
         $query = $this->db->get();
@@ -331,8 +346,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->Folio;
         }
     }
-	
-	public function getTerminosVentaReservation($id){
+    
+    public function getTerminosVentaReservation($id){
         $this->db->select("R.ListPrice, R.PackPrice, R.SpecialDiscount, R.Deposit, R.ClosingFeeAmt, R.NetSalePrice");
         $this->db->select("R.TransferAmt, R.BalanceActual, RI.WeeksNumber");
         $this->db->from("tblResFin R");
@@ -368,118 +383,118 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->TotalFinanceAmt;
         }
     }
-	
-	public function getAccountsById( $id, $typeInfo, $typeAcc ){
+    
+    public function getAccountsById( $id, $typeInfo, $typeAcc ){
         $this->db->distinct();
-		if($typeInfo == "account"){
-			$this->db->select('att.pkAccTrxId as ID, att.ynActive as Active');
-			$this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Sign_transaction, att.fkAccId as AccID');
-			$this->db->select('tc.TrxClassDesc as Concept_Trxid');
-			$this->db->select('att.CrDt as Creation_Date, CONVERT(VARCHAR(10),att.DueDt,101) as Due_Date, att.Amount, att.AbsAmount, 0 as Overdue_Amount');
+        if($typeInfo == "account"){
+            $this->db->select('att.pkAccTrxId as ID, att.ynActive as Active');
+            $this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Sign_transaction, att.fkAccId as AccID');
+            $this->db->select('tc.TrxClassDesc as Concept_Trxid');
+            $this->db->select('att.CrDt as Creation_Date, CONVERT(VARCHAR(10),att.DueDt,101) as Due_Date, att.Amount, att.AbsAmount, 0 as Overdue_Amount');
             $this->db->select('0 as Balance');
             $this->db->select('att.Curr1Amt as Euros, att.Curr2Amt as Nederlands_Florins');
-			$this->db->select('att.Doc as Document, att.Remark as Reference');
-		}else{
-			$this->db->select('0 as inputAll');
-			$this->db->select('att.pkAccTrxId as ID');
-			$this->db->select('tt.TrxTypeCode as Code');
-			$this->db->select('tc.pkTrxClassid, tc.TrxClassDesc as Concept_Trxid');
-			$this->db->select('att.DueDt as Due_Date, att.Amount, att.AbsAmount');
-		}
+            $this->db->select('att.Doc as Document, att.Remark as Reference');
+        }else{
+            $this->db->select('0 as inputAll');
+            $this->db->select('att.pkAccTrxId as ID');
+            $this->db->select('tt.TrxTypeCode as Code');
+            $this->db->select('tc.pkTrxClassid, tc.TrxClassDesc as Concept_Trxid');
+            $this->db->select('att.DueDt as Due_Date, att.Amount, att.AbsAmount');
+        }
         $this->db->from('tblAccTrx att');
         $this->db->join('tblAcc a', 'a.pkAccId = att.fkAccId');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId');
         $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = att.fkTrxTypeId');
-		$this->db->join('tblTrxClass tc', 'tc.pkTrxClassid = att.fkTrxClassID');
-		//$this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
+        $this->db->join('tblTrxClass tc', 'tc.pkTrxClassid = att.fkTrxClassID');
+        //$this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
         $this->db->where('rpa.fkResId', $id);
-		if($typeAcc == "reservation"){
-			//$this->db->where('attt.fkAccTypeId = 6');
-			$this->db->where('a.fkAccTypeId = 6');
-		}else if($typeAcc == "frontDesk"){
-			//$this->db->where('attt.fkAccTypeId = 5');
-			$this->db->where('a.fkAccTypeId = 5');
-		}
-		if($typeInfo == "payment"){
-			$this->db->where("tt.TrxTypeCode = 'SCP'");
-			$this->db->where('a.fkAccTypeId = ', $typeAcc);
-			$this->db->where('att.AbsAmount > 0');
-		}
-		$query = $this->db->get();
-		return $query->result();
+        if($typeAcc == "reservation"){
+            //$this->db->where('attt.fkAccTypeId = 6');
+            $this->db->where('a.fkAccTypeId = 6');
+        }else if($typeAcc == "frontDesk"){
+            //$this->db->where('attt.fkAccTypeId = 5');
+            $this->db->where('a.fkAccTypeId = 5');
+        }
+        if($typeInfo == "payment"){
+            $this->db->where("tt.TrxTypeCode = 'SCP'");
+            $this->db->where('a.fkAccTypeId = ', $typeAcc);
+            $this->db->where('att.AbsAmount > 0');
+        }
+        $query = $this->db->get();
+        return $query->result();
     }
-	
-	public function selectTrxType($type, $trxType){
-		$this->db->distinct();
+    
+    public function selectTrxType($type, $trxType){
+        $this->db->distinct();
         $this->db->select("tt.pkTrxTypeId as ID, tt.TrxTypeDesc");
         $this->db->from('TblTrxType tt');
-		$this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
-		if($type == "newTransAcc"){
-			$this->db->where('attt.fkAccTypeId = ', $trxType);
-		}else if($type == "addPayAcc"){
-			$this->db->where('TrxSign = -1');
-		}
-		//$this->db->where('TrxSign = -1');
+        $this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
+        if($type == "newTransAcc"){
+            $this->db->where('attt.fkAccTypeId = ', $trxType);
+        }else if($type == "addPayAcc"){
+            $this->db->where('TrxSign = -1');
+        }
+        //$this->db->where('TrxSign = -1');
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {
             return $query->result();
         }
     }
-	
-	public function selectTrxClass(){
+    
+    public function selectTrxClass(){
         $this->db->select("pkTrxClassid as ID, TrxClassDesc");
         $this->db->from('tblTrxClass');
-		$this->db->where('TrxSign = 1');
+        $this->db->where('TrxSign = 1');
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {
             return $query->result();
         }
     }
-	
-	public function getAccByRes($id){
-		//$this->db->distinct();
+    
+    public function getAccByRes($id){
+        //$this->db->distinct();
         $this->db->select( "rpa.fkAccId, RTRIM(att.AccTypeCode) as accType" );
         $this->db->from( 'tblResPeopleAcc rpa' );
-		$this->db->join( 'tblAcc a', 'a.pkAccId = rpa.fkAccId' );
-		$this->db->join( 'tblAcctype att', 'att.pkAcctypeId = a.fkAccTypeId' );
-		$this->db->where( 'rpa.fkResId = ', $id );
-		$this->db->where( 'rpa.ynPrimaryPeople = 1' );
-		$this->db->order_by('att.pkAcctypeId ASC');
+        $this->db->join( 'tblAcc a', 'a.pkAccId = rpa.fkAccId' );
+        $this->db->join( 'tblAcctype att', 'att.pkAcctypeId = a.fkAccTypeId' );
+        $this->db->where( 'rpa.fkResId = ', $id );
+        $this->db->where( 'rpa.ynPrimaryPeople = 1' );
+        $this->db->order_by('att.pkAcctypeId ASC');
         $query = $this->db->get();
-		return $query->result();
+        return $query->result();
     }
-	
-	public function getFilesContract($id){
-		$this->db->select("d.pkDocId as ID, d.docPath as Path, d.docDesc as Description");
-		$this->db->select("dt.DocTypeDesc");
-		$this->db->select("rd.CrDt as Date");
+    
+    public function getFilesContract($id){
+        $this->db->select("d.pkDocId as ID, d.docPath as Path, d.docDesc as Description");
+        $this->db->select("dt.DocTypeDesc");
+        $this->db->select("rd.CrDt as Date");
         $this->db->from('tblDoc d');
-		$this->db->join('tblDocType dt', 'dt.pkDocTypeId = d.fkDocTypeId');
-		$this->db->join('tblResDoc rd', 'rd.fkdocId = d.pkDocId');
-		$this->db->where('rd.fkResId = ', $id);
-		$this->db->where('d.ynActive = 1');
+        $this->db->join('tblDocType dt', 'dt.pkDocTypeId = d.fkDocTypeId');
+        $this->db->join('tblResDoc rd', 'rd.fkdocId = d.pkDocId');
+        $this->db->where('rd.fkResId = ', $id);
+        $this->db->where('d.ynActive = 1');
         $query = $this->db->get();
-		return $query->result();
-	}
-	
-	public function getTrxTrxSign($id){
-		$this->db->select("d.pkDocId as ID, d.docPath as Path, d.docDesc as Description");
-		$this->db->select("dt.DocTypeDesc");
-		$this->db->select("rd.CrDt as Date");
+        return $query->result();
+    }
+    
+    public function getTrxTrxSign($id){
+        $this->db->select("d.pkDocId as ID, d.docPath as Path, d.docDesc as Description");
+        $this->db->select("dt.DocTypeDesc");
+        $this->db->select("rd.CrDt as Date");
         $this->db->from('tblDoc d');
-		$this->db->join('tblDocType dt', 'dt.pkDocTypeId = d.fkDocTypeId');
-		$this->db->join('tblResDoc rd', 'rd.fkdocId = d.pkDocId');
-		$this->db->where('rd.fkResId = ', $id);
-		$this->db->where('d.ynActive = 1');
+        $this->db->join('tblDocType dt', 'dt.pkDocTypeId = d.fkDocTypeId');
+        $this->db->join('tblResDoc rd', 'rd.fkdocId = d.pkDocId');
+        $this->db->where('rd.fkResId = ', $id);
+        $this->db->where('d.ynActive = 1');
         $query = $this->db->get();
-		return $query->result();
-	}
-	
-	/////////////////////////
-	
-	public function selectIdFrequency($string){
+        return $query->result();
+    }
+    
+    /////////////////////////
+    
+    public function selectIdFrequency($string){
         $this->db->select("pkFrequencyID");
         $this->db->from('tblFrequency');
         $this->db->where('FrequencyDesc', $string);
@@ -491,8 +506,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkFrequencyID;
         }
     }
-	
-	public function selectSeasons(){
+    
+    public function selectSeasons(){
         $this->db->select("pkSeasonId as ID, SeasonDesc");
         $this->db->from('tblSeason');
         $query = $this->db->get();
@@ -501,8 +516,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $query->result();
         }
     }
-	
-	public function selectIdSeason($string){
+    
+    public function selectIdSeason($string){
         $this->db->select("pkSeasonId");
         $this->db->from('tblSeason');
         $this->db->where('SeasonDesc', $string);
@@ -514,8 +529,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkSeasonId;
         }
     }
-	
-	public function selectIdMetodoFin($string){
+    
+    public function selectIdMetodoFin($string){
         $this->db->select('pkFinMethodId');
         $this->db->from('tblFinMethod');
         $this->db->where('finMethodCode', $string);
@@ -580,8 +595,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkCalendarId;
         }
     }
-	
-	public function selectIdAccType($string){
+    
+    public function selectIdAccType($string){
         $this->db->select('pkAcctypeId');
         $this->db->from('tblAcctype');
         $this->db->where('AccTypeCode', $string);
@@ -593,8 +608,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkAcctypeId;
         }
     }
-	
-	public function selectIdFloorPlan($string){
+    
+    public function selectIdFloorPlan($string){
         $this->db->select('pkFloorPlanID');
         $this->db->from('tblFloorPlan');
         $this->db->where('FloorPlanDesc', $string);
@@ -606,8 +621,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkFloorPlanID;
         }
     }
-	
-	public function selectCostCollection(){
+    
+    public function selectCostCollection(){
         $this->db->select('CollectionFeeAmt');
         $this->db->from('tblPropertyFolio');
         $this->db->where('pkPropertyFolioId', 1);
@@ -620,19 +635,19 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->CollectionFeeAmt;
         }
     }
-	
-	public function selectView(){
+    
+    public function selectView(){
         $this->db->select("pkViewId as ID, ViewDesc");
         $this->db->from('tblView');
-		$this->db->where('ynActive = 1');
+        $this->db->where('ynActive = 1');
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {
             return $query->result();
         }
     }
-	
-	public function selectFactors(){
+    
+    public function selectFactors(){
         $this->db->select("pkFactorId as ID, FactorCode, FactorDesc");
         $this->db->from('tblFactor');
         $this->db->where('ynActive', 1);
@@ -643,8 +658,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $query->result();
         }
     }
-	
-	public function selectPriceFin($id){
+    
+    public function selectPriceFin($id){
         $this->db->select('CAST(totalFinanceAmt AS FLOAT) as totalFinanceAmt,CAST(financeBalance AS FLOAT) as financeBalance');
         $this->db->from('tblResfin');
         $this->db->where('fkResId', $id);
@@ -657,7 +672,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
     
-	public function selectUnitiesContract($resId){
+    public function selectUnitiesContract($resId){
        /* $this->db->select("RI.pkResInvtId, RI.fkUnitId, RI.Intv, RI.FirstOccYear, RI.LastOccYear, C.pkCalendarId,C.fkDayOfWeekId, C.Year");
         $this->db->from('tblResInvt RI');
         $this->db->join('tblCalendar C', 'C.Intv = RI.Intv', 'inner');
@@ -665,18 +680,18 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->where('fkResId', $resId);
         $this->db->order_by('intv', 'ASC');
         $query = $this->db->get();*/
-		
-		$this->db->select("RI.pkResInvtId, RI.fkUnitId, RI.Intv, RI.FirstOccYear, RI.LastOccYear");
-		$this->db->from('tblResInvt RI');
-		$this->db->where('RI.fkResId', $resId);
-		$this->db->order_by('RI.Intv', 'ASC');
-		$query = $this->db->get();
+        
+        $this->db->select("RI.pkResInvtId, RI.fkUnitId, RI.Intv, RI.FirstOccYear, RI.LastOccYear");
+        $this->db->from('tblResInvt RI');
+        $this->db->where('RI.fkResId', $resId);
+        $this->db->order_by('RI.Intv', 'ASC');
+        $query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
         }
     }
-	
-	public function selectDateCalendar($iniDate, $endDate){
+    
+    public function selectDateCalendar($iniDate, $endDate){
         $this->db->select("C.pkCalendarId,C.fkDayOfWeekId, C.Year");
         $this->db->from('tblCalendar C');
         $this->db->where("c.Date BETWEEN '" . $iniDate . "' and '" . $endDate . "'");
@@ -696,8 +711,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $query->result();
         }
     }
-	
-	public function selectFlags($ID){
+    
+    public function selectFlags($ID){
         $this->db->select("F.pkResFlagId, FT.FlagCode, FT.FlagDesc");
         $this->db->from('tblResFlag F');
         $this->db->join('tblFlag FT', 'F.fkFlagId = FT.pkFlagId', 'inner');
@@ -718,18 +733,18 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $query->result();
         }
     }
-	
-	public function getOccupancyTypes(){
-		$this->db->select("ot.pkOccTypeId  as ID, ot.OccTypeDesc");
+    
+    public function getOccupancyTypes(){
+        $this->db->select("ot.pkOccTypeId  as ID, ot.OccTypeDesc");
         $this->db->from('tblOccType ot');
-		$this->db->where('ynActive', 1);
+        $this->db->where('ynActive', 1);
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
         }
-	}
-	
-	public function selectIdMainPeople($string){
+    }
+    
+    public function selectIdMainPeople($string){
         $this->db->select('fkPeopleId as ID');
         $this->db->from('tblResPeopleAcc');
         $this->db->where('fkResId', $string);
@@ -740,8 +755,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->ID;
         }
     }
-	
-	public function selectNotes($ID){
+    
+    public function selectNotes($ID){
         $this->db->select("N.pkNoteId, NT.NoteTypeDesc, N.NoteDesc, N.CrDt, N.CrBy");
         $this->db->from('tblNote N');
         $this->db->join('tblNoteType NT', 'N.fkNoteTypeId = NT.pkNoteTypeid', 'inner');
@@ -751,34 +766,34 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         if($query->num_rows() > 0 ){
             return $query->result();
         }
-	}
+    }
 
-	
-	public function getRateType( $floorPlan, $floor, $view, $season, $occupancy, $occYear ){
-		$this->db->select("rt.RateAmtNight as ID, rt.RateTypeDesc");
+    
+    public function getRateType( $floorPlan, $floor, $view, $season, $occupancy, $occYear ){
+        $this->db->select("rt.RateAmtNight as ID, rt.RateTypeDesc");
         $this->db->from('tblRateType rt');
-		$this->db->where('rt.ynActive', 1);
-		$this->db->where('rt.fkOccTypeId', $occupancy);
-		$this->db->where('rt.OccYear', $occYear);
-		$this->db->where('rt.fkFloorPlanID', $floorPlan);
-		//$this->db->where('rt.fkFloorId', $floor);
-		$this->db->where('rt.fkViewId', $view);
-		$this->db->where('rt.fkSeasonId', $season);
+        $this->db->where('rt.ynActive', 1);
+        $this->db->where('rt.fkOccTypeId', $occupancy);
+        $this->db->where('rt.OccYear', $occYear);
+        $this->db->where('rt.fkFloorPlanID', $floorPlan);
+        //$this->db->where('rt.fkFloorId', $floor);
+        $this->db->where('rt.fkViewId', $view);
+        $this->db->where('rt.fkSeasonId', $season);
         $query = $this->db->get();
-		return $query->result();
-	}
-	
-	public function getInfoRateUnit($id){
-		$this->db->select("u.fkFloorPlanId, u.fkFloorId, u.fkViewId");
+        return $query->result();
+    }
+    
+    public function getInfoRateUnit($id){
+        $this->db->select("u.fkFloorPlanId, u.fkFloorId, u.fkViewId");
         $this->db->from('tblUnit u');
-		$this->db->where('u.pkUnitId', $id);
+        $this->db->where('u.pkUnitId', $id);
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
         }
-	}
-	
-	public function selectWeeksReservation($string){
+    }
+    
+    public function selectWeeksReservation($string){
         $this->db->select("RI.pkResInvtId, RI.fkUnitId,RI.Intv, RI.FirstOccYear, RI.LastOccYear ");
         $this->db->from('tblResInvt RI');
         $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
@@ -788,8 +803,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $query->result();
         }*/
     }
-	
-	public function selectPaymentType(){
+    
+    public function selectPaymentType(){
         $this->db->select("T.pkTrxTypeId as ID, RTRIM(T.TrxTypeDesc) as Type");
         $this->db->from('tbltrxtype T');
         $this->db->where('T.pkTrxTypeId <=', 5);
@@ -798,21 +813,21 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $query->result();
         }
     }
-	
-	public function getFilesReservation($id){
-		$this->db->select("d.pkDocId as ID, d.docPath as Path, d.docDesc as Description");
-		$this->db->select("dt.DocTypeDesc");
-		$this->db->select("rd.CrDt as Date");
+    
+    public function getFilesReservation($id){
+        $this->db->select("d.pkDocId as ID, d.docPath as Path, d.docDesc as Description");
+        $this->db->select("dt.DocTypeDesc");
+        $this->db->select("rd.CrDt as Date");
         $this->db->from('tblDoc d');
-		$this->db->join('tblDocType dt', 'dt.pkDocTypeId = d.fkDocTypeId');
-		$this->db->join('tblResDoc rd', 'rd.fkdocId = d.pkDocId');
-		$this->db->where('rd.fkResId = ', $id);
-		$this->db->where('d.ynActive = 1');
+        $this->db->join('tblDocType dt', 'dt.pkDocTypeId = d.fkDocTypeId');
+        $this->db->join('tblResDoc rd', 'rd.fkdocId = d.pkDocId');
+        $this->db->where('rd.fkResId = ', $id);
+        $this->db->where('d.ynActive = 1');
         $query = $this->db->get();
-		return $query->result();
-	}
-	
-	public function selectTypeGeneral($campos, $tabla){
+        return $query->result();
+    }
+    
+    public function selectTypeGeneral($campos, $tabla){
         $this->db->select($campos);
         $this->db->from($tabla);
         $this->db->where('ynActive', 1);
@@ -821,8 +836,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $query->result();
         }
     }
-	
-	public function getACCIDByContracID($idContrato){
+    
+    public function getACCIDByContracID($idContrato){
         $this->db->select('pkAccID');
         $this->db->from('tblAcc a');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId and rpa.fkResId='.$idContrato, 'inner');
@@ -834,8 +849,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkAccID;
         }
     }
-	
-	public function selectTotalFinance($id){
+    
+    public function selectTotalFinance($id){
         $this->db->select('TotalFinanceAmt as total');
         $this->db->from('tblResFin');
         $this->db->where('fkResId', $id);
@@ -847,8 +862,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->total;
         }
     }
-	
-	public function getDownpaymentsContrac($string){
+    
+    public function getDownpaymentsContrac($string){
         $this->db->select('sum(Amount) as downpayment');
         $this->db->from('tblAccTrx');
         $this->db->where('fkAccID', $string);
@@ -861,8 +876,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->downpayment;
         }
     }
-	
-	public function getACCIDByContracIDFDK($idContrato){
+    
+    public function getACCIDByContracIDFDK($idContrato){
         $this->db->select('pkAccID');
         $this->db->from('tblAcc a');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId and rpa.fkResId='.$idContrato, 'inner');
@@ -874,7 +889,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkAccID;
         }
     }
-	public function getTrxTypeContrac($string){
+    public function getTrxTypeContrac($string){
         $this->db->select('pktrxTypeId');
         $this->db->from('tbltrxtype');
         $this->db->where('TrxTypeDesc', $string);
@@ -898,7 +913,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
 
-	public function getTrxTypeContracByDesc($string){
+    public function getTrxTypeContracByDesc($string){
         $this->db->select('pkTrxTypeId');
         $this->db->from('tbltrxtype');
         $this->db->where('TrxTypeCode', $string);
@@ -910,8 +925,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkTrxTypeId;
         }
     }
-	
-	public function gettrxClassID($string){
+    
+    public function gettrxClassID($string){
         $this->db->select('pkTrxClassId');
         $this->db->from('tbltrxclass');
         $this->db->where('TrxClassCode', $string);
@@ -923,8 +938,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkTrxClassId;
         }
     }
-	
-	public function gettrxConcept($string){
+    
+    public function gettrxConcept($string){
         $this->db->select('pkTrxConceptId');
         $this->db->from('tbltrxConcept');
         $this->db->where('TrxConceptCode', $string);
@@ -949,8 +964,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->CrdLimit;
         }
     }
-	
-	 public function propertyTable($p){
+    
+     public function propertyTable($p){
         $this->db->select($p['valor'] .' as '.  $p['alias']);
         $this->db->from($p['tabla']);
         $this->db->where($p['codicion'], $p['id']);
@@ -960,8 +975,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->$p['alias'];
         }
     }
-	
-	public function selectNextStatusDesc($idStatus){
+    
+    public function selectNextStatusDesc($idStatus){
         $this->db->select('S.StatusDesc as Descripcion');
         $this->db->from('tblStatus S');
         $this->db->where('pkStatusId', $idStatus);
@@ -1002,7 +1017,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->maximo;
         }
     }
-	
+    
     //
     private function filterReservations($filters){
         $string = $filters['words']['stringRes'];
@@ -1030,7 +1045,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         if (isset($filters['checks']['emailRes'])){
             $this->db->like('e.EmailDesc', $string);
         }
-		if (isset($filters['checks']['contratoRes'])){
+        if (isset($filters['checks']['contratoRes'])){
             $this->db->like('pkResId', $string);
         }
     }
@@ -1047,8 +1062,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             $this->db->where('LName', $string);
         }
     }
-	
-	public function insertReturnId($table, $data){
+    
+    public function insertReturnId($table, $data){
         $this->db->insert($table, $data);
         return $this->db->insert_id();
     }
@@ -1057,5 +1072,5 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->update($table, $data);
         return $this->db->affected_rows();
     }
-	
+    
 }
