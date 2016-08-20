@@ -1027,6 +1027,7 @@ class Contract_db extends CI_Model {
     }
     public function selectTrxTypeSigno($type, $trxType){
         $this->db->distinct();
+        $this->db->select("tt.pkTrxTypeId as ID, tt.TrxTypeDesc, tt.TrxSign");
         $this->db->from('TblTrxType tt');
         $this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
         if($type == "newTransAcc"){
