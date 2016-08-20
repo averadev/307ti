@@ -808,6 +808,7 @@ public function createNote(){
 						$trans = floatval($valTrans[$i]);
 						$totalAmou = 0;
 						$totalAmou2 = 0;
+
 						if($trans == $amount){
 							$totalAmou2 = $trans;
 							$amount = 0;
@@ -823,6 +824,7 @@ public function createNote(){
 						$conversion = $this->convertMoney($Moneda, $totalAmou);
 						$totalAmou = $conversion['precio'];
 						$totalAmou = str_replace(",", ".", $totalAmou);
+
 						$transU = array(
 							'AbsAmount'		=>	$totalAmou,
 						);
