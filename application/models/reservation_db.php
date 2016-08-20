@@ -22,8 +22,6 @@ class Reservation_db extends CI_Model {
         $this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId');
         $this->db->join('tblEmployee em', 'em.fkPeopleId = p.pkPeopleId', 'LEFT');
         $this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId');
-<<<<<<< HEAD
-=======
 
 		//$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
 		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
@@ -35,29 +33,7 @@ class Reservation_db extends CI_Model {
 		$this->db->join('tblPeopleEmail pe', 'pe.fkPeopleId = p.pkPeopleId', 'LEFT');
 		$this->db->join('tblEmail e', 'e.pkEmail = pe.fkEmailId', 'LEFT');
 		$this->db->where('rpa.ynPrimaryPeople', '1');
-<<<<<<< HEAD
-=======
-        $this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7 or r.fkResTypeId = 10)');
-		
 
->>>>>>> origin/master
-        //$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
-       /* $this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
-        $this->db->join('tblStatusTypeStatus STS', 'STS.Sequence = r.fkStatusId and STS.fkStatusTypeId = 2');
-        $this->db->join('tblStatus ES', 'ES.pkStatusId = STS.fkStatusId ');
-        $this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = ri.fkFloorPlanId');
-        $this->db->join('tblView v', 'v.pkViewId = ri.fkViewId', 'LEFT');
-        $this->db->join('tblSeason s', 's.pkSeasonId = ri.fkSeassonId', 'LEFT');
-        $this->db->join('tblPeopleEmail pe', 'pe.fkPeopleId = p.pkPeopleId', 'LEFT');
-        $this->db->join('tblEmail e', 'e.pkEmail = pe.fkEmailId', 'LEFT');
-        $this->db->where('rpa.ynPrimaryPeople', '1');
-        $this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');*/
->>>>>>> origin/master
-        
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
         if (!is_null($filters)){
             if($filters['words'] != false){
                 if ($filters['checks'] != false){
