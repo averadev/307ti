@@ -68,11 +68,11 @@ Class frontDesk_db extends CI_MODEL
 		$iniDate = "(SELECT top 1 CONVERT(VARCHAR(11),c2.Date,106)";
 		$iniDate = $iniDate . " from tblResOcc ro2";
 		$iniDate = $iniDate . " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId";
-		$iniDate = $iniDate . " where ro2.fkResId = ro.fkResId ORDER By ro2.fkCalendarId asc) as DateIni";
+		$iniDate = $iniDate . " where ro2.fkResId = ro.fkResId and ro2.OccYear = ro.OccYear ORDER By ro2.fkCalendarId asc) as DateIni";
 		$endDate = "(SELECT top 1 CONVERT(VARCHAR(11),c2.Date,106)";
 		$endDate = $endDate . " from tblResOcc ro2";
 		$endDate = $endDate . " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId";
-		$endDate = $endDate . " where ro2.fkResId = ro.fkResId ORDER By ro2.fkCalendarId desc) as DateEnd";
+		$endDate = $endDate . " where ro2.fkResId = ro.fkResId and ro2.OccYear = ro.OccYear ORDER By ro2.fkCalendarId desc) as DateEnd";
 		$this->db->select("tblCalendar.pkCalendarId, CONVERT(VARCHAR(11),tblCalendar.Date,106) as Date2");
 		$this->db->select($iniDate);
 		$this->db->select($endDate);

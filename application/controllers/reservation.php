@@ -1132,6 +1132,7 @@ private function comprubaArray($valor, $array){
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
 			$id = $_GET['id'];
+			echo $id;
 			//$data['idTour'] = $this->reservation_db->selectIdTour($id);
 			$data['contract']= $this->reservation_db->getReservations(null,$id);
 			$data['flags'] = $this->reservation_db->selectFlags($id);
@@ -1428,6 +1429,21 @@ public function nextStatusReservacion(){
 		}
 		return array( 'precio' => $precio, 'euro' => $eurosConv, 'florines' => $florinesConv );
 	}
+	
+	public function getPropertyStatus($IdStatus){
+
+
+		$peticion = [
+				"tabla" 	=> 'tblStatus',
+				"valor" 	=> 'StatusDesc',
+				"alias" 	=> 'Status',
+				"codicion"	=> 'pkStatusId',
+				"id"		=>	$IdStatus
+			];
+		$propiedad = $this->reservation_db->propertyTable($peticion);
+	return $propiedad;
+
+}
 	
 }
 

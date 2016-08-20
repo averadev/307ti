@@ -41,6 +41,10 @@ $(document).ready(function(){
 	$(document).off( 'click', '#btnRefinancingResevation');
 	$(document).on( 'click', '#btnRefinancingResevation', function () {
 		var id = getValueFromTableSelectedRes("reservationsTable", 1);
+		var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
+		if( screen == "frontDesk" ){
+			id = $('#tab-general .tabs-title.active').data('idRes');
+		}
 		showModalFinRes(id);
 	});
 	
@@ -142,9 +146,12 @@ $(document).ready(function(){
 	$(document).on( 'click', '#btNewTransAccRes, #btAddPayAccRes', function ( ) {
 		var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
 		var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
-		var statusRes = $('#editContracStatus').attr( 'statusRes' );
+		var statusRes = $('#editReservationStatus').attr( 'statusRes' );
+		console.log(accCode);
+		console.log(statusRes);
+		console.log($(this).attr('id'));
 		if(idAccColl != undefined){
-			if( accCode == "FDK" && statusRes == "Inhouse" && $(this).attr('id') == "btNewTransAccRes" ){
+			if( accCode == "FDK" && statusRes != "In House" && $(this).attr('id') == "btNewTransAccRes" ){
 				alertify.error('You can not add transactions');
 			}else{
 				var dialogAccount = opcionAccountRes($(this).attr('attr_type'));
@@ -1452,6 +1459,11 @@ function modalEditReservation(id){
 	dialogo = $("#dialog-Edit-Reservation").dialog ({
   		open : function (event){
 	    	$(this).load("reservation/modalEdit?id="+id , function(){
+				//$('#tab-general .tabs-title.active').attr('attr-screen'));
+				var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
+				if( screen == "frontDesk" ){
+					$('#tab-general .tabs-title.active').data('idRes', id);
+				}
 	 			showLoading('#dialog-Edit-Reservation',false);
 	 			getDatosReservation(id);
 	 			setEventosEditarReservation(id);
@@ -2111,7 +2123,7 @@ function getDatosReservation(id){
 			if(data["reservation"].length > 0){
 				contraTemp = data["reservation"][0];
 				$('td.folioAccount').text(contraTemp.Folio);
-				$('#editContracStatus').attr( 'statusRes', contraTemp.StatusDesc );
+				$('#editReservationStatus').attr( 'statusRes', contraTemp.StatusDesc );
 			}
 			setHeightModal('dialog-Edit-Reservation');
 			addFunctionalityRes();
@@ -2362,7 +2374,7 @@ function drawDataContract(data){
 	$("#editContractTitle").text(titulo);
 	$("#editContracFloorPlan").text(floorPlan);
 	$("#editContracYear").text(year);
-	$("#editContracStatus").text(status);
+	$("#editReservationStatus").text(status);
 }
 
 function setEventosEditarReservation(id){
@@ -2866,6 +2878,10 @@ function modalAddNotasRes() {
 }
 function modalGetAllNotesRes() {
 	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
+	if( screen == "frontDesk" ){
+		id = $('#tab-general .tabs-title.active').data('idRes');
+	}
 	var div = "#dialog-NotasRes";
 	dialogo = $(div).dialog ({
   		open : function (event){
@@ -3028,6 +3044,10 @@ function drawTableFlagsAsignedFlagsRes(data){
 }
 function deleteFlagRes(id){
 	var idReservation = getValueFromTableSelectedRes("reservationsTable", 1);
+	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
+	if( screen == "frontDesk" ){
+		id = $('#tab-general .tabs-title.active').data('idRes');
+	}
 	var datos =  {
 		url: "reservation/deleteFlag",
 		tipo: "json",
@@ -3150,6 +3170,10 @@ function nextStatusContractRes(){
 	deactiveEventClickRes("btnNextStatusRes");
 	$("#iNextStatus").addClass("fa-spin");
 	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
+	if( screen == "frontDesk" ){
+		id = $('#tab-general .tabs-title.active').data('idRes');
+	}
 	$.ajax({
 	    data:{
 	        idContrato: id,
@@ -3158,6 +3182,7 @@ function nextStatusContractRes(){
 	    url: "reservation/nextStatusReservation",
 	    dataType:'json',
 	    success: function(data){
+			console.log(data);
 	    	$("#iNextStatus").removeClass("fa-spin");
 			$("#editReservationStatus").text("Status: "+data['status']);
 	    	if (data['next'] != null) {
@@ -3399,6 +3424,10 @@ function uploadFileContRes(){
 	showAlert(true,"Saving changes, please wait ....",'progressbar');
 	
 	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
+	if( screen == "frontDesk" ){
+		id = $('#tab-general .tabs-title.active').data('idRes');
+	}
 	//creamos la variable Request 
 	if(window.XMLHttpRequest) {
  		var Req = new XMLHttpRequest(); 

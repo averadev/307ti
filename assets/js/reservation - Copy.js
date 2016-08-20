@@ -1,6 +1,7 @@
 var unitReservacion = [];
 var iniDateRes = null;
 var endDateRes = null;
+var mocalCreditLimit = null;
 
 $(document).ready(function(){
 	maxHeight = screen.height * .10;
@@ -128,58 +129,75 @@ $(document).ready(function(){
 		var dialogDiscountAmountRes = modalDiscountAmountRes();
 		dialogDiscountAmountRes.dialog("open");
 	});
-	
+	$(document).off('click', '#tabsContratsAccounts');
+	$(document).on( 'click', '#tabsContratsAccounts', function(){
+		var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
+		if (accCode == "FDK") {
+			$("#btAddCreditLimitRes").show();
+		}else{
+			$("#btAddCreditLimitRes").hide();
+		}
+	});
 	$(document).off( 'click', '#btNewTransAccRes'); 
 	$(document).on( 'click', '#btNewTransAccRes, #btAddPayAccRes', function ( ) {
 		var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
 		var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
-		var statusRes = $('#editReservationStatus').attr( 'statusRes' );
+		var statusRes = $('#editContracStatus').attr( 'statusRes' );
 		if(idAccColl != undefined){
-			if(accCode == "FDK"){
-				console.log(statusRes)
-				console.log($(this).attr('id'))
-				if( statusRes != "Inhouse" && $(this).attr('id') == "btNewTransAccRes" ){
-					alertify.error('You can not add transactions');
-				}else{
-					var dialogAccount = opcionAccountRes($(this).attr('attr_type'));
-					dialogAccount.dialog("open");
-				}
+			if( accCode == "FDK" && statusRes == "Inhouse" && $(this).attr('id') == "btNewTransAccRes" ){
+				alertify.error('You can not add transactions');
 			}else{
 				var dialogAccount = opcionAccountRes($(this).attr('attr_type'));
 				dialogAccount.dialog("open");
-			}			
+			}
+			
 		}else{
 			alertify.error('No acc found');
 		}
 	});
 	
-	$(document).off( 'click', '#btAddCreditLimitRes'); 
-	$(document).on( 'click', '#btAddCreditLimitRes', function ( ) {
-		var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
-		var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
-		/*var dialogAccount = opcionAccountRes($(this).attr('attr_type'));
-		dialogAccount.dialog("open");*/
-	});
-	
-	//$( "#btnNextStatusRes").unbind( "click" );
-	/*$(document).off( 'click', '#btnNextStatusRes');
-	$(document).on( 'click', '#btnNextStatusRes', function () {
-		nextStatusContractRes();
-	});*/
+	$(document).on( 'click', '#btAddCreditLimitRes', function(){
+		var ajaxData =  {
+			url: "reservation/modalCreditLimit",
+			tipo: "html",
+			datos: {},
+			funcionExito : addHTMLCreditLimit,
+			funcionError: mensajeAlertify
+		};
+	var modalPropiedades = {
+		div: "dialog-CreditLimit",
+		altura: 260,
+		width: 500,
+		onOpen: ajaxDATA,
+		onSave: createNewLimit,
+		botones :[{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       		if (true) {
+       			createNewLimit();
+       			$(this).dialog('close');
+       		}
+       		}
+     	}]
+	};
 
-	/*$(document).on( 'click', '#btnAddTourID', function () {
-		var dialogAddTour = addTourContract();
-		dialogAddTour.dialog("open");
-	});
-	$(document).on( 'click', '#btnDeleteTourID', function () {
-		$('#TourID').val('0');
-	});*/
-	/*$(document).on( 'click', '#btnAddmontoDownpaymentPrg', function () {
-		if($("#montoDownpaymentPrg").val()>0){
-			tableDownpaymentSelectedPrgRes();
-			totalDownpaymentPrgRes();
+
+
+		if (mocalCreditLimit!=null) {
+			mocalCreditLimit.dialog( "destroy" );
 		}
-	});*/
+		mocalCreditLimit = modalGeneral2(modalPropiedades, ajaxData);
+		mocalCreditLimit.dialog( "open" );
+	});
+
+
 	$( "#btnCleanWordRes").unbind( "click" );
 	$('#btnCleanWordRes').click(function (){
 		$( "#stringRes, #startDateRes, #endDateRes" ).val("");
@@ -236,6 +254,40 @@ $(document).ready(function(){
 	
 	getDatailByIDRes("reservationstbody");
 });
+
+function addHTMLCreditLimit(data){
+	$("#dialog-CreditLimit").html(data);
+	//initEventosFinanciamiento();
+}
+function createNewLimit (){
+	var accauntType = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
+	var accauntID = $('#btNewTransAccRes').data( 'idAcc' + accauntType );
+	var amount = $("#creditLimitResInput").val();
+	var ajaxData =  {
+		url: "reservation/updateCreditLimit",
+		tipo: "json",
+		datos: {
+			'accauntID': accauntID,
+			'accauntType': accauntType,
+			'amount': amount
+		},
+		funcionExito : mensajeLimit,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+	
+}
+
+function mensajeLimit(data){
+	if (data['mensaje']) {
+		alertify.success(data["mensaje"]);
+	}
+	if (data['creditLimit']) {
+		$("#creditLimitRes").text(parseFloat(data['creditLimit']).toFixed(2));
+	}
+	
+	//creditLimitRes
+}
 
 function ajaxSelectsRes(url,errorMsj, funcion, divSelect) {
 	$.ajax({
@@ -2065,7 +2117,7 @@ function getDatosReservation(id){
 			if(data["reservation"].length > 0){
 				contraTemp = data["reservation"][0];
 				$('td.folioAccount').text(contraTemp.Folio);
-				$('#editReservationStatus').attr( 'statusRes', contraTemp.StatusDesc );
+				$('#editContracStatus').attr( 'statusRes', contraTemp.StatusDesc );
 			}
 			setHeightModal('dialog-Edit-Reservation');
 			addFunctionalityRes();
@@ -2144,6 +2196,7 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 }
 
 function setTableAccountRes(items, table){
+	console.table(items);
 	var balance = 0, balanceDeposits = 0, balanceSales = 0, defeatedDeposits = 0, defeatedSales = 0;
 	for(i=0;i<items.length;i++){
 		var item = items[i];
@@ -2168,7 +2221,7 @@ function setTableAccountRes(items, table){
 	}
 	balance = balanceDeposits + balanceSales;
 	
-	$('#' + table +  ' tbody tr td.balanceAccount').text('$ ' + balance.toFixed(2));
+	$('#' + table +  ' tbody tr td.balanceAccount').text('$ ' + balance);
 	$('#' + table +  ' tbody tr td.balanceDepAccount').text('$ ' + balanceDeposits.toFixed(2));
 	$('#' + table +  ' tbody tr td.balanceSaleAccount').text('$ ' + balanceSales.toFixed(2));
 	$('#' + table +  ' tbody tr td.defeatedDepAccount').text('$ ' + defeatedDeposits.toFixed(2));
@@ -2179,7 +2232,6 @@ function setTableAccountRes(items, table){
 function drawTerminosVentaRes(data){
 	var price = parseFloat(data.ListPrice).toFixed(2);
 	var semanas = data.WeeksNumber;
-	//var packReference = parseFloat(data.PackPrice).toFixed(2);
 	var SpecialDiscount = parseFloat(data.SpecialDiscount);
 	var salePrice = parseFloat(data.NetSalePrice).toFixed(2);
 	var enganche = parseFloat(data.Deposit).toFixed(2);
@@ -2210,7 +2262,8 @@ function drawTerminoFinanciamientoRes(data){
 	$("#cfPagoMensualRes").text(pagoMensual);
 	$("#cfEngancheRes").text(porEnganche);
 	$("#typeFinanceRes").text(data.FactorDesc);
-	$("#totalFoundingRes").text(balanceFinal);
+	$(".balanceAccount").text(balanceFinal);
+	console.log(balanceFinal);
 	$("#totalMonthlyPaymentRes").text(pagoMensual);
 
 }
@@ -2225,7 +2278,7 @@ function drawDataContract(data){
 	$("#editContractTitle").text(titulo);
 	$("#editContracFloorPlan").text(floorPlan);
 	$("#editContracYear").text(year);
-	$("#editReservationStatus").text(status);
+	$("#editContracStatus").text(status);
 }
 
 function setEventosEditarReservation(id){
@@ -2241,6 +2294,11 @@ function setEventosEditarReservation(id){
 	});
 	$("#btnNextStatusRes").click(function(){
 		nextStatusContractRes();
+	});
+	
+	$( "#btnFrontPage").unbind( "click" );
+	$("#btnFrontPage").click(function(){
+		generateReportRes(id);
 	});
 }
 
@@ -2753,15 +2811,12 @@ function nextStatusContractRes(){
 	    dataType:'json',
 	    success: function(data){
 	    	$("#iNextStatus").removeClass("fa-spin");
-	    	$("#editReservationStatus").text("Status: "+data['status']);
+			$("#editReservationStatus").text("Status: "+data['status']);
 	    	if (data['next'] != null) {
 	    		$("#btnNextStatusRes span").text("Next Status: "+data['next']);
 	    	}else{
 	    		$("#btnNextStatusRes").remove();
 	    	}
-	    	$("#editReservationStatus").text("Status: "+data['status']);
-			$('#editReservationStatus').attr( 'statusRes', data['status'] );
-			$('#btnNextStatusRes').text("Next Status: "+data['status']);
 	    	alertify.success(data['mensaje']);
 	    		$("#btnNextStatusRes").click(function(){
 					nextStatusContractRes();
@@ -3191,4 +3246,26 @@ function getRateRes(){
 			$("#RateRes").attr('disabled', false);
 	    }
 	});
+}
+
+function generateReportRes(id){
+	
+	var url = "Pdfs/CheckOut?idRes=" + id;
+	window.open(url);
+	//window.location = "Pdfs/CheckOut";
+	/*$.ajax({
+	    data:{
+			id:1
+		},
+	    type: "POST",
+	    url: "Pdfs/CheckOut",
+	    dataType:'json',
+		async: false,
+	    success: function(data){
+			console.log("success");
+	    },
+	    error: function(){
+	        console.log("error");
+	    }
+	});*/
 }
