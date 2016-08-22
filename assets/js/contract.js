@@ -104,9 +104,12 @@ $(document).on( 'click', '#btnAddPeople', function () {
 		}else{
 			alertify.error('No acc found');
 		}
-		
 	});
-
+	$(document).on( 'click', '#btnShowPayCardAS', function () {
+		showCreditCardAS();
+		//var dialogDiscountAmount = modalDiscountAmount();
+		//dialogDiscountAmount.dialog("open");
+	});
 	$(document).on( 'click', '#btnAddTourID', function () {
 		var dialogAddTour = addTourContract();
 		dialogAddTour.dialog("open");
@@ -1752,7 +1755,6 @@ function getArrayValuesSelectedColum(tabla, columna){
  * cambia los pantallas del modal con los tabs
  */
 function changeTabsModalContract(screen, id){
-	console.log("Este es el ID "+ id);
 	$('#tabsContrats .tabs-title').removeClass('active');
 	$('#tabsContrats li[attr-screen=' + screen + ']').addClass('active');
 	//muestra la pantalla selecionada
@@ -3607,4 +3609,47 @@ function table(datos){
 	// 	console.log("no lo muestro");
 	// }
 	// console.table(datos);
+}
+
+function showCreditCardAS(){
+	var accCode = $('#tabsContratsAccounts .active').attr('attr-accCode');
+	var idAccColl = $('#btNewTransAcc').data( 'idAcc' + accCode );
+	var ajaxData =  {
+		url: "contract/modalCreditCardAS",
+		tipo: "html",
+		datos: {
+			idAccount: idAccColl
+		},
+		funcionExito : addHTMLDIV,
+		funcionError: mensajeAlertify
+	};
+	var modalPropiedades = {
+		div: "dialog-CreditCardAS",
+		altura: 540,
+		width: 540,
+		onOpen: ajaxDATA,
+		onSave: createNewContract,
+		botones :[{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       		}
+     	}]
+	};
+
+	if (modalFin!=null) {
+		modalFin.dialog( "destroy" );
+	}
+	modalFin = modalGeneral2(modalPropiedades, ajaxData);
+	modalFin.dialog( "open" );
+}
+
+function addHTMLDIV(data){
+	$("#dialog-CreditCardAS").html(data);
 }

@@ -465,6 +465,8 @@
 					<div class="label">Add Payment</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
+					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+				</a>
 			</div>
 		</div>
 	</div>

@@ -37,14 +37,14 @@ class Contract extends CI_Controller {
 			$Contrato = isValidateContract();
 			if ($Contrato['valido']) {
 				$idContrato = $this->createContract();
-				$this->insertContratoOcupacion($idContrato);
+				$Ocupaciones = $this->insertContratoOcupacion($idContrato);
 				$acc = $this->createAcc();
 				$this->insertPeoples($idContrato, $acc);
 				$this->makeTransactions($idContrato);
 				$this->createUnidades($idContrato);
 				$this->createGifts($idContrato);
 				$balanceFinal = $this->insertFinanciamiento($idContrato);
-				$this->createSemanaOcupacion($idContrato);
+				$this->createSemanaOcupacion($idContrato, $Ocupaciones);
 				if ($_POST['card']) {
 					$Tarjeta = isValidateCreditCard();
 					if ($Tarjeta['valido']) {
@@ -93,15 +93,15 @@ private function insertTarjeta($id, $type){
 	$datos = $_POST['card'];
 	if ($datos) {
 		$Card = [
-			"fkCcTypeId" => intval($datos['type']),
-			"fkAccId" => 1,
-			"CCNumber" => $datos['number'],
-			"expDate" => $datos['dateExpiration'],
-			"ZIP" => $datos['poscode'],
-			"Code" => $datos['code'],
-			"ynActive" => 1,
-			"CrBy" => $this->nativesessions->get('id'),
-			"CrDt" => $this->getToday()
+			"fkCcTypeId"	=> intval($datos['type']),
+			"fkAccId"		=> $this->contract_db->getACCIDByContracID($id),
+			"CCNumber"		=> $datos['number'],
+			"expDate"		=> $datos['dateExpiration'],
+			"ZIP"			=> $datos['poscode'],
+			"Code"			=> $datos['code'],
+			"ynActive"		=> 1,
+			"CrBy"			=> $this->nativesessions->get('id'),
+			"CrDt"			=> $this->getToday()
 		];
 		return $this->contract_db->insertReturnId('tblAcccc', $Card);
 	}
@@ -137,6 +137,7 @@ private function createContract(){
 
 private function insertContratoOcupacion($idContrato){
 
+	$Ocupaciones = [];
 	$rango = intval($_POST['lastYear']-$_POST['firstYear']);
 	for($i =0; $i<= 10; $i++){
 			$Ocupacion = [
@@ -160,9 +161,10 @@ private function insertContratoOcupacion($idContrato){
 	        "CrBy"                      => $this->nativesessions->get('id'),
 	        "CrDt"						=> $this->getToday()
 		];
-		$this->contract_db->insertReturnId('tblRes', $Ocupacion);
+		$ID = $this->contract_db->insertReturnId('tblRes', $Ocupacion);
+		array_push($Ocupaciones, $ID);
 	}
-	
+	return $Ocupaciones;
 }
 
 private function createUnidades($idContrato){
@@ -641,7 +643,7 @@ private function insertScheduledPaymentsTrx($idContrato){
 		}
 	}
 }
-public function createSemanaOcupacion($idContrato){
+public function createSemanaOcupacion($idContrato, $Ocupaciones){
 
 	$Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
 
@@ -655,7 +657,7 @@ public function createSemanaOcupacion($idContrato){
 	for ($i=0; $i < sizeof($Unidades); $i++) {
 		for ($j=0; $j < sizeof($Unidades[$i]); $j++) {
 			$OcupacionTable = [
-				"fkResId"    	=> $idContrato,
+				"fkResId"    	=> $Ocupaciones[$i],
 				"fkResInvtId"   => $Unidades[$i][$j]->pkResInvtId,
 				"OccYear"       => $Unidades[$i][$j]->Year,
 				"NightId"       => $Unidades[$i][$j]->fkDayOfWeekId,
@@ -1422,6 +1424,22 @@ public function getFlagsContract(){
 			$idContrato = $_GET['id'];
 			$data['notes'] = $this->contract_db->selectNotes($idContrato);
 			$this->load->view('contracts/dialogAllNotes', $data);
+		}
+	}
+
+	public function modalCreditCardAS(){
+		if($this->input->is_ajax_request()) {
+			if ($_POST['idAccount']) {
+				$IDAccount = $_POST['idAccount'];
+				$data["tarjetaAsociada"] = $this->contract_db->getCreditCardAS($IDAccount);
+				$campos = "pkCcTypeId as ID, CcTypeDesc";
+				$tabla = "tblCctype";
+				$data["creditCardType"] = $this->contract_db->selectTypeGeneral($campos, $tabla);
+				$this->load->view('contracts/tarjetaAsociada', $data);
+			}else{
+				$this->load->view('contracts/tarjetaAsociada');
+			}
+			
 		}
 	}
 

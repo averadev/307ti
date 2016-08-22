@@ -649,6 +649,17 @@ class Contract_db extends CI_Model {
             return $row->ID;
         }
     }
+    public function getCreditCardAS($idAccount){
+        $this->db->select('C.CCNumber, CT.ccTypeDesc, C.ExpDate, C.ZIP, C.Code');
+        $this->db->from('tblAcccc C');
+        $this->db->join('tblccType CT', 'C.fkCcTypeId = CT.pkCcTypeId');
+        $this->db->where('fkAccId', $idAccount);
+        $this->db->where('C.ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
 
     public function selectMaxStatus(){
         $this->db->select('max(PkStatusTypeStatusId) as maximo');

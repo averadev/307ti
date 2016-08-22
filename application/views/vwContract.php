@@ -156,5 +156,6 @@
 <div id="dialog-accounts"  title="Accounts" style="display: none;"></div>
 <div id="dialog-newFile"  title="New File" style="display: none;"></div>
 <div id="dialog-DetailWeek"  title="Detail Week" style="display: none;"></div>
+<div id="dialog-CreditCardAS"  title="Card Associated" style="display: none;"></div>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>contract.js"></script>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>creditCardValidator/CardValidator.js"></script>

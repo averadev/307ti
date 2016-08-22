@@ -163,8 +163,9 @@ $(document).ready(function(){
 		}
 	});
 	
-	$(document).on( 'click', '#btAddCreditLimitRes', function(){
-		var ajaxData =  {
+
+$(document).on( 'click', '#btAddCreditLimitRes', function(){
+	var ajaxData =  {
 			url: "reservation/modalCreditLimit",
 			tipo: "html",
 			datos: {},
@@ -203,9 +204,7 @@ $(document).ready(function(){
      	}]
 	};
 
-
-
-		if (mocalCreditLimit!=null) {
+	if (mocalCreditLimit!=null) {
 			mocalCreditLimit.dialog( "destroy" );
 		}
 		mocalCreditLimit = modalGeneral2(modalPropiedades, ajaxData);
