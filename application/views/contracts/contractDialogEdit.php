@@ -465,6 +465,8 @@
 					<div class="label">Add Payment</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
+				<a id="btnShowPayCardAS" attr_type="cardAS" class="btn btn-primary spanSelect">
+					<div class="label">Card Associated</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
 			</div>
