@@ -720,6 +720,7 @@ public function createSemanaOcupacion($idContrato, $Ocupaciones){
 				"fkResInvtId"   => $Unidades[$i][$j]->pkResInvtId,
 				"OccYear"       => $Unidades[$i][$j]->Year,
 				"NightId"       => $Unidades[$i][$j]->fkDayOfWeekId,
+				"fkResTypeId"   => $this->contract_db->selectRestType('Occ'),
 				"fkOccTypeId"   => 1,
 				"fkCalendarId" 	=> $Unidades[$i][$j]->pkCalendarId,
 				"ynActive"   	=> 1,
