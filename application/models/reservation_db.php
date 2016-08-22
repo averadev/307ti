@@ -16,12 +16,14 @@ class Reservation_db extends CI_Model {
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
         $this->db->from('tblRes r');
-        $this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId');
+       // $this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId');
+		$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResRelatedId or ri.fkResId = r.pkResId');
         $this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId');
-        $this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = r.pkResId');
+       // $this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = r.pkResId');
+		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = r.pkResRelatedId or rpa.fkResId = r.pkResId');
         $this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId');
         $this->db->join('tblEmployee em', 'em.fkPeopleId = p.pkPeopleId', 'LEFT');
-        $this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId');
+        $this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
 
 		//$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
 		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
@@ -32,8 +34,8 @@ class Reservation_db extends CI_Model {
 		$this->db->join('tblSeason s', 's.pkSeasonId = ri.fkSeassonId', 'LEFT');
 		$this->db->join('tblPeopleEmail pe', 'pe.fkPeopleId = p.pkPeopleId', 'LEFT');
 		$this->db->join('tblEmail e', 'e.pkEmail = pe.fkEmailId', 'LEFT');
-		$this->db->where('rpa.ynPrimaryPeople', '1');
-
+		//$this->db->where('rpa.ynPrimaryPeople', '1');
+		$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
         if (!is_null($filters)){
             if($filters['words'] != false){
                 if ($filters['checks'] != false){
@@ -56,12 +58,14 @@ class Reservation_db extends CI_Model {
             }
         }
         if ($id!=NULL) {
-			$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7 or r.fkResTypeId = 10 )');
+			//$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7 or r.fkResTypeId = 10 )');
+			
 			$this->db->where('R.pkResId', $id);
         }else{
-			$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
+			//$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
 		}
         if($sql!=""){
+		$this->db->where('rpa.ynPrimaryPeople', '1');
            $this->db->where($sql, NULL);
         }
         $this->db->order_by('ID', 'DESC');

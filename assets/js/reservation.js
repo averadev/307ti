@@ -2102,6 +2102,7 @@ function getDatosReservation(id){
 	    url: "reservation/getDatosReservationById",
 	    dataType:'json',
 	    success: function(data){
+			console.log(id)
 			console.log(data);
 	
 			var c = parseFloat(data['CollectionCost']);
@@ -3181,9 +3182,9 @@ function nextStatusContractRes(){
 	    url: "reservation/nextStatusReservation",
 	    dataType:'json',
 	    success: function(data){
-			console.log(data);
 	    	$("#iNextStatus").removeClass("fa-spin");
 			$("#editReservationStatus").text("Status: "+data['status']);
+			$('#editReservationStatus').attr( 'statusRes', data['status'] );
 	    	if (data['next'] != null) {
 	    		$("#btnNextStatusRes span").text("Next Status: "+data['next']);
 	    	}else{
