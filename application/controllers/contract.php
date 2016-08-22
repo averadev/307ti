@@ -107,6 +107,65 @@ private function insertTarjeta($id, $type){
 	}
 }
 
+public function createCreditCardAcc(){
+	if($this->input->is_ajax_request()){	
+
+		$datos = $_POST['card'];
+		$id = $_POST['idAccount'];
+		$data["tarjetaAsociada"] = $this->contract_db->getCreditCardAS($id);
+		$Tarjeta = isValidateCreditCard();
+		if ($Tarjeta['valido']) {
+
+
+		if ($data["tarjetaAsociada"]) {
+			
+			
+				if ($datos) {
+					$Card = [
+						"fkCcTypeId"	=> intval($datos['type']),
+						"fkAccId"		=> $id,
+						"CCNumber"		=> $datos['number'],
+						"expDate"		=> $datos['dateExpiration'],
+						"ZIP"			=> $datos['poscode'],
+						"Code"			=> $datos['code'],
+						"ynActive"		=> 1,
+						"CrBy"			=> $this->nativesessions->get('id'),
+						"CrDt"			=> $this->getToday()
+					];
+					$condicion = "fkAccId = " . $id;
+					$afectados = $this->contract_db->updateReturnId('tblAcccc', $Card, $condicion);
+					$mensaje = ["mensaje"=>"Update Correctly", "status" => 1];
+					echo json_encode($mensaje);
+			
+			}
+		}else{
+			if ($datos) {
+				$Card = [
+					"fkCcTypeId"	=> intval($datos['type']),
+					"fkAccId"		=> $id,
+					"CCNumber"		=> $datos['number'],
+					"expDate"		=> $datos['dateExpiration'],
+					"ZIP"			=> $datos['poscode'],
+					"Code"			=> $datos['code'],
+					"ynActive"		=> 1,
+					"CrBy"			=> $this->nativesessions->get('id'),
+					"CrDt"			=> $this->getToday()
+				];
+				$this->contract_db->insertReturnId('tblAcccc', $Card);
+		}
+	
+		$mensaje = ["mensaje"=>"Save Correctly", "status" => 1];
+		echo json_encode($mensaje);
+		}
+		}else{
+						echo  json_encode([
+							"mensaje" => $Tarjeta['mensajes'],
+							"status" => 0
+						]);
+					}
+	}
+}
+
 private function createContract(){
 
 		$Contract = [
@@ -661,7 +720,6 @@ public function createSemanaOcupacion($idContrato, $Ocupaciones){
 				"fkResInvtId"   => $Unidades[$i][$j]->pkResInvtId,
 				"OccYear"       => $Unidades[$i][$j]->Year,
 				"NightId"       => $Unidades[$i][$j]->fkDayOfWeekId,
-				"fkResTypeId"   => 5,
 				"fkOccTypeId"   => 1,
 				"fkCalendarId" 	=> $Unidades[$i][$j]->pkCalendarId,
 				"ynActive"   	=> 1,

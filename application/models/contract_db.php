@@ -650,9 +650,9 @@ class Contract_db extends CI_Model {
         }
     }
     public function getCreditCardAS($idAccount){
-        $this->db->select('C.CCNumber, CT.ccTypeDesc, C.ExpDate, C.ZIP, C.Code');
+        $this->db->select('C.CCNumber, C.fkCcTypeId, C.ExpDate, C.ZIP, C.Code');
         $this->db->from('tblAcccc C');
-        $this->db->join('tblccType CT', 'C.fkCcTypeId = CT.pkCcTypeId');
+        //$this->db->join('tblccType CT', 'C.fkCcTypeId = CT.pkCcTypeId');
         $this->db->where('fkAccId', $idAccount);
         $this->db->where('C.ynActive', 1);
         $query = $this->db->get();

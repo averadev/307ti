@@ -3614,7 +3614,8 @@ function table(datos){
 function showCreditCardAS(){
 	var accCode = $('#tabsContratsAccounts .active').attr('attr-accCode');
 	var idAccColl = $('#btNewTransAcc').data( 'idAcc' + accCode );
-	var ajaxData =  {
+	if (idAccColl) {
+		var ajaxData =  {
 		url: "contract/modalCreditCardAS",
 		tipo: "html",
 		datos: {
@@ -3628,7 +3629,7 @@ function showCreditCardAS(){
 		altura: 540,
 		width: 540,
 		onOpen: ajaxDATA,
-		onSave: createNewContract,
+		onSave: createCreditCard,
 		botones :[{
 	       	text: "Cancel",
 	       	"class": 'dialogModalButtonCancel',
@@ -3636,9 +3637,15 @@ function showCreditCardAS(){
 	         	$(this).dialog('close');
 	       }
 	   	},{
-       		text: "Ok",
+       		text: "Save",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
+       			if (validateCreditCardAS()) {
+       				createCreditCard(idAccColl);
+       				$(this).dialog('close');
+       			}else{
+       				alertify.error("Verify Card Data");
+       			}
        		}
      	}]
 	};
@@ -3648,8 +3655,67 @@ function showCreditCardAS(){
 	}
 	modalFin = modalGeneral2(modalPropiedades, ajaxData);
 	modalFin.dialog( "open" );
+}else{
+	alertify.error("ID Account error");
+}
+	
 }
 
 function addHTMLDIV(data){
 	$("#dialog-CreditCardAS").html(data);
+
+	$( "#dateExpiracionAS" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
+}
+
+function datosCardAS(){
+	var datos = {};
+		datos.number = $('#numeroTarjetaAS').val().replace(/[^\d]/g, '');
+		datos.type = $("#cardTypesAS").val();
+		datos.dateExpiration = $("#dateExpiracionAS").val();
+		datos.poscode = $("#codigoPostalAS").val();
+		datos.code = $("#codigoTarjetaAS").val();
+	return datos
+}
+
+function validateCreditCardAS(){
+	var R = true;
+	var creditCard = datosCardAS();
+		if (creditCard) {
+			for(var key in creditCard)
+			{
+				 if(!creditCard[key]) {
+				 	R = false;
+				 }
+			}
+			return R;
+		}else{
+			return false;
+		}
+}
+
+
+function createCreditCard(id){
+	var ajaxData =  {
+		url: "contract/createCreditCardAcc",
+		tipo: "json",
+		datos: {
+			idAccount: id,
+			card: datosCardAS(),
+		},
+		funcionExito : creditCardMsg,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
+
+function creditCardMsg(data){
+	if (data["status"] == 1) {
+		alertify.success(data["mensaje"]);
+	}else{
+		alertify.error(data["mensaje"]);
+	}
+	
 }
