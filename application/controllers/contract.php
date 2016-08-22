@@ -40,6 +40,9 @@ class Contract extends CI_Controller {
 				$Ocupaciones = $this->insertContratoOcupacion($idContrato);
 				$acc = $this->createAcc();
 				$this->insertPeoples($idContrato, $acc);
+				$this->createAccOcc($Ocupaciones);
+				//$acc = $this->createAcc();
+				//$this->insertPeoples($idContrato, $acc);
 				$this->makeTransactions($idContrato);
 				$this->createUnidades($idContrato);
 				$this->createGifts($idContrato);
@@ -267,6 +270,28 @@ private function createAcc(){
 		$resultAcc[$i] = $this->contract_db->insertReturnId('tblAcc', $cuenta);
 	}
 	return $resultAcc;
+}
+
+private function createAccOcc($occupacy){
+	//$cont2 = count($occupacy);
+	for($j =0; $j< count($occupacy); $j++){
+		$typeAcc = ['5','6'];
+		$resultAcc = array();
+		for($i =0; $i< count($typeAcc); $i++){
+			$cuenta = [
+				"fkAccTypeId"     	=> $typeAcc[$i],
+				"fkCompanyId"    	=> 1,
+				"AccCode"       	=> 1000,
+				"ynActive"		 	=> 1,
+				"CrBy"      		=> $this->nativesessions->get('id'),
+				"CrDt"   			=> $this->getToday(),
+				"MdBy" 				=> $this->nativesessions->get('id'),
+				"MdDt"  			=> $this->getToday()
+			];
+			$resultAcc[$i] = $this->contract_db->insertReturnId('tblAcc', $cuenta);
+		}
+		$this->insertPeoples($occupacy[$j], $resultAcc);
+	}
 }
 
 private function insertPeoples($idContrato, $acc){

@@ -91,15 +91,19 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->from("tblCalendar");
 		$this->db->join('tblDayOfWeek dw', 'pkDayOfWeekId = tblCalendar.fkDayOfWeekId', 'INNER');
 		$this->db->join('tblResOcc ro', 'ro.fkCalendarId = tblCalendar.pkCalendarId', 'INNER');
+		//$this->db->join('tblRes r', 'r.pkResId = ro.fkResId', 'LEFT');
+		//$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'LEFT');
 		$this->db->join('tblRes r', 'r.pkResId = ro.fkResId', 'LEFT');
-		$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'LEFT');
+		//$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'LEFT');
+		$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResRelatedId or ri.fkResId = r.pkResId', 'LEFT');
 		$this->db->join('tblFloorPlan fpi', 'fpi.pkFloorPlanID = ri.fkFloorPlanId', 'LEFT');
 		$this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId', 'LEFT');
 		$this->db->join('tblView v', 'v.pkViewId = ri.fkViewId', 'LEFT');
 		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = u.fkFloorPlanId', 'LEFT');
 		$this->db->join('tblUnitHKStatus uhks', 'uhks.fkUnitId = u.pkUnitId and (uhks.fkCalendarID = tblCalendar.pkCalendarId or uhks.fkCalendarID = (SELECT MAX( uhks2.fkCalendarID ) FROM tblUnitHKStatus uhks2 WHERE uhks2.fkUnitId = u.pkUnitId ) )', 'LEFT');
 		$this->db->join('tblHKStatus hks', 'hks.pkHKStatusId = uhks.fkHkStatusId', 'LEFT');
-		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = ro.fkResId', 'LEFT');
+		//$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = ro.fkResId', 'LEFT');
+		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = r.pkResRelatedId or rpa.fkResId = r.pkResId', 'LEFT');
 		//$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = ro.fkResId and rpa.ynPrimaryPeople = 1', 'LEFT');
 		$this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId', 'LEFT');
 		if($filters['words'] != false){
