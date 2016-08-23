@@ -2126,9 +2126,9 @@ function drawTableSinHeadReservationPeople(data, table){
 	 	var checkboxT2 = "<td><div class='rdoField'><input checked type='checkbox' class='checkFilter checkInPeople'>";
 	 	checkboxT2 +="<label>Check In</label></div></td>";
 	}else{
-		var checkboxT = "<td><div class='rdoField'><input checked disabled type='checkbox' class='checkFilter checkInPeople'>";
+		var checkboxT = "<td><div class='rdoField'><input  disabled type='checkbox' class='checkFilter checkInPeople'>";
 	 	checkboxT += "<label>Check In</label></div></td>";
-	 	var checkboxT2 = "<td><div class='rdoField'><input disabled type='checkbox' class='checkFilter checkInPeople'>";
+	 	var checkboxT2 = "<td><div class='rdoField'><input checked disabled type='checkbox' class='checkFilter checkInPeople'>";
 	 	checkboxT2 += "<label>Check In</label></div></td>";
 	}
 	
@@ -2146,21 +2146,6 @@ function drawTableSinHeadReservationPeople(data, table){
         bodyHTML += "<td>" +data[i].address + "</td>";
         bodyHTML += "<td>" +data[i].ynPrimaryPeople + "</td>";
         bodyHTML += "<td>" +data[i].YnBenficiary + "</td>";
-
-/*        for (var j in data[i]) {
-        	if (j == "fkPeopleStatusId") {
-        		if (data[i][j]== 15) {
-        			bodyHTML += "<td>" +checkboxT + "</td>";
-        		}else{
-        			bodyHTML += "<td>" +checkboxT2 + "</td>";
-        		}
-        		
-        	}else{
-        		bodyHTML+="<td>" + data[i][j] + "</td>";
-        	}
-            
-        };
-*/
         bodyHTML+="</tr>";
     }
     $('#' + table).html(bodyHTML);
@@ -3264,6 +3249,9 @@ function nextStatusContractRes(){
 	    url: "reservation/nextStatusReservation",
 	    dataType:'json',
 	    success: function(data){
+	    	if (data["dateCheckOut"]) {
+	    		$("#dateCheckOut").text("Check Out: "+ data["dateCheckOut"]);
+	    	}
 	    	if (data['status'] == "In House") {
 	    		$( ".checkInPeople" ).prop( "disabled", false);
 	    	}else{

@@ -952,6 +952,18 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->checkIn;
         }
     }
+    public function getCheckOut($idReserva){
+        $this->db->select('CheckOut');
+        $this->db->from('tblRes');
+        $this->db->where('pkResId', $idReserva);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->CheckOut;
+        }
+    }
 
     public function gettrxConcept($string){
         $this->db->select('pkTrxConceptId');

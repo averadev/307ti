@@ -1155,6 +1155,7 @@ private function comprubaArray($valor, $array){
 			$creditLimit = $this->reservation_db->getCreditLimitActual($IDAccount);
 			$financeBalance = $this->reservation_db->selectFinanceBalance($id);
 			$data['dateCheckIn'] = $this->reservation_db->getCheckIn($id);
+			$data['dateCheckOut'] = $this->reservation_db->getCheckOut($id);
 			$data['statusActual']= $actual;
 			$data['statusNext'] = $next;
 			$data['creditLimit'] = $creditLimit;
@@ -1193,7 +1194,16 @@ private function comprubaArray($valor, $array){
 			}
 			$next = $this->reservation_db->selectNextStatusDesc2(intval($IdStatus)+1);
 			$actual = $this->reservation_db->selectNextStatusDesc2($IdStatus);
-			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $actual, "next" => $next];
+			if ($actual == "Out") {
+				$financiamiento = [
+							"CheckOut"	=> $this->getToday(),
+						];
+						$condicion = "pkResId = " . $id;
+						$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
+			}
+
+			$CheckOut = $this->reservation_db->getCheckOut($id);
+			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $actual, "next" => $next, "dateCheckOut" => $CheckOut];
 			echo json_encode($mensaje);
 		}else{
 			$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	

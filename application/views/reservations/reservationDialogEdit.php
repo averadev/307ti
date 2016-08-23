@@ -27,7 +27,7 @@
 		<label class="headerGeneral small-6 columns"><?php  echo "Expected Arrival: ". $contract[0]->arrivaDate;?></label>
 		<label class="headerGeneral small-6 columns" id="dateCheckIn"><?php  echo "Check In: ". $dateCheckIn;?></label>
 		<label class="headerGeneral small-6 columns"><?php  echo "Expected Deperture: ".$contract[0]->depatureDate;?></label>
-		<label class="headerGeneral small-6 columns"><?php  echo "Check Out: ";?></label>
+		<label class="headerGeneral small-6 columns" id="dateCheckOut"><?php  echo "Check Out: ". $dateCheckOut;?></label>
 
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
