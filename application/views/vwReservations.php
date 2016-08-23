@@ -127,7 +127,7 @@
 			</div>
 			<div class="box-body" id="table-reservations" style="display: block;">
 				<div class="table" >
-					<table id="reservationsTable" style="width:100%;">
+					<table id="reservationsTable" class="cell-border" style="width:100%;">
 						<!--<thead>
 						</thead>
 						<tbody>

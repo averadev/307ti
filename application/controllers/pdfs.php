@@ -334,6 +334,10 @@ class Pdfs extends CI_Controller {
 		$this->generar( $html, $title, $saveFiler, $name, $idRes );
 		
 	}
+	
+	public function seeDocument(){
+		$file = $this->pdfs_db->getFiles($_GET['idFile']);
+	}
  
     private function generar( $html, $title, $saveFiler, $name, $idRes ) {
         $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);

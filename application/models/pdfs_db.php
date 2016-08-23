@@ -68,6 +68,15 @@ class pdfs_db extends CI_Model{
 		return  $this->db->get()->result();
 	}
 	
+	function getFiles($idFile){
+		$this->db->distinct();
+		$this->db->select('at1.pkAccTrxId, at1.Amount, tt.TrxSign, CONVERT(VARCHAR(19),at1.CrDt) as date, at1.Doc, tt.TrxTypeDesc');
+		$this->db->from('tblAccTrx at1 ');
+		$this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = at1.fkTrxTypeId', 'INNER');
+		$this->db->where('at1.fkAccid  = ', $idAcc);
+		return  $this->db->get()->result();
+	}
+	
 	public function insert($data, $table){
 		$this->db->insert($table, $data);
 	}

@@ -1196,6 +1196,13 @@ private function comprubaArray($valor, $array){
 		}
 	}
 	
+	public function getDocumentsReservation(){
+		if($this->input->is_ajax_request()) {
+			$file = $this->reservation_db->getDocumentsReservation($_POST['idRes']);
+			echo json_encode($file);
+		}
+	}
+	
 	public function modalAddFileReservation(){
 		if($this->input->is_ajax_request()) {
 			//$data['notesType'] = $this->reservation_db->selectTypeNotas();

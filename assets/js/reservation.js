@@ -3707,14 +3707,15 @@ function getFilesRes(id){
 			showLoading("#tableCFilesSelectedRes", false);
 	    },
 	    error: function(){
+			showLoading("#tableCFilesSelectedRes", false);
+			noResultsTable("tableCFilesSelectedRes", "tableCFilesSelectedRes", "Try again");
 	        alertify.error("Try again");
 	    }
 	});
 }
 
 function getDocumentsRes(id){
-	var url = "reservation/getFilesReservation";
-	//var div = "#tableCFilesSelectedRes";
+	var url = "reservation/getDocumentsReservation";
 	showLoading("#tableCDocumentsSelected", true);
 	$.ajax({
 	    data:{
@@ -3725,17 +3726,24 @@ function getDocumentsRes(id){
 	    dataType:'json',
 	    success: function(data){
 			if(data.length > 0){
-				drawTable2(data, "tableCDocumentsSelected", "deleteFileRes", "eliminar");
+				drawTable2(data, "tableCDocumentsSelected", "seeDocumentRes", "See");
 			}else{
-				noResultsTable("contentTableFileRes", "tableCDocumentsSelected", "No results found");
+				noResultsTable("tableCDocumentsSelected", "tableCDocumentsSelected", "No results found");
 			}
-			
 			showLoading("#tableCDocumentsSelected", false);
 	    },
 	    error: function(){
+			showLoading("#tableCDocumentsSelected", false);
+			noResultsTable("tableCDocumentsSelected", "tableCDocumentsSelected", "Try again");
 	        alertify.error("Try again");
 	    }
 	});
+}
+
+function seeDocumentRes(idFile){
+	//console.log(idFile);
+	var url = "Pdfs/seeDocument?idFile=" + idFile;
+	window.open(url);
 }
 
 function deleteFileRes(idFile){
