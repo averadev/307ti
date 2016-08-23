@@ -446,6 +446,10 @@
 										<div class="label">Clean</div>
 										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 									</a>
+									<a id="btnNewFrontExchange" class="btn btn-primary spanSelect">
+										<div class="label">New</div>
+										<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+									</a>
 								</div>
 							</div>
 						</fieldset>
@@ -653,7 +657,7 @@
 <div id="dialog-unit-hkConfig" title="Unit " style="display: none;"></div>
 <div id="dialog-edit-HKStatus" title="HK status" style="display: none;"></div>
 <div id="dialog-CreditLimit"  title="Credit Limit" style="display: none;"></div>
-
+<div id="dialog-ExchangeRate"  title="FrontDesk > New Exchange Rate" style="display: none;"></div>
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>reservation.js"></script>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>frontDesk.js"></script>

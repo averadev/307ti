@@ -1304,9 +1304,16 @@ private function comprubaArray($valor, $array){
 						$condicion = "pkResId = " . $id;
 						$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
 			}
-
+			if ($actual == "In House") {
+				$financiamiento = [
+							"checkIn"	=> $this->getToday(),
+						];
+				$condicion = "pkResId = " . $id;
+				$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
+			}
+			$dateCheckIn = $this->reservation_db->getCheckIn($id);
 			$CheckOut = $this->reservation_db->getCheckOut($id);
-			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $actual, "next" => $next, "dateCheckOut" => $CheckOut];
+			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $actual, "next" => $next, "dateCheckOut" => $CheckOut, "dateCheckIn" => $dateCheckIn];
 			echo json_encode($mensaje);
 		}else{
 			$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
@@ -1406,20 +1413,13 @@ public function nextStatusReservacion(){
 			];
 			$IdStatus = $this->reservation_db->propertyTable($peticion);
 			if ($IdStatus == 4) {
-				$CheckIn = $this->reservation_db->getCheckIn($idReserva);
+				//$CheckIn = $this->reservation_db->getCheckIn($idReserva);
 				$financiamiento = [
 					"fkPeopleStatusId"	=> 15,
 				];
 				$condicion = "fkResId = " . $idReserva. " and fkPeopleId =". $idPeople;
 				$afectados = $this->reservation_db->updateReturnId('tblRespeopleacc', $financiamiento, $condicion);
 				if ($afectados>0) {
-					if ($CheckIn == null) {
-						$financiamiento = [
-							"checkIn"	=> $this->getToday(),
-						];
-						$condicion = "pkResId = " . $idReserva;
-						$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
-					}
 					$dateCheckIn = $this->reservation_db->getCheckIn($idReserva);
 					$mensaje = ["mensaje"=>"It was successfully saved", "status" => 1, "CheckIn" => $dateCheckIn];
 					echo json_encode($mensaje);

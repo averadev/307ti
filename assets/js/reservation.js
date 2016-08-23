@@ -3358,6 +3358,9 @@ function nextStatusContractRes(){
 	    	if (data["dateCheckOut"]) {
 	    		$("#dateCheckOut").text("Check Out: "+ data["dateCheckOut"]);
 	    	}
+	    	if (data["dateCheckIn"]) {
+	    		$("#dateCheckIn").text("Check In: "+ data["dateCheckIn"]);
+	    	}
 	    	if (data['status'] == "In House") {
 	    		$( ".checkInPeople" ).prop( "disabled", false);
 	    	}else{

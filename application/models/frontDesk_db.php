@@ -605,6 +605,16 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->where('pkUnitHKStatusId = 5');
 		$this->db->update("tblUnitHKStatus", $data);
 	}
+	public function selectTypeGeneral($campos, $tabla){
+        $this->db->select($campos);
+        $this->db->from($tabla);
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
 	
 }
 //end model
+

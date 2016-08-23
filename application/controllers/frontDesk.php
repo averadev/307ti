@@ -123,7 +123,29 @@ class FrontDesk extends CI_Controller {
 			echo json_encode(array('items' => $data, 'total' => $total));
 		}
 	}
-	
+public function createNewExchangeRate(){
+	if($this->input->is_ajax_request()){	
+
+		$datos = $_POST['exchangeRate'];
+			
+		if ($datos) {
+			$ExchangeRate = [
+				"fkCurrencyFromId"	=> $datos['fromCurrency'],
+				"fkCurrencyToId"	=> $datos['toCurrency'],
+				"AmtFrom"			=> $datos['fromAmount'],
+				"AmtTo"				=> $datos['toAmount'],
+				"ValidFrom"			=> $datos['ValidFrom'],
+				"ynActive"			=> 1,
+				"CrBy"				=> $this->nativesessions->get('id'),
+				"CrDt"				=> $this->getToday()
+			];
+			$data = $this->frontDesk_db->insert($ExchangeRate,"tblExchangeRate");
+			$mensaje = ["mensaje"=>"insert Correctly", "status" => 1];
+			echo json_encode($mensaje);
+		}
+	}
+}
+
 	public function getWeekByYear(){
 		if($this->input->is_ajax_request()){
 			$data = $this->frontDesk_db->getWeekByYear($_POST['year']);
@@ -151,6 +173,15 @@ class FrontDesk extends CI_Controller {
 			$total = count($data);
 			$data = array_slice($data, $page, 25);
 			echo json_encode(array('items' => $data, 'total' => $total));
+		}
+	}
+
+	public function modalNewExchangeRate(){
+		if($this->input->is_ajax_request()){
+			$campos = "pkCurrencyId as ID, CurrencyDesc";
+			$tabla = "tblCurrency";
+			$data["creditCardType"] = $this->frontDesk_db->selectTypeGeneral($campos, $tabla);
+			$this->load->view('frontDesk/modalNewExchangeRate', $data);
 		}
 	}
 	
@@ -807,4 +838,10 @@ class FrontDesk extends CI_Controller {
 		$date = date( "m/d/Y", strtotime( $restarDay . " day", strtotime( $date ) ) ); 
 		return $date;
 	}
+		private function getToday(){
+		$hoy = getdate();
+		$strHoy = $hoy["year"]."-".$hoy["mon"]."-".$hoy["mday"] . " " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
+		return $strHoy;
+	}
 }
+

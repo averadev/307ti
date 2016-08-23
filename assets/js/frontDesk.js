@@ -12,7 +12,7 @@ var dialogHKConfig = modalHKConfig(0);
 var peopleDialogHK = addPeopleDialogHKC("");
 var unitDialogHK = addUnitDialogHKC();
 var chgStatusDialog = editHKStatus();
-
+var exchangeRate = null;
 
 var FloorplanFD;
 
@@ -20,6 +20,10 @@ var FloorplanFD;
 
 $('.searchFD').off();
 $('.searchFD').on('click', function(){ $('.orderRow').removeClass("active"); getFrontDesk("",1); });
+
+$("#btnNewFrontExchange").on('click', function(){
+	getModalNewExchangeRate();
+});
 
 $('#orderRow').off();
 $('.orderRow').on('click', function(){ orderRowFront(this); });
@@ -1302,4 +1306,80 @@ function showReservation(selector){
 	var idRes = $(selector).attr('reservation');
 	 var dialogEditReservation = modalEditReservation(idRes);
 	dialogEditReservation.dialog("open");
+}
+
+function getModalNewExchangeRate(){
+	var ajaxData =  {
+			url: "frontDesk/modalNewExchangeRate",
+			tipo: "html",
+			datos: {},
+			funcionExito : addHtmlExchangeRate,
+			funcionError: mensajeAlertify
+		};
+	var modalPropiedades = {
+		div: "dialog-ExchangeRate",
+		altura: 480,
+		width: 560,
+		onOpen: ajaxDATA,
+		onSave: saveExchangeRate,
+		botones :[{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       			saveExchangeRate();
+       			//$(this).dialog('close');
+       		}
+     	}]
+	};
+
+	if (exchangeRate!=null) {
+			exchangeRate.dialog( "destroy" );
+		}
+		exchangeRate = modalGeneral2(modalPropiedades, ajaxData);
+		exchangeRate.dialog( "open" );
+}
+
+function addHtmlExchangeRate(data){
+	$("#dialog-ExchangeRate").html(data);
+	$( "#validFromEx" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
+}
+
+function saveExchangeRate(){
+	
+	var ajaxData =  {
+		url: "frontDesk/createNewExchangeRate",
+		tipo: "json",
+		datos: {
+			exchangeRate: getDatosExchangeRate()
+		},
+		funcionExito : mensajeExchangeRate,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
+
+function getDatosExchangeRate(){
+	var datos = {};
+		datos.fromCurrency  = $("#fromCurrency").val();
+		datos.toCurrency =  1;//$("#toCurrency").val();
+		datos.fromAmount = $("#fromAmount").val();
+		datos.toAmount = $("#toAmount").val();
+		datos.ValidFrom = $("#validFromEx").val();
+	return datos
+}
+
+function mensajeExchangeRate(data){
+	exchangeRate.dialog('close');
+	if (data['mensaje']) {
+		alertify.success(data["mensaje"]);
+	}
 }
