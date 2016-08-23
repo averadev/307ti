@@ -90,11 +90,15 @@
 		</div>
 			<fieldset class="fieldset">
 				<legend>
-					Contract Data
+					Reservation Data
 				</legend>
 				<div class="containerContract">
 					<div class="row">
-						<div class="small-12 columns">
+						<div class="small-6 columns">
+							<a id="btnRefinancingReservation" class="button tiny">
+							<i class="fa fa-user-plus">Refinancing reservation</i></a>
+						</div>
+						<div class="small-6 columns">
 					<?php if ($statusNext) {
 					echo '<a id="btnNextStatusRes" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>'. "<span>Next Status: ".$statusNext.'</span></a>';
 					} ?>

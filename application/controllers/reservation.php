@@ -31,9 +31,7 @@ class Reservation extends CI_Controller {
 				"status" => true
 			];
 			$Contrato = isValidateReservation();
-			
 			if ($Contrato['valido']) {
-			
 				$idContrato = $this->createReservacion();
 				$this->insertOcupacion($idContrato);
 				$acc = $this->createAcc();
@@ -61,8 +59,8 @@ class Reservation extends CI_Controller {
 					"balance" => $this->reservation_db->selectPriceFin($idContrato)[0],
 					"status" => 1,
 					"idContrato" =>$idContrato,
-					"balanceFinal" => $balanceFinal]
-				);
+					"balanceFinal" => $balanceFinal
+				]);
 			}else{
 				$VALIDO['status'] = false;
 				echo  json_encode([
@@ -566,7 +564,7 @@ class Reservation extends CI_Controller {
 	}
 	
 	public function updateFinanciamiento(){
-		if($this->input->is_ajax_request()) {
+		/*if($this->input->is_ajax_request()) {
 			$financiamiento = [
 				"fkFactorId"	=> $_POST['factor'],
 				"MonthlyPmtAmt" => $_POST['pagoMensual']
@@ -580,7 +578,112 @@ class Reservation extends CI_Controller {
 				$mensaje = ["mesaje"=>"an error occurred"];	
 				echo json_encode($mensaje);
 			}
+		}*/
+		
+		if($this->input->is_ajax_request()) {
+			$IDContrato = $_POST['idReservation'];
+			$financiamiento = [
+				"fkFactorId"	=> $_POST['factor'],
+				"MonthlyPmtAmt" => $this->remplaceFloat($_POST['pagoMensual'])
+			];
+			$condicion = "fkResId = " . $IDContrato;
+			$afectados = $this->reservation_db->updateReturnId('tblResfin', $financiamiento, $condicion);
+			$this->insertTransaccionesCredito();
+			if ($afectados>0) {
+				$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados];
+				echo json_encode($mensaje);
+			}else{
+				$mensaje = ["mesaje"=>"ocurrio un error"];	
+				echo json_encode($mensaje);
+			}
 		}
+		
+	}
+	
+	private function insertTransaccionesCredito(){
+		$IDContrato = $_POST['idReservation'];
+		$pagoMensual = floatval($_POST['pagoMensual']);
+		$meses = intval($_POST['meses']);
+		$total = $pagoMensual * $meses;
+		$balanceActual = floatval($_POST['balanceActual']);
+		if ($balanceActual < $total) {
+			$cantidad = $total - $balanceActual;
+			$this->insertFinanceCostTransacction($cantidad);
+		}
+
+		$Dolares = $this->reservation_db->selectIdCurrency('USD');
+		$Florinres  = $this->reservation_db->selectIdCurrency('NFL');
+		$Euros  = $this->reservation_db->selectIdCurrency('EUR');
+		$tipoCambioFlorines  = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+		$tipoCambioEuros = $this->reservation_db->selectTypoCambio($Dolares, $Euros);
+		$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
+		$tipoCambioEuros = valideteNumber($tipoCambioEuros);
+
+		for ($i=0; $i < $meses; $i++) {
+			$fecha =  new DateTime($_POST['fecha']);
+			$fecha->modify("+".$i." month");
+			$fechaActual = $fecha->format('Y-m-d');
+			$precio = valideteNumber($_POST['pagoMensual']);
+			$euros = $precio * $tipoCambioEuros;
+			$florines = $precio * $tipoCambioFlorines;
+
+			$transaction = [
+				"fkAccid" 			=> $this->reservation_db->getACCIDByContracID($IDContrato),  //la cuenta
+				"fkTrxTypeId"		=> $this->reservation_db->getTrxTypeContracByDesc('SCP'),//$_POST['trxTypeId'], //lista
+				"fkTrxClassID"		=> $this->reservation_db->gettrxClassID('LOA'),//$_POST['trxClassID'], // vendedor
+				"Debit-"			=> 0,
+				"Credit+"			=> 0,
+				"Amount"			=> valideteNumber($precio), 
+				"AbsAmount"			=> valideteNumber($precio),
+				"Curr1Amt"			=> valideteNumber($euros),
+				"Curr2Amt"			=> valideteNumber($florines),
+				"Remark"			=> '', //
+				"Doc"				=> '',
+				"DueDt"				=> $fechaActual,
+				"ynActive"			=> 1,
+				"CrBy"				=> $this->nativesessions->get('id'),
+				"CrDt"				=> $this->getToday(),
+				"MdBy"				=> $this->nativesessions->get('id'),
+				"MdDt"				=> $this->getToday()
+			];
+			$this->reservation_db->insertReturnId('tblAccTrx', $transaction);
+		}
+	}
+	
+	private function insertFinanceCostTransacction($cantidad){
+		$IDContrato = $_POST['idReservation'];
+		$fecha =  new DateTime($_POST['fecha']);
+		$fechaActual = $fecha->format('Y-m-d');
+		$Dolares = $this->reservation_db->selectIdCurrency('USD');
+		$Florinres  = $this->reservation_db->selectIdCurrency('NFL');
+		$Euros  = $this->reservation_db->selectIdCurrency('EUR');
+		$tipoCambioFlorines  = $this->reservation_db->selectTypoCambio($Dolares, $Florinres);
+		$tipoCambioEuros = $this->reservation_db->selectTypoCambio($Dolares, $Euros);
+		$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
+		$tipoCambioEuros = valideteNumber($tipoCambioEuros);
+		$euros = $cantidad * $tipoCambioEuros;
+		$florines = $cantidad * $tipoCambioFlorines;
+
+		$transaction = [
+				"fkAccid" 			=> $this->reservation_db->getACCIDByContracID($IDContrato),
+				"fkTrxTypeId"		=> $this->reservation_db->getTrxTypeContracByDesc('FCost'),
+				"fkTrxClassID"		=> $this->reservation_db->gettrxClassID('LOA'),
+				"Debit-"			=> 0,
+				"Credit+"			=> 0,
+				"Amount"			=> valideteNumber($cantidad), 
+				"AbsAmount"			=> 0,
+				"Curr1Amt"			=> valideteNumber($euros),
+				"Curr2Amt"			=> valideteNumber($florines),
+				"Remark"			=> '', //
+				"Doc"				=> '',
+				"DueDt"				=> $fechaActual,
+				"ynActive"			=> 1,
+				"CrBy"				=> $this->nativesessions->get('id'),
+				"CrDt"				=> $this->getToday(),
+				"MdBy"				=> $this->nativesessions->get('id'),
+				"MdDt"				=> $this->getToday()
+			];
+			$this->reservation_db->insertReturnId('tblAccTrx', $transaction);
 	}
 	
 	public function createSemanaOcupacion($idContrato, $iniDate, $endDate){
@@ -1253,11 +1356,16 @@ public function nextStatusReservacion(){
 
 	public function modalFinanciamiento(){
 		if($this->input->is_ajax_request()) {
+			/*$idReservation = $_POST['idReservation'];
+			$data['precio'] = $this->reservation_db->selectPriceFin($idReservation);
+			$data['factores'] = $this->reservation_db->selectFactors();
+			$data['CostCollection'] = $this->reservation_db->selectCostCollection();
+			$this->load->view('reservations/reservationDialogFinanciamiento', $data);	*/
 			$idReservation = $_POST['idReservation'];
 			$data['precio'] = $this->reservation_db->selectPriceFin($idReservation);
 			$data['factores'] = $this->reservation_db->selectFactors();
 			$data['CostCollection'] = $this->reservation_db->selectCostCollection();
-			$this->load->view('reservations/reservationDialogFinanciamiento', $data);			
+			$this->load->view('contracts/contractDialogFinanciamiento', $data);
 		}
 	}
 	public function modalCreditLimit(){

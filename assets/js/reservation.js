@@ -38,8 +38,8 @@ $(document).ready(function(){
 		unidadResDialog.dialog( "open" );
 	});
 
-	$(document).off( 'click', '#btnRefinancingResevation');
-	$(document).on( 'click', '#btnRefinancingResevation', function () {
+	$(document).off( 'click', '#btnRefinancingReservation');
+	$(document).on( 'click', '#btnRefinancingReservation', function () {
 		var id = getValueFromTableSelectedRes("reservationsTable", 1);
 		var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
 		if( screen == "frontDesk" ){
@@ -147,9 +147,6 @@ $(document).ready(function(){
 		var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
 		var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
 		var statusRes = $('#editReservationStatus').attr( 'statusRes' );
-		console.log(accCode);
-		console.log(statusRes);
-		console.log($(this).attr('id'));
 		if(idAccColl != undefined){
 			if( accCode == "FDK" && statusRes != "In House" && $(this).attr('id') == "btNewTransAccRes" ){
 				alertify.error('You can not add transactions');
@@ -197,8 +194,6 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 			
        			precio = parseFloat(precio.replace("$", "").trim());
        			var creditLimit = getNumberTextInputRes("creditLimitResInput");
-				console.log(creditLimit);
-				console.log(precio);
        			if (creditLimit >= precio) {
        				createNewLimit();
        				$(this).dialog('close');
@@ -397,7 +392,6 @@ function cambiarCantidadPRes(monto){
 }
 
 function cambiarCantidadDERes(monto){
-	console.log(monto);
 	var seleccionado = $("input[name='especialDiscount']:checked").val();
 	var precioVenta = $("#precioVenta").val();
 	if (seleccionado == 'porcentaje') {
@@ -412,9 +406,7 @@ function cambiarCantidadDERes(monto){
 
 
 function createDialogReservation(addReservation) {
-	console.log($('#selectLanguageRes'));
 	var div = "#dialog-Reservations";
-	//console.log(div)
 	if (addReservation!=null) {
 	    	addReservation.dialog( "destroy" );
 	    }
@@ -617,8 +609,6 @@ function addUnidadResDialog(iniDate, unit){
 					var endDate = endDateRes.split("/");
 					endDate = endDate[2];
 					var frequency = "every Year";
-					console.log(iniDateRes);
-					console.log(endDateRes);
 	       			tablUnidadadesRes(unidades, frequency, intDate, endDate);
 	       			$(this).dialog('close');
 				}else{
@@ -914,7 +904,6 @@ function createNewReservation(){
 			var dayDif = date2.getTime() - date1.getTime();
 			var day = Math.round(dayDif/(1000 * 60 * 60 * 24));
 			showAlert(true,"Saving changes, please wait ....",'progressbar');
-			console.log(iniDateRes)
 			$.ajax({
 					data: {
 						idiomaID : $("#selectLanguageRes").val(),
@@ -944,7 +933,6 @@ function createNewReservation(){
 						day:day,
 						iniDate:iniDateRes,
 						endDate:endDateRes,
-						
 					},
 					type: "POST",
 					dataType:'json',
@@ -952,15 +940,10 @@ function createNewReservation(){
 				})
 				.done(function( data, textStatus, jqXHR ) {
 					showAlert(false,"Saving changes, please wait ....",'progressbar');
-					if (data['status']== 1) {
+					/*if (data['status']== 1) {
 						elem.resetForm();
 						var arrayWords = ["depositoEngancheRes", "precioUnidadRes", "precioVentaRes", "downpaymentRes"];
 						clearInputsByIdRes(arrayWords);
-						/*if (modalFinRes!=null) {
-				    		modalFinRes.dialog( "destroy" );
-				    	}
-				    	modalFinRes = modalFinResanciamientoRes();
-				        modalFinRes.dialog( "open" );*/
 						$('#dialog-Weeks').empty();
 						$('#tablePeopleResSelected tbody').empty();
 						$('#tableUnidadesResSelected tbody').empty();
@@ -972,8 +955,30 @@ function createNewReservation(){
 							$('#reservationstbody').empty();
 							getReservations();
 						}
+					}*/
+					console.log( data['status'] );
+					console.log( data['balance'].financeBalance );
+					if (data['status']== 1) {
+						elem.resetForm();
+						var arrayWords = ["depositoEngancheRes", "precioUnidadRes", "precioVentaRes", "downpaymentRes"];
+						clearInputsByIdRes(arrayWords);
+						if (data['balance'].financeBalance > 0 ) {
+							showModalFinRes(data['idContrato']);
+						}
+						$('#dialog-Weeks').empty();
+						$('#tablePeopleResSelected tbody').empty();
+						$('#tableUnidadesResSelected tbody').empty();
+						alertify.success(data['mensaje']);
+						var tabCurrent = $('#tab-general .active').attr('attr-screen');
+						if(tabCurrent == "frontDesk"){
+							getFrontDesk("",1);
+						}else{
+							$('#reservationstbody').empty();
+							getReservations();
+						}
+					}else{
+						alertify.error(data["mensaje"]);
 					}
-					
 				})
 				.fail(function( jqXHR, textStatus, errorThrown ) {
 					alertify.error("Try again");
@@ -1058,7 +1063,6 @@ function getValueTablePersonasRes(){
 			persona.primario = $(this).find('td').eq(4).find('input[name=peopleType1]').is(':checked'),
 			persona.beneficiario = $(this).find('td').eq(5).find('input[name=peopleType2]').is(':checked')
 			personas.push(persona);
-			console.log(i); 
 		}
 	});
 	return personas;
@@ -1161,8 +1165,6 @@ function getWeeksResDialog(unidades){
 				intDate = intDate[2];
 				var endDate = endDateRes.split("/");
 				endDate = endDate[2];
-				console.log(iniDateRes);
-							console.log(endDateRes);
        			//var primero = $("#firstYearWeeks").val();
        			//var ultimo = $("#lastYearWeeks").val();
        			tablUnidadadesRes(unidades, frequency, intDate, endDate);	
@@ -1594,7 +1596,6 @@ function getUnidadesRes(){
 		url: "reservation/getUnidades",
 		dataType:'json',
 		success: function(data){
-			console.log(data)
 			showLoading('#tblUnidadesRes',false);
 			if(data != null){
 				alertify.success("Found "+ data.items.length);
@@ -2168,8 +2169,6 @@ function getDatosReservation(id){
 	    url: "reservation/getDatosReservationById",
 	    dataType:'json',
 	    success: function(data){
-			console.log(id)
-			console.log(data);
 	
 			var c = parseFloat(data['CollectionCost']);
 	    	$("#CollectionCostRes").text(c);
@@ -2225,7 +2224,6 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 	    url: "reservation/getAccountsById",
 	    dataType:'json',
 	    success: function(data){
-			console.log(data)
 			if(typeInfo == "account"){
 				var reservation = data["reservation"];
 				var frontDesk = data["frontDesk"];
@@ -2426,7 +2424,6 @@ function drawTerminoFinanciamientoRes(data){
 	$("#cfEngancheRes").text(porEnganche);
 	$("#typeFinanceRes").text(data.FactorDesc);
 	$(".balanceAccount").text(balanceFinal);
-	console.log(balanceFinal);
 	$("#totalMonthlyPaymentRes").text(pagoMensual);
 
 }
@@ -2508,7 +2505,7 @@ function addHTMLModalFinRes(data){
 }
 
 function showModalFinRes(id){
-	var ajaxData =  {
+	/*var ajaxData =  {
 		url: "reservation/modalFinanciamiento",
 		tipo: "html",
 		datos: {
@@ -2542,11 +2539,56 @@ function showModalFinRes(id){
 		modalFin.dialog( "destroy" );
 	}
 	modalFin = modalGeneral2(modalPropiedades, ajaxData);
+	modalFin.dialog( "open" );*/
+	
+	console.log("entrooooooo");
+	
+	var ajaxData =  {
+		url: "reservation/modalFinanciamiento",
+		tipo: "html",
+		datos: {
+			idReservation: id
+		},
+		funcionExito : addHTMLModalFinRes,
+		funcionError: mensajeAlertify
+	};
+	var modalPropiedades = {
+		div: "dialog-FinanciamientoRes",
+		altura: maxHeight,
+		width: "70%",
+		onOpen: ajaxDATA,
+		onSave: createNewReservation,
+		botones :[{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       			var totaltoPay = getNumberTextString("totalPagarF");
+       			if (totaltoPay>0) {
+       				updateFinanciamientoRes(id);
+    				$(this).dialog('close');
+       			}else{
+       				alertify.error("Please Calculate the Monthly Payment");
+       			}
+       		}
+     	}]
+	};
+
+	if (modalFin!=null) {
+		modalFin.dialog( "destroy" );
+	}
+	modalFin = modalGeneral2(modalPropiedades, ajaxData);
 	modalFin.dialog( "open" );
+	
 }
 
 function updateFinanciamientoRes(id){
-	var fechaPP = $("#fechaPrimerPagoFRes").val();
+	/*var fechaPP = $("#fechaPrimerPagoFRes").val();
     var factor = $("#terminosFinanciamientoFRes").val();
     var pagoMensual = getArrayValuesColumnTableRes("tablePagosSelected", 3);
 	$.ajax({
@@ -2564,11 +2606,35 @@ function updateFinanciamientoRes(id){
 	    error: function(){
 	        alertify.error("Try again");
 	    }
-	});
+	});*/
+	var fechaPP = $("#fechaPrimerPagoF").val();
+    var factor = $("#terminosFinanciamientoF").val();
+    var pagoMensual = getArrayValuesColumnTable("tablePagosSelectedFin", 3)[0];
+    var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
+    var balanceActual = getNumberTextString("balanceFinanciarF");
+    var ajaxData =  {
+		url: "reservation/updateFinanciamiento",
+		tipo: "json",
+		datos: {
+			idReservation: id,
+	        factor:factor,
+	        pagoMensual: pagoMensual,
+	        meses : meses,
+	        fecha: fechaPP,
+	        balanceActual: balanceActual
+		},
+		funcionExito : afterUpdateFinanciamientoRes,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
+
+function afterUpdateFinanciamientoRes(data){
+	alertify.success(data['mensaje']);
 }
 
 function initEventosFinanciamientoRes(){
-	setDateRes("fechaPrimerPagoFRes");
+	/*setDateRes("fechaPrimerPagoFRes");
 	var palabras = $("#terminosFinanciamientoFRes option:selected").text();
 		palabras = palabras.split(",");
 		$("#numeroMesesFRes").text(palabras[0]);
@@ -2591,7 +2657,41 @@ function initEventosFinanciamientoRes(){
 		palabras = palabras.split(",");
 		$("#numeroMesesFRes").text(palabras[0]);
 		$("#tasaInteresFRes").text(palabras[1]);
+	});*/
+	
+	$( "#fechaPrimerPagoF" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
 	});
+	$('#fechaPrimerPagoF').val(getCurrentDate());
+	var palabras = $("#terminosFinanciamientoF option:selected").text();
+		palabras = palabras.split(",");
+		$("#numeroMesesF").text(palabras[0]);
+		$("#tasaInteresF").text(palabras[1]);
+
+	$( "#btnCalcularF" ).unbind( "click" );
+	$( "#btnCalcularF" ).click(function(){
+		var factor = $("#terminosFinanciamientoF option:selected").attr("code");
+		var factor = parseFloat(factor.replace(",", "."));
+		var pagoTotal = parseFloat($('#balanceFinanciarF').text().trim());
+		var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
+		var pagoMensual = parseFloat((pagoTotal*factor));
+		var pagoMensual = parseFloat(pagoMensual.toFixed(2));
+
+		$("#pagoMF").text(pagoMensual);
+		var cargo = getNumberTextInput("CargoCF");
+		var totalMensual = parseFloat(pagoMensual) + parseFloat(cargo);
+		$("#totalPagarF").text(totalMensual.toFixed(2));
+
+	});
+	$('#terminosFinanciamientoF').on('change', function() {
+		var palabras = $("#terminosFinanciamientoF option:selected").text();
+		palabras = palabras.split(",");
+		$("#numeroMesesF").text(palabras[0]);
+		$("#tasaInteresF").text(palabras[1]);
+	});
+	
+	
 }
 
 function setUnitiesContractPrueba(){
@@ -3335,9 +3435,6 @@ function opcionAccountRes(attrType){
        			limiteCredito = parseFloat(limiteCredito);
        			var nuevoCantidad  = getNumberTextInput("AmountAcc");
        			var nuevaAmount = nuevoCantidad + cantidad;
-				console.log(signo);
-				console.log(nuevaAmount);
-				console.log(limiteCredito);
        			if (signo == "1" && (nuevaAmount > limiteCredito)) {
        				alertify.error("Credit limit Exceeded");
        			}else{
