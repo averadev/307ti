@@ -89,6 +89,13 @@ class FrontDesk extends CI_Controller {
 		}
 	}
 	
+	public function getUnitForReservation(){
+		if($this->input->is_ajax_request()){
+			$data = $this->frontDesk_db->getUnitForReservation($_POST['unitId']);
+			echo json_encode(array('items' => $data,));
+		}
+	}
+	
 	/***************************************/
 	/*******HousekeepingConfiguration*******/
 	/***************************************/
@@ -120,7 +127,7 @@ class FrontDesk extends CI_Controller {
 	public function getWeekByYear(){
 		if($this->input->is_ajax_request()){
 			$data = $this->frontDesk_db->getWeekByYear($_POST['year']);
-			echo json_encode(array('items' => $data,));
+			echo json_encode(array('items' => $data));
 		}
 	}
 	

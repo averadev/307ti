@@ -450,7 +450,7 @@ function createTableLookUp(data){
 	
 	var existMoth = "";
 	var existYear = "";
-	console.log(items)
+	console.log(units)
 	
 	for (var j in dates) {
 		if(existYear != dates[j].year ){
@@ -487,7 +487,7 @@ function createTableLookUp(data){
 		$('#tableFrontDesk tbody').append(bodyHTML);
 		
 		for(j = 0;j<dates.length;j++){
-			bodyHTML="<td class='rightPanel emptyUnitsFront' id='" + i + "-" + dates[j].pkCalendarId + "' day='" + dates[j].Date + "' unit='" + itemUnit.unit + "'></td>";
+			bodyHTML="<td class='rightPanel emptyUnitsFront' id='" + i + "-" + dates[j].pkCalendarId + "' day='" + dates[j].Date + "' unit='" + itemUnit.unit + "'  unitId='" + itemUnit.pkUnitId + "'></td>";
 			$('#tableFrontDesk tbody #tr' + i).append(bodyHTML);
 		}
 		
@@ -1180,7 +1180,6 @@ function saveHKStatus(rowStatus){
 			chgStatusDialog.dialog( 'close' );
 		}
     });
-	
 }
 
 function generateReportFrontDesk(){
@@ -1236,9 +1235,57 @@ function createExcel(url){
 */
 function showNewReservation(selector){
 	var unit = $(selector).attr('unit');
-	var day = $(selector).attr('day');
+	var iniDate = $(selector).attr('day');
+	var unitId = $(selector).attr('unitId');
+	var div = "#table-frontDesk";
+	showLoading(div,true);
 	
-		var addReservation = null;
+	/*var delay=3000;
+	var a = 0;
+	var timer = setInterval(function(){ 
+		if(a == 2){
+			console.log("adios");
+			clearInterval(timer);
+		}else{
+			console.log("ciclando");
+			a++;
+		}
+	}, delay);*/
+	
+	$.ajax({
+		data:{
+			unitId:unitId
+		},
+   		type: "POST",
+       	url: "frontDesk/getUnitForReservation",
+		dataType:'json',
+		success: function(data){
+			showLoading(div,false);
+			if ( data.items.length > 0 ){
+				var addReservation = null;
+				var unidadResDialog = addUnidadResDialog();
+				addReservation = createDialogReservation(addReservation);
+				addReservation.dialog("open");
+				if (unidadResDialog!=null) {
+					unidadResDialog.dialog( "destroy" );
+				}
+				unidadResDialog = addUnidadResDialog(iniDate,data.items[0]);
+				unidadResDialog.dialog( "open" );
+			}else{
+				alertify.error('no unit found');
+			}
+		},
+		error: function(){
+			showLoading(div,false);
+			showAlert(true,"Error to open new reservation, try again later. ",'button',showAlert);
+		}
+    });
+	
+	//getUnitsReservation( unitId, day );
+	
+	//console.log(unitId)
+	
+		/*var addReservation = null;
 		var unidadResDialog = addUnidadResDialog();
 		addReservation = createDialogReservation(addReservation);
 		addReservation.dialog("open");
@@ -1246,8 +1293,9 @@ function showNewReservation(selector){
 			unidadResDialog.dialog( "destroy" );
 		}
 		unidadResDialog = addUnidadResDialog(day,unit);
-		unidadResDialog.dialog( "open" );
+		unidadResDialog.dialog( "open" );*/
 }
+
 
 function showReservation(selector){
 	//dialogEditContract.dialog('open');

@@ -222,6 +222,14 @@ Class frontDesk_db extends CI_MODEL
 		return  $this->db->get()->result();
 	}
 	
+	public function getUnitForReservation($id){
+		$this->db->select("u.pkUnitId, u.fkPropertyId, u.fkFloorPlanId, u.fkViewId, fp.MaxAdults, fp.MaxKids");
+		$this->db->from("tblUnit u");
+		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = u.fkFloorPlanId');
+		$this->db->where("u.pkUnitId = ", $id);
+		return  $this->db->get()->result();
+	}
+	
 	/*************** HousekeepingConfiguration******************/
 	
 	public function getHousekeepingConfiguration($filters){

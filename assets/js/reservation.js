@@ -529,7 +529,7 @@ function verifyLanguageRes(){
 	return value;
 }
 
-function addUnidadResDialog(arrivaDateUni, unit){
+function addUnidadResDialog(iniDate, unit){
 	var div = "#dialog-UnidadesRes";
 	dialog = $( "#dialog-UnidadesRes" ).dialog({
 		open : function (event){
@@ -550,17 +550,38 @@ function addUnidadResDialog(arrivaDateUni, unit){
 						show_icon: false,
 						direction: 1
 					});
-					if(arrivaDateUni != null){
-						$('#fromDateUnitRes').val(arrivaDateUni)
+					if(iniDate != null){
+						$('#fromDateUnitRes').val(iniDate)
+					}
+					if(unit != null){
+						var delay=1000;
+						var timer1 = setInterval(function(){ 
+							if( $('#propertyRes option').length > 1){
+								$('#propertyRes').val(unit.fkPropertyId);
+								clearInterval(timer1);
+							}
+						}, delay);
+						var timer2 = setInterval(function(){ 
+							if( $('#floorPlanUnitRes option').length > 1){
+								$('#floorPlanUnitRes').val(unit.fkFloorPlanId);
+								clearInterval(timer2);
+							}
+						}, delay);
+						var timer3 = setInterval(function(){ 
+							if( $('#viewUnitRes option').length > 1){
+								$('#viewUnitRes').val(unit.fkViewId);
+								clearInterval(timer3);
+							}
+						}, delay);
+						$('#guestsAdultRes').val(unit.MaxAdults);
+						$('#guestChildRes').val(unit.MaxKids);
 					}
 					$('#btnGetUnidadesRes').unbind('click');
 					$('#btnGetUnidadesRes').click(function(){
 						if($('#fromDateUnitRes').val().trim().length > 0 && $('#toDateUnitRes').val().trim().length > 0 ){
 							iniDateRes = $('#fromDateUnitRes').val();
 							endDateRes = $('#toDateUnitRes').val();
-							console.log(iniDateRes);
-							console.log(endDateRes);
-							getUnidadesRes(unit);
+							getUnidadesRes();
 						}else{
 							alertify.error("Choose dates for the reservation");
 						}
@@ -1552,7 +1573,7 @@ function selectMetodoPagoRes(){
 
 /****************Unit*****************/
 
-function getUnidadesRes(unit){
+function getUnidadesRes(){
 	showLoading('#tblUnidadesRes',true);
 	$.ajax({
 		data:{
@@ -1563,7 +1584,6 @@ function getUnidadesRes(unit){
 			toDate:$('#toDateUnitRes').val(),
 			floorPlan:$('#floorPlanUnitRes').val(),
 			view:$('#viewUnitRes').val(),
-			unit:unit
 		},
 		type: "POST",
 		url: "reservation/getUnidades",
