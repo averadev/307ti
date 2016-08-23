@@ -3202,7 +3202,6 @@ function nextStatusContractRes(){
 	});
 }
 function generalSelectsDefaultRes(data, div){
-	console.table(data);
      var select = '';
     for (var i = 0; i < data.length; i++) {
         select += '<option value="'+data[i].ID+'" Signo="'+data[i].TrxSign+'">';
@@ -3302,7 +3301,7 @@ function opcionAccountRes(attrType){
     	$('#AmountAcc').val("");
     	$('#documentAcc').val("");
     	$('#referenceAcc').val("");
-    	
+    	$("#tabletPaymentAccoun tbody").empty();
      }
 	});
 	return dialogo;
