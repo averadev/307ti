@@ -145,7 +145,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
     public function getPeopleReservation($string){
         $sql = "";
         $this->db->distinct();
-        $this->db->select('P.pkPeopleId as ID, RTRIM(P.Name) as Name, RTRIM(P.LName) AS lastName');
+        $this->db->select('PC.fkPeopleStatusId, P.pkPeopleId as ID, RTRIM(P.Name) as Name, RTRIM(P.LName) AS lastName');
         $this->db->select('RTRIM(AD.Street1) as address, PC.ynPrimaryPeople, PC.YnBenficiary');
         $this->db->from('tblResPeopleAcc PC');
         $this->db->join('tblPeople P', 'P.pkPeopleId = PC.fkPeopleId', 'left');
@@ -940,6 +940,19 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
     
+    public function getCheckIn($idReserva){
+        $this->db->select('checkIn');
+        $this->db->from('tblRes');
+        $this->db->where('pkResId', $idReserva);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->checkIn;
+        }
+    }
+
     public function gettrxConcept($string){
         $this->db->select('pkTrxConceptId');
         $this->db->from('tbltrxConcept');

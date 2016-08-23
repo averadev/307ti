@@ -163,6 +163,11 @@ $(document).ready(function(){
 		}
 	});
 	
+	$(document).on( 'change', '.checkInPeople', function () {
+		if(this.checked) {
+	    	updateStatusPeople();
+	    }
+	});
 
 $(document).on( 'click', '#btAddCreditLimitRes', function(){
 	var ajaxData =  {
@@ -690,7 +695,7 @@ function getReservations(){
 		success: function(data){
 			if( data.items ){
 				alertify.success("Found "+ data.length);
-				drawTable2(data.items,"reservationsTable","edit","editRes");
+				drawTable2(data.items,"reservationsTable","getDatailByIDRes","editRes");
 			}else{
 				noResultsTable("table-reservations", "reservationsTable", "no results found");
 			}
@@ -2112,6 +2117,62 @@ function drawTableSinHeadReservation(data, table){
     }
     $('#' + table).html(bodyHTML);
 }
+function drawTableSinHeadReservationPeople(data, table){
+
+	var status = $("#editReservationStatus").text().replace("Status: ", "");
+	if (status == "In House") {
+		var checkboxT = "<td><div class='rdoField'><input  type='checkbox' class='checkFilter checkInPeople'>";
+	 	checkboxT +="<label>Check In</label></div></td>";
+	 	var checkboxT2 = "<td><div class='rdoField'><input checked type='checkbox' class='checkFilter checkInPeople'>";
+	 	checkboxT2 +="<label>Check In</label></div></td>";
+	}else{
+		var checkboxT = "<td><div class='rdoField'><input checked disabled type='checkbox' class='checkFilter checkInPeople'>";
+	 	checkboxT += "<label>Check In</label></div></td>";
+	 	var checkboxT2 = "<td><div class='rdoField'><input disabled type='checkbox' class='checkFilter checkInPeople'>";
+	 	checkboxT2 += "<label>Check In</label></div></td>";
+	}
+	
+    var bodyHTML = '';
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+  		if (data[i].fkPeopleStatusId == 15) {
+  			bodyHTML += checkboxT2;
+  		}else{
+  			bodyHTML += checkboxT;
+  		}
+       	bodyHTML += "<td>" +data[i].ID + "</td>";
+        bodyHTML += "<td>" +data[i].Name + "</td>";
+        bodyHTML += "<td>" +data[i].lastName + "</td>";
+        bodyHTML += "<td>" +data[i].address + "</td>";
+        bodyHTML += "<td>" +data[i].ynPrimaryPeople + "</td>";
+        bodyHTML += "<td>" +data[i].YnBenficiary + "</td>";
+
+/*        for (var j in data[i]) {
+        	if (j == "fkPeopleStatusId") {
+        		if (data[i][j]== 15) {
+        			bodyHTML += "<td>" +checkboxT + "</td>";
+        		}else{
+        			bodyHTML += "<td>" +checkboxT2 + "</td>";
+        		}
+        		
+        	}else{
+        		bodyHTML+="<td>" + data[i][j] + "</td>";
+        	}
+            
+        };
+*/
+        bodyHTML+="</tr>";
+    }
+    $('#' + table).html(bodyHTML);
+
+/*     var select = '';
+    for (var i = 0; i < data.length; i++) {
+        select += '<option value="'+data[i].ID+'" Signo="'+data[i].TrxSign+'">';
+        select += data[i].TrxTypeDesc;
+        select+='</option>';
+    }
+    $("#"+div).html(select);*/
+}
 
 function getDatosReservation(id){
 	$.ajax({
@@ -2128,7 +2189,7 @@ function getDatosReservation(id){
 			var c = parseFloat(data['CollectionCost']);
 	    	$("#CollectionCostRes").text(c);
 			if(data["peoples"].length > 0){
-				drawTableSinHeadReservation(data["peoples"], "peoplesReservation");
+				drawTableSinHeadReservationPeople(data["peoples"], "peoplesReservation");
 			}
 	    	if(data["unities"].length > 0){
 				drawTableSinHeadReservation(data["unities"], "tableUnidadesReservation");
@@ -2164,7 +2225,7 @@ function addFunctionalityRes(){
 function tableOnclickRes(id){
 	$("#"+id).on("click", "tr", function(){
 		var idPeople = $(this).find("td").eq(0).text().trim();
-		showModalContractXD(idPeople);
+		//showModalContractXD(idPeople);
 	});
 }
 
@@ -3203,6 +3264,11 @@ function nextStatusContractRes(){
 	    url: "reservation/nextStatusReservation",
 	    dataType:'json',
 	    success: function(data){
+	    	if (data['status'] == "In House") {
+	    		$( ".checkInPeople" ).prop( "disabled", false);
+	    	}else{
+	    		$( ".checkInPeople" ).prop( "disabled", true);
+	    	}
 	    	$("#iNextStatus").removeClass("fa-spin");
 			$("#editReservationStatus").text("Status: "+data['status']);
 			$('#editReservationStatus').attr( 'statusRes', data['status'] );
@@ -3719,3 +3785,31 @@ function generateReportRes(id, selector){
 	}
 	window.open(url);
 }
+
+function updateStatusPeople(){
+	var id = getValueFromTableSelectedRes("peopleContract", 1);
+	var idReserva = getValueFromTableSelectedRes("reservationsTable", 1);
+	var ajaxData =  {
+		url: "reservation/updateStatusPeople",
+		tipo: "json",
+		datos: {
+			'idPeople': id,
+			'idReserva': idReserva
+		},
+		funcionExito : mensajeGeneral,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+	
+}
+
+function mensajeGeneral(data){
+	if (data['status'] == "1") {
+		alertify.success(data["mensaje"]);
+		var checkIn = data['CheckIn'];
+		$("#dateCheckIn").text("Check In: "+checkIn);
+	}else if (data['status'] == "0") {
+		alertify.error(data["mensaje"]);
+	}
+}
+

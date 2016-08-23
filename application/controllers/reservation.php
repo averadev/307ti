@@ -1132,7 +1132,6 @@ private function comprubaArray($valor, $array){
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
 			$id = $_GET['id'];
-			echo $id;
 			//$data['idTour'] = $this->reservation_db->selectIdTour($id);
 			$data['contract']= $this->reservation_db->getReservations(null,$id);
 			$data['flags'] = $this->reservation_db->selectFlags($id);
@@ -1155,6 +1154,7 @@ private function comprubaArray($valor, $array){
 			$IDAccount = $this->reservation_db->getACCIDByContracIDFDK($id);
 			$creditLimit = $this->reservation_db->getCreditLimitActual($IDAccount);
 			$financeBalance = $this->reservation_db->selectFinanceBalance($id);
+			$data['dateCheckIn'] = $this->reservation_db->getCheckIn($id);
 			$data['statusActual']= $actual;
 			$data['statusNext'] = $next;
 			$data['creditLimit'] = $creditLimit;
@@ -1272,6 +1272,46 @@ public function nextStatusReservacion(){
 				$mensaje = ["mesaje"=>"an error occurred"];	
 				echo json_encode($mensaje);
 			}		
+		}
+	}
+
+	public function updateStatusPeople(){
+		if($this->input->is_ajax_request()) {
+			$idReserva = $_POST['idReserva'];
+			$idPeople = $_POST['idPeople'];
+			$peticion = [
+				"tabla" 	=> 'tblRes',
+				"valor" 	=> 'fkStatusId',
+				"alias" 	=> 'ID',
+				"codicion"	=> 'pkResID',
+				"id"		=>	$idReserva
+			];
+			$IdStatus = $this->reservation_db->propertyTable($peticion);
+			if ($IdStatus == 4) {
+				$CheckIn = $this->reservation_db->getCheckIn($idReserva);
+				$financiamiento = [
+					"fkPeopleStatusId"	=> 15,
+				];
+				$condicion = "fkResId = " . $idReserva. " and fkPeopleId =". $idPeople;
+				$afectados = $this->reservation_db->updateReturnId('tblRespeopleacc', $financiamiento, $condicion);
+				if ($afectados>0) {
+					if ($CheckIn == null) {
+						$financiamiento = [
+							"checkIn"	=> $this->getToday(),
+						];
+						$condicion = "pkResId = " . $idReserva;
+						$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
+					}
+					$dateCheckIn = $this->reservation_db->getCheckIn($idReserva);
+					$mensaje = ["mensaje"=>"It was successfully saved", "status" => 1, "CheckIn" => $dateCheckIn];
+					echo json_encode($mensaje);
+				}else{
+					$mensaje = ["mesaje"=>"An Error Occurred", "status" => 0];	
+					echo json_encode($mensaje);
+				}	
+			}
+
+	
 		}
 	}
 	public function modalDepositDownpayment(){

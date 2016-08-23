@@ -22,12 +22,12 @@
 <div class="row headerDescription headerGeneral" style="padding: 8px;">
 	<div class="small-12 medium-12 large-8 columns"  >
 		<label class="headerDescriptionTitle small-12 columns" id="editContractTitle"><?php  echo "[".$contract[0]->Folio;?></label>
-				<label class="headerGeneral small-12 columns" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
+		<label class="headerGeneral small-12 columns" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
 		<label class="headerGeneral small-12 columns" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
-		<label class="headerGeneral small-6 columns" id="editContractTitle"><?php  echo "Expected Arrival: ". $contract[0]->arrivaDate;?></label>
-		<label class="headerGeneral small-6 columns" id="editContractTitle"><?php  echo "Check In: ";?></label>
-		<label class="headerGeneral small-6 columns" id="editContractTitle"><?php  echo "Expected Deperture: ".$contract[0]->depatureDate;?></label>
-		<label class="headerGeneral small-6 columns" id="editContractTitle"><?php  echo "Check Out: ";?></label>
+		<label class="headerGeneral small-6 columns"><?php  echo "Expected Arrival: ". $contract[0]->arrivaDate;?></label>
+		<label class="headerGeneral small-6 columns" id="dateCheckIn"><?php  echo "Check In: ". $dateCheckIn;?></label>
+		<label class="headerGeneral small-6 columns"><?php  echo "Expected Deperture: ".$contract[0]->depatureDate;?></label>
+		<label class="headerGeneral small-6 columns"><?php  echo "Check Out: ";?></label>
 
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
@@ -105,6 +105,7 @@
 									<th colspan="8" class="thColspan" >People</th>
 								</tr> 
 								<tr>
+									<th class="cellEdit" >Check In</th>
 									<th class="cellEdit" >ID</th>
 									<th class="cellGeneral">Name</th>
 									<th class="cellGeneral">Last Name</th>
