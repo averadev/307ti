@@ -1988,9 +1988,9 @@ function getDatosContractProvisionsRes(id){
 	console.log("Provisiones" + id);
 }
 function getDatosContractOcupationRes(id){
-	if ($("#tableCOccupationSelectedbodyRes").is(':empty')) {
+	//if ($("#tableCOccupationSelectedbodyRes").is(':empty')) {
 		getWeeksRes(id);	
-	}
+	//}
 }
 function getDatosContractDocuments(id){
 	getDocumentsRes(id);
@@ -2907,7 +2907,8 @@ function addProRes(){
 }
 
 function getWeeksRes(id){
-	var div = "#tableCOccupationSelectedbodyRes";
+	console.log(id);
+	var div = "#content-OccupationRes";
 	showLoading(div, true);
 	$.ajax({
 	    data:{
@@ -2917,8 +2918,13 @@ function getWeeksRes(id){
 	    url: "reservation/selectWeeksReservation",
 	    dataType:'json',
 	    success: function(data){
-	    	drawTableIdOcupacionRes(data,"tableCOccupationSelectedbodyRes");
-	    	//selectTableRes("tableCOccupationSelectedbodyRes");
+			if(data.length > 0){
+				//drawTableIdOcupacionRes(data,);
+				drawTable2(data,"tableCOccupationSelected", false, "");
+			}else{
+				noResultsTable(div, "tableCOccupationSelected", "No results found");
+			}
+	    	//
 			showLoading(div, false);
 	    },
 	    error: function(){
@@ -3806,7 +3812,7 @@ function pruebas(){
 }
 
 function drawTableIdOcupacionRes(data, table){
-	var primero = data[0].FirstOccYear;
+	/*var primero = data[0].FirstOccYear;
 	var last = data[0].LastOccYear;
 	var rango = last - primero;
 	var bodyHTML = '';
@@ -3823,7 +3829,8 @@ function drawTableIdOcupacionRes(data, table){
 			// 	bodyHTML+=	bodyHTML;
 			// }
         }
-    $('#' + table).html(bodyHTML);
+    $('#' + table).html(bodyHTML);*/
+	
 }
 
 function getRateRes(){

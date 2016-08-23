@@ -10,13 +10,14 @@ class Reservation_db extends CI_Model {
     function getReservations($filters, $id){
         $sql = "";
         $this->db->distinct();
-        $this->db->select("r.pkResId as ID, ( CONVERT(varchar(10),  r.folio ) + '-' +  CONVERT(varchar(10),  1 ) ) as Folio, (ot.OccTypeCode + '-' + CONVERT(varchar(10), r.folio ) + '-' + CONVERT(varchar(10), r.FirstOccYear ) ) as Confirmation_code, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name");
+        $this->db->select("r.pkResId as ID, rt.ResTypeDesc as Reservacion_type, ( CONVERT(varchar(10),  r.folio ) + '-' +  CONVERT(varchar(10),  1 ) ) as Folio, (ot.OccTypeCode + '-' + CONVERT(varchar(10), r.folio ) + '-' + CONVERT(varchar(10), r.FirstOccYear ) ) as Confirmation_code, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name");
         $this->db->select('ot.OccTypeDesc as Occ_type, fp.FloorPlanDesc as FloorPlan, v.ViewDesc as View_, s.SeasonDesc as Season, R.FirstOccYear, ES.StatusDesc');
         $this->db->select('r.CrBy as Create_by, r.CrDt as Create_date, r.MdBy as Modified_by, r.MdDt as Modified_date');
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
         $this->db->from('tblRes r');
        // $this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId');
+		$this->db->join('tblResType rt', 'rt.pkResTypeId = r.fkResTypeId');
 		$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResRelatedId or ri.fkResId = r.pkResId');
         $this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId');
        // $this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = r.pkResId');
@@ -24,7 +25,7 @@ class Reservation_db extends CI_Model {
         $this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId');
         $this->db->join('tblEmployee em', 'em.fkPeopleId = p.pkPeopleId', 'LEFT');
         $this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
-
+		
 		//$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
 		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
 		$this->db->join('tblStatusTypeStatus STS', 'STS.Sequence = r.fkStatusId and STS.fkStatusTypeId = 2');
@@ -794,17 +795,17 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
     
-    public function selectWeeksReservation($string){
-        $this->db->select("RI.pkResInvtId, RI.fkUnitId,RI.Intv, RI.FirstOccYear, RI.LastOccYear ");
-        $this->db->from('tblResInvt RI');
-        $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
-        $this->db->where('fkResId', $string);
-        return  $this->db->get()->result();
-        /*if($query->num_rows() > 0 ){
-            return $query->result();
-        }*/
+	public function selectWeeksReservation($id){
+        $this->db->select("ro.pkResOccId as ID, ro.OccYear as Year, ro.NightId, ri.Intv, CONVERT(VARCHAR(11),c.Date,106) as Date");
+        $this->db->from('tblResOcc ro');
+        $this->db->join('tblRes r', 'r.pkResId = ro.fkResId');
+        $this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId');
+		$this->db->join('tblResInvt ri', 'ri.pkResInvtId = ro.fkResInvtId');
+        $this->db->where('r.pkResId = ', $id);
+        $query = $this->db->get();
+        return $query->result();
     }
-    
+	
     public function selectPaymentType(){
         $this->db->select("T.pkTrxTypeId as ID, RTRIM(T.TrxTypeDesc) as Type");
         $this->db->from('tbltrxtype T');
