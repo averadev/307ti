@@ -2124,6 +2124,7 @@ function getDatosReservation(id){
 				contraTemp = data["reservation"][0];
 				$('td.folioAccount').text(contraTemp.Folio);
 				$('#editReservationStatus').attr( 'statusRes', contraTemp.StatusDesc );
+				//$('#editOccTypeCodeRes').text(contraTemp.Folio);
 			}
 			setHeightModal('dialog-Edit-Reservation');
 			addFunctionalityRes();
@@ -3261,6 +3262,9 @@ function opcionAccountRes(attrType){
        			limiteCredito = parseFloat(limiteCredito);
        			var nuevoCantidad  = getNumberTextInput("AmountAcc");
        			var nuevaAmount = nuevoCantidad + cantidad;
+				console.log(signo);
+				console.log(nuevaAmount);
+				console.log(limiteCredito);
        			if (signo == "1" && (nuevaAmount > limiteCredito)) {
        				alertify.error("Credit limit Exceeded");
        			}else{

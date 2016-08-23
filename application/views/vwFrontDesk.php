@@ -652,6 +652,7 @@
 <div id="dialog-people-hkConfig" title="People " style="display: none;"></div>
 <div id="dialog-unit-hkConfig" title="Unit " style="display: none;"></div>
 <div id="dialog-edit-HKStatus" title="HK status" style="display: none;"></div>
+<div id="dialog-CreditLimit"  title="Credit Limit" style="display: none;"></div>
 
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>reservation.js"></script>
