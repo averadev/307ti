@@ -1326,6 +1326,7 @@ function getModalNewExchangeRate(){
 	       	text: "Cancel",
 	       	"class": 'dialogModalButtonCancel',
 	       	click: function() {
+	       		
 	         	$(this).dialog('close');
 	       }
 	   	},{
@@ -1333,7 +1334,6 @@ function getModalNewExchangeRate(){
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			saveExchangeRate();
-       			//$(this).dialog('close');
        		}
      	}]
 	};
@@ -1351,26 +1351,38 @@ function addHtmlExchangeRate(data){
 		format: 'm/d/Y',
 		show_icon: false,
 	});
+	$('#validFromEx').val(getCurrentDate())
 }
 
 function saveExchangeRate(){
+	if($("#fromCurrency").val() == $("#toCurrency").val()){
+	       			alertify.error("Verify Data");
+	       			
+	       		}else{
+	       			
+	       			if ($("#fromAmount").val() && $("#toAmount").val() && $("#validFromEx").val()) {
+	       				alertify.success("saving");
+	       					var ajaxData =  {
+							url: "frontDesk/createNewExchangeRate",
+							tipo: "json",
+							datos: {
+								exchangeRate: getDatosExchangeRate()
+							},
+							funcionExito : mensajeExchangeRate,
+							funcionError: mensajeAlertify
+						};
+						ajaxDATA(ajaxData);
+	       			}else{
+	       				alertify.error("fill all filds")
+	       			}
+	       		}
 	
-	var ajaxData =  {
-		url: "frontDesk/createNewExchangeRate",
-		tipo: "json",
-		datos: {
-			exchangeRate: getDatosExchangeRate()
-		},
-		funcionExito : mensajeExchangeRate,
-		funcionError: mensajeAlertify
-	};
-	ajaxDATA(ajaxData);
 }
 
 function getDatosExchangeRate(){
 	var datos = {};
 		datos.fromCurrency  = $("#fromCurrency").val();
-		datos.toCurrency =  1;//$("#toCurrency").val();
+		datos.toCurrency =  $("#toCurrency").val();
 		datos.fromAmount = $("#fromAmount").val();
 		datos.toAmount = $("#toAmount").val();
 		datos.ValidFrom = $("#validFromEx").val();
