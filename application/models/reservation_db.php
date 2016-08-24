@@ -82,7 +82,7 @@ class Reservation_db extends CI_Model {
         $depurateDate = $filters['toDate'];
         $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(FP.FloorPlanDesc) as Floor_Plan, V.ViewDesc as View, F.pkFloorId as Floor');
         $this->db->select("(select TOP 1 c2.Intv from tblCalendar c2 where c2.Date = '" .$arrivaDate . "' ) as Week");
-        $this->db->select("(select TOP 1 c2.fkSeasonId from tblCalendar c2 where c2.Date = '" .$arrivaDate . "' ) as Season");
+        $this->db->select("(select TOP 1 SD.fkSeasonId from tblCalendar c2 inner join tblSeasonDate SD on c2.Date between SD.DateFrom and SD.DateTo where c2.Date = '" .$arrivaDate . "' ) as Season");
         $this->db->from('tblUnit U');
         $this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
         $this->db->join('tblProperty P', 'P.pkPropertyId = U.fkPropertyId', 'inner');
