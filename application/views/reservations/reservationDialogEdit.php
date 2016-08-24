@@ -269,7 +269,7 @@
 								</tr>
 								<tr>
 									<td>Balance</td>
-									<td class="balanceAccount"><?php echo floatval($financeBalance);?></td>
+									<td class="balanceAccount"><?php echo floatval($Balance);?></td>
 									<td></td>
 									<td></td>
 								</tr>

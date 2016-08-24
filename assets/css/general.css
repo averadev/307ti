@@ -1728,3 +1728,6 @@ select option {
 a#btnNextStatus , a#btnNextStatusRes{
     float: right;
 }
+.colorRED{
+	color: red;
+}

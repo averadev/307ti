@@ -1264,6 +1264,7 @@ private function comprubaArray($valor, $array){
 			$next = $this->reservation_db->selectNextStatusDesc2(intval($IdStatus)+1);
 			$actual = $this->reservation_db->selectNextStatusDesc2($IdStatus);
 			$IDAccount = $this->reservation_db->getACCIDByContracIDFDK($id);
+			$IDACC = $this->reservation_db->getACCIDByContracID($id);
 			$creditLimit = $this->reservation_db->getCreditLimitActual($IDAccount);
 			$financeBalance = $this->reservation_db->selectFinanceBalance($id);
 			$data['dateCheckIn'] = $this->reservation_db->getCheckIn($id);
@@ -1272,6 +1273,7 @@ private function comprubaArray($valor, $array){
 			$data['statusNext'] = $next;
 			$data['creditLimit'] = $creditLimit;
 			$data['financeBalance'] = $financeBalance;
+			$data['Balance'] = $this->reservation_db->selectBalance($IDACC);
 			$this->load->view('reservations/reservationDialogEdit', $data);
 		}
 	}
@@ -1322,7 +1324,15 @@ private function comprubaArray($valor, $array){
 			}
 			$dateCheckIn = $this->reservation_db->getCheckIn($id);
 			$CheckOut = $this->reservation_db->getCheckOut($id);
-			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $actual, "next" => $next, "dateCheckOut" => $CheckOut, "dateCheckIn" => $dateCheckIn];
+			//$balance = $this->reservation_db->selectBalance();
+			$mensaje = [
+				"mensaje"=>"save correctly",
+				"afectados" => $afectados,
+				"status" => $actual,
+				"next" => $next,
+				"dateCheckOut" => $CheckOut,
+				"dateCheckIn" => $dateCheckIn
+			];
 			echo json_encode($mensaje);
 		}else{
 			$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	

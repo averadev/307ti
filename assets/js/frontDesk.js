@@ -1394,4 +1394,13 @@ function mensajeExchangeRate(data){
 	if (data['mensaje']) {
 		alertify.success(data["mensaje"]);
 	}
+	var order = '', page = 0;
+	filters = {};
+		dates = getDates(["dateArrivalExchange","dateDepartureExchange","textIntervalExchange"]);
+		words = getWords(["textIntervalExchange"]);
+		options = {};
+		url = "frontDesk/getExchangeRate";
+	
+	
+	ajaxFrontDesk( url, filters, dates, words, options, order, page );
 }
