@@ -2228,7 +2228,6 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 				var reservation = data["reservation"];
 				var frontDesk = data["frontDesk"];
 				
-				
 				var acc = data["acc"];
 				//frontDesk = parsearFrontDesk(frontDesk);
 				//reservation = parsearFrontDesk(reservation);
@@ -2270,6 +2269,15 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 	        alertify.error("Try again");
 	    }
 	});
+}
+
+function verificarRED(status, balance){
+	if (status== "Status: In House") {
+		if (balance>0) {
+	    	$(".headerDescriptionTitle").addClass("colorRED");
+			$(".headerGeneral").addClass("colorRED");
+	    }
+	 }
 }
 
 function parsearSALERes(sales){
@@ -2423,7 +2431,7 @@ function drawTerminoFinanciamientoRes(data){
 	$("#cfPagoMensualRes").text(pagoMensual);
 	$("#cfEngancheRes").text(porEnganche);
 	$("#typeFinanceRes").text(data.FactorDesc);
-	$(".balanceAccount").text(balanceFinal);
+	//$(".balanceAccount").text(balanceFinal);
 	$("#totalMonthlyPaymentRes").text(pagoMensual);
 
 }
@@ -2460,6 +2468,11 @@ function setEventosEditarReservation(id){
 	$('.btnReportRes').on('click', function(){
 		generateReportRes(id, this);
 	});
+
+	var status = $("#editReservationStatus").text();
+	var balance = $("#tableReservationAccRes .balanceAccount").text().replace("$ ", "");
+	    balance = parseFloat(balance);
+	 verificarRED(status, balance);
 }
 
 function modalFinanciamientoRes() {
@@ -3363,6 +3376,10 @@ function nextStatusContractRes(){
 	    	}
 	    	if (data['status'] == "In House") {
 	    		$( ".checkInPeople" ).prop( "disabled", false);
+	    			var status = "Status: In House";
+					var balance = $("#tableReservationAccRes .balanceAccount").text().replace("$ ", "");
+					    balance = parseFloat(balance);
+					 verificarRED(status, balance);
 	    	}else{
 	    		$( ".checkInPeople" ).prop( "disabled", true);
 	    	}

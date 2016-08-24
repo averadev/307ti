@@ -344,6 +344,20 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->Folio;
         }
     }
+
+    public function selectBalance($id){
+        $this->db->select('sum(TT.TrxSign * AT.Amount) as Balance');
+        $this->db->from('tblacctrx AT');
+        $this->db->join('tblTrxType TT', 'AT.fkTrxTypeId = TT.pkTrxTypeId');
+        $this->db->where('AT.fkaccID', $id);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->Balance;
+        }
+    }
     
     public function getTerminosVentaReservation($id){
         $this->db->select("R.ListPrice, R.PackPrice, R.SpecialDiscount, R.Deposit, R.ClosingFeeAmt, R.NetSalePrice");
