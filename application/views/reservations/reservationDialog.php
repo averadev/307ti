@@ -20,7 +20,14 @@
                     </div>
                     <div class="small-9 columns">
 						<div class="caja" >
-							<select required class="input-group-field round" id="selectLanguageRes" form="saveDataReservation"></select>
+							<select required class="input-group-field round" id="selectLanguageRes" form="saveDataReservation">
+								<?php
+                                      foreach($languages as $item){?>
+                                          <option value="<?php echo $item->ID; ?>"><?php echo $item->LanguageDesc; ?></option>
+                                          <?php
+                                      }
+                                ?>
+							</select>
 						</div>
                     </div>
                 </div>
@@ -100,6 +107,13 @@
 						<label  class="text-left">Occupancy Type</label>
 						<div class="caja" >
 							<select id="occupancySalesRes" class="input-group-field round">
+							<?php
+								foreach($OccupancyTypes as $item){
+									?>
+									<option value="<?php echo $item->ID; ?>"><?php echo $item->OccTypeDesc; ?></option>
+									<?php
+								}
+							?>
 							</select>
 						</div>
                     </div>

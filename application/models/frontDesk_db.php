@@ -64,7 +64,7 @@ Class frontDesk_db extends CI_MODEL
 	* obtiene la lista de tblStatusType
 	**/
 	public function getFrontDesk($filters){
-		
+		$this->db->distinct();
 		$iniDate = "(SELECT top 1 CONVERT(VARCHAR(11),c2.Date,106)";
 		$iniDate = $iniDate . " from tblResOcc ro2";
 		$iniDate = $iniDate . " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId";
@@ -152,8 +152,10 @@ Class frontDesk_db extends CI_MODEL
 		if($filters['order'] != false){
 			$this->db->order_by($filters['order']);
 		}
+		$this->db->order_by('u.UnitCode ASC');
 		$this->db->order_by('ro.fkResId ASC');
 		$this->db->order_by('tblCalendar.pkCalendarId ASC');
+		
 		return  $this->db->get()->result();
 	}
 
@@ -556,6 +558,8 @@ Class frontDesk_db extends CI_MODEL
 				$date = $filters['dates']['textIntervalExchange'];
 				$this->db->where("CONVERT(VARCHAR(11),er.ValidFrom,101) >= DATEADD(day,-10,CONVERT(VARCHAR(10),'" . $date . "',101)) and CONVERT(VARCHAR(11),er.ValidFrom,101) <= CONVERT(VARCHAR(10),'" . $date . "',101)");
 			}
+		}else{
+			$this->db->where(" ( SELECT TOP 1 er2.CrDt from tblExchangeRate er2 where (er2.fkCurrencyFromId = er.fkCurrencyFromId and er2.fkCurrencyToId = er.fkCurrencyToId) ORDER BY er2.CrDt DESC ) = er.CrDt ");
 		}
 		return  $this->db->get()->result();
 	}

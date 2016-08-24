@@ -193,7 +193,7 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
        	url: url,
 		dataType:'json',
 		success: function(data){
-			console.log(data);
+			//console.log(data);
 			//var section = $('.SectionFrontDesk:checked').val();
 			var section = $('#typeSearchFrontDesk').val();
 			switch(section) {
@@ -454,7 +454,7 @@ function createTableLookUp(data){
 	
 	var existMoth = "";
 	var existYear = "";
-	console.log(units)
+	console.log(items)
 	
 	for (var j in dates) {
 		if(existYear != dates[j].year ){

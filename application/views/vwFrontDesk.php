@@ -395,7 +395,7 @@
 							<div class="row">
 								<!-- Arrival Date -->
 								<div class="small-12 large-3 columns">
-									<label id="alertArrivalFront" class="text-left">Arrival Date
+									<label id="alertArrivalFront" class="text-left"> Initial Date
 										<div class="input-group date" id="frontArrivalDate" >
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
 											<input type="text" id="dateArrivalExchange" class="txtSearch input-group-field roundRight" readonly/>
@@ -404,7 +404,7 @@
 								</div>
 								<!-- Departure Date -->
 								<div class="small-12 large-3 columns">
-									<label id="alertDepartureFront" class="text-left">Departure Date
+									<label id="alertDepartureFront" class="text-left">End Date
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
 											<input type="text" id="dateDepartureExchange" class="txtSearch input-group-field roundRight" readonly/>
