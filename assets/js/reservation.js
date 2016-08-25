@@ -166,6 +166,7 @@ $(document).ready(function(){
 	    }
 	});
 
+$(document).off( 'click', '#btAddCreditLimitRes');
 $(document).on( 'click', '#btAddCreditLimitRes', function(){
 	var ajaxData =  {
 			url: "reservation/modalCreditLimit",

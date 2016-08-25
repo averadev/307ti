@@ -16,34 +16,35 @@ $(document).ready(function(){
 
 	initDatesContract();
 
-
-$(document).on( 'click', '#newContract', function () {
-	showModalContract();
-});
-$(document).on( 'click', '#btnRefinancingContract', function () {
-	var id = getValueFromTableSelected("contracts", 1);
-	showModalFin(id);
-});
-$(document).on( 'click', '#btnAddPeople', function () {
-	peopleDialog = addPeopleDialog();
-	peopleDialog.dialog( "open" );
-});
-
-	 $(document).on( 'click', '#btnAddUnidades', function () {
-	        if (unidadDialog!=null) {
-	    		unidadDialog.dialog( "destroy" );
-	    	}
-	    	unidadDialog = addUnidadDialog();
-	        unidadDialog.dialog( "open" );
-	        
-	    });
- 	
- 	$(document).on( 'click', '#btnNewSeller', function () {
- 		if (modalVendedores!=null) {
-	    		modalVendedores.dialog( "destroy" );
-	    	}
-	    	modalVendedores = modalSellers();
-	        modalVendedores.dialog( "open" );
+	$(document).off( 'click', '#newContract');
+	$(document).on( 'click', '#newContract', function () {
+		showModalContract();
+	});
+	$(document).off( 'click', '#btnRefinancingContract');
+	$(document).on( 'click', '#btnRefinancingContract', function () {
+		var id = getValueFromTableSelected("contracts", 1);
+		showModalFin(id);
+	});
+	$(document).off( 'click', '#btnAddPeople');
+	$(document).on( 'click', '#btnAddPeople', function () {
+		peopleDialog = addPeopleDialog();
+		peopleDialog.dialog( "open" );
+	});
+	$(document).off( 'click', '#btnAddUnidades');
+	$(document).on( 'click', '#btnAddUnidades', function () {
+		if (unidadDialog!=null) {
+			unidadDialog.dialog( "destroy" );
+		}
+		unidadDialog = addUnidadDialog();
+		unidadDialog.dialog( "open" );
+	});
+	$(document).off( 'click', '#btnNewSeller'); 	
+	$(document).on( 'click', '#btnNewSeller', function () {
+		if (modalVendedores!=null) {
+			modalVendedores.dialog( "destroy" );
+		}
+		modalVendedores = modalSellers();
+		modalVendedores.dialog( "open" );
 	 });
 
  	 $(document).on( 'click', '#btnNewFile', function () {

@@ -21,6 +21,7 @@ var FloorplanFD;
 $('.searchFD').off();
 $('.searchFD').on('click', function(){ $('.orderRow').removeClass("active"); getFrontDesk("",1); });
 
+$(document).off( 'click', '#btnNewFrontExchange');
 $("#btnNewFrontExchange").on('click', function(){
 	getModalNewExchangeRate();
 });
@@ -193,7 +194,6 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
        	url: url,
 		dataType:'json',
 		success: function(data){
-			console.log(data);
 			//var section = $('.SectionFrontDesk:checked').val();
 			var section = $('#typeSearchFrontDesk').val();
 			switch(section) {
@@ -1340,9 +1340,9 @@ function getModalNewExchangeRate(){
 
 	if (exchangeRate!=null) {
 			exchangeRate.dialog( "destroy" );
-		}
-		exchangeRate = modalGeneral2(modalPropiedades, ajaxData);
-		exchangeRate.dialog( "open" );
+	}
+	exchangeRate = modalGeneral2(modalPropiedades, ajaxData);
+	exchangeRate.dialog( "open" );
 }
 
 function addHtmlExchangeRate(data){
@@ -1351,7 +1351,7 @@ function addHtmlExchangeRate(data){
 		format: 'm/d/Y',
 		show_icon: false,
 	});
-	$('#validFromEx').val(getCurrentDate())
+	$('#validFromEx').val(getCurrentDate());
 }
 
 function saveExchangeRate(){
