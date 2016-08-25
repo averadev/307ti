@@ -427,9 +427,9 @@ function createDialogReservation(addReservation) {
 					getOpctionOccType();
 				});
 				
-				$(document).on( 'change', '#RateRes', function () {
+				/*$(document).on( 'change', '#RateRes', function () {
 					setValueUnitPriceRes();
-				});
+				});*/
 	    	});
 		},
 		autoOpen: false,
@@ -826,7 +826,7 @@ function deleteElementTableRes(div){
 function deleteElementTableUnidadesRes(div){
 	$("#"+div+" tr").on("click", "button", function(){
 		$(this).closest("tr").remove();
-		setValueUnitPriceRes();
+		setValueUnitPriceRes(null);
 	});
 }
 function deleteElementTableFuncionRes(div, funcion){
@@ -967,8 +967,6 @@ function createNewReservation(){
 							getReservations();
 						}
 					}*/
-					console.log( data['status'] );
-					console.log( data['balance'].financeBalance );
 					if (data['status']== 1) {
 						elem.resetForm();
 						var arrayWords = ["depositoEngancheRes", "precioUnidadRes", "precioVentaRes", "downpaymentRes"];
@@ -1467,16 +1465,27 @@ function getValueFromTableSelectedRes(id, posicion){
 	return array.eq(posicion).text().trim();
 }
 
-function setValueUnitPriceRes(){
+function setValueUnitPriceRes(data){
+	
 	var value = $('#RateRes').val();
 	var date1 = new Date(iniDateRes);
 	var date2 = new Date(endDateRes);
 	var dayDif = date2.getTime() - date1.getTime();
 	var day = Math.round(dayDif/(1000 * 60 * 60 * 24));
-	var precio = value * day;
+	var precio = 0;
+	if(data != null){
+		var seasonDay = data.seasonDay;
+		for( j = 0; j<day; j++ ){
+			var seasonD = seasonDay[j];
+			precio =  precio + seasonD.RateAmtNight;
+		}
+	}
+	
+	
+	/*var precio = value * day;*/
 	$("#precioUnidadRes").val(precio);
 	$("#precioVentaRes").val(precio);
-	updateBalanceFinalRes();
+	//updateBalanceFinalRes();
 }
 
 function getDatailByIDRes(id){
@@ -1614,6 +1623,8 @@ function getUnidadesRes(){
 			if(data != null){
 				alertify.success("Found "+ data.items.length);
 				drawTable(data.items, 'add', "details", "Unidades");
+				$('#newReservation').data( 'season1', data.season[0].Season );
+				$('#newReservation').data( 'season2', data.season[0].Season2 );
 			}else{
 				alertify.error("No records found");
 			}
@@ -2482,9 +2493,6 @@ function setEventosEditarReservation(id){
 	$('.btnReportRes').on('click', function(){
 		generateReportRes(id, this);
 	});
-<<<<<<< HEAD
-	
-	
 	$('#btnDeleteDocRes').off('click');
 	$('#btnDeleteDocRes').on('click', function(){
 		//var idDoc = $('')
@@ -2505,13 +2513,10 @@ function setEventosEditarReservation(id){
 			alertify.error('You must select a document');
 		}
 	});
-=======
-
 	var status = $("#editReservationStatus").text();
 	var balance = $("#tableReservationAccRes .balanceAccount").text().replace("$ ", "");
 	    balance = parseFloat(balance);
 	 verificarRED(status, balance);
->>>>>>> origin/master
 }
 
 function modalFinanciamientoRes() {
@@ -3909,19 +3914,24 @@ function getRateRes(){
 			id:unitReservacion[0].id,
 			season:unitReservacion[0].season,
 			occupancy:$('#occupancySalesRes').val(),
-			occYear:occYear
+			occYear:occYear,
+			intDate:iniDateRes,
+			endDate:endDateRes,
+			//season: $('#newReservation').data( 'season1' ),
+			season2: $('#newReservation').data( 'season2' ),
+			
 		},
 	    type: "POST",
 	    url: "reservation/getRateType",
 	    dataType:'json',
 	    success: function(data){
-			if(data.length > 0){
-				generalSelectsDefault(data, "RateRes");
-				setValueUnitPriceRes();
+			if(data.items.length > 0){
+				generalSelectsDefault(data.items, "RateRes");
+				$("#RateRes").attr('disabled', false);
+				setValueUnitPriceRes(data);
 			}else{
 				alertify.error("no price list found");
 			}
-			$("#RateRes").attr('disabled', false);
 	    },
 	    error: function(){
 	        alertify.error("Try again");
