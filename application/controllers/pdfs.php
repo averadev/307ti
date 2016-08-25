@@ -337,6 +337,20 @@ class Pdfs extends CI_Controller {
 	
 	public function seeDocument(){
 		$file = $this->pdfs_db->getFiles($_GET['idFile']);
+		if( count($file) > 0 ){
+			//echo $file[0]->docPath;
+			//$filee = "C:/xampp/htdocs/307ti/assets/pdf/";
+			$mi_pdf = fopen ($file[0]->docPath, "r");
+			if (!$mi_pdf) {
+				echo "<p>You can not open the file for reading</p>";
+				exit;
+			}
+			header('Content-type: application/pdf');
+			fpassthru($mi_pdf); // Esto hace la magia
+			fclose ($archivo);
+		}else{
+			echo "No documents found";
+		}
 	}
  
     private function generar( $html, $title, $saveFiler, $name, $idRes ) {
@@ -456,9 +470,7 @@ class Pdfs extends CI_Controller {
         fpassthru($mi_pdf); // Esto hace la magia
         fclose ($archivo);*/
 		
-		
 		//$this->generar2( $html, $title, $nombre_archivo, $name );
-		
     }
 	
 	private function getonlyDate($restarDay){

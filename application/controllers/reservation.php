@@ -1223,7 +1223,9 @@ private function comprubaArray($valor, $array){
 	
 	public function modal(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('reservations/reservationDialog');
+			$datos['languages'] = $this->reservation_db->getLanguages();
+			$datos['OccupancyTypes'] = $this->reservation_db->getOccupancyTypes();
+			$this->load->view('reservations/reservationDialog', $datos);
 		}
 	}
 	
@@ -1456,6 +1458,21 @@ public function nextStatusReservacion(){
 			$data["paymentTypes"] = $this->reservation_db->selectPaymentType();
 			$data["creditCardType"] = $this->reservation_db->selectTypeGeneral($campos, $tabla);
 			$this->load->view('reservations/dialogDepositDownpayment', $data);
+		}
+	}
+	
+	public function deleteDocumentRes(){
+		if($this->input->is_ajax_request()) {
+			$update = array(
+				'ynActive'		=>	0,
+			);
+			$condicion = "pkDocId = " . $_POST['idDoc'];
+			$data = $this->reservation_db->updateReturnId( 'tblDoc', $update, $condicion );
+			if( $data ){
+				echo json_encode( array( 'success' => true, 'message' => "the document was removed") );
+			}else{
+				echo json_encode( array( 'success' => true, 'false' => "The document could not be deleted") );
+			}
 		}
 	}
 	

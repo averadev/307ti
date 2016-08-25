@@ -103,7 +103,7 @@
 					echo '<a id="btnNextStatusRes" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>'. "<span>Next Status: ".$statusNext.'</span></a>';
 					} ?>
 						</div>
-						<table id="peopleContract" width="100%">
+						<table id="peopleContract" width="100%" class="cell-border" >
 							<thead>
 								<tr class="trColspan" >
 									<th colspan="8" class="thColspan" >People</th>
@@ -127,7 +127,7 @@
 				<div class="containerContract" style="margin-top:10px">
 				
                     <div class="row">
-                        <table id="tableUnidades" width="100%">
+                        <table id="tableUnidades" width="100%" class="cell-border">
                             <thead>
 								<tr class="trColspan">
 									<th colspan="9">Units</th>
@@ -157,7 +157,7 @@
 					Terms of sale
 				</legend>
 				<div class="row" id="editTermsOfSale" style="display:none;">
-					<table class="tableAccountResult">
+					<table class="tableAccountResult" class="cell-border">
 						<thead>
 							<tr class="trColspan">
 								<th colspan="4">Results</th>
@@ -206,7 +206,7 @@
 					 Financig Terms
 				</legend>
 				<div class="row" id="editTermsOfFinancing" style="display:none;">
-					<table class="tableAccountResult">
+					<table class="tableAccountResult" class="cell-border">
 						<thead>
 							<tr class="trColspan">
 								<th colspan="4" class="colorCrema">Results</th>
@@ -259,7 +259,7 @@
 			<div id="tab-RARes" class="large-12 columns tab-modal" style="display:inline;">
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
-						<table class="tableAccountResult" id="tableReservationAccRes" style="margin-top:16px;">
+						<table class="tableAccountResult" id="tableReservationAccRes" style="margin-top:16px;" class="cell-border">
 							<tbody>
 								<tr>
 									<td >Folio Reservation</td>
@@ -291,7 +291,7 @@
 				</div>
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns table-section2" style="padding:0;" >
-						<table id="tableAccountSeller" width="100%" style="min-height:150px;">
+						<table id="tableAccountSeller" width="100%" style="min-height:150px;" class="cell-border" >
 							<thead>
 								<!--<tr class="trColspan" >
 									<th colspan="9" class="thColspan" >Seller</th>
@@ -319,7 +319,7 @@
 			<div id="tab-RAFrontDesk" class="large-12 columns tab-modal" style="display:none;">
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
-						<table class="tableAccountResult" id="tableFrontDeskAccRes" style="margin-top:16px;">
+						<table class="tableAccountResult" id="tableFrontDeskAccRes" style="margin-top:16px;" class="cell-border" >
 							<tbody>
 								<tr>
 									<td >Folio Reservation</td>
@@ -351,7 +351,7 @@
 				</div>
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns table-section2" style="padding:0;" >
-						<table id="tableAccountLoan" width="100%" style="min-height:150px;">
+						<table id="tableAccountLoan" width="100%" style="min-height:150px;" class="cell-border">
 							<thead>
 								<tr>
 									<th class="cellGeneral">Id</th>
@@ -395,7 +395,7 @@
 			<fieldset class="fieldset">
 				<div class="containerContract">
 					<div class="row">
-						<table id="tableSellerSelected" width="100%" style="min-height:250px;">
+						<table id="tableSellerSelected" width="100%" style="min-height:250px;" class="cell-border">
 							<thead>
 								<tr class="trColspan" >
 									<th colspan="8" class="thColspan" >Sales People</th>
@@ -427,7 +427,7 @@
 				
 				<div class="containerContract">
 					<div class="row">
-						<table id="tableProvisionsSelected" width="100%" style="min-height:250px;">
+						<table id="tableProvisionsSelected" width="100%" style="min-height:250px;" class="cell-border">
 							<thead>
 								<tr class="trColspan" >
 									<th colspan="8" class="thColspan" >Gifts</th>
@@ -457,7 +457,7 @@
 			<fieldset class="fieldset">
 				<div class="containerContract" id="content-OccupationRes">
 					<div class="row">
-						<table id="tableCOccupationSelected" width="100%">
+						<table id="tableCOccupationSelected" width="100%" class="cell-border" >
 							<thead>
 								<tr class="trColspan" >
 									<th colspan="8" class="thColspan" >Occupancy</th>
@@ -484,7 +484,7 @@
 			<fieldset class="fieldset">
 				<div class="containerContract">
 					<div class="row">
-						<table id="tableCDocumentsSelected" width="100%" >
+						<table id="tableCDocumentsSelected" width="100%" class="cell-border" >
 							<thead>
 								<tr class="trColspan" >
 									<th colspan="8" class="thColspan" >Documents</th>
@@ -503,6 +503,12 @@
 					</div>
 				</div>
 			</fieldset>
+			<div class="small-12 medium-12 large-12 columns" > 
+				<a id="btnDeleteDocRes" class="btn btn-primary btn-Search">
+					<div class="label">Delete Document</div>
+					<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+				</a>
+			</div>
 		</form>
 	</div>
 	<!-- tabs notas -->
@@ -511,7 +517,7 @@
 			<fieldset class="fieldset editBox">
 				<div class="containerContract">
 					<div class="row">
-						<table id="tableCNotesSelected" width="100%">
+						<table id="tableCNotesSelected" width="100%" class="cell-border">
 							<thead>
 								<tr class="trColspan" >
 									<th colspan="8" class="thColspan" >Notes</th>
@@ -543,7 +549,7 @@
 				<div class="containerContract">
 					<div class="row">
 						<div class="small-12 medium-6 large-6 columns">
-							<table id="tableFlagsListRes" width="100%" style="min-height:250px;">
+							<table id="tableFlagsListRes" width="100%" style="min-height:250px;" class="cell-border">
 								<thead>
 									<tr class="trColspan" >
 										<th colspan="3" class="thColspan" >List of flags</th>
@@ -558,7 +564,7 @@
 							</table>
 						</div>
 						<div class="small-12 medium-6 large-6 columns">
-							<table id="tableCNotesAssignedSelected" width="100%">
+							<table id="tableCNotesAssignedSelected" width="100%" class="cell-border">
 								<thead>
 									<tr class="trColspan" >
 										<th colspan="4" class="thColspan" >Assigned flags</th>
@@ -587,7 +593,7 @@
 			<fieldset class="fieldset">
 				<div class="containerContract" id="contentTableFileRes">
 					<div class="row">
-						<table id="tableCFilesSelectedRes" width="100%" >
+						<table id="tableCFilesSelectedRes" width="100%" class="cell-border" >
 							<thead>
 								<tr class="trColspan" >
 									<th colspan="8" class="thColspan" >Notes</th>

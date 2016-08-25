@@ -268,6 +268,9 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 	});
 	
 	getDatailByIDRes("reservationstbody");
+	
+	
+	
 });
 
 function updateDownpaymentRes(){
@@ -417,16 +420,11 @@ function createDialogReservation(addReservation) {
 			showLoading(div,true);
 			$(this).load ("reservation/modal" , function(){
 		    	showLoading(div,false);
-		 		ajaxSelectRes('contract/getLanguages','try again', generalSelects, 'selectLanguageRes');
-				ajaxSelectRes('reservation/getOccupancyTypes','try again', generalSelects, 'occupancySalesRes');
+		 		//ajaxSelectRes('contract/getLanguages','try again', generalSelects, 'selectLanguageRes');
+				//ajaxSelectRes('reservation/getOccupancyTypes','try again', generalSelects, 'occupancySalesRes');
 				
 				$(document).on( 'change', '#occupancySalesRes', function () {
-					var unidades = getValueTableUnidadesRes();
-					if (unidades.length<=0) {
-						alertify.error("You should add one unit or more");	
-					}else {
-						getRateRes();
-					}
+					getOpctionOccType();
 				});
 				
 				$(document).on( 'change', '#RateRes', function () {
@@ -472,6 +470,16 @@ function createDialogReservation(addReservation) {
 	});
 	return dialog;
 }
+
+function getOpctionOccType(){
+	var unidades = getValueTableUnidadesRes();
+	if (unidades.length<=0) {
+		alertify.error("You should add one unit or more");	
+	}else {
+		getRateRes();
+	}
+}
+					
 
 function verifyContractALLRes(){
 	var value = false;
@@ -611,6 +619,8 @@ function addUnidadResDialog(iniDate, unit){
 					endDate = endDate[2];
 					var frequency = "every Year";
 	       			tablUnidadadesRes(unidades, frequency, intDate, endDate);
+					$('#occupancySalesRes').val(2);
+					getOpctionOccType();
 	       			$(this).dialog('close');
 				}else{
 					alertify.error("Search and click over for choose one");
@@ -1119,12 +1129,14 @@ function editRes(id){
 }
 
 function selectTableRes(div){
+	$("#"+div).off("click", "tr");
 	$("#"+div).on("click", "tr", function(){
 		$(this).toggleClass("yellow");
 	});
 }
 function selectTableUnicoRes(div){
 	var pickedup;
+	$("#"+div).off("click", "tr");
 	$("#"+div).on("click", "tr", function(){
           if (pickedup != null) {
               pickedup.removeClass("yellow");
@@ -1495,6 +1507,7 @@ function modalEditReservation(id){
 	 			showLoading('#dialog-Edit-Reservation',false);
 	 			getDatosReservation(id);
 	 			setEventosEditarReservation(id);
+				selectTableUnicoRes("tableCDocumentsSelected");
 	    	});
 		},
 		autoOpen: false,
@@ -2469,11 +2482,36 @@ function setEventosEditarReservation(id){
 	$('.btnReportRes').on('click', function(){
 		generateReportRes(id, this);
 	});
+<<<<<<< HEAD
+	
+	
+	$('#btnDeleteDocRes').off('click');
+	$('#btnDeleteDocRes').on('click', function(){
+		//var idDoc = $('')
+		var array = $("#tableCDocumentsSelected .yellow");
+		if( array.length > 0 ){
+			var fullArray = $(array[0]).find("td");
+			var idDoc = fullArray.eq(1).text().replace(/\s+/g, " ");
+			alertify.confirm("You want to delete the document.",
+				function(){
+					deleteDocumentRes(idDoc, id);
+				},
+				function(){
+					//alertify.error('Cancel');
+				}
+			);
+			//console.log(idDoc);
+		}else{
+			alertify.error('You must select a document');
+		}
+	});
+=======
 
 	var status = $("#editReservationStatus").text();
 	var balance = $("#tableReservationAccRes .balanceAccount").text().replace("$ ", "");
 	    balance = parseFloat(balance);
 	 verificarRED(status, balance);
+>>>>>>> origin/master
 }
 
 function modalFinanciamientoRes() {
@@ -2836,11 +2874,11 @@ function getSellersRes(){
 	});
 }
 
-function selectTableRes(div){
+/*function selectTableRes(div){
 	$("#"+div).on("click", "tr", function(){
 		$(this).toggleClass("yellow");
 	});
-}
+}*/
 
 function modalProvisionsRes() {
 	var div = "#dialog-ProvisionesRes";
@@ -3878,7 +3916,8 @@ function getRateRes(){
 	    dataType:'json',
 	    success: function(data){
 			if(data.length > 0){
-				generalSelects(data, "RateRes");
+				generalSelectsDefault(data, "RateRes");
+				setValueUnitPriceRes();
 			}else{
 				alertify.error("no price list found");
 			}
@@ -3934,3 +3973,24 @@ function mensajeGeneral(data){
 	}
 }
 
+function deleteDocumentRes(idDoc, id){
+	$.ajax({
+		data:{
+			idDoc: idDoc
+		},
+   		type: "POST",
+       	url: "reservation/deleteDocumentRes",
+		dataType:'json',
+		success: function(data){
+			if(data.success){
+				getDatosContractDocuments(id);
+			}
+			alertify.success(data.message);
+			//showLoading('#table-reservations',false);
+		},
+		error: function(){
+			alertify.error("Try again");
+			//showLoading('#table-reservations',false);
+		}
+    });
+}
