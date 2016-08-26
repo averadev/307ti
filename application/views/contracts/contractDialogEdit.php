@@ -360,13 +360,13 @@
 								<tr>
 									<td>Balance of Deposits</td>
 									<td class="balanceDepAccount">$000,000.00</td>
-									<td>Defeated Deposits</td>
+									<td>Past Due Deposits</td>
 									<td class="defeatedDepAccount">$000,000.00</td>
 								</tr>
 								<tr>
 									<td>Balance Sales</td>
 									<td class="balanceSaleAccount">$000,000.00</td>
-									<td>Defeated Sales</td>
+									<td>Past Due Sales</td>
 									<td class="defeatedSaleAccount">$000,000.00</td>
 								</tr>
 							</tbody>
@@ -420,13 +420,13 @@
 								<tr>
 									<td>Balance of Deposits</td>
 									<td class="balanceDepAccount">$000,000.00</td>
-									<td>Defeated Deposits</td>
+									<td>Past Due Deposits</td>
 									<td class="defeatedDepAccount">$000,000.00</td>
 								</tr>
 								<tr>
 									<td>Balance Sales</td>
 									<td class="balanceSaleAccount">$000,000.00</td>
-									<td>Defeated Sales</td>
+									<td>Past Due Sales</td>
 									<td class="defeatedSaleAccount">$000,000.00</td>
 								</tr>
 							</tbody>
