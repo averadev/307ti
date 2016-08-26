@@ -110,12 +110,12 @@ Class inventory_db extends CI_MODEL
 		
 		$typePropety = "";
 		if($floorPlan != 0){
-			$typePropety = " u.fkFloorPlanId = '" . $floorPlan . "' ";
+			$typePropety = " u2.fkFloorPlanId = '" . $floorPlan . "' ";
 		}else if($property != 0){
-			$typePropety = " u.fkPropertyId = '" . $property . "' ";
+			$typePropety = " u2.fkPropertyId = '" . $property . "' ";
 		}
 		
-		$cadena = "";
+		/*$cadena = "";
 		//$cadena = "";
 			$cadena = "select count(u.pkUnitId) as TOTAL from tblUnit u";
 			if($Overbooking == 0 && $OOO == 0){
@@ -134,26 +134,93 @@ Class inventory_db extends CI_MODEL
 				INNER JOIN tblCalendar c on c.pkCalendarId = uk.fkCalendarID and c.Date = tblCalendar.Date ) uk on uk.fkUnitID = u.pkUnitID 
 				INNER JOIN tblOverbooking ob on ob.fkPropertyID = u.fkPropertyId
 				where " . $typePropety . " and uk.fkUnitID is null and ob.ValidFromDt >= tblCalendar.Date";
-			}
+			}*/
 			
-		$cadena2 = "SELECT count(r.pkResId) as TOTAL from tblRes r";
+		/*$cadena2 = "SELECT count(r.pkResId) as TOTAL from tblRes r";
 		$cadena2 = $cadena2 . " INNER JOIN tblResType rt on rt.pkResTypeId = r.fkResTypeId and rt.ynHotRes = 1";
 		$cadena2 = $cadena2 . " INNER JOIN tblResOcc ro on ro.fkResId = r.pkResId";
 		if($nonDeducted == 0){
 			$cadena2 = $cadena2 . " INNER JOIN tblResStatus rs on rs.fkResId = r.pkResId";
-			$cadena = $cadena2 . " INNER JOIN tblStatus s on s.pkStatusId = rs.fkStatusId and s.ynResDeducted = 1";
+			//$cadena = $cadena2 . " INNER JOIN tblStatus s on s.pkStatusId = rs.fkStatusId and s.ynResDeducted = 1";
 		}
-		$cadena2 = $cadena2 . " where ro.fkCalendarId = tblCalendar.pkCalendarId";
+		$cadena2 = $cadena2 . " where ro.fkCalendarId = tblCalendar.pkCalendarId";*/
 		
-		$this->db->select("tblCalendar.pkCalendarId, tblDayOfWeek.DayOfWeekDesc as DAY, tblCalendar.Date as DATE, CONVERT(VARCHAR(11),tblCalendar.Date,106) as DATE2");
+		$cadena = "";
+		$cadena3 = "";
+		if($availability == "Availability"){
+			//$cadena = "select count(u.pkUnitId) as TOTAL from tblUnit u";
+			if($Overbooking == 0 && $OOO == 0){
+				$cadena .= " Select count(*) from tblUnit u2 left join (select fkUnitID from tblUnitHKStatus uk2 ";
+				$cadena .= " inner join tblOccStatus os2 on os2.pkOccStatusID = uk2.fkOccStatusID and os2.ynOccupancy = 1 ";
+				$cadena .= " inner join tblCalendar c2 on c2.pkCalendarID = uk2.fkCalendarID and c2.Date = c.Date ) uk2 on uk2.fkUnitID = u2.pkUnitID ";
+				$cadena .= " where u2.ynActive = 1 and " . $typePropety . " and uk2.fkUnitID is null ";
+			}else if($Overbooking == 0 && $OOO == 1){
+				$cadena = "Select count(*) from tblUnit u where " . $typePropety . " and u.ynActive = 1  ";
+			}else if($Overbooking == 1 && $OOO == 1){
+				$cadena = "Select count(*) from tblUnit u where u.ynActive = 1  ";
+				$cadena3 = " Select top 1 ob.TotOCCPctPlus from tblOverBooking ob where " . $typePropety . " and ob.fkPropertyID = 1 and ob.fkOBTypeID = 1 ";
+			}else if($Overbooking == 1 && $OOO == 0){
+				$cadena .= " Select count(*) from tblUnit u2 left join (select fkUnitID from tblUnitHKStatus uk2 ";
+				$cadena .= " inner join tblOccStatus os2 on os2.pkOccStatusID = uk2.fkOccStatusID and os2.ynOccupancy = 1 ";
+				$cadena .= " inner join tblCalendar c2 on c2.pkCalendarID = uk2.fkCalendarID and c2.Date = c.Date ) uk2 on uk2.fkUnitID = u2.pkUnitID ";
+				$cadena .= " where u2.ynActive = 1 and " . $typePropety . " and uk2.fkUnitID is null ";
+				$cadena3 = " Select top 1 ob.TotOCCPctPlus from tblOverBooking ob where ob.fkPropertyID = 1 and ob.fkOBTypeID = 1 ";
+			}
+		}else if($availability == "Occupancy"){
+			if($Overbooking == 1){
+				$cadena .= " select count(*) from tblRes r2 ";
+				$cadena .= " INNER JOIN tblResType rt2 on rt2.pkResTypeId = r2.fkResTypeId ";
+				$cadena .= " INNER JOIN tblResOcc ro2 on ro2.fkResId = r2.pkResId ";
+				$cadena .= " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId ";
+				$cadena .= " where rt2.ynHotRes = 1 and CONVERT( VARCHAR(10), c2.Date, 101 ) = c.Date ";
+			}else if($Overbooking == 0){
+				$cadena = "Select count(*) from tblUnit u where u.ynActive = 1  ";
+				$cadena3 .= " select count(*) from tblRes r2 ";
+				$cadena3 .= " INNER JOIN tblResType rt2 on rt2.pkResTypeId = r2.fkResTypeId ";
+				$cadena3 .= " INNER JOIN tblResOcc ro2 on ro2.fkResId = r2.pkResId ";
+				$cadena3 .= " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId ";
+				$cadena3 .= " where rt2.ynHotRes = 1 and CONVERT( VARCHAR(10), c2.Date, 101 ) = c.Date ";
+			}
+		}
+		
+		$cadena2 = "";
+		if($nonDeducted == 0){
+			$cadena2 .= " select count(*) from tblRes r2 ";
+			$cadena2 .= " INNER JOIN tblResType rt2 on rt2.pkResTypeId = r2.fkResTypeId ";
+			$cadena2 .= " INNER JOIN tblStatusTypeStatus sts2 on sts2.Sequence = r2.fkStatusId ";
+			$cadena2 .= " INNER JOIN tblStatus s2 on s2.pkStatusId = sts2.fkStatusId";
+			$cadena2 .= " INNER JOIN tblResOcc ro2 on ro2.fkResId = r2.pkResId ";
+			$cadena2 .= " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId ";
+			$cadena2 .= " where rt2.ynHotRes = 1 and s2.ynResDeducted = 1 and CONVERT( VARCHAR(10), c2.Date, 101 ) = c.Date ";
+		}else if($nonDeducted == 1){
+			$cadena2 .= " select count(*) from tblRes r2 ";
+			$cadena2 .= " INNER JOIN tblResType rt2 on rt2.pkResTypeId = r2.fkResTypeId ";
+			$cadena2 .= " INNER JOIN tblResOcc ro2 on ro2.fkResId = r2.pkResId ";
+			$cadena2 .= " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId ";
+			$cadena2 .= " where rt2.ynHotRes = 1 and CONVERT( VARCHAR(10), c2.Date, 101 ) = c.Date ";
+		}
+		
+		//$cadena = "  Select count(*) from tblUnit u where u.ynActive = 1  ";
+		
+		
+		$this->db->select("c.pkCalendarId, dw.DayOfWeekDesc as Day, c.Date as DATE, CONVERT(VARCHAR(11), c.Date, 106) as DATE2");
 		$this->db->select("(" . $cadena . ") as TOTAL");
 		$this->db->select("(" . $cadena2 . ") as TOTAL2");
-		$this->db->from("tblCalendar");
-		$this->db->join('tblDayOfWeek', 'tblDayOfWeek.pkDayOfWeekId = tblCalendar.fkDayOfWeekId', 'inner');
+		if($availability == "Availability"){
+			if( ( $Overbooking == 1 && $OOO == 1 ) || ( $Overbooking == 1 && $OOO == 0 ) ){
+				$this->db->select("(" . $cadena3 . ") as OverBooking");
+			}
+		}else if($availability == "Occupancy"){
+			if( $Overbooking == 0 ){
+				$this->db->select("(" . $cadena3 . ") as OverBooking");
+			}
+		}
+		$this->db->from("tblCalendar c");
+		$this->db->join('tblDayOfWeek dw', 'dw.pkDayOfWeekId = c.fkDayOfWeekId', 'inner');
 		if($date != ""){
-			$this->db->where("tblCalendar.Date >= '" . $date . "' and tblCalendar.Date <= DATEADD(day,20,'" . $date . "')");
+			$this->db->where("c.Date >= '" . $date . "' and c.Date <= DATEADD(day,20,'" . $date . "')");
 		}else{
-			$this->db->where("tblCalendar.Date >= CONVERT(VARCHAR(10),GETDATE(),101) and tblCalendar.Date <= DATEADD(day,20,CONVERT(VARCHAR(10),GETDATE(),101))");
+			$this->db->where("c.Date >= CONVERT(VARCHAR(10),GETDATE(),101) and c.Date <= DATEADD(day,20,CONVERT(VARCHAR(10),GETDATE(),101))");
 		}
 		return  $this->db->get()->result();
 	}

@@ -43,23 +43,24 @@ class Inventory extends CI_Controller {
 			//$data = $this->inventory_db->getDateofCalendar($date);
 			$data = $this->inventory_db->getDetailedAvailability($date, $floorPlan, $property, $availability, $nonDeducted, $Overbooking, $OOO);
 			
-			
+			$total = 0;
 			foreach($data as $item){
 				$item->Date = $item->DATE2;
 				if($availability == "Availability"){
-					$item->TOTAL = $item->TOTAL - $item->TOTAL2;
+					if( ( $Overbooking == 1 && $OOO == 1 ) || ( $Overbooking == 1 && $OOO == 0 ) ){
+						$item->TOTAL = $item->TOTAL + (  $item->TOTAL / $item->OverBooking );
+					}
+					//$item->TOTAL = $item->TOTAL - $item->TOTAL2;
 				}else{
 					if($Overbooking == 0){
-						if( $item->TOTAL2 < 0 ){
-							$item->TOTAL = 0; 
-						}
-					}else if($Overbooking == 1){
-						if($item->TOTAL2 > $item->TOTAL){
-							$item->TOTAL = $item->TOTAL2;
+						if( $item->TOTAL2 < $item->TOTAL ){
+							$item->TOTAL = $item->TOTAL;
 						}
 					}
+					
 				}
-				unset($item->pkCalendarId,$item->DATE2,$item->TOTAL2);
+				//unset($item->pkCalendarId,$item->DATE2,$item->TOTAL2);
+				unset($item->OverBooking, $item->DATE2);
 			}
 			
 			if($property == 1){
@@ -71,17 +72,17 @@ class Inventory extends CI_Controller {
 					foreach($data2 as $item){
 						
 						if($availability == "Availability"){
-							$item->TOTAL = $item->TOTAL - $item->TOTAL2;
+							if( ( $Overbooking == 1 && $OOO == 1 ) || ( $Overbooking == 1 && $OOO == 0 ) ){
+								$item->TOTAL = $item->TOTAL + (  $item->TOTAL / $item->OverBooking );
+							}
+							//$item->TOTAL = $item->TOTAL - $item->TOTAL2;
 						}else{
 							if($Overbooking == 0){
-								if( $item->TOTAL2 < 0 ){
-									$item->TOTAL = 0; 
-								}
-							}else if($Overbooking == 1){
-								if($item->TOTAL2 > $item->TOTAL){
-									$item->TOTAL = $item->TOTAL2;
+								if( $item->TOTAL2 < $item->TOTAL ){
+									$item->TOTAL = $item->TOTAL;
 								}
 							}
+							
 						}
 						
 						$data[$cont]->$fpName = $item->TOTAL;
