@@ -2404,8 +2404,10 @@ function setTableAccountRes(items, table){
 			tempTotal2 += parseFloat(item.Amount);
 		}
 		if( item.Concept_Trxid.trim() == "Down Payment" && item.Type.trim() == "Schedule Payment"){
-			downpayment += parseFloat(item.Amount);
 			atrasadoDownpayment += parseFloat(item.Overdue_Amount);
+		}
+		if(item.Sign_transaction == "-1" && item.Concept_Trxid.trim() == "Loan"){
+			downpayment += parseFloat(item.Amount);
 		}
 		if( item.Concept_Trxid.trim() == "Sale"){
 			sales += parseFloat(item.Amount);
@@ -2419,6 +2421,7 @@ function setTableAccountRes(items, table){
 	$('#' + table +  ' tbody tr td.balanceAccount').text('$ ' + balance.toFixed(2));
 	$('#' + table +  ' tbody tr td.balanceDepAccount').text('$ ' + downpayment.toFixed(2));
 	$('#' + table +  ' tbody tr td.balanceSaleAccount').text('$ ' + loan.toFixed(2));
+
 	$('#' + table +  ' tbody tr td.defeatedDepAccount').text('$ ' + atrasadoDownpayment.toFixed(2));
 	$('#' + table +  ' tbody tr td.defeatedSaleAccount').text('$ ' + atrasadoLoan.toFixed(2));
 }
