@@ -440,7 +440,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
         if($typeInfo == "payment"){
             //$this->db->where("tt.TrxTypeCode = 'SCP'");
-            $this->db->where("tt.TrxSign", 1);
+            $this->db->where("( tt.TrxSign = 0 or tt.TrxSign = 1 )");
             $this->db->where('a.fkAccTypeId = ', $typeAcc);
             $this->db->where('att.AbsAmount > 0');
         }

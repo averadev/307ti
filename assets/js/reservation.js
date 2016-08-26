@@ -1485,7 +1485,7 @@ function setValueUnitPriceRes(data){
 	/*var precio = value * day;*/
 	$("#precioUnidadRes").val(precio);
 	$("#precioVentaRes").val(precio);
-	//updateBalanceFinalRes();
+	updateBalanceFinalRes();
 }
 
 function getDatailByIDRes(id){
@@ -3949,9 +3949,10 @@ function generateReportRes(id, selector){
 		var url = "Pdfs/Farewell?idRes=" + id;
 	}else if(type == "GuestInfromationRes"){
 		var url = "Pdfs/GuestInfromation?idRes=" + id;
-	}
-	else if(type == "Statement"){
+	}else if(type == "Statement"){
 		var url = "Pdfs/Statement?idRes=" + id;
+	}else if( type == "ReservationConfirmation" ){
+		var url = "Pdfs/ReservationConfirmation?idRes=" + id;
 	}
 	window.open(url);
 }

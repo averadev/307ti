@@ -10,18 +10,22 @@
 			<i class="fa fa-money fa-lg"></i>
 		</a>
 		<a id="" class="btn btn-primary spanSelect btnReportRes" attr_type="GuestInfromationRes">
-			<div class="label">Guest Infromation form</div>
+			<div class="label">Guest Infromation Form</div>
 			<i class="fa fa-file-text-o fa-lg"></i>
 		</a>
 		<a id="" class="btn btn-primary spanSelect btnReportRes" attr_type="Statement">
 			<div class="label">Statement</div>
 			<i class="fa fa-file-text-o fa-lg"></i>
 		</a>
+		<a id="" class="btn btn-primary spanSelect btnReportRes" attr_type="ReservationConfirmation">
+			<div class="label">Reservation Confirmation</div>
+			<i class="fa fa-file-text-o fa-lg"></i>
+		</a>
 	</div>
 </div>
 <div class="row headerDescription headerGeneral" style="padding: 8px;">
 	<div class="small-12 medium-12 large-8 columns"  >
-		<label class="headerDescriptionTitle small-12 columns" id="editContractTitle"><?php  echo "[".$contract[0]->Folio;?></label>
+		<label class="headerDescriptionTitle small-12 columns" id="editContractTitle"><?php  echo $contract[0]->Folio;?></label>
 		<label class="headerGeneral small-12 columns" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
 		<label class="headerGeneral small-12 columns" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
 		<label class="headerGeneral small-6 columns"><?php  echo "Expected Arrival: ". $contract[0]->arrivaDate;?></label>
