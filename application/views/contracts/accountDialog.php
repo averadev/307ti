@@ -85,7 +85,7 @@
 				<!-- Amount -->
 				<div class="row">
 					<div class="small-4 columns">
-                        <label for="AmountAcc" class="text-left">Amount:</label>
+                        <label for="AmountAcc" class="text-left">Amount to Pay:</label>
                     </div>
                     <div class="small-8 columns">
                         <input type="number" id="AmountAcc" name="AmountAcc" class="round general" required >
