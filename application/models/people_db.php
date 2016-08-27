@@ -201,7 +201,7 @@ Class people_db extends CI_MODEL
 	* @param id identificador de la persona
     */
 	public function getReservationsByPeople($id){
-		$this->db->select('tblRes.ResCode, tblRes.pkResId as ResId');
+		/*$this->db->select('tblRes.ResCode, tblRes.pkResId as ResId');
 		$this->db->select('tblResType.ResTypeDesc as ResType');
 		$this->db->select('tblResOcc.OccYear as Year,tblResOcc.NightId');
 		$this->db->select('tblFloorPlan.FloorPlanDesc as FloorPlan');
@@ -223,7 +223,26 @@ Class people_db extends CI_MODEL
 		$this->db->where('tblResPeopleAcc.fkPeopleId = ', $id);
 		$this->db->where('tblResPeopleAcc.ynActive = 1');
 		$this->db->where('(tblRes.fkResTypeId = 6 or tblRes.fkResTypeId = 9)');
-		$this->db->where('tblRes.ynActive = 1');
+		$this->db->where('tblRes.ynActive = 1');*/
+		$this->db->distinct();
+		$this->db->select('r.pkResid as ID, r2.folio, r.ResConf,u.UnitCode as UnitCode,ri.Intv as Intv,s.StatusDesc,r.firstOccYear as OccYear');
+		$this->db->from('tblres r');
+		$this->db->join('tblStatus s with(nolock) ', ' s.pkStatusid = r.fkStatusId', 'left');
+		$this->db->join('tblResType rt with(nolock) ', ' rt.pkResTypeid = r.fkResTypeId', 'left');
+		$this->db->join('tblResinvt ri with(nolock) ', ' ri.fkResid = r.pkResId', 'left');
+		$this->db->join('tblFloorPlan fp with(nolock) ', ' fp.pkFloorPlanid = ri.fkFloorPlanId', 'left');
+		$this->db->join('tblResTypeUnitType ru with(nolock) ', ' ru.fkResTypeid = rt.pkResTypeId', 'left');
+		$this->db->join('tblResfin rfi with(nolock) ', ' rfi.fkResid = r.pkResId', 'left');
+		$this->db->join('tbllocation loc with(nolock) ', ' Loc.pkLocationid = r.fkLocationId', 'left');
+		$this->db->join('tblfinMethod fi with(nolock) ', ' fi.pkFinMethodid = rfi.fkfinMethodId', 'left');
+		$this->db->join('tblResPeopleAcc rp with(nolock) ', ' rp.fkResid = r.pkResId', 'left');
+		$this->db->join('tblPeople p with(nolock) ', ' p.pkPeopleid = rp.fkPeopleId', 'left');
+		$this->db->join('tblUnit u with(nolock) ', ' u.pkUnitId = ri.fkUnitId', 'left');
+		$this->db->join('tblResflag rf with(nolock) ', ' rf.fkResid = r.pkResId and rf.ynActive= 1', 'left');
+		$this->db->join('tblFlag f with(nolock) ', ' f.pkflagId = rf.fkFlagId', 'left');
+		$this->db->join('tblres r2 with(nolock) ', ' r2.pkResId = r.PkResRelatedId', 'inner');
+		$this->db->where('p.pkpeopleid ', $id);
+		$this->db->where("r.fkResTypeId = ( select pkResTypeId from tblResType where ResTypeCode ='Occ' )");
 		return  $this->db->get()->result();
 	}
 	
@@ -231,7 +250,7 @@ Class people_db extends CI_MODEL
 	 *
 	 **/
 	public function getContractByPeople($id,$search){
-		$this->db->select('tblRes.Folio as ContractNo, tblRes.pkResId as ContractID');
+		/*$this->db->select('tblRes.Folio as ContractNo, tblRes.pkResId as ContractID');
 		$this->db->select('tblResOcc.OccYear as FirstOccYear');
 		$this->db->select('tblFloorPlan.FloorPlanDesc as FloorPlan');
 		$this->db->select('tblSeason.SeasonDesc as Season');
@@ -252,7 +271,27 @@ Class people_db extends CI_MODEL
 		$this->db->join('tblStatus', 'tblStatus.pkStatusId = tblRes.fkStatusId', 'left');
 		$this->db->where('tblResPeopleAcc.fkPeopleId = ', $id);
 		$this->db->where('tblRes.fkResTypeId = 5');
-		$this->db->where('tblResPeopleAcc.ynActive = 1');
+		$this->db->where('tblResPeopleAcc.ynActive = 1');*/
+		$this->db->distinct();
+		$this->db->select('p.pkPeopleId  as ID, r.Folio as ContractNo,u.UnitCode,ri.Intv as Intv,s.StatusDesc');
+		$this->db->select('rt.resTypeDesc,f.FlagDesc,Fp.FloorPlanDesc,r.FirstOccYear, r.lastOccYear');
+		$this->db->from('tblres r');
+		$this->db->join('tblStatus s with(nolock) ', ' s.pkStatusid = r.fkStatusId', 'inner');
+		$this->db->join('tblResType rt with(nolock) ', ' rt.pkResTypeid = r.fkResTypeId', 'inner');
+		$this->db->join('tblResinvt ri with(nolock) ', ' ri.fkResid = r.pkResId', 'inner');
+		$this->db->join('tblFloorPlan fp with(nolock) ', ' fp.pkFloorPlanid = ri.fkFloorPlanId', 'inner');
+		$this->db->join('tblResTypeUnitType ru with(nolock) ', ' ru.fkResTypeid = rt.pkResTypeId', 'inner');
+		$this->db->join('tblResfin rfi with(nolock) ', ' rfi.fkResid = r.pkResId', 'inner');
+		$this->db->join('tbllocation loc with(nolock) ', ' Loc.pkLocationid = r.fkLocationId', 'inner');
+		$this->db->join('tblfinMethod fi with(nolock) ', ' fi.pkFinMethodid = rfi.fkfinMethodId', 'inner');
+		$this->db->join('tblResPeopleAcc rp with(nolock) ', ' rp.fkResid = r.pkResId', 'inner');
+		$this->db->join('tblPeople p with(nolock) ', ' p.pkPeopleid = rp.fkPeopleId', 'inner');
+		$this->db->join('tblUnit u with(nolock) ', ' u.pkUnitId = ri.fkUnitId', 'inner');
+		$this->db->join('tblUnit u2	with(nolock) ', ' u2.pkUnitid = ri.fkUnitId', 'inner');
+		$this->db->join('tblResflag rf with(nolock) ', ' rf.fkResid = r.pkResId and rf.ynActive= 1', 'left');
+		$this->db->join('tblFlag f with(nolock) ', ' f.pkflagId = rf.fkFlagId', 'left');
+		$this->db->where('p.pkpeopleid ', $id);
+		$this->db->where("r.fkResTypeId = ( select pkResTypeId from tblResType where ResTypeCode ='ContFx' )");
 		if($search != ""){
 			$this->db->where('tblRes.Folio =', $search);
 		}

@@ -536,8 +536,8 @@
 	<!-- tabs años de ocupacion -->
 	<div id="tab-COccupation" class="large-12 columns tab-modal" style="display:none;">
 		<form  data-abide='ajax'>
-			<fieldset class="fieldset">
-				<div class="containerContract" style="height: 400px;overflow: scroll;">
+			<fieldset class="fieldset" id="fieldsetOccuCon">
+				<div class="containerContract" id="content-OccupationCont" style="overflow: auto;">
 					<div class="row">
 						<table id="tableCOccupationSelected" width="100%">
 							<thead>

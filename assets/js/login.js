@@ -43,7 +43,7 @@ function login(){
 					clearTimeout(timer);
 					$('#progressbar').hide();
 					$('#btnCloseModal').show();
-					$('#subModal label').html('Acceso denegado!');
+					$('#subModal label').html('Access denied!');
                 }
             }
         });

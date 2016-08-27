@@ -974,7 +974,8 @@ function getWeeksDialog(unidades){
 	    		ajaxSelects('contract/getFrequencies','try again', generalSelectsDefault, 'frequency');
 	    		$("#weeksNumber").val(1);
 	    		setYear("firstYearWeeks", 0);
-	    		setYear("lastYearWeeks", 10);
+	    		//setYear("lastYearWeeks", 10);
+				$("#lastYearWeeks").val(2087);
 	    	});
 		},
 		autoOpen: false,
@@ -1776,13 +1777,15 @@ function changeTabsModalContract(screen, id){
 			break;
 		case "tab-COccupation":
 			getDatosContractOcupation(id);
+			var heightNote = $('#tab-COccupation').height() - 250;
+			$('#fieldsetOccuCon').height( heightNote + "px" );
 			break;
 		case "tab-CDocuments":
 			getDatosContractDocuments(id);
 			break;
 		case "tab-CNotes":
 			getDatosContractNotes(id);
-			var heightNote = $('#tab-CNotes').height();
+			var heightNote = $('#tab-CNotes').height() - 100;
 			$('#fieldsetNoteCon').height( heightNote + "px" );
 			break;
 		case "tab-CFlags":
@@ -2591,7 +2594,7 @@ function addPro(){
 	alertify.success("deleted");
 }
 function getWeeks(id){
-	var div = "#tableCOccupationSelectedbody";
+	var div = "#content-OccupationCont";
 	showLoading(div, true);
 	$.ajax({
 	    data:{
@@ -2602,13 +2605,24 @@ function getWeeks(id){
 	    dataType:'json',
 	    success: function(data){
 	    	showLoading(div, false);
-	    	drawTableIdOcupacion(data,"tableCOccupationSelectedbody");
+	    	//drawTableIdOcupacion(data,"tableCOccupationSelectedbody");
+			
+			
+			if(data){
+				drawTable2( data, "tableCOccupationSelected", false, "" );
+			}else{
+				noResultsTable("content-OccupationCont", "tableCOccupationSelected", "No results found");
+				//alertify.error("No Results Found");
+			}
+			
 	    },
 	    error: function(){
 	        alertify.error("Try again");
+			showLoading(div, false);
 	    }
 	});
 }
+
 function getTypesFlags(id){
 	var div = "#tableFlagsListBody";
 	showLoading(div, true);

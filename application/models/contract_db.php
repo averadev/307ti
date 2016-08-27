@@ -687,12 +687,25 @@ class Contract_db extends CI_Model {
         }
     }
     public function selectWeeksContract($string){
-        $this->db->select("RTRIM(RT.ResTypeDesc) as Descripcion,RI.fkUnitId,RI.Intv, RI.FirstOccYear, RI.LastOccYear ");
+        /*$this->db->select("RTRIM(RT.ResTypeDesc) as Descripcion,RI.fkUnitId,RI.Intv, RI.FirstOccYear, RI.LastOccYear ");
         $this->db->from('tblResInvt RI');
         $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
         $this->db->join('tblRes R', 'RI.fkResId = R.pkResId', 'inner');
         $this->db->join('tblResType RT', 'R.fkResTypeId = RT.pkResTypeId', 'inner');
-        $this->db->where('fkResId', $string);
+        $this->db->where('fkResId', $string);*/
+		$this->db->distinct();
+		$this->db->select("r.pkResid as ID, r.Folio as Contract_Num,r2.pkResid,r2.ResConf,u.UnitCode as UnitCode,ri.Intv as fixedIntv,s.StatusDesc, r2.firstOccYear as Occ_Year");
+		$this->db->from('tblres r');
+		$this->db->join('tblres r2  with(nolock) ', ' r.pkResid = r2.pkResRelatedId', 'inner');
+		$this->db->join('tblStatus s with(nolock) ', ' s.pkStatusid = r2.fkStatusId', 'inner');
+		$this->db->join('tblResType rt with(nolock) ', ' rt.pkResTypeid = r.fkResTypeId', 'inner');
+		$this->db->join('tblResinvt ri with(nolock) ', ' ri.fkResid = r.pkResId', 'inner');
+		$this->db->join('tblFloorPlan fp with(nolock) ', ' fp.pkFloorPlanid = ri.fkFloorPlanId', 'inner');
+		$this->db->join('tblResTypeUnitType ru with(nolock) ', ' ru.fkResTypeid = rt.pkResTypeId', 'inner');
+		$this->db->join('tblResfin rfi with(nolock) ', ' rfi.fkResid = r.pkResId', 'inner');
+		$this->db->join('tblCalendar c  with(nolock) ', ' c.intv = ri.intv and fkDayOfWeekId =1', 'inner');
+		$this->db->join('tblUnit u with(nolock) ', ' u.pkUnitId = ri.fkUnitId', 'inner');
+		$this->db->where('r.pkResId', $string);
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();

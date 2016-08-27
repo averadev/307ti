@@ -14,7 +14,7 @@
 }
 
 body {
-    background-color: #1c3a5c;
+    background-color: #e8d6b4;
 }
 
 /**
@@ -46,13 +46,18 @@ body {
 */
 .btnAction{
     width: 100%;
-	background-color: #1c3a5c;
+	background-color: #d6ba85;
+	color: #000000;
+	border: solid 1px #c0a777;
+	font-weight:bold;
 }
 .btnAction:hover{
-	background-color: #1c3a5c;
+	background-color: #d6ba85;
+	color: #000000;
 }
 .btnAction:focus{
-	background-color: #1c3a5c;
+	background-color: #d6ba85;
+	color: #000000;
 }
 
 
@@ -139,7 +144,7 @@ body {
 
 #modal{
 	position:fixed;
-	background:#183a59;
+	background:#b9ab90;
 	padding-right:6px;
 	width: 250px;
     height: 110px;
@@ -155,8 +160,8 @@ body {
 #subModal{
 	text-align:center;
 	position:fixed;
-	background:#183a59;
-	background:rgba(99,146,189,0.78);
+	background:#e8d6b4;
+	/*background:rgba(99,146,189,0.78);*/
 	padding-right:6px;
 	width: 246px;
     height: 106px;
@@ -169,7 +174,7 @@ body {
 #subModal label{
 	text-align:center;
 	padding-top:7px;
-	color:#FFFFFF;
+	color:#000000;
 }
 
 #progressbar{
@@ -180,9 +185,9 @@ body {
 }
 
 #btnCloseModal{
-	background:#183a59;
-	color:#FFFFFF;
-	border-radius:4px;
+	background:#d6ba85;
+	color:#000000;
+	border-radius:1px;
 	display:none;
 	margin-top:25px;
 }

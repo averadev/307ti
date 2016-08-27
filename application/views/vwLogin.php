@@ -33,13 +33,13 @@
 								</div>
 							</div>
                             <div class="large-12 columns">
-                                <label>Usuario
+                                <label>User
                                 <input type="text" id="txtUser" name="txtUser" />
                                 </label>
                             </div>
                             
                             <div class="large-12 columns">
-                                <label>Contraseña
+                                <label>Password
                                 <input type="password" id="txtPassword" name="txtPassword" />
                                 </label>
                             </div>
@@ -65,9 +65,9 @@
 			<div id="bgModalLogin"></div>
 			<div id="modal">
 				<div id="subModal">
-					<label>Conectando</label>
+					<label>Loading</label>
 					<div id="progressbar"></div>
-					<button class="button tiny" id="btnCloseModal">Aceptar</button>
+					<button class="button tiny" id="btnCloseModal">Accept</button>
 				</div>
 			</div>
 		</div>

@@ -627,7 +627,7 @@ class People extends CI_Controller {
 					date('i', strtotime($item->CrDt)) . ":" .
 					date('s', strtotime($item->CrDt));*/
 				
-				if(is_null($item->Unit)){
+				/*if(is_null($item->Unit)){
 					$item->Unit = "";
 				}
 				if(is_null($item->FloorPlan)){
@@ -641,7 +641,7 @@ class People extends CI_Controller {
 				}
 				if(is_null($item->Interval)){
 					$item->Interval = "";
-				}
+				}*/
 			}
 			echo json_encode(array('items' => $data));
 		}
@@ -665,7 +665,7 @@ class People extends CI_Controller {
 					date('i', strtotime($item->CrDt)) . ":" .
 					date('s', strtotime($item->CrDt));*/
 				
-				if(is_null($item->FloorPlan)){
+				/*if(is_null($item->FloorPlan)){
 					$item->FloorPlan = "";
 				}
 				if(is_null($item->Season)){
@@ -682,7 +682,7 @@ class People extends CI_Controller {
 				}
 				if(is_null($item->Unit)){
 					$item->Unit = "";
-				}
+				}*/
 			}
 			echo json_encode(array('items' => $data));
 		}

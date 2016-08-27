@@ -106,7 +106,7 @@
 			<div class="box-body" id="section-table-people" style="display: block;">
 				<div class="table" id="tb" >
 					<div class="" id="divTablePeople">
-						<table id="tablePeople" class="display hover" cellspacing="0" width="100%" style="display:none;">
+						<table id="tablePeople" class="display hover" class="cell-border" cellspacing="0" width="100%" style="display:none;">
 							<thead>
 								<tr>
 									<th>Edit</th>
@@ -434,7 +434,7 @@
 		<div id="tab-PReservaciones" class="large-12 columns tab-modal">
 			<div class="row tab-modal-top" id="divTableReservationsPeople">
 				<div class="large-12 columns table-section2">
-					<table id="tableReservationsPeople">
+					<table id="tableReservationsPeople" width="100%" class="cell-border" >
 						<thead>
 							<tr>
 								<th class="cellGeneral" >Res. code</th>
@@ -481,10 +481,9 @@
 		
 			<div class="row" >
 				<div class="large-12 columns table-section2" id="divTableContractPeople">
-					<table id="tableContractPeople">
+					<table id="tableContractPeople" width="100%" class="cell-border">
 						<thead>
 							<tr>
-								<th> </th>
 								<th class="cellGeneral" >Contract No.</th>
 								<th class="cellSmall" >Contract Id</th>
 								<th class="cellMedium">First occ year</th>

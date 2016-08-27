@@ -3009,8 +3009,9 @@ function getTypesFlagsRes(id){
 				//drawTableFlagsRes(data,"tableFlagsListBody");
 	    		//saveFlagsRes("tableFlagsListBody");
 
-	    		drawTableId(data,"tableFlagsListBodyRes");
-	    		saveFlagsRes("tableFlagsListBodyRes");
+				drawTableFlagsRes(data,"tableFlagsListBodyRes");
+				saveFlagsRes("tableFlagsListBodyRes");
+
 	    		//selectTableRes("tableFlagsListBodyRes");
 
 	    	}else{
@@ -3037,24 +3038,6 @@ function saveFlagREs(){
 	var flags = getArrayValuesSelectedColumRes("tableFlagsListRes", 1).length;
 	if (flags>0) {
 		SaveFlagsContractRes();
-	}
-}
-
-function saveFlagsRes(div){
-	var pickedup;
-	$("#"+div).on("click", "tr", function(){
-          if (pickedup != null) {
-              pickedup.removeClass("yellow");
-          }
-          $( this ).addClass("yellow");
-          pickedup = $(this);
-          saveFlagRes();
-	});
-}
-function saveFlagRes(){
-	var flags = getArrayValuesSelectedColum("tableFlagsList", 1).length;
-	if (flags>0) {
-		SaveFlagsContract();
 	}
 }
 
@@ -3164,7 +3147,12 @@ function SaveNotesRes(){
 }
 
 function SaveNotesContractRes(){
-	var id = getValueFromTableSelected("contracts", 1);
+	//var id = getValueFromTableSelectedRes("contracts", 1);
+	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
+	if( screen == "frontDesk" ){
+		id = $('#tab-general .tabs-title.active').data('idRes');
+	}
 	var noteType = $("#notesTypes").val();
 	var noteDescription = $("#NoteDescription").val();
 	$.ajax({
@@ -3178,7 +3166,7 @@ function SaveNotesContractRes(){
 	    dataType:'json',
 	    success: function(data){
 	    	alertify.success(data['mensaje']);
-	    	getNotes(id);
+	    	getNotesRes(id);
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -3256,13 +3244,38 @@ function drawTableFlagsAsignedRes(data, table){
     deleteSelectFlagRes(table);
 }
 function deleteSelectFlagRes(div){
-	$("#"+div).on("click", "tr", function(){
+	/*$("#"+div).on("click", "tr", function(){
 		var id = $(this).find('td').eq(1).text();
         $(this).closest("tr").remove();
         deleteFlagRes(id);
         console.log("SE elimna");
+	});*/
+	$("#"+div).on("click", "tr", function(){
+		var id = $(this).find('td').eq(1).text();
+        $(this).closest("tr").remove();
+        deleteFlagRes(id);
 	});
 }
+
+function deleteFlagRes(id){
+	var idReservation = getValueFromTableSelectedRes("reservationsTable", 1);
+	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
+	if( screen == "frontDesk" ){
+		idReservation = $('#tab-general .tabs-title.active').data('idRes');
+	}
+	var datos =  {
+		url: "reservation/deleteFlag",
+		tipo: "json",
+		datos: {
+			id:id,
+			idReservation:idReservation
+		},
+		funcionExito : drawTableFlagsAsignedFlags,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(datos);
+}
+
 function drawTableFlagsAsignedFlagsRes(data){
 	alertify.success(data['mensaje']);
 	if (data["banderas"]) {
@@ -3272,29 +3285,17 @@ function drawTableFlagsAsignedFlagsRes(data){
 	}
 	
 }
-function deleteFlagRes(id){
-	var idReservation = getValueFromTableSelectedRes("reservationsTable", 1);
-	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
-	if( screen == "frontDesk" ){
-		id = $('#tab-general .tabs-title.active').data('idRes');
-	}
-	var datos =  {
-		url: "reservation/deleteFlag",
-		tipo: "json",
-		datos: {
-			id:id,
-			idReservation: idReservation
-		},
-		funcionExito : drawTableFlagsAsignedFlagsRes,
-		funcionError: mensajeAlertify
-	};
-	ajaxDATA(datos);
-}
+
 
 function SaveFlagsContractRes(){
 
 	var flags = getArrayValuesSelectedColumRes("tableFlagsListRes", 1);
+	//var id = getValueFromTableSelectedRes("reservationsTable", 1);
 	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
+	if( screen == "frontDesk" ){
+		id = $('#tab-general .tabs-title.active').data('idRes');
+	}
 	$.ajax({
 	    data:{
 	        idReservation: id,
@@ -3310,9 +3311,9 @@ function SaveFlagsContractRes(){
 	    	if (data["banderas"]) {
 	    		updateTagBanderasRes(data["banderas"]);
 	    	}else{
-	    		$("#flagsContracEdit").text("Flags:");*/
+	    		$("#flagsContracEditRes").text("Flags:");*/
 
-	    	drawTableFlagsAsigned(data['banderas'],"flagsAsignedBodyRes");
+	    	drawTableFlagsAsignedRes(data['banderas'],"flagsAsignedBodyRes");
 	    	if (data["banderas"]) {
 	    		updateTagBanderasRes(data["banderas"]);
 	    	}else{
@@ -3334,14 +3335,9 @@ function updateTagBanderasRes(banderas){
 		}
 	}
 
-	$("#flagsContracEdit").text(textoBanderas);
+	$("#flagsContracEditRes").text(textoBanderas);
 }
 
-function drawTableFlagsAsignedRes(data, table){
-	//console.table(data);
-
-	$("#flagsReservationEdit").text(textoBanderas);
-}
 function drawTableFlagsAsigned(data, table){
 	var bodyHTML = '';
     for (var i = 0; i < data.length; i++) {
@@ -3358,39 +3354,16 @@ function drawTableFlagsAsigned(data, table){
     deleteSelectFlag("flagsAsignedBody");
 }
 
-function drawTableFlagsAsignedFlags(data){
-	alertify.success(data['mensaje']);
-	if (data["banderas"]) {
-		updateTagBanderas(data["banderas"]);
-	}else{
-		$("#flagsContracEdit").text("Flags:");
+function updateTagBanderasRes(banderas){
+	var textoBanderas = "Flags: ";
+	for(var i = 0; i < banderas.length; i++){
+		textoBanderas += banderas[i].FlagDesc;
+		if (banderas.length != i) {
+			textoBanderas += ",";
+		}
 	}
-	
+	$("#flagsContracEditRes").text(textoBanderas);
 }
-
-function deleteSelectFlag(div){
-	$("#"+div).on("click", "tr", function(){
-		var id = $(this).find('td').eq(1).text();
-        $(this).closest("tr").remove();
-        deleteFlag(id);
-	});
-}
-
-function deleteFlag(id){
-	var idContrat = getValueFromTableSelected("contracts", 1);
-	var datos =  {
-		url: "contract/deleteFlag",
-		tipo: "json",
-		datos: {
-			id:id,
-			idContrat:idContrat
-		},
-		funcionExito : drawTableFlagsAsignedFlags,
-		funcionError: mensajeAlertify
-	};
-	ajaxDATA(datos);
-}
-
 
    // $('#flagsAsignedBodyRes').off('click');
    // deleteSelectFlag("flagsAsignedBodyRes");

@@ -782,9 +782,10 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
     }
     
     public function selectNotes($ID){
-        $this->db->select("N.pkNoteId, NT.NoteTypeDesc, N.NoteDesc, N.CrDt, N.CrBy");
+        $this->db->select("N.pkNoteId, NT.NoteTypeDesc, N.NoteDesc, N.CrDt, U.UserLogin");
         $this->db->from('tblNote N');
         $this->db->join('tblNoteType NT', 'N.fkNoteTypeId = NT.pkNoteTypeid', 'inner');
+        $this->db->join('tblUser U', 'N.CrBy = U.pkUserId', 'inner');
         $this->db->where('fkResId', $ID);
         $this->db->where('N.ynActive', 1);
         $query = $this->db->get();
@@ -838,13 +839,27 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
     }
     
 	public function selectWeeksReservation($id){
-        $this->db->select("ro.pkResOccId as ID, ro.OccYear as Year, ro.NightId, ri.Intv, CONVERT(VARCHAR(11),c.Date,106) as Date");
+        /*$this->db->select("ro.pkResOccId as ID, ro.OccYear as Year, ro.NightId, ri.Intv, CONVERT(VARCHAR(11),c.Date,106) as Date");
         $this->db->from('tblResOcc ro');
         $this->db->join('tblRes r', 'r.pkResId = ro.fkResId');
         $this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId');
 		$this->db->join('tblResInvt ri', 'ri.pkResInvtId = ro.fkResInvtId');
-        $this->db->where('r.pkResId = ', $id);
-        $query = $this->db->get();
+        $this->db->where('r.pkResId = ', $id);*/
+		$this->db->distinct();
+		$this->db->select("r.pkResId as ID, r.folio as ContractNum,r.ResConf,s.StatusDesc,r.FirstOccYear as OccYear,Fp.FloorPlanDesc");
+        $this->db->select("u.UnitCode as FixedUnitCode,ri.Intv as Intv,rt.resTypeDesc, ro.NightId,cal.Date");
+		$this->db->from('tblres r ');
+		$this->db->join('tblStatus s with(nolock) ', ' s.pkStatusid = r.fkStatusId', 'inner');
+		$this->db->join('tblResType rt with(nolock) ', ' rt.pkResTypeid = r.fkResTypeId', 'inner');
+		$this->db->join('tblResinvt ri with(nolock) ', ' ri.fkResid = r.pkResRelatedId or ri.fkResid = r.pkResId', 'inner');
+		$this->db->join('tblFloorPlan fp with(nolock) ', ' fp.pkFloorPlanid = ri.fkFloorPlanId', 'inner');
+		$this->db->join('tblResOcc ro with(nolock) ', ' ro.fkResid = r.pkResId', 'inner');
+		$this->db->join('tblOccType oty with(nolock) ', ' oty.pkOccTypeId = ro.fkOccTypeId', 'inner');
+		$this->db->join('tblUnit u with(nolock) ', ' u.pkUnitId = ri.fkUnitId', 'inner');
+		$this->db->join('tblResType rty with(nolock) ', '  rty.pkResTypeId = ro.fkResTypeId', 'inner');
+		$this->db->join('tblCalendar cal	with(nolock) ', ' cal.pkCalendarid = ro.fkCalendarId', 'inner');
+		$this->db->where('r.pkResId = ', $id);
+		$query = $this->db->get();
         return $query->result();
     }
 	

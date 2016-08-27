@@ -36,7 +36,7 @@
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
 		<label class="headerGeneral" id="editReservationStatus">Status: <?php echo $statusActual;?></label>
-		<label class="headerGeneral" id="flagsReservationEdit">Flags: 
+		<label id="flagsContracEditRes" class="headerGeneral">Flags: 
 		<?php
 			if (!empty($flags)) {
 				 foreach($flags as $item){
@@ -44,7 +44,7 @@
 			 	}
 			}
 		?></label>
-		<label class="headerGeneral" id="editOccTypeCodeRes"><?php  echo "OccTypeCode: ". $contract[0]->Occ_type;?></label>
+		<!--<label class="headerGeneral" id="editOccTypeCodeRes"><?php  echo "OccTypeCode: ". $contract[0]->Occ_type;?></label>-->
 	</div>
 </div>
 <!-- tabs de los modales -->
