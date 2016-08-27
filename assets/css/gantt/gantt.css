@@ -63,7 +63,7 @@ table.ganttTable{
 }
 
 .ganttTable td.cellOwners.rightPanel{
-	background:#0392cf;
+	background:#fde7be;
 	border-right: 4px solid #FFFFFF;
 }
 
