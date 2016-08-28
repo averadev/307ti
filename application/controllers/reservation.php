@@ -1258,13 +1258,13 @@ private function comprubaArray($valor, $array){
 				"id"		=>	$id
 			];
 			$maximo = $this->reservation_db->selectMaxStatus();
-			//$IdStatus = $this->reservation_db->propertyTable($peticion);
-			$IdStatus = $this->reservation_db->propertyTable2($peticion);
-			if( count($IdStatus ) > 0){
+			$IdStatus = $this->reservation_db->propertyTable($peticion);
+			//$IdStatus = $this->reservation_db->propertyTable2($peticion);
+			/*if( count($IdStatus ) > 0){
 				$IdStatus = $IdStatus[0]->ID;
 			}else{
 				$IdStatus = 1;
-			}
+			}*/
 			if ($IdStatus<$maximo) {
 				$IdStatus = $IdStatus;
 			}else{
