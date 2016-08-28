@@ -1072,6 +1072,19 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->$p['alias'];
         }
     }
+	
+	public function propertyTable2($p){
+        $this->db->select($p['valor'] .' as '.  $p['alias']);
+        $this->db->from($p['tabla']);
+        $this->db->where($p['codicion'], $p['id']);
+        $query = $this->db->get();
+		//$query = $this->db->get();
+        return $query->result();
+        /*if($query->num_rows() > 0 ){
+            //$row = $query->row();
+            return $row->$p['alias'];
+        }*/
+    }
     
     public function selectNextStatusDesc($idStatus){
         $this->db->select('S.StatusDesc as Descripcion');
