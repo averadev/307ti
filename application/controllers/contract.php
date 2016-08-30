@@ -170,7 +170,7 @@ public function createCreditCardAcc(){
 }
 
 private function createContract(){
-
+		//$folio = 
 		$Contract = [
 			"fkResTypeId"               => $this->contract_db->selectRestType('ContFx'),
 			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('RG'),
@@ -184,7 +184,7 @@ private function createContract(){
 		    "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
 		    "LegalName"                 => $_POST['legalName'],
 		    "Prefix"					=> $this->contract_db->selectPrefix(),
-		    "Folio"                     => $this->contract_db->select_Folio(),
+		    "Folio"                     => $this->contract_db->select_Folio(1),
 		    "fkTourId"                  => $_POST['tourID'],
 		    "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
 		    "fkInvtTypeId"          	=> $this->contract_db->selectInvtTypeId('CU'),
@@ -193,7 +193,11 @@ private function createContract(){
 		    "CrBy"                      => $this->nativesessions->get('id'),
 		    "CrDt"						=> $this->getToday()
 	];
-	return $this->contract_db->insertReturnId('tblRes', $Contract);
+	$idReturn = $this->contract_db->insertReturnId('tblRes', $Contract);
+	if($idReturn){
+		$this->contract_db->next_Folio(1);
+	}
+	return $idReturn;
 
 }
 
@@ -214,7 +218,7 @@ private function insertContratoOcupacion($idContrato){
 	        "ResConf"                   => "",
 	        "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
 	        "LegalName"                 => $_POST['legalName'],
-	        "Folio"                     => $this->contract_db->select_Folio(),
+	        "Folio"                     => $this->contract_db->select_Folio(2),
 	        "fkTourId"                  => $_POST['tourID'],
 	        "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
 	        "fkInvtTypeId"          	=> $this->contract_db->selectInvtTypeId('CU'),
@@ -224,6 +228,9 @@ private function insertContratoOcupacion($idContrato){
 	        "CrDt"						=> $this->getToday()
 		];
 		$ID = $this->contract_db->insertReturnId('tblRes', $Ocupacion);
+		if($ID){
+			$this->contract_db->next_Folio(2);
+		}
 		array_push($Ocupaciones, $ID);
 	}
 	return $Ocupaciones;

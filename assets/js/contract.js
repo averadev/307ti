@@ -600,7 +600,8 @@ function createNewContract(){
 			data: {
 				idiomaID : $("#selectLanguage").val(),
 				firstYear :$("#firstYearWeeks").val().trim(),
-				lastYear : $("#lastYearWeeks").val().trim(),
+				//lastYear : $("#lastYearWeeks").val().trim(),
+				lastYear : getYear( $("#firstYearWeeks").val() ),
 				legalName : $("#legalName").val().trim(),
 				tourID : $("#TourID").val().trim(),
 				peoples: getValueTablePersonas(),
@@ -998,10 +999,14 @@ function getWeeksDialog(unidades){
        			}else{
        				var frequency = $("#frequency option:selected" ).text();
        				var primero = $("#firstYearWeeks").val();
-	       			var ultimo = $("#lastYearWeeks").val();
+	       			//var ultimo = $("#lastYearWeeks").val(); 
+					var ultimo = getYear( $("#firstYearWeeks").val() ); 
 	       			tablUnidadades(unidades, frequency, primero, ultimo);	
 	       			$(this).dialog('close');
 	       			setValueUnitPrice();
+					
+					//setYear("firstYearWeeks", 0);
+	    		//setYear("lastYearWeeks", 10);
        			}
        			
        		}
@@ -1017,6 +1022,10 @@ function setYear(id, n){
 	$("#"+id).val(d + n);
 }
 
+function getYear(year){
+	//var d = new Date().getFullYear();
+	return (parseInt(year) + 10);
+}
 
 function PackReference(){
 	showLoading('#dialog-Pack', true);

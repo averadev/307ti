@@ -42,44 +42,35 @@ class Pdfs extends CI_Controller {
     }
 	
 	public function CheckOut(){
-		//if($this->input->is_ajax_request()){
-			$idRes = $_GET['idRes'];
-			$data = $this->pdfs_db->getCheckOut($idRes);
-			
-			$body = '';
-			$body .= '<table width="100%">';
-			//$table .= "<tr><th>Name</th><th>Last name</th><th>Type people</th></tr>";
-			
-			foreach ($data as $item){
-				$name = $item->Name;
-				$lname = $item->Last_name;
-				$body .= '<tr><td class="Name">' . $name . '</td><td class="Last name">' . $lname . '</td>';
-				$typeProple = "Benficiary People";
-				if($item->ynPrimaryPeople == 1){
-					$typeProple = "Primary People";
-				}
-				$body .= '<td class="type">' . $typeProple . '</td></tr>';
+		$idRes = $_GET['idRes'];
+		$data = $this->pdfs_db->getCheckOut($idRes);
+		$body = '';
+		$body .= '<table width="100%">';
+		//$table .= "<tr><th>Name</th><th>Last name</th><th>Type people</th></tr>";
+		foreach ($data as $item){
+			$name = $item->Name;
+			$lname = $item->Last_name;
+			$body .= '<tr><td class="Name">' . $name . '</td><td class="Last name">' . $lname . '</td>';
+			$typeProple = "Benficiary People";
+			if($item->ynPrimaryPeople == 1){
+				$typeProple = "Primary People";
 			}
-			$body .= '</table>';
+			$body .= '<td class="type">' . $typeProple . '</td></tr>';
+		}
+		$body .= '</table>';
+		$body .= '<br><br>';
+		$body .= '<h4>Dear Owners & Guests,</h5>';
+		$body .= '<h4>As you will be leaving us tomorrow, we would like to refer you to paragraph #8 of the owners manual in your room whereby we request the following:</h5>';
+		$body .= '<h4>Before Leaving your unit at the end of your stay:</h5>';
+		$body .= '<h4>a) All dishes, pots and pans, silverware, etc. Are to be left clean. Put any dirt dishes, etc. into the dishwasher and turn it on.</h5>';
+		$body .= '<h4>b) The unit should be left in an orderly manner. (All loose paper and garbage put into the trash bins).</h5>';
+		$body .= '<h4>c) As you leave the unit make sure you turn the gray switch by the entrance door off.</h5>';
+		$body .= '<h4>d) Leave your safe deposit box open and unlocked (check to make sure you have left nothing behind, check all drawers and under the beds!!).</h5>';
+		$body .= '<h4>Please note that your apartment must be left in an orderly condition in order not to have to enforce a maid cleaning surcharge. Have a good flight home!!</h5>';
 			
-			$body .= '<br><br>';
-			
-			$body .= '<h4>Dear Owners & Guests,</h5>';
-			$body .= '<h4>As you will be leaving us tomorrow, we would like to refer you to paragraph #8 of the owners manual in your room whereby we request the following:</h5>';
-			$body .= '<h4>Before Leaving your unit at the end of your stay:</h5>';
-			$body .= '<h4>a) All dishes, pots and pans, silverware, etc. Are to be left clean. Put any dirt dishes, etc. into the dishwasher and turn it on.</h5>';
-			$body .= '<h4>b) The unit should be left in an orderly manner. (All loose paper and garbage put into the trash bins).</h5>';
-			$body .= '<h4>c) As you leave the unit make sure you turn the gray switch by the entrance door off.</h5>';
-			$body .= '<h4>d) Leave your safe deposit box open and unlocked (check to make sure you have left nothing behind, check all drawers and under the beds!!).</h5>';
-			$body .= '<h4>Please note that your apartment must be left in an orderly condition in order not to have to enforce a maid cleaning surcharge. Have a good flight home!!</h5>';
-			
-			$title = "Check Out";
-			$saveFiler = "CheckOut" . $idRes;
-			//var_dump($data);
-			
-			$this->createTableStyle("CheckOut", $body, $title, $saveFiler, $idRes);
-			
-		//}
+		$title = "Check Out";
+		$saveFiler = "CheckOut" . $idRes;
+		$this->createTableStyle("CheckOut", $body, $title, $saveFiler, $idRes);
 	}
 	
 	public function Farewell(){
@@ -239,7 +230,6 @@ class Pdfs extends CI_Controller {
 		$data2 = $this->pdfs_db->getResAcc($idRes);
 		$body = '';
 		$body .= '<table width="100%">';
-		//$body .= "<tr><th>Name</th><th>Last name</th><th>Type people</th></tr>";
 		foreach ($data as $item){
 			$name = $item->Name;
 			$lname = $item->Last_name;
@@ -249,7 +239,6 @@ class Pdfs extends CI_Controller {
 				$typeProple = "Primary People";
 			}
 			$body .= '<td class="type">' . $typeProple . '</td></tr>';
-			//$body .= '<tr><td >' . $item->Street1 . '</td><td>' . $item->Street2 . '</td><td>' . $item->City . ' ' . $item->ZipCode . ' ' . $item->StateCode . '</td></tr>';
 			$body .= '<tr><td>' . $item->Street1 . '</td></tr>';
 			$body .= '<tr><td>' . $item->Street2 . '</td></tr>';
 			$body .= '<tr><td>' . $item->City . ' ' . $item->ZipCode . ' ' . $item->StateCode . '</td></tr>';
@@ -271,7 +260,6 @@ class Pdfs extends CI_Controller {
 			foreach ($data3 as $item3){
 				$Credit = 0;
 				$Charge = 0;
-				//$credit = $item3->Amount;
 				if($item3->TrxSign == 1){
 					$Credit = $item3->Amount;
 					if($Credit == 0){
@@ -286,21 +274,12 @@ class Pdfs extends CI_Controller {
 				$body .= '<tr><td>' . $item3->date . '</td><td>' . $item3->Doc . '</td><td>' . $item3->TrxTypeDesc . '</td>';
 				$body .= '<td></td><td></td>';
 				$body .= '<td>' . $Credit . '</td><td>' . $Charge . '</td></tr>';
-				/*$body .= "<tr><th>Date</th><th>Doc#</th><th>Description</th></tr>";
-				$body .= '<tr><td>' . $item3->date . '</td><td>' . $item3->Doc . '</td><td>' . $item3->TrxTypeDesc . '</td></tr>';
-				$body .= "<tr><th>Source</th><th>Bill to</th><th></th></tr>";
-				$body .= '<tr><td></td><td></td></tr>';
-				$body .= "<tr><th>Credit</th><th>Charge</th><th></th></tr>";
-				$body .= '<tr><td>' . $Credit . '</td><td>' . $Charge . '</td></tr>';*/
 				$finalCredit = $finalCredit + $Credit;
 				$finalCharge = $finalCharge + $Charge;
 			}
 			$balance = $finalCredit - $finalCharge;
 			$body .= '<tr><th></th><th></th><th></th><th></th><th>Bill</th><th>Final Credit</th><th>Final Charge</th></tr>';
 			$body .= '<tr><td></td><td></td><td></td><td></td><td>' . $balance . '</td><td>' . $finalCredit . '</td><td>' . $finalCharge . '</td></tr>';
-			/*$body .= '<h4></h4>';
-			$body .= "<tr><th>Credit Balance</th><th>Charge Balance#</th><th>Folio Balance</th></tr>";
-			$body .= '<tr><td>' . $finalCredit . '</td><td>' . $finalCharge . '</td><td>' . $balance . '</td></tr>';*/
 			$body .= '</table>';
 			$body .= '<h4></h4>';
 		}
@@ -308,6 +287,91 @@ class Pdfs extends CI_Controller {
 		$title = "Statement";
 		$saveFiler = "Statement" . $idRes;
 		$this->createTableStyle("Statement", $body, $title, $saveFiler, $idRes);
+	}
+	
+	public function ReservationConfirmation(){
+		$idRes = $_GET['idRes'];
+		$data = $this->pdfs_db->getReservation($idRes);
+		$RateAmtNigh = $this->pdfs_db->getRateAmtNigh($idRes);
+		$trans = $this->pdfs_db->getTraxRes($idRes);
+		
+		$body = '';
+		$body .= '<img src="assets/img/logo/header.jpg"  width="1000" />';
+		
+		foreach( $data as $item ){
+			$item = $data[0];
+			$body .= '<h3>Dear ' . $item->LName . ' ' . $item->Name . ' </h3>';
+			$body .= '<h4>Your reservation with us has been completed successfully.</h4>';
+			$body .= '<h3>SUMMARY OF YOUR RESERVATION</h3>';
+			$body .= '<table class="balance" width="100%">';
+			$body .= '<tr><td>Confirmation number</td><td>' . $item->ResConf . '</td></tr>';
+			$body .= '<tr><td>Check-In Date</td><td>' . $item->CheckIn . '</td></tr>';
+			$body .= '<tr><td>Check-Out Date</td><td>' . $item->CheckOut . '</td></tr>';
+			$body .= '<tr><td>Resort</td><td>' . $item->PropertyName . '</td></tr>';
+			$body .= '<tr><td>Unit Type</td><td>' . $item->FloorPlanDesc . '</td></tr>';
+			$body .= '<tr><td>Max Number of Persons</td><td>' . $item->MaxPersons . '</td></tr>';
+			$body .= '<tr><td>Meal Plan Type</td><td> </td></tr>';
+			$body .= '<tr><td>View</td><td>' . $item->ViewDesc . '</td></tr>';
+			$body .= '<tr><td>Resort Type</td><td></td></tr>';
+			$body .= '<tr><td>Call Address</td><td></td></tr>';
+			//$body .= '<tr><td>Us Toll Free</td><td>' . $item->Name . '</td></tr>';
+			//$body .= '<tr><td>Rate</td><td>' . $item->Name . '</td></tr>';
+			/*$body .= '<tr><td>Total Rate</td><td>' . $item->Name . '</td></tr>';
+			$body .= '<tr><td>Payment</td><td>' . $item->Name . '</td></tr>';
+			$body .= '<tr><td>Remaining</td><td>' . $item->Name . '</td></tr>';
+			$body .= '<tr><td>Balance</td><td>' . $item->Name . '</td></tr>';*/
+			
+			break;
+		}
+		
+		$season = 0;
+		$day = 1;
+		$cont = 0;
+		$seasonA = array();
+		array_pop ( $RateAmtNigh );
+		foreach( $RateAmtNigh as $item ){
+			if( $season != $item->fkSeasonId ){
+				$season = $item->fkSeasonId;
+				array_push($seasonA, array( 'season' =>  $item->fkSeasonId, 'days' => 1, 'RateAmtNight' => $item->RateAmtNight ) );
+				$cont++;
+			}else{
+				$seasonA[$cont - 1]['days'] = $seasonA[$cont - 1]['days'] + 1;
+			}
+		}
+		foreach( $seasonA as $item ){
+			$body .= '<tr><td>Us Toll Free</td><td>The rate is ' . $item['RateAmtNight'] . ' Por ' . $item['days']  . ' dias</td></tr>';
+		}
+		$totalRate = 0;
+		foreach( $RateAmtNigh as $item ){
+			$totalRate += $item->RateAmtNight;
+		}
+		$body .= '<tr><td>Rate</td><td>$' . $totalRate . '</td></tr>';
+		$totalPayment = 0;
+		foreach($trans as $item){
+			$totalPayment += $item->Amount;
+		}
+		$body .= '<tr><td>Payment</td><td>$' . $totalPayment . '</td></tr>';
+		
+		$body .= '</table>';
+			
+			//$body .= '<table width="100%">';
+		//foreach ($data as $item){
+			//$body .= '<tr><td class="Name">' . $name . '</td><td class="Last name">' . $lname . '</td>';
+		//}
+		/*$body .= '</table>';
+		$body .= '<br><br>';
+		$body .= '<h4>Dear Owners & Guests,</h5>';
+		$body .= '<h4>As you will be leaving us tomorrow, we would like to refer you to paragraph #8 of the owners manual in your room whereby we request the following:</h5>';
+		$body .= '<h4>Before Leaving your unit at the end of your stay:</h5>';
+		$body .= '<h4>a) All dishes, pots and pans, silverware, etc. Are to be left clean. Put any dirt dishes, etc. into the dishwasher and turn it on.</h5>';
+		$body .= '<h4>b) The unit should be left in an orderly manner. (All loose paper and garbage put into the trash bins).</h5>';
+		$body .= '<h4>c) As you leave the unit make sure you turn the gray switch by the entrance door off.</h5>';
+		$body .= '<h4>d) Leave your safe deposit box open and unlocked (check to make sure you have left nothing behind, check all drawers and under the beds!!).</h5>';
+		$body .= '<h4>Please note that your apartment must be left in an orderly condition in order not to have to enforce a maid cleaning surcharge. Have a good flight home!!</h5>';
+			*/
+		$title = "Reservation Confirmation";
+		$saveFiler = "Reservation_Confirmation" . $idRes;
+		$this->createTableStyle("Reservation_Confirmation", $body, $title, $saveFiler, $idRes);
 	}
 	
 	private function createTableStyle( $name, $body, $title, $saveFiler, $idRes ){
@@ -430,7 +494,7 @@ class Pdfs extends CI_Controller {
 		
 		$pdf->Output($nombre_archivo,'FI');
 		
-		$saveDocument = array(
+		/*$saveDocument = array(
 			'fkDocTypeId' => 1,
 			'docPath' => $nombre_archivo,
 			'docDesc' => $nombre_archivo2,
@@ -452,7 +516,7 @@ class Pdfs extends CI_Controller {
 			'MdBy' => $this->nativesessions->get('id'),
 			'MdDt' => $this->getToday(),
 		);
-		$this->pdfs_db->insert($saveDocumentRes,"tblResDoc");
+		$this->pdfs_db->insert($saveDocumentRes,"tblResDoc");*/
 		
 		//$pdf->Output($nombre_archivo2,'I');
 		

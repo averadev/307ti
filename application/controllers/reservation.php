@@ -33,7 +33,7 @@ class Reservation extends CI_Controller {
 			$Contrato = isValidateReservation();
 			if ($Contrato['valido']) {
 				$idContrato = $this->createReservacion();
-				$this->insertOcupacion($idContrato);
+				//$this->insertOcupacion($idContrato);
 				$acc = $this->createAcc();
 				//$this->insertTarjeta($idContrato, $acc);
 				$this->insertPeoples($idContrato, $acc);
@@ -105,7 +105,7 @@ class Reservation extends CI_Controller {
 	}
 	
 	private function createReservacion(){
-		$folioRes = $this->reservation_db->select_Folio();
+		$folioRes = $this->reservation_db->select_Folio(2);
 		
 		$Contract = [
 			"fkResTypeId"               => $this->reservation_db->selectRestType('Hot'),
@@ -128,7 +128,12 @@ class Reservation extends CI_Controller {
 			"CrBy"                      => $this->nativesessions->get('id'),
 			"CrDt"						=> $this->getToday()
 		];
-		return $this->reservation_db->insertReturnId('tblRes', $Contract);
+		$idReturn = $this->reservation_db->insertReturnId('tblRes', $Contract);
+		if($idReturn){
+			$this->reservation_db->next_Folio(2);
+		}
+		return $idReturn;
+		
 	}
 	
 	private function insertOcupacion($idContrato){
@@ -146,7 +151,7 @@ class Reservation extends CI_Controller {
 				"ResConf"                   => "",
 				"fkExchangeRateId"          => $this->reservation_db->selectExchangeRateId(),
 				//"LegalName"                 => $_POST['legalName'],
-				"Folio"                     => $this->reservation_db->select_Folio(),
+				"Folio"                     => $this->reservation_db->select_Folio(2),
 				//"fkTourId"                  => $_POST['tourID'],
 				"fkSaleTypeId"              => $this->reservation_db->selectSaleTypeId('CU'),
 				"fkInvtTypeId"          	=> $this->reservation_db->selectInvtTypeId('CU'),
@@ -706,7 +711,7 @@ class Reservation extends CI_Controller {
 					"OccYear"       => $idCalendar[$i]->Year,
 					"NightId"       => $idCalendar[$i]->fkDayOfWeekId,
 					"fkResTypeId"   => 5,
-					"fkOccTypeId"   => 1,
+					"fkOccTypeId"   => 2,
 					"fkCalendarId" 	=> $idCalendar[$i]->pkCalendarId,
 					"ynActive"   	=> 1,
 					"CrBy"          => $this->nativesessions->get('id'),
@@ -1259,12 +1264,6 @@ private function comprubaArray($valor, $array){
 			];
 			$maximo = $this->reservation_db->selectMaxStatus();
 			$IdStatus = $this->reservation_db->propertyTable($peticion);
-			//$IdStatus = $this->reservation_db->propertyTable2($peticion);
-			/*if( count($IdStatus ) > 0){
-				$IdStatus = $IdStatus[0]->ID;
-			}else{
-				$IdStatus = 1;
-			}*/
 			if ($IdStatus<$maximo) {
 				$IdStatus = $IdStatus;
 			}else{

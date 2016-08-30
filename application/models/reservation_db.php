@@ -10,7 +10,7 @@ class Reservation_db extends CI_Model {
     function getReservations($filters, $id){
         $sql = "";
         $this->db->distinct();
-        $this->db->select("r.pkResId as ID, rt.ResTypeDesc as Reservacion_type, ( CONVERT(varchar(10),  r.folio ) + '-' +  CONVERT(varchar(10),  1 ) ) as Folio, (ot.OccTypeCode + '-' + CONVERT(varchar(10), r.folio ) + '-' + CONVERT(varchar(10), r.FirstOccYear ) ) as Confirmation_code, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name");
+        $this->db->select("r.pkResId as ID, rt.ResTypeDesc as Reservacion_type, ( CONVERT(varchar(10),  r.folio ) + '-' +  CONVERT(varchar(10),  1 ) ) as Folio, (ot.OccTypeCode + '-' + CONVERT(varchar(10), r.folio ) + '-' + substring(CONVERT(varchar(10), r.FirstOccYear ), 3, 4) ) as Confirmation_code, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name");
         $this->db->select('ot.OccTypeDesc as Occ_type, fp.FloorPlanDesc as FloorPlan, v.ViewDesc as View_, s.SeasonDesc as Season, R.FirstOccYear, ES.StatusDesc');
         $this->db->select('r.CrBy as Create_by, r.CrDt as Create_date, r.MdBy as Modified_by, r.MdDt as Modified_date');
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
@@ -28,7 +28,7 @@ class Reservation_db extends CI_Model {
 		
 		//$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
 		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
-		$this->db->join('tblStatusTypeStatus STS', 'STS.Sequence = r.fkStatusId and STS.fkStatusTypeId = 2', 'left');
+		$this->db->join('tblStatusTypeStatus STS', 'STS.pkStatusTypeStatusId = r.fkStatusId and STS.fkStatusTypeId = 2', 'left');
 		$this->db->join('tblStatus ES', 'ES.pkStatusId = STS.fkStatusId ', 'left');
 		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = ri.fkFloorPlanId');
 		$this->db->join('tblView v', 'v.pkViewId = ri.fkViewId', 'LEFT');
@@ -342,7 +342,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
     
-    public function select_Folio(){
+    /*public function select_Folio(){
         $this->db->select('MAX(Folio)+1 as Folio');
         $this->db->from('tblRes');
         $query = $this->db->get();
@@ -352,7 +352,26 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             $row = $query->row();
             return $row->Folio;
         }
-    }
+    }*/
+	
+	public function select_Folio($typeId){
+		$this->db->select('pf.NextFolio');
+		$this->db->from('tblPropertyFolio pf');
+		$this->db->where('pf.fkFolioTypeID', $typeId);
+		$query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->NextFolio;
+        }
+	}
+	
+	public function next_Folio($typeId){
+		$query = $this->db->query("UPDATE tblPropertyFolio SET NextFolio = ( select top 1 (NextFolio)+1 as Folio from tblPropertyFolio pf2 WHERE pf2.fkFolioTypeID = '" . $typeId ."' ) WHERE fkFolioTypeID = '" . $typeId ."'");
+		//this->db->affected_rows();
+		/*$this->db->where($condicion);
+        $this->db->update($table, $data);
+        return $this->db->affected_rows();*/
+	}
 
     public function selectBalance($id){
         $this->db->select('sum(TT.TrxSign * AT.Amount) as Balance');
@@ -1104,7 +1123,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->join('tblstatustype st', 'st.pkStatusTypeid = sts.fkStatusTypeId', 'inner');
         $this->db->join('tblstatus s', 's.pkStatusId = sts.fkStatusId', 'inner');
         $this->db->where('sts.fkStatusTypeId', 2);
-        $this->db->where('sts.Sequence', $id);
+        $this->db->where('sts.pkStatusTypeStatusId', $id);
         $this->db->order_by('sts.pkStatusTypeStatusId');
         $query = $this->db->get();
 

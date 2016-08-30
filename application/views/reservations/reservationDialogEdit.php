@@ -44,7 +44,7 @@
 			 	}
 			}
 		?></label>
-		<!--<label class="headerGeneral" id="editOccTypeCodeRes"><?php  echo "OccTypeCode: ". $contract[0]->Occ_type;?></label>-->
+		<label class="headerGeneral" id="editOccTypeCodeRes"><?php  echo "OccTypeCode: ". $contract[0]->Occ_type;?></label>
 	</div>
 </div>
 <!-- tabs de los modales -->

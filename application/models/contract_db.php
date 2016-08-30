@@ -52,10 +52,14 @@ class Contract_db extends CI_Model {
     function getContratos2($filters, $id){
         $sql = "";
         $this->db->distinct();
-        $this->db->select("R.pkResId as ID, cast(R.Prefix as varchar) + '-' + cast(R.Folio as varchar) as Folio,  R.LegalName as LegalName, RTRIM(UT.FloorPlanDesc) as FloorPlan, FR.FrequencyDesc");
+        $this->db->select("R.pkResId as ID, cast(R.Prefix as varchar) + '-' + cast(R.Folio as varchar) as Folio");
+		$this->db->select("(ot.OccTypeCode + '-' + CONVERT(varchar(10), R.folio ) + '-' + substring(CONVERT(varchar(10), R.FirstOccYear ), 3, 4) ) as Confirmation_code");
+		$this->db->select("R.LegalName as LegalName, RTRIM(UT.FloorPlanDesc) as FloorPlan, FR.FrequencyDesc");
         $this->db->select('ES.StatusDesc, RI.CrDt, R.FirstOccYear, R.LastOccYear, RF.ListPrice, RF.NetSalePrice as netsale');
         $this->db->from('tblRes R');
         $this->db->join('tblResinvt RI', 'RI.fkResId = R.pkResId');
+		$this->db->join('tblResOcc RO ', ' RO.fkResInvtId = RI.pkResInvtId');
+		$this->db->join('tblOccType ot ', ' ot.pkOccTypeId = RO.fkOccTypeId');
         $this->db->join('tblFloorPlan UT', 'UT.pkFloorPlanID = RI.fkFloorPlanId');
         $this->db->join('tblFrequency FR', 'FR.pkFrequencyId = RI.fkFrequencyId');
         $this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId');
@@ -924,7 +928,7 @@ class Contract_db extends CI_Model {
         }
     }
 
-    public function select_Folio(){
+    /*public function select_Folio(){
         $this->db->select('MAX(Folio)+1 as Folio');
         $this->db->from('tblREs');
         $query = $this->db->get();
@@ -934,7 +938,26 @@ class Contract_db extends CI_Model {
             $row = $query->row();
             return $row->Folio;
         }
-    }
+    }*/
+	
+	public function select_Folio($typeId){
+		$this->db->select('pf.NextFolio');
+		$this->db->from('tblPropertyFolio pf');
+		$this->db->where('pf.fkFolioTypeID', $typeId);
+		$query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->NextFolio;
+        }
+	}
+	
+	public function next_Folio($typeId){
+		$query = $this->db->query("UPDATE tblPropertyFolio SET NextFolio = ( select top 1 (NextFolio)+1 as Folio from tblPropertyFolio pf2 WHERE pf2.fkFolioTypeID = '" . $typeId ."' ) WHERE fkFolioTypeID = '" . $typeId ."'");
+		//this->db->affected_rows();
+		/*$this->db->where($condicion);
+        $this->db->update($table, $data);
+        return $this->db->affected_rows();*/
+	}
 
     public function getTerminosVentaContract($id){
         $this->db->select("R.ListPrice, R.PackPrice, R.SpecialDiscount, R.Deposit, R.ClosingFeeAmt, R.NetSalePrice");

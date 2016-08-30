@@ -82,7 +82,8 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->select("u.pkUnitId, u.UnitCode, u.fkPropertyId");
 		$this->db->select("fp.pkFloorPlanID, fp.FloorPlanDesc");
 		$this->db->select("v.pkViewId, v.ViewDesc, v.ViewCode");
-		$this->db->select("r.ResConf");
+		//$this->db->select("r.ResConf");
+		$this->db->select("(ot.OccTypeCode + '-' + CONVERT(varchar(10), R.folio ) + '-' + substring(CONVERT(varchar(10), R.FirstOccYear ), 3, 4) ) as ResConf");
 		$this->db->select("rpa.pkResPeopleAccId");
 		$this->db->select('LTRIM(RTRIM(p.Name)) as Name');
 		$this->db->select('LTRIM(RTRIM(p.LName)) as LName');
@@ -91,6 +92,7 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->from("tblCalendar");
 		$this->db->join('tblDayOfWeek dw', 'pkDayOfWeekId = tblCalendar.fkDayOfWeekId', 'INNER');
 		$this->db->join('tblResOcc ro', 'ro.fkCalendarId = tblCalendar.pkCalendarId', 'INNER');
+		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
 		//$this->db->join('tblRes r', 'r.pkResId = ro.fkResId', 'LEFT');
 		//$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'LEFT');
 		$this->db->join('tblRes r', 'r.pkResId = ro.fkResId', 'LEFT');

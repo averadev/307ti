@@ -76,6 +76,61 @@ class pdfs_db extends CI_Model{
 		return  $this->db->get()->result();
 	}
 	
+	public function getReservation($idRes){
+		$this->db->distinct();
+		$this->db->select('r.pkResId, r.Folio, r.ResConf, p.LName, p.Name, r.CheckIn, r.CheckOut, pr.PropertyName, fp.FloorPlanDesc, fp.MaxPersons, v.ViewDesc');
+		$this->db->from('tblRes r');
+		$this->db->join('tblResInvt ri ', 'ri.fkResId = r.pkResRelatedId or ri.fkResId = r.pkResId', 'INNER');
+		$this->db->join('tblUnit u ', ' u.pkUnitId = ri.fkUnitId', 'INNER');
+		$this->db->join('tblProperty pr ', ' pr.pkPropertyId = u.fkPropertyId', 'INNER');
+		$this->db->join('tblFloorPlan fp ', ' fp.pkFloorPlanID = u.fkFloorPlanId', 'INNER');
+		$this->db->join('tblView v ', ' v.pkViewId = u.fkViewId', 'INNER');
+		$this->db->join('tblResPeopleAcc rpa ', 'rpa.fkResId = r.pkResRelatedId or rpa.fkResId = r.pkResId', 'INNER');
+		$this->db->join('tblPeople p ', ' p.pkPeopleId = rpa.fkPeopleId', 'INNER');
+		$this->db->where('r.pkResId  = ', $idRes);
+		$this->db->where('( r.fkResTypeId = 7 or r.fkResTypeId = 6 )');
+		$this->db->where('rpa.ynPrimaryPeople = 1');
+		return  $this->db->get()->result();
+	}
+	
+	/*public function getSeason($idRes){
+		$this->db->distinct();
+		$this->db->select('sd.fkSeasonId, rt.RateAmtNight');
+		$this->db->from('tblRes r');
+		$this->db->join('tblResOcc ro ', 'ro.fkResId = r.pkResId', 'INNER');
+		$this->db->join('tblCalendar c ', 'c.pkCalendarId = ro.fkCalendarId', 'INNER');
+		$this->db->join('tblSeasonDate sd ', 'c.Date BETWEEN sd.DateFrom and sd.DateTo', 'INNER');
+		$this->db->join('tblRateType rt ', 'rt.fkSeasonId = sd.fkSeasonId', 'INNER');
+		$this->db->where('r.pkResId  = ', $idRes);
+		$this->db->order_by('c.Date ASC');
+		return  $this->db->get()->result();
+	}*/
+	
+	public function getRateAmtNigh($idRes){
+		$this->db->distinct();
+		$this->db->select('CONVERT( VARCHAR(10), c.Date, 101) as Date, sd.fkSeasonId, rt.RateAmtNight, c.Date');
+		$this->db->from('tblRes r');
+		$this->db->join('tblResOcc ro ', 'ro.fkResId = r.pkResId', 'INNER');
+		$this->db->join('tblCalendar c ', 'c.pkCalendarId = ro.fkCalendarId', 'INNER');
+		$this->db->join('tblSeasonDate sd ', 'c.Date BETWEEN sd.DateFrom and sd.DateTo', 'INNER');
+		$this->db->join('tblRateType rt ', 'rt.fkSeasonId = sd.fkSeasonId', 'INNER');
+		$this->db->where('r.pkResId  = ', $idRes);
+		$this->db->order_by('c.Date ASC');
+		return  $this->db->get()->result();
+	}
+	
+	public function getTraxRes($idRes){
+		$this->db->distinct();
+		$this->db->select('at1.Amount');
+		$this->db->from('tblRes r');
+		$this->db->join('tblResPeopleAcc rpa ', 'rpa.fkResId = r.pkResRelatedId or rpa.fkResId = r.pkResId', 'INNER');
+		$this->db->join('tblAccTrx at1 ', 'at1.fkAccid = rpa.fkAccId', 'INNER');
+		$this->db->join('TblTrxType tt ', 'tt.pkTrxTypeId = at1.fkTrxTypeId', 'INNER');
+		$this->db->where('r.pkResId  = ', $idRes);
+		$this->db->where('tt.TrxSign = -1');
+		return  $this->db->get()->result();
+	}
+	
 	public function insert($data, $table){
 		$this->db->insert($table, $data);
 	}
