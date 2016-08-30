@@ -1625,7 +1625,13 @@ function getUnidadesRes(){
 				alertify.success("Found "+ data.items.length);
 				drawTable(data.items, 'add', "details", "Unidades");
 				$('#newReservation').data( 'season1', data.season[0].Season );
-				$('#newReservation').data( 'season2', data.season[0].Season2 );
+				var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
+				if( screen == "frontDesk" ){
+					$('#section-frontDesk').data( 'season2', data.season[0].Season2 );
+				}else{
+					$('#section-reservations').data( 'season2', data.season[0].Season2 );
+				}
+				
 			}else{
 				alertify.error("No records found");
 			}
@@ -3886,6 +3892,13 @@ function getRateRes(){
 	$("#RateRes").attr('disabled', true);
 	var intDate = iniDateRes.split("/");
 	var occYear = intDate[2];
+	var season2 = 0;
+	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
+	if( screen == "frontDesk" ){
+		season2 = $('#section-frontDesk').data( 'season2' );
+	}else{
+		season2 = $('#section-reservations').data( 'season2' );
+	}
 	$.ajax({
 	    data:{
 			id:unitReservacion[0].id,
@@ -3894,8 +3907,9 @@ function getRateRes(){
 			occYear:occYear,
 			intDate:iniDateRes,
 			endDate:endDateRes,
+			season2:season2,
 			//season: $('#newReservation').data( 'season1' ),
-			season2: $('#newReservation').data( 'season2' ),
+			//season2: $('#newReservation').data( 'season2' ),
 			
 		},
 	    type: "POST",

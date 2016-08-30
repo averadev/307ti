@@ -838,6 +838,7 @@ private function comprubaArray($valor, $array){
 }	
 	public function getReservations(){
 		if($this->input->is_ajax_request()) {
+			ini_set('max_execution_time', 120);
 			$sql = $this->getFilters($_POST, 'r.CrDt', 'Res');
 			$id = null;
 			$reservations = $this->reservation_db->getReservations($sql, $id);
