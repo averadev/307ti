@@ -1080,9 +1080,10 @@ public function nextStatusContract(){
 		];
 		$IdStatus = $this->contract_db->propertyTable($peticion);
 		$maximo = $this->contract_db->selectMaxStatus();
-		if ($IdStatus <= $maximo) {
+		$IdStatus = $this->contract_db->getNextStatusID($IdStatus);
+		/*if ($IdStatus <= $maximo) {
 			$IdStatus += 1;
-		}
+		}*/
 		$Res = [
 			"fkStatusId"	=> $IdStatus,
 			"MdBy"			=> $this->nativesessions->get('id'),
@@ -1092,13 +1093,15 @@ public function nextStatusContract(){
 		$afectados = $this->contract_db->updateReturnId('tblRes', $Res, $condicion);
 		if ($afectados>0) {
 			
-			if ($IdStatus< $maximo) {
+			/*if ($IdStatus< $maximo) {
 				$IdStatus = $IdStatus;
 			}else{
 				$IdStatus = $maximo;
 			}
 			$next = $this->contract_db->selectNextStatusDesc2(intval($IdStatus)+1);
-			$actual = $this->contract_db->selectNextStatusDesc2($IdStatus);
+			$actual = $this->contract_db->selectNextStatusDesc2($IdStatus);*/
+			$next = $this->contract_db->getNextStatus($IdStatus);
+			$actual = $this->contract_db->getCurrentStatus($IdStatus);
 			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $actual, "next" => $next];
 			echo json_encode($mensaje);
 		}else{
@@ -1460,16 +1463,18 @@ public function getFlagsContract(){
 				"codicion"	=> 'pkResID',
 				"id"		=>	$id
 			];
-			$maximo = $this->contract_db->selectMaxStatus();
+			//$maximo = $this->contract_db->selectMaxStatus();
 
 			$IdStatus = $this->contract_db->propertyTable($peticion);
-			if ($IdStatus<$maximo) {
+			/*if ($IdStatus<$maximo) {
 				$IdStatus = $IdStatus;
 			}else{
 				$IdStatus = $maximo;
 			}
 			$next = $this->contract_db->selectNextStatusDesc2(intval($IdStatus)+1);
-			$actual = $this->contract_db->selectNextStatusDesc2($IdStatus);
+			$actual = $this->contract_db->selectNextStatusDesc2($IdStatus);*/
+			$next = $this->contract_db->getNextStatus($IdStatus);
+			$actual = $this->contract_db->getCurrentStatus($IdStatus);
 			$IDAccount  = $this->contract_db->getACCIDByContracID($id);
 			$data['extras'] = $this->contract_db->getExtraContrac($IDAccount);
 			$data['statusActual']= $actual;

@@ -28,8 +28,8 @@ class Reservation_db extends CI_Model {
 		
 		//$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
 		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
-		$this->db->join('tblStatusTypeStatus STS', 'STS.pkStatusTypeStatusId = r.fkStatusId and STS.fkStatusTypeId = 2', 'left');
-		$this->db->join('tblStatus ES', 'ES.pkStatusId = STS.fkStatusId ', 'left');
+		//$this->db->join('tblStatusTypeStatus STS', 'STS.pkStatusTypeStatusId = r.fkStatusId and STS.fkStatusTypeId = 2', 'left');
+		$this->db->join('tblStatus ES', 'ES.pkStatusId = r.fkStatusId ', 'INNER');
 		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = ri.fkFloorPlanId');
 		$this->db->join('tblView v', 'v.pkViewId = ri.fkViewId', 'LEFT');
 		$this->db->join('tblSeason s', 's.pkSeasonId = ri.fkSeassonId', 'LEFT');
@@ -1104,8 +1104,48 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->$p['alias'];
         }*/
     }
+	
+	public function getCurrentStatus($idStatus){
+		$this->db->select('S.StatusDesc as Descripcion');
+        $this->db->from('tblStatus S');
+        $this->db->where('pkStatusId', $idStatus);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->Descripcion;
+        }
+	}
     
-    public function selectNextStatusDesc($idStatus){
+	public function getNextStatus($idStatus){
+		$where = "s.pkStatusId = ( select sts.fkStatusId from tblStatusTypeStatus sts where sts.fkStatusTypeId = 2 and sts.Sequence = ";
+		$where .= " (select top 1 (sts2.Sequence) + 1 from tblStatusTypeStatus sts2 where sts2.fkStatusId = " . $idStatus . " and sts2.fkStatusTypeId = 2) )";
+		$this->db->select('s.StatusDesc as Descripcion');
+        $this->db->from('tblStatus S');
+        $this->db->where($where);
+		$query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->Descripcion;
+        }
+	}
+	
+	public function getNextStatusID($idStatus){
+		$where = "s.pkStatusId = ( select sts.fkStatusId from tblStatusTypeStatus sts where sts.fkStatusTypeId = 2 and sts.Sequence = ";
+		$where .= " (select top 1 (sts2.Sequence) + 1 from tblStatusTypeStatus sts2 where sts2.fkStatusId = " . $idStatus . " and sts2.fkStatusTypeId = 2) )";
+		$this->db->select('s.pkStatusId as idStatus');
+        $this->db->from('tblStatus S');
+        $this->db->where($where);
+		$query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->idStatus;
+        }
+	}
+	
+    /*public function selectNextStatusDesc($idStatus){
         $this->db->select('S.StatusDesc as Descripcion');
         $this->db->from('tblStatus S');
         $this->db->where('pkStatusId', $idStatus);
@@ -1115,9 +1155,9 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             $row = $query->row();
             return $row->Descripcion;
         }
-    }
+    }*/
 
- public function selectNextStatusDesc2($id){
+	public function selectNextStatusDesc2($id){
         $this->db->select('s.statusDesc');
         $this->db->from('tblstatustypestatus sts');
         $this->db->join('tblstatustype st', 'st.pkStatusTypeid = sts.fkStatusTypeId', 'inner');
@@ -1133,12 +1173,17 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
     public function selectMaxStatus(){
-        $this->db->select('max(PkStatusTypeStatusId) as maximo');
+       /* $this->db->select('max(PkStatusTypeStatusId) as maximo');
         $this->db->from('tblstatustypestatus sts');
         $this->db->join('tblstatustype st', 'st.pkStatusTypeid = sts.fkStatusTypeId', 'inner');
         $this->db->join('tblstatus s', 's.pkStatusId = sts.fkStatusId', 'inner');
         $this->db->where('st.pkStatusTypeid', 2);
-        $this->db->where('st.ynActive', 1);
+        $this->db->where('st.ynActive', 1);*/
+		$this->db->select('sts.fkStatusId as maximo');
+		$this->db->from('tblStatusTypeStatus sts');
+		$this->db->where('sts.fkStatusTypeId', 2);
+		$this->db->where('sts.ynActive', 1);
+		$this->db->where('sts.Sequence = ( SELECT MAX(sts2.Sequence) FROM tblStatusTypeStatus sts2 where sts2.fkStatusTypeId = 2 and sts2.ynActive = 1)');
         $query = $this->db->get();
 
         if($query->num_rows() > 0 ){

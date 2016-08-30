@@ -641,6 +641,47 @@ class Contract_db extends CI_Model {
             return $row->statusDesc;
         }
     }
+	
+	public function getNextStatus($idStatus){
+		$where = "s.pkStatusId = ( select sts.fkStatusId from tblStatusTypeStatus sts where sts.fkStatusTypeId = 1 and sts.Sequence = ";
+		$where .= " (select top 1 (sts2.Sequence) + 1 from tblStatusTypeStatus sts2 where sts2.fkStatusId = " . $idStatus . " and sts2.fkStatusTypeId = 1) )";
+		$this->db->select('s.StatusDesc as Descripcion');
+        $this->db->from('tblStatus S');
+        $this->db->where($where);
+		$query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->Descripcion;
+        }
+	}
+	
+	public function getNextStatusID($idStatus){
+		$where = "s.pkStatusId = ( select sts.fkStatusId from tblStatusTypeStatus sts where sts.fkStatusTypeId = 1 and sts.Sequence = ";
+		$where .= " (select top 1 (sts2.Sequence) + 1 from tblStatusTypeStatus sts2 where sts2.fkStatusId = " . $idStatus . " and sts2.fkStatusTypeId = 1) )";
+		$this->db->select('s.pkStatusId as idStatus');
+        $this->db->from('tblStatus S');
+        $this->db->where($where);
+		$query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->idStatus;
+        }
+	}
+	
+	public function getCurrentStatus($idStatus){
+		$this->db->select('S.StatusDesc as Descripcion');
+        $this->db->from('tblStatus S');
+        $this->db->where('pkStatusId', $idStatus);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->Descripcion;
+        }
+	}
+	
     public function selectIDRes($id, $year){
         $this->db->select('pkResId as ID');
         $this->db->from('tblRes');

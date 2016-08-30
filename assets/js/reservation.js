@@ -593,7 +593,8 @@ function addUnidadResDialog(iniDate, unit){
 						}
 						
 					});
-		            selectTableRes("tblUnidadesRes");
+		            //selectTableRes("tblUnidadesRes");
+					selectTableUnicoRes("tblUnidadesRes");
 	    		});
 	    	
 		},

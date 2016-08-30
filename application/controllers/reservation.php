@@ -1262,15 +1262,16 @@ private function comprubaArray($valor, $array){
 				"codicion"	=> 'pkResID',
 				"id"		=>	$id
 			];
-			$maximo = $this->reservation_db->selectMaxStatus();
+			//$maximo = $this->reservation_db->selectMaxStatus();
 			$IdStatus = $this->reservation_db->propertyTable($peticion);
-			if ($IdStatus<$maximo) {
+			/*if ($IdStatus<$maximo) {
 				$IdStatus = $IdStatus;
 			}else{
 				$IdStatus = $maximo;
-			}
-			$next = $this->reservation_db->selectNextStatusDesc2(intval($IdStatus)+1);
-			$actual = $this->reservation_db->selectNextStatusDesc2($IdStatus);
+			}*/
+			
+			$next = $this->reservation_db->getNextStatus($IdStatus);
+			$actual = $this->reservation_db->getCurrentStatus($IdStatus);
 			$IDAccount = $this->reservation_db->getACCIDByContracIDFDK($id);
 			$IDACC = $this->reservation_db->getACCIDByContracID($id);
 			$creditLimit = $this->reservation_db->getCreditLimitActual($IDAccount);
@@ -1282,111 +1283,77 @@ private function comprubaArray($valor, $array){
 			$data['creditLimit'] = $creditLimit;
 			$data['financeBalance'] = $financeBalance;
 			$data['Balance'] = $this->reservation_db->selectBalance($IDACC);
+			//var_dump($data);
 			$this->load->view('reservations/reservationDialogEdit', $data);
 		}
 	}
+	
 	public function nextStatusReservation(){
-	if($this->input->is_ajax_request()) {
-		$id = $_POST['idContrato'];
-		$peticion = [
-			"tabla" 	=> 'tblRes',
-			"valor" 	=> 'fkStatusId',
-			"alias" 	=> 'ID',
-			"codicion"	=> 'pkResID',
-			"id"		=>	$id
-		];
-		$IdStatus = $this->reservation_db->propertyTable($peticion);
-		$maximo = $this->reservation_db->selectMaxStatus();
-		if ($IdStatus < $maximo) {
-			$IdStatus += 1;
-		}
-		$Res = [
-			"fkStatusId"	=> $IdStatus,
-			"MdBy"			=> $this->nativesessions->get('id'),
-			"MdDt"			=> $this->getToday()
-		];
-		$condicion = "pkResId = " . $id;
-		$afectados = $this->reservation_db->updateReturnId('tblRes', $Res, $condicion);
-		if ($afectados>0) {
-			
-			if ($IdStatus< $maximo) {
-				$IdStatus = $IdStatus;
-			}else{
-				$IdStatus = $maximo;
-			}
-			$next = $this->reservation_db->selectNextStatusDesc2(intval($IdStatus)+1);
-			$actual = $this->reservation_db->selectNextStatusDesc2($IdStatus);
-			if ($actual == "Out") {
-				$financiamiento = [
-							"CheckOut"	=> $this->getToday(),
-						];
-						$condicion = "pkResId = " . $id;
-						$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
-			}
-			if ($actual == "In House") {
-				$financiamiento = [
-							"checkIn"	=> $this->getToday(),
-						];
-				$condicion = "pkResId = " . $id;
-				$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
-			}
-			$dateCheckIn = $this->reservation_db->getCheckIn($id);
-			$CheckOut = $this->reservation_db->getCheckOut($id);
-			//$balance = $this->reservation_db->selectBalance();
-			$mensaje = [
-				"mensaje"=>"save correctly",
-				"afectados" => $afectados,
-				"status" => $actual,
-				"next" => $next,
-				"dateCheckOut" => $CheckOut,
-				"dateCheckIn" => $dateCheckIn
+		if($this->input->is_ajax_request()) {
+			$id = $_POST['idContrato'];
+			$peticion = [
+				"tabla" 	=> 'tblRes',
+				"valor" 	=> 'fkStatusId',
+				"alias" 	=> 'ID',
+				"codicion"	=> 'pkResID',
+				"id"		=>	$id
 			];
-			echo json_encode($mensaje);
-		}else{
-			$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
-			echo json_encode($mensaje);
-		}
-	}
-}
-public function nextStatusReservacion(){
-	if($this->input->is_ajax_request()) {
-		$id = $_POST['idContrato'];
-		$peticion = [
-			"tabla" 	=> 'tblRes',
-			"valor" 	=> 'fkStatusId',
-			"alias" 	=> 'ID',
-			"codicion"	=> 'pkResID',
-			"id"		=>	$id
-		];
-		$IdStatus = $this->reservation_db->propertyTable($peticion);
-		$maximo = $this->reservation_db->selectMaxStatus();
-		if ($IdStatus < $maximo) {
-			$IdStatus += 1;
-		}
-		$Res = [
-			"fkStatusId"	=> $IdStatus,
-			"MdBy"			=> $this->nativesessions->get('id'),
-			"MdDt"			=> $this->getToday()
-		];
-		$condicion = "pkResId = " . $id;
-		$afectados = $this->reservation_db->updateReturnId('tblRes', $Res, $condicion);
-		if ($afectados>0) {
-			
-			if ($IdStatus< $maximo) {
-				$IdStatus = $IdStatus;
+			$IdStatus = $this->reservation_db->propertyTable($peticion);
+			$maximo = $this->reservation_db->selectMaxStatus();
+			//if ($IdStatus < 6) {
+				//$IdStatus += 1;
+				$IdStatus = $this->reservation_db->getNextStatusID($IdStatus);
+			//}
+			$Res = [
+				"fkStatusId"	=> $IdStatus,
+				"MdBy"			=> $this->nativesessions->get('id'),
+				"MdDt"			=> $this->getToday()
+			];
+			$condicion = "pkResId = " . $id;
+			$afectados = $this->reservation_db->updateReturnId('tblRes', $Res, $condicion);
+			if ($afectados>0) {
+				
+				/*if ($IdStatus< $maximo) {
+					$IdStatus = $IdStatus;
+				}else{
+					$IdStatus = $maximo;
+				}*/
+				//$next = $this->reservation_db->selectNextStatusDesc2(intval($IdStatus)+1);
+				//$actual = $this->reservation_db->selectNextStatusDesc2($IdStatus);
+				$next = $this->reservation_db->getNextStatus($IdStatus);
+				$actual = $this->reservation_db->getCurrentStatus($IdStatus);
+				if ($actual == "Out") {
+					$financiamiento = [
+								"CheckOut"	=> $this->getToday(),
+							];
+							$condicion = "pkResId = " . $id;
+							$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
+				}
+				if ($actual == "In House") {
+					$financiamiento = [
+								"checkIn"	=> $this->getToday(),
+							];
+					$condicion = "pkResId = " . $id;
+					$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
+				}
+				$dateCheckIn = $this->reservation_db->getCheckIn($id);
+				$CheckOut = $this->reservation_db->getCheckOut($id);
+				//$balance = $this->reservation_db->selectBalance();
+				$mensaje = [
+					"mensaje"=>"save correctly",
+					"afectados" => $afectados,
+					"status" => $actual,
+					"next" => $next,
+					"dateCheckOut" => $CheckOut,
+					"dateCheckIn" => $dateCheckIn
+				];
+				echo json_encode($mensaje);
 			}else{
-				$IdStatus = $maximo;
+				$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
+				echo json_encode($mensaje);
 			}
-			$next = $this->reservation_db->selectNextStatusDesc2(intval($IdStatus)+1);
-			$actual = $this->reservation_db->selectNextStatusDesc2($IdStatus);
-			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $actual, "next" => $next];
-			echo json_encode($mensaje);
-		}else{
-			$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
-			echo json_encode($mensaje);
 		}
 	}
-}
 
 	public function modalFinanciamiento(){
 		if($this->input->is_ajax_request()) {
