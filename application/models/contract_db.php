@@ -692,11 +692,13 @@ class Contract_db extends CI_Model {
     }
     public function selectUnitOCC($IdUnidad, $year, $Intervalo){
         $this->db->select('count(*) as Ocupadas');
-        $this->db->from('tblResInvt');
-        $this->db->where('fkUnitId', $IdUnidad);
+        $this->db->from('tblResInvt I');
+        $this->db->join('tblResOcc ro', 'ro.fkResInvtId = I.pkResInvtId');
+        $this->db->join('tblCalendar c', 'I.Intv = c.Intv');
+        $this->db->where('I.fkUnitId', $IdUnidad);
         $this->db->where($year.' BETWEEN firstOccYear  AND LastOccYear');
-        $this->db->where('Intv', $Intervalo);
-        $this->db->where('ynActive', 1);
+        $this->db->where('I.Intv', $Intervalo);
+        $this->db->where('I.ynActive', 1);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 ){
