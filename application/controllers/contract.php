@@ -205,7 +205,7 @@ private function insertContratoOcupacion($idContrato){
 
 	$Ocupaciones = [];
 	$rango = intval($_POST['lastYear']-$_POST['firstYear']);
-	for($i =0; $i<= 10; $i++){
+	for($i =0; $i<= $rango; $i++){
 			$Ocupacion = [
 			"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
 			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
@@ -1260,7 +1260,20 @@ public function getFlagsContract(){
 			echo json_encode($trxType);
 		}
 	}
-	
+	public function selectUnidadesOcupadas(){
+		if($this->input->is_ajax_request()) {
+			$Ocupadas = [];
+			$rango = intval(sizeof($_POST['unidades']));
+			for($i =0; $i< $rango; $i++){
+				$IdUnidad = $_POST['unidades'][$i]['id'];
+				$year = $_POST['unidades'][$i]['lyear'];
+				$Intervalo = $_POST['unidades'][$i]['week'];
+				$N = $this->contract_db->selectUnitOCC($IdUnidad, $year, $Intervalo);
+				array_push($Ocupadas, $N);
+			}
+			echo json_encode($Ocupadas);
+		}
+	}
 	public function getTrxClass(){
 		if($this->input->is_ajax_request()) {
 			$trxClass = $this->contract_db->selectTrxClass();

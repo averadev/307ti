@@ -690,6 +690,20 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
+    public function selectUnitOCC($IdUnidad, $year, $Intervalo){
+        $this->db->select('count(*) as Ocupadas');
+        $this->db->from('tblResInvt');
+        $this->db->where('fkUnitId', $IdUnidad);
+        $this->db->where($year.' BETWEEN firstOccYear  AND LastOccYear');
+        $this->db->where('Intv', $Intervalo);
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->Ocupadas;
+        }
+    }
     public function selectWeeksContract($string){
         /*$this->db->select("RTRIM(RT.ResTypeDesc) as Descripcion,RI.fkUnitId,RI.Intv, RI.FirstOccYear, RI.LastOccYear ");
         $this->db->from('tblResInvt RI');

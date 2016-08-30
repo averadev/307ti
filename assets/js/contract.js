@@ -600,8 +600,7 @@ function createNewContract(){
 			data: {
 				idiomaID : $("#selectLanguage").val(),
 				firstYear :$("#firstYearWeeks").val().trim(),
-				//lastYear : $("#lastYearWeeks").val().trim(),
-				lastYear : getYear( $("#firstYearWeeks").val() ),
+				lastYear : getYear($("#lastYearWeeks").val()),
 				legalName : $("#legalName").val().trim(),
 				tourID : $("#TourID").val().trim(),
 				peoples: getValueTablePersonas(),
@@ -725,8 +724,8 @@ function getValueTableUnidades(){
 			unidad.frequency = $(this).find('td').eq(3).text(),
 			unidad.season = $(this).find('td').eq(4).text(),
 			unidad.week = $(this).find('td').eq(5).text(),
-			unidad.fyear = $(this).find('td').eq(6).text(),
-			unidad.lyear = $(this).find('td').eq(7).text()
+			unidad.fyear = $(this).find('td').eq(7).text(),
+			unidad.lyear = $(this).find('td').eq(8).text()
 			unidades.push(unidad); 
 		}
 	});
@@ -999,8 +998,8 @@ function getWeeksDialog(unidades){
        			}else{
        				var frequency = $("#frequency option:selected" ).text();
        				var primero = $("#firstYearWeeks").val();
-	       			//var ultimo = $("#lastYearWeeks").val(); 
-					var ultimo = getYear( $("#firstYearWeeks").val() ); 
+	       			var ultimo = getYear($("#lastYearWeeks").val()); 
+					//var ultimo = getYear( $("#firstYearWeeks").val() ); 
 	       			tablUnidadades(unidades, frequency, primero, ultimo);	
 	       			$(this).dialog('close');
 	       			setValueUnitPrice();
@@ -1023,8 +1022,19 @@ function setYear(id, n){
 }
 
 function getYear(year){
-	//var d = new Date().getFullYear();
-	return (parseInt(year) + 10);
+	var first = $("#firstYearWeeks").val().trim();
+	first = parseInt(first)
+	if (year <= first + 10) {
+		return year;
+	}else{
+		return (first + 10);
+	}	
+}
+
+function getOnlyYear(){
+	var d = new Date();
+	var n = d.getFullYear();
+	return n;
 }
 
 function PackReference(){
@@ -1245,7 +1255,7 @@ function modalDiscountAmount(){
 function tablUnidadades(unidades, frequency, primero, ultimo){
 	var bodyHTML = '';
 	for (var i = 0; i < unidades.length; i++) {
-		bodyHTML += "<tr>";
+		bodyHTML += "<tr id="+'unidad'+unidades[i].id+">";
 		bodyHTML += "<td>"+unidades[i].id+"</td>";
 		bodyHTML += "<td>"+unidades[i].description+"</td>";
 		bodyHTML += "<td>"+unidades[i].price+"</td>";
@@ -1261,6 +1271,32 @@ function tablUnidadades(unidades, frequency, primero, ultimo){
    
     $('#tableUnidadesSelected tbody').append(bodyHTML);
     deleteElementTableUnidades("tableUnidadesSelected");
+    selectUnidadOcupada();
+}
+
+function selectUnidadOcupada(){
+	var ajaxDatos =  {
+		url: "contract/selectUnidadesOcupadas",
+		tipo: "json",
+		datos: {
+			unidades: getValueTableUnidades()
+		},
+		funcionExito : UnidadesOcupadas,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxDatos);
+
+}
+function UnidadesOcupadas(data){
+	var myTable = document.getElementById('tableUnidadesSelected');
+	var rows =  myTable.rows;
+	for(j in data) {
+		if (data[j]>0) {
+			$(rows[parseInt(j)+2]).addClass("redI");
+			alertify.error("Unit in red is in use");
+		}
+	}
+	
 }
 
 function verificarTablas(div){
