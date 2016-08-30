@@ -1255,7 +1255,7 @@ function modalDiscountAmount(){
 function tablUnidadades(unidades, frequency, primero, ultimo){
 	var bodyHTML = '';
 	for (var i = 0; i < unidades.length; i++) {
-		bodyHTML += "<tr id="+'unidad'+unidades[i].id+">";
+		bodyHTML += "<tr>";
 		bodyHTML += "<td>"+unidades[i].id+"</td>";
 		bodyHTML += "<td>"+unidades[i].description+"</td>";
 		bodyHTML += "<td>"+unidades[i].price+"</td>";
