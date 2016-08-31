@@ -255,8 +255,13 @@ function showModalContract(){
 			"class": 'dialogModalButtonAccept',
 			click: function() {
 				if (verifyContractALL()) {
-					createNewContract();
-					$(this).dialog('close');
+					if ($('#tableUnidadesSelected tr').hasClass('redI')) {
+						alertify.error("Verify the Unities");
+					}else{
+						createNewContract();
+						$(this).dialog('close');
+					}
+					
 				}
 			}
 		}]
@@ -3379,8 +3384,12 @@ function showModalContractXD(id){
 			"class": 'dialogModalButtonAccept',
 			click: function() {
 				if (verifyContractALL()) {
-					createNewContract();
-					//$(this).dialog('close');
+					if ($('#tableUnidadesSelected tr').hasClass('redI')) {
+						alertify.error("Verify the Unities");
+					}else{
+						createNewContract();
+					}
+					
 				}
 				
 			}

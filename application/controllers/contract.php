@@ -1269,9 +1269,10 @@ public function getFlagsContract(){
 			$rango = intval(sizeof($_POST['unidades']));
 			for($i =0; $i< $rango; $i++){
 				$IdUnidad = $_POST['unidades'][$i]['id'];
-				$year = $_POST['unidades'][$i]['lyear'];
+				$fYear = $_POST['unidades'][$i]['fyear'];
+				$lYear = $_POST['unidades'][$i]['lyear'];
 				$Intervalo = $_POST['unidades'][$i]['week'];
-				$N = $this->contract_db->selectUnitOCC($IdUnidad, $year, $Intervalo);
+				$N = $this->contract_db->selectUnitOCC2($IdUnidad, $fYear, $lYear, $Intervalo);
 				array_push($Ocupadas, $N);
 			}
 			echo json_encode($Ocupadas);

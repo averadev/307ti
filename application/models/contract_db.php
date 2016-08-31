@@ -731,13 +731,13 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
-    public function selectUnitOCC($IdUnidad, $year, $Intervalo){
+    public function selectUnitOCC($IdUnidad, $fYear, $lYear, $Intervalo){
         $this->db->select('count(*) as Ocupadas');
         $this->db->from('tblResInvt I');
         $this->db->join('tblResOcc ro', 'ro.fkResInvtId = I.pkResInvtId');
         $this->db->join('tblCalendar c', 'I.Intv = c.Intv');
         $this->db->where('I.fkUnitId', $IdUnidad);
-        $this->db->where($year.' BETWEEN firstOccYear  AND LastOccYear');
+        $this->db->where($lYear.' BETWEEN firstOccYear  AND LastOccYear');
         $this->db->where('I.Intv', $Intervalo);
         $this->db->where('I.ynActive', 1);
         $query = $this->db->get();
@@ -745,6 +745,20 @@ class Contract_db extends CI_Model {
         if($query->num_rows() > 0 ){
             $row = $query->row();
             return $row->Ocupadas;
+        }
+    }
+     public function selectUnitOCC2($IdUnidad, $fYear, $lYear, $Intervalo){
+        $this->db->select('count(*) as ocupadas');
+        $this->db->from('tblResInvt I');
+        $this->db->where('I.fkUnitId', $IdUnidad);
+        $this->db->where('I.Intv', $Intervalo);
+        $this->db->where($fYear.' BETWEEN I.FirstOccYear and I.LastOccYear');
+        $this->db->where('I.ynActive', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->ocupadas;
         }
     }
     public function selectWeeksContract($string){
@@ -953,13 +967,14 @@ class Contract_db extends CI_Model {
     public function getUnidades($filters){
 
         $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc');
-        $this->db->select('CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price, PRI.Week, SE.SeasonDesc, PRI.ClosingCost, V.ViewDesc as View');
+        $this->db->select('CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price, PRI.Week, SE.SeasonDesc, PRI.ClosingCost, V.ViewDesc as View, ISNULL(IV.LastOccYear, 0 ) as LastOccYear');
         $this->db->from('tblUnit U');
         $this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
         $this->db->join('tblPrice PRI', 'U.pkUnitId = PRI.fkUnitId', 'inner');
         $this->db->join('tblSeason SE', 'PRI.fkSeasonId = SE.pkSeasonId', 'inner');
         $this->db->join('tblProperty P', 'P.pkPropertyId = U.fkPropertyId', 'inner');
         $this->db->join('tblView V', 'U.fkViewId = V.pkViewId', 'inner');
+        $this->db->join('tblResInvt IV', 'U.pkUnitId = IV.fkUnitId and IV.Intv = PRI.Week', 'left');
         $this->db->where('PRI.fkStatusId', 17);
         if (!empty($filters['interval'])) {
             $this->db->where('PRI.Week', $filters['interval']);
