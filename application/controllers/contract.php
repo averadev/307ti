@@ -30,7 +30,7 @@ class Contract extends CI_Controller {
 	public function saveContract(){
 
 		if($this->input->is_ajax_request()){	
-			ini_set('max_execution_time', 120);
+			ini_set('max_execution_time', 300);
 			$VALIDO =[
 				"status" => true
 			];
@@ -171,6 +171,7 @@ public function createCreditCardAcc(){
 
 private function createContract(){
 		//$folio = 
+		$folioCon = $this->contract_db->select_Folio(1);
 		$Contract = [
 			"fkResTypeId"               => $this->contract_db->selectRestType('ContFx'),
 			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('RG'),
@@ -179,12 +180,12 @@ private function createContract(){
 		    "pkResRelatedId"            => null,
 		    "FirstOccYear"              => $_POST['firstYear'],
 		    "LastOccYear"               => $_POST['lastYear'],
-		    "ResCode"                   => "",
-		    "ResConf"                   => "",
+		    "ResCode"                   => "OW" . "-" . $folioCon . "-" . substr($_POST['firstYear'],2,4),
+		    "ResConf"                   => "OW" . "-" . $folioCon . "-" . substr($_POST['firstYear'],2,4),
 		    "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
 		    "LegalName"                 => $_POST['legalName'],
 		    "Prefix"					=> $this->contract_db->selectPrefix(),
-		    "Folio"                     => $this->contract_db->select_Folio(1),
+		    "Folio"                     => $folioCon,
 		    "fkTourId"                  => $_POST['tourID'],
 		    "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
 		    "fkInvtTypeId"          	=> $this->contract_db->selectInvtTypeId('CU'),
@@ -202,11 +203,12 @@ private function createContract(){
 }
 
 private function insertContratoOcupacion($idContrato){
-
+	
 	$Ocupaciones = [];
 	$rango = intval($_POST['lastYear']-$_POST['firstYear']);
 	for($i =0; $i<= $rango; $i++){
-			$Ocupacion = [
+		$folioOcc = $this->contract_db->select_Folio(2);
+		$Ocupacion = [
 			"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
 			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
 			"fkLanguageId"              => $_POST['idiomaID'],
@@ -214,11 +216,11 @@ private function insertContratoOcupacion($idContrato){
 	        "pkResRelatedId"            => $idContrato,
 	        "FirstOccYear"              => $_POST['firstYear'] + $i,
 	        "LastOccYear"               => $_POST['firstYear'] + $i,
-	        "ResCode"                   => "",
-	        "ResConf"                   => "",
+	        "ResCode"                   => "OW" . "-" . $folioOcc . "-" . substr($_POST['firstYear'],2,4),
+	        "ResConf"                   => "OW" . "-" . $folioOcc . "-" . substr($_POST['firstYear'],2,4),
 	        "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
 	        "LegalName"                 => $_POST['legalName'],
-	        "Folio"                     => $this->contract_db->select_Folio(2),
+	        "Folio"                     => $folioOcc,
 	        "fkTourId"                  => $_POST['tourID'],
 	        "fkSaleTypeId"              => $this->contract_db->selectSaleTypeId('CU'),
 	        "fkInvtTypeId"          	=> $this->contract_db->selectInvtTypeId('CU'),

@@ -11,7 +11,7 @@
         <form id="saveDataReservation" data-abide>
             <div class="fieldset large-12 columns">
                 <legend>
-                    Reservation Data
+                    Language
                 </legend>
                 <!-- Language-->
                 <div class="row">
@@ -31,7 +31,11 @@
 						</div>
                     </div>
                 </div>
-
+			</div>
+			<div class="fieldset large-12 columns">
+                <legend>
+                    People
+                </legend>
                 <div class="containerPeople">
                     <div class="row">
                         <div class="small-12 columns">

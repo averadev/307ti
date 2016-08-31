@@ -25,7 +25,7 @@
 </div>
 <div class="row headerDescription headerGeneral" style="padding: 8px;">
 	<div class="small-12 medium-12 large-8 columns"  >
-		<label class="headerDescriptionTitle" id="editContractTitle"><?php  echo "[".$contract[0]->Folio ."-".$contract[0]->ID."]".$contract[0]->LegalName;?></label>
+		<label class="headerDescriptionTitle" id="editContractTitle"><?php  echo "[".$contract[0]->Confirmation_code ."]".$contract[0]->LegalName;?></label>
 		<label class="headerGeneral" id="editContracFloorPlan"><b><?php echo $contract[0]->FloorPlan ."/ Unit ". $encabezado[0]->ID ."/ Intv ".$encabezado[0]->Intv;?><b></label>
 		<label class="headerGeneral" id="editContracYear"><b>Year: <?php echo $contract[0]->FirstOccYear; ?></b></label>
 	</div>

@@ -11,7 +11,8 @@ class Reservation_db extends CI_Model {
         $sql = "";
         $this->db->distinct();
 		//$this->db->limit(100);
-        $this->db->select("r.pkResId as ID, rt.ResTypeDesc as Reservacion_type, ( CONVERT(varchar(10),  r.folio ) + '-' +  CONVERT(varchar(10),  1 ) ) as Folio, (ot.OccTypeCode + '-' + CONVERT(varchar(10), r.folio ) + '-' + substring(CONVERT(varchar(10), r.FirstOccYear ), 3, 4) ) as Confirmation_code, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name");
+        //$this->db->select("r.pkResId as ID, rt.ResTypeDesc as Reservacion_type, ( CONVERT(varchar(10),  r.folio ) + '-' +  CONVERT(varchar(10),  1 ) ) as Folio, (ot.OccTypeCode + '-' + CONVERT(varchar(10), r.folio ) + '-' + substring(CONVERT(varchar(10), r.FirstOccYear ), 3, 4) ) as Confirmation_code, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name");
+		$this->db->select("r.pkResId as ID, rt.ResTypeDesc as Reservacion_type, ( CONVERT(varchar(10),  r.folio ) + '-' +  CONVERT(varchar(10),  1 ) ) as Folio, r.ResConf as Confirmation_code, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name");
         $this->db->select('ot.OccTypeDesc as Occ_type, fp.FloorPlanDesc as FloorPlan, v.ViewDesc as View_, s.SeasonDesc as Season, R.FirstOccYear, ES.StatusDesc');
         $this->db->select('r.CrBy as Create_by, r.CrDt as Create_date, r.MdBy as Modified_by, r.MdDt as Modified_date');
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');

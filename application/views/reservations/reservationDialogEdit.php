@@ -25,7 +25,7 @@
 </div>
 <div class="row headerDescription headerGeneral" style="padding: 8px;">
 	<div class="small-12 medium-12 large-8 columns"  >
-		<label class="headerDescriptionTitle small-12 columns" id="editContractTitle"><?php  echo $contract[0]->Folio;?></label>
+		<label class="headerDescriptionTitle small-12 columns" id="editContractTitle"><?php  echo $contract[0]->Confirmation_code;?></label>
 		<label class="headerGeneral small-12 columns" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
 		<label class="headerGeneral small-12 columns" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
 		<label class="headerGeneral small-6 columns"><?php  echo "Expected Arrival: ". $contract[0]->arrivaDate;?></label>
