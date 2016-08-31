@@ -387,6 +387,7 @@ class People extends CI_Controller {
 	* Obtiene la lista de usuario de la busqueda
 	**/
 	public function getPeopleBySearch(){
+		ini_set('max_execution_time', 60);
 		$months = array('', 'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
 		$peopleId = $_POST['peopleId'];
 		$lastName = $_POST['lastName'];
