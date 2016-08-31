@@ -13,6 +13,8 @@ $(document).ready(function(){
 		show_icon: false,
 	});
 	
+	$( "#startDateRes" ).val( getCurrentDate() );
+	
 	var addReservation = null;
 	var unidadResDialog = addUnidadResDialog( null, null );
     var peopleResDialog = addPeopleResDialog();
@@ -223,7 +225,6 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 	
 	$( "#btnfindRes").unbind( "click" );
 	$('#btnfindRes').click(function(){
-		$('#reservationstbody').empty();
 		getReservations();
 	});
 
@@ -442,17 +443,16 @@ function createDialogReservation(addReservation) {
 			click: function() {
 				$(this).dialog('close');
 			}
-		},{
-			text: "Save and close",
-			"class": 'dialogModalButtonAccept',
-			click: function() {
-					if (verifyContractALLRes()) {
-						createNewReservation();
-						$(this).dialog('close');
-					}
-			}
-		},
-			{
+			},{
+				text: "Save",
+				"class": 'dialogModalButtonAccept',
+				click: function() {
+						if (verifyContractALLRes()) {
+							createNewReservation();
+							$(this).dialog('close');
+						}
+				}
+			},/*{
 				text: "Save",
 				"class": 'dialogModalButtonAccept',
 				click: function() {
@@ -460,7 +460,8 @@ function createDialogReservation(addReservation) {
 						createNewReservation();
 					}
 				}
-			}],
+			}*/
+		],
 		close: function() {
 			$('#dialog-Reservations').empty();
 			
@@ -677,37 +678,41 @@ function getReservations(){
 	noResults( '#table-reservations', false );
 	showLoading( '#table-reservations', true );
 	
-	noResults('#table-reservations',false);
-	showLoading( '#table-frontDesk', true );
-	
     var filters = getFiltersCheckboxs('filtro_reservations');
     var arrayDate = ["startDateRes", "endDateRes"];
     var dates = getDates(arrayDate);
     var arrayWords = ["stringRes"];
     var words = getWords(arrayWords);
-    $.ajax({
-		data:{
-			filters: filters,
-			dates: dates,
-			words: words
-		},
-   		type: "POST",
-       	url: "reservation/getReservations",
-		dataType:'json',
-		success: function(data){
-			if( data.items ){
-				alertify.success("Found "+ data.length);
-				drawTable2(data.items,"reservationsTable","getDatailByIDRes","editRes");
-			}else{
-				noResultsTable("table-reservations", "reservationsTable", "no results found");
+	
+	if( dates.startDateRes == "" && dates.endDateRes == "" && words.stringRes == "" ){
+		alertify.error("Choose at least filtering field");
+		showLoading( '#table-reservations', false );
+	}else{
+		$('#reservationstbody').empty();
+		$.ajax({
+			data:{
+				filters: filters,
+				dates: dates,
+				words: words
+			},
+			type: "POST",
+			url: "reservation/getReservations",
+			dataType:'json',
+			success: function(data){
+				if( data.items ){
+					alertify.success("Found "+ data.length);
+					drawTable2(data.items,"reservationsTable","getDatailByIDRes","editRes");
+				}else{
+					noResultsTable("table-reservations", "reservationsTable", "no results found");
+				}
+				showLoading('#table-reservations',false);
+			},
+			error: function(){
+				alertify.error("Try again");
+				showLoading('#table-reservations',false);
 			}
-			showLoading('#table-reservations',false);
-		},
-		error: function(){
-			alertify.error("Try again");
-			showLoading('#table-reservations',false);
-		}
-    });
+		});
+	}
 }
 
 function selectAllPeopleRes(){
@@ -952,28 +957,15 @@ function createNewReservation(){
 				})
 				.done(function( data, textStatus, jqXHR ) {
 					showAlert(false,"Saving changes, please wait ....",'progressbar');
-					/*if (data['status']== 1) {
-						elem.resetForm();
-						var arrayWords = ["depositoEngancheRes", "precioUnidadRes", "precioVentaRes", "downpaymentRes"];
-						clearInputsByIdRes(arrayWords);
-						$('#dialog-Weeks').empty();
-						$('#tablePeopleResSelected tbody').empty();
-						$('#tableUnidadesResSelected tbody').empty();
-						alertify.success(data['mensaje']);
-						var tabCurrent = $('#tab-general .active').attr('attr-screen');
-						if(tabCurrent == "frontDesk"){
-							getFrontDesk("",1);
-						}else{
-							$('#reservationstbody').empty();
-							getReservations();
-						}
-					}*/
 					if (data['status']== 1) {
 						elem.resetForm();
 						var arrayWords = ["depositoEngancheRes", "precioUnidadRes", "precioVentaRes", "downpaymentRes"];
 						clearInputsByIdRes(arrayWords);
 						if (data['balance'].financeBalance > 0 ) {
 							showModalFinRes(data['idContrato']);
+						}else{
+							var dialogEditReservation = modalEditReservation(id);
+							dialogEditReservation.dialog("open");
 						}
 						$('#dialog-Weeks').empty();
 						$('#tablePeopleResSelected tbody').empty();
@@ -983,7 +975,7 @@ function createNewReservation(){
 						if(tabCurrent == "frontDesk"){
 							getFrontDesk("",1);
 						}else{
-							$('#reservationstbody').empty();
+							
 							getReservations();
 						}
 					}else{
@@ -2556,7 +2548,7 @@ function modalFinanciamientoRes() {
     			//alertify.success("Financiamiento guardado");
     			updateFinanciamientoRes(421);
     			//$(this).dialog('close');
-	       
+				modalEditReservation(data['idContrato']);
        		}
      	}],
      close: function() {
@@ -2572,44 +2564,6 @@ function addHTMLModalFinRes(data){
 }
 
 function showModalFinRes(id){
-	/*var ajaxData =  {
-		url: "reservation/modalFinanciamiento",
-		tipo: "html",
-		datos: {
-			idReservation: id
-		},
-		funcionExito : addHTMLModalFinRes,
-		funcionError: mensajeAlertify
-	};
-	var modalPropiedades = {
-		div: "dialog-FinanciamientoRes",
-		altura: maxHeight,
-		width: "75%",
-		onOpen: ajaxDATA,
-		onSave: createNewReservation,
-		botones :[{
-	       	text: "Cancel",
-	       	"class": 'dialogModalButtonCancel',
-	       	click: function() {
-	         	$(this).dialog('close');
-	       }
-	   	},{
-       		text: "Ok",
-       		"class": 'dialogModalButtonAccept',
-       		click: function() {
-    			updateFinanciamientoRes(id);
-       		}
-     	}]
-	};
-
-	if (modalFin!=null) {
-		modalFin.dialog( "destroy" );
-	}
-	modalFin = modalGeneral2(modalPropiedades, ajaxData);
-	modalFin.dialog( "open" );*/
-	
-	console.log("entrooooooo");
-	
 	var ajaxData =  {
 		url: "reservation/modalFinanciamiento",
 		tipo: "html",
@@ -2630,6 +2584,8 @@ function showModalFinRes(id){
 	       	"class": 'dialogModalButtonCancel',
 	       	click: function() {
 	         	$(this).dialog('close');
+				var dialogEditReservation = modalEditReservation(id);
+				dialogEditReservation.dialog("open");
 	       }
 	   	},{
        		text: "Ok",
@@ -2639,9 +2595,12 @@ function showModalFinRes(id){
        			if (totaltoPay>0) {
        				updateFinanciamientoRes(id);
     				$(this).dialog('close');
+					var dialogEditReservation = modalEditReservation(id);
+					dialogEditReservation.dialog("open");
        			}else{
        				alertify.error("Please Calculate the Monthly Payment");
        			}
+				
        		}
      	}]
 	};
@@ -2655,25 +2614,6 @@ function showModalFinRes(id){
 }
 
 function updateFinanciamientoRes(id){
-	/*var fechaPP = $("#fechaPrimerPagoFRes").val();
-    var factor = $("#terminosFinanciamientoFRes").val();
-    var pagoMensual = getArrayValuesColumnTableRes("tablePagosSelected", 3);
-	$.ajax({
-	    data:{
-	        idContrato: id,
-	        factor:factor,
-	        pagoMensual: pagoMensual[0]
-	    },
-	    type: "POST",
-	    url: "reservation/updateFinanciamiento",
-	    dataType:'json',
-	    success: function(data){
-	    	alertify.success(data['mensaje']);
-	    },
-	    error: function(){
-	        alertify.error("Try again");
-	    }
-	});*/
 	var fechaPP = $("#fechaPrimerPagoF").val();
     var factor = $("#terminosFinanciamientoF").val();
     var pagoMensual = getArrayValuesColumnTable("tablePagosSelectedFin", 3)[0];

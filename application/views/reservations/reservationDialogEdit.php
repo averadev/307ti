@@ -144,7 +144,7 @@
 									<th class="cellGeneral" ># Week</th>
 									<th class="cellGeneral" >Fisrt Year OCC</th>
 									<th class="cellGeneral" >Last Year OCC</th>
-									<th class="cellGeneral" >Frequency</th>
+									<th class="cellGeneral" >OCCYear</th>
 									<th></th>
 								</tr>
 							</thead>

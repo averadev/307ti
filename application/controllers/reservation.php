@@ -1097,11 +1097,26 @@ private function comprubaArray($valor, $array){
 			$datos =[
 				"reservation"=> $this->reservation_db->getReservations(null,$id),
 				"peoples" => $this->reservation_db->getPeopleReservation($id),
-				"unities" => $this->reservation_db->getUnitiesReservation($id),
+				//"unities" => $this->reservation_db->getUnitiesReservation($id),
 				"terminosVenta" => $this->reservation_db->getTerminosVentaReservation($id),
 				"terminosFinanciamiento" => $this->reservation_db->getTerminosFinanciamiento($id),
 				"CollectionCost" => $this->reservation_db->selectCostCollection()
 			];
+			$unities = $this->reservation_db->getUnitiesReservation($id);
+			$SeasonByDay = null;
+			foreach($unities as $item){
+				if( $item->fkResTypeId == 7 ){
+					$SeasonByDay = $this->reservation_db->getSeasonByDay( $item->fkFloorPlanId, $item->fkFloorId, $item->fkViewId, 1, 1, 2, $item->OccYear, $item->iniDate, $item->endDate );
+					array_pop($SeasonByDay);
+					$price = 0;
+					foreach( $SeasonByDay as $item2 ){
+						$price += $item2->RateAmtNight;
+					}
+					$item->Price = $price;
+				}
+				unset( $item->fkResTypeId, $item->fkFloorPlanId, $item->fkViewId, $item->fkFloorId, $item->iniDate, $item->endDate );
+			}
+			$datos['unities'] = $unities;
 			echo json_encode($datos);
 		}
 	}

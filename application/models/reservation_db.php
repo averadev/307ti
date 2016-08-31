@@ -10,11 +10,13 @@ class Reservation_db extends CI_Model {
     function getReservations($filters, $id){
         $sql = "";
         $this->db->distinct();
+		//$this->db->limit(100);
         $this->db->select("r.pkResId as ID, rt.ResTypeDesc as Reservacion_type, ( CONVERT(varchar(10),  r.folio ) + '-' +  CONVERT(varchar(10),  1 ) ) as Folio, (ot.OccTypeCode + '-' + CONVERT(varchar(10), r.folio ) + '-' + substring(CONVERT(varchar(10), r.FirstOccYear ), 3, 4) ) as Confirmation_code, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name");
         $this->db->select('ot.OccTypeDesc as Occ_type, fp.FloorPlanDesc as FloorPlan, v.ViewDesc as View_, s.SeasonDesc as Season, R.FirstOccYear, ES.StatusDesc');
         $this->db->select('r.CrBy as Create_by, r.CrDt as Create_date, r.MdBy as Modified_by, r.MdDt as Modified_date');
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
-        $this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
+        $this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 0, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
+		//$this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
         $this->db->from('tblRes r');
        // $this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId');
 		$this->db->join('tblResType rt', 'rt.pkResTypeId = r.fkResTypeId');
@@ -45,8 +47,8 @@ class Reservation_db extends CI_Model {
             }
             if($filters['dates'] != false){
                 if( isset($filters['dates']['startDateRes']) && isset($filters['dates']['endDateRes']) ){
-                    $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) >= ', $filters['dates']['startDateRes']);
-                    $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) <= ', $filters['dates']['endDateRes']);
+                    $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) = ', $filters['dates']['startDateRes']);
+                    $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) = ', $filters['dates']['endDateRes']);
                 }
                 else{
                     if(isset($filters['dates']['startDateRes'])){
@@ -173,14 +175,20 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
        
     public function getUnitiesReservation($string){
         $sql = "";
-        $this->db->select('U.UnitCode, RTRIM(TFP.floorPlanDesc) as description, CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price');
-        $this->db->select('RI.WeeksNumber, RI.FirstOccYear, RI.LastOccYear');
-        $this->db->from('tblResInvt RI');
+		$this->db->distinct();
+        $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(TFP.floorPlanDesc) as description, CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price');
+        $this->db->select('RI.WeeksNumber, RI.FirstOccYear, RI.LastOccYear, R.fkResTypeId');
+		$this->db->select('U.fkFloorPlanId, U.fkViewId, U.fkFloorId, RO.OccYear');
+		$this->db->select('( SELECT top 1 CONVERT( VARCHAR(11), C2.Date, 101 )FROM tblResOcc RO2 INNER JOIN tblCalendar C2 on C2.pkCalendarId = RO2.fkCalendarId where RO2.fkResId = RO.fkResId and RO2.OccYear = RO.OccYear ORDER BY RO2.NightId ASC) as iniDate');
+		$this->db->select('( SELECT top 1 CONVERT( VARCHAR(11), C2.Date, 101 )FROM tblResOcc RO2 INNER JOIN tblCalendar C2 on C2.pkCalendarId = RO2.fkCalendarId where RO2.fkResId = RO.fkResId and RO2.OccYear = RO.OccYear ORDER BY RO2.NightId DESC) as endDate');
+        $this->db->from('tblRes R');
+		$this->db->join('tblResInvt RI ', ' RI.fkResId = R.pkResRelatedId OR RI.fkResId = R.pkResId', 'inner');
         $this->db->join('tblFloorplan TFP', 'RI.fkFloorPlanId = TFP.pkFloorPlanId', 'inner');
         $this->db->join('tblFrequency TF', 'RI.fkFrequencyId = TF.pkFrequencyId', 'inner');
         $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
         $this->db->join('tblPrice PRI', 'U.pkUnitId = PRI.fkUnitId and RI.WeeksNumber = PRI.Week', 'inner');
-        $this->db->where('fkResId', $string);
+		$this->db->join('tblResOcc RO ', ' RO.fkResId = R.pkResId', 'inner');
+        $this->db->where('R.pkResId', $string);
         $this->db->order_by('', 'DESC');
         $query = $this->db->get();
 		return $query->result();
