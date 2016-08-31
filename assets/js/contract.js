@@ -642,6 +642,11 @@ function createNewContract(){
 					clearInputsById(arrayWords);
 					if (data['balance'].financeBalance >0) {
 						showModalFin(data['idContrato']);
+						var dialogEditContract = modalEditContract(data['idContrato']);
+ 						dialogEditContract.dialog("open");
+					}else{
+						var dialogEditContract = modalEditContract(data['idContrato']);
+ 						dialogEditContract.dialog("open");
 					}
 					
 					$('#dialog-Weeks').empty();
