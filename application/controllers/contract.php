@@ -1354,7 +1354,7 @@ public function getFlagsContract(){
 				$tyTr = $_POST['typeAcc'];
 				$data = $this->contract_db->getAccountsById( $id, $typeInfo, $tyTr);
 				foreach($data as $item){
-					$item->inputAll = '<input type="checkbox" id="' . $item->ID . '" class="checkPayAcc" name="checkPayAcc[]" value="' . $item->Pay_Amount . '" trxClass="' . $item->pkTrxClassid . '"  ><label for="checkFilter1">&nbsp;</label>';
+					$item->inputAll = '<input type="checkbox" id="' . $item->ID . '" class="checkPayAcc" name="checkPayAcc[]" value="' . $item->AbsAmount . '" trxClass="' . $item->pkTrxClassid . '"  ><label for="checkFilter1">&nbsp;</label>';
 					unset($item->pkTrxClassid);
 				}
 				$datos['acc'] = $data;
