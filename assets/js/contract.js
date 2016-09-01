@@ -2121,12 +2121,12 @@ function getAccounts( id, typeInfo, typeAcc ){
 function parsearSALE(sales){
 	var Balance = 0;
 	for(var i = 0; i < sales. length; i++){
-		if( sales[i].Sign_transaction == "1" ){
-			Balance += parseFloat(sales[i].Amount);
-			sales[i].Balance = Balance.toFixed(2);
-		}
 		if( sales[i].Sign_transaction == "-1" ){
 			Balance -= parseFloat(sales[i].Amount);
+			sales[i].Balance = Balance.toFixed(2);
+		}
+		if( sales[i].Sign_transaction == "1" ){
+			Balance += parseFloat(sales[i].Amount);
 			sales[i].Balance = Balance.toFixed(2);
 		}
 		if (sales[i].Amount !=".0000") {

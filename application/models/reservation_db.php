@@ -441,10 +441,9 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             $this->db->select('att.pkAccTrxId as ID, att.ynActive as Active');
             $this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Sign_transaction, att.fkAccId as AccID');
             $this->db->select('tc.TrxClassDesc as Concept_Trxid');
-            $this->db->select('att.CrDt as Creation_Date, CONVERT(VARCHAR(10),att.DueDt,101) as Due_Date, att.Amount, att.AbsAmount, 0 as Overdue_Amount');
-            $this->db->select('0 as Balance');
+            $this->db->select('att.CrDt as Creation_Date, CONVERT(VARCHAR(10),att.DueDt,101) as Due_Date, att.Amount, att.AbsAmount,0 as Balance, 0 as Overdue_Amount');
             $this->db->select('att.Curr1Amt as Euros, att.Curr2Amt as Nederlands_Florins');
-            $this->db->select('att.Doc as Document, att.Remark as Reference');
+            $this->db->select('att.Doc as Document, att.Remark as Reference, u.UserLogin as CreateBy, u.CrDt');
         }else{
             $this->db->select('0 as inputAll');
             $this->db->select('att.pkAccTrxId as ID');
@@ -457,17 +456,14 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId');
         $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = att.fkTrxTypeId');
         $this->db->join('tblTrxClass tc', 'tc.pkTrxClassid = att.fkTrxClassID');
-        //$this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
+        $this->db->join('tblUser u', 'a.CrBy = u.pkUserId');
         $this->db->where('rpa.fkResId', $id);
         if($typeAcc == "reservation"){
-            //$this->db->where('attt.fkAccTypeId = 6');
             $this->db->where('a.fkAccTypeId = 6');
         }else if($typeAcc == "frontDesk"){
-            //$this->db->where('attt.fkAccTypeId = 5');
             $this->db->where('a.fkAccTypeId = 5');
         }
         if($typeInfo == "payment"){
-            //$this->db->where("tt.TrxTypeCode = 'SCP'");
             $this->db->where("( tt.TrxSign = 0 or tt.TrxSign = 1 )");
             $this->db->where('a.fkAccTypeId = ', $typeAcc);
             $this->db->where('att.AbsAmount > 0');
