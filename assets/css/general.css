@@ -1733,3 +1733,11 @@ a#btnNextStatus , a#btnNextStatusRes{
 .colorRED{
 	color: red;
 }
+
+table tbody{
+	color: #424141;
+}
+
+table tbody tr td{
+	font-size: 12px;
+}
