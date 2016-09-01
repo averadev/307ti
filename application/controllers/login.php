@@ -25,14 +25,14 @@ class Login extends CI_Controller {
 	 */
 	public function checkLogin(){
 		if($this->input->is_ajax_request()){
-			$data = $this->admin_user_db->get(array("UserLogin" => $_POST['email'], "Password" => md5($_POST['password']), "fkUserTypeId" => 1 ));
+			$data = $this->admin_user_db->get(array("UserLogin" => $_POST['email'], "Password" => md5($_POST['password'])));
 			if(count($data)>0){
 				$this->nativesessions->set( "id", $data[0]->pkUserId );
 				$this->nativesessions->set( "username", $data[0]->UserLogin );
 				$this->nativesessions->set( "type", "ADMIN" );
 				echo json_encode(array('success' => true, 'message' => 'Acceso satisfactorio.'));
 			}else {
-				echo json_encode(array('success' => false, 'message' => 'El usuario y/o password es incorrecto.'));
+				echo json_encode(array('success' => false, 'message' => 'El usuario y/o password es incorrecto.', "pass"=> md5($_POST['password'])));
 			}
 		}
 	}
