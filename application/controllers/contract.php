@@ -208,6 +208,10 @@ private function insertContratoOcupacion($idContrato){
 	$rango = intval($_POST['lastYear']-$_POST['firstYear']);
 	for($i =0; $i<= $rango; $i++){
 		$folioOcc = $this->contract_db->select_Folio(2);
+		$F = intval(substr($_POST['firstYear'],2,4));
+		$L = intval(substr($_POST['firstYear'],2,4));
+		$F = $F+$i;
+		$L = $L+$i;
 		$Ocupacion = [
 			"fkResTypeId"               => $this->contract_db->selectRestType('Occ'),
 			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('NO'),
@@ -216,8 +220,8 @@ private function insertContratoOcupacion($idContrato){
 	        "pkResRelatedId"            => $idContrato,
 	        "FirstOccYear"              => $_POST['firstYear'] + $i,
 	        "LastOccYear"               => $_POST['firstYear'] + $i,
-	        "ResCode"                   => "OW" . "-" . $folioOcc . "-" . substr($_POST['firstYear'],2,4),
-	        "ResConf"                   => "OW" . "-" . $folioOcc . "-" . substr($_POST['firstYear'],2,4),
+	        "ResCode"                   => "OW" . "-" . $folioOcc . "-" . strval($F),
+	        "ResConf"                   => "OW" . "-" . $folioOcc . "-" . strval($L),
 	        "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
 	        "LegalName"                 => $_POST['legalName'],
 	        "Folio"                     => $folioOcc,
