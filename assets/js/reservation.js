@@ -2342,6 +2342,11 @@ function parsearSALERes(sales){
 			sales[i].Nederlands_Florins = 0;
 		}
 	}
+	for(var i = 0; i < sales. length; i++){
+		if (sales[i].Balance == 0) {
+			sales[i].Balance = '';
+		}
+	}
 	return sales;	
 }
 
