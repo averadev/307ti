@@ -2321,10 +2321,10 @@ function parsearSALERes(sales){
 		}else{
 			sales[i].Amount = 0;
 		}
-		if (sales[i].AbsAmount !=".0000") {
-			sales[i].AbsAmount = parseFloat(sales[i].AbsAmount).toFixed(2);
+		if (sales[i].Pay_Amount !=".0000") {
+			sales[i].Pay_Amount = parseFloat(sales[i].Pay_Amount).toFixed(2);
 		}else{
-			sales[i].AbsAmount = 0;
+			sales[i].Pay_Amount = 0;
 		}
 		if (sales[i].Overdue_Amount !=".0000") {
 			sales[i].Overdue_Amount = parseFloat(sales[i].Overdue_Amount).toFixed(2);
@@ -2367,10 +2367,10 @@ function parsearFrontDesk(frontDesk){
 		}else{
 			frontDesk[i].Amount = 0;
 		}
-		if (frontDesk[i].AbsAmount !=".0000") {
-			frontDesk[i].AbsAmount = parseFloat(frontDesk[i].AbsAmount).toFixed(2);
+		if (frontDesk[i].Pay_Amount !=".0000") {
+			frontDesk[i].Pay_Amount = parseFloat(frontDesk[i].Pay_Amount).toFixed(2);
 		}else{
-			frontDesk[i].AbsAmount = 0;
+			frontDesk[i].Pay_Amount = 0;
 		}
 		if (frontDesk[i].Overdue_Amount !=".0000") {
 			frontDesk[i].Overdue_Amount = parseFloat(frontDesk[i].Overdue_Amount).toFixed(2);

@@ -1088,10 +1088,10 @@ class Contract_db extends CI_Model {
 	public function getAccountsById($id, $typeInfo, $typeAcc ){
         $this->db->distinct();
 		if($typeInfo == "account"){
-			$this->db->select('att.pkAccTrxId as ID, att.ynActive as Active');
+			$this->db->select('att.pkAccTrxId as ID');
 			$this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Sign_transaction, att.fkAccId as AccID');
 			$this->db->select('tc.TrxClassDesc as Concept_Trxid');
-			$this->db->select('att.CrDt as Creation_Date, CONVERT(VARCHAR(10),att.DueDt,101) as Due_Date, att.Amount, att.AbsAmount,0 as Balance, 0 as Overdue_Amount');
+			$this->db->select('att.CrDt as Creation_Date, CONVERT(VARCHAR(10),att.DueDt,101) as Due_Date, att.Amount, att.AbsAmount as Pay_Amount,0 as Balance, 0 as Overdue_Amount');
             $this->db->select('att.Curr1Amt as Euros, att.Curr2Amt as Nederlands_Florins');
 			$this->db->select('att.Doc as Document, att.Remark as Reference, u.UserLogin as CreateBy, u.CrDt');
 		}else{

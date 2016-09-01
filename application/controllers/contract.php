@@ -1341,9 +1341,9 @@ public function getFlagsContract(){
 						$item->Overdue_Amount = 0;
 						if( $dueDate < $CurDate  ){
 							if( $item->Sign_transaction == 1){
-								$item->Overdue_Amount = $item->AbsAmount;
+								$item->Overdue_Amount = $item->Pay_Amount;
 							}else if( $item->Sign_transaction == 0 && ($item->Concept_Trxid == "Down Payment" or $item->Type == "Schedule Payment") ){
-								$item->Overdue_Amount = $item->AbsAmount;
+								$item->Overdue_Amount = $item->Pay_Amount;
 							}
 						}
 					}
@@ -1354,7 +1354,7 @@ public function getFlagsContract(){
 				$tyTr = $_POST['typeAcc'];
 				$data = $this->contract_db->getAccountsById( $id, $typeInfo, $tyTr);
 				foreach($data as $item){
-					$item->inputAll = '<input type="checkbox" id="' . $item->ID . '" class="checkPayAcc" name="checkPayAcc[]" value="' . $item->AbsAmount . '" trxClass="' . $item->pkTrxClassid . '"  ><label for="checkFilter1">&nbsp;</label>';
+					$item->inputAll = '<input type="checkbox" id="' . $item->ID . '" class="checkPayAcc" name="checkPayAcc[]" value="' . $item->Pay_Amount . '" trxClass="' . $item->pkTrxClassid . '"  ><label for="checkFilter1">&nbsp;</label>';
 					unset($item->pkTrxClassid);
 				}
 				$datos['acc'] = $data;

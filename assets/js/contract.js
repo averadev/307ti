@@ -2134,10 +2134,10 @@ function parsearSALE(sales){
 		}else{
 			sales[i].Amount = 0;
 		}
-		if (sales[i].AbsAmount !=".0000") {
-			sales[i].AbsAmount = parseFloat(sales[i].AbsAmount).toFixed(2);
+		if (sales[i].Pay_Amount !=".0000") {
+			sales[i].Pay_Amount = parseFloat(sales[i].Pay_Amount).toFixed(2);
 		}else{
-			sales[i].AbsAmount = 0;
+			sales[i].Pay_Amount = 0;
 		}
 		if (sales[i].Overdue_Amount !=".0000") {
 			sales[i].Overdue_Amount = parseFloat(sales[i].Overdue_Amount).toFixed(2);
@@ -2207,7 +2207,7 @@ function setTableAccount12(items, table){
 		var item = items[i];
 		var tempTotal = 0, tempTotal2 = 0;
 		if( item.Sign_transaction == 1 ){
-			tempTotal = parseFloat(item.AbsAmount);
+			tempTotal = parseFloat(item.Pay_Amount);
 			tempTotal2 = parseFloat(item.Overdue_Amount);
 		}
 		if( item.Concept_Trxid.trim() == "Sale" ){
