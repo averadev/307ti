@@ -44,7 +44,12 @@ class Pdfs extends CI_Controller {
 	public function CheckOut(){
 		$idRes = $_GET['idRes'];
 		$data = $this->pdfs_db->getCheckOut($idRes);
-		$body = '';
+		$title = "Check Out";
+		$name = "CheckOut";
+		$saveFiler = "CheckOut" . $idRes;
+		$pdf = $this->generatePdfTemp( $name, $title );
+		$style = $this->generateStyle();
+		
 		$body .= '<table width="100%">';
 		//$table .= "<tr><th>Name</th><th>Last name</th><th>Type people</th></tr>";
 		foreach ($data as $item){
@@ -68,14 +73,28 @@ class Pdfs extends CI_Controller {
 		$body .= '<h4>d) Leave your safe deposit box open and unlocked (check to make sure you have left nothing behind, check all drawers and under the beds!!).</h5>';
 		$body .= '<h4>Please note that your apartment must be left in an orderly condition in order not to have to enforce a maid cleaning surcharge. Have a good flight home!!</h5>';
 			
-		$title = "Check Out";
-		$saveFiler = "CheckOut" . $idRes;
-		$this->createTableStyle("CheckOut", $body, $title, $saveFiler, $idRes);
+		
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
+		
+		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+		
+		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes );
 	}
 	
 	public function Farewell(){
+		
 		$idRes = $_GET['idRes'];
 		$data = $this->pdfs_db->getCheckOut($idRes);
+		$title = "Farewell";
+		$name = "Farewell";
+		$saveFiler = "Farewell" . $idRes;
+		$pdf = $this->generatePdfTemp( $name, $title );
+		$style = $this->generateStyle();
+		
 		$body = '';
 		$body .= '<table width="100%">';
 		//$body .= "<tr><th>Name</th><th>Last name</th><th>Type people</th></tr>";
@@ -103,16 +122,29 @@ class Pdfs extends CI_Controller {
 		$body .= '<h4>Sincerely</h4>';
 		$body .= '<h4>The Towers at Mullet Bay</h4>';
 		$body .= '<h4>Management.</h4>';
-			
-		$title = "Farewell";
-		$saveFiler = "Farewell" . $idRes;
-		$this->createTableStyle("Farewell", $body, $title, $saveFiler, $idRes);
+		
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
+		
+		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+		
+		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes );
 	}
 	
 	public function GuestInfromation(){
+		
 		$idRes = $_GET['idRes'];
 		$data = $this->pdfs_db->getCheckOut($idRes);
 		$data2 = $this->pdfs_db->getRoom($idRes);
+		$title = "Guest Infromation form";
+		$name = "Guest Infromation form";
+		$saveFiler = "Guest_Infromation" . $idRes;
+		$pdf = $this->generatePdfTemp( $name, $title );
+		$style = $this->generateStyle();
+		
 		$body = '';
 		$body .= '<table width="100%">';
 		foreach ($data as $item){
@@ -132,7 +164,6 @@ class Pdfs extends CI_Controller {
 		foreach($data2 as $item){
 			$body .= '<tr><td>' . $item->UnitCode . '</td><td>' . $item->ResTypeDesc . '</td><td>' . $item->Folio . '</td><td>' . $item->ResConf . '</td></tr>';
 		}
-		
 		
 		$body .= '</table>';
 		$body .= '<br>';
@@ -219,15 +250,29 @@ class Pdfs extends CI_Controller {
 		$body .= '<h4></h4>';
 		$body .= '<h4>FOR ADDITIONAL COMMENTS PLEASE USE BLANK SPACE PN THE BACK OF THIS PAGE</h4>';
 		
-		$title = "Guest Infromation form";
-		$saveFiler = "Guest_Infromation" . $idRes;
-		$this->createTableStyle("Guest Infromation form", $body, $title, $saveFiler, $idRes);
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
+		
+		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+		
+		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes );
+		
 	}
 	
 	public function Statement(){
+		
 		$idRes = $_GET['idRes'];
 		$data = $this->pdfs_db->getPeople($idRes);
 		$data2 = $this->pdfs_db->getResAcc($idRes);
+		$title = "Statement";
+		$name = "Statement";
+		$saveFiler = "Statement" . $idRes;
+		$pdf = $this->generatePdfTemp( $name, $title );
+		$style = $this->generateStyle();
+		
 		$body = '';
 		$body .= '<table width="100%">';
 		foreach ($data as $item){
@@ -283,10 +328,16 @@ class Pdfs extends CI_Controller {
 			$body .= '</table>';
 			$body .= '<h4></h4>';
 		}
-			
-		$title = "Statement";
-		$saveFiler = "Statement" . $idRes;
-		$this->createTableStyle("Statement", $body, $title, $saveFiler, $idRes);
+		
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
+		
+		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+		
+		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes );
 	}
 	
 	public function ReservationConfirmation(){
@@ -294,6 +345,12 @@ class Pdfs extends CI_Controller {
 		$data = $this->pdfs_db->getReservation($idRes);
 		$RateAmtNigh = $this->pdfs_db->getRateAmtNigh($idRes);
 		$trans = $this->pdfs_db->getTraxRes($idRes);
+		$balance = $this->pdfs_db->getBalance($idRes);
+		$title = "Reservation Confirmation";
+		$name = "Reservation_Confirmation";
+		$saveFiler = $name . $idRes;
+		$pdf = $this->generatePdfTemp( $name, $title );
+		$style = $this->generateStyle();
 		
 		$body = '';
 		$body .= '<img src="assets/img/logo/header.jpg"  width="1000" />';
@@ -314,12 +371,6 @@ class Pdfs extends CI_Controller {
 			$body .= '<tr><td>View</td><td>' . $item->ViewDesc . '</td></tr>';
 			$body .= '<tr><td>Resort Type</td><td></td></tr>';
 			$body .= '<tr><td>Call Address</td><td></td></tr>';
-			//$body .= '<tr><td>Us Toll Free</td><td>' . $item->Name . '</td></tr>';
-			//$body .= '<tr><td>Rate</td><td>' . $item->Name . '</td></tr>';
-			/*$body .= '<tr><td>Total Rate</td><td>' . $item->Name . '</td></tr>';
-			$body .= '<tr><td>Payment</td><td>' . $item->Name . '</td></tr>';
-			$body .= '<tr><td>Remaining</td><td>' . $item->Name . '</td></tr>';
-			$body .= '<tr><td>Balance</td><td>' . $item->Name . '</td></tr>';*/
 			
 			break;
 		}
@@ -345,91 +396,148 @@ class Pdfs extends CI_Controller {
 		foreach( $RateAmtNigh as $item ){
 			$totalRate += $item->RateAmtNight;
 		}
-		$body .= '<tr><td>Rate</td><td>$' . $totalRate . '</td></tr>';
+		$body .= '<tr><td>Rate</td><td>$ ' . $totalRate . '</td></tr>';
 		$totalPayment = 0;
 		foreach($trans as $item){
 			$totalPayment += $item->Amount;
 		}
-		$body .= '<tr><td>Payment</td><td>$' . $totalPayment . '</td></tr>';
+		$body .= '<tr><td>Payment Remaining</td><td>$ ' . $totalPayment . '</td></tr>';
+		$body .= '<tr><td>Balance</td><td>$ ' . $balance . '</td></tr>';
 		
 		$body .= '</table>';
-			
-			//$body .= '<table width="100%">';
-		//foreach ($data as $item){
-			//$body .= '<tr><td class="Name">' . $name . '</td><td class="Last name">' . $lname . '</td>';
-		//}
-		/*$body .= '</table>';
-		$body .= '<br><br>';
-		$body .= '<h4>Dear Owners & Guests,</h5>';
-		$body .= '<h4>As you will be leaving us tomorrow, we would like to refer you to paragraph #8 of the owners manual in your room whereby we request the following:</h5>';
-		$body .= '<h4>Before Leaving your unit at the end of your stay:</h5>';
-		$body .= '<h4>a) All dishes, pots and pans, silverware, etc. Are to be left clean. Put any dirt dishes, etc. into the dishwasher and turn it on.</h5>';
-		$body .= '<h4>b) The unit should be left in an orderly manner. (All loose paper and garbage put into the trash bins).</h5>';
-		$body .= '<h4>c) As you leave the unit make sure you turn the gray switch by the entrance door off.</h5>';
-		$body .= '<h4>d) Leave your safe deposit box open and unlocked (check to make sure you have left nothing behind, check all drawers and under the beds!!).</h5>';
-		$body .= '<h4>Please note that your apartment must be left in an orderly condition in order not to have to enforce a maid cleaning surcharge. Have a good flight home!!</h5>';
-			*/
-		$title = "Reservation Confirmation";
-		$saveFiler = "Reservation_Confirmation" . $idRes;
-		$this->createTableStyle("Reservation_Confirmation", $body, $title, $saveFiler, $idRes);
-	}
-	
-	private function createTableStyle( $name, $body, $title, $saveFiler, $idRes ){
+		
+		$body .= '<h4></h4>';
+		$body .= '<h4>Please contact our Concierge Team at Phone:  1(721 )545-3069</h4>';
+		$body .= '<h4>Email:  info@thetowersatmulletbay.com</h4>';
+		
+		
 		
 		$html = '';
-		
 		$html .= ' <html><head></head><body>';
 		$html .= $body;
-		$html .= ' <style type="text/css">';
-		$html .= ' *{ font-family: Arial; font-weight: normal;}';
-		$html .= ' table{ color: #662C19; font-size:14px; }';
-		$html .= ' table.balance{ font-size:12px; }';
-		$html .= ' table.balance tr td, table tr th{ height: 25px; }';
-		$html .= ' th{ color: #662C19;  background-color: #fdf0d8; }';
-		$html .= ' table.poll{ color: #666666; font-size:14px; }';
-		$html .= ' table.poll tr td{  height: 25px; }';
-		$html .= ' .blackLine{ border-bottom: solid 2px #000000; }';
-		
-		$html .= ' h3{ color: #662C19; }';
-		$html .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
-		$html .= '</style>';
+		$html .= $style;
 		$html .= '</body></html>';
 		
-		$this->generar( $html, $title, $saveFiler, $name, $idRes );
+		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
 		
+		$pdf->AddPage();
+		
+		$body = '';
+		
+		$body .= '<h3>Resort Policies</h3>';
+		
+		$body .= '<h4>Hotel Policies & Reservations Confirmations</h4>';
+		$body .= '<h4>The Towers at Mullet Bay Policies and Reservation Information page will provide you with all information you will need to make a reservation and stay with us at THE TOWERS SINT MAARTEN.</h4>';
+		$body .= '<h4>Guaranteed Reservations</h4>';
+		$body .= '<h4>To guarantee a reservation at The Towers at Mullet Bay, a valid credit card is required at time of booking. If a credit card is not available, your reservation will only be held for a minimal time period.</h4>';
+		$body .= '<h4>Cancellation Policy</h4>';
+		$body .= '<h4>Guaranteed reservations at The Towers at Mullet Bay must be cancelled 72 hours prior to arrival date to avoid cancellation penalties.';
+		$body .= ' If you wish to cancel your reservation within the cancel policy, a 1night penalty including taxes/fees will be applied.</h4>';
+		$body .= '<h4>Group and Conference reservations are subject to the cancellation and deposit policies outlined at time of booking and may vary from standard hotel policies.</h4>';
+		$body .= '<h4>New Year’s Eve Cancellation and Deposit Policy</h4>';
+		$body .= '<h4>New Year’s Eve reservations will be charged a deposit at time of booking, with the balance of the stay being charged in full on December 12th. Cancellations prior to 4pm on December 12 will forfeit the $100.00 deposit';
+		$body .= 'Cancellations after 4pm on December will forfeit 50% of the New Year’s Eve Stay along with a $100.00 deposit.';
+		$body .= 'Cancellations requested after 4pm 48hrs prior to arrival will forfeit 100% of stay and applicable taxes.</h4>';
+		$body .= '<h4></h4>';
+		$body .= '<h4>Pets</h4>';
+		$body .= '<h4>The Towers at Mullet Bay unfortunately does not accept pets</h4>';
+		$body .= '<h4>Check in / Check out</h4>';
+		$body .= '<h4>Check in time at The Towers at Mullet Bay begins at 4:00PM';
+		$body .= 'Every Saturday If your party happens to arrive earlier and the room is not available at the time of arrival, our concierge desk will be happy to store your bags so you can enjoy your day in Our Pool Bar.';
+		$body .= 'Check out time is for 10:00AM every Saturday the day of departure.</h4>';
+		$body .= '<h4>Age Requirement</h4>';
+		$body .= '<h4>To reserve a room at The Towers at Mullet Bay, there must be at least 1 adult present in the room 18 years of age or older.</h4>';
+		$body .= '<h4>Payment options</h4>';
+		$body .= '<h4>The Towers at Mullet Bay accepts all major credit cards, as well as cash, Visa, Master card, American Express, Maestro.</h4>';
+		$body .= '<h4>Taxes & Fee</h4>';
+		$body .= '<h4>Hotel stays in The Towers at Mullet Bay are subject to tax and PF (Promotion Fee, which is NOT a tax) totaling 19.67% (13% is Sint Maarten Government Tax)';
+		$body .= 'Implemented by The Towers at Mullet Bay Falls to travelers the PF may also be used to generate better services for visitors while in Sint Maarten.</h4>';
+		$body .= '<h4>Dining establishments, attractions and retail outlets will also be subject to the Promotional Fee.</h4>';
+		$body .= '<h4>Room Occupancy</h4>';
+		$body .= '<h4>The Towers at Mullet Bay Hotel fire code permits a maximum of 5 guests in a room depending on the room category. Some room types have a maximum occupancy of less than 5.</h4>';
+		$body .= '<h4>Pre-authorization Information</h4>';
+		$body .= '<h4>In the case that a guest’s room is to be paid by another party’s credit card that will not be attending the hotel, a pre-authorization form is required to be filled out by the credit card holder allowing the Hotel to use the credit card for the specified charges.';
+		$body .= ' A reservation agent will be able to fax or e-mail you the form to be filled out at your request.</h4>';
+		$body .= '<h4>Photo ID</h4>';
+		$body .= '<h4>Valid photo ID is required both for the check in process, as well as being a necessity to process a credit card.</h4>';
+		
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
+		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+		
+		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes );
 	}
 	
-	public function seeDocument(){
-		$file = $this->pdfs_db->getFiles($_GET['idFile']);
-		if( count($file) > 0 ){
-			//echo $file[0]->docPath;
-			//$filee = "C:/xampp/htdocs/307ti/assets/pdf/";
-			$mi_pdf = fopen ($file[0]->docPath, "r");
-			if (!$mi_pdf) {
-				echo "<p>You can not open the file for reading</p>";
-				exit;
+	public function RoomChange(){
+		$idRes = $_GET['idRes'];
+		$data = $this->pdfs_db->getCheckOut($idRes);
+		$data2 = $this->pdfs_db->getRoom($idRes);
+		$title = "Room Change";
+		$name = "RoomChange";
+		$saveFiler = "RoomChange" . $idRes;
+		$pdf = $this->generatePdfTemp( $name, $title );
+		$style = $this->generateStyle();
+		
+		$body .= '<table width="100%">';
+		//$table .= "<tr><th>Name</th><th>Last name</th><th>Type people</th></tr>";
+		foreach ($data as $item){
+			$name = $item->Name;
+			$lname = $item->Last_name;
+			$body .= '<tr><td class="Name">' . $name . '</td><td class="Last name">' . $lname . '</td>';
+			$typeProple = "Benficiary People";
+			if($item->ynPrimaryPeople == 1){
+				$typeProple = "Primary People";
 			}
-			header('Content-type: application/pdf');
-			fpassthru($mi_pdf); // Esto hace la magia
-			fclose ($archivo);
-		}else{
-			echo "No documents found";
+			$body .= '<td class="type">' . $typeProple . '</td></tr>';
 		}
+		$body .= '</table>';
+		$body .= "<h4></h4>";
+		$body .= '<table width="100%">';
+		foreach ($data2 as $item){
+			$body .= '<tr><td>' . $item->UnitCode . '</td></tr>';
+		}
+		$body .= '</table>';
+		
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
+		
+		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+		
+		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes );
 	}
- 
-    private function generar( $html, $title, $saveFiler, $name, $idRes ) {
-        $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+	
+	private function generateStyle(){
+		$style = '';
+		$style .= ' <style type="text/css">';
+		$style .= ' *{ font-family: Arial; font-weight: normal;}';
+		$style .= ' table{ color: #662C19; font-size:14px; }';
+		$style .= ' table.balance{ font-size:12px; }';
+		$style .= ' table.balance tr td, table tr th{ height: 25px; }';
+		$style .= ' th{ color: #662C19;  background-color: #fdf0d8; }';
+		$style .= ' table.poll{ color: #666666; font-size:14px; }';
+		$style .= ' table.poll tr td{  height: 25px; }';
+		$style .= ' .blackLine{ border-bottom: solid 2px #000000; }';
+		$style .= ' h3{ color: #662C19; }';
+		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
+		$style .= '</style>';
+		return $style;
+	}
+	
+	private function generatePdfTemp( $name, $title ){
+		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('307ti');
         $pdf->SetTitle($name);
         $pdf->SetSubject('report');
         $pdf->SetKeywords('report');
  
-		// datos por defecto de cabecera, se pueden modificar en el archivo tcpdf_config_alt.php de libraries/config
-		
-        //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 001', PDF_HEADER_STRING, array(0, 64, 255), array(0, 200, 128));
-		
-		//$logo = APPPATH."/third_party/logo.jpg";
+	
 		$logo = "logo.jpg";
 		$headerString = " " . $this->nativesessions->get('username') .  " \n      " . $this->getonlyDate(0);
 		$pdf->SetHeaderData($logo, 20, "     " . $title, "     " . $headerString,  array( 102,44,25 ), array( 102,44,25 ));
@@ -471,26 +579,38 @@ class Pdfs extends CI_Controller {
 		//fijar efecto de sombra en el texto
         $pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
  
-		// Imprimimos el texto con writeHTMLCell()
-        $pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+		return $pdf;
  
-		// ---------------------------------------------------------
-		// Cerrar el documento PDF y preparamos la salida
-		// Este método tiene varias opciones, consulte la documentación para más información.
-		
+	}
+	
+	public function seeDocument(){
+		$file = $this->pdfs_db->getFiles($_GET['idFile']);
+		if( count($file) > 0 ){
+			//echo $file[0]->docPath;
+			//$filee = "C:/xampp/htdocs/307ti/assets/pdf/";
+			$mi_pdf = fopen ($file[0]->docPath, "r");
+			if (!$mi_pdf) {
+				echo "<p>You can not open the file for reading</p>";
+				exit;
+			}
+			header('Content-type: application/pdf');
+			fpassthru($mi_pdf); // Esto hace la magia
+			fclose ($archivo);
+		}else{
+			echo "No documents found";
+		}
+	}
+	
+	private function showpdf( $pdf, $saveFiler, $idRes ){
 		$date = new DateTime();
 		
 		$saveFiler .= $date->getTimestamp() . ".pdf";
 		
-		//$nombre_archivo = utf8_decode(base_url() . "assets/pdf/" . $saveFiler);
-		//$nombre_archivo = utf8_decode("C:/xampp/htdocs/307ti/assets/pdf/" . $saveFiler);
 		$nombre_archivo = utf8_decode($saveFiler);
 		$nombre_archivo = $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/" . $nombre_archivo;
-		//$nombre_archivo = $_SERVER['DOCUMENT_ROOT'] . "307ti/assets/pdf/" . $nombre_archivo;
+		
 		$nombre_archivo2 = utf8_decode($saveFiler);
-		//$pdf->Output($nombre_archivo,'I');
-		//$pdf->Output($nombre_archivo,'F');
-		//print("hola");
+		
 		
 		$pdf->Output($nombre_archivo,'FI');
 		
@@ -518,24 +638,9 @@ class Pdfs extends CI_Controller {
 		);
 		$this->pdfs_db->insert($saveDocumentRes,"tblResDoc");*/
 		
-		//$pdf->Output($nombre_archivo2,'I');
-		
 		$pdf = null;
-		//$pdf->Output($nombre_archivo2,'I');
 		
-		/*$pdf = null;
-		$filee = "C:/xampp/htdocs/307ti/assets/pdf/";
-		$mi_pdf = fopen ($filee, "r");
-        if (!$mi_pdf) {
-            echo "<p>No puedo abrir el archivo para lectura</p>";
-            exit;
-        }
-        header('Content-type: application/pdf');
-        fpassthru($mi_pdf); // Esto hace la magia
-        fclose ($archivo);*/
-		
-		//$this->generar2( $html, $title, $nombre_archivo, $name );
-    }
+	}
 	
 	private function getonlyDate($restarDay){
 		$date = date( "Y-m-d" );

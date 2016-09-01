@@ -21,6 +21,10 @@
 			<div class="label">Reservation Confirmation</div>
 			<i class="fa fa-file-text-o fa-lg"></i>
 		</a>
+		<a id="" class="btn btn-primary spanSelect btnReportRes" attr_type="RoomChange">
+			<div class="label">Room Change</div>
+			<i class="fa fa-file-text-o fa-lg"></i>
+		</a>
 	</div>
 </div>
 <div class="row headerDescription headerGeneral" style="padding: 8px;">

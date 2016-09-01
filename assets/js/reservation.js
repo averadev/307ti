@@ -3889,6 +3889,8 @@ function generateReportRes(id, selector){
 		var url = "Pdfs/Statement?idRes=" + id;
 	}else if( type == "ReservationConfirmation" ){
 		var url = "Pdfs/ReservationConfirmation?idRes=" + id;
+	}else if( type == "RoomChange" ){
+		var url = "Pdfs/RoomChange?idRes=" + id;
 	}
 	window.open(url);
 }

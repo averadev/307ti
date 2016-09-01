@@ -131,6 +131,22 @@ class pdfs_db extends CI_Model{
 		return  $this->db->get()->result();
 	}
 	
+	public function getBalance($idRes){
+		$this->db->select('sum(TT.TrxSign * AT.Amount) as Balance');
+		$this->db->from('tblacctrx AT');
+		$this->db->join('tblTrxType TT ', 'AT.fkTrxTypeId = TT.pkTrxTypeId', 'INNER');
+		$this->db->join('tblResPeopleAcc RPA ', 'RPA.fkAccId = AT.fkAccId', 'INNER');
+		$this->db->where('RPA.fkResId  = ', $idRes);
+		$this->db->where('RPA.ynPrimaryPeople = 1');
+		$query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->Balance;
+        }
+	}
+	
 	public function insert($data, $table){
 		$this->db->insert($table, $data);
 	}
