@@ -558,7 +558,7 @@ function addUnidadResDialog(iniDate, unit){
 						direction: 1
 					});
 					if(iniDate != null){
-						$('#fromDateUnitRes').val(iniDate)
+						$('#fromDateUnitRes').val(iniDate);
 					}
 					if(unit != null){
 						var delay=1000;
