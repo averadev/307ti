@@ -967,7 +967,7 @@ class Contract_db extends CI_Model {
     public function getUnidades($filters){
 
         $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc');
-        $this->db->select('CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price, PRI.Week, SE.SeasonDesc, PRI.ClosingCost, V.ViewDesc as View, ISNULL(IV.LastOccYear, 0 ) as LastOccYear');
+        $this->db->select('CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price, PRI.Week, SE.SeasonDesc, PRI.ClosingCost, V.ViewDesc as View, ISNULL(IV.LastOccYear+1, 0 ) as LastOccYear');
         $this->db->from('tblUnit U');
         $this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
         $this->db->join('tblPrice PRI', 'U.pkUnitId = PRI.fkUnitId', 'inner');

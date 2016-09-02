@@ -1735,9 +1735,10 @@ a#btnNextStatus , a#btnNextStatusRes{
 }
 
 table tbody{
-	color: #424141;
+	color: black;
 }
 
 table tbody tr td{
 	font-size: 12px;
+	font-weight: bold;
 }
