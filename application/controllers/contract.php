@@ -375,6 +375,7 @@ public function updateFinanciamiento(){
 		];
 		$condicion = "fkResId = " . $IDContrato;
 		$afectados = $this->contract_db->updateReturnId('tblResfin', $financiamiento, $condicion);
+		$this->CreateTransferToLoan();
 		$this->insertTransaccionesCredito();
 		if ($afectados>0) {
 			$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados];
@@ -384,6 +385,45 @@ public function updateFinanciamiento(){
 			echo json_encode($mensaje);
 		}
 	}
+}
+
+private function CreateTransferToLoan(){
+
+	$IDContrato = $_POST['idContrato'];
+	$pagoMensual = floatval($_POST['pagoMensual']);
+	$meses = intval($_POST['meses']);
+	$total = $pagoMensual * $meses;
+
+	$Dolares = $this->contract_db->selectIdCurrency('USD');
+	$Florinres  = $this->contract_db->selectIdCurrency('NFL');
+	$Euros  = $this->contract_db->selectIdCurrency('EUR');
+	$tipoCambioFlorines  = $this->contract_db->selectTypoCambio($Dolares, $Florinres);
+	$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
+	$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
+	$tipoCambioEuros = valideteNumber($tipoCambioEuros);
+	$euros = $total * $tipoCambioEuros;
+	$florines = $total * $tipoCambioFlorines;
+
+	$transaction = [
+			"fkAccid" 			=> $this->contract_db->getACCIDByContracID($IDContrato),
+			"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('TRLo'),
+			"fkTrxClassID"		=> $this->contract_db->gettrxClassID('SAL'),
+			"Debit-"			=> 0,
+			"Credit+"			=> 0,
+			"Amount"			=> valideteNumber($total), 
+			"AbsAmount"			=> 0,
+			"Curr1Amt"			=> valideteNumber($euros),
+			"Curr2Amt"			=> valideteNumber($florines),
+			"Remark"			=> '', //
+			"Doc"				=> '',
+			"DueDt"				=> $this->getToday(),
+			"ynActive"			=> 1,
+			"CrBy"				=> $this->nativesessions->get('id'),
+			"CrDt"				=> $this->getToday(),
+			"MdBy"				=> $this->nativesessions->get('id'),
+			"MdDt"				=> $this->getToday()
+		];
+		$this->contract_db->insertReturnId('tblAccTrx', $transaction);
 }
 
 private function insertTransaccionesCredito(){

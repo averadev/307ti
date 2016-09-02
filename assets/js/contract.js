@@ -645,8 +645,6 @@ function createNewContract(){
 					clearInputsById(arrayWords);
 					if (data['balance'].financeBalance >0) {
 						showModalFin(data['idContrato']);
-						var dialogEditContract = modalEditContract(data['idContrato']);
- 						dialogEditContract.dialog("open");
 					}else{
 						var dialogEditContract = modalEditContract(data['idContrato']);
  						dialogEditContract.dialog("open");
@@ -2070,7 +2068,7 @@ function tableOnclick(id){
 }
 
 function getAccounts( id, typeInfo, typeAcc ){
-	var id = getValueFromTableSelected("contracts", 1);
+	//var id = getValueFromTableSelected("contracts", 1);
 	$.ajax({
 	    data:{
 	        idContrato: id,
@@ -2108,7 +2106,6 @@ function getAccounts( id, typeInfo, typeAcc ){
 					var nameSafe = acc[i].accType;
 					$('#btNewTransAcc').data( 'idAcc' + nameSafe, acc[i].fkAccId );	
 				}
-				//console.log( $('#btNewTransAcc').data() );
 			}else{
 				var acc = data["acc"];
 				if(acc.length > 0){
@@ -2167,11 +2164,11 @@ function parsearSALE(sales){
 			sales[i].Nederlands_Florins = 0;
 		}
 	}
-	for(var i = 0; i < sales. length; i++){
-		if (sales[i].Balance == 0) {
-			sales[i].Balance = '';
-		}
-	}
+	// for(var i = 0; i < sales. length; i++){
+	// 	if (sales[i].Balance == 0) {
+	// 		sales[i].Balance = '';
+	// 	}
+	// }
 	return sales;	
 }
 
@@ -2367,6 +2364,8 @@ function showModalFin(id){
 	       	"class": 'dialogModalButtonCancel',
 	       	click: function() {
 	         	$(this).dialog('close');
+	         	var dialogEditContract = modalEditContract(id);
+ 				dialogEditContract.dialog("open");
 	       }
 	   	},{
        		text: "Ok",
@@ -2376,6 +2375,8 @@ function showModalFin(id){
        			if (totaltoPay>0) {
        				updateFinanciamiento(id);
     				$(this).dialog('close');
+    				var dialogEditContract = modalEditContract(id);
+ 					dialogEditContract.dialog("open");
        			}else{
        				alertify.error("Please Calculate the Monthly Payment");
        			}
