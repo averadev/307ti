@@ -2135,8 +2135,13 @@ function parsearSALE(sales){
 			sales[i].Balance = Balance.toFixed(2);
 		}
 		if( sales[i].Sign_transaction == "1" ){
-			Balance += parseFloat(sales[i].Amount);
-			sales[i].Balance = Balance.toFixed(2);
+			if (sales[i].Concept_Trxid != "Down Payment" || sales[i].Code != "SCP") {
+				Balance += parseFloat(sales[i].Amount);
+				sales[i].Balance = Balance.toFixed(2);
+			}
+		}
+		if( sales[i].Sign_transaction == "0" ){
+			sales[i].Balance = Balance;
 		}
 		if (sales[i].Amount !=".0000") {
 			sales[i].Amount = parseFloat(sales[i].Amount).toFixed(2);
@@ -2183,7 +2188,7 @@ function setTableAccount(items, table){
 	var sales = 0;
 	for(i=0;i<items.length;i++){
 		var item = items[i];
-		if( item.Sign_transaction == "1" ){
+		if( item.Sign_transaction == "1" &&  item.Concept_Trxid != "Down Payment"){
 			tempTotal += parseFloat(item.Amount);
 		}
 		if (item.Sign_transaction == "-1") {
