@@ -11,8 +11,6 @@ $(document).ready(function(){
 	var dialogEditContract = modalEditContract();
 	var dialogAddTour = addTourContract();
 	var dialogAccount = opcionAccount();
-	
-	//alertify.success("Found "+ 50);
 
 	initDatesContract();
 
@@ -391,8 +389,13 @@ function addUnidadDialog() {
 			click: function() {
 				var unidades = getValueTableUnidadesSeleccionadas();
 				if (unidades.length>0) {
+					var ultimos = [];
 					$(this).dialog('close');
-					var dialogWeeks = getWeeksDialog(unidades);
+					for (var i = 0; i < unidades.length; i++) {
+						ultimos.push(parseInt(unidades[i].lastYear));
+					}
+					ultimo = Math.max.apply( Math, ultimos);
+					var dialogWeeks = getWeeksDialog(unidades, ultimo);
 					dialogWeeks.dialog("open");
 				}else{
 					alertify.error("Search and click over for choose one");
@@ -889,6 +892,7 @@ function getValueTableUnidadesSeleccionadas(){
 			unidad.week = $(this).find('td').eq(5).text(),			
 			unidad.season = $(this).find('td').eq(6).text(),
 			unidad.costoClosing = $(this).find('td').eq(7).text(),
+			unidad.lastYear = $(this).find('td').eq(9).text(),
 			unidades.push(unidad); 
 		}
 	});
@@ -974,7 +978,7 @@ function selectTableUnico(div){
 }
 
 
-function getWeeksDialog(unidades){
+function getWeeksDialog(unidades, ultimo){
 	showLoading('#dialog-Weeks', true);
 	var unidades = unidades;
 	dialogo = $("#dialog-Weeks").dialog ({
@@ -983,8 +987,11 @@ function getWeeksDialog(unidades){
 	    		showLoading('#dialog-Weeks', false);
 	    		ajaxSelects('contract/getFrequencies','try again', generalSelectsDefault, 'frequency');
 	    		$("#weeksNumber").val(1);
-	    		setYear("firstYearWeeks", 0);
-	    		//setYear("lastYearWeeks", 10);
+	    		if (ultimo>0) {
+	    			$("#firstYearWeeks").val(ultimo);
+	    		}else{
+	    			setYear("firstYearWeeks", 0);
+	    		}
 				$("#lastYearWeeks").val(2087);
 	    	});
 		},
