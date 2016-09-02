@@ -471,13 +471,13 @@
 				</h3>
 			</div>
 			<div class="box-body" id="table-frontDesk" style="display: block;">
-				<div class="table">
+				<div class="table" id="FrontDeskRes">
 					<div id="divTableFrontDesk" class="section1 tableSection">
 						<table id="tableFrontDesk" class="ganttTable" style="width:100%; float:left;">
 							<thead>
-								<tr class="gHeaderYear">
+								<!--<tr class="gHeaderYear">
 									<th colspan="4" class="panelLeftHead last"></th>
-								</tr>
+								</tr>-->
 								<tr class="gHeaderMonth">
 									<th colspan="4" class="panelLeftHead last"></th>
 								</tr>

@@ -64,6 +64,7 @@ class FrontDesk extends CI_Controller {
 						$res[$p]['type'] = $item->type;
 						$res[$p]['unit'] = $item->UnitCode;
 						$res[$p]['status'] = $item->HKStatusDesc;
+						$res[$p]['isUnit'] = $item->isUnit;
 						//$res[$p]['view'] = $item->ViewCode;
 						//$res[$p]['viewDesc'] = $item->ViewDesc;
 					}
@@ -80,6 +81,7 @@ class FrontDesk extends CI_Controller {
 					$res[$p]['values'][$p2]['dateFrom'] = $item->DateIni;
 					$res[$p]['values'][$p2]['dateTo'] = $item->DateEnd;
 					$res[$p]['values'][$p2]['ResId'] = $item->pkResId;
+					//$res[$p]['values'][$p2]['isUnit'] = $item->isUnit;
 				}
 				$res[$p]['values'][$p2]['to'] = $item->pkCalendarId;
 				

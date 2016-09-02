@@ -89,6 +89,19 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->select('LTRIM(RTRIM(p.LName)) as LName');
 		$this->db->select('LTRIM(RTRIM(p.LName2)) as LName2');
 		$this->db->select('hks.HKStatusDesc');
+		if($filters['words'] != false){
+			if (isset($filters['words']['textUnitCodeFront'])){
+				$unit = $filters['words']['textUnitCodeFront'];
+				$this->db->select('( CASE WHEN u.UnitCode = ' . $unit . ' THEN 1 ELSE 0 END ) as isUnit ');
+			}else if (isset($filters['words']['textConfirmationFront'])){
+				$conf = $filters['words']['textConfirmationFront'];
+				$this->db->select("( CASE WHEN r.ResConf = '" . $conf . "' THEN 1 ELSE 0 END ) as isUnit ");
+			}else{
+				$this->db->select('( 0 ) as isUnit ');
+			}
+		}else{
+			$this->db->select('( 0 ) as isUnit ');
+		}
 		$this->db->from("tblCalendar");
 		$this->db->join('tblDayOfWeek dw', 'pkDayOfWeekId = tblCalendar.fkDayOfWeekId', 'INNER');
 		$this->db->join('tblResOcc ro', 'ro.fkCalendarId = tblCalendar.pkCalendarId', 'INNER');
@@ -109,12 +122,12 @@ Class frontDesk_db extends CI_MODEL
 		//$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = ro.fkResId and rpa.ynPrimaryPeople = 1', 'LEFT');
 		$this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId', 'LEFT');
 		if($filters['words'] != false){
-			if (isset($filters['words']['textUnitCodeFront'])){
+			/*if (isset($filters['words']['textUnitCodeFront'])){
 				$this->db->where('u.UnitCode = ', $filters['words']['textUnitCodeFront']);
-			}
-			if (isset($filters['words']['textConfirmationFront'])){
+			}*/
+			/*if (isset($filters['words']['textConfirmationFront'])){
 				$this->db->where('r.ResConf = ', $filters['words']['textConfirmationFront']);
-			}
+			}*/
 			if (isset($filters['words']['textViewFront'])){
 				$this->db->where('v.pkViewId = ', $filters['words']['textViewFront']);
 			}

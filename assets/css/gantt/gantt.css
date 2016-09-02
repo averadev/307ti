@@ -64,22 +64,22 @@ table.ganttTable{
 
 .ganttTable td.cellOwners.rightPanel{
 	background:#fde7be;
-	border-right: 4px solid #FFFFFF;
+	border-right: 2px solid #FFFFFF;
 }
 
 .ganttTable td.cellRentals.rightPanel{
 	background:#9ad3eb;
-	border-right: 4px solid #FFFFFF;
+	border-right: 2px solid #FFFFFF;
 }
 
 .ganttTable td.cellOwnersLoan.rightPanel{
 	background:#fcec4d;
-	border-right: 4px solid #FFFFFF;
+	border-right: 2px solid #FFFFFF;
 }
 
 .ganttTable td.cellNoChange.rightPanel{
 	background:#7bc043;
-	border-right: 4px solid #FFFFFF;
+	border-right: 2px solid #FFFFFF;
 	padding-left:5px;
 }
 
@@ -98,4 +98,28 @@ table.ganttTable{
 
 .orderRow.active{
 	color:#000000;
+}
+
+.ganttTable td.cellOwners.rightPanel.FDBorder {
+	border: 3px solid rgba(88, 85, 85, 0.5);
+}
+
+.ganttTable tbody tr.borderSelectFront {
+	border: 3px solid rgba(88, 85, 85, 0.5);	
+	border-right: 3px solid rgba(88, 85, 85, 0.5);	
+}
+
+#divTableFrontDesk{
+	width:100%;
+}
+
+table#tableFrontDesk {
+    /*overflow-x:scroll;*/
+}
+
+table#tableFrontDesk tbody {
+    /*max-height: 500px;
+    overflow-y:scroll;
+    display:block;
+	width: 100%;*/
 }
