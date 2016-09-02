@@ -989,11 +989,15 @@ function getWeeksDialog(unidades, ultimo){
 	    		$("#weeksNumber").val(1);
 	    		if (ultimo>0) {
 	    			$("#firstYearWeeks").val(ultimo);
+	    			$('#firstYearWeeks').attr('min',ultimo);
+	    			$('#lastYearWeeks').attr('min',ultimo);
 	    		}else{
 	    			setYear("firstYearWeeks", 0);
+	    			$('#firstYearWeeks').attr('min',getOnlyYear());
+	    			$('#lastYearWeeks').attr('min',getOnlyYear());
 	    		}
 				$("#lastYearWeeks").val(2087);
-				$('#lastYearWeeks').attr('min',ultimo)
+				
 	    	});
 		},
 		autoOpen: false,
