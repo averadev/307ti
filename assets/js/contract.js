@@ -993,6 +993,7 @@ function getWeeksDialog(unidades, ultimo){
 	    			setYear("firstYearWeeks", 0);
 	    		}
 				$("#lastYearWeeks").val(2087);
+				$('#lastYearWeeks').attr('min',ultimo)
 	    	});
 		},
 		autoOpen: false,

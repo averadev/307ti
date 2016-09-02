@@ -15,7 +15,7 @@
                 <label for="legalName" class="text-left">Firt Year</label>
             </div>
             <div class="small-9 columns">
-                <input class="round general" id="firstYearWeeks" type="number" name="quantity" min="2016" max="2099">
+                <input readonly class="round general" id="firstYearWeeks" type="number" name="quantity" min="2016" max="2099">
             </div>
         </div>
         <div class="row">
