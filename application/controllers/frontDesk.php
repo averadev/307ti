@@ -117,8 +117,7 @@ class FrontDesk extends CI_Controller {
 			$page = ($page - 1) * 25;
 			$data = $this->frontDesk_db->getHousekeepingConfiguration($sql);
 			$total = count($data);
-			$data = array_slice($data, $page, 25);
-			
+			//$data = array_slice($data, $page, 25);
 			
 			echo json_encode(array('items' => $data, 'total' => $total));
 		}
@@ -266,8 +265,7 @@ public function createNewExchangeRate(){
 			$page = ($page - 1) * 25;
 			$data = $this->frontDesk_db->getHousekeepingLookUp($sql);
 			$total = count($data);
-			$data = array_slice($data, $page, 25);
-			
+			//$data = array_slice($data, $page, 25);
 			
 			echo json_encode(array('items' => $data, 'total' => $total));
 		}

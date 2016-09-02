@@ -119,6 +119,8 @@ $(function() {
 	
 	var addReservation = null;
 	
+	getFrontDesk("",1);
+	
 });
 
 function gepPageFrontDesk(page){
@@ -296,7 +298,7 @@ function orderRowFront(selector){
 	var order = $(selector).attr('attr-order');
 	$('.orderRow').removeClass("active");
 	$(selector).addClass("active");
-	getFrontDesk(field + " " + order,1);
+	//getFrontDesk(field + " " + order,1);
 }
 
 /**
