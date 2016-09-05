@@ -19,19 +19,14 @@ class Reservation_db extends CI_Model {
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 0, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
 		//$this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
         $this->db->from('tblRes r');
-       // $this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId');
 		$this->db->join('tblResType rt', 'rt.pkResTypeId = r.fkResTypeId');
-		$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResRelatedId or ri.fkResId = r.pkResId');
+		$this->db->join('tblResInvt ri', '(ri.fkResId =  CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)');
         $this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId');
-       // $this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = r.pkResId');
-		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = r.pkResRelatedId or rpa.fkResId = r.pkResId');
+		$this->db->join('tblResPeopleAcc rpa', '(rpa.fkResId =  CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)');
         $this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId');
         $this->db->join('tblEmployee em', 'em.fkPeopleId = p.pkPeopleId', 'LEFT');
         $this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
-		
-		//$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
 		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
-		//$this->db->join('tblStatusTypeStatus STS', 'STS.pkStatusTypeStatusId = r.fkStatusId and STS.fkStatusTypeId = 2', 'left');
 		$this->db->join('tblStatus ES', 'ES.pkStatusId = r.fkStatusId ', 'INNER');
 		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = ri.fkFloorPlanId');
 		$this->db->join('tblView v', 'v.pkViewId = ri.fkViewId', 'LEFT');
