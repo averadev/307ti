@@ -659,7 +659,7 @@ private function insertDeposittransaction($idContrato){
 			"Debit-"		=> valideteNumber($precio),
 			"Credit+"		=> 0,
 			"Amount"		=> valideteNumber(abs($precio)), 
-			"AbsAmount"		=> valideteNumber(abs($precio)),
+			"AbsAmount"		=> 0,//valideteNumber(abs($precio)),
 			"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
 			"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 			"Remark"		=> '', //
@@ -731,7 +731,7 @@ private function insertPagosDownpayment($idContrato){
 				"Debit-"			=> valideteNumber($precio),
 				"Credit+"			=> 0,
 				"Amount"			=> valideteNumber(abs($precio)), 
-				"AbsAmount"			=> valideteNumber(abs($precio)),
+				"AbsAmount"			=> 0,//valideteNumber(abs($precio)),
 				"Curr1Amt"			=> valideteNumber($precio * $tipoCambioEuros),
 				"Curr2Amt"			=> valideteNumber($precio * $tipoCambioFlorines),
 				"Remark"			=> '', 
