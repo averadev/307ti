@@ -1414,7 +1414,7 @@ private function comprubaArray($valor, $array){
 				"id"		=>	$idReserva
 			];
 			$IdStatus = $this->reservation_db->propertyTable($peticion);
-			if ($IdStatus == 4) {
+			if ($IdStatus == 15) {
 				//$CheckIn = $this->reservation_db->getCheckIn($idReserva);
 				$financiamiento = [
 					"fkPeopleStatusId"	=> 15,

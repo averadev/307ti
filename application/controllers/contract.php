@@ -203,9 +203,15 @@ private function createContract(){
 }
 
 private function insertContratoOcupacion($idContrato){
-	
+	$first = intval($_POST['firstYear']);
+	$last = intval($_POST['lastYear']);
+	if ($last <= $first + 10) {
+		$rango = $last - $first; 
+	}else{
+		$rango = 10;
+	}	
 	$Ocupaciones = [];
-	$rango = intval($_POST['lastYear']-$_POST['firstYear']);
+	//$rango = intval($_POST['lastYear']-$_POST['firstYear']);
 	for($i =0; $i<= $rango; $i++){
 		$folioOcc = $this->contract_db->select_Folio(2);
 		$F = intval(substr($_POST['firstYear'],2,4));
@@ -759,7 +765,7 @@ private function insertScheduledPaymentsTrx($idContrato){
 			$tipoCambioEuros = $this->contract_db->selectTypoCambio($Dolares, $Euros);
 			$transaction = [
 				"fkAccid" 			=> $this->contract_db->getACCIDByContracID($idContrato),
-				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('SCP'),
+				"fkTrxTypeId"		=> $this->contract_db->getTrxTypeContracByDesc('SPDP'),
 				"fkTrxClassID"		=> $this->contract_db->gettrxClassID('DWP'),
 				"Debit-"			=> 0,
 				"Credit+"			=> 0,
@@ -787,7 +793,12 @@ public function createSemanaOcupacion($idContrato, $Ocupaciones){
 	$Unidades = [];
 	$fYear = $Years[0]->FirstOccYear;
 	$lYear = $Years[0]->LastOccYear;
-	for ($i = $fYear; $i <= $lYear ; $i++) { 
+	if ($lYear <= $fYear + 10) {
+		$rango = $lYear - $fYear; 
+	}else{
+		$rango = 10;
+	}	
+	for ($i = $fYear; $i <= $rango ; $i++) { 
 		array_push($Unidades, $this->contract_db->selectUnitiesContract($idContrato, $i));
 	}
 

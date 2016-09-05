@@ -1225,7 +1225,7 @@ class Contract_db extends CI_Model {
             $this->db->like('Folio', $string);
         }
         if (isset($filters['checks']['unidad']) ){
-            $this->db->like('pkUnitId', $string);
+            $this->db->like('fkUnitId', $string);
         }
         if (isset($filters['checks']['email'])){
             $this->db->like('EmailDesc', $string);

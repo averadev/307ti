@@ -20,7 +20,7 @@ $(document).ready(function(){
 	});
 	$(document).off( 'click', '#btnRefinancingContract');
 	$(document).on( 'click', '#btnRefinancingContract', function () {
-		var id = getValueFromTableSelected("contracts", 1);
+		var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
 		showModalFin(id);
 	});
 	$(document).off( 'click', '#btnAddPeople');
@@ -273,7 +273,7 @@ function showModalContract(){
 }
 
 function showModalDetailWeek(){
-	var id = getValueFromTableSelected("contracts", 1);
+	var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
 	var year = getValueFromTableSelected("tableCOccupationSelected", 1);
 	var week = getValueFromTableSelected("tableCOccupationSelected", 2);
 	var ajaxData =  {
@@ -608,7 +608,7 @@ function createNewContract(){
 			data: {
 				idiomaID : $("#selectLanguage").val(),
 				firstYear :$("#firstYearWeeks").val().trim(),
-				lastYear : getYear($("#lastYearWeeks").val()),
+				lastYear : $("#lastYearWeeks").val().trim(),
 				legalName : $("#legalName").val().trim(),
 				tourID : $("#TourID").val().trim(),
 				peoples: getValueTablePersonas(),
@@ -1018,7 +1018,7 @@ function getWeeksDialog(unidades, ultimo){
        			}else{
        				var frequency = $("#frequency option:selected" ).text();
        				var primero = $("#firstYearWeeks").val();
-	       			var ultimo = getYear($("#lastYearWeeks").val()); 
+	       			var ultimo = $("#lastYearWeeks").val(); 
 					//var ultimo = getYear( $("#firstYearWeeks").val() ); 
 	       			tablUnidadades(unidades, frequency, primero, ultimo);	
 	       			$(this).dialog('close');
@@ -2068,7 +2068,7 @@ function tableOnclick(id){
 }
 
 function getAccounts( id, typeInfo, typeAcc ){
-	//var id = getValueFromTableSelected("contracts", 1);
+	var id = getIDContrato();
 	$.ajax({
 	    data:{
 	        idContrato: id,
@@ -2104,7 +2104,8 @@ function getAccounts( id, typeInfo, typeAcc ){
 				}
 				for( i=0; i<acc.length; i++ ){
 					var nameSafe = acc[i].accType;
-					$('#btNewTransAcc').data( 'idAcc' + nameSafe, acc[i].fkAccId );	
+					$('#btNewTransAcc').data( 'idAcc' + nameSafe, acc[i].fkAccId );
+					console.log('idAcc' + nameSafe, acc[i].fkAccId);	
 				}
 			}else{
 				var acc = data["acc"];
@@ -2127,6 +2128,10 @@ function getAccounts( id, typeInfo, typeAcc ){
 	});
 }
 
+function getIDContrato(){
+	var id = $("#idContratoX").text();
+	return id;
+}
 function parsearSALE(sales){
 	var Balance = 0;
 	for(var i = 0; i < sales. length; i++){
@@ -2135,7 +2140,7 @@ function parsearSALE(sales){
 			sales[i].Balance = Balance.toFixed(2);
 		}
 		if( sales[i].Sign_transaction == "1" ){
-			if (sales[i].Concept_Trxid != "Down Payment" || sales[i].Code != "SCP") {
+			if (sales[i].Concept_Trxid != "Down Payment" || sales[i].Code != "SPDP") {
 				Balance += parseFloat(sales[i].Amount);
 				sales[i].Balance = Balance.toFixed(2);
 			}
@@ -2188,7 +2193,7 @@ function setTableAccount(items, table){
 	var sales = 0;
 	for(i=0;i<items.length;i++){
 		var item = items[i];
-		if( item.Sign_transaction == "1" &&  item.Concept_Trxid != "Down Payment"){
+		if( item.Sign_transaction == "1"){
 			tempTotal += parseFloat(item.Amount);
 		}
 		if (item.Sign_transaction == "-1") {
@@ -2797,7 +2802,7 @@ function modalAddNotas() {
 	return dialogo;
 }
 function modalGetAllNotes() {
-	var id = getValueFromTableSelected("contracts", 1);
+	var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
 	var div = "#dialog-Notas";
 	dialogo = $(div).dialog ({
   		open : function (event){
@@ -2830,7 +2835,7 @@ function SaveNote(){
 }
 
 function SaveNotesContract(){
-	var id = getValueFromTableSelected("contracts", 1);
+	var id = getIDContrato();// getValueFromTableSelected("contracts", 1);
 	var noteType = $("#notesTypes").val();
 	var noteDescription = $("#NoteDescription").val();
 	$.ajax({
@@ -2906,7 +2911,7 @@ function getFlags(id){
 function SaveFlagsContract(){
 
 	var flags = getArrayValuesSelectedColum("tableFlagsList", 1);
-	var id = getValueFromTableSelected("contracts", 1);
+	var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
 	$.ajax({
 	    data:{
 	        idContrato: id,
@@ -2975,7 +2980,7 @@ function deleteSelectFlag(div){
 }
 
 function deleteFlag(id){
-	var idContrat = getValueFromTableSelected("contracts", 1);
+	var idContrat = getIDContrato();// getValueFromTableSelected("contracts", 1);
 	var datos =  {
 		url: "contract/deleteFlag",
 		tipo: "json",
@@ -2992,7 +2997,7 @@ function deleteFlag(id){
 function nextStatusContract(){
 	deactiveEventClick("btnNextStatus");
 	$("#iNextStatus").addClass("fa-spin");
-	var id = getValueFromTableSelected("contracts", 1);
+	var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
 	$.ajax({
 	    data:{
 	        idContrato: id,
@@ -3029,7 +3034,6 @@ function opcionAccount(attrType){
   				showLoading(div, true);
 				$(this).load ("contract/modalAccount" , function(){
 					showLoading(div, false);
-					//initEventosSellers();
 					$( "#dueDateAcc" ).Zebra_DatePicker({
 						format: 'm/d/Y',
 						show_icon: false,
@@ -3223,7 +3227,7 @@ function uploadFileCont(){
 	
 	showAlert(true,"Saving changes, please wait ....",'progressbar');
 	
-	var id = getValueFromTableSelected("contracts", 1);
+	var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
 	//creamos la variable Request 
 	if(window.XMLHttpRequest) {
  		var Req = new XMLHttpRequest(); 
@@ -3320,7 +3324,7 @@ function deleteFile(idFile){
 				url: "contract/deleteFile",
 				dataType:'json',
 				success: function(data){
-					var id = getValueFromTableSelected("contracts", 1);
+					var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
 					getFiles(id);
 					showLoading("#tableCFilesSelected", false);
 					alertify.success("deleted file");
