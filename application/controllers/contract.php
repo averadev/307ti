@@ -1381,7 +1381,6 @@ public function getFlagsContract(){
 			$datos['downpayment'] = $this->contract_db->getDownpaymentsContrac($accId);
 			$datos['balance'] = $this->contract_db->selectTotalFinance($id);
 			$PAYS = $this->contract_db->getIDACCPay($accId);
-			echo json_encode($PAYS);
 			$Cuentas = [];
 			if($typeInfo == "account"){
 				$acc = $this->contract_db->getAccByRes( $id );
