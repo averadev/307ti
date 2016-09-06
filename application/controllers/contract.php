@@ -1380,15 +1380,19 @@ public function getFlagsContract(){
 			$datos = array();
 			$datos['downpayment'] = $this->contract_db->getDownpaymentsContrac($accId);
 			$datos['balance'] = $this->contract_db->selectTotalFinance($id);
+			$PAYS = $this->contract_db->getIDACCPay($accId);
+			echo json_encode($PAYS);
+			$Cuentas = [];
 			if($typeInfo == "account"){
 				$acc = $this->contract_db->getAccByRes( $id );
 				$datos['acc'] = $acc;
 				$typeTr = array( 'sale', 'maintenance', 'loan' );
 				foreach($typeTr as $tyTr){
 					$data = $this->contract_db->getAccountsById( $id, $typeInfo, $tyTr);
-					foreach($data as $item){
+					foreach($data as $key=>$item){
 						$CurDate = strtotime($this->getonlyDate(0));
 						$dueDate = strtotime($item->Due_Date);
+						
 						$item->Overdue_Amount = 0;
 						if( $dueDate < $CurDate  ){
 							if( $item->Sign_transaction == 1){
@@ -1416,6 +1420,22 @@ public function getFlagsContract(){
 		}
 	}
 	
+private function search($array, $key, $value){
+    $results = array();
+
+    if (is_array($array)) {
+        if (isset($array[$key]) && $array[$key] == $value) {
+            $results[] = $array;
+        }
+
+        foreach ($array as $subarray) {
+            $results = array_merge($results, search($subarray, $key, $value));
+        }
+    }
+
+    return $results;
+}
+
 	public function getDocType(){
 		if($this->input->is_ajax_request()) {
 			$docType = $this->contract_db->getDocType();
@@ -1429,8 +1449,6 @@ public function getFlagsContract(){
 			$year = $_POST['year'];
 			$week = $_POST['week'];
 			$data['weekDetail'] = $this->contract_db->selectWeekDetail($idContrato, $year, $week);
-			//$id = $this->contract_db->selectIDRes($idContrato, $year);
-			//echo json_encode(["id" =>$id]);
 			$this->load->view('contracts/dialogDetailWeek', $data);
 		}
 	}

@@ -976,6 +976,8 @@ class Contract_db extends CI_Model {
         $this->db->join('tblView V', 'U.fkViewId = V.pkViewId', 'inner');
         $this->db->join('tblResInvt IV', 'U.pkUnitId = IV.fkUnitId and IV.Intv = PRI.Week', 'left');
         $this->db->where('PRI.fkStatusId', 17);
+        $this->db->where('(ISNULL(IV.LastOccYear+1, year(getDate()))<=2087)');
+        
         if (!empty($filters['interval'])) {
             $this->db->where('PRI.Week', $filters['interval']);
         }
@@ -1091,7 +1093,7 @@ class Contract_db extends CI_Model {
 			$this->db->select('att.pkAccTrxId as ID');
 			$this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Sign_transaction, att.fkAccId as AccID');
 			$this->db->select('tc.TrxClassDesc as Concept_Trxid');
-			$this->db->select('att.CrDt as Creation_Date, CONVERT(VARCHAR(10),att.DueDt,101) as Due_Date, att.Amount, att.AbsAmount as Pay_Amount,0 as Balance, 0 as Overdue_Amount');
+			$this->db->select('att.CrDt as Creation_Date, CONVERT(VARCHAR(10),att.DueDt,101) as Due_Date, att.Amount, att.AbsAmount as Pay_Amount,0 as Balance, PT.fkPayId, 0 as Overdue_Amount');
             $this->db->select('att.Curr1Amt as Euros, att.Curr2Amt as Nederlands_Florins');
 			$this->db->select('att.Doc as Document, att.Remark as Reference, u.UserLogin as CreateBy, u.CrDt');
 		}else{
@@ -1103,6 +1105,7 @@ class Contract_db extends CI_Model {
 		}
         $this->db->from('tblAccTrx att');
         $this->db->join('tblAcc a', 'a.pkAccId = att.fkAccId');
+        $this->db->join('tblPayTrx PT', 'att.pkAccTrxID = PT.fkAccTrxId', 'left');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId');
         $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = att.fkTrxTypeId');
 		$this->db->join('tblTrxClass tc', 'tc.pkTrxClassid = att.fkTrxClassID');
@@ -1179,7 +1182,19 @@ class Contract_db extends CI_Model {
         $query = $this->db->get();
 		return $query->result();
     }
-	
+	public function getIDACCPay($idAccount){
+        $this->db->select("PT.fkPayId as TRX , PT.fkAccTrxId as PAGO" );
+        $this->db->from( 'tblPayTrx PT' );
+        $this->db->join( 'tblAcctrx AT', 'PT.fkAccTrxId = AT.pkAccTrxID' );
+        $this->db->where( 'AT.fkAccID', $idAccount);
+        $this->db->order_by('pkPaytrxId');
+        $query = $this->db->get();
+         if($query->num_rows() > 0 ){
+            return $query->result();
+         }
+        
+        
+    }
 	public function getFilesContract($id){
 		$this->db->select("d.pkDocId as ID, d.docPath as Path, d.docDesc as Description");
 		$this->db->select("dt.DocTypeDesc");
