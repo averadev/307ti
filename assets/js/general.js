@@ -356,7 +356,7 @@ function drawTable2(data, table ,funcion, cadena, option){
 		"scrollY": heightScroll - 50,
 		"scrollX": true,
 		"paging":   false,
-		//"ordering": false,
+		"ordering": false,
 		"info":     false,
 		"filter": 	false,
 	});
