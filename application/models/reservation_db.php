@@ -135,7 +135,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->join('tblResInvt ri', 'ri.fkUnitId = u.pkUnitId', 'inner');
         $this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId', 'inner');
         $this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId', 'inner');
-        $this->db->where("CONVERT(VARCHAR(11),c.Date,101) between '" . $arrivaDate . "' and '" . $depurateDate . "' ");
+        $this->db->where("c.Date between '" . $arrivaDate . "' and '" . $depurateDate . "' ");
         $this->db->order_by('u.pkUnitId', 'ASC');
         $query = $this->db->get();
         return $query->result();

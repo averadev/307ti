@@ -62,7 +62,7 @@
 				<div class="row">
 					<!-- From Date -->
 					<div class="small-12 large-6 columns">
-						<label for="fromDateUnitRes" class="text-left">From Date
+						<label for="fromDateUnitRes" class="text-left">Arrival Date
 							<div class="input-group date" >
 								<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
 								<input type="text" id="fromDateUnitRes" name="fromDateUnitRes" class="input-group-field roundRight" readonly required />
@@ -72,7 +72,7 @@
 					
 					<!-- To Date -->
 					<div class="small-12 large-6 columns">
-						<label for="toDateUnitRes" class="text-left">To Date
+						<label for="toDateUnitRes" class="text-left">Departure Date
 							<div class="input-group date" >
 								<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
 								<input type="text" id="toDateUnitRes" name="toDateUnitRes" class="input-group-field roundRight" readonly required />

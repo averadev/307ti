@@ -110,7 +110,7 @@ Class frontDesk_db extends CI_MODEL
 		//$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'LEFT');
 		$this->db->join('tblRes r', 'r.pkResId = ro.fkResId', 'LEFT');
 		//$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'LEFT');
-		$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResRelatedId or ri.fkResId = r.pkResId', 'LEFT');
+		$this->db->join('tblResInvt ri', '(ri.fkResId =  CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)', 'LEFT');
 		$this->db->join('tblFloorPlan fpi', 'fpi.pkFloorPlanID = ri.fkFloorPlanId', 'LEFT');
 		$this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId', 'LEFT');
 		$this->db->join('tblView v', 'v.pkViewId = ri.fkViewId', 'LEFT');
