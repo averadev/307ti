@@ -226,6 +226,16 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkPaymentProcessTypeId;
         }
     }
+    public function getCreditCardAS($idAccount){
+        $this->db->select('C.CCNumber, C.fkCcTypeId, C.ExpDate, C.ZIP, C.Code');
+        $this->db->from('tblAcccc C');
+        $this->db->where('fkAccId', $idAccount);
+        $this->db->where('C.ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
     public function selectArrivaDate($id){
         $this->db->select('top 1 CONVERT(VARCHAR(11),c.Date,106) as depatureDate');
         $this->db->from('tblResOcc ro2');

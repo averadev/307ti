@@ -2,7 +2,7 @@ var unitReservacion = [];
 var iniDateRes = null;
 var endDateRes = null;
 var mocalCreditLimit = null;
-
+var modalCCR = null;
 $(document).ready(function(){
 	maxHeight = screen.height * .10;
 	maxHeight = screen.height - maxHeight;
@@ -116,7 +116,9 @@ $(document).ready(function(){
 		var dialogPackRes = PackReferenceRes();
 		dialogPackRes.dialog("open");
 	});
-
+	$(document).on( 'click', '#btnShowPayCardASR', function () {
+		showCreditCardASR();
+	});
 	//
 	$(document).off( 'click', '#btnDownpaymentRes');
 	$(document).on( 'click', '#btnDownpaymentRes', function () {
@@ -3942,4 +3944,113 @@ function deleteDocumentRes(idDoc, id){
 			//showLoading('#table-reservations',false);
 		}
     });
+}
+
+function showCreditCardASR(){
+	console.log("=D");
+	var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
+	var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
+	
+	if (idAccColl) {
+		var ajaxData =  {
+		url: "reservation/modalCreditCardAS",
+		tipo: "html",
+		datos: {
+			idAccount: idAccColl
+		},
+		funcionExito : addHTMLDIVR,
+		funcionError: mensajeAlertify
+	};
+	var modalPropiedades = {
+		div: "dialog-CreditCardASR",
+		altura: 540,
+		width: 540,
+		onOpen: ajaxDATA,
+		onSave: createCreditCardR,
+		botones :[{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Save",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       			if (validateCreditCardASR()) {
+       				createCreditCardR(idAccColl);
+       				$(this).dialog('close');
+       			}else{
+       				alertify.error("Verify Card Data");
+       			}
+       		}
+     	}]
+	};
+
+	if (modalCCR!=null) {
+		modalCCR.dialog( "destroy" );
+	}
+	modalCCR = modalGeneral2(modalPropiedades, ajaxData);
+	modalCCR.dialog( "open" );
+}else{
+	alertify.error("ID Account error");
+}
+	
+}
+function validateCreditCardASR(){
+	var R = true;
+	var creditCard = datosCardASR();
+		if (creditCard) {
+			for(var key in creditCard)
+			{
+				 if(!creditCard[key]) {
+				 	R = false;
+				 }
+			}
+			return R;
+		}else{
+			return false;
+		}
+}
+
+function addHTMLDIVR(data){
+	$("#dialog-CreditCardASR").html(data);
+
+	$( "#dateExpiracionASR" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
+}
+
+function datosCardASR(){
+	var datos = {};
+		datos.number = $('#numeroTarjetaASR').val().replace(/[^\d]/g, '');
+		datos.type = $("#cardTypesASR").val();
+		datos.dateExpiration = $("#dateExpiracionASR").val();
+		datos.poscode = $("#codigoPostalASR").val();
+		datos.code = $("#codigoTarjetaASR").val();
+	return datos
+}
+
+function createCreditCardR(id){
+	var ajaxData =  {
+		url: "reservation/createCreditCardAcc",
+		tipo: "json",
+		datos: {
+			idAccount: id,
+			card: datosCardASR(),
+		},
+		funcionExito : creditCardMsgR,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
+
+function creditCardMsgR(data){
+	if (data["status"] == 1) {
+		alertify.success(data["mensaje"]);
+	}else{
+		alertify.error(data["mensaje"]);
+	}
+	
 }

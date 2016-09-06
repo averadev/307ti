@@ -106,8 +106,6 @@ $(document).ready(function(){
 	});
 	$(document).on( 'click', '#btnShowPayCardAS', function () {
 		showCreditCardAS();
-		//var dialogDiscountAmount = modalDiscountAmount();
-		//dialogDiscountAmount.dialog("open");
 	});
 	$(document).on( 'click', '#btnAddTourID', function () {
 		var dialogAddTour = addTourContract();

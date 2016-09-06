@@ -118,8 +118,6 @@ public function createCreditCardAcc(){
 		$data["tarjetaAsociada"] = $this->contract_db->getCreditCardAS($id);
 		$Tarjeta = isValidateCreditCard();
 		if ($Tarjeta['valido']) {
-
-
 		if ($data["tarjetaAsociada"]) {
 			
 			
@@ -211,6 +209,7 @@ private function insertContratoOcupacion($idContrato){
 		$rango = 10;
 	}	
 	$Ocupaciones = [];
+	$Folio = $this->contract_db->Contract_Folio($idContrato);
 	//$rango = intval($_POST['lastYear']-$_POST['firstYear']);
 	for($i =0; $i<= $rango; $i++){
 		$folioOcc = $this->contract_db->select_Folio(2);
@@ -226,8 +225,8 @@ private function insertContratoOcupacion($idContrato){
 	        "pkResRelatedId"            => $idContrato,
 	        "FirstOccYear"              => $_POST['firstYear'] + $i,
 	        "LastOccYear"               => $_POST['firstYear'] + $i,
-	        "ResCode"                   => "OW" . "-" . $folioOcc . "-" . strval($F),
-	        "ResConf"                   => "OW" . "-" . $folioOcc . "-" . strval($L),
+	        "ResCode"                   => "OW" . "-01" . $Folio . "-" . strval($F),
+	        "ResConf"                   => "OW" . "-01" . $Folio . "-" . strval($L),
 	        "fkExchangeRateId"          => $this->contract_db->selectExchangeRateId(),
 	        "LegalName"                 => $_POST['legalName'],
 	        "Folio"                     => $folioOcc,

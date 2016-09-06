@@ -697,7 +697,6 @@ class Contract_db extends CI_Model {
     public function getCreditCardAS($idAccount){
         $this->db->select('C.CCNumber, C.fkCcTypeId, C.ExpDate, C.ZIP, C.Code');
         $this->db->from('tblAcccc C');
-        //$this->db->join('tblccType CT', 'C.fkCcTypeId = CT.pkCcTypeId');
         $this->db->where('fkAccId', $idAccount);
         $this->db->where('C.ynActive', 1);
         $query = $this->db->get();
@@ -999,6 +998,16 @@ class Contract_db extends CI_Model {
         if($query->num_rows() > 0 )
         {
             return $query->result();
+        }
+    }
+    public function Contract_Folio($typeId){
+        $this->db->select('Folio');
+        $this->db->from('tblRes');
+        $this->db->where('pkResId', $typeId);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->Folio;
         }
     }
 

@@ -389,6 +389,10 @@
 					<div class="label">Add Payment</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
+				<a id="btnShowPayCardASR" attr_type="cardASR" class="btn btn-primary spanSelect">
+					<div class="label">Card Associated</div>
+					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+				</a>
 				<a id="btAddCreditLimitRes" style="display: none;" attr_type="addLimitAcc" class="btn btn-primary spanSelect">
 					<div class="label">Credit Limit</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>

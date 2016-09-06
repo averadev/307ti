@@ -1225,6 +1225,78 @@ private function comprubaArray($valor, $array){
 			$this->load->view('contracts/dialogUploadFile');
 		}
 	}
+	public function modalCreditCardAS(){
+		if($this->input->is_ajax_request()) {
+			if ($_POST['idAccount']) {
+				$IDAccount = $_POST['idAccount'];
+				$data["tarjetaAsociada"] = $this->reservation_db->getCreditCardAS($IDAccount);
+				$campos = "pkCcTypeId as ID, CcTypeDesc";
+				$tabla = "tblCctype";
+				$data["creditCardType"] = $this->reservation_db->selectTypeGeneral($campos, $tabla);
+				$this->load->view('reservations/tarjetaAsociada', $data);
+			}else{
+				$this->load->view('reservations/tarjetaAsociada');
+			}
+			
+		}
+	}
+
+	public function createCreditCardAcc(){
+	if($this->input->is_ajax_request()){	
+
+		$datos = $_POST['card'];
+		$id = $_POST['idAccount'];
+		$data["tarjetaAsociada"] = $this->reservation_db->getCreditCardAS($id);
+		$Tarjeta = isValidateCreditCard();
+		if ($Tarjeta['valido']) {
+		if ($data["tarjetaAsociada"]) {
+			
+			
+				if ($datos) {
+					$Card = [
+						"fkCcTypeId"	=> intval($datos['type']),
+						"fkAccId"		=> $id,
+						"CCNumber"		=> $datos['number'],
+						"expDate"		=> $datos['dateExpiration'],
+						"ZIP"			=> $datos['poscode'],
+						"Code"			=> $datos['code'],
+						"ynActive"		=> 1,
+						"CrBy"			=> $this->nativesessions->get('id'),
+						"CrDt"			=> $this->getToday()
+					];
+					$condicion = "fkAccId = " . $id;
+					$afectados = $this->reservation_db->updateReturnId('tblAcccc', $Card, $condicion);
+					$mensaje = ["mensaje"=>"Update Correctly", "status" => 1];
+					echo json_encode($mensaje);
+			
+			}
+		}else{
+			if ($datos) {
+				$Card = [
+					"fkCcTypeId"	=> intval($datos['type']),
+					"fkAccId"		=> $id,
+					"CCNumber"		=> $datos['number'],
+					"expDate"		=> $datos['dateExpiration'],
+					"ZIP"			=> $datos['poscode'],
+					"Code"			=> $datos['code'],
+					"ynActive"		=> 1,
+					"CrBy"			=> $this->nativesessions->get('id'),
+					"CrDt"			=> $this->getToday()
+				];
+				$this->reservation_db->insertReturnId('tblAcccc', $Card);
+		}
+	
+		$mensaje = ["mensaje"=>"Save Correctly", "status" => 1];
+		echo json_encode($mensaje);
+		}
+		}else{
+						echo  json_encode([
+							"mensaje" => $Tarjeta['mensajes'],
+							"status" => 0
+						]);
+					}
+	}
+}
 	
 	/*****************************************/
 	/**************** Vistas *****************/
