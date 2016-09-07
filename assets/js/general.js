@@ -226,7 +226,7 @@ function showLoading(parentElement, isOpen,message, success){
 		var widthLoading = $(parentElement).css('width')
 		var loandingElements = '<div class="divLoadingTable">' +
 				'<div class="loadingScreen" >' +
-					'<div class="imgLoadingScreen"><img src="' + BASE_URL + 'assets/img/common/712.gif' + '" /></div> ' +
+					'<div class="imgLoadingScreen"><img src="' + BASE_URL + 'assets/img/common/default.svg' + '" /></div> ' +
 					'<label>' + messageLoading + '</label>' +
 				'</div>' +
 			'</div>';
