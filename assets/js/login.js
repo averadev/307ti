@@ -22,9 +22,9 @@ function login(){
 	if ($('#txtUser').val().trim().length == 0
        || $('#txtPassword').val().trim().length == 0){
 		   
-        showMsg('El usuario y password son requeridos.');
+        showMsg('Please enter the correct user and password.');
     }else{
-		$('#subModal label').html('Conectando');
+		$('#subModal label').html('Loging In');
 		$('#modalLogin').show();
 		progress(true)
         $.ajax({

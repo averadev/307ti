@@ -30,9 +30,9 @@ class Login extends CI_Controller {
 				$this->nativesessions->set( "id", $data[0]->pkUserId );
 				$this->nativesessions->set( "username", $data[0]->UserLogin );
 				$this->nativesessions->set( "type", "ADMIN" );
-				echo json_encode(array('success' => true, 'message' => 'Acceso satisfactorio.'));
+				echo json_encode(array('success' => true, 'message' => 'Login Successfull.'));
 			}else {
-				echo json_encode(array('success' => false, 'message' => 'El usuario y/o password es incorrecto.', "pass"=> md5($_POST['password'])));
+				echo json_encode(array('success' => false, 'message' => 'Incorrect User and Password.', "pass"=> md5($_POST['password'])));
 			}
 		}
 	}
