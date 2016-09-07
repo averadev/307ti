@@ -473,7 +473,7 @@
 			<div class="box-body" id="table-frontDesk" style="display: block;">
 				<div class="table" id="FrontDeskRes">
 					<div id="divTableFrontDesk" class="section1 tableSection">
-						<table id="tableFrontDesk" class="ganttTable" style="width:100%; float:left;">
+						<table id="tableFrontDesk" class="ganttTable">
 							<thead>
 								<!--<tr class="gHeaderYear">
 									<th colspan="4" class="panelLeftHead last"></th>
@@ -482,28 +482,28 @@
 									<th colspan="4" class="panelLeftHead last"></th>
 								</tr>
 								<tr class="gHeaderDay" id="day">
-									<th class="panelLeftHead" style="width:200px;">
+									<th class="panelLeftHead typeFd">
 										Type
 										<div class="orderField" attr-field="fpi.FloorPlanDesc">
 											<span class="orderRow" attr-order="asc" ><i class="fa fa-caret-up"></i></span>
 											<span class="orderRow" attr-order="desc"><i class="fa fa-caret-down"></i></span>
 										</div>
 									</th>
-									<th class="panelLeftHead">
+									<th class="panelLeftHead NumFd">
 										Num
 										<div class="orderField" attr-field="u.UnitCode">
 											<span class="orderRow" attr-order="asc" ><i class="fa fa-caret-up"></i></span>
 											<span class="orderRow" attr-order="desc"><i class="fa fa-caret-down"></i></span>
 										</div>
 									</th>
-									<th class="panelLeftHead">
+									<th class="panelLeftHead StatusFd">
 										status
 										<div class="orderField" attr-field="hks.HKStatusDesc">
 											<span class="orderRow" attr-order="asc" ><i class="fa fa-caret-up"></i></span>
 											<span class="orderRow" attr-order="desc"><i class="fa fa-caret-down"></i></span>
 										</div>
 									</th>
-									<th class="panelLeftHead last Tooltips">
+									<th class="panelLeftHead last Tooltips ViewFd">
 										View
 										<div class="orderField" attr-field="v.ViewDesc">
 											<span class="orderRow" attr-order="asc" ><i class="fa fa-caret-up"></i></span>
