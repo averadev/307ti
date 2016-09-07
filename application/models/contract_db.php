@@ -236,12 +236,13 @@ class Contract_db extends CI_Model {
         }
     }
     public function selectTypoCambio($MonedaActual, $ACovertir){
-        $this->db->select('ER.AmtTo as AMT');
+        $this->db->select('top 1 ER.AmtTo as AMT');
         $this->db->from('tblCurrency C');
         $this->db->join('tblExchangeRate ER', 'C.pkCurrencyId = ER.fkCurrencyToId', 'inner');
         $this->db->where('ER.fkCurrencyFromId', $MonedaActual);
         $this->db->where('ER.fkCurrencyToId', $ACovertir);
         $this->db->where('ER.ynActive', 1);
+        $this->db->order_by('ER.pkExchangeRateId', 'DESC');
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )

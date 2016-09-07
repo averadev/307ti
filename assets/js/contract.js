@@ -638,6 +638,8 @@ function createNewContract(){
 		}).done(function( data, textStatus, jqXHR ) {
 				showAlert(false,"Saving changes, please wait ....",'progressbar');
 				if (data['status']== 1) {
+					$("#tablePagosPrgSelected").empty();
+					$("#tablePagosSelected").empty();
 					elem.resetForm();
 					var arrayWords = ["legalName", "TourID", "depositoEnganche", "precioUnidad", "precioVenta", "downpayment"];
 					clearInputsById(arrayWords);
@@ -2794,13 +2796,13 @@ function modalAddNotas() {
        		}
      	}],
      close: function() {
-    	//$('#dialog-Sellers').empty();
+    	$('#dialog-Notas').empty();
      }
 	});
 	return dialogo;
 }
 function modalGetAllNotes() {
-	var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
+	var id = getIDContrato();
 	var div = "#dialog-Notas";
 	dialogo = $(div).dialog ({
   		open : function (event){
