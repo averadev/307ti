@@ -123,3 +123,95 @@ table#tableFrontDesk tbody {
     display:block;
 	width: 100%;*/
 }
+
+/*table#tableFrontDesk1,
+table#tableFrontDesk1 thead,
+table#tableFrontDesk1 tbody,
+table#tableFrontDesk1 tfoot,
+table#tableFrontDesk1 tr,
+table#tableFrontDesk1 th,
+table#tableFrontDesk1 td {
+    display: block;
+    width: auto;
+    height: auto;
+    margin: 0;
+    border: none;
+    border-collapse: inherit;
+    border-spacing: 0;
+    border-color: inherit;
+    vertical-align: inherit;
+    text-align: left;
+    font-weight: inherit;
+    -webkit-border-horizontal-spacing: 0;
+    -webkit-border-vertical-spacing: 0;
+}
+
+table#tableFrontDesk1{
+	width:100%;
+}
+
+table#tableFrontDesk1 th, table#tableFrontDesk1 td {
+    display: inline-table;
+}
+
+table#tableFrontDesk1 tbody {
+    height: 500px;
+    overflow-y:scroll;
+    display:block;
+	width: 100%;
+}*/
+
+/*table#tableFrontDesk1{
+	table-layout:fixed;
+	width:500px;
+	border-collapse:collapse;
+}*/
+
+/*tbody {
+  display: block;
+  height: 400px;
+  min-height: 200px;
+  overflow-Y: scroll;
+}
+tr {
+  display: block;
+  overflow: hidden;
+}*/
+
+table#tableFrontDesk1{
+    table-layout: fixed;
+    width: 100%;
+}
+
+#tableFrontDesk1 head {
+    z-index: 2;
+}
+
+#tableFrontDesk1 thead tr {
+    padding-right: 17px;
+    /*box-shadow: 0 4px 6px rgba(0,0,0,.6);*/
+    z-index: 2;
+}
+
+#tableFrontDesk1 th, #tableFrontDesk1 td {
+    width: 30%;
+    float: left;
+}
+
+#tableFrontDesk1 tbody {
+    display: block;
+    /*height: calc(50vh - 1px);*/
+	min-height:300px;
+    /*min-height: calc(200px + 1 px);*/
+    overflow-Y: scroll;
+}
+
+#tableFrontDesk1 tr {
+    display: block;
+    overflow: hidden;
+}
+
+#tableFrontDesk1 td {
+    padding: .5rem 0 .5rem 1rem;
+    border-right: 2px solid rgba(0,0,0,.2);
+}

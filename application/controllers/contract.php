@@ -795,8 +795,9 @@ public function createSemanaOcupacion($idContrato, $Ocupaciones){
 	if ($lYear <= $fYear + 10) {
 		$rango = $lYear - $fYear; 
 	}else{
-		$rango = 10;
-	}	
+		//$rango = 10;
+		$rango = $fYear + 10;
+	}
 	for ($i = $fYear; $i <= $rango ; $i++) { 
 		array_push($Unidades, $this->contract_db->selectUnitiesContract($idContrato, $i));
 	}

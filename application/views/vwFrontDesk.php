@@ -516,6 +516,28 @@
 							
 							</tbody>
 						</table>
+						<!--<table id="tableFrontDesk1" class="" style="">
+							<thead>
+								<tr>
+									<td class="">a</td>
+									<td class="">b</td>
+									<td class="">c</td>
+								</tr>
+							</thead>
+							<tbody id="tablePrueba">
+								<?php
+								for($i = 0;$i<100;$i++){
+									?>
+									<tr>
+										<td class="">a</td>
+										<td class="">b</td>
+										<td class="">c</td>
+									</tr>
+									<?php
+								}
+								?>
+							</tbody>
+						</table>-->
 					</div>
 					
 					<div class="section3 tableSection" style="display:none;">
