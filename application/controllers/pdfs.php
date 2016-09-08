@@ -615,7 +615,7 @@ class Pdfs extends CI_Controller {
 		
 		$pdf->Output($nombre_archivo,'FI');
 		
-		/*$saveDocument = array(
+		$saveDocument = array(
 			'fkDocTypeId' => 1,
 			'docPath' => $nombre_archivo,
 			'docDesc' => $nombre_archivo2,
@@ -637,7 +637,7 @@ class Pdfs extends CI_Controller {
 			'MdBy' => $this->nativesessions->get('id'),
 			'MdDt' => $this->getToday(),
 		);
-		$this->pdfs_db->insert($saveDocumentRes,"tblResDoc");*/
+		$this->pdfs_db->insert($saveDocumentRes,"tblResDoc");
 		
 		$pdf = null;
 		
