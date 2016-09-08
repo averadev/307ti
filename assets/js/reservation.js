@@ -227,6 +227,7 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 	
 	$( "#btnfindRes").unbind( "click" );
 	$('#btnfindRes').click(function(){
+		$("#NR").text("Reservations");
 		getReservations();
 	});
 
@@ -702,7 +703,8 @@ function getReservations(){
 			dataType:'json',
 			success: function(data){
 				if( data.items ){
-					alertify.success("Found "+ data.length);
+					alertify.success("Found "+ data["items"].length);
+					$("#NR").text(data["items"].length +" Reservations");
 					drawTable2(data.items,"reservationsTable","getDatailByIDRes","editRes");
 				}else{
 					noResultsTable("table-reservations", "reservationsTable", "no results found");
