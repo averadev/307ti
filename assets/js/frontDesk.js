@@ -143,7 +143,8 @@ function getFrontDesk(order, page){
 		$('.rightPanel').remove();
 		$('.panelLeft').remove();
 		$('#tableFrontDesk tbody').empty();
-		filters = getFiltersCheckboxs('FilterFrontDesk');
+		//filters = getFiltersCheckboxs('FilterFrontDesk');
+		filters = {};
 		dates = getDates(["dateArrivalFront", "dateDepartureFront", "textIntervalFront"]);
 		words = getWords(["textUnitCodeFront","textConfirmationFront","textViewFront"]);
 		options = getWords(["textIntervalFront"]);
@@ -536,9 +537,9 @@ function createTableLookUp(data){
 			}
 		}
 	}
-	var wiCell = 60/dates.length;
+	/*var wiCell = 60/dates.length;
 	$('.gHeaderDay .rightPanel').css('width', wiCell + "%");
-	$('.rightPanel.emptyUnitsFront').css('width', wiCell + "%");
+	$('.rightPanel.emptyUnitsFront').css('width', wiCell + "%");*/
 	if(isUnit != 0){
 		//var idTrFD = $('#tr' + isUnit);
 		var currentTopFK = $('#tr' + isUnit).position().top;

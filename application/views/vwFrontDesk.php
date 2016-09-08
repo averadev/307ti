@@ -40,7 +40,7 @@
 				</div>
 				<!--filter-->
 				<div class="row sectionFrontDesk section1">
-					<div class="small-12 medium-8 large-12 columns"> 
+					<!--<div class="small-12 medium-8 large-12 columns"> 
 						<fieldset class="large-12 columns fieldsetFilter">
 							<legend class="legendSearch">Choose the filters</legend>
 							<label>Status</label>
@@ -51,12 +51,11 @@
 									<input name="FilterFrontDesk" type="checkbox" id="<?php echo "check" . $item->StatusCode; ?>" class="checkFilterFrontDesk" value="<?php echo $item->pkStatusId; ?>">
 									<label for="<?php echo "check" . $item->StatusCode; ?>"><?php echo $item->StatusDesc; ?></label>
 								</div>
-								<!--<option value="<?php echo $item->pkStatusId; ?>"><?php echo $item->StatusDesc; ?></option>-->
 								<?php
 								}
 							?>
 						</fieldset>
-					</div>
+					</div>-->
 					<div class="small-12 medium-12 large-12 columns">
 						<!-- text Field dates -->
 						<fieldset class="large-12 columns fieldsetFilter">

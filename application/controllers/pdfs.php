@@ -265,6 +265,7 @@ class Pdfs extends CI_Controller {
 	public function Statement(){
 		
 		$idRes = $_GET['idRes'];
+		//$idRes = 125;
 		$data = $this->pdfs_db->getPeople($idRes);
 		$data2 = $this->pdfs_db->getResAcc($idRes);
 		$title = "Statement";
@@ -342,7 +343,7 @@ class Pdfs extends CI_Controller {
 	
 	public function ReservationConfirmation(){
 		$idRes = $_GET['idRes'];
-		$data = $this->pdfs_db->getReservation($idRes);
+		$data = $this->pdfs_db->getReservationConf($idRes);
 		$RateAmtNigh = $this->pdfs_db->getRateAmtNigh($idRes);
 		$trans = $this->pdfs_db->getTraxRes($idRes);
 		$balance = $this->pdfs_db->getBalance($idRes);
@@ -362,8 +363,8 @@ class Pdfs extends CI_Controller {
 			$body .= '<h3>SUMMARY OF YOUR RESERVATION</h3>';
 			$body .= '<table class="balance" width="100%">';
 			$body .= '<tr><td>Confirmation number</td><td>' . $item->ResConf . '</td></tr>';
-			$body .= '<tr><td>Check-In Date</td><td>' . $item->CheckIn . '</td></tr>';
-			$body .= '<tr><td>Check-Out Date</td><td>' . $item->CheckOut . '</td></tr>';
+			$body .= '<tr><td>Check-In Date</td><td>' . $item->arrivaDate . '</td></tr>';
+			$body .= '<tr><td>Check-Out Date</td><td>' . $item->depatureDate . '</td></tr>';
 			$body .= '<tr><td>Resort</td><td>' . $item->PropertyName . '</td></tr>';
 			$body .= '<tr><td>Unit Type</td><td>' . $item->FloorPlanDesc . '</td></tr>';
 			$body .= '<tr><td>Max Number of Persons</td><td>' . $item->MaxPersons . '</td></tr>';
