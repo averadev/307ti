@@ -1378,7 +1378,8 @@ private function comprubaArray($valor, $array){
 				"codicion"	=> 'pkResID',
 				"id"		=>	$id
 			];
-			$IdStatus = $this->reservation_db->propertyTable($peticion);
+			//$IdStatus = $this->reservation_db->propertyTable($peticion);
+			$IdStatus = $this->reservation_db->selectStatusResID($id);
 			$maximo = $this->reservation_db->selectMaxStatus();
 			$IdStatus = $this->reservation_db->getNextStatusID($IdStatus);
 			$Res = [
@@ -1474,7 +1475,8 @@ private function comprubaArray($valor, $array){
 				"codicion"	=> 'pkResID',
 				"id"		=>	$idReserva
 			];
-			$IdStatus = $this->reservation_db->propertyTable($peticion);
+			//$IdStatus = $this->reservation_db->propertyTable($peticion);
+			$IdStatus = $this->reservation_db->selectStatusResID($idReserva);
 			if ($IdStatus == 15) {
 				//$CheckIn = $this->reservation_db->getCheckIn($idReserva);
 				$financiamiento = [

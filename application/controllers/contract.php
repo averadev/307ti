@@ -1135,7 +1135,8 @@ public function nextStatusContract(){
 			"codicion"	=> 'pkResID',
 			"id"		=>	$id
 		];
-		$IdStatus = $this->contract_db->propertyTable($peticion);
+		//$IdStatus = $this->contract_db->propertyTable($peticion);
+		$IdStatus = $this->contract_db->selectContractID($id);
 		$maximo = $this->contract_db->selectMaxStatus();
 		$IdStatus = $this->contract_db->getNextStatusID($IdStatus);
 		/*if ($IdStatus <= $maximo) {
