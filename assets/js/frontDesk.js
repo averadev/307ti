@@ -143,7 +143,8 @@ function getFrontDesk(order, page){
 		$('.rightPanel').remove();
 		$('.panelLeft').remove();
 		$('#tableFrontDesk tbody').empty();
-		filters = getFiltersCheckboxs('FilterFrontDesk');
+		//filters = getFiltersCheckboxs('FilterFrontDesk');
+		filters = {};
 		dates = getDates(["dateArrivalFront", "dateDepartureFront", "textIntervalFront"]);
 		words = getWords(["textUnitCodeFront","textConfirmationFront","textViewFront"]);
 		options = getWords(["textIntervalFront"]);
@@ -484,19 +485,24 @@ function createTableLookUp(data){
 	for(i=0;i<units.length;i++){
 		
 		var itemUnit = units[i];
+		var wiCell = 60/dates.length;
 		
 		bodyHTML = "<tr id='tr" + i + "'>";
-		bodyHTML+="<td nowrap class='panelLeft'>"+ itemUnit.FloorPlan +"</th>";
-		bodyHTML+="<td nowrap class='panelLeft' >"+ itemUnit.unit +"</th>";
-		bodyHTML+="<td nowrap class='panelLeft' >"+itemUnit.hkStatus+"</th>";
-		bodyHTML+="<td nowrap title='" + itemUnit.views + "' class='panelLeft last Tooltips'>" + itemUnit.viewsCode + "</th>";
+		bodyHTML+="<td nowrap class='panelLeft typeFd'>"+ itemUnit.FloorPlan +"</th>";
+		bodyHTML+="<td nowrap class='panelLeft NumFd' >"+ itemUnit.unit +"</th>";
+		bodyHTML+="<td nowrap class='panelLeft StatusFd' >"+itemUnit.hkStatus+"</th>";
+		bodyHTML+="<td nowrap title='" + itemUnit.views + "' class='panelLeft last Tooltips ViewFd'>" + itemUnit.viewsCode + "</th>";
 		bodyHTML += "</tr>";
 		$('#tableFrontDesk tbody').append(bodyHTML);
+		
+		
 		
 		for(j = 0;j<dates.length;j++){
 			bodyHTML="<td class='rightPanel emptyUnitsFront' id='" + i + "-" + dates[j].pkCalendarId + "' day='" + dates[j].Date + "' unit='" + itemUnit.unit + "'  unitId='" + itemUnit.pkUnitId + "'></td>";
 			$('#tableFrontDesk tbody #tr' + i).append(bodyHTML);
+			//$('#' + + j + "-" + dates[j].pkCalendarId).css('width', wiCell + "%");
 		}
+		
 		
 		for(l=0;l<items.length;l++){
 			var item = items[l];
@@ -520,6 +526,7 @@ function createTableLookUp(data){
 								}
 								$('#' + + i + "-" + dates[j].pkCalendarId).attr('class',values.occType + " rightPanel Tooltips showReservation");
 								$('#' + + i + "-" + dates[j].pkCalendarId).text(values.people);
+								$('#' + + i + "-" + dates[j].pkCalendarId).css('width', (wiCell *  totaltd ) + "%");
 								exist = true;
 							}else{
 								$('#' + + i + "-" + dates[j].pkCalendarId).remove();
@@ -530,6 +537,9 @@ function createTableLookUp(data){
 			}
 		}
 	}
+	/*var wiCell = 60/dates.length;
+	$('.gHeaderDay .rightPanel').css('width', wiCell + "%");
+	$('.rightPanel.emptyUnitsFront').css('width', wiCell + "%");*/
 	if(isUnit != 0){
 		//var idTrFD = $('#tr' + isUnit);
 		var currentTopFK = $('#tr' + isUnit).position().top;

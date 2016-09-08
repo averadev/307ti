@@ -1711,12 +1711,11 @@ input.general.error, .caja.error{
     position: fixed;
 }
 
-select option {
-    margin:40px;
-    background: rgb(253, 231, 190);
+/*select option {
+    margin:5px;
     color:black;
     text-shadow:0 1px 0 rgba(0,0,0,0.4);
-}
+}*/
 
 .emptyUnitsFront{
 	background:#f5f4ff;

@@ -177,41 +177,86 @@ tr {
   display: block;
   overflow: hidden;
 }*/
-
-table#tableFrontDesk1{
+/*
+table#tableFrontDesk{
     table-layout: fixed;
     width: 100%;
+	overflow-x: scroll;
+	width:100%;
 }
 
-#tableFrontDesk1 head {
+#tableFrontDesk head {
     z-index: 2;
 }
 
-#tableFrontDesk1 thead tr {
+#tableFrontDesk thead tr {
     padding-right: 17px;
-    /*box-shadow: 0 4px 6px rgba(0,0,0,.6);*/
     z-index: 2;
 }
 
-#tableFrontDesk1 th, #tableFrontDesk1 td {
-    width: 30%;
+#tableFrontDesk tbody {
+    display: block;
+    overflow-Y: scroll;
+	height:400px;
+	
+}
+
+#tableFrontDesk tr {
+    display: block;
+    overflow: hidden;
+}*/
+
+/*#tableFrontDesk td {
+    padding: .5rem 0 .5rem 1rem;
+    border-right: 2px solid rgba(0,0,0,.2);
+}*/
+
+/*#tableFrontDesk th, #tableFrontDesk td {
+    width: 10%;
+    float: left;
+}*/
+
+/*.gHeaderMonth .panelLeftHead{
+	width: 40%;
     float: left;
 }
 
-#tableFrontDesk1 tbody {
-    display: block;
-    /*height: calc(50vh - 1px);*/
-	min-height:300px;
-    /*min-height: calc(200px + 1 px);*/
-    overflow-Y: scroll;
+.gHeaderMonth .rightPanel{
+	width:60%;
+	float:left;
 }
 
-#tableFrontDesk1 tr {
-    display: block;
-    overflow: hidden;
+.typeFd{
+	width: 20%;
+    float: left;
 }
 
-#tableFrontDesk1 td {
-    padding: .5rem 0 .5rem 1rem;
-    border-right: 2px solid rgba(0,0,0,.2);
+.NumFd{
+	width: 5%;
+    float: left;
 }
+
+.StatusFd{
+	width: 5%;
+    float: left;
+}
+
+.ViewFd{
+	width: 10%;
+    float: left;
+}
+
+.gHeaderDay .rightPanel{
+	width: 5.45%;
+    float: left;
+}
+
+.rightPanel.emptyUnitsFront{
+	width: 5.45%;
+    float: left;
+	height:36px;
+}
+
+.rightPanel.showReservation{
+    float: left;
+}*/
