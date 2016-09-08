@@ -1332,7 +1332,6 @@ private function comprubaArray($valor, $array){
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
 			$id = $_GET['id'];
-			//$data['idTour'] = $this->reservation_db->selectIdTour($id);
 			$data['contract']= $this->reservation_db->getReservations(null,$id);
 			$data['flags'] = $this->reservation_db->selectFlags($id);
 			$peticion = [
@@ -1380,10 +1379,7 @@ private function comprubaArray($valor, $array){
 			];
 			$IdStatus = $this->reservation_db->propertyTable($peticion);
 			$maximo = $this->reservation_db->selectMaxStatus();
-			//if ($IdStatus < 6) {
-				//$IdStatus += 1;
-				$IdStatus = $this->reservation_db->getNextStatusID($IdStatus);
-			//}
+			$IdStatus = $this->reservation_db->getNextStatusID($IdStatus);
 			$Res = [
 				"fkStatusId"	=> $IdStatus,
 				"MdBy"			=> $this->nativesessions->get('id'),
@@ -1392,33 +1388,25 @@ private function comprubaArray($valor, $array){
 			$condicion = "pkResId = " . $id;
 			$afectados = $this->reservation_db->updateReturnId('tblRes', $Res, $condicion);
 			if ($afectados>0) {
-				
-				/*if ($IdStatus< $maximo) {
-					$IdStatus = $IdStatus;
-				}else{
-					$IdStatus = $maximo;
-				}*/
-				//$next = $this->reservation_db->selectNextStatusDesc2(intval($IdStatus)+1);
-				//$actual = $this->reservation_db->selectNextStatusDesc2($IdStatus);
-				$next = $this->reservation_db->getNextStatus($IdStatus);
-				$actual = $this->reservation_db->getCurrentStatus($IdStatus);
-				if ($actual == "Out") {
-					$financiamiento = [
-								"CheckOut"	=> $this->getToday(),
-							];
-							$condicion = "pkResId = " . $id;
-							$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
+
+			$next = $this->reservation_db->getNextStatus($IdStatus);
+			$actual = $this->reservation_db->getCurrentStatus($IdStatus);
+			if ($actual == "Out") {
+				$financiamiento = [
+					"CheckOut"	=> $this->getToday(),
+				];
+				$condicion = "pkResId = " . $id;
+				$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
 				}
-				if ($actual == "In House") {
-					$financiamiento = [
-								"checkIn"	=> $this->getToday(),
-							];
-					$condicion = "pkResId = " . $id;
-					$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
+			if ($actual == "In House") {
+				$financiamiento = [
+					"checkIn"	=> $this->getToday(),
+				];
+				$condicion = "pkResId = " . $id;
+				$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
 				}
 				$dateCheckIn = $this->reservation_db->getCheckIn($id);
 				$CheckOut = $this->reservation_db->getCheckOut($id);
-				//$balance = $this->reservation_db->selectBalance();
 				$mensaje = [
 					"mensaje"=>"save correctly",
 					"afectados" => $afectados,
