@@ -116,8 +116,15 @@ $(document).ready(function(){
 		var dialogPackRes = PackReferenceRes();
 		dialogPackRes.dialog("open");
 	});
+	$(document).off( 'click', '#btnShowPayCardASR');
 	$(document).on( 'click', '#btnShowPayCardASR', function () {
-		showCreditCardASR();
+		var modalCCR = null;
+		var P = showCreditCardASR();
+		if (modalCCR != null) {
+			modalCCR.dialog( "destroy" );
+		}
+		modalCCR = modalGeneral2(P[0], P[1]);
+		modalCCR.dialog( "open" );
 	});
 	//
 	$(document).off( 'click', '#btnDownpaymentRes');
@@ -3949,7 +3956,6 @@ function deleteDocumentRes(idDoc, id){
 }
 
 function showCreditCardASR(){
-	console.log("=D");
 	var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
 	var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
 	
@@ -3988,12 +3994,7 @@ function showCreditCardASR(){
        		}
      	}]
 	};
-
-	if (modalCCR!=null) {
-		modalCCR.dialog( "destroy" );
-	}
-	modalCCR = modalGeneral2(modalPropiedades, ajaxData);
-	modalCCR.dialog( "open" );
+	return [modalPropiedades, ajaxData];
 }else{
 	alertify.error("ID Account error");
 }
@@ -4016,6 +4017,7 @@ function validateCreditCardASR(){
 }
 
 function addHTMLDIVR(data){
+	showLoading("#dialog-CreditCardASR",false);
 	$("#dialog-CreditCardASR").html(data);
 
 	$( "#dateExpiracionASR" ).Zebra_DatePicker({
