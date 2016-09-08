@@ -921,6 +921,17 @@ class Contract_db extends CI_Model {
         }
     }
 
+    public function selectContractID($p){
+        $this->db->select('fkStatusId as ID');
+        $this->db->from('tblRes');
+        $this->db->where('pkResID', $p);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->ID;
+        }
+    }
+
     public function selectTypesGift(){
         $this->db->select("pkGiftTypeId, GiftTypeDesc");
         $this->db->from('tblGiftType');

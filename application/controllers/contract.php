@@ -1532,7 +1532,7 @@ private function search($array, $key, $value){
 			];
 			//$maximo = $this->contract_db->selectMaxStatus();
 
-			$IdStatus = $this->contract_db->propertyTable($peticion);
+			$IdStatus = $this->contract_db->selectContractID($id);
 			/*if ($IdStatus<$maximo) {
 				$IdStatus = $IdStatus;
 			}else{
