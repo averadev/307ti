@@ -139,6 +139,7 @@
 				</div>
 				<div class="pagina" >
 					<div class="pages">
+					<span id="NR"></span>
 						<div class="pagination" id="paginationReservation">
 							<a href="#" class="first" data-action="first">&laquo;</a>
 							<a href="#" class="previous" data-action="previous">&lsaquo;</a>

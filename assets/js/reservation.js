@@ -227,6 +227,7 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 	
 	$( "#btnfindRes").unbind( "click" );
 	$('#btnfindRes').click(function(){
+		$("#NR").text("Reservations");
 		getReservations();
 	});
 
@@ -703,10 +704,9 @@ function getReservations(){
 			success: function(data){
 				if( data.items ){
 					alertify.success("Found "+ data["items"].length);
-					$("#box-reservations-relation h3.box-title").text(data["items"].length +" Reservations");
+					$("#NR").text(data["items"].length +" Reservations");
 					drawTable2(data.items,"reservationsTable","getDatailByIDRes","editRes");
 				}else{
-					$("#box-reservations-relation h3.box-title").text("Reservations");
 					noResultsTable("table-reservations", "reservationsTable", "no results found");
 				}
 				showLoading('#table-reservations',false);
