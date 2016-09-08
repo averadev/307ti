@@ -978,7 +978,7 @@ function createNewReservation(){
 						if (data['balance'].financeBalance > 0 ) {
 							showModalFinRes(data['idContrato']);
 						}else{
-							var dialogEditReservation = modalEditReservation(id);
+							var dialogEditReservation = modalEditReservation(data['idContrato']);
 							dialogEditReservation.dialog("open");
 						}
 						$('#dialog-Weeks').empty();
