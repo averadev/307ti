@@ -3,6 +3,7 @@ var iniDateRes = null;
 var endDateRes = null;
 var mocalCreditLimit = null;
 var modalCCR = null;
+var msgReservation = null;
 $(document).ready(function(){
 	maxHeight = screen.height * .10;
 	maxHeight = screen.height - maxHeight;
@@ -931,7 +932,8 @@ function createNewReservation(){
 			var date2 = new Date(endDateRes);
 			var dayDif = date2.getTime() - date1.getTime();
 			var day = Math.round(dayDif/(1000 * 60 * 60 * 24));
-			showAlert(true,"Saving changes, please wait ....",'progressbar');
+			//showAlert(true,"Saving changes, please wait ....",'progressbar');
+			msgReservation = alertify.success('Saving changes, please wait ....', 0);
 			$.ajax({
 					data: {
 						idiomaID : $("#selectLanguageRes").val(),
@@ -967,7 +969,8 @@ function createNewReservation(){
 					url: 'reservation/saveReservacion'
 				})
 				.done(function( data, textStatus, jqXHR ) {
-					showAlert(false,"Saving changes, please wait ....",'progressbar');
+					//showAlert(false,"Saving changes, please wait ....",'progressbar');
+					msgReservation.dismiss();
 					if (data['status']== 1) {
 						elem.resetForm();
 						var arrayWords = ["depositoEngancheRes", "precioUnidadRes", "precioVentaRes", "downpaymentRes"];
@@ -3520,7 +3523,8 @@ function saveAccContRes(attrType){
 			trxClass.push($(this).attr('trxclass'));
 		});
 	}
-	showAlert(true,"Saving changes, please wait ....",'progressbar');
+	//showAlert(true,"Saving changes, please wait ....",'progressbar');
+	msgReservation = alertify.success('Saving changes, please wait ....', 0);
 	var accType = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accType');
 	//var accId = 0;
 	/*if(accType == 6){
@@ -3553,16 +3557,19 @@ function saveAccContRes(attrType){
 			//getDatailByID("contractstbody");
 			getAccountsRes( $('#btNewTransAccRes').data( 'idRes' ), "account", "" );
 			$("#dialog-accountsRes").dialog('close');
-			showAlert(false,"Saving changes, please wait ....",'progressbar');
+			//showAlert(false,"Saving changes, please wait ....",'progressbar');
+			msgReservation.dismiss();
 		}else{
 			$("#dialog-accountsRes").dialog('close');
-			showAlert(false,"Saving changes, please wait ....",'progressbar');
+			//showAlert(false,"Saving changes, please wait ....",'progressbar');
+			msgReservation.dismiss();
 			//alert("no transacenshion");
 		}
 	}).fail(function( jqXHR, textStatus, errorThrown ) {
 		//alert("no guardeishion");
 		//$("#dialog-accountsRes").dialog('close');
-		showAlert(false,"Saving changes, please wait ....",'progressbar');
+		//showAlert(false,"Saving changes, please wait ....",'progressbar');
+		msgReservation.dismiss();
 		alertify.error("Try Again");
 	});
 }
@@ -3623,7 +3630,8 @@ function verifyAccount( inputArray, selectArray ){
 
 function uploadFileContRes(){
 	
-	showAlert(true,"Saving changes, please wait ....",'progressbar');
+	//showAlert(true,"Saving changes, please wait ....",'progressbar');
+	msgReservation = alertify.success('Saving changes, please wait ....', 0);
 	
 	var id = getValueFromTableSelectedRes("reservationsTable", 1);
 	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
@@ -3672,13 +3680,15 @@ function uploadFileContRes(){
 			getFilesRes(id);
 			var div = "#dialog-newFileRes";
 			$(div).dialog('close');
-			showAlert(false,"Saving changes, please wait ....",'progressbar');
+			//showAlert(false,"Saving changes, please wait ....",'progressbar');
+			msgReservation.dismiss();
 		} else { 
 			getFilesRes(id);
 			alertify.error("Try again");
 			var div = "#dialog-newFileRes";
 			$(div).dialog('close');
-			showAlert(false,"Saving changes, please wait ....",'progressbar');
+			//showAlert(false,"Saving changes, please wait ....",'progressbar');
+			msgReservation.dismiss();
 		} 	
 	};
 		

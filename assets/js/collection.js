@@ -7,6 +7,7 @@
 
 var maxHeight = 400;
 var xhrInventary = null;
+var msgColletion = null;
 
 /**************Index****************/
 
@@ -575,7 +576,8 @@ function saveAccContRes(attrType){
 	}
 	var accCode = $('#tab-CollAccounts .tabsModal .tabs .active').attr('attr-accCode');
 	var idAccColl = $('#dialog-Edit-colletion').data( 'idAcc' + accCode );
-	showAlert(true,"Saving changes, please wait ....",'progressbar');
+	//showAlert(true,"Saving changes, please wait ....",'progressbar');
+	msgColletion = alertify.success('Saving changes, please wait ....', 0);
 	$.ajax({
 		data: {
 			attrType:attrType,
@@ -596,15 +598,18 @@ function saveAccContRes(attrType){
 		if( data.success ){
 			getAccountsColl( "account" );
 			$("#dialog-accountsColl").dialog('close');
-			showAlert(false,"Saving changes, please wait ....",'progressbar');
+			//showAlert(false,"Saving changes, please wait ....",'progressbar');
+			msgColletion.dismiss();
 		}else{
 			$("#dialog-accountsRes").dialog('close');
-			showAlert(false,"Saving changes, please wait ....",'progressbar');
+			//showAlert(false,"Saving changes, please wait ....",'progressbar');
+			msgColletion.dismiss();
 			//alert("no transacenshion");
 		}
 	}).fail(function( jqXHR, textStatus, errorThrown ) {
 		$("#dialog-accountsRes").dialog('close');
-		showAlert(false,"Saving changes, please wait ....",'progressbar');
+		//showAlert(false,"Saving changes, please wait ....",'progressbar');
+		msgColletion.dismiss();
 		alertify.error("Try Again");
 	});
 }

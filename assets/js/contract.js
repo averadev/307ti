@@ -1,3 +1,5 @@
+var msgContract = null;
+
 $(document).ready(function(){
 	maxHeight = screen.height * .10;
 	maxHeight = screen.height - maxHeight;
@@ -11,7 +13,8 @@ $(document).ready(function(){
 	var dialogEditContract = modalEditContract();
 	var dialogAddTour = addTourContract();
 	var dialogAccount = opcionAccount();
-
+	
+	
 	initDatesContract();
 
 	$(document).off( 'click', '#newContract');
@@ -601,7 +604,8 @@ function createNewContract(){
 		var id = "saveDataContract";
 		var form = $("#"+id);
 		var elem = new Foundation.Abide(form, {});
-		showAlert(true,"Saving changes, please wait ....",'progressbar');
+		//showAlert(true,"Saving changes, please wait ....",'progressbar');
+		msgContract = alertify.success('Saving changes, please wait ....', 0);
 		$.ajax({
 			data: {
 				idiomaID : $("#selectLanguage").val(),
@@ -636,7 +640,8 @@ function createNewContract(){
 			dataType:'json',
 			url: 'contract/saveContract'
 		}).done(function( data, textStatus, jqXHR ) {
-				showAlert(false,"Saving changes, please wait ....",'progressbar');
+				//showAlert(false,"Saving changes, please wait ....",'progressbar');
+				msgPeople.dismiss();
 				if (data['status']== 1) {
 					$("#tablePagosPrgSelected").empty();
 					$("#tablePagosSelected").empty();
@@ -658,10 +663,8 @@ function createNewContract(){
 					alertify.error(data["mensaje"]);
 				}
 			}).fail(function( jqXHR, textStatus, errorThrown ) {
-
-				});
-	
-		
+				msgPeople.dismiss();
+			});
 }
 
 //funciona para pagos enganches
@@ -3135,7 +3138,8 @@ function saveAccCont(attrType){
 	}
 	var accCode = $('#tab-CAccounts .active').attr('attr-accCode');
 	var idAccCon = $('#btNewTransAcc').data( 'idAcc' + accCode );
-	showAlert(true,"Saving changes, please wait ....",'progressbar');
+	//showAlert(true,"Saving changes, please wait ....",'progressbar');
+	msgContract = alertify.success('Saving changes, please wait ....', 0);
 	$.ajax({
 		data: {
 			attrType:attrType,
@@ -3154,17 +3158,20 @@ function saveAccCont(attrType){
 		dataType:'json',
 		url: 'contract/saveTransactionAcc'
 	}).done(function( data, textStatus, jqXHR ) {
-		console.log(data);
+
 		if( data.success ){
 			getAccounts( $('#btNewTransAcc').data( 'idRes' ), "account", "" );
 			$("#dialog-accounts").dialog('close');
-			showAlert(false,"Saving changes, please wait ....",'progressbar');
+			//showAlert(false,"Saving changes, please wait ....",'progressbar');
+			msgContract.dismiss();
 		}else{
 			$("#dialog-accounts").dialog('close');
-			showAlert(false,"Saving changes, please wait ....",'progressbar');
+			//showAlert(false,"Saving changes, please wait ....",'progressbar');
+			msgContract.dismiss();
 		}
 	}).fail(function( jqXHR, textStatus, errorThrown ) {
-		showAlert(false,"Saving changes, please wait ....",'progressbar');
+		//showAlert(false,"Saving changes, please wait ....",'progressbar');
+		msgContract.dismiss();
 		alertify.error("Try Again");
 	});
 }
@@ -3225,7 +3232,8 @@ function verifyAccount( inputArray, selectArray ){
 
 function uploadFileCont(){
 	
-	showAlert(true,"Saving changes, please wait ....",'progressbar');
+	//showAlert(true,"Saving changes, please wait ....",'progressbar');
+	msgContract = alertify.success('Saving changes, please wait ....', 0);
 	
 	var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
 	//creamos la variable Request 
@@ -3270,13 +3278,15 @@ function uploadFileCont(){
 			getFiles(id);
 			var div = "#dialog-newFile";
 			$(div).dialog('close');
-			showAlert(false,"Saving changes, please wait ....",'progressbar');
+			//showAlert(false,"Saving changes, please wait ....",'progressbar');
+			msgContract.dismiss();
 		} else { 
 			getFiles(id);
 			alertify.error("Try again");
 			var div = "#dialog-newFile";
 			$(div).dialog('close');
-			showAlert(false,"Saving changes, please wait ....",'progressbar');
+			//showAlert(false,"Saving changes, please wait ....",'progressbar');
+			msgContract.dismiss();
 		} 	
 	};
 		

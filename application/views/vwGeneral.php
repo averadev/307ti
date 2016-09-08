@@ -10,8 +10,11 @@
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<!--<link rel='stylesheet prefetch' href='https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css'>-->
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>paginacion/jqpagination.css" />
-        <link rel="stylesheet" href="<?php echo base_url().CSS; ?>alertify/alertify.core.css" />
-        <link rel="stylesheet" href="<?php echo base_url().CSS; ?>alertify/alertify.default.css" />
+        <!--<link rel="stylesheet" href="<?php echo base_url().CSS; ?>alertify/alertify.core.css" />
+        <link rel="stylesheet" href="<?php echo base_url().CSS; ?>alertify/alertify.default.css" />-->
+		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>alertify/alertify.min.css" />
+		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>alertify/semantic.min.css" />
+        <!--<link rel="stylesheet" href="<?php echo base_url().CSS; ?>alertify/alertify.rtl.min.css" />-->
         <link rel="stylesheet" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" />
 		<!-- MultiSelect-->
 		<link rel="stylesheet" href="<?php echo base_url().CSS; ?>multiselect/multiple-select.css" />

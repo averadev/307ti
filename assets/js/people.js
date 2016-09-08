@@ -11,6 +11,7 @@ var maxHeight = 400;
 isSearch = true;
 var xhrPeople;
 var idPeople = 0;
+var msgPeople = null;
 
 /**************Index****************/
 
@@ -281,7 +282,9 @@ function EditUser(isClosed, idPeople){
 */
 function saveUserData(id, isClosed){
 	
-	showAlert(true,"Saving changes, please wait ....",'progressbar');
+	//showAlert(true,"Saving changes, please wait ....",'progressbar');
+	
+	msgPeople = alertify.success('Saving changes, please wait ....', 0);
 	
 	var phoneArray = new Array();
 	$(".phonePeople").each(function (index){
@@ -351,7 +354,10 @@ function saveUserData(id, isClosed){
 			roster:$('#textRoster').val(),
 		},
 		success: function(data){
-			showAlert(true,data.message,'button',showAlert);
+			//showAlert(true,data.message,'button',showAlert);
+			msgPeople.dismiss();
+			alertify.success('People Create');
+			//alertify.success('peopñe', 0);
 			if(data.success == true){
 				if(!isClosed){
 					dialogUser.dialog('close');
@@ -370,7 +376,9 @@ function saveUserData(id, isClosed){
 			
 		},
 		error: function(){
-			showAlert(true,"Error inserting data, try again later. ",'button',showAlert);
+			msgPeople.dismiss();
+			alertify.error('Error inserting data, try again later.');
+			//showAlert(true,"Error inserting data, try again later. ",'button',showAlert);
 			dialogUser.dialog('close');
 			cleanUserFields();
 			$("#idPeople").removeData("pkPeopleId");
@@ -716,6 +724,11 @@ function cleanUserFields(){
 * @param page nueva pagina a buscar/ si es 0 es una busqueda nueva
 */
 function searchPeople(page){
+	
+	
+	//var msg = alertify.message('Default message');
+	//msg.delay(3).setContent('Wait time updated to 3 Seconds');
+	
 	$('#tablePeople tbody').empty();
 	showLoading('#section-table-people',true);
 	
@@ -772,7 +785,7 @@ function searchPeople(page){
 			noResultsPeople("section-table-people", "tablePeople", "Try again");
 			showLoading('#section-table-people',false);
 		}
-	});	
+	});
 }
 
 /**
@@ -894,9 +907,10 @@ function getInfoPeople(id){
 		},
 		error: function(error){
 			showLoading('#section-table-people',false);
-			showAlert(true,"Error in the search, try again later",'button',showAlert);
+			alertify.error('Error inserting data, try again later.');
+			//showAlert(true,"Error in the search, try again later",'button',showAlert);
 		}
-	});	
+	});
 	
 }
 
@@ -1082,7 +1096,8 @@ function changeState(selector){
 			$('#textState').empty();
 			$('#textState').append('<option value="0" code="0">Select your state</option>');
 			$('#textState').attr('false',false);
-			showAlert(true,"Error in the search, try again later.",'button',showAlert);
+			alertify.error('Error inserting data, try again later.');
+			//showAlert(true,"Error in the search, try again later.",'button',showAlert);
 		}
 	});
 }

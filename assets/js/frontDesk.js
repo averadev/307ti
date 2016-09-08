@@ -16,6 +16,8 @@ var exchangeRate = null;
 
 var FloorplanFD;
 
+var msgFrontDesk = null;
+
 /**************Index****************/
 
 $('.searchFD').off();
@@ -952,7 +954,8 @@ function hideFieldHKCForm(){
 
 function saveHKConfig(id){
 	
-	showAlert(true,"Saving changes, please wait ....",'progressbar');
+	//showAlert(true,"Saving changes, please wait ....",'progressbar');
+	msgFrontDesk = alertify.success('Saving changes, please wait ....', 0);
 	
 	var maid = $('#tablePeopleMaidSelectedHKC tbody tr').find('td').first().text().trim();
 	var supervisor = $('#tablePeopleSupeSelectedHKC tbody tr').find('td').first().text().trim();
@@ -971,12 +974,14 @@ function saveHKConfig(id){
        	url: "frontDesk/saveUnitHKConfig",
 		dataType:'json',
 		success: function(data){
-			showAlert(true,data.message,'button',showAlert);
+			//showAlert(true,data.message,'button',showAlert);
+			msgFrontDesk.dismiss();
 			dialogHKConfig.dialog('close');
 			getFrontDesk("",0);
 		},
 		error: function(){
-			showAlert(true,"Error inserting data, try again later. ",'button',showAlert);
+			//showAlert(true,"Error inserting data, try again later. ",'button',showAlert);
+			msgFrontDesk.dismiss();
 			dialogHKConfig.dialog( 'open' );
 		}
     });
@@ -1132,7 +1137,9 @@ function saveHKStatus(rowStatus){
 		},
 		error: function(){
 			showLoading(div,false);
-			showAlert(true,"Error updating data, try again later. ",'button',showAlert);
+			//showAlert(true,"Error updating data, try again later. ",'button',showAlert);
+			alertify.error('Error updating data, try again later.');
+			//msgFrontDesk.dismiss();
 			chgStatusDialog.dialog( 'close' );
 		}
     });
@@ -1233,7 +1240,8 @@ function showNewReservation(selector){
 		},
 		error: function(){
 			showLoading(div,false);
-			showAlert(true,"Error to open new reservation, try again later. ",'button',showAlert);
+			//showAlert(true,"Error to open new reservation, try again later. ",'button',showAlert);
+			msgFrontDesk = alertify.success('Error to open new reservation, try again later.');
 		}
     });
 	
