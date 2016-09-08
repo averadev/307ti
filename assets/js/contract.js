@@ -641,7 +641,7 @@ function createNewContract(){
 			url: 'contract/saveContract'
 		}).done(function( data, textStatus, jqXHR ) {
 				//showAlert(false,"Saving changes, please wait ....",'progressbar');
-				msgPeople.dismiss();
+				msgContract.dismiss();
 				if (data['status']== 1) {
 					$("#tablePagosPrgSelected").empty();
 					$("#tablePagosSelected").empty();
@@ -663,7 +663,7 @@ function createNewContract(){
 					alertify.error(data["mensaje"]);
 				}
 			}).fail(function( jqXHR, textStatus, errorThrown ) {
-				msgPeople.dismiss();
+				msgContract.dismiss();
 			});
 }
 
