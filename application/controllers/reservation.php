@@ -1342,7 +1342,8 @@ private function comprubaArray($valor, $array){
 				"id"		=>	$id
 			];
 			//$maximo = $this->reservation_db->selectMaxStatus();
-			$IdStatus = $this->reservation_db->propertyTable($peticion);
+			//$IdStatus = $this->reservation_db->propertyTable($peticion);
+			$IdStatus = $this->reservation_db->selectStatusResID($id);
 			/*if ($IdStatus<$maximo) {
 				$IdStatus = $IdStatus;
 			}else{

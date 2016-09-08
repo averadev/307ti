@@ -1102,6 +1102,17 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
 	
+	public function selectStatusResID($p){
+        $this->db->select('fkStatusId as ID');
+        $this->db->from('tblRes');
+        $this->db->where('pkResID', $p);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->ID;
+        }
+    }
+	
 	public function propertyTable2($p){
         $this->db->select($p['valor'] .' as '.  $p['alias']);
         $this->db->from($p['tabla']);
