@@ -10,6 +10,18 @@ var modalFin = null;
 var modalAllNotes = null;
 var modalNuevoxD = null;
 var dialogWeekDetail = null;
+var modalCCR = null;
+var mocalCreditLimit = null;
+var peopleDialog = null;
+var peopleResDialog = null;
+var unidadDialog = null;
+var dialogWeeks = null;
+var dialogPack = null;
+var dialogEnganche = null;
+var dialogScheduledPayments = null;
+var dialogDiscountAmount = null;
+var dialogEditContract = null;
+var dialogAccount = null;
 $(function() {
 	
     // Button Dropdown Menu

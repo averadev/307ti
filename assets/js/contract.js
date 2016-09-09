@@ -3,16 +3,9 @@ var msgContract = null;
 $(document).ready(function(){
 	maxHeight = screen.height * .10;
 	maxHeight = screen.height - maxHeight;
-    var unidadDialog = addUnidadDialog();
-    var peopleDialog = addPeopleDialog();
-	var dialogWeeks = getWeeksDialog();
-	var dialogPack = PackReference();
-	var dialogEnganche = modalDepositDownpayment();
-	var dialogScheduledPayments = modalScheduledPayments();
-	var dialogDiscountAmount = modalDiscountAmount();
-	var dialogEditContract = modalEditContract();
-	var dialogAddTour = addTourContract();
-	var dialogAccount = opcionAccount();
+
+	var dialogAddTour = null;
+	
 	
 	
 	initDatesContract();
@@ -23,11 +16,14 @@ $(document).ready(function(){
 	});
 	$(document).off( 'click', '#btnRefinancingContract');
 	$(document).on( 'click', '#btnRefinancingContract', function () {
-		var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
+		var id = getIDContrato();
 		showModalFin(id);
 	});
 	$(document).off( 'click', '#btnAddPeople');
 	$(document).on( 'click', '#btnAddPeople', function () {
+		if (peopleDialog != null) {
+			peopleDialog.dialog( "destroy" );
+		}
 		peopleDialog = addPeopleDialog();
 		peopleDialog.dialog( "open" );
 	});
@@ -47,7 +43,7 @@ $(document).ready(function(){
 		modalVendedores = modalSellers();
 		modalVendedores.dialog( "open" );
 	 });
-
+	$(document).off( 'click', '#btnNewFile'); 
  	 $(document).on( 'click', '#btnNewFile', function () {
  		if (modalNewFile!=null) {
 	    		modalNewFile.dialog( "destroy" );
@@ -55,6 +51,7 @@ $(document).ready(function(){
 	    	modalNewFile = modalNewFileContract();
 	        modalNewFile.dialog( "open" );
 	 });
+	$(document).off( 'click', '#btnNewProvision'); 
 	$(document).on( 'click', '#btnNewProvision', function () {
  		if (modalProvisiones!=null) {
 	    		modalProvisiones.dialog( "destroy" );
@@ -62,6 +59,7 @@ $(document).ready(function(){
 	    	modalProvisiones = modalProvisions();
 	        modalProvisiones.dialog( "open" );
 	 });
+	$(document).off( 'click', '#btnNewNote'); 
 	$(document).on( 'click', '#btnNewNote', function () {
  		if (modalNotas!=null) {
 	    		modalNotas.dialog( "destroy" );
@@ -69,6 +67,7 @@ $(document).ready(function(){
 	    	modalNotas = modalAddNotas();
 	        modalNotas.dialog( "open" );
 	 });
+	$(document).off( 'click', '#btnGetAllNotes'); 
 	$(document).on( 'click', '#btnGetAllNotes', function () {
  		if (modalAllNotes!=null) {
 	    		modalAllNotes.dialog( "destroy" );
@@ -76,56 +75,80 @@ $(document).ready(function(){
 	    	modalAllNotes = modalGetAllNotes();
 	        modalAllNotes.dialog( "open" );
 	 });
-	
+	$(document).off( 'click', '#btnPackReference'); 
 	$(document).on( 'click', '#btnPackReference', function () {
-		var dialogPack = PackReference();
+		if (dialogPack!=null) {
+	    	dialogPack.dialog( "destroy" );
+	    }
+		dialogPack = PackReference();
 		dialogPack.dialog("open");
 	});
-
+	$(document).off( 'click', '#btnDownpayment'); 
 	$(document).on( 'click', '#btnDownpayment', function () {
-		var dialogEnganche = modalDepositDownpayment();
+		if (dialogEnganche!=null) {
+	    	dialogEnganche.dialog( "destroy" );
+	    }
+		dialogEnganche = modalDepositDownpayment();
 		dialogEnganche.dialog("open");
 	});
-	
+	$(document).off( 'click', '#btnScheduledPayments'); 
 	$(document).on( 'click', '#btnScheduledPayments', function () {
-		var dialogScheduledPayments = modalScheduledPayments();
+		if (dialogScheduledPayments!=null) {
+	    	dialogScheduledPayments.dialog( "destroy" );
+	    }
+		dialogScheduledPayments = modalScheduledPayments();
 		dialogScheduledPayments.dialog("open");
 	});
-
+	$(document).off( 'click', '#btnDiscountAmount'); 
 	$(document).on( 'click', '#btnDiscountAmount', function () {
-		var dialogDiscountAmount = modalDiscountAmount();
+		if (dialogDiscountAmount!=null) {
+	    	dialogDiscountAmount.dialog( "destroy" );
+	    }
+		dialogDiscountAmount = modalDiscountAmount();
 		dialogDiscountAmount.dialog("open");
 	});
-	
+	$(document).off( 'click', '#btnAddTourID');
+	$(document).on( 'click', '#btnAddTourID', function () {
+		if (dialogAddTour!=null) {
+	    	dialogAddTour.dialog( "destroy" );
+	   	}
+		dialogAddTour = addTourContract();
+		dialogAddTour.dialog("open");
+	});
+	$(document).off( 'click', '#btNewTransAcc'); 
+	$(document).off( 'click', '#btAddPayAcc'); 
 	$(document).on( 'click', '#btNewTransAcc, #btAddPayAcc', function () {
 		var accCode = $('#tabsContratsAccounts .active').attr('attr-accCode');
 		var idAccColl = $('#btNewTransAcc').data( 'idAcc' + accCode );
 		if(idAccColl != undefined){
-			var dialogAccount = opcionAccount($(this).attr('attr_type'));
+			if (dialogAccount!=null) {
+	    		dialogAccount.dialog( "destroy" );
+	   		}
+			dialogAccount = opcionAccount($(this).attr('attr_type'));
 			dialogAccount.dialog("open");
 		}else{
 			alertify.error('No acc found');
 		}
 	});
+	$(document).off( 'click', '#btnShowPayCardAS');
 	$(document).on( 'click', '#btnShowPayCardAS', function () {
 		showCreditCardAS();
 	});
-	$(document).on( 'click', '#btnAddTourID', function () {
-		var dialogAddTour = addTourContract();
-		dialogAddTour.dialog("open");
-	});
+
+	$(document).off( 'click', '#btnDeleteTourID');
 	$(document).on( 'click', '#btnDeleteTourID', function () {
 		$('#TourID').val('0');
 	});
+	$(document).off( 'click', '#btnCleanWord');
 	$('#btnCleanWord').click(function (){
 		$('#stringContrat').val('');
 	});
-	
+	$(document).off( 'click', '#btnfind');
 	$('#btnfind').click(function(){
 		$('#contractstbody').empty();
 		getContratos();
 	});
-
+	$(document).off( 'click', '#busquedaAvanazada');
 	$("#busquedaAvanazada").click(function(){
 		$("#avanzada").slideToggle("slow");
 	});
@@ -274,7 +297,7 @@ function showModalContract(){
 }
 
 function showModalDetailWeek(){
-	var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
+	var id = getIDContrato();
 	var year = getValueFromTableSelected("tableCOccupationSelected", 1);
 	var week = getValueFromTableSelected("tableCOccupationSelected", 2);
 	var ajaxData =  {
@@ -319,18 +342,15 @@ function addHTMLDetailWeek(data){
 function cerrarContract(){
 	$('#dialog-DiscountAmount').empty();
 }
-function addTourContract(unidades){
+function addTourContract(){
 	var div = '#dialog-tourID';
-	var unidades = unidades;
 	dialogo = $("#dialog-tourID").dialog ({
   		open : function (event){
-  			if ($(div).is(':empty')) {
   				showLoading(div,true);
   				$(this).load ("tours/index" , function(){
 	    			showLoading(div,false);
 	    			selectTableUnico("tours");
 	    		});
-  			}
 		},
 		autoOpen: false,
      	height: maxHeight,
@@ -356,6 +376,7 @@ function addTourContract(unidades){
 	});
 	return dialogo;
 }
+
 function addUnidadDialog() {
 	var div = "#dialog-Unidades";
 	dialog = $( "#dialog-Unidades" ).dialog({
@@ -396,7 +417,10 @@ function addUnidadDialog() {
 						ultimos.push(parseInt(unidades[i].lastYear));
 					}
 					ultimo = Math.max.apply( Math, ultimos);
-					var dialogWeeks = getWeeksDialog(unidades, ultimo);
+					if (dialogWeeks!=null) {
+						dialogWeeks.dialog( "destroy" );
+					}
+					dialogWeeks = getWeeksDialog(unidades, ultimo);
 					dialogWeeks.dialog("open");
 				}else{
 					alertify.error("Search and click over for choose one");
@@ -443,7 +467,7 @@ function addPeopleDialog() {
 			}
 		}],
 		close: function() {
-			$('#tablePeople tbody').empty();
+			$('#dialog-People').empty();
 		}
 	});
 	return dialog;
@@ -651,7 +675,10 @@ function createNewContract(){
 					if (data['balance'].financeBalance >0) {
 						showModalFin(data['idContrato']);
 					}else{
-						var dialogEditContract = modalEditContract(data['idContrato']);
+						if (dialogEditContract!=null) {
+							dialogEditContract.dialog( "destroy" );
+						}
+						dialogEditContract = modalEditContract(data['idContrato']);
  						dialogEditContract.dialog("open");
 					}
 					
@@ -1384,7 +1411,10 @@ function getDatailByID(id){
 		if (pickedup != null) {
         	pickedup.removeClass("yellow");
 			var id = $(this).find("td").eq(1).text().trim();
-            var dialogEditContract = modalEditContract(id);
+			if (dialogEditContract!=null) {
+				dialogEditContract.dialog( "destroy" );
+			}
+            dialogEditContract = modalEditContract(id);
             dialogEditContract.dialog("open");
           }
           $( this ).addClass("yellow");
@@ -2914,7 +2944,7 @@ function getFlags(id){
 function SaveFlagsContract(){
 
 	var flags = getArrayValuesSelectedColum("tableFlagsList", 1);
-	var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
+	var id = getIDContrato();
 	$.ajax({
 	    data:{
 	        idContrato: id,
@@ -3000,7 +3030,7 @@ function deleteFlag(id){
 function nextStatusContract(){
 	deactiveEventClick("btnNextStatus");
 	$("#iNextStatus").addClass("fa-spin");
-	var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
+	var id = getIDContrato();
 	$.ajax({
 	    data:{
 	        idContrato: id,
@@ -3235,7 +3265,7 @@ function uploadFileCont(){
 	//showAlert(true,"Saving changes, please wait ....",'progressbar');
 	msgContract = alertify.success('Saving changes, please wait ....', 0);
 	
-	var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
+	var id = getIDContrato();
 	//creamos la variable Request 
 	if(window.XMLHttpRequest) {
  		var Req = new XMLHttpRequest(); 
@@ -3334,7 +3364,7 @@ function deleteFile(idFile){
 				url: "contract/deleteFile",
 				dataType:'json',
 				success: function(data){
-					var id = getIDContrato();//getValueFromTableSelected("contracts", 1);
+					var id = getIDContrato();
 					getFiles(id);
 					showLoading("#tableCFilesSelected", false);
 					alertify.success("deleted file");

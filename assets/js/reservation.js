@@ -1,8 +1,6 @@
 var unitReservacion = [];
 var iniDateRes = null;
 var endDateRes = null;
-var mocalCreditLimit = null;
-var modalCCR = null;
 var msgReservation = null;
 $(document).ready(function(){
 	maxHeight = screen.height * .10;
@@ -18,7 +16,7 @@ $(document).ready(function(){
 	
 	var addReservation = null;
 	var unidadResDialog = addUnidadResDialog( null, null );
-    var peopleResDialog = addPeopleResDialog();
+    
 	var dialogWeeksRes = getWeeksResDialog();
 	var dialogPackRes = PackReferenceRes();
 	var dialogEngancheRes = modalDepositDownpaymentRes();
@@ -53,6 +51,9 @@ $(document).ready(function(){
 	
 	$(document).off( 'click', '#btnAddPeopleRes');
 	$(document).on( 'click', '#btnAddPeopleRes', function () {
+		// if (peopleResDialog != null) {
+		// 	peopleResDialog.dialog( "destroy" );
+		// }
          peopleResDialog = addPeopleResDialog();
          peopleResDialog.dialog( "open" );
 	});
@@ -119,13 +120,7 @@ $(document).ready(function(){
 	});
 	$(document).off( 'click', '#btnShowPayCardASR');
 	$(document).on( 'click', '#btnShowPayCardASR', function () {
-		var modalCCR = null;
-		var P = showCreditCardASR();
-		if (modalCCR != null) {
-			modalCCR.dialog( "destroy" );
-		}
-		modalCCR = modalGeneral2(P[0], P[1]);
-		modalCCR.dialog( "open" );
+		showCreditCardASR();
 	});
 	//
 	$(document).off( 'click', '#btnDownpaymentRes');
@@ -651,12 +646,14 @@ function addPeopleResDialog(){
 	var div = "#dialog-PeopleRes";	
 	dialog = $(div).dialog({
 		open : function (event){
+			if ($(div).is(':empty')) {
 				showLoading(div, true);
 				$(this).load ("people/index" , function(){
 		    		showLoading(div, false);
 		    		$("#dialog-User").hide();
 	            	selectTableRes("tablePeople");
 	    		});
+			}
 		},
 		autoOpen: false,
 		height: maxHeight,
@@ -4004,7 +4001,11 @@ function showCreditCardASR(){
        		}
      	}]
 	};
-	return [modalPropiedades, ajaxData];
+	if (modalCCR != null) {
+			modalCCR.dialog( "destroy" );
+	}
+	modalCCR = modalGeneral2(modalPropiedades, ajaxData);
+	modalCCR.dialog( "open" );
 }else{
 	alertify.error("ID Account error");
 }
