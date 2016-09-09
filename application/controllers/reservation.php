@@ -284,7 +284,7 @@ class Reservation extends CI_Controller {
 				$tipoCambioEuros = $this->reservation_db->selectTypoCambio($Dolares, $Euros);
 				$transaction = [
 					"fkAccid" 			=> $this->reservation_db->getACCIDByContracID($idContrato),
-					"fkTrxTypeId"		=> $this->reservation_db->getTrxTypeContracByDesc('SCP'),
+					"fkTrxTypeId"		=> $this->reservation_db->getTrxTypeContracByDesc('SPDP'),
 					"fkTrxClassID"		=> $this->reservation_db->gettrxClassID('DWP'),
 					"Debit-"			=> 0,
 					"Credit+"			=> 0,
