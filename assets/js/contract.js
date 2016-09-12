@@ -5,9 +5,7 @@ $(document).ready(function(){
 	maxHeight = screen.height - maxHeight;
 
 	var dialogAddTour = null;
-	
-	
-	
+
 	initDatesContract();
 
 	$(document).off( 'click', '#newContract');
@@ -334,8 +332,6 @@ function showModalDetailWeek(){
 	dialogWeekDetail.dialog( "open" );
 }
 function addHTMLDetailWeek(data){
-	//console.table(data)
-	//modalEditContract(data.id);
 	$("#dialog-DetailWeek").html(data);
 } 
 
