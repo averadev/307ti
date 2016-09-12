@@ -798,7 +798,6 @@ function getValueTablePersonas(){
 			persona.primario = $(this).find('td').eq(4).find('input[name=peopleType1]').is(':checked'),
 			persona.beneficiario = $(this).find('td').eq(5).find('input[name=peopleType2]').is(':checked')
 			personas.push(persona);
-			console.log(i); 
 		}
 	});
 	return personas;
@@ -946,8 +945,8 @@ function tablaPersonas(personas){
 
 function onChangePrimary(){
 	$(".primy").change(function(){
-		//var selected = getIndexCheckbox();
 		checkAllBeneficiary(this.value);
+		console.log(this.value);
 	});
 }
 function defaultValues(){
@@ -958,7 +957,11 @@ function defaultValues(){
 function deleteElementTable(div){
 	$("#"+div+" tr").on("click", "button", function(){
 		$(this).closest("tr").remove();
+		if (!PrimaryPeople()) {
+			defaultValues();
+		}
 	});
+
 }
 
 function deleteElementTableUnidades(div){
@@ -1835,7 +1838,24 @@ function getArrayValuesColumnTable(tabla, columna){
 	});
 	return items;
 }
-
+function getArrayValuesCheckbox(){
+	var items=[];
+	var Primario = $("#tablePeopleSelected .primy");
+	for (var i = 0; i < Primario.length; i++) {
+		items.push(Primario[i].checked);
+	}
+	return items;
+}
+function PrimaryPeople(){
+	var P = false;
+	var items = getArrayValuesCheckbox();
+	for (var i = 0; i < items.length; i++) {
+		if (items[i]) {
+			P = true;
+		}
+	}
+	return P;
+}
 function getArrayValuesSelectedColum(tabla, columna){
 	var items=[];
 	$('#'+tabla+' tbody tr.yellow td:nth-child('+columna+')').each( function(){

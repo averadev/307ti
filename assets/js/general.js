@@ -818,7 +818,6 @@ function checkAllBeneficiary(selected){
 		}else{
 			this.checked = false;
 		}
-		
 	});	
 }
 

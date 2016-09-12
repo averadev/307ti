@@ -835,9 +835,29 @@ function defaultValuesRes(){
 function deleteElementTableRes(div){
 	$("#"+div+" tr").on("click", "button", function(){
 		$(this).closest("tr").remove();
+		if (!PrimaryPeopleRes()) {
+			defaultValuesRes();
+		}
 	});
 }
-
+function getArrayValuesCheckboxRes(){
+	var items=[];
+	var Primario = $("#tablePeopleResSelected .primy");
+	for (var i = 0; i < Primario.length; i++) {
+		items.push(Primario[i].checked);
+	}
+	return items;
+}
+function PrimaryPeopleRes(){
+	var P = false;
+	var items = getArrayValuesCheckboxRes();
+	for (var i = 0; i < items.length; i++) {
+		if (items[i]) {
+			P = true;
+		}
+	}
+	return P;
+}
 function deleteElementTableUnidadesRes(div){
 	$("#"+div+" tr").on("click", "button", function(){
 		$(this).closest("tr").remove();
