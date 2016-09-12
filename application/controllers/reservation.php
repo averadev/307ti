@@ -703,7 +703,7 @@ class Reservation extends CI_Controller {
 		$resInt =  $this->reservation_db->selectUnitiesContract($idContrato);
 		$idCalendar =  $this->reservation_db->selectDateCalendar( $iniDate, $endDate );
 		
-		for ($i=0; $i < sizeof($idCalendar); $i++) {
+		for ($i=0; $i < sizeof($idCalendar) - 1; $i++) {
 			for ($j=0; $j < sizeof($resInt); $j++) {
 				$OcupacionTable = [
 					"fkResId"    	=> $idContrato,

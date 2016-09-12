@@ -469,7 +469,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             $this->db->where('a.fkAccTypeId = 5');
         }
         if($typeInfo == "payment"){
-            $this->db->where("tt.TrxSign = 1");
+            //$this->db->where("tt.TrxSign = 1");
             $this->db->where('a.fkAccTypeId = ', $typeAcc);
             $this->db->where('att.AbsAmount > 0');
         }

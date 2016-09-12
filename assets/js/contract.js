@@ -389,7 +389,6 @@ function addUnidadDialog() {
 					});
 		            selectTable("tblUnidades");
 	    		});
-	    	
 		},
 		autoOpen: false,
 		height: maxHeight,

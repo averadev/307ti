@@ -69,7 +69,7 @@ Class frontDesk_db extends CI_MODEL
 		$iniDate = $iniDate . " from tblResOcc ro2";
 		$iniDate = $iniDate . " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId";
 		$iniDate = $iniDate . " where ro2.fkResId = ro.fkResId and ro2.OccYear = ro.OccYear ORDER By ro2.fkCalendarId asc) as DateIni";
-		$endDate = "(SELECT top 1 CONVERT(VARCHAR(11),c2.Date,106)";
+		$endDate = "(SELECT top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c2.Date),106)";
 		$endDate = $endDate . " from tblResOcc ro2";
 		$endDate = $endDate . " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId";
 		$endDate = $endDate . " where ro2.fkResId = ro.fkResId and ro2.OccYear = ro.OccYear ORDER By ro2.fkCalendarId desc) as DateEnd";

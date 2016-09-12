@@ -39,6 +39,12 @@ class Pdfs extends CI_Controller {
 		echo "</br>";
 		echo base_url();*/
 		
+		echo $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/" . "prueba.png";
+		
+		echo "</br>";
+		
+		echo base_url();
+		
     }
 	
 	public function CheckOut(){
@@ -609,6 +615,8 @@ class Pdfs extends CI_Controller {
 		
 		$nombre_archivo = utf8_decode($saveFiler);
 		$nombre_archivo = $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/" . $nombre_archivo;
+		
+		
 		
 		$nombre_archivo2 = utf8_decode($saveFiler);
 		
