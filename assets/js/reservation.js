@@ -670,6 +670,7 @@ function addPeopleResDialog(){
 			"class": 'dialogModalButtonAccept',
 			click: function() {
 				if(selectAllPeopleRes()){
+					updateValuePeopleRes();
 					$(this).dialog('close');
 				};
 			}
@@ -810,7 +811,7 @@ function tablePeopleRes(personas){
             bodyHTML+="<td>" + personas[i][j] + "</td>";
         };
         bodyHTML += "<td><div class='rdoField'><input class='primy' value='"+i+"'  type='radio' name='peopleType1'><label for='folio'>&nbsp;</label></div></td>";
-        bodyHTML += "<td><div class='rdoField'><input class='benefy' value='"+i+"' type='checkbox' name='peopleType2'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><div class='rdoField'><input disabled class='benefy' value='"+i+"' type='checkbox' name='peopleType2'><label for='folio'>&nbsp;</label></div></td>";
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
         bodyHTML+="</tr>";
     }
@@ -827,17 +828,25 @@ function onChangePrimaryRes(){
 	});
 }
 function defaultValuesRes(){
-	$('.primy')[0].checked = true;
-	checkAllBeneficiary(0);
+	if ($('.primy').length>0) {
+		$('.primy')[0].checked = true;
+		checkAllBeneficiary(0);
+	}
 }
 
 //reducir a una funcion
 function deleteElementTableRes(div){
 	$("#"+div+" tr").on("click", "button", function(){
 		$(this).closest("tr").remove();
+		updateValuePeopleRes();
 		if (!PrimaryPeopleRes()) {
 			defaultValuesRes();
 		}
+	});
+}
+function updateValuePeopleRes(){
+	$(".primy").each(function (i) {
+		this.value= i;
 	});
 }
 function getArrayValuesCheckboxRes(){
