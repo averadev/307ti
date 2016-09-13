@@ -171,8 +171,7 @@ $(document).ready(function(){
 	$(document).off( 'change', '#occupancyTypeGroupRes');
 	$(document).on( 'change', '#occupancyTypeGroupRes', function () {
 		id = $(this).val();
-		console.log(id);
-		ajaxSelectRes('reservation/getOccupancyTypes?id='+id,'try again', generalSelectsDefault, 'occupancySalesRes');
+		ajaxSelectRes('reservation/getOccupancyTypes?id='+id,'try again', generalSelectsDefault2, 'occupancySalesRes');
 	});
 
 $(document).off( 'click', '#btAddCreditLimitRes');
@@ -634,7 +633,9 @@ function addUnidadResDialog(iniDate, unit){
 					endDate = endDate[2];
 					var frequency = "every Year";
 	       			tablUnidadadesRes(unidades, frequency, intDate, endDate);
-					$('#occupancySalesRes').val(2);
+					///$('#occupancySalesRes').val(2);
+					id = $('#occupancyTypeGroupRes').val();
+					ajaxSelectRes('reservation/getOccupancyTypes?id='+id,'try again', generalSelectsDefault2, 'occupancySalesRes');
 					getOpctionOccType();
 	       			$(this).dialog('close');
 				}else{
@@ -3487,6 +3488,24 @@ function generalSelectsDefaultRes(data, div){
     }
     $("#"+div).html(select);
 }
+
+function generalSelectsDefault2(data, div){
+     var select = '';
+    for (var i = 0; i < data.length; i++) {
+        select += '<option value="'+data[i].ID+'">';
+        for (var j in data[i]) {
+            if(data[i][j] != data[i].ID){
+                select+= data[i][j].trim();
+            }
+        };
+        select+='</option>';
+    }
+    $("#"+div).html(select);
+	getRateRes();
+}
+
+
+
 //tt.pkTrxTypeId as ID, tt.TrxTypeDesc, tt.TrxSign
 function opcionAccountRes(attrType){
 	var div = "#dialog-accountsRes";
@@ -3946,6 +3965,7 @@ function drawTableIdOcupacionRes(data, table){
 }
 
 function getRateRes(){
+	
 	$("#RateRes").attr('disabled', true);
 	var intDate = iniDateRes.split("/");
 	var occYear = intDate[2];
