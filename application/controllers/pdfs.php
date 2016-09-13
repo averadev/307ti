@@ -39,11 +39,11 @@ class Pdfs extends CI_Controller {
 		echo "</br>";
 		echo base_url();*/
 		
-		echo $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/" . "prueba.png";
+		//echo $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/" . "prueba.png";
 		
-		echo "</br>";
+		//echo "</br>";
 		
-		echo base_url();
+		//echo base_url();
 		
     }
 	

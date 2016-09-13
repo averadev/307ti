@@ -107,9 +107,7 @@
 							<i class="fa fa-user-plus">Refinancing reservation</i></a>
 						</div>
 						<div class="small-6 columns">
-					<?php if ($statusNext) {
-					echo '<a id="btnNextStatusRes" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>'. "<span>Next Status: ".$statusNext.'</span></a>';
-					} ?>
+						<a id="btnNextStatusRes" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i><span>Change Status</span></a>
 						</div>
 						<table id="peopleContractRes" width="100%" class="cell-border" >
 							<thead>

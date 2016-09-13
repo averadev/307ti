@@ -25,6 +25,8 @@ $(document).ready(function(){
 	var dialogEditReservation = modalEditReservation();
 	/*var dialogAddTour = addTourContract();*/
 	var dialogAccount = opcionAccountRes();
+	var dialogStatus = modalStatusRes();
+	
 
 	//$("#newReservation").off();
 	//$("#newReservation").on( 'click', function () {
@@ -2556,7 +2558,9 @@ function setEventosEditarReservation(id){
 		gotoDiv('ContenidoModalContractEdit', 'finTerminos');
 	});
 	$("#btnNextStatusRes").click(function(){
-		nextStatusContractRes();
+		dialogStatus = modalStatusRes();
+		dialogStatus.dialog("open");
+		//nextStatusContractRes();
 	});
 
 	$('.btnReportRes').off('click');
@@ -3387,8 +3391,47 @@ function updateTagBanderasRes(banderas){
    // deleteSelectFlag("flagsAsignedBodyRes");
 //}
 
+function modalStatusRes(){
+	var div = "#dialog-StatusRes";
+	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
+	if( screen == "frontDesk" ){
+		id = $('#tab-general .tabs-title.active').data('idRes');
+	}
+	dialogo = $(div).dialog ({
+		open : function (event){
+			showLoading(div, true);
+			$(this).load ("reservation/modalChangeStatus?id="+id , function(){
+				showLoading(div, false);
+			});
+		},
+		autoOpen: false,
+     	height: maxHeight/2,
+     	width: "40%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Change",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+				nextStatusContractRes();
+       		}
+     	}],
+     close: function() {
+     }
+	});
+	return dialogo;
+}
+
 function nextStatusContractRes(){
-	deactiveEventClickRes("btnNextStatusRes");
+	//deactiveEventClickRes("btnNextStatusRes");
+	var div = "#dialog-StatusRes";
+	showLoading(div, true);
 	$("#iNextStatus").addClass("fa-spin");
 	var id = getValueFromTableSelectedRes("reservationsTable", 1);
 	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
@@ -3398,11 +3441,13 @@ function nextStatusContractRes(){
 	$.ajax({
 	    data:{
 	        idContrato: id,
+			idNextStatus: $('#statusRes').val()
 	    },
 	    type: "POST",
 	    url: "reservation/nextStatusReservation",
 	    dataType:'json',
 	    success: function(data){
+			
 	    	if (data["dateCheckOut"]) {
 	    		$("#dateCheckOut").text("Check Out: "+ data["dateCheckOut"]);
 	    	}
@@ -3410,28 +3455,24 @@ function nextStatusContractRes(){
 	    		$("#dateCheckIn").text("Check In: "+ data["dateCheckIn"]);
 	    	}
 	    	if (data['status'] == "In House") {
-	    		$( ".checkInPeople" ).prop( "disabled", false);
+	    		//$( ".checkInPeople" ).prop( "disabled", false);
 	    			var status = "Status: In House";
 					var balance = $("#tableReservationAccRes .balanceAccount").text().replace("$ ", "");
 					    balance = parseFloat(balance);
 					 verificarRED(status, balance);
 	    	}else{
-	    		$( ".checkInPeople" ).prop( "disabled", true);
+	    		//$( ".checkInPeople" ).prop( "disabled", true);
 	    	}
 	    	$("#iNextStatus").removeClass("fa-spin");
 			$("#editReservationStatus").text("Status: "+data['status']);
 			$('#editReservationStatus').attr( 'statusRes', data['status'] );
-	    	if (data['next'] != null) {
-	    		$("#btnNextStatusRes span").text("Next Status: "+data['next']);
-	    	}else{
-	    		$("#btnNextStatusRes").remove();
-	    	}
+			showLoading(div, false);
+			dialogStatus.dialog('close');
 	    	alertify.success(data['mensaje']);
-	    		$("#btnNextStatusRes").click(function(){
-					nextStatusContractRes();
-				});
+	    		
 	    },
 	    error: function(){
+			showLoading(div, false);
 	        alertify.error("Try again");
 	    }
 	});

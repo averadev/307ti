@@ -1223,6 +1223,21 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
     
+	public function getStatusReservation($idRes){
+		$this->db->select('s.pkStatusId as ID, s.StatusDesc, r.fkStatusId');
+		$this->db->from('tblStatus s');
+		$this->db->join('tblStatusTypeStatus sts', 'sts.fkStatusId = s.pkStatusId', 'inner');
+		$this->db->join('tblRes r', 'r.fkStatusId = pkStatusId and r.pkResId = ' . $idRes, 'left');
+		$this->db->where('sts.fkStatusTypeId', 2);
+		$this->db->order_by('sts.Sequence', 'ASC');
+		$query = $this->db->get();
+        return $query->result();
+	}
+	
+	/*public function getStatusReservation(){
+		
+	}*/
+	
     //
     private function filterReservations($filters){
         $string = $filters['words']['stringRes'];

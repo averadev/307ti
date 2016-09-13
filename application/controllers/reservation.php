@@ -1336,6 +1336,14 @@ private function comprubaArray($valor, $array){
 		}
 	}
 	
+	public function modalChangeStatus(){
+		if($this->input->is_ajax_request()) {
+			$id = $_GET['id'];
+			$data['statusRes'] = $this->reservation_db->getStatusReservation($id);
+			$this->load->view('reservations/dialogStatus', $data);
+		}
+	}
+	
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
 			$id = $_GET['id'];
@@ -1372,7 +1380,48 @@ private function comprubaArray($valor, $array){
 	public function nextStatusReservation(){
 		if($this->input->is_ajax_request()) {
 			$id = $_POST['idContrato'];
-			$peticion = [
+			$IdStatus = $_POST['idNextStatus'];
+			$Res = [
+				"fkStatusId"	=> $IdStatus,
+				"MdBy"			=> $this->nativesessions->get('id'),
+				"MdDt"			=> $this->getToday()
+			];
+			$condicion = "pkResId = " . $id;
+			$afectados = $this->reservation_db->updateReturnId('tblRes', $Res, $condicion);
+			if ($afectados>0) {
+
+			//$next = $this->reservation_db->getNextStatus($IdStatus);
+			$actual = $this->reservation_db->getCurrentStatus($IdStatus);
+			if ($actual == "Out") {
+				$financiamiento = [
+					"CheckOut"	=> $this->getToday(),
+				];
+				$condicion = "pkResId = " . $id;
+				$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
+				}
+			if ($actual == "In House") {
+				$financiamiento = [
+					"checkIn"	=> $this->getToday(),
+				];
+				$condicion = "pkResId = " . $id;
+				$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
+				}
+				$dateCheckIn = $this->reservation_db->getCheckIn($id);
+				$CheckOut = $this->reservation_db->getCheckOut($id);
+				$mensaje = [
+					"mensaje"=>"save correctly",
+					"afectados" => $afectados,
+					"status" => $actual,
+					//"next" => $next,
+					"dateCheckOut" => $CheckOut,
+					"dateCheckIn" => $dateCheckIn
+				];
+				echo json_encode($mensaje);
+			}else{
+				$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
+				echo json_encode($mensaje);
+			}
+			/*$peticion = [
 				"tabla" 	=> 'tblRes',
 				"valor" 	=> 'fkStatusId',
 				"alias" 	=> 'ID',
@@ -1422,7 +1471,7 @@ private function comprubaArray($valor, $array){
 			}else{
 				$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
 				echo json_encode($mensaje);
-			}
+			}*/
 		}
 	}
 
