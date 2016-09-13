@@ -167,11 +167,11 @@ $(document).ready(function(){
 		}
 	});
 	
-	$(document).on( 'change', '.checkInPeople', function () {
-		if(this.checked) {
-	    	updateStatusPeople();
-	    }
-	});
+	// $(document).on( 'change', '.checkInPeople', function () {
+	// 	if(this.checked) {
+	//     	updateStatusPeople();
+	//     }
+	// });
 
 $(document).off( 'click', '#btAddCreditLimitRes');
 $(document).on( 'click', '#btAddCreditLimitRes', function(){
@@ -276,7 +276,20 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 	
 	getDatailByIDRes("reservationstbody");
 	
-	
+/*	$(document).off( 'change', '#StatusPeople')
+	$(document).on('change', "#StatusPeople", function () {
+		var id = $(this).val();
+		var idReserva = getValueFromTableSelectedRes("reservationsTable", 1);
+		var idPersona = getValueFromTableSelectedRes("peopleContract", 1);
+		updateStatusPeople(id, idReserva, idPersona);
+	});*/
+	$(document).off( 'change', '.checkInPeople');
+	$(document).on( 'change', '.checkInPeople', function () {
+	    var id = $(this).val();
+		var idReserva = getValueFromTableSelectedRes("reservationsTable", 1);
+		var idPersona = getValueFromTableSelectedRes("peopleContractRes", 1);
+		updateStatusPeople(id, idReserva, idPersona);
+	});
 	
 });
 
@@ -381,15 +394,6 @@ function getNumberTextStringRes(div){
 	}
 }	
 function cambiarCantidadPRes(monto){
-	/*var seleccionado = $("input[name='engancheRRes']:checked").val();
-	var precioVenta = $("#precioVentaRes").val();
-	if (seleccionado == 'porcentaje') {
-		var porcentaje = precioVenta * (monto/100);
-		$("#montoTotalRes").val(porcentaje);
-	}else{
-		$("#montoTotalRes").val(monto);
-	}
-	updateBalanceFinalRes();*/
 	var seleccionado = $("input[name='engancheRRes']:checked").val();
 	var precioVenta = getNumberTextInputRes("precioVentaRes"); 
 	var descuento = getNumberTextInputRes("montoTotalDERes");
@@ -2182,29 +2186,53 @@ function drawTableSinHeadReservation(data, table){
     }
     $('#' + table).html(bodyHTML);
 }
-function drawTableSinHeadReservationPeople(data, table){
 
+function ajaxSelectsPeopleStatus(status) {
+	$.ajax({
+		type: "POST",
+		url: "reservation/getPeopleStatus",
+		dataType:'json',
+		success: function(data){
+			var select = '';
+			 for (var i = 0; i < data.length; i++) {
+		        select += '<option value="'+data[i].ID+'">';
+		        for (var j in data[i]) {
+		            if(data[i][j] != data[i].ID){
+		                select+= data[i][j].trim();
+		            }
+		        };
+        		select+='</option>';
+        	}
+        	$(".checkInPeople").html(select);
+        	for (var i = 0; i < status.length; i++) {
+   		 			$(".checkInPeople")[i].value = status[i];
+   				}
+		},
+		error: function(){
+			alertify.error(errorMsj);
+		}
+	});
+}
+function drawTableSinHeadReservationPeople(data, table){
+	var statusActuales = [];
 	var status = $("#editReservationStatus").text().replace("Status: ", "");
 	if (status == "In House") {
-		var checkboxT = "<td><div class='rdoField'><input  type='checkbox' class='checkFilter checkInPeople'>";
-	 	checkboxT +="<label>Check In</label></div></td>";
-	 	var checkboxT2 = "<td><div class='rdoField'><input checked type='checkbox' class='checkFilter checkInPeople'>";
-	 	checkboxT2 +="<label>Check In</label></div></td>";
+		var option1 = "<select class='checkInPeople'>"+status+"</select>";
+		var option2 = "<select class='checkInPeople'>"+status+"</select>";
+		var checkboxT = "<td><div class='rdoField'>"+option1+"</td>";
+	 	var checkboxT2 = "<td><div class='rdoField'>"+option2+"</div></td>";
 	}else{
-		var checkboxT = "<td><div class='rdoField'><input  disabled type='checkbox' class='checkFilter checkInPeople'>";
-	 	checkboxT += "<label>Check In</label></div></td>";
-	 	var checkboxT2 = "<td><div class='rdoField'><input checked disabled type='checkbox' class='checkFilter checkInPeople'>";
-	 	checkboxT2 += "<label>Check In</label></div></td>";
+		var option1 = "<select class='checkInPeople' disabled>"+status+"</select>";
+		var option2 = "<select class='checkInPeople' disabled>"+status+"</select>";
+		var checkboxT = "<td><div class='rdoField'>"+option1+"</td>";
+	 	var checkboxT2 = "<td><div class='rdoField'>"+option2+"</div></td>";
 	}
 	
     var bodyHTML = '';
     for (var i = 0; i < data.length; i++) {
         bodyHTML += "<tr>";
-  		if (data[i].fkPeopleStatusId == 15) {
-  			bodyHTML += checkboxT2;
-  		}else{
-  			bodyHTML += checkboxT;
-  		}
+        bodyHTML += checkboxT;
+        statusActuales.push(data[i].fkPeopleStatusId); 
        	bodyHTML += "<td>" +data[i].ID + "</td>";
         bodyHTML += "<td>" +data[i].Name + "</td>";
         bodyHTML += "<td>" +data[i].lastName + "</td>";
@@ -2214,14 +2242,7 @@ function drawTableSinHeadReservationPeople(data, table){
         bodyHTML+="</tr>";
     }
     $('#' + table).html(bodyHTML);
-
-/*     var select = '';
-    for (var i = 0; i < data.length; i++) {
-        select += '<option value="'+data[i].ID+'" Signo="'+data[i].TrxSign+'">';
-        select += data[i].TrxTypeDesc;
-        select+='</option>';
-    }
-    $("#"+div).html(select);*/
+    return statusActuales;
 }
 
 function getDatosReservation(id){
@@ -2237,7 +2258,10 @@ function getDatosReservation(id){
 			var c = parseFloat(data['CollectionCost']);
 	    	$("#CollectionCostRes").text(c);
 			if(data["peoples"].length > 0){
-				drawTableSinHeadReservationPeople(data["peoples"], "peoplesReservation");
+				
+				var status = drawTableSinHeadReservationPeople(data["peoples"], "peoplesReservation");
+				ajaxSelectsPeopleStatus(status);
+				
 			}
 	    	if(data["unities"].length > 0){
 				drawTableSinHeadReservation(data["unities"], "tableUnidadesReservation");
@@ -2253,7 +2277,6 @@ function getDatosReservation(id){
 				contraTemp = data["reservation"][0];
 				$('td.folioAccount').text(contraTemp.Folio);
 				$('#editReservationStatus').attr( 'statusRes', contraTemp.StatusDesc );
-				//$('#editOccTypeCodeRes').text(contraTemp.Folio);
 			}
 			setHeightModal('dialog-Edit-Reservation');
 			addFunctionalityRes();
@@ -3942,15 +3965,16 @@ function generateReportRes(id, selector){
 	window.open(url);
 }
 
-function updateStatusPeople(){
-	var id = getValueFromTableSelectedRes("peopleContract", 1);
-	var idReserva = getValueFromTableSelectedRes("reservationsTable", 1);
+function updateStatusPeople(id, idReserva,  idPersona){
+	/*var id = getValueFromTableSelectedRes("peopleContract", 1);
+	var idReserva = getValueFromTableSelectedRes("reservationsTable", 1);*/
 	var ajaxData =  {
 		url: "reservation/updateStatusPeople",
 		tipo: "json",
 		datos: {
-			'idPeople': id,
-			'idReserva': idReserva
+			'idPeople': idPersona,
+			'idReserva': idReserva,
+			'idStatus': id
 		},
 		funcionExito : mensajeGeneral,
 		funcionError: mensajeAlertify

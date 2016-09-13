@@ -1219,6 +1219,13 @@ private function comprubaArray($valor, $array){
 		}
 	}
 	
+	public function getPeopleStatus(){
+		if($this->input->is_ajax_request()) {
+			$status = $this->reservation_db->selectPeopleStatus();
+			echo json_encode($status);
+		}
+	}
+
 	public function modalAddFileReservation(){
 		if($this->input->is_ajax_request()) {
 			//$data['notesType'] = $this->reservation_db->selectTypeNotas();
@@ -1341,15 +1348,9 @@ private function comprubaArray($valor, $array){
 				"codicion"	=> 'pkResID',
 				"id"		=>	$id
 			];
-			//$maximo = $this->reservation_db->selectMaxStatus();
-			//$IdStatus = $this->reservation_db->propertyTable($peticion);
+
 			$IdStatus = $this->reservation_db->selectStatusResID($id);
-			/*if ($IdStatus<$maximo) {
-				$IdStatus = $IdStatus;
-			}else{
-				$IdStatus = $maximo;
-			}*/
-			
+
 			$next = $this->reservation_db->getNextStatus($IdStatus);
 			$actual = $this->reservation_db->getCurrentStatus($IdStatus);
 			$IDAccount = $this->reservation_db->getACCIDByContracIDFDK($id);
@@ -1363,7 +1364,7 @@ private function comprubaArray($valor, $array){
 			$data['creditLimit'] = $creditLimit;
 			$data['financeBalance'] = $financeBalance;
 			$data['Balance'] = $this->reservation_db->selectBalance($IDACC);
-			//var_dump($data);
+
 			$this->load->view('reservations/reservationDialogEdit', $data);
 		}
 	}
@@ -1468,6 +1469,8 @@ private function comprubaArray($valor, $array){
 		if($this->input->is_ajax_request()) {
 			$idReserva = $_POST['idReserva'];
 			$idPeople = $_POST['idPeople'];
+			$idStatus = $_POST['idStatus'];
+
 			$peticion = [
 				"tabla" 	=> 'tblRes',
 				"valor" 	=> 'fkStatusId',
@@ -1475,12 +1478,11 @@ private function comprubaArray($valor, $array){
 				"codicion"	=> 'pkResID',
 				"id"		=>	$idReserva
 			];
-			//$IdStatus = $this->reservation_db->propertyTable($peticion);
+
 			$IdStatus = $this->reservation_db->selectStatusResID($idReserva);
 			if ($IdStatus == 15) {
-				//$CheckIn = $this->reservation_db->getCheckIn($idReserva);
 				$financiamiento = [
-					"fkPeopleStatusId"	=> 15,
+					"fkPeopleStatusId"	=> $idStatus,
 				];
 				$condicion = "fkResId = " . $idReserva. " and fkPeopleId =". $idPeople;
 				$afectados = $this->reservation_db->updateReturnId('tblRespeopleacc', $financiamiento, $condicion);
@@ -1489,9 +1491,12 @@ private function comprubaArray($valor, $array){
 					$mensaje = ["mensaje"=>"It was successfully saved", "status" => 1, "CheckIn" => $dateCheckIn];
 					echo json_encode($mensaje);
 				}else{
-					$mensaje = ["mesaje"=>"An Error Occurred", "status" => 0];	
+					$mensaje = ["mensaje"=>"An Error Occurred", "status" => 0];	
 					echo json_encode($mensaje);
 				}	
+			}else{
+				$mensaje = ["mensaje"=>"Not Save, Change Status Reservation", "status" => 0];	
+					echo json_encode($mensaje);
 			}
 
 	

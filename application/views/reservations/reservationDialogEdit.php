@@ -111,7 +111,7 @@
 					echo '<a id="btnNextStatusRes" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>'. "<span>Next Status: ".$statusNext.'</span></a>';
 					} ?>
 						</div>
-						<table id="peopleContract" width="100%" class="cell-border" >
+						<table id="peopleContractRes" width="100%" class="cell-border" >
 							<thead>
 								<tr class="trColspan" >
 									<th colspan="8" class="thColspan" >People</th>

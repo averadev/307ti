@@ -1014,6 +1014,16 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
 
+    public function selectPeopleStatus(){
+        $this->db->select('pkStatusId as ID, StatusDesc');
+        $this->db->from('tblstatus TS');
+        $this->db->join('tblstatustypestatus TST', 'TS.pkStatusId = TST.fkStatusid');
+        $this->db->where('TST.fkStatusTypeId', 6);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
     public function getTrxTypeContracByDesc($string){
         $this->db->select('pkTrxTypeId');
         $this->db->from('tbltrxtype');
