@@ -1128,7 +1128,8 @@ private function comprubaArray($valor, $array){
 public function nextStatusContract(){
 	if($this->input->is_ajax_request()) {
 		$id = $_POST['idContrato'];
-		$peticion = [
+		$IdStatus = $_POST['idNextStatus'];
+		/*$peticion = [
 			"tabla" 	=> 'tblRes',
 			"valor" 	=> 'fkStatusId',
 			"alias" 	=> 'ID',
@@ -1138,10 +1139,8 @@ public function nextStatusContract(){
 		//$IdStatus = $this->contract_db->propertyTable($peticion);
 		$IdStatus = $this->contract_db->selectContractID($id);
 		$maximo = $this->contract_db->selectMaxStatus();
-		$IdStatus = $this->contract_db->getNextStatusID($IdStatus);
-		/*if ($IdStatus <= $maximo) {
-			$IdStatus += 1;
-		}*/
+		$IdStatus = $this->contract_db->getNextStatusID($IdStatus);*/
+		
 		$Res = [
 			"fkStatusId"	=> $IdStatus,
 			"MdBy"			=> $this->nativesessions->get('id'),
@@ -1150,17 +1149,9 @@ public function nextStatusContract(){
 		$condicion = "pkResId = " . $id;
 		$afectados = $this->contract_db->updateReturnId('tblRes', $Res, $condicion);
 		if ($afectados>0) {
-			
-			/*if ($IdStatus< $maximo) {
-				$IdStatus = $IdStatus;
-			}else{
-				$IdStatus = $maximo;
-			}
-			$next = $this->contract_db->selectNextStatusDesc2(intval($IdStatus)+1);
-			$actual = $this->contract_db->selectNextStatusDesc2($IdStatus);*/
-			$next = $this->contract_db->getNextStatus($IdStatus);
+			//$next = $this->contract_db->getNextStatus($IdStatus);
 			$actual = $this->contract_db->getCurrentStatus($IdStatus);
-			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $actual, "next" => $next];
+			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $actual];
 			echo json_encode($mensaje);
 		}else{
 			$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
@@ -1386,7 +1377,7 @@ public function getFlagsContract(){
 			if($typeInfo == "account"){
 				$acc = $this->contract_db->getAccByRes( $id );
 				$datos['acc'] = $acc;
-				$typeTr = array( 'sale', 'maintenance', 'loan' );
+				$typeTr = array( 'sale', 'maintenance' );
 				foreach($typeTr as $tyTr){
 					$data = $this->contract_db->getAccountsById( $id, $typeInfo, $tyTr);
 					foreach($data as $key=>$item){
@@ -1517,6 +1508,15 @@ private function search($array, $key, $value){
 			$this->load->view('unities/unitiesDialog');
 		}
 	}
+
+	public function modalChangeStatus(){
+		if($this->input->is_ajax_request()) {
+			$id = $_GET['id'];
+			$data['statusRes'] = $this->contract_db->getStatuContract($id);
+			$this->load->view('reservations/dialogStatus', $data);
+		}
+	}
+
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
 			$id = $_GET['id'];

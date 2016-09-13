@@ -722,6 +722,17 @@ class Contract_db extends CI_Model {
         }
     }
 
+	public function getStatuContract($idRes){
+		$this->db->select('s.pkStatusId as ID, s.StatusDesc, r.fkStatusId');
+		$this->db->from('tblStatus s');
+		$this->db->join('tblStatusTypeStatus sts', 'sts.fkStatusId = s.pkStatusId', 'inner');
+		$this->db->join('tblRes r', 'r.fkStatusId = pkStatusId and r.pkResId = ' . $idRes, 'left');
+		$this->db->where('sts.fkStatusTypeId', 1);
+		$this->db->order_by('sts.Sequence', 'ASC');
+		$query = $this->db->get();
+        return $query->result();
+	}
+
     public function selectEmployees(){
         $this->db->select("E.pkEmployeeId, RTRIM(E.EmployeeCode) as Code");
         $this->db->select("(RTRIM(P.Name) + ' '+ RTRIM(P.SecondName) + ' '+ RTRIM(P.LName)) as name");

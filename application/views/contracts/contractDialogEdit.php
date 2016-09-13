@@ -94,14 +94,23 @@
 				<div class="containerContract">
 					<div class="row">
 						<div class="small-6 columns">
-							<a id="btnRefinancingContract" class="button tiny">
-							<i class="fa fa-user-plus">Refinancing contract</i></a>
+							<!--<a id="btnRefinancingContract" class="button tiny">
+							<i class="fa fa-user-plus">Refinancing contract</i></a>-->
+							<a id="btnRefinancingContract" class="btn btn-primary">
+								<div class="label">Refinancing contract</div>
+								<span>
+									<i class="fa fa-user-plus"></i>
+								</span>
+							</a>
 						</div>
 					<div class="small-6 columns" >
-					<?php if ($statusNext) {
-					echo '<a id="btnNextStatus" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>'. "<span>Next Status: ".$statusNext.'</span></a>';
-					} ?> 
-	
+						<a id="btnNextStatus" class="btn btn-primary">
+							<div class="label">Change Status</div>
+							<span>
+								<i id="iNextStatus" class="fa fa-refresh fa-lg"></i>
+							</span>
+						</a>
+					<!--echo '<a id="btnNextStatus" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>'. "<span>Next Status: ".$statusNext.'</span></a>';-->
 					</div>
 						<table id="peopleContract" width="100%">
 							<thead>
@@ -273,9 +282,9 @@
 				<li class="tabs-title" attr-screen="tab-CAMaintenance" attr-accType="3" attr-accCode="FEE" >
 					<a>Maintenance</a>
 				</li>
-				<li class="tabs-title" attr-screen="tab-CALoan" attr-accType="2" attr-accCode="LOA" >
+				<!--<li class="tabs-title" attr-screen="tab-CALoan" attr-accType="2" attr-accCode="LOA" >
 					<a>Loan</a>
-				</li>
+				</li>-->
 			</ul>
 		</div>
 		<!-- contenido del modal -->

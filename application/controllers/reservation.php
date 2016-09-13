@@ -1134,7 +1134,7 @@ private function comprubaArray($valor, $array){
 			if($typeInfo == "account"){
 				$acc = $this->reservation_db->getAccByRes( $id );
 				$datos['acc'] = $acc;
-				$typeTr = array( 'reservation', 'frontDesk' );
+				$typeTr = array( 'reservation' );
 				foreach($typeTr as $tyTr){
 					$data = $this->reservation_db->getAccountsById( $id, $typeInfo, $tyTr);
 					foreach($data as $item){
@@ -1531,7 +1531,7 @@ private function comprubaArray($valor, $array){
 			];
 
 			$IdStatus = $this->reservation_db->selectStatusResID($idReserva);
-			if ($IdStatus == 15) {
+			//if ($IdStatus == 15) {
 				$financiamiento = [
 					"fkPeopleStatusId"	=> $idStatus,
 				];
@@ -1545,10 +1545,10 @@ private function comprubaArray($valor, $array){
 					$mensaje = ["mensaje"=>"An Error Occurred", "status" => 0];	
 					echo json_encode($mensaje);
 				}	
-			}else{
+			/*}else{
 				$mensaje = ["mensaje"=>"Not Save, Change Status Reservation", "status" => 0];	
 					echo json_encode($mensaje);
-			}
+			}*/
 
 	
 		}

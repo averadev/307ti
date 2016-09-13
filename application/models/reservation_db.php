@@ -992,7 +992,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->select('pkAccID');
         $this->db->from('tblAcc a');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId and rpa.fkResId='.$idContrato, 'inner');
-        $this->db->where('a.fkAccTypeId = 5');
+        $this->db->where('a.fkAccTypeId = 6');
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {

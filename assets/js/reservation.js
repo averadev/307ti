@@ -25,7 +25,7 @@ $(document).ready(function(){
 	var dialogEditReservation = modalEditReservation();
 	/*var dialogAddTour = addTourContract();*/
 	var dialogAccount = opcionAccountRes();
-	var dialogStatus = modalStatusRes();
+	var dialogStatusRes = modalStatusRes();
 	
 
 	//$("#newReservation").off();
@@ -142,7 +142,7 @@ $(document).ready(function(){
 		var dialogDiscountAmountRes = modalDiscountAmountRes();
 		dialogDiscountAmountRes.dialog("open");
 	});
-	$(document).off('click', '#tabsContratsAccounts');
+	/*$(document).off('click', '#tabsContratsAccounts');
 	$(document).on( 'click', '#tabsContratsAccounts', function(){
 		var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
 		if (accCode == "FDK") {
@@ -150,7 +150,7 @@ $(document).ready(function(){
 		}else{
 			$("#btAddCreditLimitRes").hide();
 		}
-	});
+	});*/
 	$(document).off( 'click', '#btNewTransAccRes'); 
 	$(document).on( 'click', '#btNewTransAccRes, #btAddPayAccRes', function ( ) {
 		var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
@@ -200,7 +200,7 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
        		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			var precio = $("#tableFrontDeskAccRes .balanceAccount").text();
+       			var precio = $("#tableReservationAccRes .balanceAccount").text();
 			
        			precio = parseFloat(precio.replace("$", "").trim());
        			var creditLimit = getNumberTextInputRes("creditLimitResInput");
@@ -321,6 +321,7 @@ function addHTMLCreditLimit(data){
 function createNewLimit (){
 	var accauntType = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
 	var accauntID = $('#btNewTransAccRes').data( 'idAcc' + accauntType );
+	console.log(accauntType,accauntID );
 	var amount = $("#creditLimitResInput").val();
 	var ajaxData =  {
 		url: "reservation/updateCreditLimit",
@@ -2218,17 +2219,17 @@ function ajaxSelectsPeopleStatus(status) {
 function drawTableSinHeadReservationPeople(data, table){
 	var statusActuales = [];
 	var status = $("#editReservationStatus").text().replace("Status: ", "");
-	if (status == "In House") {
+	//if (status == "In House") {
 		var option1 = "<select class='checkInPeople'>"+status+"</select>";
 		var option2 = "<select class='checkInPeople'>"+status+"</select>";
 		var checkboxT = "<td><div class='rdoField'>"+option1+"</td>";
 	 	var checkboxT2 = "<td><div class='rdoField'>"+option2+"</div></td>";
-	}else{
+	/*}else{
 		var option1 = "<select class='checkInPeople' disabled>"+status+"</select>";
 		var option2 = "<select class='checkInPeople' disabled>"+status+"</select>";
 		var checkboxT = "<td><div class='rdoField'>"+option1+"</td>";
 	 	var checkboxT2 = "<td><div class='rdoField'>"+option2+"</div></td>";
-	}
+	}*/
 	
     var bodyHTML = '';
     for (var i = 0; i < data.length; i++) {
@@ -2327,13 +2328,13 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 				}else{
 					alertify.error('no results found')
 				}
-				if(frontDesk.length > 0){
+				/*if(frontDesk.length > 0){
 					var frontDesk = parsearSALERes(frontDesk);
 					drawTable2(frontDesk, "tableAccountLoan", false, "");
 					setTableAccountRes( frontDesk, "tableFrontDeskAccRes" );
 				}else{
 					alertify.error('no results found')
-				}
+				}*/
 				for( i=0; i<acc.length; i++ ){
 					var nameSafe = acc[i].accType;
 					$('#btNewTransAccRes').data( 'idAcc' + nameSafe, acc[i].fkAccId );	
@@ -2558,8 +2559,8 @@ function setEventosEditarReservation(id){
 		gotoDiv('ContenidoModalContractEdit', 'finTerminos');
 	});
 	$("#btnNextStatusRes").click(function(){
-		dialogStatus = modalStatusRes();
-		dialogStatus.dialog("open");
+		dialogStatusRes = modalStatusRes();
+		dialogStatusRes.dialog("open");
 		//nextStatusContractRes();
 	});
 
@@ -3455,19 +3456,19 @@ function nextStatusContractRes(){
 	    		$("#dateCheckIn").text("Check In: "+ data["dateCheckIn"]);
 	    	}
 	    	if (data['status'] == "In House") {
-	    		$( ".checkInPeople" ).prop( "disabled", false);
+	    		//$( ".checkInPeople" ).prop( "disabled", false);
 	    			var status = "Status: In House";
 					var balance = $("#tableReservationAccRes .balanceAccount").text().replace("$ ", "");
 					    balance = parseFloat(balance);
 					 verificarRED(status, balance);
 	    	}else{
-	    		$( ".checkInPeople" ).prop( "disabled", true);
+	    		//$( ".checkInPeople" ).prop( "disabled", true);
 	    	}
 	    	$("#iNextStatus").removeClass("fa-spin");
 			$("#editReservationStatus").text("Status: "+data['status']);
 			$('#editReservationStatus').attr( 'statusRes', data['status'] );
 			showLoading(div, false);
-			dialogStatus.dialog('close');
+			dialogStatusRes.dialog('close');
 	    	alertify.success(data['mensaje']);
 	    		
 	    },
@@ -3531,7 +3532,7 @@ function opcionAccountRes(attrType){
        		"class": 'dialogModalButtonAccept',
        		click: function() {
        			var signo = $("#slcTransTypeAcc  option:selected").attr("Signo");
-       			var cantidad = $("#tableFrontDeskAccRes .balanceAccount").text().replace("$ ", "");
+       			var cantidad = $("#tableReservationAccRes .balanceAccount").text().replace("$ ", "");
        			cantidad = parseFloat(cantidad);
        			var limiteCredito = $("#creditLimitRes").text().replace("$ ", "");
        			limiteCredito = parseFloat(limiteCredito);

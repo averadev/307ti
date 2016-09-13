@@ -104,7 +104,7 @@
                 </div>
             </div>
             <!-- Condiciones de financiamiento -->
-             <div class="fieldset large-12 columns">
+            <div class="fieldset large-12 columns">
                 <legend>Sale Terms</legend>
                 <div class="row">
                     <div class="small-3 columns">

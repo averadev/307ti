@@ -103,11 +103,22 @@
 				<div class="containerContract">
 					<div class="row">
 						<div class="small-6 columns">
-							<a id="btnRefinancingReservation" class="button tiny">
-							<i class="fa fa-user-plus">Refinancing reservation</i></a>
+							<a id="btnRefinancingReservation" class="btn btn-primary">
+								<div class="label">Refinancing reservation</div>
+								<span>
+									<i class="fa fa-user-plus"></i>
+								</span>
+							</a>
+							<!--<a id="btnRefinancingReservation" class="button tiny">
+							<i class="fa fa-user-plus">Refinancing reservation</i></a>-->
 						</div>
 						<div class="small-6 columns">
-						<a id="btnNextStatusRes" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i><span>Change Status</span></a>
+							<a id="btnNextStatusRes" class="btn btn-primary btn-right">
+								<div class="label">Change Status</div>
+								<span>
+									<i id="iNextStatus" class="fa fa-refresh fa-lg"></i>
+								</span>
+							</a>
 						</div>
 						<table id="peopleContractRes" width="100%" class="cell-border" >
 							<thead>
@@ -254,9 +265,9 @@
 				<li class="tabs-title active" attr-screen="tab-RARes" attr-accType="6" attr-accCode="RES" >
 					<a>Reservation</a>
 				</li>
-				<li class="tabs-title" attr-screen="tab-RAFrontDesk" attr-accType="5" attr-accCode="FDK" >
+				<!--<li class="tabs-title" attr-screen="tab-RAFrontDesk" attr-accType="5" attr-accCode="FDK" >
 					<a>Front Desk</a>
-				</li>
+				</li>-->
 			</ul>
 		</div>
 		<!-- contenido del modal -->
@@ -270,8 +281,8 @@
 								<tr>
 									<td >Folio Reservation</td>
 									<td class="folioAccount">00000</td>
-									<td></td>
-									<td ></td>
+									<td>Credit Limit</td>
+									<td id="creditLimitRes"><?php echo floatval($creditLimit); ?></td>
 								</tr>
 								<tr>
 									<td>Balance</td>
@@ -330,8 +341,8 @@
 								<tr>
 									<td >Folio Reservation</td>
 									<td class="folioAccount">00000</td>
-									<td>Credit Limit</td>
-									<td id="creditLimitRes"><?php echo floatval($creditLimit); ?></td>
+									<td></td>
+									<td ></td>
 								</tr>
 								<tr>
 									<td>Balance</td>
@@ -391,7 +402,7 @@
 					<div class="label">Card Associated</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
-				<a id="btAddCreditLimitRes" style="display: none;" attr_type="addLimitAcc" class="btn btn-primary spanSelect">
+				<a id="btAddCreditLimitRes" attr_type="addLimitAcc" class="btn btn-primary spanSelect">
 					<div class="label">Credit Limit</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>

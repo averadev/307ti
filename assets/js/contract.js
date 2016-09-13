@@ -5,6 +5,7 @@ $(document).ready(function(){
 	maxHeight = screen.height - maxHeight;
 
 	var dialogAddTour = null;
+	var dialogStatus = null;
 
 	initDatesContract();
 
@@ -2155,10 +2156,10 @@ function getAccounts( id, typeInfo, typeAcc ){
 					drawTable2( maintenance, "tableAccountMaintenance", false, "" );
 					setTableAccount( maintenance, "tableMainteAccRes" );
 				}
-				if( loan.length > 0 ){
+				/*if( loan.length > 0 ){
 					drawTable2( loan, "tableAccountLoan", false, "" );
 					setTableAccount( loan, "tableLoanAccRes" );
-				}
+				}*/
 				for( i=0; i<acc.length; i++ ){
 					var nameSafe = acc[i].accType;
 					$('#btNewTransAcc').data( 'idAcc' + nameSafe, acc[i].fkAccId );
@@ -2400,7 +2401,9 @@ function setEventosEditarContrato(id){
 		gotoDiv('ContenidoModalContractEdit', 'finTerminos');
 	});
 	$("#btnNextStatus").click(function(){
-		nextStatusContract();
+		dialogStatus = modalStatusCon();
+		dialogStatus.dialog("open");
+		//nextStatusContract();
 	});
 }
 
@@ -3051,13 +3054,47 @@ function deleteFlag(id){
 	ajaxDATA(datos);
 }
 
+function modalStatusCon(){
+	var div = "#dialog-Status";
+	var id = getIDContrato();;
+	dialogo = $(div).dialog ({
+		open : function (event){
+			showLoading(div, true);
+			$(this).load ("contract/modalChangeStatus?id="+id , function(){
+				showLoading(div, false);
+			});
+		},
+		autoOpen: false,
+     	height: maxHeight/2,
+     	width: "40%",
+     	modal: true,
+     	buttons: [{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Change",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+				nextStatusContract();
+       		}
+     	}],
+     close: function() {
+     }
+	});
+	return dialogo;
+}
+
 function nextStatusContract(){
-	deactiveEventClick("btnNextStatus");
+	//deactiveEventClick("btnNextStatus");
 	$("#iNextStatus").addClass("fa-spin");
 	var id = getIDContrato();
 	$.ajax({
 	    data:{
 	        idContrato: id,
+			idNextStatus: $('#statusRes').val()
 	    },
 	    type: "POST",
 	    url: "contract/nextStatusContract",
@@ -3065,16 +3102,16 @@ function nextStatusContract(){
 	    success: function(data){
 	    	$("#iNextStatus").removeClass("fa-spin");
 	    	$("#editContracStatus").text("Status: "+data['status']);
-	    	if (data['next'] != null) {
+	    	/*if (data['next'] != null) {
 	    		$("#btnNextStatus span").text("Next Status: "+data['next']);
 	    	}else{
 	    		$("#btnNextStatus").remove();
-	    	}
+	    	}*/
 	    	
 	    	alertify.success(data['mensaje']);
-	    		$("#btnNextStatus").click(function(){
+	    		/*$("#btnNextStatus").click(function(){
 					nextStatusContract();
-				});
+				});*/
 	    },
 	    error: function(){
 	        alertify.error("Try again");
