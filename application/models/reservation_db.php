@@ -788,9 +788,19 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
     
-    public function getOccupancyTypes(){
+    public function getOccupancyTypes($idGroup){
         $this->db->select("ot.pkOccTypeId  as ID, ot.OccTypeDesc");
         $this->db->from('tblOccType ot');
+        $this->db->where('ot.fkOccTypeGroupId', $idGroup);
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
+    public function getOccupancyTypesGroup(){
+        $this->db->select("pkOccTypeGroupId as ID, OccTypeGroupDesc");
+        $this->db->from('tblOccTypeGroup');
         $this->db->where('ynActive', 1);
         $query = $this->db->get();
         if($query->num_rows() > 0 ){

@@ -168,12 +168,12 @@ $(document).ready(function(){
 			alertify.error('No acc found');
 		}
 	});
-	
-	// $(document).on( 'change', '.checkInPeople', function () {
-	// 	if(this.checked) {
-	//     	updateStatusPeople();
-	//     }
-	// });
+	$(document).off( 'change', '#occupancyTypeGroupRes');
+	$(document).on( 'change', '#occupancyTypeGroupRes', function () {
+		id = $(this).val();
+		console.log(id);
+		ajaxSelectRes('reservation/getOccupancyTypes?id='+id,'try again', generalSelectsDefault, 'occupancySalesRes');
+	});
 
 $(document).off( 'click', '#btAddCreditLimitRes');
 $(document).on( 'click', '#btAddCreditLimitRes', function(){
@@ -269,7 +269,7 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 		updateBalanceFinalRes();
 	});*/
 	
-	$(document).off( 'change', '#amountTransferRes')
+	$(document).off( 'change', '#amountTransferRes');
 	$(document).on('change', "#amountTransferRes", function () {
 		var balanceFinal = $("#financeBalanceRes").val();
 		var transferido = $("#amountTransferRes").val();
@@ -434,7 +434,7 @@ function createDialogReservation(addReservation) {
 			$(this).load ("reservation/modal" , function(){
 		    	showLoading(div,false);
 		 		//ajaxSelectRes('contract/getLanguages','try again', generalSelects, 'selectLanguageRes');
-				//ajaxSelectRes('reservation/getOccupancyTypes','try again', generalSelects, 'occupancySalesRes');
+				//ajaxSelectRes('reservation/getOccupancyTypes','try again', generalSelectsDefaultRes, 'occupancySalesRes');
 				
 				$(document).on( 'change', '#occupancySalesRes', function () {
 					getOpctionOccType();

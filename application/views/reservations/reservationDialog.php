@@ -107,28 +107,36 @@
              <div class="fieldset large-12 columns">
                 <legend>Sale Terms</legend>
                 <div class="row">
-                    <div class="small-4 columns">
+                    <div class="small-3 columns">
+                        <label  class="text-left">Occupancy Type Group</label>
+                        <div class="caja" >
+                            <select id="occupancyTypeGroupRes" class="input-group-field round">
+                            <?php
+                                foreach($OccupancyTypesGroup as $item){
+                                    ?>
+                                    <option value="<?php echo $item->ID; ?>"><?php echo $item->OccTypeGroupDesc; ?></option>
+                                    <?php
+                                }
+                            ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="small-3 columns">
 						<label  class="text-left">Occupancy Type</label>
 						<div class="caja" >
 							<select id="occupancySalesRes" class="input-group-field round">
-							<?php
-								foreach($OccupancyTypes as $item){
-									?>
-									<option value="<?php echo $item->ID; ?>"><?php echo $item->OccTypeDesc; ?></option>
-									<?php
-								}
-							?>
+
 							</select>
 						</div>
                     </div>
-					<div class="small-4 columns">
+					<div class="small-3 columns">
 						<label for="RateRes" class="text-left">Rate</label>
 						<div class="caja" >
 							<select id="RateRes" class="input-group-field round">
 							</select>
 						</div>
                     </div>
-                    <div class="small-4 columns">
+                    <div class="small-3 columns">
 						<div class="row collapse">
 							<label id="alertLastName" for="contractR" class="text-left">Reservation Related</label>
 							<div class="small-10 columns">

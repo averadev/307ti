@@ -1071,7 +1071,8 @@ private function comprubaArray($valor, $array){
 	
 	public function getOccupancyTypes(){
 		if($this->input->is_ajax_request()){
-			$OccupancyTypes = $this->reservation_db->getOccupancyTypes();
+			$ID = $_GET['id'];
+			$OccupancyTypes = $this->reservation_db->getOccupancyTypes($ID);
 			echo json_encode($OccupancyTypes);
 		}
 	}
@@ -1319,7 +1320,8 @@ private function comprubaArray($valor, $array){
 	public function modal(){
 		if($this->input->is_ajax_request()) {
 			$datos['languages'] = $this->reservation_db->getLanguages();
-			$datos['OccupancyTypes'] = $this->reservation_db->getOccupancyTypes();
+			$datos['OccupancyTypesGroup'] = $this->reservation_db->getOccupancyTypesGroup();
+			//$datos['OccupancyTypes'] = $this->reservation_db->getOccupancyTypes();
 			$this->load->view('reservations/reservationDialog', $datos);
 		}
 	}
