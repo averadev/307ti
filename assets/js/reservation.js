@@ -3455,13 +3455,13 @@ function nextStatusContractRes(){
 	    		$("#dateCheckIn").text("Check In: "+ data["dateCheckIn"]);
 	    	}
 	    	if (data['status'] == "In House") {
-	    		//$( ".checkInPeople" ).prop( "disabled", false);
+	    		$( ".checkInPeople" ).prop( "disabled", false);
 	    			var status = "Status: In House";
 					var balance = $("#tableReservationAccRes .balanceAccount").text().replace("$ ", "");
 					    balance = parseFloat(balance);
 					 verificarRED(status, balance);
 	    	}else{
-	    		//$( ".checkInPeople" ).prop( "disabled", true);
+	    		$( ".checkInPeople" ).prop( "disabled", true);
 	    	}
 	    	$("#iNextStatus").removeClass("fa-spin");
 			$("#editReservationStatus").text("Status: "+data['status']);
