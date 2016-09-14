@@ -171,7 +171,8 @@ $(document).ready(function(){
 	$(document).off( 'change', '#occupancyTypeGroupRes');
 	$(document).on( 'change', '#occupancyTypeGroupRes', function () {
 		id = $(this).val();
-		ajaxSelectRes('reservation/getOccupancyTypes?id='+id,'try again', generalSelectsDefault2, 'occupancySalesRes');
+		ajaxSelectRes('reservation/getOccupancyTypes?id='+id,'try again', getOccupancyTypes, 'occupancySalesRes');
+		getOpctionOccType();
 	});
 
 $(document).off( 'click', '#btAddCreditLimitRes');
@@ -290,6 +291,16 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 		var idReserva = getValueFromTableSelectedRes("reservationsTable", 1);
 		var idPersona = getValueFromTableSelectedRes("peopleContractRes", 1);
 		updateStatusPeople(id, idReserva, idPersona);
+	});
+	
+	$(document).off( 'change', '#RateRes')
+	$(document).on( 'change', '#RateRes', function () {
+		var unidades = getValueTableUnidadesRes();
+		if (unidades.length<=0) {
+			alertify.error("You should add one unit or more");	
+		}else {
+			setValueUnitPriceRes(null);
+		}
 	});
 	
 });
@@ -436,9 +447,9 @@ function createDialogReservation(addReservation) {
 		 		//ajaxSelectRes('contract/getLanguages','try again', generalSelects, 'selectLanguageRes');
 				//ajaxSelectRes('reservation/getOccupancyTypes','try again', generalSelectsDefaultRes, 'occupancySalesRes');
 				
-				$(document).on( 'change', '#occupancySalesRes', function () {
+				/*$(document).on( 'change', '#occupancySalesRes', function () {
 					getOpctionOccType();
-				});
+				});*/
 				
 				/*$(document).on( 'change', '#RateRes', function () {
 					setValueUnitPriceRes();
@@ -635,8 +646,8 @@ function addUnidadResDialog(iniDate, unit){
 	       			tablUnidadadesRes(unidades, frequency, intDate, endDate);
 					///$('#occupancySalesRes').val(2);
 					id = $('#occupancyTypeGroupRes').val();
-					ajaxSelectRes('reservation/getOccupancyTypes?id='+id,'try again', generalSelectsDefault2, 'occupancySalesRes');
-					getOpctionOccType();
+					ajaxSelectRes('reservation/getOccupancyTypes?id='+id,'try again', getOccupancyTypes, 'occupancySalesRes');
+					//getOpctionOccType();
 	       			$(this).dialog('close');
 				}else{
 					alertify.error("Search and click over for choose one");
@@ -997,6 +1008,7 @@ function createNewReservation(){
 						day:day,
 						iniDate:iniDateRes,
 						endDate:endDateRes,
+						RateAmtNight:$('#RateRes').val(),
 					},
 					type: "POST",
 					dataType:'json',
@@ -1509,7 +1521,7 @@ function getValueFromTableSelectedRes(id, posicion){
 function setValueUnitPriceRes(data){
 	
 	var value = $('#RateRes').val();
-	var date1 = new Date(iniDateRes);
+	/*var date1 = new Date(iniDateRes);
 	var date2 = new Date(endDateRes);
 	var dayDif = date2.getTime() - date1.getTime();
 	var day = Math.round(dayDif/(1000 * 60 * 60 * 24));
@@ -1521,9 +1533,17 @@ function setValueUnitPriceRes(data){
 			precio =  precio + seasonD.RateAmtNight;
 		}
 	}
+	$("#precioUnidadRes").val(precio);
+	$("#precioVentaRes").val(precio);*/
 	
 	
-	/*var precio = value * day;*/
+	var value = $('#RateRes').val();
+	var date1 = new Date(iniDateRes);
+	var date2 = new Date(endDateRes);
+	var dayDif = date2.getTime() - date1.getTime();
+	var day = Math.round(dayDif/(1000 * 60 * 60 * 24));
+	var precio = 0;
+	precio = value * day;
 	$("#precioUnidadRes").val(precio);
 	$("#precioVentaRes").val(precio);
 	updateBalanceFinalRes();
@@ -3489,8 +3509,8 @@ function generalSelectsDefaultRes(data, div){
     $("#"+div).html(select);
 }
 
-function generalSelectsDefault2(data, div){
-     var select = '';
+function getOccupancyTypes(data, div){
+    var select = '';
     for (var i = 0; i < data.length; i++) {
         select += '<option value="'+data[i].ID+'">';
         for (var j in data[i]) {
@@ -3966,40 +3986,45 @@ function drawTableIdOcupacionRes(data, table){
 
 function getRateRes(){
 	
-	$("#RateRes").attr('disabled', true);
-	var intDate = iniDateRes.split("/");
-	var occYear = intDate[2];
-	var season2 = 0;
-	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
+	//$("#RateRes").attr('disabled', true);
+	//var intDate = iniDateRes.split("/");
+	//var occYear = intDate[2];
+	//var season2 = 0;
+	/*var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
 	if( screen == "frontDesk" ){
 		season2 = $('#section-frontDesk').data( 'season2' );
 	}else{
 		season2 = $('#section-reservations').data( 'season2' );
-	}
+	}*/
 	$.ajax({
 	    data:{
-			id:unitReservacion[0].id,
+			/*id:unitReservacion[0].id,
 			season:unitReservacion[0].season,
 			occupancy:$('#occupancySalesRes').val(),
 			occYear:occYear,
 			intDate:iniDateRes,
 			endDate:endDateRes,
-			season2:season2,
+			season2:season2,*/
 			//season: $('#newReservation').data( 'season1' ),
 			//season2: $('#newReservation').data( 'season2' ),
-			
+			idGroup:$('#occupancyTypeGroupRes').val()
 		},
 	    type: "POST",
 	    url: "reservation/getRateType",
 	    dataType:'json',
 	    success: function(data){
 			if(data.items.length > 0){
+				item = data.items[0];
+				$('#RateRes').val(item.RateAmtNight);
+				setValueUnitPriceRes(null);
+			}
+			/*if(data.items.length > 0){
 				generalSelectsDefault(data.items, "RateRes");
-				$("#RateRes").attr('disabled', false);
+				//$("#RateRes").attr('disabled', false);
 				setValueUnitPriceRes(data);
 			}else{
 				alertify.error("no price list found");
-			}
+			}*/
 	    },
 	    error: function(){
 	        alertify.error("Try again");

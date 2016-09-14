@@ -458,17 +458,20 @@ function validateUserFields(){
 	}
 	
 	//Email
-	if($('#textEmail1').val().trim().length == 0){
+	/*if($('#textEmail1').val().trim().length == 0){
 		$('#alertEmail1').addClass('error');
 		$('#textEmail1').focus();
 		errorText = "Correo<br>"  + errorText;
 		infoContact = false;
-	}else if(!regex.test($('#textEmail1').val().trim())){
-		$('#alertEmail1').addClass('error');
-		$('#textEmail1').focus();
-		errorText = "EL correo debe ser valido</br>"  + errorText;
-		infoContact = false;
-    }
+	}else*/
+	if($('#textEmail1').val().trim().length > 0){
+		if(!regex.test($('#textEmail1').val().trim())){
+			$('#alertEmail1').addClass('error');
+			$('#textEmail1').focus();
+			errorText = "EL correo debe ser valido</br>"  + errorText;
+			infoContact = false;
+		}
+	}
 	
 	//Telefono 3
 	if($('#textPhone3').val().trim().length > 0 && $('#textPhone3').val().trim().length > 14 ){
@@ -486,8 +489,16 @@ function validateUserFields(){
 		infoContact = false;
 	}
 	
+	//Telefono 2
+	if($('#textPhone1').val().trim().length > 0 && $('#textPhone1').val().trim().length > 14 ){
+		$('#alertPhone1').addClass('error');
+		$('#textPhone1').focus();
+		errorText = "El telefono 1 debe tener maximo 11 caracteres<br>"  + errorText;
+		infoContact = false;
+	}
+	
 	//Telefono
-	if($('#textPhone1').val().trim().length == 0){
+	/*if($('#textPhone1').val().trim().length == 0){
 		$('#alertPhone1').addClass('error');
 		$('#textPhone1').focus();
 		errorText = "Telefono<br>"  + errorText;
@@ -498,7 +509,7 @@ function validateUserFields(){
 		$('#textPhone1').focus();
 		errorText = "El telefono debe tener maximo 11 caracteres<br>"  + errorText;
 		infoContact = false;
-	}
+	}*/
 	
 	if(infoContact == false){
 		result = false;
@@ -542,12 +553,12 @@ function validateUserFields(){
 	}
 	
 	//colonia
-	if($('#textColony').val().trim().length == 0){
+	/*if($('#textColony').val().trim().length == 0){
 		$('#alertColony').addClass('error');
 		$('#textColony').focus();
 		errorText = "Colonia<br>"  + errorText;
 		infoAddress = false;
-	}
+	}*/
 	//calle
 	if($('#textStreet').val().trim().length == 0){
 		$('#alertStreet').addClass('error');

@@ -189,7 +189,7 @@ class Reservation extends CI_Controller {
 	}
 	
 	private function createAcc(){
-		$typeAcc = ['5','6'];
+		$typeAcc = ['6'];
 		$resultAcc = array();
 		for($i =0; $i< count($typeAcc); $i++){
 			$cuenta = [
@@ -713,9 +713,12 @@ class Reservation extends CI_Controller {
 					"fkResTypeId"   => 5,
 					"fkOccTypeId"   => 2,
 					"fkCalendarId" 	=> $idCalendar[$i]->pkCalendarId,
+					"RateAmtNight"	=> $_POST['RateAmtNight'],
 					"ynActive"   	=> 1,
 					"CrBy"          => $this->nativesessions->get('id'),
 					"CrDt"			=> $this->getToday()
+					
+					
 				];
 				$this->reservation_db->insertReturnId('tblResOcc', $OcupacionTable);
 			 }
@@ -1079,16 +1082,18 @@ private function comprubaArray($valor, $array){
 	
 	public function getRateType(){
 		if($this->input->is_ajax_request()){
-			$data = $this->reservation_db->getInfoRateUnit($_POST['id']);
+			//$data = $this->reservation_db->getInfoRateUnit($_POST['id']);
+			$data = $this->reservation_db->getRateType($_POST['idGroup']);
 			if(count($data) > 0){
-				$item = $data[0];
-				$season = $_POST['season'];
-				$season2 = $_POST['season2'];
+				//$item = $data[0];
+				//$season = $_POST['season'];
+				//$season2 = $_POST['season2'];
 				//$season = 0;
-				$RateType = $this->reservation_db->getRateType( $item->fkFloorPlanId, $item->fkFloorId, $item->fkViewId, $season, $season2, $_POST['occupancy'], $_POST['occYear'] );
-				$SeasonByDay = $this->reservation_db->getSeasonByDay( $item->fkFloorPlanId, $item->fkFloorId, $item->fkViewId, $season, $season2, $_POST['occupancy'], $_POST['occYear'], $_POST['intDate'], $_POST['endDate'] );
-				echo json_encode( array( 'items' => $RateType, 'seasonDay' => $SeasonByDay ) );
+				//$RateType = $this->reservation_db->getRateType( $item->fkFloorPlanId, $item->fkFloorId, $item->fkViewId, $season, $season2, $_POST['occupancy'], $_POST['occYear'] );
+				//$SeasonByDay = $this->reservation_db->getSeasonByDay( $item->fkFloorPlanId, $item->fkFloorId, $item->fkViewId, $season, $season2, $_POST['occupancy'], $_POST['occYear'], $_POST['intDate'], $_POST['endDate'] );
+				//echo json_encode( array( 'items' => $RateType, 'seasonDay' => $SeasonByDay ) );
 			}
+			echo json_encode( array( 'items' => $data ) );
 		}
 	}
 	
@@ -1107,13 +1112,20 @@ private function comprubaArray($valor, $array){
 			$SeasonByDay = null;
 			foreach($unities as $item){
 				if( $item->fkResTypeId == 7 ){
-					$SeasonByDay = $this->reservation_db->getSeasonByDay( $item->fkFloorPlanId, $item->fkFloorId, $item->fkViewId, 1, 1, 2, $item->OccYear, $item->iniDate, $item->endDate );
+					$RateAmtNight = $this->reservation_db->getRateAmtNightByDay( $id );
+					$price = 0;
+					foreach( $RateAmtNight as $item2 ){
+						$price += $item2->RateAmtNight;
+					}
+					$item->Price = $price;
+					/*$SeasonByDay = $this->reservation_db->getSeasonByDay( $item->fkFloorPlanId, $item->fkFloorId, $item->fkViewId, 1, 1, 2, $item->OccYear, $item->iniDate, $item->endDate );
 					array_pop($SeasonByDay);
 					$price = 0;
 					foreach( $SeasonByDay as $item2 ){
 						$price += $item2->RateAmtNight;
 					}
-					$item->Price = $price;
+					$item->Price = $price;*/
+					//$item->Price = 0;
 				}
 				unset( $item->fkResTypeId, $item->fkFloorPlanId, $item->fkViewId, $item->fkFloorId, $item->iniDate, $item->endDate );
 			}

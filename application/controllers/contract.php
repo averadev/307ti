@@ -293,7 +293,7 @@ private function createAcc(){
 private function createAccOcc($occupacy){
 	//$cont2 = count($occupacy);
 	for($j =0; $j< count($occupacy); $j++){
-		$typeAcc = ['5','6'];
+		$typeAcc = ['6'];
 		$resultAcc = array();
 		for($i =0; $i< count($typeAcc); $i++){
 			$cuenta = [

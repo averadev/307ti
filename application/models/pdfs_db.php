@@ -95,7 +95,7 @@ class pdfs_db extends CI_Model{
 	
 	public function getReservationConf($idRes){
 		$this->db->distinct();
-		$this->db->select('r.pkResId, r.Folio, r.ResConf, p.LName, p.Name, r.CheckIn, r.CheckOut, pr.PropertyName, fp.FloorPlanDesc, fp.MaxPersons, v.ViewDesc');
+		$this->db->select('r.pkResId, r.fkResTypeId,  r.Folio, r.ResConf, p.LName, p.Name, r.CheckIn, r.CheckOut, pr.PropertyName, fp.FloorPlanDesc, fp.MaxPersons, v.ViewDesc');
 		$this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
 		$this->db->from('tblRes r');
@@ -125,17 +125,26 @@ class pdfs_db extends CI_Model{
 		return  $this->db->get()->result();
 	}*/
 	
-	public function getRateAmtNigh($idRes){
+	/*public function getRateAmtNigh($idRes){
 		$this->db->distinct();
 		$this->db->select('CONVERT( VARCHAR(10), c.Date, 101) as Date, sd.fkSeasonId, rt.RateAmtNight, c.Date');
 		$this->db->from('tblRes r');
 		$this->db->join('tblResOcc ro ', 'ro.fkResId = r.pkResId', 'INNER');
 		$this->db->join('tblCalendar c ', 'c.pkCalendarId = ro.fkCalendarId', 'INNER');
 		$this->db->join('tblSeasonDate sd ', 'c.Date BETWEEN sd.DateFrom and sd.DateTo', 'INNER');
-		$this->db->join('tblRateType rt ', 'rt.fkSeasonId = sd.fkSeasonId', 'INNER');
+		$this->db->join('tblRateType1 rt ', 'rt.fkSeasonId = sd.fkSeasonId', 'INNER');
 		$this->db->where('r.pkResId  = ', $idRes);
 		$this->db->order_by('c.Date ASC');
 		return  $this->db->get()->result();
+	}*/
+	
+	public function getRateAmtNigh($idRes){
+		$this->db->select("CONVERT(VARCHAR(11), c.Date, 106) as Date, ro.RateAmtNight, c.Date");
+		$this->db->from('tblResOcc ro');
+		$this->db->join('tblCalendar c ', ' c.pkCalendarId = ro.fkCalendarId ');
+		$this->db->where('ro.fkResId', $idRes);
+		$query = $this->db->get();
+        return $query->result();
 	}
 	
 	public function getTraxRes($idRes){

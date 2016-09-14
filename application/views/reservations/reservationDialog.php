@@ -131,10 +131,7 @@
                     </div>
 					<div class="small-3 columns">
 						<label for="RateRes" class="text-left">Rate</label>
-						<div class="caja" >
-							<select id="RateRes" class="input-group-field round">
-							</select>
-						</div>
+						<input class="round general" id="RateRes" name="RateRes" type="text">
                     </div>
                     <div class="small-3 columns">
 						<div class="row collapse">

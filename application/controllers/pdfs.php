@@ -361,7 +361,7 @@ class Pdfs extends CI_Controller {
 		
 		$body = '';
 		$body .= '<img src="assets/img/logo/header.jpg"  width="1000" />';
-		
+		$restype = 0;
 		foreach( $data as $item ){
 			$item = $data[0];
 			$body .= '<h3>Dear ' . $item->LName . ' ' . $item->Name . ' </h3>';
@@ -378,7 +378,7 @@ class Pdfs extends CI_Controller {
 			$body .= '<tr><td>View</td><td>' . $item->ViewDesc . '</td></tr>';
 			$body .= '<tr><td>Resort Type</td><td></td></tr>';
 			$body .= '<tr><td>Call Address</td><td></td></tr>';
-			
+			$restype = $item->fkResTypeId; 
 			break;
 		}
 		
@@ -386,8 +386,8 @@ class Pdfs extends CI_Controller {
 		$day = 1;
 		$cont = 0;
 		$seasonA = array();
-		array_pop ( $RateAmtNigh );
-		foreach( $RateAmtNigh as $item ){
+		//array_pop ( $RateAmtNigh );
+		/*foreach( $RateAmtNigh as $item ){
 			if( $season != $item->fkSeasonId ){
 				$season = $item->fkSeasonId;
 				array_push($seasonA, array( 'season' =>  $item->fkSeasonId, 'days' => 1, 'RateAmtNight' => $item->RateAmtNight ) );
@@ -395,15 +395,25 @@ class Pdfs extends CI_Controller {
 			}else{
 				$seasonA[$cont - 1]['days'] = $seasonA[$cont - 1]['days'] + 1;
 			}
-		}
-		foreach( $seasonA as $item ){
+			
+		}*/
+		/*foreach( $RateAmtNigh as $item ){
+			//$body .= '<tr><td>Us Toll Free</td><td>The rate is ' . $item['RateAmtNight'] . ' Por ' . $item['days']  . ' dias</td></tr>';
 			$body .= '<tr><td>Us Toll Free</td><td>The rate is ' . $item['RateAmtNight'] . ' Por ' . $item['days']  . ' dias</td></tr>';
+		}*/
+		if($restype == 7){
+			if( count($RateAmtNigh) > 0){
+				$body .= '<tr><td>Us Toll Free</td><td>The rate is ' . $RateAmtNigh[0]->RateAmtNight . ' By ' . count($RateAmtNigh)  . ' days</td></tr>';
+			}
+			$totalRate = 0;
+			foreach( $RateAmtNigh as $item ){
+				$totalRate += $item->RateAmtNight;
+			}
+			$body .= '<tr><td>Rate</td><td>$ ' . $totalRate . '</td></tr>';
+		}else{
+			$body .= '<tr><td>Us Toll Free</td><td>The rate is 6 day</td></tr>';
+			$body .= '<tr><td>Rate</td><td>$0.00</td></tr>';
 		}
-		$totalRate = 0;
-		foreach( $RateAmtNigh as $item ){
-			$totalRate += $item->RateAmtNight;
-		}
-		$body .= '<tr><td>Rate</td><td>$ ' . $totalRate . '</td></tr>';
 		$totalPayment = 0;
 		foreach($trans as $item){
 			$totalPayment += $item->Amount;
@@ -416,8 +426,6 @@ class Pdfs extends CI_Controller {
 		$body .= '<h4></h4>';
 		$body .= '<h4>Please contact our Concierge Team at Phone:  1(721 )545-3069</h4>';
 		$body .= '<h4>Email:  info@thetowersatmulletbay.com</h4>';
-		
-		
 		
 		$html = '';
 		$html .= ' <html><head></head><body>';

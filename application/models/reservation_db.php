@@ -172,7 +172,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
     public function getUnitiesReservation($string){
         $sql = "";
 		$this->db->distinct();
-        $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(TFP.floorPlanDesc) as description, CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price');
+        $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(TFP.floorPlanDesc) as description, CAST(0 AS DECIMAL(10,2)) as Price');
         $this->db->select('RI.WeeksNumber, RI.FirstOccYear, RI.LastOccYear, R.fkResTypeId');
 		$this->db->select('U.fkFloorPlanId, U.fkViewId, U.fkFloorId, RO.OccYear');
 		$this->db->select('( SELECT top 1 CONVERT( VARCHAR(11), C2.Date, 101 )FROM tblResOcc RO2 INNER JOIN tblCalendar C2 on C2.pkCalendarId = RO2.fkCalendarId where RO2.fkResId = RO.fkResId and RO2.OccYear = RO.OccYear ORDER BY RO2.NightId ASC) as iniDate');
@@ -182,7 +182,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->join('tblFloorplan TFP', 'RI.fkFloorPlanId = TFP.pkFloorPlanId', 'inner');
         $this->db->join('tblFrequency TF', 'RI.fkFrequencyId = TF.pkFrequencyId', 'inner');
         $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
-        $this->db->join('tblPrice PRI', 'U.pkUnitId = PRI.fkUnitId and RI.WeeksNumber = PRI.Week', 'inner');
+        //$this->db->join('tblPrice PRI', 'U.pkUnitId = PRI.fkUnitId and RI.WeeksNumber = PRI.Week', 'inner');
 		$this->db->join('tblResOcc RO ', ' RO.fkResId = R.pkResId', 'inner');
         $this->db->where('R.pkResId', $string);
         $this->db->order_by('', 'DESC');
@@ -834,7 +834,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
     }
 
     
-    public function getRateType( $floorPlan, $floor, $view, $season, $season2, $occupancy, $occYear ){
+    /*public function getRateType( $floorPlan, $floor, $view, $season, $season2, $occupancy, $occYear ){
         $this->db->select("rt.RateAmtNight as ID, rt.RateTypeDesc");
         $this->db->from('tblRateType rt');
         $this->db->where('rt.ynActive', 1);
@@ -846,6 +846,14 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 		$this->db->where("( rt.fkSeasonId = '" . $season . "' or rt.fkSeasonId = '" . $season2 . "' )");
 		//$this->db->where('(rt.fkSeasonId =' $season);
         
+        $query = $this->db->get();
+        return $query->result();
+    }*/
+	
+	public function getRateType( $idGroup ){
+        $this->db->select("RT.pkRateTypeId as ID, RT.RateAmtNight");
+        $this->db->from('tblRateType RT');
+        $this->db->where('RT.fkOccTypeGroupId', $idGroup);
         $query = $this->db->get();
         return $query->result();
     }
@@ -863,6 +871,15 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         //$this->db->where('rt.fkFloorId', $floor);
         $this->db->where('rt.fkViewId', $view);
 		$this->db->order_by('c.Date ASC');
+		$query = $this->db->get();
+        return $query->result();
+	}
+	
+	public function getRateAmtNightByDay($id){
+		$this->db->select("CONVERT(VARCHAR(11), c.Date, 106) as Date, ro.RateAmtNight");
+		$this->db->from('tblResOcc ro');
+		$this->db->join('tblCalendar c ', ' c.pkCalendarId = ro.fkCalendarId ');
+		$this->db->where('ro.fkResId', $id);
 		$query = $this->db->get();
         return $query->result();
 	}
