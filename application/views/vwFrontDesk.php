@@ -34,6 +34,8 @@
 								<option value="section4">Housekeeping Lookup</option>
 								<option value="section6">Exchange Rate</option>
 								<option value="section5">Report</option>
+								<option value="section7">Audit Units</option>
+								<option value="section8">Audit Transactions</option>
 							</select>
 						</fieldset>
 					</div>
@@ -455,6 +457,178 @@
 					</div>
 					
 				</div>
+				<div class="row sectionFrontDesk section7" style="display:none;">
+					<div class="small-12 medium-12 large-12 columns">
+						<!-- text Field dates -->
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row">
+								<!-- Arrival Date -->
+								<div class="small-12 large-2 columns">
+									<label id="dateAuditLabel" class="text-left">Date
+										<div class="input-group date">
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="dateAudit" class="txtSearch input-group-field roundRight" readonly/>
+										</div>
+									</label>
+								</div>
+								<!-- Departure Date -->
+								<div class="small-12 large-2 columns">
+									<label id="unitAuditLabel" class="text-left">Unit
+										<div class="input-group date" >
+											<span  class="input-group-label prefix"><i class="fa fa-home"></i></span>
+											<input type="text" id="unitAudit" class="txtSearch input-group-field roundRight"/>
+										</div>
+									</label>
+								</div>
+								<!-- Year -->
+								<div class="small-12 large-3 columns">
+									<label id="statusAuditLabel" class="text-left">Status
+										<div class="input-group date" >
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<select  id="statusAudit" class="txtSearch input-group-field roundRight">
+											<option value="0">Choose an option</option>
+												<?php
+												foreach($statusRes as $item){
+													?>
+													<option value="<?php echo $item->ID; ?>"><?php echo $item->StatusDesc; ?></option>
+													<?php
+												}
+												?>
+											</select>
+										</div>
+									</label>
+								</div>
+								<!-- Interval -->
+								<div class="small-12 large-3 columns">
+									<label id="occTypeLabel" class="text-left">OccType
+										<div class="caja" >
+											<select id="occTypeAudit" class="txtSearch input-group-field round">
+											<option value="0">Choose an option</option>
+											<!-- <option value="1">All</option>
+											<option value="2">Ocupadas</option>
+											<option value="3">Desocupadas</option> -->
+												<?php
+												foreach($OccType as $item){
+													?>
+													<option value="<?php echo $item->ID; ?>"><?php echo $item->OccTypeDesc; ?></option>
+													<?php
+												}
+												?>
+											</select>
+										</div>
+									</label>
+								</div>
+								<!-- Interval -->
+								<div class="small-12 large-2 columns">
+									<label id="occTypeLabel" class="text-left">OccStatus
+										<div class="caja" >
+											<select id="occTypeAudit" class="txtSearch input-group-field round">
+											<option value="0">Choose an option</option>
+												<option value="1">All</option>
+												<option value="2">Ocupadas</option>
+												<option value="3">Desocupadas</option>
+											</select>
+										</div>
+									</label>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row">
+								<div class="small-12 large-6 columns end" style="padding-top:25px;">
+									<a id="btnSearchAuditUnit" class="btn btn-primary btn-Search searchFD">
+										<div class="label">Search</div>
+										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+									</a>
+									<a id="btnCleanAuditUnit" class="btn btn-primary spanSelect">
+										<div class="label">Clean</div>
+										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+									</a>
+									<a id="btnReporAuditUnit" class="btn btn-primary btn-Search">
+										<div class="label">Export</div>
+										<img src="<?php echo base_url().IMG; ?>common/report.png"/>
+									</a>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					
+				</div>
+				<div class="row sectionFrontDesk section8" style="display:none;">
+					<div class="small-12 medium-12 large-12 columns">
+						<!-- text Field dates -->
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row">
+								<!-- Arrival Date -->
+								<div class="small-12 large-4 columns">
+									<label id="userTrxLabel" class="text-left"> User
+										<div class="input-group date" >
+											<span  class="input-group-label prefix"><i class="fa fa-user"></i></span>
+											<input type="text" id="userTrxAudit" class="txtSearch input-group-field roundRight"/>
+										</div>
+									</label>
+								</div>
+								<!-- Departure Date -->
+								<div class="small-12 large-4 columns">
+									<label id="trxAuditLabel" class="text-left">Trx Description
+										<div class="input-group date" >
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<select  id="statusAudit" class="txtSearch input-group-field roundRight">
+											<option value="0">Choose an option</option>
+												<?php
+												foreach($TrxTypes as $item){
+													?>
+													<option value="<?php echo $item->ID; ?>"><?php echo $item->TrxTypeDesc; ?></option>
+													<?php
+												}
+												?>
+											</select>
+										</div>
+									</label>
+								</div>
+								<!-- Year -->
+								<div class="small-12 large-4 columns">
+									<label id="alertYearFront" class="text-left">YnAudit
+										<div class="input-group date" >
+											<span  class="input-group-label prefix"><i class="fa fa-check-circle-o"></i></span>
+											<select id="occTypeAudit" class="txtSearch input-group-field round">
+											<option value="0">Choose an option</option>
+											<option value="1">All</option>
+											<option value="2">Audit</option>
+											<option value="3">no Audit</option>
+											</select>
+										</div>
+									</label>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row">
+								<div class="small-12 large-6 columns end" style="padding-top:25px;">
+									<a id="btnSearchAuditTransactions" class="btn btn-primary btn-Search searchFD">
+										<div class="label">Search</div>
+										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+									</a>
+									<a id="btnCleanAuditTransactions" class="btn btn-primary spanSelect">
+										<div class="label">Clean</div>
+										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+									</a>
+									<a id="btnReporAuditTrx" class="btn btn-primary btn-Search">
+										<div class="label">Export</div>
+										<img src="<?php echo base_url().IMG; ?>common/report.png"/>
+									</a>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					
+				</div>
 				
 			</div>
 		</div>
@@ -630,7 +804,44 @@
 							</tbody>
 						</table>
 					</div>
-					
+				<div class="section7 tableSection" style="display:none;">
+						<table id="tablaAuditUnits" style="width:100%">
+							<thead>
+								<tr>
+									<th>unitCode</th>
+									<th>Date</th>
+									<th>FloorPlan</th>
+									<th>OccTypeDesc</th>
+									<th>Resconf</th>
+									<th>LName</th>
+									<th>Name</th>
+									
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+					<div class="section8 tableSection" style="display:none;">
+						<table id="tablaAuditTrx" style="width:100%">
+							<thead>
+								<tr>
+									<th>Unit</th>
+									<th>CrDate</th>
+									<th>User</th>
+									<th>Trx Description</th>
+									<th>Sign</th>
+									<th>TrxAmount</th>
+									<th>Credit</th>
+									<th>Debit</th>
+									<th>Audit Date</th>
+									<th>Audit by user</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
 				</div>
 				<div class="pagina" id="generalPage" style="display:none;" >
 					<div class="pages">
