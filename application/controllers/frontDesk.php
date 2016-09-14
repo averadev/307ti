@@ -23,7 +23,13 @@ class FrontDesk extends CI_Controller {
 	}
     
 	public function index(){
-		//$data['property'] = $this->frontDesk_db->getProperty();
+		$data["statusRes"] = $this->frontDesk_db->getStatusReservation();
+		$campos = "pkOccTypeId as ID, OccTypeDesc";
+		$tabla = "tblOccType";
+		$data["OccType"] = $this->frontDesk_db->selectTypeGeneral($campos, $tabla);
+		$campos = "pkTrxTypeId as ID, TrxTypeDesc";
+		$tabla = "TblTrxType";
+		$data["TrxTypes"] = $this->frontDesk_db->selectTypeGeneral($campos, $tabla);
 		$data['view'] = $this->frontDesk_db->getView();
 		$data['status'] = $this->frontDesk_db->getStatus();
 		$data['HKStatus'] = $this->frontDesk_db->getHKStatus();
@@ -150,6 +156,27 @@ public function createNewExchangeRate(){
 	public function getWeekByYear(){
 		if($this->input->is_ajax_request()){
 			$data = $this->frontDesk_db->getWeekByYear($_POST['year']);
+			echo json_encode(array('items' => $data));
+		}
+	}
+
+	public function getAuditUnits(){
+		if($this->input->is_ajax_request()){
+			$fecha = $_POST['dates']['dateAudit'];
+			$UnidCode = $_POST['words']['unitAudit'];
+			$status = $_POST['words']['statusAudit'];
+			$OccType = $_POST['words']['occTypeAudit'];
+			$data = $this->frontDesk_db->getAuditUnits($fecha, $UnidCode, $status, $OccType);
+			echo json_encode(array('items' => $data));
+		}
+	}
+	public function getAuditTrx(){
+		if($this->input->is_ajax_request()){
+			// $fecha = $_POST['dates']['dateAudit'];
+			// $UnidCode = $_POST['words']['unitAudit'];
+			// $status = $_POST['words']['statusAudit'];
+			// $OccType = $_POST['words']['occTypeAudit'];
+			$data = $this->frontDesk_db->getAuditTrx();
 			echo json_encode(array('items' => $data));
 		}
 	}

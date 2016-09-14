@@ -338,6 +338,45 @@ Class frontDesk_db extends CI_MODEL
         }
 	}
 	
+	public function getAuditUnits($fecha, $UnidCode, $status, $OccType){
+		$this->db->distinct();
+		$this->db->select("U.UnitCode, C.Date, FP.FloorPlanDesc, OC.OccTypeDesc, R.ResConf, P.LName, P.Name");
+		$this->db->from("tblRes R");
+		$this->db->join('tblResInvt RI', 'R.pkResId = RI.fkResId', 'inner');
+		$this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
+		$this->db->join('tblResOcc RO', 'RO.fkResInvtId = RI.pkResInvtId', 'inner');
+		$this->db->join('tblCalendar C', 'RO.fkCalendarId = C.pkCalendarId', 'inner');
+		$this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
+		$this->db->join('tblOccType OC', 'OC.pkOccTypeId = '.$OccType, 'inner');
+		$this->db->join('tblResPeopleAcc RP', 'RP.fkResId = R.pkResId', 'inner');
+		$this->db->join('tblPeople P', 'RP.fkPeopleId = P.pkPeopleId', 'inner');
+		$this->db->where("U.UnitCode", $UnidCode);
+		$this->db->where("C.pkCalendarId = (select C.pkcalendarId from tblCalendar C where C.Date = '$fecha')");
+		$this->db->where("R.fkStatusId", $status);
+		$this->db->where("RO.fkOccTypeId", $OccType);
+		$this->db->where("RP.ynPrimaryPeople", 1);
+		$query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+	}
+
+	public function getAuditTrx(){
+		$this->db->distinct();
+		$this->db->select("U.UnitCode, AC.CrDt, AC.CrBy, TT.TrxTypeDesc, TT.TrxSign, AC.AbsAmount");
+		$this->db->from("tblRes R");
+		$this->db->join('tblResInvt RI', 'R.pkResId = RI.fkResId', 'inner');
+		$this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
+		$this->db->join('tblResPeopleAcc RP', 'RP.fkResId = R.pkResId', 'inner');
+		$this->db->join('tblPeople P', 'RP.fkPeopleId = P.pkPeopleId', 'inner');
+		$this->db->join('tblAccTrx AC', 'RP.fkAccId = AC.fkAccid', 'inner');
+		$this->db->join('TblTrxType TT', 'AC.fkTrxTypeId = TT.pkTrxTypeId', 'inner');
+		$this->db->where("RP.ynPrimaryPeople", 1);
+		$query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+	}
 	public function insert($data, $table){
 		$this->db->insert($table, $data);
 	}
@@ -364,6 +403,16 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->join('tblpeople p2', 'p2.pkPeopleid = cfg.fkPeopleSuperid', 'inner');
 		$this->db->where('cfg.pkUnitHKId = ', $id);
 		return  $this->db->get()->result();
+	}
+
+		public function getStatusReservation(){
+		$this->db->select('s.pkStatusId as ID, s.StatusDesc');
+		$this->db->from('tblStatus s');
+		$this->db->join('tblStatusTypeStatus sts', 'sts.fkStatusId = s.pkStatusId', 'inner');
+		$this->db->where('sts.fkStatusTypeId', 2);
+		$this->db->order_by('sts.Sequence', 'ASC');
+		$query = $this->db->get();
+        return $query->result();
 	}
 	
 	/*************** Housekeeping Look Up******************/
@@ -597,7 +646,7 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->from('tblUnit u');
 		return  $this->db->get()->result();
 	}
-	
+
 	public function getUnitsOcc(){
 		$this->db->distinct();
 		$this->db->select("u.pkUnitId, s.StatusDesc, r.pkResId, CONVERT(VARCHAR(10),c.Date,101) as date1");

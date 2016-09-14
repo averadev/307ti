@@ -122,13 +122,20 @@ $(function() {
 	var addReservation = null;
 	
 	getFrontDesk("",1);
-	
+	initDatesAudit();
 });
 
 function gepPageFrontDesk(page){
 	getFrontDesk("",page)
 }
 
+function initDatesAudit(){
+	$( "#dateAudit" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
+	$('#dateAudit').val(getCurrentDate());
+}
 /**
 * Muestra la lista de front desk
 */
@@ -178,7 +185,20 @@ function getFrontDesk(order, page){
 		words = getWords(["textIntervalExchange"]);
 		options = {};
 		url = "frontDesk/getExchangeRate";
+	}else if(section == "section7"){
+		filters = {};
+		dates = getDates(["dateAudit"]);
+		words = getWords(["unitAudit", "statusAudit", "occTypeAudit"]);
+		options = {};
+		url = "frontDesk/getAuditUnits";
+	}else if(section == "section8"){
+		filters = {};
+		dates = {};
+		words = {};
+		options = {};
+		url = "frontDesk/getAuditTrx";
 	}
+
 	
 	ajaxFrontDesk( url, filters, dates, words, options, order, page );
 }
@@ -207,7 +227,7 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 					createTableLookUp(data);
 				break;
 			}
-			if(data.items.length > 0){
+			if(data.items){
 				switch(section) {
 					case "section1":
 						//createTableLookUp(data);
@@ -232,6 +252,12 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 					case "section6":
 						drawTable2( data.items, "tableExchangeRateFront", false, "" );
 					break;
+					case "section7":
+						drawTable2( data.items, "tablaAuditUnits", false, "" );
+					break;
+					case "section8":
+						drawTable2( data.items, "tablaAuditTrx", false, "" );
+					break;
 				}
 			}else{
 				switch(section) {
@@ -249,6 +275,10 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 					case "section5":
 						noResultsTable("table-frontDesk", "tableHKReport", "no results found");
 						//paginadorFrontDesk(1,"paginationHKLookUp",0);
+					break;
+					case "section7":
+						alertify.success("No data Found");
+						$("#tablaAuditUnits").empty();
 					break;
 				}
 			}

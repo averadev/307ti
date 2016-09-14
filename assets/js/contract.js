@@ -1682,7 +1682,7 @@ function initEventosDownpaymentProgramados(){
 		format: 'm/d/Y',
 		show_icon: false,
 	});
-	$('#datePaymentPrg').val(getCurrentDate())
+	$('#datePaymentPrg').val(getCurrentDate());
 	var downpayment = getNumberTextInput("downpaymentTotal");
 	var deposit = getNumberTextInput("depositoEnganche");
 	$("#montoDownpaymentPrg").val(0);
