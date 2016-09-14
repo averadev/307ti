@@ -1543,7 +1543,7 @@ function setValueUnitPriceRes(data){
 	var dayDif = date2.getTime() - date1.getTime();
 	var day = Math.round(dayDif/(1000 * 60 * 60 * 24));
 	var precio = 0;
-	precio = value * day;
+	//precio = value * day;
 	$("#precioUnidadRes").val(precio);
 	$("#precioVentaRes").val(precio);
 	updateBalanceFinalRes();
