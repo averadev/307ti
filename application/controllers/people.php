@@ -72,7 +72,7 @@ class People extends CI_Controller {
 				if($_POST['id'] == 0){
 				
 				$insert = array(
-					'fkPeopleTypeId'	=> 18,
+					'fkPeopleTypeId'	=> 2,
 					'Name'				=> strtoupper($_POST['name']),
 					'SecondName'		=> strtoupper($_POST['SecondName']),
 					'LName'				=> strtoupper($_POST['lName']),

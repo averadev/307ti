@@ -228,13 +228,18 @@ class Reservation extends CI_Controller {
 	}
 	
 	private function insertFinanciamiento($idContrato){
-		$porcentaje = intval(($_POST['specialDiscount']/$_POST['salePrice']))*100;
+		if( $_POST['salePrice'] > 0){
+			$porcentaje = intval(($_POST['specialDiscount']/$_POST['salePrice']))*100;
+		}else{
+			$porcentaje = 0;
+		}
 		$balanceFinal = intval($_POST['financeBalance']);
 		if ($balanceFinal == 0) {
 			$porEnganche = 0;
 		}else{
 			$porEnganche = intval(($_POST['downpayment']/$balanceFinal))*100;
 		}
+		
 		$financiamiento = [
 			"fkResId"                   => $idContrato,
 			"fkFinMethodId"    			=> $this->reservation_db->selectIdMetodoFin('RG'),
