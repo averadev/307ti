@@ -507,14 +507,14 @@ function getOpctionOccType(){
 
 function verifyContractALLRes(){
 	var value = false;
-	if (verifyContractRes()) {
+	//if (verifyContractRes()) {
 		if (verifyTablesContractRes()) {
 			if (verifyLanguageRes()) {
 				value = true;
 			}
 			
 		}
-	}
+	//}
 	return value;
 }
 
@@ -957,11 +957,11 @@ function createNewReservation(){
 	var form = $("#"+id);
 	var elem = new Foundation.Abide(form, {});
 
-	if(!verifyInputsByIDRes(arrayWords)){
-		$('#'+id).foundation('validateForm');
-		alertify.success("Please fill required fields (red)");
-		return false;
-	}else{
+	//if(!verifyInputsByIDRes(arrayWords)){
+		//$('#'+id).foundation('validateForm');
+		//alertify.success("Please fill required fields (red)");
+		//return false;
+	//}else{
 		var unidades = getValueTableUnidadesRes();
 		var personas = getValueTablePersonasRes();
 		if (personas.length<=0) {
@@ -1045,7 +1045,7 @@ function createNewReservation(){
 				.fail(function( jqXHR, textStatus, errorThrown ) {
 					alertify.error("Try again");
 				});
-		}
+		//}
 	}
 }
 
@@ -1543,7 +1543,7 @@ function setValueUnitPriceRes(data){
 	var dayDif = date2.getTime() - date1.getTime();
 	var day = Math.round(dayDif/(1000 * 60 * 60 * 24));
 	var precio = 0;
-	precio = value * day;
+	//precio = value * day;
 	$("#precioUnidadRes").val(precio);
 	$("#precioVentaRes").val(precio);
 	updateBalanceFinalRes();
@@ -1796,18 +1796,21 @@ function ValidateDownpaymentRes(){
 
 function datosCardRes(){
 	var tipoPago = $("#tiposPago").val();
-	if(tipoPago != 1 && tipoPago != 5){
-		var datos = {};
-		datos.number = $('#numeroTarjeta').val().replace(/[^\d]/g, '');
-		datos.type = $("#cardTypes").val();
-		datos.dateExpiration = $("#dateExpiracion").val();
-		datos.poscode = $("#codigoPostal").val();
-		datos.code = $("#codigoTarjeta").val();
-		return datos
+	if(tipoPago != undefined ){
+		if(tipoPago != 1 && tipoPago != 5 ){
+			var datos = {};
+			datos.number = $('#numeroTarjeta').val().replace(/[^\d]/g, '');
+			datos.type = $("#cardTypes").val();
+			datos.dateExpiration = $("#dateExpiracion").val();
+			datos.poscode = $("#codigoPostal").val();
+			datos.code = $("#codigoTarjeta").val();
+			return datos
+		}else{
+			return null;
+		}
 	}else{
 		return null;
 	}
-	
 }
 
 function splitNumberTarjetaRes(){

@@ -19,9 +19,13 @@ Class people_db extends CI_MODEL
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');
 		$this->db->select('tblState.StateDesc, tblCountry.CountryDesc');
         $this->db->from('tblPeople');
+		/*if($typePeople == "maid"){
+			//$this->db->join('tblPeopleType', 'tblPeopleType.fkPeopleId = tblPeople.pkPeopleId', 'inner');
+		}
 		if($typePeople == "superior"){
 			$this->db->join('tblEmployee', 'tblEmployee.fkPeopleId = tblPeople.pkPeopleId', 'inner');
-		}
+		}*/
+		$this->db->join('tblPeopleType', 'tblPeopleType.pkPeopleTypeId = tblPeople.fkPeopleTypeId', 'inner');
 		$this->db->join('tblPeopleAddress', 'tblPeopleAddress.fkPeopleId = tblPeople.pkPeopleId', 'left');
 		$this->db->join('tblAddress', 'tblAddress.pkAddressid = tblPeopleAddress.fkAddressId', 'left');
 		$this->db->join('tblState', 'tblState.pkStateId = tblAddress.FkStateId', 'left');
@@ -65,6 +69,11 @@ Class people_db extends CI_MODEL
 		if($cadena != "("){
 			$cadena = $cadena . ")";
 			$this->db->where($cadena, NULL);
+		}
+		if($typePeople == "maid"){
+			$this->db->where("tblPeopleType.ynMaid", 1);
+		}else if($typePeople == "superior"){
+			$this->db->where("tblPeopleType.ynSup", 1);
 		}
 		return  $this->db->get()->result();
 	}
