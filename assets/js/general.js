@@ -22,7 +22,17 @@ var dialogScheduledPayments = null;
 var dialogDiscountAmount = null;
 var dialogEditContract = null;
 var dialogAccount = null;
+<<<<<<< HEAD
 var modalAddTrxAudit = null;
+=======
+//front desk
+/*var peopleDialogHK = null;
+var dialogEditContract = null;
+var dialogHKConfig = null;
+var unitDialogHK = null;
+var chgStatusDialog = null;*/
+
+>>>>>>> origin/master
 $(function() {
 	
     // Button Dropdown Menu

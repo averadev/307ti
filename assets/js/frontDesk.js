@@ -464,11 +464,21 @@ function modalHKConfig(id){
 				ajaxSelectsFrontDesk('frontDesk/getHkServiceType','try again', generalSelectsFront, 'SltServiceTypeHKC', 'Select a service type');
 				$('#btnAddPeopleHKCMaid').off();
 				$('#btnAddPeopleHKCMaid').on('click', function() { 
+					//peopleDialogHK = addPeopleDialogHKC('maid');
+					//peopleDialogHK.dialog( "open" );
+					if (peopleDialogHK != null) {
+						peopleDialogHK.dialog( "destroy" );
+					}
 					peopleDialogHK = addPeopleDialogHKC('maid');
 					peopleDialogHK.dialog( "open" );
 				});
 				$('#btnAddPeopleHKCSupe').off();
 				$('#btnAddPeopleHKCSupe').on('click', function() { 
+					//peopleDialogHK = addPeopleDialogHKC('superior');
+					//peopleDialogHK.dialog( "open" );
+					if (peopleDialogHK != null) {
+						peopleDialogHK.dialog( "destroy" );
+					}
 					peopleDialogHK = addPeopleDialogHKC('superior');
 					peopleDialogHK.dialog( "open" );
 				});
