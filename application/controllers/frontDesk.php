@@ -157,9 +157,10 @@ public function createTrxAudit(){
 		$Trx = $_POST['TRX'];
 		$RS = $_POST['RS'];
 		$T = [];
-		for ($i=0; $i < $Trx; $i++) {
-			array_push($T, $Trx[$i]); 
-			//$this->frontDesk_db->selectValorTrx($Trx[$i]);
+		for ($i=0; $i < sizeof($Trx); $i++) {
+			$OK = $this->frontDesk_db->selectValorTrx($Trx[$i]);
+			var_dump($OK);
+			
 		}
 			
 		//$mensaje = ["mensaje"=>"insert Correctly", "status" => 1];

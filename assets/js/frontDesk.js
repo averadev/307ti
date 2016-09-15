@@ -1478,7 +1478,6 @@ function showModalAuditAddTrx(){
 		altura: 540,
 		width: 540,
 		onOpen: ajaxDATA,
-		onSave: saveTrxAudit,
 		botones :[{
 	       	text: "Cancel",
 	       	"class": 'dialogModalButtonCancel',
@@ -1507,14 +1506,15 @@ function addHTMLAddTrx(data){
 }
 
 function saveTrxAudit(){
-	var TRX = AUDITTRX.multipleSelect('getSelects');
-	var RS = getArrayValuesColumnTable("tablaAuditUnits", 1);
+	console.log("YO");
+	var TRXS = AUDITTRX.multipleSelect('getSelects');
+	var RSS = getArrayValuesColumnTable("tablaAuditUnits", 1);
 	var ajaxDatos =  {
 		url: "frontDesk/createTrxAudit",
 		tipo: "json",
 		datos: {
-			TRX: TRX,
-			RS: RS
+			TRX: TRXS,
+			RS: RSS
 		},
 		funcionExito : saveExitoTrx,
 		funcionError: mensajeAlertify

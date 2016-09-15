@@ -698,8 +698,7 @@ Class frontDesk_db extends CI_MODEL
 
         if($query->num_rows() > 0 )
         {
-            $row = $query->row();
-            return $row->pkFactorId;
+            return $query->result();
         }
     }
 	public function getCalendaryCurrent(){
