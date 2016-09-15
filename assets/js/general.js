@@ -25,11 +25,11 @@ var dialogAccount = null;
 var modalAddTrxAudit = null;
 
 //front desk
-/*var peopleDialogHK = null;
+var peopleDialogHK = null;
 var dialogEditContract = null;
 var dialogHKConfig = null;
 var unitDialogHK = null;
-var chgStatusDialog = null;*/
+var chgStatusDialog = null;
 
 $(function() {
 	
