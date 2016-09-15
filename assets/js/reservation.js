@@ -43,11 +43,7 @@ $(document).ready(function(){
 
 	$(document).off( 'click', '#btnRefinancingReservation');
 	$(document).on( 'click', '#btnRefinancingReservation', function () {
-		var id = getValueFromTableSelectedRes("reservationsTable", 1);
-		var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
-		if( screen == "frontDesk" ){
-			id = $('#tab-general .tabs-title.active').data('idRes');
-		}
+		var id = $("#idReservationX").text();
 		showModalFinRes(id);
 	});
 	
@@ -288,7 +284,8 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 	$(document).off( 'change', '.checkInPeople');
 	$(document).on( 'change', '.checkInPeople', function () {
 	    var id = $(this).val();
-		var idReserva = getValueFromTableSelectedRes("reservationsTable", 1);
+		//var idReserva = getValueFromTableSelectedRes("reservationsTable", 1);
+		var idReserva = $("#idReservationX").text();
 		var idPersona = getValueFromTableSelectedRes("peopleContractRes", 1);
 		updateStatusPeople(id, idReserva, idPersona);
 	});
@@ -3137,11 +3134,7 @@ function modalAddNotasRes() {
 	return dialogo;
 }
 function modalGetAllNotesRes() {
-	var id = getValueFromTableSelectedRes("reservationsTable", 1);
-	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
-	if( screen == "frontDesk" ){
-		id = $('#tab-general .tabs-title.active').data('idRes');
-	}
+	var id = $("#idReservationX").text();
 	var div = "#dialog-NotasRes";
 	dialogo = $(div).dialog ({
   		open : function (event){
@@ -3195,11 +3188,7 @@ function SaveNotesRes(){
 
 function SaveNotesContractRes(){
 	//var id = getValueFromTableSelectedRes("contracts", 1);
-	var id = getValueFromTableSelectedRes("reservationsTable", 1);
-	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
-	if( screen == "frontDesk" ){
-		id = $('#tab-general .tabs-title.active').data('idRes');
-	}
+	var id = $("#idReservationX").text();
 	var noteType = $("#notesTypes").val();
 	var noteDescription = $("#NoteDescription").val();
 	$.ajax({
@@ -3305,11 +3294,7 @@ function deleteSelectFlagRes(div){
 }
 
 function deleteFlagRes(id){
-	var idReservation = getValueFromTableSelectedRes("reservationsTable", 1);
-	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
-	if( screen == "frontDesk" ){
-		idReservation = $('#tab-general .tabs-title.active').data('idRes');
-	}
+	var id = $("#idReservationX").text();
 	var datos =  {
 		url: "reservation/deleteFlag",
 		tipo: "json",
@@ -3338,11 +3323,7 @@ function SaveFlagsContractRes(){
 
 	var flags = getArrayValuesSelectedColumRes("tableFlagsListRes", 1);
 	//var id = getValueFromTableSelectedRes("reservationsTable", 1);
-	var id = getValueFromTableSelectedRes("reservationsTable", 1);
-	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
-	if( screen == "frontDesk" ){
-		id = $('#tab-general .tabs-title.active').data('idRes');
-	}
+	var id = $("#idReservationX").text();
 	$.ajax({
 	    data:{
 	        idReservation: id,
@@ -3418,11 +3399,7 @@ function updateTagBanderasRes(banderas){
 
 function modalStatusRes(){
 	var div = "#dialog-StatusRes";
-	var id = getValueFromTableSelectedRes("reservationsTable", 1);
-	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
-	if( screen == "frontDesk" ){
-		id = $('#tab-general .tabs-title.active').data('idRes');
-	}
+	var id = $("#idReservationX").text();
 	dialogo = $(div).dialog ({
 		open : function (event){
 			showLoading(div, true);
@@ -3458,11 +3435,12 @@ function nextStatusContractRes(){
 	var div = "#dialog-StatusRes";
 	showLoading(div, true);
 	$("#iNextStatus").addClass("fa-spin");
-	var id = getValueFromTableSelectedRes("reservationsTable", 1);
+	/*var id = getValueFromTableSelectedRes("reservationsTable", 1);
 	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
 	if( screen == "frontDesk" ){
 		id = $('#tab-general .tabs-title.active').data('idRes');
-	}
+	}*/
+	var id = $("#idReservationX").text();
 	$.ajax({
 	    data:{
 	        idContrato: id,
@@ -3766,11 +3744,7 @@ function uploadFileContRes(){
 	//showAlert(true,"Saving changes, please wait ....",'progressbar');
 	msgReservation = alertify.success('Saving changes, please wait ....', 0);
 	
-	var id = getValueFromTableSelectedRes("reservationsTable", 1);
-	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
-	if( screen == "frontDesk" ){
-		id = $('#tab-general .tabs-title.active').data('idRes');
-	}
+	var id = $("#idReservationX").text();
 	//creamos la variable Request 
 	if(window.XMLHttpRequest) {
  		var Req = new XMLHttpRequest(); 
@@ -3901,7 +3875,8 @@ function deleteFileRes(idFile){
 				url: "reservation/deleteFile",
 				dataType:'json',
 				success: function(data){
-					var id = getValueFromTableSelectedRes("contracts", 1);
+					//var id = getValueFromTableSelectedRes("contracts", 1);
+					var id = $("#idReservationX").text();
 					getFilesRes(id);
 					showLoading("#tableCFilesSelectedRes", false);
 					alertify.success("deleted file");

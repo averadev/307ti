@@ -156,7 +156,8 @@
 
 </div>
 
-<div id="dialog-User" title="People">
+<div id="dialog-User" title="People"></div>
+<!--<div id="dialog-User" title="People">
 	<div class="tabsModal" id="tabsModalPeople">
 		<ul class="tabs" data-tabs>
 			<li class="tabs-title active" attr-screen="tab-PGeneral">
@@ -177,10 +178,10 @@
 	
 		<div id="tab-PGeneral" class="large-12 columns tab-modal" style="display:inline;">
 			<!-- Datos personales -->
-			<div class="row" id="alertValPeopleGeneral" style="display:inline;">
+			<!-- <div class="row" id="alertValPeopleGeneral" style="display:inline;">
 				<div class="small-12 columns">
 					<!--<div data-alert class="alert-box alert" >-->
-					<div class="callout alert">
+					<!-- <div class="callout alert">
 						Please complete fields in red
 					</div>
 				</div>
@@ -189,7 +190,7 @@
 			<fieldset class="fieldset">
 				<legend>Personal information</legend>
 				<!-- nombre-->
-				<div class="row">
+				<!--<div class="row">
 					<div class="small-12 large-3 columns">
 						<label id="alertName" for="right-label" class="text-left">Name</label>
 					</div>
@@ -198,7 +199,7 @@
 					</div>
 				</div>
 				<!-- segundo nombre-->
-				<div class="row">
+				<!--<div class="row">
 					<div class="small-12 large-3 columns">
 						<label id="alertMiddleName" for="right-label" class="text-left">Middle name</label>
 					</div>
@@ -207,7 +208,7 @@
 					</div>
 				</div>
 				<!-- apellido paterno-->
-				<div class="row">
+				<!--<div class="row">
 					<div class="small-12 large-3 columns">
 						<label id="alertLastName" for="right-label" class="text-left">Last name</label>
 					</div>
@@ -216,7 +217,7 @@
 					</div>
 				</div>
 				<!-- apellido materno-->
-				<div class="row">
+				<!--<div class="row">
 					<div class="small-12 large-3 columns">
 						<label for="right-label" class="text-left">Second last name</label>
 					</div>
@@ -225,7 +226,7 @@
 					</div>
 				</div>
 				<!-- genero -->
-				<div class="row">
+				<!--<div class="row">
 					<div class="small-12 large-3 columns">
 						<label id="alertGender" for="right-label" class="text-left">Gender</label>
 					</div>
@@ -237,7 +238,7 @@
 		
 				<div class="row">
 					<!-- fecha de nacimiento-->
-					<div class="small-12 large-6 columns" style="float:right">
+					<!--<div class="small-12 large-6 columns" style="float:right">
 						<label id="alertBirthdate" class="text-left">Birth date
 							<div class="input-group date" id="dateBirthdate" >
 								<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
@@ -247,7 +248,7 @@
 					</div>
 					
 					<!-- aniversario boda-->
-					<div class="small-12 large-6 columns">
+					<!--<div class="small-12 large-6 columns">
 						<label id="alertWeddingAnniversary" for="textWeddingAnniversary" class="text-left">Wedding anniversary
 							<div class="input-group date" id="dateAnniversary" >
 								<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
@@ -259,7 +260,7 @@
 
 				<div class="row">
 					<!-- Nacionalidad-->
-					<div class="small-12 large-6 columns">
+					<!--<div class="small-12 large-6 columns">
 						<label id="alertNationality" for="textNationality" class="text-left">Nationality
 						<div class="caja" >
 							<select id="textNationality" class="input-group-field round">
@@ -276,7 +277,7 @@
 						</label>
 					</div>
 					<!-- Calificacion-->
-					<div class="small-12 large-6 columns">
+					<!--<div class="small-12 large-6 columns">
 						<label class="text-left">Qualification
 						<div class="caja" >
 							<select id="textQualification" class="input-group-field round">
@@ -295,7 +296,7 @@
 				</div>
 			</fieldset>
 			<!-- Datos del domicilio -->
-			<div class="row" id="alertValPeopleAddress" style="display:none;">
+			<!--<div class="row" id="alertValPeopleAddress" style="display:none;">
 				<div class="small-12 columns">
 					<div class="callout alert">
 						Please complete fields in red
@@ -306,7 +307,7 @@
 				<legend class="btnAddressData"><img id="imgCoppapseAddress" class="imgCollapseFieldset down" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>Address data</legend>
 				<div id="containerAddress" style="display:none;">
 					<!-- calle, numero-->
-					<div class="row">
+					<!--<div class="row">
 						<div class="small-12 large-3 columns">
 							<label id="alertStreet" for="textStreet" class="text-left">Street</label>
 						</div>
@@ -315,7 +316,7 @@
 						</div>
 					</div>
 					<!-- Colonia -->
-					<div class="row">
+					<!--<div class="row">
 						<div class="small-12 large-3 columns">
 							<label id="alertColony" for="textColony" class="text-left">Street 2</label>
 						</div>
@@ -326,7 +327,7 @@
 			
 					<div class="row">
 						<!-- Pais -->
-						<div class="small-12 large-6 columns">
+						<!--<div class="small-12 large-6 columns">
 							<label id="alertCountry" for="textCountry" class="text-left">Country
 							<div class="caja" >
 								<select id="textCountry" class="input-group-field round">
@@ -344,7 +345,7 @@
 							</label>
 						</div>
 						<!-- Estado-->
-						<div class="small-12 large-6 columns">
+						<!--<div class="small-12 large-6 columns">
 							<label id="alertState" for="textState" class="text-left">State
 							<div class="caja" >
 								<select id="textState" class="input-group-field round">
@@ -357,13 +358,13 @@
 			
 					<div class="row">
 						<!-- Ciudad -->
-						<div class="small-12 large-6 columns">
+						<!--<div class="small-12 large-6 columns">
 							<label id="alertCity" for="textCity" class="text-left">City
 								<input id="textCity" type="text" class="round general">
 							</label>
 						</div>
 						<!-- Zip Code -->
-						<div class="small-12 large-6 columns">
+						<!--<div class="small-12 large-6 columns">
 							<label id="alertPostalCode" for="textPostalCode" class="text-left">Zip Code
 								<input id="textPostalCode" type="text" class="round general">
 							</label>
@@ -373,7 +374,7 @@
 				</div>
 			</fieldset>
 			<!-- Datos del contacto -->
-			<div class="row" id="alertValPeopleContact" style="display:none;">
+			<!--<div class="row" id="alertValPeopleContact" style="display:none;">
 				<div class="small-12 columns">
 					<div class="callout alert">
 						Please complete fields in red
@@ -384,7 +385,7 @@
 				<legend class="btnContactData"><img id="imgCoppapseContact" class="imgCollapseFieldset down" src="<?php echo base_url().IMG; ?>common/iconCollapseDown.png"/>Contact information</legend>
 				<div id="containerContact" style="display:none">
 					<!-- Telefono 1-->
-					<div class="row">
+					<!--<div class="row">
 						<div class="small-12 large-3 columns">
 							<label id="alertPhone1" for="textPhone1" class="text-left">Phone number 1</label>
 						</div>
@@ -393,7 +394,7 @@
 						</div>
 					</div>
 					<!-- Telefono 2 -->
-					<div class="row">
+					<!--<div class="row">
 						<div class="small-12 large-3 columns">
 							<label id="alertPhone2" for="textPhone2" class="text-left">Phone number 2</label>
 						</div>
@@ -402,7 +403,7 @@
 						</div>
 					</div>
 					<!-- Telefono 3 -->
-					<div class="row">
+					<!--<div class="row">
 						<div class="small-12 large-3 columns">
 							<label id="alertPhone3" for="textPhone3" class="text-left">Phone number 3</label>
 						</div>
@@ -411,7 +412,7 @@
 						</div>
 					</div>
 					<!-- Email 1 -->
-					<div class="row">
+					<!--<div class="row">
 						<div class="small-12 large-3 columns">
 							<label id="alertEmail1" for="textEmail1" class="text-left">Email 1</label>
 						</div>
@@ -420,7 +421,7 @@
 						</div>
 					</div>
 					<!-- Email 2 -->
-					<div class="row">
+					<!--<div class="row">
 						<div class="small-12 large-3 columns">
 							<label id="alertEmail2" for="textEmail2" class="text-left">Email 2</label>
 						</div>
@@ -507,7 +508,7 @@
 		</div>
 		<div id="tab-PEmpleados" class="large-12 columns tab-modal">
 			<!-- Datos del contacto -->
-			<div class="row" id="alertValPeopleEmployee" style="display:none;">
+			<!--<div class="row" id="alertValPeopleEmployee" style="display:none;">
 				<div class="small-12 columns">
 					<div class="callout alert">
 						Please complete fields in red
@@ -517,7 +518,7 @@
 				<div class="row tab-modal-top" id="containerPeopleEmployee">
 					<div class="small-10 large-centered columns">
 						<!-- Código del colaborador:-->
-						<div class="row">
+						<!--<div class="row">
 							<div class="small-3 columns">
 								<label id="alertCodeCollaborator" for="textCodeCollaborator" class="text-left">Employee code</label>
 							</div>
@@ -527,18 +528,18 @@
 						</div>
 						<div class="row">
 							<!-- Iniciales-->
-							<div class="small-12 large-6 columns" style="float:right">
+							<!--<div class="small-12 large-6 columns" style="float:right">
 								<label id="alertInitials" for="textInitials" class="text-left">Initials</label>
 									<input type="text" id="textInitials" class="round general" >
 							</div>
 							<!-- Código numérico -->
-							<div class="small-12 large-6 columns">
+							<!--<div class="small-12 large-6 columns">
 								<label for="textCodeNumber" id="alertCodeNumber" class="text-left">Numeric code</label>
 									<input type="number" id="textCodeNumber" class="round general">
 							</div>
 						</div>
 						<!-- tipo de vendedor -->
-<div class="row" style="margin-bottom:10px;">
+						<!--<div class="row" style="margin-bottom:10px;">
 							<div class="small-3 columns">
 								<label id="alertTypeSeller" for="textTypeSeller" class="text-left">Payroll account</label>
 							</div>
@@ -565,7 +566,7 @@
 								</div>
 							</div>
 						</div> -->
-						<div class="rdoField">
+						<!--<div class="rdoField">
 							<input type="checkbox" class="EmployeePeople" value="active" id="checkPeopleEmployee" />
 							<label for="checkPeopleEmployee">Active</label>
 						</div>
@@ -574,6 +575,6 @@
 			</div>
 		</div>
 	<input type="hidden" value="0" id="idPeople" />
-</div>
+</div>-->
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>people.js"></script>

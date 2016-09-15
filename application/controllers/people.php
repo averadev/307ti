@@ -714,6 +714,13 @@ class People extends CI_Controller {
 		$this->load->view('people/peopleDialog.php');
 	}
 	
+	public function modalPeople2(){
+		$data['country'] = $this->people_db->getCountry();
+		$data['nationality'] = $this->people_db->getNationality();
+		$data['qualifications'] = $this->people_db->getQualifications();
+		$this->load->view('people/peopleDialogEdit.php', $data);
+	}
+	
 	/*
 	SELECT r.pkResId as ResId, r.Folio, r.ResCode, rt.ResTypeDesc
 FROM tblRes r

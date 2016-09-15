@@ -21,13 +21,6 @@ $('#newUser').on('click', function() {  showModal(0); });
 //esconde el modal de usuarios
 //$(document).on('click','.imgCloseModal', function(){ hideModal(); });
 
-//muestra o oculta los datos del domicilio
-$('.btnAddressData').off();
-$('.btnAddressData').on('click', function(){ showDivModal('address'); });
-//muestra o oculta la informacion de contacto
-$('.btnContactData').off();
-$('.btnContactData').on('click', function(){ showDivModal('contact'); });
-
 //$('#minusPeople').click(function(){ $(".fiter-section .box").toggle(); });
 
 
@@ -49,14 +42,6 @@ $('#checkFilterAdvance').on('click', function() {  searchAdvanced(); });
 
 //editar persomas
 
-//activa los tap del modal
-$('#tabsModalPeople .tabs .tabs-title').off();
-$('#tabsModalPeople .tabs .tabs-title').on('click', function() { changeTabsModalPeople($(this).attr('attr-screen')) });
-
-//busqueda de contrado por folio
-$('#btnSearchContractPeople').off();
-$('#btnSearchContractPeople').on('click', function() { getInfoTabsPeople( "tab-PContratos", "people/getContractByPeople" );  });
-
 $('#textSearchContractPeople').keyup(function(e){
     if(e.keyCode ==13){
 		getInfoTabsPeople( "tab-PContratos", "people/getContractByPeople" ); 	
@@ -67,8 +52,7 @@ $('#textSearchContractPeople').keyup(function(e){
 $('#btnCleanSearchContractPeople').off();
 $('#btnCleanSearchContractPeople').on('click', function() {  CleandFieldSearchPContract(); });
 
-//detecta cuando se cambia el valor del select de pais(country)
-$('#textCountry').change(function(){ changeState(this) });
+
 
 /************Funciones**************/
 
@@ -84,7 +68,7 @@ $(document).ready(function(){
 	maxHeight = screen.height * .10;
 	maxHeight = screen.height - maxHeight;
 	
-	createModalDialog();
+	dialogUser = createModalDialog();
 	
 	$('#paginationPeople').jqPagination({
 		max_page: 1,
@@ -97,19 +81,139 @@ $(document).ready(function(){
 		}
 	});
 	
-	$( "#textBirthdate" ).Zebra_DatePicker({
-		format: 'm/d/Y',
-		show_icon: false,
-	});
-	
-	$( "#textWeddingAnniversary" ).Zebra_DatePicker({
-		format: 'm/d/Y',
-		show_icon: false,
-	});
 	expandBox("section-people","box-people-relation")
 });
 
-function createModalDialog(){
+function createModalDialog(id){
+	
+	var div = "#dialog-User";
+	dialog = $( "#dialog-User" ).dialog({
+		open : function (event){
+				showLoading(div,true);
+				$(this).load("people/modalPeople2" , function(){
+		    		showLoading(div,false);
+					$("#textPhone1").mask("(999) 999-9999");
+					$("#textPhone2").mask("(999) 999-9999");
+					$("#textPhone3").mask("(999) 999-9999");
+					$( "#textBirthdate" ).Zebra_DatePicker({
+						format: 'm/d/Y',
+						show_icon: false,
+					});
+					
+					$( "#textWeddingAnniversary" ).Zebra_DatePicker({
+						format: 'm/d/Y',
+						show_icon: false,
+					});
+					cleanUserFields();
+					$('#contentModalPeople .tab-modal').hide();
+					$('#contentModalPeople #tab-PGeneral').show();
+					
+					//muestra o oculta los datos del domicilio
+					$('.btnAddressData').off();
+					$('.btnAddressData').on('click', function(){ showDivModal('address'); });
+					//muestra o oculta la informacion de contacto
+					$('.btnContactData').off();
+					$('.btnContactData').on('click', function(){ showDivModal('contact'); });
+					
+					if(id == 0){
+						$('.dialogModalButtonSecondary').hide();
+						$("#tabsModalPeople").hide();
+						
+						$('#imgCloseModal').off();
+						$('.imgCloseModal').on('click', function() {  hideModal(); });
+					}else{
+						//$( "#dialog-User" ).dialog( "option", "title", "People > Edit person" );
+						$('.dialogModalButtonSecondary').show();
+						$("#tabsModalPeople").show();
+						$('#dialog-User .contentModal').css('height', "90%" );
+						getInfoPeople(id);
+					}
+					
+					//activa los tap del modal
+					$('#tabsModalPeople .tabs .tabs-title').off();
+					$('#tabsModalPeople .tabs .tabs-title').on('click', function() { changeTabsModalPeople($(this).attr('attr-screen')) });
+
+					//busqueda de contrado por folio
+					$('#btnSearchContractPeople').off();
+					$('#btnSearchContractPeople').on('click', function() { getInfoTabsPeople( "tab-PContratos", "people/getContractByPeople" );  });
+					
+					//detecta cuando se cambia el valor del select de pais(country)
+					$(document).off('change', "#textCountry");
+					$(document).on('change', "#textCountry", function () {
+						changeState(this);
+					});
+					
+					dialogUser.css('overflow', 'hidden');
+					
+		    		/*ajaxSelects('contract/getProperties','try again', generalSelectsDefault, 'property');
+	    			ajaxSelects('contract/getUnitTypes','try again', generalSelects, 'unitType');
+	    			ajaxSelects('contract/getViewsType','try again', generalSelects, 'unitView');
+	    			ajaxSelects('contract/getSeasons','try again', generalSelects, 'season');
+					$('#btngetUnidades').click(function(){
+					        getUnidades();
+					});
+		            selectTable("tblUnidades");*/
+	    		});
+		},
+		autoOpen: false,
+		height: maxHeight,
+		width: "70%",
+		modal: true,
+		buttons: [
+			{
+				text: "Clone person",
+				"class": 'dialogModalButtonSecondary',
+				click: function() {
+					clonePeople();
+				}
+			},
+			{
+				text: "Cancel",
+				"class": 'dialogModalButtonCancel',
+				click: function() {
+					dialogUser.dialog('close');
+					cleanUserFields();
+					$("#idPeople").removeData("pkPeopleId");
+					$("#idPeople").removeData("pkEmployeeId");
+				}
+			},
+			{
+				text: "Save and close",
+				"class": 'dialogModalButtonAccept',
+				click: function() {
+					if($("#idPeople").data("pkPeopleId") == undefined ){
+						CreateNewUser(false)
+					}else{
+						EditUser(false, $("#idPeople").data("pkPeopleId") )
+					}
+				}
+			},
+			{
+				text: "Save",
+				"class": 'dialogModalButtonAccept',
+				click: function() {
+					//$("#idPeople").data("pkPeopleId",item.pkPeopleId);
+					if($("#idPeople").data("pkPeopleId") == undefined){
+						CreateNewUser(true)
+					}else{
+						EditUser(true, $("#idPeople").data("pkPeopleId") )
+					}
+					
+				}
+			},
+		],
+		close: function() {
+			$("#idPeople").removeData("pkPeopleId");
+			$("#idPeople").removeData("pkEmployeeId");
+			cleanUserFields();
+			$('#dialog-Unidades').empty();
+		}
+	});
+	return dialog;
+	
+}
+
+/*function createModalDialog(){
 	
 	if(dialogUser != null){
 		dialogUser.dialog( "destroy" );
@@ -175,7 +279,7 @@ function createModalDialog(){
 		}
 	});
 	//dialogUser.css('overflow', 'hidden');
-}
+}*/
 
 
 /**
@@ -183,28 +287,37 @@ function createModalDialog(){
 * @param id id de la persona
 */
 function showModal(id){
+	
 	//dialogUser.dialog('option', 'position', { my: "center", at: "center", of: window });
 	$("#idPeople").removeData("pkPeopleId");
 	$("#idPeople").removeData("pkEmployeeId");
-	cleanUserFields();
-	$('.tab-modal').hide();
-	$('#tab-PGeneral').show();
+	//cleanUserFields();
+	//$('.tab-modal').hide();
+	//$('#tab-PGeneral').show();
+	if (dialogUser!=null) {
+		dialogUser.dialog( "destroy" );
+	}
+	
+	dialogUser = createModalDialog(id);
+	dialogUser.dialog('open');
 	if(id == 0){
-		$('.dialogModalButtonSecondary').hide();
-		$("#tabsModalPeople").hide();
-
+		
+		//$('.dialogModalButtonSecondary').hide();
+		//$("#tabsModalPeople").hide();
+		
+		
 		dialogUser.dialog( "option", "title", "People > Create person" );
-		dialogUser.dialog('open');
-		$('#imgCloseModal').off();
-		$('.imgCloseModal').on('click', function() {  hideModal(); });
+		
+		//$('#imgCloseModal').off();
+		//$('.imgCloseModal').on('click', function() {  hideModal(); });
 	
 	}else{
 		
 		dialogUser.dialog( "option", "title", "People > Edit person" );
-		$('.dialogModalButtonSecondary').show();
+		/*$('.dialogModalButtonSecondary').show();
 		$("#tabsModalPeople").show();
 		$('#dialog-User .contentModal').css('height', "90%" );
-		getInfoPeople(id);
+		getInfoPeople(id);*/
 		
 	}
 	/**/

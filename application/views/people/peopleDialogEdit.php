@@ -1,4 +1,4 @@
-<div id="dialog-User" title="People">
+
 	<div class="tabsModal" id="tabsModalPeople">
 		<ul class="tabs" data-tabs>
 			<li class="tabs-title active" attr-screen="tab-PGeneral">
@@ -416,4 +416,3 @@
 			</div>
 		</div>
 	<input type="hidden" value="0" id="idPeople" />
-</div>

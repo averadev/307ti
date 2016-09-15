@@ -7,11 +7,11 @@
 
 var maxHeight = 400;
 
-var dialogEditContract = modalEditReservations();
+/*var dialogEditContract = modalEditReservations();
 var dialogHKConfig = modalHKConfig(0);
 var peopleDialogHK = addPeopleDialogHKC("");
 var unitDialogHK = addUnitDialogHKC();
-var chgStatusDialog = editHKStatus();
+var chgStatusDialog = editHKStatus();*/
 var exchangeRate = null;
 
 var FloorplanFD;
@@ -701,8 +701,13 @@ function showHKConfiguration(id){
 }
 
 function showModaFrontDesk(id){
-	dialogHKConfig = modalHKConfig(id)
+	if (dialogHKConfig!=null) {
+		dialogHKConfig.dialog( "destroy" );
+	}
+	dialogHKConfig = modalHKConfig(id);
 	dialogHKConfig.dialog('open');
+	//dialogHKConfig = modalHKConfig(id)
+	//dialogHKConfig.dialog('open');
 }
 
 /***************************/
