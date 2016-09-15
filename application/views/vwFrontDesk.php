@@ -483,10 +483,7 @@
 								<!-- Year -->
 								<div class="small-12 large-3 columns">
 									<label id="statusAuditLabel" class="text-left">Status
-										<div class="input-group date" >
-											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-											<select  id="statusAudit" class="txtSearch input-group-field roundRight">
-											<option value="0">Choose an option</option>
+											<select  id="statusAudit"  class="input-group-field round"  multiple="multiple">
 												<?php
 												foreach($statusRes as $item){
 													?>
@@ -495,18 +492,12 @@
 												}
 												?>
 											</select>
-										</div>
 									</label>
 								</div>
 								<!-- Interval -->
 								<div class="small-12 large-3 columns">
 									<label id="occTypeLabel" class="text-left">OccType
-										<div class="caja" >
-											<select id="occTypeAudit" class="txtSearch input-group-field round">
-											<option value="0">Choose an option</option>
-											<!-- <option value="1">All</option>
-											<option value="2">Ocupadas</option>
-											<option value="3">Desocupadas</option> -->
+											<select id="occTypeAudit" class="input-group-field round"  multiple="multiple">
 												<?php
 												foreach($OccType as $item){
 													?>
@@ -515,14 +506,13 @@
 												}
 												?>
 											</select>
-										</div>
 									</label>
 								</div>
 								<!-- Interval -->
 								<div class="small-12 large-2 columns">
 									<label id="occTypeLabel" class="text-left">OccStatus
 										<div class="caja" >
-											<select id="occTypeAudit" class="txtSearch input-group-field round">
+											<select id="occStatusAudit" class="txtSearch input-group-field round">
 											<option value="0">Choose an option</option>
 												<option value="1">All</option>
 												<option value="2">Ocupadas</option>
@@ -546,6 +536,10 @@
 									<a id="btnCleanAuditUnit" class="btn btn-primary spanSelect">
 										<div class="label">Clean</div>
 										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+									</a>
+									<a id="btnAddTrxAuditUnit" class="btn btn-primary spanSelect">
+										<div class="label">Add Transactions</div>
+										<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 									</a>
 									<a id="btnReporAuditUnit" class="btn btn-primary btn-Search">
 										<div class="label">Export</div>
@@ -576,7 +570,7 @@
 									<label id="trxAuditLabel" class="text-left">Trx Description
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-											<select  id="statusAudit" class="txtSearch input-group-field roundRight">
+											<select  id="statusAudit2" class="txtSearch input-group-field roundRight">
 											<option value="0">Choose an option</option>
 												<?php
 												foreach($TrxTypes as $item){
@@ -891,5 +885,6 @@
 <div id="dialog-CreditLimit"  title="Credit Limit" style="display: none;"></div>
 <div id="dialog-ExchangeRate"  title="FrontDesk > New Exchange Rate" style="display: none;"></div>
 <div id="dialog-StatusRes"  title="Status" style="display: none;"></div>
+<div id="dialog-addTransactionsAudit"  title="Status" style="display: none;"></div>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>reservation.js"></script>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>frontDesk.js"></script>

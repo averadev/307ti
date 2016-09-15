@@ -152,6 +152,20 @@ public function createNewExchangeRate(){
 		}
 	}
 }
+public function createTrxAudit(){
+	if($this->input->is_ajax_request()){	
+		$Trx = $_POST['TRX'];
+		$RS = $_POST['RS'];
+		$T = [];
+		for ($i=0; $i < $Trx; $i++) {
+			array_push($T, $Trx[$i]); 
+			//$this->frontDesk_db->selectValorTrx($Trx[$i]);
+		}
+			
+		//$mensaje = ["mensaje"=>"insert Correctly", "status" => 1];
+		echo json_encode($T);
+		}
+	}
 
 	public function getWeekByYear(){
 		if($this->input->is_ajax_request()){
@@ -162,14 +176,40 @@ public function createNewExchangeRate(){
 
 	public function getAuditUnits(){
 		if($this->input->is_ajax_request()){
-			$fecha = $_POST['dates']['dateAudit'];
-			$UnidCode = $_POST['words']['unitAudit'];
-			$status = $_POST['words']['statusAudit'];
-			$OccType = $_POST['words']['occTypeAudit'];
-			$data = $this->frontDesk_db->getAuditUnits($fecha, $UnidCode, $status, $OccType);
+			$filtros = $this->receiveWords($_POST);
+			//var_dump($filtros);
+			$data = $this->frontDesk_db->getAuditUnits($filtros);
+			//$this->makeExcel($data, "Audit");
 			echo json_encode(array('items' => $data));
 		}
 	}
+	public function getAuditUnitsReport(){
+		if(isset($_GET['words'])){
+			$words = json_decode( $_GET['words'] );
+			$sql['words'] = $this->receiveWords($words);
+		}
+		if(isset($_GET['dates'])){
+			$dates = json_decode( $_GET['dates'] );
+			$sql['dates'] = $this->receiveWords($dates);
+		}
+		$data = $this->frontDesk_db->getAuditUnits($sql);
+		$this->makeExcel($data, "AuditReportunits");
+	}
+
+	public function getAuditTrxReport(){
+		$sql = '';
+		if(isset($_GET['words'])){
+			$words = json_decode( $_GET['words'] );
+			$sql['words'] = $this->receiveWords($words);
+		}
+		if(isset($_GET['dates'])){
+			$dates = json_decode( $_GET['dates'] );
+			$sql['dates'] = $this->receiveWords($dates);
+		}
+		$data = $this->frontDesk_db->getAuditTrx();
+		$this->makeExcel($data, "AuditReportTrx");
+	}
+	
 	public function getAuditTrx(){
 		if($this->input->is_ajax_request()){
 			// $fecha = $_POST['dates']['dateAudit'];
@@ -303,6 +343,12 @@ public function createNewExchangeRate(){
 	public function modalHKStatusDesc(){
 		if($this->input->is_ajax_request()){
 			$this->load->view('frontDesk/HKStatusDesc.php');
+		}
+	}
+	public function modalAddTrx(){
+		if($this->input->is_ajax_request()){
+			$data['TrxAudit'] = $this->frontDesk_db->getTrxAudit();
+			$this->load->view('frontDesk/modalAddTrx', $data);
 		}
 	}
 	
@@ -770,7 +816,63 @@ public function createNewExchangeRate(){
 		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
 		$objWriter->save('php://output');
 	}
-	
+	public function makeExcel($json, $nombre){
+			$date = new DateTime();
+            $objPHPExcel = new PHPExcel();
+            $lastColumn = $objPHPExcel->getActiveSheet()->getHighestColumn();
+            $inicio = $lastColumn;
+
+            $head = 1;
+            $activa = 0;
+
+            foreach ($json[0] as $key => $value) {
+                $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($lastColumn.$head, $key);
+                $lastColumn++;
+            }
+            $estilos = array(
+                'font'    => array(
+                    'bold'      => true
+                ),
+                'borders' => array(
+                	'allborders' => array(
+					'style' => PHPExcel_Style_Border::BORDER_THIN
+					)
+				),
+                'alignment' => array(
+					'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+					'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				)
+            );
+
+            $rango = $inicio."1".":".$lastColumn."1";
+            //var_dump($rango);
+            $objPHPExcel->getActiveSheet()->getStyle($rango)->applyFromArray($estilos);
+            //$objPHPExcel->getActiveSheet()->getStyle($rango)->applyFromArray($estilos);
+            $objPHPExcel->getActiveSheet()->setAutoFilter($rango);
+
+            for ($i = $inicio; $i != $lastColumn ; $i++) {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($i)->setAutoSize(true);
+            }
+
+            for ($j=0; $j <sizeof($json); $j++) {
+                $inicio = "A";
+                foreach ($json[$j] as $key => $value) {
+                    $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio++.($j+2), $value);
+                }
+            }
+            // Rename worksheet
+            $objPHPExcel->getActiveSheet()->setTitle('Turicun');
+            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            $filename= $nombre . $date->getTimestamp() . '.xlsx'; //save our workbook as this file name
+			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //mime type
+			header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+			header('Cache-Control: max-age=0'); //no cache
+            // Save Excel 2007 file
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+			$objWriter->save('php://output');
+        }
 	//obtiene el la letras del excel por numero
 	private function getNameFromNumber($num) {
     	$numeric = $num % 26;
@@ -812,7 +914,7 @@ public function createNewExchangeRate(){
 		return $sql;
 	}
 	
-	private function receiveFilter($filters,$field){
+	private function receiveFilter($filters, $field){
 		$ArrayFilters = null;
 		$cont = 0;
 		foreach ($filters as $key => $value) {

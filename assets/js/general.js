@@ -22,6 +22,7 @@ var dialogScheduledPayments = null;
 var dialogDiscountAmount = null;
 var dialogEditContract = null;
 var dialogAccount = null;
+var modalAddTrxAudit = null;
 $(function() {
 	
     // Button Dropdown Menu
@@ -482,7 +483,7 @@ function getFiltersCheckboxs(name) {
     filters = {};
     $('input[name='+name+']:checked').each(
         function() {
-            filters[$(this).val()] = $(this).val()
+            filters[$(this).val()] = $(this).val();
         }
     );
     return filters;

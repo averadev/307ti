@@ -15,7 +15,9 @@ var chgStatusDialog = editHKStatus();
 var exchangeRate = null;
 
 var FloorplanFD;
-
+var OCCTYPE;
+var OCCSTATUS;
+var AUDITTRX;
 var msgFrontDesk = null;
 
 /**************Index****************/
@@ -33,6 +35,8 @@ $('.orderRow').on('click', function(){ orderRowFront(this); });
 
 $('#btnCleanFrontDesk').off();
 $('#btnCleanFrontDesk').on('click', function(){ cleanFilterFrontDesk(); })
+$('#btnCleanAuditUnit').off();
+$('#btnCleanAuditUnit').on('click', function(){ cleanAuditUnit(); })
 
 $('#typeSearchFrontDesk').on('change', function(){ showSection($(this).val()); });
 
@@ -40,14 +44,28 @@ $('#typeSearchFrontDesk').on('change', function(){ showSection($(this).val()); }
 $('#newFontDesk').off();
 $('#newFontDesk').on('click', function() {  showModaFrontDesk(0); });
 
-$('#btnChgStatus').off();
-$('#btnChgStatus').on('click', function() {  showModaChgStatus(); });
+
 
 $('#btnHKREPORT').off();
 $('#btnHKREPORT').on('click', function() {  generateReportFrontDesk(); });
 
 $('#btnHKLUREPORT').off();
 $('#btnHKLUREPORT').on('click', function() {  generateReportFrontDesk(); });
+
+$('#btnChgStatus').off();
+$('#btnChgStatus').on('click', function() {  showModaChgStatus(); });
+
+
+$('#btnAddTrxAuditUnit').off();
+$('#btnAddTrxAuditUnit').on('click', function() {  showModalAuditAddTrx(); });
+
+$('#btnReporAuditUnit').off();
+$('#btnReporAuditUnit').on('click', function() {  generateReportAuditUnits(); });
+
+$('#btnReporAuditTrx').off();
+$('#btnReporAuditTrx').on('click', function() {  generateReportAuditTrx(); });
+
+
 
 /************Funciones**************/
 
@@ -116,6 +134,23 @@ $(function() {
 		onClick: function(view) {
 		},
 	});
+	OCCTYPE = $('#occTypeAudit').multipleSelect({
+		filter: true,
+		width: '100%',
+		placeholder: "Select one",
+		selectAll: false,
+		onClick: function(view) {
+		},
+	});
+	OCCSTATUS = $('#statusAudit').multipleSelect({
+		filter: true,
+		width: '100%',
+		placeholder: "Select one",
+		selectAll: false,
+		onClick: function(view) {
+		},
+	});
+	
 	activatePaginador('paginationHKConfig', gepPageFrontDesk);
 	activatePaginador('paginationHKLookUp', gepPageFrontDesk);
 	
@@ -188,8 +223,12 @@ function getFrontDesk(order, page){
 	}else if(section == "section7"){
 		filters = {};
 		dates = getDates(["dateAudit"]);
-		words = getWords(["unitAudit", "statusAudit", "occTypeAudit"]);
+		words = getWords(["unitAudit", "occStatusAudit"]);
+		words.statusAudit = OCCSTATUS.multipleSelect('getSelects');
+		words.occTypeAudit = OCCTYPE.multipleSelect('getSelects');
 		options = {};
+		//options = getWordsByArray(OCCTYPE.multipleSelect('getSelects'));
+		
 		url = "frontDesk/getAuditUnits";
 	}else if(section == "section8"){
 		filters = {};
@@ -201,6 +240,15 @@ function getFrontDesk(order, page){
 
 	
 	ajaxFrontDesk( url, filters, dates, words, options, order, page );
+}
+function getWordsByArrayAudit(names, values) {
+	console.table(names);
+	console.table(values);
+    words = {};
+	for(i=0;i<names.length;i++){
+		words[names[i]] = values[i];
+	}
+    return words;
 }
 
 function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
@@ -219,7 +267,6 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
        	url: url,
 		dataType:'json',
 		success: function(data){
-			console.log(data);
 			//var section = $('.SectionFrontDesk:checked').val();
 			var section = $('#typeSearchFrontDesk').val();
 			switch(section) {
@@ -292,6 +339,13 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 	
 }
 
+function cleanAuditUnit(){
+	$("#unitAudit").val('');
+	$("#statusAudit").val(0);
+	$("#occTypeAudit").val(0);
+	$("#occStatusAudit").val(0);
+	
+}
 /**
 * obtiene los semanas dependiendo del año seleccionado
 */
@@ -1217,6 +1271,7 @@ function generateReportFrontDesk(){
 }
 
 function createExcel(url){
+	console.log("frontDesk/getReportFrontDesk" + url);
 	window.location = "frontDesk/getReportFrontDesk" + url;
 }
 
@@ -1394,3 +1449,96 @@ function mensajeExchangeRate(data){
 	
 	ajaxFrontDesk( url, filters, dates, words, options, order, page );
 }
+
+function showModalAuditAddTrx(){
+	var ajaxData =  {
+		url: "frontDesk/modalAddTrx",
+		tipo: "html",
+		datos: {},
+		funcionExito : addHTMLAddTrx,
+		funcionError: mensajeAlertify
+	};
+	var modalPropiedades = {
+		div: "dialog-addTransactionsAudit",
+		altura: 540,
+		width: 540,
+		onOpen: ajaxDATA,
+		onSave: saveTrxAudit,
+		botones :[{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Add",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       			saveTrxAudit();
+       			$(this).dialog('close');
+       		}
+     	}]
+	};
+	if (modalAddTrxAudit != null) {
+			modalAddTrxAudit.dialog( "destroy" );
+	}
+	modalAddTrxAudit = modalGeneral2(modalPropiedades, ajaxData);
+	modalAddTrxAudit.dialog( "open" );
+}
+
+function addHTMLAddTrx(data){
+	$("#dialog-addTransactionsAudit").html(data);
+
+}
+
+function saveTrxAudit(){
+	var TRX = AUDITTRX.multipleSelect('getSelects');
+	var RS = getArrayValuesColumnTable("tablaAuditUnits", 1);
+	var ajaxDatos =  {
+		url: "frontDesk/createTrxAudit",
+		tipo: "json",
+		datos: {
+			TRX: TRX,
+			RS: RS
+		},
+		funcionExito : saveExitoTrx,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxDatos);
+}
+
+function saveExitoTrx(data){
+	console.table(data);
+}
+
+function generateReportAuditUnits(){
+	filters = {};
+		dates = getDates(["dateAudit"]);
+		words = getWords(["unitAudit", "occStatusAudit"]);
+		words.statusAudit = OCCSTATUS.multipleSelect('getSelects');
+		words.occTypeAudit = OCCTYPE.multipleSelect('getSelects');
+		options = {};
+		//options = getWordsByArray(OCCTYPE.multipleSelect('getSelects'));
+		
+		url = "?type=report";
+	dates = JSON.stringify(dates);
+	words = JSON.stringify(words);
+	
+	url += "&dates=" + dates;
+	url += "&words=" + words;
+	dowloadExcel("frontDesk/getAuditUnitsReport"+ url)
+	
+}
+
+function dowloadExcel(url){
+	window.location = url;
+}
+
+function generateReportAuditTrx(){
+	filters = {};
+	words = {};
+	options = {};
+	url = "?type=report";
+	dowloadExcel("frontDesk/getAuditTrxReport" + url)
+	
+}	
