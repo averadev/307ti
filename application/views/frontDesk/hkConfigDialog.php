@@ -44,7 +44,7 @@
                         <div class="small-12 columns">
                             <!--<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>-->
 							<a id="btnAddPeopleHKCMaid" class="btn btn-primary spanSelect">
-								<div class="label">Agregar</div>
+								<div class="label">Add</div>
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
                         </div>
@@ -76,7 +76,7 @@
                         <div class="small-12 columns">
                             <!--<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>-->
 							<a id="btnAddPeopleHKCSupe" class="btn btn-primary spanSelect">
-								<div class="label">Agregar</div>
+								<div class="label">Add</div>
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
                         </div>
