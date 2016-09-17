@@ -1,8 +1,9 @@
 var msgContract = null;
+var maxHeight = screen.height * .10;
+maxHeight = screen.height - maxHeight;
 
 $(document).ready(function(){
-	maxHeight = screen.height * .10;
-	maxHeight = screen.height - maxHeight;
+	
 
 	var dialogAddTour = null;
 	var dialogStatus = null;

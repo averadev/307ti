@@ -1196,6 +1196,11 @@ private function comprubaArray($valor, $array){
 		if($this->input->is_ajax_request()) {
 			$id = $_POST['idreservation'];
 			$weeks = $this->reservation_db->selectWeeksReservation($id);
+			foreach($weeks as $item){
+				if( is_null( $item->RateAmtNight ) ){
+					$item->RateAmtNight = 0;
+				}
+			}
 			echo json_encode($weeks);
 		}
 	}

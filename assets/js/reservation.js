@@ -2,9 +2,11 @@ var unitReservacion = [];
 var iniDateRes = null;
 var endDateRes = null;
 var msgReservation = null;
+
+var maxHeight = screen.height * .10;
+maxHeight = screen.height - maxHeight;
+
 $(document).ready(function(){
-	maxHeight = screen.height * .10;
-	maxHeight = screen.height - maxHeight;
 	
 	//dateField
 	$( "#startDateRes, #endDateRes" ).Zebra_DatePicker({
@@ -3008,7 +3010,6 @@ function addProRes(){
 }
 
 function getWeeksRes(id){
-	console.log(id);
 	var div = "#content-OccupationRes";
 	showLoading(div, true);
 	$.ajax({

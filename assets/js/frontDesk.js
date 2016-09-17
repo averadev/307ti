@@ -5,7 +5,9 @@
 * @version 0.1
 */
 
-var maxHeight = 400;
+//var maxHeight = 400;
+var maxHeight = screen.height * .10;
+maxHeight = screen.height - maxHeight;
 
 /*var dialogEditContract = modalEditReservations();
 var dialogHKConfig = modalHKConfig(0);
@@ -407,8 +409,8 @@ function cleanFilterFrontDesk(){
 
 function modalEditReservations(){
 	
-	maxHeight = screen.height * .25;
-	maxHeight = screen.height - maxHeight;
+	//var maxHeight = screen.height * .25;
+	//maxHeight = screen.height - maxHeight;
 	
 	showLoading('#dialog-Edit-Reservations',true);
 	dialogo = $("#dialog-Edit-Reservations").dialog ({
@@ -450,8 +452,8 @@ function modalEditReservations(){
 /****************************************/
 
 function modalHKConfig(id){
-	maxHeight = screen.height * .25;
-	maxHeight = screen.height - maxHeight;
+	//maxHeight = screen.height * .25;
+	//maxHeight = screen.height - maxHeight;
 	
 	dialog = $("#dialog-HKConfig").dialog ({
   		open : function (event){
@@ -1103,8 +1105,8 @@ function editHKStatus(filters){
 	
 	var div = "#dialog-edit-HKStatus";
 	
-	maxHeight = screen.height * .25;
-	maxHeight = screen.height - maxHeight;
+	//maxHeight = screen.height * .25;
+	//maxHeight = screen.height - maxHeight;
 	
 	dialog = $(div).dialog ({
 		open : function (event){
