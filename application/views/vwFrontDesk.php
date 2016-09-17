@@ -528,7 +528,7 @@
 					<div class="small-12 medium-12 large-12 columns">
 						<fieldset class="large-12 columns fieldsetFilter">
 							<div class="row">
-								<div class="small-12 large-6 columns end" style="padding-top:25px;">
+								<div class="small-12 large-12 columns end" style="padding-top:25px;">
 									<a id="btnSearchAuditUnit" class="btn btn-primary btn-Search searchFD">
 										<div class="label">Search</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>

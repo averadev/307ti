@@ -347,7 +347,18 @@ Class frontDesk_db extends CI_MODEL
             return $query->result();
         }
 	}
-	
+	public function select($ID){
+        $this->db->select('Autoamount');
+        $this->db->from('tblTrxType');
+        $this->db->where('pkTrxTypeId', $ID);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->Autoamount;
+        }
+    }
 	public function getAuditUnits($filters){
 		$this->db->distinct();
 		$this->db->select("R.pkResId, U.UnitCode, C.Date, FP.FloorPlanDesc, OC.OccTypeDesc, R.ResConf, P.LName, P.Name");

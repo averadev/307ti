@@ -159,7 +159,15 @@ public function createTrxAudit(){
 		$T = [];
 		for ($i=0; $i < sizeof($Trx); $i++) {
 			$OK = $this->frontDesk_db->selectValorTrx($Trx[$i]);
-			var_dump($OK);
+			$object = (object) $OK[0];
+			if ($object->Porcetaje) {
+				//$Precio = $this->frontDesk_db
+			}else{
+				$Precio = $object->AutoAmount;
+			}
+			//echo $object->Porcetaje. "</br>";
+			//echo $object->AutoAmount. "</br>";
+			//echo $object->fkTrxTypeId. "</br>";
 			
 		}
 			

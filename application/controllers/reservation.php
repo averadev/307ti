@@ -396,7 +396,7 @@ class Reservation extends CI_Controller {
 			"Debit-"		=> 0,
 			"Credit+"		=> 0,
 			"Amount"		=> valideteNumber($precio), 
-			"AbsAmount"		=> valideteNumber($precio),
+			"AbsAmount"		=> 0,
 			"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
 			"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 			"Remark"		=> '', //
@@ -483,7 +483,7 @@ class Reservation extends CI_Controller {
 			"Debit-"		=> valideteNumber($precio),
 			"Credit+"		=> 0,
 			"Amount"		=> valideteNumber(abs($precio)), 
-			"AbsAmount"		=> valideteNumber(abs($precio)),
+			"AbsAmount"		=>0,
 			"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
 			"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 			"Remark"		=> '', //

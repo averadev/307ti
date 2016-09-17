@@ -145,7 +145,7 @@
 						</div>
 					</div>
                 </div>
-                <div class="small-12 columns">
+                <div class="small-12 columns"  style="display:none">
                     <table id="tableFinanciamiento" class="small-12 columns">
                         <thead>
                         <tr>
@@ -161,7 +161,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="row">
+                <div class="row" style="display:none">
 					<div class="small-3 columns">
 						<label>Price</label>
 					</div>
@@ -169,7 +169,7 @@
                         <input readonly type="text" id="precioUnidadRes" name="precioUnidadRes" class="round general" required>
                     </div>
 				</div>
-				<div class="row">
+				<div class="row" style="display:none">
 					<div class="small-3 columns">
 						<label>Extras</label>
 					</div>
@@ -180,7 +180,7 @@
 						<a id="btnPackReferenceRes" href="#" class="button postfix">Capture</a>
 					</div>
 				</div>
-				<div class="row border-bottom">
+				<div class="row border-bottom" style="display:none">
 					<div class="small-3 columns">
 						<label>Sell Price</label>
 					</div>
@@ -189,7 +189,7 @@
                     </div>
                 </div>
 				<!--Montos a Descontar-->
-                <div class="row">
+                <div class="row" style="display:none">
                     <div class="large-3 columns">
                         <label>Special Discount</label>
                     </div>
@@ -207,7 +207,7 @@
                         <input id="montoTotalDERes" class="round general" type="text" placeholder="amount applied" />
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="display:none">
                     <div class="large-3 columns">
                         <label>Downpayment</label>
 					</div>
@@ -225,7 +225,7 @@
                         <input id="montoTotalRes" class="round general" type="text" placeholder="%" />
                     </div>
 				</div>
-                <div class="row">
+                <div class="row" style="display:none">
                     <div class="small-3 columns">
                         <label for="depositoEngancheRes" class="text-left">Deposit</label>
                     </div>
@@ -237,7 +237,7 @@
 					</div>
                 </div>
                 <!--Pagos programados-->
-                <div class="row border-bottom">
+                <div class="row border-bottom" style="display:none">
                     <div class="small-3 columns">
                         <label id="alertLastName" for="right-label" class="text-left">Scheduled Payments</label>
                     </div>
@@ -249,7 +249,7 @@
 					</div>
                 </div>
                 <!--Montos a Descontar-->
-                <div class="row">
+                <div class="row" style="display:none">
                     <div class="small-3 columns">
                         <label id="alertLastName" for="right-label" class="text-left">Discount Amount</label>
                     </div>
@@ -260,7 +260,7 @@
 						<a id="btnDiscountAmountRes" href="#" class="button postfix">Capture</a>
 					</div>
                 </div>
-                <div class="row">
+                <div class="row" style="display:none">
 					<div class="small-12 columns">
 						<p>Extras</p>
 						<table id="tableDescuentosRes" class="large-12 columns">

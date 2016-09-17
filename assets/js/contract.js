@@ -2142,24 +2142,31 @@ function getAccounts( id, typeInfo, typeAcc ){
 			$("#balanceAccount").text(data["balance"]);
 			if(typeInfo == "account"){
 				var sale = data["sale"];
+
 				var maintenance = data["maintenance"];
-				var loan = data["loan"];
+				//var loan = data["loan"];
 				var acc = data["acc"];
-				var sale = parsearSALE(sale);
-				var maintenance = parsearSALE(maintenance);
-				var loan = parsearSALE(loan);
-				if( sale.length > 0 ){
+				
+				
+				//var loan = parsearSALE(loan);
+				if( sale){
+					var sale = parsearSALE(sale);
 					drawTable2( sale, "tableAccountSeller", false, "" );
 					setTableAccount( sale, "tableSaleAccRes" );
 				}
-				if( maintenance.length > 0 ){
-					drawTable2( maintenance, "tableAccountMaintenance", false, "" );
-					setTableAccount( maintenance, "tableMainteAccRes" );
+				if( maintenance){
+					if (maintenance.length>0) {
+						var maintenance = parsearSALE(maintenance);
+						drawTable2( maintenance, "tableAccountMaintenance", false, "" );
+						setTableAccount( maintenance, "tableMainteAccRes" );
+					}
+					
 				}
 				/*if( loan.length > 0 ){
 					drawTable2( loan, "tableAccountLoan", false, "" );
 					setTableAccount( loan, "tableLoanAccRes" );
 				}*/
+				console.table(acc);
 				for( i=0; i<acc.length; i++ ){
 					var nameSafe = acc[i].accType;
 					$('#btNewTransAcc').data( 'idAcc' + nameSafe, acc[i].fkAccId );
@@ -2192,7 +2199,7 @@ function getIDContrato(){
 }
 function parsearSALE(sales){
 	var Balance = 0;
-	for(var i = 0; i < sales. length; i++){
+	for(var i = 0; i < sales.length; i++){
 		if( sales[i].Sign_transaction == "-1" ){
 			Balance -= parseFloat(sales[i].Amount);
 			sales[i].Balance = Balance.toFixed(2);

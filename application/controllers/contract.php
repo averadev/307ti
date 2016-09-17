@@ -567,7 +567,7 @@ private function insertExtrastransaction($idContrato){
 		"Debit-"		=> 0,
 		"Credit+"		=> 0,
 		"Amount"		=> valideteNumber($precio), 
-		"AbsAmount"		=> valideteNumber($precio),
+		"AbsAmount"		=> 0,
 		"Curr1Amt"		=> valideteNumber($precio * $tipoCambioEuros),
 		"Curr2Amt"		=> valideteNumber($precio * $tipoCambioFlorines),
 		"Remark"		=> '', //
