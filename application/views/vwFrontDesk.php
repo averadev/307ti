@@ -570,7 +570,7 @@
 									<label id="trxAuditLabel" class="text-left">Trx Description
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-											<select  id="statusAudit2" class="txtSearch input-group-field roundRight">
+											<select  id="idTrx" class="txtSearch input-group-field roundRight">
 											<option value="0">Choose an option</option>
 												<?php
 												foreach($TrxTypes as $item){
@@ -588,7 +588,7 @@
 									<label id="alertYearFront" class="text-left">YnAudit
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-check-circle-o"></i></span>
-											<select id="occTypeAudit" class="txtSearch input-group-field round">
+											<select id="isAudited" class="txtSearch input-group-field round">
 											<option value="0">Choose an option</option>
 											<option value="1">All</option>
 											<option value="2">Audit</option>

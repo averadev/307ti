@@ -11,6 +11,7 @@ class FrontDesk extends CI_Controller {
 	
 	public function __construct() {
 		parent::__construct();
+		$this->load->helper('validation');
 		$this->load->library('nativesessions');
 		$this->load->library('excel');
 		$this->load->helper('url');
@@ -27,9 +28,10 @@ class FrontDesk extends CI_Controller {
 		$campos = "pkOccTypeId as ID, OccTypeDesc";
 		$tabla = "tblOccType";
 		$data["OccType"] = $this->frontDesk_db->selectTypeGeneral($campos, $tabla);
-		$campos = "pkTrxTypeId as ID, TrxTypeDesc";
-		$tabla = "TblTrxType";
-		$data["TrxTypes"] = $this->frontDesk_db->selectTypeGeneral($campos, $tabla);
+		//$campos = "pkTrxTypeId as ID, TrxTypeDesc";
+		//$tabla = "TblTrxType";
+		//$data["TrxTypes"] = $this->frontDesk_db->selectTypeGeneral($campos, $tabla);
+		$data['TrxTypes'] = $this->frontDesk_db->getTrxAudit();
 		$data['view'] = $this->frontDesk_db->getView();
 		$data['status'] = $this->frontDesk_db->getStatus();
 		$data['HKStatus'] = $this->frontDesk_db->getHKStatus();
@@ -161,24 +163,66 @@ public function createTrxAudit(){
 			$OK = $this->frontDesk_db->selectValorTrx($Trx[$i]);
 			$object = (object) $OK[0];
 			if ($object->Porcetaje) {
-				//$Precio = $this->frontDesk_db
+				$Porcetaje = $object->AutoAmount / 100;
+				$Precio = $Porcetaje * ($this->frontDesk_db->selectAmountTrx($object->fkTrxTypeId));
 			}else{
 				$Precio = $object->AutoAmount;
 			}
+			for ($j=0; $j < sizeof($RS); $j++) { 
+				///echo $Precio."TRx".$Trx[$i]."RESERVA".$RS[$j] ."<br>";
+				$this->insertAuditTransaction($RS[$j], $Precio, $Trx[$i]);
+			}
+			
 			//echo $object->Porcetaje. "</br>";
 			//echo $object->AutoAmount. "</br>";
 			//echo $object->fkTrxTypeId. "</br>";
 			
 		}
-			
-		//$mensaje = ["mensaje"=>"insert Correctly", "status" => 1];
-		echo json_encode($T);
+		echo json_encode(["mensaje" => "save transactions"]);
 		}
 	}
 
+private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
+
+	$precio = valideteNumber($Precio);
+	$Dolares = $this->frontDesk_db->selectIdCurrency('USD');
+	$Florinres  = $this->frontDesk_db->selectIdCurrency('NFL');
+	$Euros  = $this->frontDesk_db->selectIdCurrency('EUR');
+	$tipoCambioFlorines  = $this->frontDesk_db->selectTypoCambio($Dolares, $Florinres);
+	$tipoCambioEuros = $this->frontDesk_db->selectTypoCambio($Dolares, $Euros);
+	$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
+	$tipoCambioEuros = valideteNumber($tipoCambioEuros);
+	$euros = $precio * $tipoCambioEuros;
+	$florines = $precio * $tipoCambioFlorines;
+
+	$transaction = [
+		"fkAccid"		=> $this->frontDesk_db->getACCIDByContracID($IdReserva),//la cuenta
+		"fkTrxTypeId"	=> $TrxID,
+		"fkTrxClassID"	=> $this->frontDesk_db->gettrxClassID('LOA'),
+		"Debit-"		=> 0,
+		"Credit+"		=> 0,
+		"Amount"		=> $precio,
+		"AbsAmount"		=> $precio,
+		"Curr1Amt"		=> valideteNumber($euros),
+		"Curr2Amt"		=> valideteNumber($florines),
+		"Remark"		=> '', //
+		"Doc"			=> '',
+		"DueDt"			=> $this->getToday(),
+		"ynActive"		=> 1,
+		"NAuditDate"	=> $this->getToday(),
+		"NAuditUser"	=> $this->nativesessions->get('id'),
+		"fkCurrencyId"	=> 2,
+		"CrBy"			=> $this->nativesessions->get('id'),
+		"CrDt"			=> $this->getToday(),
+		"MdBy"			=> $this->nativesessions->get('id'),
+		"MdDt"			=> $this->getToday(),
+	];
+	$this->frontDesk_db->insertReturnId('tblAccTrx', $transaction);
+}
 	public function getWeekByYear(){
 		if($this->input->is_ajax_request()){
 			$data = $this->frontDesk_db->getWeekByYear($_POST['year']);
+			//faustino es bn puto
 			echo json_encode(array('items' => $data));
 		}
 	}
@@ -221,15 +265,28 @@ public function createTrxAudit(){
 	
 	public function getAuditTrx(){
 		if($this->input->is_ajax_request()){
-			// $fecha = $_POST['dates']['dateAudit'];
-			// $UnidCode = $_POST['words']['unitAudit'];
-			// $status = $_POST['words']['statusAudit'];
-			// $OccType = $_POST['words']['occTypeAudit'];
-			$data = $this->frontDesk_db->getAuditTrx();
+			$sql = '';
+			if(isset($_POST['words'])){
+				$words = $_POST['words'];
+				$sql['words'] = $this->receiveWords($words);
+			}
+			//var_dump($sql);
+			$data = $this->frontDesk_db->getAuditTrx($sql['words']);
+			$data = $this->ParseNumberTRX($data);
 			echo json_encode(array('items' => $data));
 		}
 	}
 	
+	private function ParseNumberTRX($data){
+		for ($i=0; $i < sizeof($data); $i++) { 
+			foreach ($data[$i] as $key => $value) {
+				if ($data[$i]->Amount == $value) {
+					$data[$i]->Amount = number_format((float)$data[$i]->$key, 2, '.', '');
+				}
+			}
+		}
+		return $data;
+	}
 	public function getHkServiceType(){
 		if($this->input->is_ajax_request()){
 			$data = $this->frontDesk_db->getHkServiceType();

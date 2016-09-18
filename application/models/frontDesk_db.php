@@ -340,14 +340,14 @@ Class frontDesk_db extends CI_MODEL
 	public function getTrxAudit(){
 		$this->db->select("pkTrxTypeId as ID, TrxTypeDesc");
 		$this->db->from("TblTrxType ");
-		$this->db->where("ynNAuditAuto", 1);
+		//$this->db->where("ynNAuditAuto", 1);
 		$this->db->where("ynActive", 1);
 		$query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
         }
 	}
-	public function select($ID){
+	public function selectAmountTrx($ID){
         $this->db->select('Autoamount');
         $this->db->from('tblTrxType');
         $this->db->where('pkTrxTypeId', $ID);
@@ -400,9 +400,10 @@ Class frontDesk_db extends CI_MODEL
         }
 	}
 
-	public function getAuditTrx(){
-		$this->db->distinct();
-		$this->db->select("U.UnitCode, AC.CrDt, AC.CrBy, TT.TrxTypeDesc, TT.TrxSign, AC.AbsAmount");
+	public function getAuditTrx($filtros){
+
+		//$this->db->distinct();
+		$this->db->select("U.UnitCode, AC.CrDt, AC.CrBy, US.UserLogin as AuditedBy, TT.TrxTypeDesc, TT.TrxSign,  round(AC.AbsAmount, 2) as Amount");
 		$this->db->from("tblRes R");
 		$this->db->join('tblResInvt RI', 'R.pkResId = RI.fkResId', 'inner');
 		$this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
@@ -411,6 +412,29 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->join('tblAccTrx AC', 'RP.fkAccId = AC.fkAccid', 'inner');
 		$this->db->join('TblTrxType TT', 'AC.fkTrxTypeId = TT.pkTrxTypeId', 'inner');
 		$this->db->where("RP.ynPrimaryPeople", 1);
+		if (isset($filtros["isAudited"])) {
+			switch ($filtros["isAudited"]) {
+				case 1:
+					$this->db->join('tblUser US', 'AC.NAuditUser = US.pkUserId', 'left');
+					break;
+				case 2:
+					$this->db->join('tblUser US', 'AC.NAuditUser = US.pkUserId', 'inner');
+					break;
+				case 3:
+					$this->db->join('tblUser US', 'AC.NAuditUser = US.pkUserId', 'left');
+					$this->db->where("AC.NAuditUser IS NULL");
+					break;
+			}
+		}else{
+			$this->db->join('tblUser US', 'AC.NAuditUser = US.pkUserId', 'left');
+			//$this->db->join('tblUser US', 'AC.NAuditUser = US.pkUserId and (AC.NAuditDate) = null', 'left');
+		}
+		if (isset($filtros["userTrxAudit"])) {
+			$this->db->where("AC.NAuditUser = (select pkUserID from tblUser where UserLogin = '".$filtros["userTrxAudit"]."')");
+		}
+		if (isset($filtros["idTrx"])) {
+			$this->db->where("TT.pkTrxTypeId", $filtros["idTrx"]);
+		}
 		$query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
@@ -419,6 +443,10 @@ Class frontDesk_db extends CI_MODEL
 	public function insert($data, $table){
 		$this->db->insert($table, $data);
 	}
+	public function insertReturnId($table, $data){
+        $this->db->insert($table, $data);
+        return $this->db->insert_id();
+    }
 	
 	public function update($data, $table, $condicion){
 		$this->db->where($condicion);
@@ -700,6 +728,60 @@ Class frontDesk_db extends CI_MODEL
 		return  $this->db->get()->result();
 	}
 	
+	public function selectIdCurrency($string){
+        $this->db->select('pkCurrencyId');
+        $this->db->from('tblCurrency');
+        $this->db->where('Currencycode', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkCurrencyId;
+        }
+    }
+   	public function gettrxClassID($string){
+        $this->db->select('pkTrxClassId');
+        $this->db->from('tbltrxclass');
+        $this->db->where('TrxClassCode', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkTrxClassId;
+        }
+    }
+
+    public function getACCIDByContracID($idContrato){
+        $this->db->select('pkAccID');
+        $this->db->from('tblAcc a');
+        $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId and rpa.fkResId='.$idContrato, 'inner');
+        //$this->db->where('a.fkAccTypeId = 1');
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkAccID;
+        }
+    }
+   public function selectTypoCambio($MonedaActual, $ACovertir){
+        $this->db->limit('1');
+        $this->db->select('ER.AmtTo as AMT');
+        $this->db->from('tblCurrency C');
+        $this->db->join('tblExchangeRate ER', 'C.pkCurrencyId = ER.fkCurrencyToId', 'inner');
+        $this->db->where('ER.fkCurrencyFromId', $MonedaActual);
+        $this->db->where('ER.fkCurrencyToId', $ACovertir);
+        $this->db->where('ER.ynActive', 1);
+        $this->db->order_by('ER.pkExchangeRateId', 'DESC');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->AMT;
+        }
+    }
     public function selectValorTrx($ID){
         $this->db->select('ynPct as Porcetaje, AutoAmount, fkTrxTypeId');
         $this->db->from('TblTrxType');

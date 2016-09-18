@@ -235,7 +235,7 @@ function getFrontDesk(order, page){
 	}else if(section == "section8"){
 		filters = {};
 		dates = {};
-		words = {};
+		words = getWords(["userTrxAudit", "idTrx", "isAudited"]);
 		options = {};
 		url = "frontDesk/getAuditTrx";
 	}
@@ -305,6 +305,7 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 						drawTable2( data.items, "tablaAuditUnits", false, "" );
 					break;
 					case "section8":
+					console.log(data.items.length);
 						drawTable2( data.items, "tablaAuditTrx", false, "" );
 					break;
 				}
@@ -1525,6 +1526,7 @@ function saveTrxAudit(){
 }
 
 function saveExitoTrx(data){
+	alertify.success(data.mensaje);
 	console.table(data);
 }
 
