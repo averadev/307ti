@@ -114,7 +114,7 @@
                             <?php
                                 foreach($OccupancyTypesGroup as $item){
                                     ?>
-                                    <option value="<?php echo $item->ID; ?>"><?php echo $item->OccTypeGroupDesc; ?></option>
+                                    <option value="<?php echo $item->ID; ?>" occCode="<?php echo $item->OccTypeGroupCode; ?>"><?php echo $item->OccTypeGroupDesc; ?></option>
                                     <?php
                                 }
                             ?>

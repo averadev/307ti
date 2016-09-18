@@ -987,7 +987,8 @@ function createNewReservation(){
 						weeks: getArrayValuesColumnTableRes("tableUnidadesResSelected",7),
 						firstYear : unidadRes[0].fyear,
 						lastYear : unidadRes[0].lyear,
-						tipoVentaId : $("#occupancySalesRes").val(), // pendiente
+						occType : $("#occupancySalesRes").val(),
+						occCode : $('#occupancyTypeGroupRes option:selected').attr('occCode'),
 						listPrice: getNumberTextInputRes("precioUnidadRes"),
 						salePrice: getNumberTextInputRes("precioVentaRes"),
 						specialDiscount:getNumberTextInputRes("montoTotalDERes"),
@@ -1009,6 +1010,7 @@ function createNewReservation(){
 						endDate:endDateRes,
 						RateAmtNight:$('#RateRes').val(),
 					},
+
 					type: "POST",
 					dataType:'json',
 					url: 'reservation/saveReservacion'

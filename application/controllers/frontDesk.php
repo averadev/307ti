@@ -51,7 +51,7 @@ class FrontDesk extends CI_Controller {
 			$data = $this->frontDesk_db->getFrontDesk($sql);
 			//echo json_encode($data);
 			$calendary = $this->frontDesk_db->getCalendary($sql);
-			$color = array("", "cellOwners", "cellRentals", "cellOwnersLoan", "cellNoChange");
+			$color = array("", "cellOwners", "cellRentals", "cellOwnersLoan", "cellNoChange", "cellOwners", "cellOwners", "cellOwners");
 			$res = array();
 			$lastResId = 0;
 			$p = 0;
@@ -880,6 +880,8 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		header('Cache-Control: max-age=0'); //no cache
 					
 		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
+		//$arch = $$nombre_archivo = $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/prueba" ;
+		ob_end_clean();
 		$objWriter->save('php://output');
 	}
 	public function makeExcel($json, $nombre){
@@ -937,6 +939,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 			header('Cache-Control: max-age=0'); //no cache
             // Save Excel 2007 file
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+			ob_end_clean();
 			$objWriter->save('php://output');
         }
 	//obtiene el la letras del excel por numero

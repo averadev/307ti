@@ -469,7 +469,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             $this->db->where('a.fkAccTypeId = 5');
         }
         if($typeInfo == "payment"){
-            //$this->db->where("tt.TrxSign = 1");
+            $this->db->where("(tt.TrxSign = 1 or tt.TrxSign = 0)");
             $this->db->where('a.fkAccTypeId = ', $typeAcc);
             $this->db->where('att.AbsAmount > 0');
         }
@@ -799,7 +799,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
     public function getOccupancyTypesGroup(){
-        $this->db->select("pkOccTypeGroupId as ID, OccTypeGroupDesc");
+        $this->db->select("pkOccTypeGroupId as ID, OccTypeGroupDesc, OccTypeGroupCode");
         $this->db->from('tblOccTypeGroup');
         $this->db->where('ynActive', 1);
         $query = $this->db->get();
