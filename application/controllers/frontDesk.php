@@ -900,8 +900,8 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
 		//$arch = $$nombre_archivo = $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/prueba" ;
 		//ob_end_clean();
-		//$objWriter->save('php://output');
-		$objWriter->save('C:/xampp/htdocs//307ti/assets/pdf/');
+		$objWriter->save('php://output');
+		//$objWriter->save('C:/xampp/htdocs//307ti/assets/pdf/');
 	}
 	public function makeExcel($json, $nombre){
 			$date = new DateTime();
@@ -958,7 +958,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 			header('Cache-Control: max-age=0'); //no cache
             // Save Excel 2007 file
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-			ob_end_clean();
+			//ob_end_clean();
 			$objWriter->save('php://output');
         }
 	//obtiene el la letras del excel por numero
