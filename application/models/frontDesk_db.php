@@ -374,26 +374,21 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->distinct();
 		$this->db->select("R.pkResId, U.UnitCode, C.Date, FP.FloorPlanDesc, OC.OccTypeDesc, R.ResConf, P.LName, P.Name");
 		$this->db->from("tblRes R");
-		$this->db->join('tblResInvt RI', 'R.pkResId = RI.fkResId', 'inner');
+		$this->db->join('tblResInvt RI', '(ri.fkResId =  CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)');
 		$this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
 		$this->db->join('tblResOcc RO', 'RO.fkResInvtId = RI.pkResInvtId', 'inner');
 		$this->db->join('tblCalendar C', 'RO.fkCalendarId = C.pkCalendarId', 'inner');
 		$this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
-		$this->db->join('tblResPeopleAcc RP', 'RP.fkResId = R.pkResId', 'inner');
+		$this->db->join('tblResPeopleAcc RP', '(RP.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)', 'inner');
 		$this->db->join('tblPeople P', 'RP.fkPeopleId = P.pkPeopleId', 'inner');
 		$this->db->join('tblOccType OC', 'OC.pkOccTypeId = RO.fkOccTypeId', 'inner');
+		$this->db->join('tblResType RT', 'RT.pkResTypeId = R.fkResTypeId');
 		$this->db->where("C.pkCalendarId = (select C.pkcalendarId from tblCalendar C where C.Date = '".$filters['dates']['dateAudit']."')");
 		$this->db->where("RP.ynPrimaryPeople", 1);
+		$this->db->where('(R.fkResTypeId = 6 or R.fkResTypeId = 7)');
 		if ($filters['words']['unitAudit'] != 0) {
 			$this->db->where("U.UnitCode", $filters['words']['unitAudit']);
 		}
-/*		if ($filters['words']['statusAudit'] != 0) {
-			$this->db->where("R.fkStatusId", $filters['words']['statusAudit']);
-		}
-		if ($filters['words']['occTypeAudit'] != 0) {
-			$this->db->where("RO.fkOccTypeId", $filters['words']['occTypeAudit']);
-		}
-		*/
 		if ($filters['words']['occStatusAudit'] != 0) {
 			if($filters['words']['occStatusAudit'] == 2){
 				$this->db->where("R.fkStatusId", 15);
@@ -401,10 +396,7 @@ Class frontDesk_db extends CI_MODEL
 			if($filters['words']['occStatusAudit'] == 3){
 				$this->db->where("R.fkStatusId", 16);
 			}
-			
 		}
-		
-		
 		$query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
@@ -774,7 +766,7 @@ Class frontDesk_db extends CI_MODEL
         $this->db->select('pkAccID');
         $this->db->from('tblAcc a');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId and rpa.fkResId='.$idContrato, 'inner');
-        //$this->db->where('a.fkAccTypeId = 1');
+        $this->db->where('rpa.ynPrimaryPeople', 1);
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {

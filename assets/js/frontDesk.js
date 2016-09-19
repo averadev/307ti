@@ -313,12 +313,7 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 						drawTable2( data.items, "tablaAuditUnits", false, "" );
 					break;
 					case "section8":
-						if(data.items.length > 0 ){
 							drawTable2( data.items, "tablaAuditTrx", false, "" );
-						}else{
-							$("#tablaAuditTrx tbody").empty();
-						}
-						
 					break;
 				}
 			}else{
@@ -342,6 +337,9 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 						alertify.success("No data Found");
 						$("#tablaAuditUnits").empty();
 					break;
+					case "section8":
+						alertify.success("No Data Found");
+						$("#tablaAuditTrx tbody").empty();
 				}
 			}
 			showLoading('#table-frontDesk',false);	
