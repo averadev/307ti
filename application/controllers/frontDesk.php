@@ -25,12 +25,11 @@ class FrontDesk extends CI_Controller {
     
 	public function index(){
 		$data["statusRes"] = $this->frontDesk_db->getStatusReservation();
-		$campos = "pkOccTypeId as ID, OccTypeDesc";
-		$tabla = "tblOccType";
+		//$campos = "pkOccTypeId as ID, OccTypeDesc as Description";
+		//$tabla = "tblOccType";
+		$campos = "pkOccTypeGroupId as ID, OccTypeGroupDesc as Description";
+		$tabla = "tblOccTypeGroup";
 		$data["OccType"] = $this->frontDesk_db->selectTypeGeneral($campos, $tabla);
-		//$campos = "pkTrxTypeId as ID, TrxTypeDesc";
-		//$tabla = "TblTrxType";
-		//$data["TrxTypes"] = $this->frontDesk_db->selectTypeGeneral($campos, $tabla);
 		$data['TrxTypes'] = $this->frontDesk_db->getTrxAudit();
 		$data['view'] = $this->frontDesk_db->getView();
 		$data['status'] = $this->frontDesk_db->getStatus();
@@ -171,18 +170,37 @@ public function createTrxAudit(){
 				$Precio = $object->AutoAmount;
 			}
 			for ($j=0; $j < sizeof($RS); $j++) { 
-				///echo $Precio."TRx".$Trx[$i]."RESERVA".$RS[$j] ."<br>";
 				$this->insertAuditTransaction($RS[$j], $Precio, $Trx[$i]);
-			}
-			
-			//echo $object->Porcetaje. "</br>";
-			//echo $object->AutoAmount. "</br>";
-			//echo $object->fkTrxTypeId. "</br>";
-			
+			}	
 		}
 		echo json_encode(["mensaje" => "save transactions"]);
 		}
-	}
+}
+
+public function createTrxAuditById(){
+	if($this->input->is_ajax_request()){	
+		$Trx = $_POST['TRX'];
+		$T = [];
+		for ($i=0; $i < sizeof($Trx); $i++) {
+			$this->updateTRXByID($Trx[$i]);
+			//echo $Trx[$i]. "<br>";
+		}
+		echo json_encode(["mensaje" => "save Correctly"]);
+		}
+}
+
+private function updateTRXByID($ID){
+	$fecha =  new DateTime($this->getToday());
+	$fecha->modify("-1 day");
+	$fechaActual = $fecha->format('Y-m-d H:i:s');
+	$TRX =[
+		"NAuditDate"	=> $fechaActual,
+		"NAuditUserId"	=> $this->nativesessions->get('id')
+	];
+	$condicion = "pkAccTrxID = " . $ID;
+	$afectados = $this->frontDesk_db->updateReturnId('tblAccTrx', $TRX, $condicion);
+}
+
 
 private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 
@@ -252,16 +270,14 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 	}
 
 	public function getAuditTrxReport(){
-		$sql = '';
-		if(isset($_GET['words'])){
-			$words = json_decode( $_GET['words'] );
-			$sql['words'] = $this->receiveWords($words);
-		}
-		if(isset($_GET['dates'])){
-			$dates = json_decode( $_GET['dates'] );
-			$sql['dates'] = $this->receiveWords($dates);
-		}
-		$data = $this->frontDesk_db->getAuditTrx();
+		$sql['words'] =[
+			"userTrxAudit" => $_GET['userTrxAudit'],
+			"idTrx" => $_GET['idTrx'],
+			"isAudited" => $_GET['isAudited']
+		];
+		$sql['words'] = $this->receiveWords($sql['words']);
+		$data = $this->frontDesk_db->getAuditTrx($sql['words']);
+		//var_dump($sql);
 		$this->makeExcel($data, "AuditReportTrx");
 	}
 	
@@ -415,7 +431,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 	}
 	public function modalAddTrx(){
 		if($this->input->is_ajax_request()){
-			$data['TrxAudit'] = $this->frontDesk_db->getTrxAudit();
+			$data['TrxAudit'] = $this->frontDesk_db->getTrxAudition();
 			$this->load->view('frontDesk/modalAddTrx', $data);
 		}
 	}
@@ -932,7 +948,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
                 }
             }
             // Rename worksheet
-            $objPHPExcel->getActiveSheet()->setTitle('Turicun');
+            $objPHPExcel->getActiveSheet()->setTitle($nombre);
             // Set active sheet index to the first sheet, so Excel opens this as the first sheet
             $objPHPExcel->setActiveSheetIndex(0);
 

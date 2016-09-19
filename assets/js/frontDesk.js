@@ -36,9 +36,14 @@ $('#orderRow').off();
 $('.orderRow').on('click', function(){ orderRowFront(this); });
 
 $('#btnCleanFrontDesk').off();
-$('#btnCleanFrontDesk').on('click', function(){ cleanFilterFrontDesk(); })
+$('#btnCleanFrontDesk').on('click', function(){ cleanFilterFrontDesk(); });
+
 $('#btnCleanAuditUnit').off();
-$('#btnCleanAuditUnit').on('click', function(){ cleanAuditUnit(); })
+$('#btnCleanAuditUnit').on('click', function(){ cleanAuditUnit(); });
+
+$('#btnCleanAuditTransactions').off();
+$('#btnCleanAuditTransactions').on('click', function(){ cleanAuditUnitTRX(); });
+
 
 $('#typeSearchFrontDesk').on('change', function(){ showSection($(this).val()); });
 
@@ -67,6 +72,8 @@ $('#btnReporAuditUnit').on('click', function() {  generateReportAuditUnits(); })
 $('#btnReporAuditTrx').off();
 $('#btnReporAuditTrx').on('click', function() {  generateReportAuditTrx(); });
 
+$('#btncloseDayAuditTransactions').off();
+$('#btncloseDayAuditTransactions').on('click', function() {  closeDAYTRX(); });
 
 
 /************Funciones**************/
@@ -144,6 +151,7 @@ $(function() {
 		onClick: function(view) {
 		},
 	});
+
 	OCCSTATUS = $('#statusAudit').multipleSelect({
 		filter: true,
 		width: '100%',
@@ -305,8 +313,12 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 						drawTable2( data.items, "tablaAuditUnits", false, "" );
 					break;
 					case "section8":
-					console.log(data.items.length);
-						drawTable2( data.items, "tablaAuditTrx", false, "" );
+						if(data.items.length > 0 ){
+							drawTable2( data.items, "tablaAuditTrx", false, "" );
+						}else{
+							$("#tablaAuditTrx tbody").empty();
+						}
+						
 					break;
 				}
 			}else{
@@ -344,9 +356,16 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 
 function cleanAuditUnit(){
 	$("#unitAudit").val('');
-	$("#statusAudit").val(0);
-	$("#occTypeAudit").val(0);
-	$("#occStatusAudit").val(0);
+	//$("#statusAudit").val(0);
+	//$("#occTypeAudit").val(0);
+	OCCTYPE.multipleSelect("uncheckAll");
+	OCCSTATUS.multipleSelect("uncheckAll");	
+	$("#occStatusAudit").val(0);	
+}
+function cleanAuditUnitTRX(){
+	$("#userTrxAudit").val('');
+	$("#idTrx").val(0);
+	$("#isAudited").val(0);
 	
 }
 /**
@@ -538,6 +557,8 @@ function showSection(section){
 	}
 	if( section == "section3" || section == "section4" || section == "section5" ){
 		$('#newExchangeRate').show();
+	}if( section == "section7" || section == "section8"){
+		getFrontDesk("",1);
 	}else{
 		$('#newExchangeRate').hide();
 	}
@@ -1491,8 +1512,14 @@ function showModalAuditAddTrx(){
        		text: "Add",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       			saveTrxAudit();
-       			$(this).dialog('close');
+       			var STRXS = AUDITTRX.multipleSelect('getSelects').length;
+				var SRSS = getArrayValuesColumnTable("tablaAuditUnits", 1).length;
+       			if (STRXS > 0 && SRSS > 0) {
+       				saveTrxAudit();
+       				$(this).dialog('close');
+       			}else{
+       				alertify.error("First Search Transactions");
+       			}
        		}
      	}]
 	};
@@ -1527,7 +1554,6 @@ function saveTrxAudit(){
 
 function saveExitoTrx(data){
 	alertify.success(data.mensaje);
-	console.table(data);
 }
 
 function generateReportAuditUnits(){
@@ -1555,9 +1581,38 @@ function dowloadExcel(url){
 
 function generateReportAuditTrx(){
 	filters = {};
-	words = {};
+	dates = {};
+	words = getWords(["userTrxAudit", "idTrx", "isAudited"]);
 	options = {};
 	url = "?type=report";
-	dowloadExcel("frontDesk/getAuditTrxReport" + url)
+	for(j in words){
+		url+= "&"+j+"="+words[j];
+	}
 	
-}	
+	dowloadExcel("frontDesk/getAuditTrxReport" + url);
+}
+
+function closeDAYTRX(){
+
+	//var TRXS = AUDITTRX.multipleSelect('getSelects');
+	var TRXS = getArrayValuesColumnTable("tablaAuditTrx", 1);
+	var ajaxDatos =  {
+		url: "frontDesk/createTrxAuditById",
+		tipo: "json",
+		datos: {
+			TRX: TRXS
+		},
+		funcionExito : saveExitoTrxID,
+		funcionError: mensajeAlertify
+	};
+	if (ajaxDatos.datos.TRX.length > 0) {
+		ajaxDATA(ajaxDatos);
+	}else{
+		alertify.error("First Search Transactions");
+	}
+	
+}
+
+function saveExitoTrxID(data){
+	alertify.success(data.mensaje);
+}

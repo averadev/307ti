@@ -348,6 +348,16 @@ Class frontDesk_db extends CI_MODEL
             return $query->result();
         }
 	}
+	public function getTrxAudition(){
+		$this->db->select("pkTrxTypeId as ID, TrxTypeDesc");
+		$this->db->from("TblTrxType ");
+		$this->db->where("ynNAuditAuto", 1);
+		$this->db->where("ynActive", 1);
+		$query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+	}
 	public function selectAmountTrx($ID){
         $this->db->select('Autoamount');
         $this->db->from('tblTrxType');
@@ -403,8 +413,8 @@ Class frontDesk_db extends CI_MODEL
 
 	public function getAuditTrx($filtros){
 
-		//$this->db->distinct();
-		$this->db->select("U.UnitCode, AC.CrDt, AC.CrBy, US.UserLogin as AuditedBy, TT.TrxTypeDesc, TT.TrxSign,  round(AC.AbsAmount, 2) as Amount");
+		$this->db->distinct();
+		$this->db->select("AC.pkAccTrxId as TrxID, U.UnitCode, AC.CrDt, AC.CrBy, US.UserLogin as AuditedBy, TT.TrxTypeDesc, TT.TrxSign,  round(AC.AbsAmount, 2) as Amount");
 		$this->db->from("tblRes R");
 		$this->db->join('tblResInvt RI', 'R.pkResId = RI.fkResId', 'inner');
 		$this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
@@ -416,22 +426,24 @@ Class frontDesk_db extends CI_MODEL
 		if (isset($filtros["isAudited"])) {
 			switch ($filtros["isAudited"]) {
 				case 1:
-					$this->db->join('tblUser US', 'AC.NAuditUser = US.pkUserId', 'left');
+					$this->db->join('tblUser US', 'AC.NAuditUserId = US.pkUserId', 'left');
 					break;
 				case 2:
-					$this->db->join('tblUser US', 'AC.NAuditUser = US.pkUserId', 'inner');
+					$this->db->join('tblUser US', 'AC.NAuditUserId = US.pkUserId', 'inner');
 					break;
 				case 3:
-					$this->db->join('tblUser US', 'AC.NAuditUser = US.pkUserId', 'left');
-					$this->db->where("AC.NAuditUser IS NULL");
+					$this->db->join('tblUser US', 'AC.NAuditUserId = US.pkUserId', 'left');
+					$this->db->where("AC.NAuditUserId IS NULL");
 					break;
+				default:
+				$this->db->join('tblUser US', 'AC.NAuditUserId = US.pkUserId', 'left');
+						break;
 			}
 		}else{
-			$this->db->join('tblUser US', 'AC.NAuditUser = US.pkUserId', 'left');
-			//$this->db->join('tblUser US', 'AC.NAuditUser = US.pkUserId and (AC.NAuditDate) = null', 'left');
+			$this->db->join('tblUser US', 'AC.NAuditUserId = US.pkUserId', 'left');
 		}
 		if (isset($filtros["userTrxAudit"])) {
-			$this->db->where("AC.NAuditUser = (select pkUserID from tblUser where UserLogin = '".$filtros["userTrxAudit"]."')");
+			$this->db->where("AC.NAuditUserId = (select pkUserID from tblUser where UserLogin = '".$filtros["userTrxAudit"]."')");
 		}
 		if (isset($filtros["idTrx"])) {
 			$this->db->where("TT.pkTrxTypeId", $filtros["idTrx"]);
@@ -453,7 +465,11 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->where($condicion);
 		$this->db->update($table, $data);
 	}
-	
+	public function updateReturnId($table, $data, $condicion){
+        $this->db->where($condicion);
+        $this->db->update($table, $data);
+        return $this->db->affected_rows();
+    }
 	public function updateBatch($data,$table, $field){
 		$this->db->update_batch( $table, $data, $field ); 
 	}

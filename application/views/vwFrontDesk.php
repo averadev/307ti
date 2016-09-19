@@ -501,7 +501,7 @@
 												<?php
 												foreach($OccType as $item){
 													?>
-													<option value="<?php echo $item->ID; ?>"><?php echo $item->OccTypeDesc; ?></option>
+													<option value="<?php echo $item->ID; ?>"><?php echo $item->Description; ?></option>
 													<?php
 												}
 												?>
@@ -571,7 +571,7 @@
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
 											<select  id="idTrx" class="txtSearch input-group-field roundRight">
-											<option value="0">Choose an option</option>
+											<option value="">Choose an option</option>
 												<?php
 												foreach($TrxTypes as $item){
 													?>
@@ -589,7 +589,7 @@
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-check-circle-o"></i></span>
 											<select id="isAudited" class="txtSearch input-group-field round">
-											<option value="0">Choose an option</option>
+											<option value="">Choose an option</option>
 											<option value="1">All</option>
 											<option value="2">Audit</option>
 											<option value="3">no Audit</option>
@@ -612,6 +612,10 @@
 									<a id="btnCleanAuditTransactions" class="btn btn-primary spanSelect">
 										<div class="label">Clean</div>
 										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+									</a>
+									<a id="btncloseDayAuditTransactions" class="btn btn-primary spanSelect">
+										<div class="label">Close Day</div>
+										<i class="fa fa-check-square"></i>
 									</a>
 									<a id="btnReporAuditTrx" class="btn btn-primary btn-Search">
 										<div class="label">Export</div>
