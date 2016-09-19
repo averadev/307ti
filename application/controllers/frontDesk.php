@@ -51,7 +51,8 @@ class FrontDesk extends CI_Controller {
 			$data = $this->frontDesk_db->getFrontDesk($sql);
 			//echo json_encode($data);
 			$calendary = $this->frontDesk_db->getCalendary($sql);
-			$color = array("", "cellOwners", "cellRentals", "cellOwnersLoan", "cellNoChange", "cellOwners", "cellOwners", "cellOwners");
+			//$color = array("cellOwners", "cellOwners", "cellRentals", "cellOwnersLoan", "cellNoChange", "cellOwners", "cellOwners", "cellOwners","cellOwners","cellOwners","cellOwners","cellOwners","cellOwners");
+			$color = array("cellOwners", "cellOwners", "cellRentals", "cellOwnersLoan", "cellNoChange", "cellOwners", "cellOwners", "cellOwners","cellOwners","cellOwners","cellOwners","cellOwners","cellOwners");
 			$res = array();
 			$lastResId = 0;
 			$p = 0;
@@ -81,10 +82,11 @@ class FrontDesk extends CI_Controller {
 					}else{
 						$p2 = 0;
 					}
+					$color = array("cellOwners", "cellOwners", "cellRentals", "cellOwnersLoan", "cellNoChange", "cellOwners", "cellOwners", "cellOwners");
 					$res[$p]['values'][$p2]['from'] = $item->pkCalendarId;
 					$res[$p]['values'][$p2]['to'] = $item->pkCalendarId;
 					$res[$p]['values'][$p2]['people'] = $item->Name . " " . $item->LName . " " . $item->LName2;
-					$res[$p]['values'][$p2]['occType'] = $color[intval($item->fkOccTypeId)];
+					$res[$p]['values'][$p2]['occType'] = $color[intval($item->fkOccTypeGroupId)];
 					$res[$p]['values'][$p2]['ResConf'] = $item->ResConf;
 					$res[$p]['values'][$p2]['dateFrom'] = $item->DateIni;
 					$res[$p]['values'][$p2]['dateTo'] = $item->DateEnd;
@@ -881,8 +883,9 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 					
 		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
 		//$arch = $$nombre_archivo = $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/prueba" ;
-		ob_end_clean();
-		$objWriter->save('php://output');
+		//ob_end_clean();
+		//$objWriter->save('php://output');
+		$objWriter->save('C:/xampp/htdocs//307ti/assets/pdf/');
 	}
 	public function makeExcel($json, $nombre){
 			$date = new DateTime();
