@@ -49,12 +49,12 @@ $(document).ready(function(){
 		showModalFinRes(id);
 	});
 	
-	$(document).off( 'click', '#btnAddPeopleRes');
-	$(document).on( 'click', '#btnAddPeopleRes', function () {
+	$(document).off( 'click', '#btnAddPeopleRes, #btnAddPeopleResEdit');
+	$(document).on( 'click', '#btnAddPeopleRes, #btnAddPeopleResEdit', function () {
 		// if (peopleResDialog != null) {
 		// 	peopleResDialog.dialog( "destroy" );
 		// }
-         peopleResDialog = addPeopleResDialog();
+         peopleResDialog = addPeopleResDialog( $(this).attr('attr_table') );
          peopleResDialog.dialog( "open" );
 	});
 
@@ -274,8 +274,6 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 		$("#financeBalanceRes").val(balanceFinal - transferido);
 	});
 	
-	getDatailByIDRes("reservationstbody");
-	
 /*	$(document).off( 'change', '#StatusPeople')
 	$(document).on('change', "#StatusPeople", function () {
 		var id = $(this).val();
@@ -301,6 +299,13 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 			setValueUnitPriceRes(null);
 		}
 	});
+	
+	$(document).off( 'click', '#btnSavePeopleRes');
+	$(document).on('click', "#btnSavePeopleRes", function () {
+		savePeopleRes();
+	});
+	
+	getDatailByIDRes("reservationstbody");
 	
 });
 
@@ -506,28 +511,34 @@ function getOpctionOccType(){
 
 function verifyContractALLRes(){
 	var value = false;
-	//if (verifyContractRes()) {
+	if (verifyContractRes()) {
 		if (verifyTablesContractRes()) {
 			if (verifyLanguageRes()) {
 				value = true;
 			}
 			
 		}
-	//}
+	}
 	return value;
 }
 
 function verifyContractRes(){
+	//var arrayWords = ["depositoEngancheRes", "precioUnidadRes", "precioVentaRes"];
 	var value = true;
-	var arrayWords = ["depositoEngancheRes", "precioUnidadRes", "precioVentaRes"];
-	var id = "saveDataReservation";
-	var form = $("#"+id);
-	var elem = new Foundation.Abide(form, {});
-
-	if(!verifyInputsByIDRes(arrayWords)){
-		$('#'+id).foundation('validateForm');
-		alertify.success("Please fill required fields (red)");
+	$("#RateRes").removeClass('is-invalid-input');
+	var valueRate = getNumberTextInputRes("RateRes");
+	if($('#RateRes').val().trim().length == 0 || valueRate < 0){
 		value = false;
+		gotoDiv("contentModalReservation", "RateRes");
+		$("#RateRes").addClass('is-invalid-input');
+		alertify.error("Choose a rate");
+	}else{
+		if (!/^([0-9])*$/.test($('#RateRes').val().trim())){
+			value = false;
+			gotoDiv("contentModalReservation", "RateRes");
+			$("#RateRes").addClass('is-invalid-input');
+			alertify.error("Only numbers are allowed");
+		}
 	}
 	return value;
 }
@@ -535,7 +546,7 @@ function verifyContractRes(){
 function verifyTablesContractRes(){
 	var value = true;
 	var unidades = getValueTableUnidadesRes();
-	var personas = getValueTablePersonasRes();
+	var personas = getValueTablePersonasRes("tablePeopleResSelected");
 	if (personas.length<=0) {
 		alertify.error("You should add one people or more");
 		value = false;
@@ -660,7 +671,7 @@ function addUnidadResDialog(iniDate, unit){
 	return dialog;
 }
 
-function addPeopleResDialog(){
+function addPeopleResDialog(table){
 	var div = "#dialog-PeopleRes";	
 	dialog = $(div).dialog({
 		open : function (event){
@@ -687,7 +698,7 @@ function addPeopleResDialog(){
 			text: "Add",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
-				if(selectAllPeopleRes()){
+				if(selectAllPeopleRes(table)){
 					updateValuePeopleRes();
 					$(this).dialog('close');
 				};
@@ -743,7 +754,7 @@ function getReservations(){
 	}
 }
 
-function selectAllPeopleRes(){
+function selectAllPeopleRes(table){
 	var personasSeleccionaDas = getArrayValuesColumnTableRes("tablePeopleResSelected", 1);
 	var personas = [];
 
@@ -775,7 +786,7 @@ function selectAllPeopleRes(){
 		return false;
 	}else{
 		if (personas.length>0) {
-			tablePeopleRes(personas);
+			tablePeopleRes(personas, table);
 		}
 		return true;
 	}
@@ -820,27 +831,32 @@ function getValueTableUnidadesSeleccionadasRes(){
 	//endDateRes = $('#toDateUnitRes').val();
 }
 
-function tablePeopleRes(personas){
+function tablePeopleRes(personas, table){
 	var bodyHTML = '';
 	    //creación del body
     for (var i = 0; i < personas.length; i++) {
 		bodyHTML += "<tr>";
+		if(table == "peopleContractRes"){
+			bodyHTML+="<td></td>";
+		}
         for (var j in personas[i]) {
             bodyHTML+="<td>" + personas[i][j] + "</td>";
         };
+		
         bodyHTML += "<td><div class='rdoField'><input class='primy' value='"+i+"'  type='radio' name='peopleType1'><label for='folio'>&nbsp;</label></div></td>";
         bodyHTML += "<td><div class='rdoField'><input disabled class='benefy' value='"+i+"' type='checkbox' name='peopleType2'><label for='folio'>&nbsp;</label></div></td>";
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
         bodyHTML+="</tr>";
     }
-    $('#tablePeopleResSelected tbody').append(bodyHTML);
+    $('#' + table + ' tbody').append(bodyHTML);
     defaultValuesRes();
     onChangePrimaryRes();
-	deleteElementTableRes("tablePeopleResSelected");
+	deleteElementTableRes(table);
 }
 
 function onChangePrimaryRes(){
-	$(".primy").change(function(){
+	$(document).off( 'change', '.primy');
+	$(document).on( 'change', '.primy', function () {
 		//var selected = getIndexCheckbox();
 		checkAllBeneficiary(this.value);
 	});
@@ -854,7 +870,9 @@ function defaultValuesRes(){
 
 //reducir a una funcion
 function deleteElementTableRes(div){
-	$("#"+div+" tr").on("click", "button", function(){
+	$("#"+div+" tr").off( 'click', 'button');
+	$("#"+div+" tr").on( 'click', 'button', function () {
+	//$("#"+div+" tr").on("click", "button", function(){
 		$(this).closest("tr").remove();
 		updateValuePeopleRes();
 		if (!PrimaryPeopleRes()) {
@@ -962,7 +980,7 @@ function createNewReservation(){
 		//return false;
 	//}else{
 		var unidades = getValueTableUnidadesRes();
-		var personas = getValueTablePersonasRes();
+		var personas = getValueTablePersonasRes("tablePeopleResSelected");
 		if (personas.length<=0) {
 			alertify.error("You must add at least one person");
 		}else if (unidades.length<=0) {
@@ -981,7 +999,7 @@ function createNewReservation(){
 			$.ajax({
 					data: {
 						idiomaID : $("#selectLanguageRes").val(),
-						peoples: getValueTablePersonasRes(),
+						peoples: getValueTablePersonasRes("tablePeopleResSelected"),
 						types: typePeopleRes(),
 						unidades: unidadRes,
 						weeks: getArrayValuesColumnTableRes("tableUnidadesResSelected",7),
@@ -1115,17 +1133,25 @@ function getValueTableUnidadesRes(){
 	});
 	return unidades;
 }
-function getValueTablePersonasRes(){
-	var tabla = "tablePeopleResSelected";
+function getValueTablePersonasRes(tabla){
+	//var tabla = "tablePeopleResSelected";
 	var unidades = [];
 	var personas = [];
 	$('#'+tabla+' tbody tr').each( function(i){
 		if ($(this).text().replace(/\s+/g, " ")!="") {
 			var persona = {};
-			persona.id = $(this).find('td').eq(0).text(),
-			persona.primario = $(this).find('td').eq(4).find('input[name=peopleType1]').is(':checked'),
-			persona.beneficiario = $(this).find('td').eq(5).find('input[name=peopleType2]').is(':checked')
-			personas.push(persona);
+			if(tabla == "tablePeopleResSelected"){
+				persona.id = $(this).find('td').eq(0).text(),
+				persona.primario = $(this).find('td').eq(4).find('input[name=peopleType1]').is(':checked'),
+				persona.beneficiario = $(this).find('td').eq(5).find('input[name=peopleType2]').is(':checked')
+				personas.push(persona);
+			}else{
+				persona.id = $(this).find('td').eq(1).text(),
+				persona.primario = $(this).find('td').eq(5).find('input[name=peopleType1]').is(':checked'),
+				persona.beneficiario = $(this).find('td').eq(6).find('input[name=peopleType2]').is(':checked')
+				persona.exist = 0
+				personas.push(persona);
+			}
 		}
 	});
 	return personas;
@@ -2242,21 +2268,15 @@ function ajaxSelectsPeopleStatus(status) {
 	});
 }
 function drawTableSinHeadReservationPeople(data, table){
+	console.log(data)
 	var statusActuales = [];
 	var status = $("#editReservationStatus").text().replace("Status: ", "");
-	//if (status == "In House") {
-		var option1 = "<select class='checkInPeople'>"+status+"</select>";
-		var option2 = "<select class='checkInPeople'>"+status+"</select>";
-		var checkboxT = "<td><div class='rdoField'>"+option1+"</td>";
-	 	var checkboxT2 = "<td><div class='rdoField'>"+option2+"</div></td>";
-	/*}else{
-		var option1 = "<select class='checkInPeople' disabled>"+status+"</select>";
-		var option2 = "<select class='checkInPeople' disabled>"+status+"</select>";
-		var checkboxT = "<td><div class='rdoField'>"+option1+"</td>";
-	 	var checkboxT2 = "<td><div class='rdoField'>"+option2+"</div></td>";
-	}*/
+	var option1 = "<select class='checkInPeople'>"+status+"</select>";
+	var option2 = "<select class='checkInPeople'>"+status+"</select>";
+	var checkboxT = "<td><div class='rdoField'>"+option1+"</td>";
+	var checkboxT2 = "<td><div class='rdoField'>"+option2+"</div></td>";
 	
-    var bodyHTML = '';
+  /*  var bodyHTML = '';
     for (var i = 0; i < data.length; i++) {
         bodyHTML += "<tr>";
         bodyHTML += checkboxT;
@@ -2269,7 +2289,30 @@ function drawTableSinHeadReservationPeople(data, table){
         bodyHTML += "<td>" +data[i].YnBenficiary + "</td>";
         bodyHTML+="</tr>";
     }
-    $('#' + table).html(bodyHTML);
+    $('#' + table).html(bodyHTML);*/
+	
+	$('#' + table).empty();
+    for (var i = 0; i < data.length; i++) {
+		var bodyHTML = '';
+		bodyHTML += "<tr>";
+		bodyHTML += checkboxT;
+        bodyHTML += "<td>" +data[i].ID + "</td>";
+		bodyHTML += "<td>" +data[i].Name + "</td>";
+		bodyHTML += "<td>" +data[i].lastName + "</td>";
+		bodyHTML += "<td>" +data[i].address + "</td>";
+        bodyHTML += "<td><div class='rdoField'><input class='primy' value='"+i+"'  type='radio'  name='peopleType1'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><div class='rdoField'><input disabled class='benefy' value='"+i+"' type='checkbox' name='peopleType2'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
+        bodyHTML+="</tr>";
+		$('#' + table).append(bodyHTML);
+		if(data[i].ynPrimaryPeople){
+			$('.primy')[i].checked = true;
+		}
+    }
+	defaultValuesRes();
+    onChangePrimaryRes();
+	deleteElementTableRes(table);
+	
     return statusActuales;
 }
 
@@ -2286,10 +2329,9 @@ function getDatosReservation(id){
 			var c = parseFloat(data['CollectionCost']);
 	    	$("#CollectionCostRes").text(c);
 			if(data["peoples"].length > 0){
-				
+				//var status = drawTableSinHeadReservationPeople(data["peoples"], "peoplesReservation");
 				var status = drawTableSinHeadReservationPeople(data["peoples"], "peoplesReservation");
 				ajaxSelectsPeopleStatus(status);
-				
 			}
 	    	if(data["unities"].length > 0){
 				drawTableSinHeadReservation(data["unities"], "tableUnidadesReservation");
@@ -4189,4 +4231,36 @@ function creditCardMsgR(data){
 		alertify.error(data["mensaje"]);
 	}
 	
+}
+
+function savePeopleRes(){
+	
+	console.log(getValueTablePersonasRes('peopleContractRes'))
+	
+	var personas = getValueTablePersonasRes('peopleContractRes');
+	if (personas.length<=0) {
+			alertify.error("You must add at least one person");
+	}else{
+		msgReservation = alertify.success('Saving People, please wait ....', 0);
+			$.ajax({
+				data: {
+					peoples: getValueTablePersonasRes('peopleContractRes'),
+					id: $("#idReservationX").text(),
+				},
+				type: "POST",
+				dataType:'json',
+				url: 'reservation/savePeople'
+			}).done(function( data, textStatus, jqXHR ) {
+				//showAlert(false,"Saving changes, please wait ....",'progressbar');
+				msgReservation.dismiss();
+				if(data.items.length > 0){
+					var status = drawTableSinHeadReservationPeople(data.items, "peoplesReservation");
+					ajaxSelectsPeopleStatus(status);
+				}
+			}).fail(function( jqXHR, textStatus, errorThrown ) {
+				msgReservation.dismiss();
+				alertify.error("Try again");
+			});
+		//}
+	}
 }

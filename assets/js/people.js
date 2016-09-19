@@ -301,24 +301,18 @@ function showModal(id){
 	dialogUser = createModalDialog(id);
 	dialogUser.dialog('open');
 	if(id == 0){
-		
 		//$('.dialogModalButtonSecondary').hide();
 		//$("#tabsModalPeople").hide();
 		
-		
 		dialogUser.dialog( "option", "title", "People > Create person" );
-		
 		//$('#imgCloseModal').off();
 		//$('.imgCloseModal').on('click', function() {  hideModal(); });
-	
 	}else{
-		
 		dialogUser.dialog( "option", "title", "People > Edit person" );
 		/*$('.dialogModalButtonSecondary').show();
 		$("#tabsModalPeople").show();
 		$('#dialog-User .contentModal').css('height', "90%" );
-		getInfoPeople(id);*/
-		
+		getInfoPeople(id);*/	
 	}
 	/**/
 }

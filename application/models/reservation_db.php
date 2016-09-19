@@ -35,6 +35,7 @@ class Reservation_db extends CI_Model {
 		$this->db->join('tblEmail e', 'e.pkEmail = pe.fkEmailId', 'LEFT');
 		//$this->db->where('rpa.ynPrimaryPeople', '1');
 		$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
+		$this->db->where('rpa.ynActive',1);
         if (!is_null($filters)){
             if($filters['words'] != false){
                 if ($filters['checks'] != false){
@@ -63,6 +64,7 @@ class Reservation_db extends CI_Model {
 			$this->db->where('rpa.ynPrimaryPeople', '1');
 			//$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
 		}
+		
         if($sql!=""){
 		
            $this->db->where($sql, NULL);
@@ -160,6 +162,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->join('tblPeopleAddress PAD', 'PAD.fkPeopleId = P.pkPeopleId', 'left');
         $this->db->join('tblAddress AD', 'AD.pkAddressid = PAD.fkAddressId', 'left');
         $this->db->where('fkResId', $string);
+		$this->db->where('PC.ynActive',1);
         $this->db->order_by('ID', 'DESC');
         $query = $this->db->get();
 
@@ -473,6 +476,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             $this->db->where('a.fkAccTypeId = ', $typeAcc);
             $this->db->where('att.AbsAmount > 0');
         }
+		$this->db->where('rpa.ynActive',1);
         $query = $this->db->get();
         return $query->result();
     }
@@ -514,6 +518,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->join( 'tblAcctype att', 'att.pkAcctypeId = a.fkAccTypeId' );
         $this->db->where( 'rpa.fkResId = ', $id );
         $this->db->where( 'rpa.ynPrimaryPeople = 1' );
+		$this->db->where('rpa.ynActive',1);
         $this->db->order_by('att.pkAcctypeId ASC');
         $query = $this->db->get();
         return $query->result();
@@ -813,6 +818,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->from('tblResPeopleAcc');
         $this->db->where('fkResId', $string);
         $this->db->where('YnPrimaryPeople', 1);
+		$this->db->where('ynActive',1);
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
             $row = $query->row();
@@ -971,6 +977,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->from('tblAcc a');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId and rpa.fkResId='.$idContrato, 'inner');
         $this->db->where('a.fkAccTypeId = 6');
+		$this->db->where('rpa.ynActive',1);
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {
@@ -1011,6 +1018,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->from('tblAcc a');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId and rpa.fkResId='.$idContrato, 'inner');
         $this->db->where('a.fkAccTypeId = 6');
+		$this->db->where('rpa.ynActive',1);
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {
@@ -1120,6 +1128,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->from('tblResPeopleAcc');
         $this->db->where('fkAccId', $idAccount);
         $this->db->where('ynPrimaryPeople', 1);
+		$this->db->where('ynActive',1);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )
@@ -1258,6 +1267,15 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 		$this->db->join('tblRes r', 'r.fkStatusId = pkStatusId and r.pkResId = ' . $idRes, 'left');
 		$this->db->where('sts.fkStatusTypeId', 2);
 		$this->db->order_by('sts.Sequence', 'ASC');
+		$query = $this->db->get();
+        return $query->result();
+	}
+	
+	public function getResPeople($idRes){
+		$this->db->select('rpa.pkResPeopleAccId as ID, rpa.fkPeopleId, rpa.ynPrimaryPeople, rpa.YnBenficiary, rpa.ynActive, rpa.fkAccId ');
+		$this->db->from('tblResPeopleAcc rpa');
+		$this->db->where('rpa.ynActive',1);
+		$this->db->where('rpa.fkResId', $idRes);
 		$query = $this->db->get();
         return $query->result();
 	}

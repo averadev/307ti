@@ -1600,6 +1600,71 @@ private function comprubaArray($valor, $array){
 		}
 	}
 	
+	public function savePeople(){
+		if($this->input->is_ajax_request()){
+			$id = $_POST['id'];
+			//$_POST['peoples'][$i]["id"],
+			$people = $_POST['peoples'];
+			$resPeople = $this->reservation_db->getResPeople($id);
+			foreach($resPeople as $item){
+				$exist = 0;
+				foreach($people as $person){
+					if($item->fkPeopleId == $person['id']){
+						//echo "hola ";
+						$exist = 1;
+						$update = [
+							"ynPrimaryPeople"	=> $person['primario'],
+							"YnBenficiary"		=> $person['beneficiario'],
+							"ynActive"			=> 1,
+							"MdBy"             	=> $this->nativesessions->get('id'),
+							"MdDt"				=> $this->getToday()
+						];
+						$condicion = "pkResPeopleAccId = " . $item->ID ;
+						$this->reservation_db->updateReturnId('tblResPeopleAcc', $update, $condicion);
+						$person['exist'] = 1;
+					}
+				}
+				if($exist == 0){
+					$update = [
+						"ynPrimaryPeople"	=> 0,
+						"YnBenficiary"		=> 0,
+						"ynActive"			=> 0,
+						"MdBy"             	=> $this->nativesessions->get('id'),
+						"MdDt"				=> $this->getToday()
+					];
+					$condicion = "pkResPeopleAccId = " . $item->ID;
+					$this->reservation_db->updateReturnId('tblResPeopleAcc', $update, $condicion);
+				}
+			}
+			foreach($people as $person){
+				$exist = 0;
+				foreach($resPeople as $item){
+					if($item->fkPeopleId == $person['id']){
+						$exist = 1;
+					}
+				}
+				if($exist == 0){
+					if($resPeople > 0){
+						$acc = $resPeople[0];
+						$personas = [
+							"fkResId"    		=> $id,	
+							"fkPeopleId"        => $person["id"],
+							"fkAccId"           => $acc->fkAccId,
+							"ynPrimaryPeople"   => $person['primario'],
+							"ynBenficiary"		=> $person['beneficiario'],
+							"ynActive"          => 1,
+							"CrBy"             	=> $this->nativesessions->get('id'),
+							"CrDt"				=> $this->getToday()
+						];
+						$this->reservation_db->insertReturnId('tblResPeopleAcc ', $personas);
+					}
+				}
+			}
+			$data = $this->reservation_db->getPeopleReservation($id);
+			echo json_encode( array( 'success' => true, 'message' => "People save", 'items' => $data) );
+		}
+	}
+	
 	
 	/*****************************************/
 	/**********Funciones genericas************/

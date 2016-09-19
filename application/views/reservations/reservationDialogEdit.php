@@ -121,49 +121,72 @@
 								</span>
 							</a>
 						</div>
-						<table id="peopleContractRes" width="100%" class="cell-border" >
-							<thead>
-								<tr class="trColspan" >
-									<th colspan="8" class="thColspan" >People</th>
-								</tr> 
-								<tr>
-									<th class="cellEdit" >Check In</th>
-									<th class="cellEdit" >ID</th>
-									<th class="cellGeneral">Name</th>
-									<th class="cellGeneral">Last Name</th>
-									<th class="cellGeneral" >Address</th>
-									<th class="cellGeneral" >Primary</th>
-									<th class="cellGeneral" >Beneficiary</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody id="peoplesReservation"></tbody>
-						</table>
 					</div>
 				</div>
+				</br>
+				<!-- people -->
+				<div class="containerPeople">
+					<div class="row">
+						<div class="small-12 columns">
+                            <!--<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>-->
+							<a id="btnAddPeopleResEdit" attr_table="peopleContractRes" class="btn btn-primary spanSelect">
+								<div class="label">Add</div>
+								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+							</a>
+							<a id="btnSavePeopleRes" class="btn btn-primary spanSelect">
+								<div class="label">Save peoples</div>
+								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+							</a>
+                        </div>
+						<div class="small-12 columns">
+							<table id="peopleContractRes" width="100%" class="cell-border">
+								<thead>
+									<tr class="trColspan" >
+										<th colspan="8" class="thColspan" >People</th>
+									</tr> 
+									<tr>
+										<th class="cellEdit" >Check In</th>
+										<th class="cellEdit" >ID</th>
+										<th class="cellGeneral">Name</th>
+										<th class="cellGeneral">Last Name</th>
+										<th class="cellGeneral" >Address</th>
+										<th class="cellGeneral" >Main</th>
+										<th class="cellGeneral" >Secondary</th>
+										<th class="cellGeneral">Delete</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody id="peoplesReservation"></tbody>
+							</table>
+							
+						</div>
+					</div>
+				</div>
+				
 				<!-- Unidades -->
 				<div class="containerContract" style="margin-top:10px">
-				
                     <div class="row">
-                        <table id="tableUnidades" width="100%" class="cell-border">
-                            <thead>
-								<tr class="trColspan">
-									<th colspan="9">Units</th>
-								</tr>
-								<tr>
-								<th class="cellEdit" >ID</th>
-									<th class="cellEdit" >Code</th>
-									<th class="cellGeneral">Description</th>
-									<th class="cellGeneral">Price</th>
-									<th class="cellGeneral" ># Week</th>
-									<th class="cellGeneral" >Fisrt Year OCC</th>
-									<th class="cellGeneral" >Last Year OCC</th>
-									<th class="cellGeneral" >OCCYear</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody id="tableUnidadesReservation"></tbody>
-                        </table>
+						<div class="small-12 columns">
+							<table id="tableUnidades" width="100%" class="cell-border">
+								<thead>
+									<tr class="trColspan">
+										<th colspan="9">Units</th>
+									</tr>
+									<tr>
+									<th class="cellEdit" >ID</th>
+										<th class="cellEdit" >Code</th>
+										<th class="cellGeneral">Description</th>
+										<th class="cellGeneral">Price</th>
+										<th class="cellGeneral" ># Week</th>
+										<th class="cellGeneral" >Fisrt Year OCC</th>
+										<th class="cellGeneral" >Last Year OCC</th>
+										<th class="cellGeneral" >OCCYear</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody id="tableUnidadesReservation"></tbody>
+							</table>
+						</div>
                     </div>
                 </div>
 			</fieldset>

@@ -40,7 +40,7 @@
                     <div class="row">
                         <div class="small-12 columns">
                             <!--<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>-->
-							<a id="btnAddPeopleRes" class="btn btn-primary spanSelect">
+							<a id="btnAddPeopleRes" attr_table="tablePeopleResSelected" class="btn btn-primary spanSelect">
 								<div class="label">Add</div>
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
@@ -49,6 +49,7 @@
                             <table id="tablePeopleResSelected" width="100%">
                                 <thead>
 									<tr>
+										
 										<th class="cellEdit" >ID</th>
 										<th class="cellGeneral">Name</th>
 										<th class="cellGeneral">Last Name</th>
@@ -56,6 +57,7 @@
 										<th class="cellGeneral" >Main</th>
 										<th class="cellGeneral" >Secondary</th>
 										<th class="cellGeneral" >Beneficiary</th>
+										<th class="cellGeneral">Delete</th>
 										<th></th>
 									</tr>
                                 </thead>
