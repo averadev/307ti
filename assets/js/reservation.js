@@ -28,6 +28,7 @@ $(document).ready(function(){
 	/*var dialogAddTour = addTourContract();*/
 	var dialogAccount = opcionAccountRes();
 	var dialogStatusRes = modalStatusRes();
+	var dialogNewOccRes = modalNewOccRes();
 	
 
 	//$("#newReservation").off();
@@ -217,6 +218,15 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 		}
 		mocalCreditLimit = modalGeneral2(modalPropiedades, ajaxData);
 		mocalCreditLimit.dialog( "open" );
+	});
+	
+	$(document).off( 'click', '#btnNewOccRes');
+	$(document).on( 'click', '#btnNewOccRes', function () {
+		if (dialogNewOccRes!=null) {
+			dialogNewOccRes.dialog( "destroy" );
+		}
+		dialogNewOccRes = modalNewOccRes();
+		dialogNewOccRes.dialog("open");
 	});
 
 
@@ -3067,6 +3077,8 @@ function getWeeksRes(id){
 			if(data.length > 0){
 				//drawTableIdOcupacionRes(data,);
 				drawTable2(data,"tableCOccupationSelected", false, "");
+				$(document).off('click','.btnDeleteOccRes')
+				$(document).on('click','.btnDeleteOccRes', function(){ confirmDeleteOccRes(this); });
 			}else{
 				noResultsTable(div, "tableCOccupationSelected", "No results found");
 			}
@@ -3075,6 +3087,39 @@ function getWeeksRes(id){
 	    },
 	    error: function(){
 	        alertify.error("Try again");
+			showLoading(div, false);
+	    }
+	});
+}
+
+function confirmDeleteOccRes(selector){
+	var idOcc = $(selector).attr('attr_id');
+	var msg = "sure you want to delete the occupation?";
+	alertify.confirm('Delete occupation.', msg, 
+		function(){ deleteOccRes(idOcc); },
+		function(){ }
+	);
+}
+
+function deleteOccRes(idOcc){
+	var div = "#content-OccupationRes";
+	showLoading(div, true);
+	$.ajax({
+	    data:{
+	        idResOcc: idOcc
+	    },
+	    type: "POST",
+	    url: "reservation/deleteResOcc",
+	    dataType:'json',
+	    success: function(data){
+	    	showLoading(div, false);
+			alertify.success(data.message);
+			var id = $("#idReservationX").text();
+			getWeeksRes(id);
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+			showLoading(div, false);
 	    }
 	});
 }
@@ -4263,4 +4308,41 @@ function savePeopleRes(){
 			});
 		//}
 	}
+}
+
+function modalNewOccRes(){
+	var div = "#dialog-NewOccRes";	
+	dialog = $(div).dialog({
+		open : function (event){
+			if ($(div).is(':empty')) {
+				showLoading(div, true);
+				$(this).load ("reservation/modalNewOccRes" , function(){
+		    		showLoading(div, false);
+		    		/*$("#dialog-User").hide();
+	            	selectTable("tablePeople");*/
+	    		});
+			}
+		},
+		autoOpen: false,
+		height: maxHeight,
+		width: "70%",
+		modal: true,
+		buttons: [{
+			text: "Cancel",
+			"class": 'dialogModalButtonCancel',
+			click: function() {
+				$(this).dialog('close');
+			}
+		},{
+			text: "Add",
+			"class": 'dialogModalButtonAccept',
+			click: function() {
+				
+			}
+		}],
+		close: function() {
+			$('#dialog-NewOccRes').empty();
+		}
+	});
+	return dialog;
 }
