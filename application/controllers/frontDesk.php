@@ -950,15 +950,6 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
            
 
             $objPHPExcel->getActiveSheet()->getRowDimension($head)->setRowHeight(30);
-           /* $cell = "A" . $firtCell;
-			$cell2 = $letter . $num;
-			//$this->excel->getActiveSheet()->setAutoFilter($cell . ":" . $cell2);*/
-			//$styleArray = array('font' => array('bold' => true));
-			//$this->excel->getActiveSheet()->getStyle($cell . ":" . $cell2)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-			//$this->excel->getActiveSheet()->getStyle($cell . ":" . $cell2)->getFill()->getStartColor()->setARGB('99ccff');
-			//$this->excel->getActiveSheet()->getStyle($cell . ":" . $cell2)->applyFromArray($styleArray);
-
-
 
             $estilos = array(
                 'font'    => array(
@@ -982,7 +973,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 			        array(
 			            'fill' => array(
 			                'type' => PHPExcel_Style_Fill::FILL_SOLID,
-			                'color' => array('rgb' => '99ccff')
+			                'color' => array('rgb' => 'b77648')
 			            )
 			        )
 			    );
