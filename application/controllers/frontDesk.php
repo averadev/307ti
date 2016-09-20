@@ -173,7 +173,7 @@ public function createTrxAudit(){
 				$this->insertAuditTransaction($RS[$j], $Precio, $Trx[$i]);
 			}	
 		}
-		echo json_encode(["mensaje" => "save transactions"]);
+		echo json_encode(["mensaje" => "Save Correctly"]);
 		}
 }
 
@@ -250,9 +250,8 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 	public function getAuditUnits(){
 		if($this->input->is_ajax_request()){
 			$filtros = $this->receiveWords($_POST);
-			//var_dump($filtros);
 			$data = $this->frontDesk_db->getAuditUnits($filtros);
-			//$this->makeExcel($data, "Audit");
+			//var_dump($filtros);
 			echo json_encode(array('items' => $data));
 		}
 	}
@@ -266,7 +265,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 			$sql['dates'] = $this->receiveWords($dates);
 		}
 		$data = $this->frontDesk_db->getAuditUnits($sql);
-		$this->makeExcel($data, "AuditReportunits");
+		$this->makeExcel($data, "AuditReportunits", $sql);
 	}
 
 	public function getAuditTrxReport(){
@@ -278,7 +277,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		$sql['words'] = $this->receiveWords($sql['words']);
 		$data = $this->frontDesk_db->getAuditTrx($sql['words']);
 		//var_dump($sql);
-		$this->makeExcel($data, "AuditReportTrx");
+		$this->makeExcel($data, "AuditReportTrx", $sql);
 	}
 	
 	public function getAuditTrx(){
@@ -903,19 +902,80 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		$objWriter->save('php://output');
 		//$objWriter->save('C:/xampp/htdocs//307ti/assets/pdf/');
 	}
-	public function makeExcel($json, $nombre){
+	public function makeExcel($json, $nombre, $filtros){
 			$date = new DateTime();
-            $objPHPExcel = new PHPExcel();
-            $lastColumn = $objPHPExcel->getActiveSheet()->getHighestColumn();
+			$objPHPExcel = new PHPExcel();
+			 $lastColumn = $objPHPExcel->getActiveSheet()->getHighestColumn();
+			//activate worksheet number 1
+			$objPHPExcel->setActiveSheetIndex(0);
+			//name the worksheet
+			$objPHPExcel->getActiveSheet()->setTitle("report 1");
+			//$objPHPExcel->excel->getActiveSheet()->setTitle('frontdesk report2');
+			//set cell A1 content with some text
+			$objPHPExcel->getActiveSheet()->setCellValue('C1', 'Front Desk');
+			//change the font size
+			$objPHPExcel->getActiveSheet()->getStyle('C1')->getFont()->setSize(20);
+			//make the font become bold
+			$objPHPExcel->getActiveSheet()->getStyle('C1')->getFont()->setBold(true);
+			//merge cell A1 until D1
+			$objPHPExcel->getActiveSheet()->mergeCells('C1:J3');
+			//set aligment to center for that merged cell (A1 to D1)
+			$objPHPExcel->getActiveSheet()->getStyle('C1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			
+			$objPHPExcel->getActiveSheet()->setCellValue('C5', 	$nombre);
+			$objPHPExcel->getActiveSheet()->getStyle('C5')->getFont()->setSize(16);
+			$objPHPExcel->getActiveSheet()->getStyle('C5')->getFont()->setBold(true);
+			$objPHPExcel->getActiveSheet()->mergeCells('C5:J5');
+			$objPHPExcel->getActiveSheet()->getStyle('C5')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Logo');
+			$objDrawing->setDescription('Logo');
+			$logo = APPPATH."/third_party/logo.jpg";
+			$objDrawing->setPath($logo);
+			$objDrawing->setCoordinates('A1');
+			$objDrawing->setHeight(88);
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+           
             $inicio = $lastColumn;
 
-            $head = 1;
+            $head = 10;
             $activa = 0;
-
+            $c = 0;
             foreach ($json[0] as $key => $value) {
                 $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($lastColumn.$head, $key);
-                $lastColumn++;
+                if ($c+1<count((array)$json[0])) {
+                	$lastColumn++;
+                }
+                $c++;
             }
+            $objPHPExcel->getActiveSheet()->getRowDimension($head)->setRowHeight(30);
+            $c = 0;
+            $head = 7;
+            if (isset($filtros['dates'])) {
+            	foreach ($filtros['dates'] as $key => $value) {
+                	$objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio.$head, $key." ".$value);
+	                if ($c+1<sizeof($filtros['dates'])) {
+	                	$lastColumn++;
+	                }
+	                $c++;
+	            }
+            }
+            $c = 0;
+            $head = 8;
+
+	        if (isset($filtros['words']) && !empty($filtros['words'])) {
+	            foreach ($filtros['words'] as $key => $value) {
+	                $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio.$head, $key." ".$value);
+		            if ($c+1<sizeof($filtros['words'])) {
+		            	$lastColumn++;
+		            }
+		            $c++;
+		        }
+		    }
+           
+
+
             $estilos = array(
                 'font'    => array(
                     'bold'      => true
@@ -931,10 +991,19 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 				)
             );
 
-            $rango = $inicio."1".":".$lastColumn."1";
-            //var_dump($rango);
+            $rango = $inicio."10".":".$lastColumn."10";
+			$objPHPExcel->getActiveSheet()
+			    ->getStyle($rango)
+			    ->applyFromArray(
+			        array(
+			            'fill' => array(
+			                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+			                'color' => array('rgb' => 'b77648')
+			            )
+			        )
+			    );
             $objPHPExcel->getActiveSheet()->getStyle($rango)->applyFromArray($estilos);
-            //$objPHPExcel->getActiveSheet()->getStyle($rango)->applyFromArray($estilos);
+
             $objPHPExcel->getActiveSheet()->setAutoFilter($rango);
 
             for ($i = $inicio; $i != $lastColumn ; $i++) {
@@ -944,7 +1013,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
             for ($j=0; $j <sizeof($json); $j++) {
                 $inicio = "A";
                 foreach ($json[$j] as $key => $value) {
-                    $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio++.($j+2), $value);
+                    $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio++.($j+11), $value);
                 }
             }
             // Rename worksheet

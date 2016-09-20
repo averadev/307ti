@@ -372,31 +372,43 @@ Class frontDesk_db extends CI_MODEL
     }
 	public function getAuditUnits($filters){
 		$this->db->distinct();
-		$this->db->select("R.pkResId, U.UnitCode, C.Date, FP.FloorPlanDesc, OC.OccTypeDesc, R.ResConf, P.LName, P.Name");
+		$this->db->select("R.pkResId, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc, ES.StatusDesc, OC.OccTypeDesc, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name");
 		$this->db->from("tblRes R");
-		$this->db->join('tblResInvt RI', '(ri.fkResId =  CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)');
-		$this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
-		$this->db->join('tblResOcc RO', 'RO.fkResInvtId = RI.pkResInvtId', 'inner');
-		$this->db->join('tblCalendar C', 'RO.fkCalendarId = C.pkCalendarId', 'inner');
-		$this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
-		$this->db->join('tblResPeopleAcc RP', '(RP.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)', 'inner');
-		$this->db->join('tblPeople P', 'RP.fkPeopleId = P.pkPeopleId', 'inner');
-		$this->db->join('tblOccType OC', 'OC.pkOccTypeId = RO.fkOccTypeId', 'inner');
 		$this->db->join('tblResType RT', 'RT.pkResTypeId = R.fkResTypeId');
-		$this->db->where("C.pkCalendarId = (select C.pkcalendarId from tblCalendar C where C.Date = '".$filters['dates']['dateAudit']."')");
+		$this->db->join('tblResInvt RI', '(RI.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)');
+		$this->db->join('tblUnit U', 'U.pkUnitId = RI.fkUnitId', 'inner');
+		$this->db->join('tblResPeopleAcc RP', '(RP.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)', 'inner');
+		$this->db->join('tblPeople P', ' P.pkPeopleId = RP.fkPeopleId', 'inner');
+		$this->db->join('tblResOcc RO', 'RO.fkResId = R.pkResId', 'inner');
+		$this->db->join('tblOccType OC', 'OC.pkOccTypeId = RO.fkOccTypeId', 'inner');
+		$this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId', 'inner');
+		$this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
+		  $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) = ', $filters['dates']['dateAudit']);
 		$this->db->where("RP.ynPrimaryPeople", 1);
-		$this->db->where('(R.fkResTypeId = 6 or R.fkResTypeId = 7)');
 		if ($filters['words']['unitAudit'] != 0) {
 			$this->db->where("U.UnitCode", $filters['words']['unitAudit']);
 		}
-		if ($filters['words']['occStatusAudit'] != 0) {
-			if($filters['words']['occStatusAudit'] == 2){
-				$this->db->where("R.fkStatusId", 15);
+		$condicion = '';
+		if (isset($filters['words']['statusAudit'])) {
+			for ($i=0; $i < sizeof($filters['words']['statusAudit']); $i++) { 
+				$condicion .= 'ES.pkStatusId = '.$filters['words']['statusAudit'][$i];
+				if ($i+1 < sizeof($filters['words']['statusAudit'])) {
+					$condicion .=' or ';
+				}
 			}
-			if($filters['words']['occStatusAudit'] == 3){
-				$this->db->where("R.fkStatusId", 16);
-			}
+			$this->db->where("( " . $condicion . ")");
 		}
+		$condicion = '';
+		if (isset($filters['words']['occTypeAudit'])) {
+			for ($i=0; $i < sizeof($filters['words']['occTypeAudit']); $i++) { 
+				$condicion .= 'OC.pkOccTypeId = '.$filters['words']['occTypeAudit'][$i];
+				if ($i+1 < sizeof($filters['words']['occTypeAudit'])) {
+					$condicion .=' or ';
+				}
+			}
+			$this->db->where("( " . $condicion . ")");
+		}
+
 		$query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
@@ -767,6 +779,7 @@ Class frontDesk_db extends CI_MODEL
         $this->db->from('tblAcc a');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId and rpa.fkResId='.$idContrato, 'inner');
         $this->db->where('rpa.ynPrimaryPeople', 1);
+        $this->db->where('a.fkAccTypeId', 6);
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {

@@ -37,7 +37,7 @@ class Reservation extends CI_Controller {
 				$acc = $this->createAcc();
 				//$this->insertTarjeta($idContrato, $acc);
 				$this->insertPeoples($idContrato, $acc);
-				$this->makeTransactions($idContrato);
+				//$this->makeTransactions($idContrato);
 				$this->createUnidades($idContrato);
 				//$this->createDownPayment($idContrato);
 				$this->createGifts($idContrato);

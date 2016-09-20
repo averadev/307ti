@@ -463,7 +463,7 @@
 						<fieldset class="large-12 columns fieldsetFilter">
 							<div class="row">
 								<!-- Arrival Date -->
-								<div class="small-12 large-2 columns">
+								<div class="small-12 large-3 columns">
 									<label id="dateAuditLabel" class="text-left">Date
 										<div class="input-group date">
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
@@ -472,7 +472,7 @@
 									</label>
 								</div>
 								<!-- Departure Date -->
-								<div class="small-12 large-2 columns">
+								<div class="small-12 large-3 columns">
 									<label id="unitAuditLabel" class="text-left">Unit
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-home"></i></span>
@@ -496,7 +496,7 @@
 								</div>
 								<!-- Interval -->
 								<div class="small-12 large-3 columns">
-									<label id="occTypeLabel" class="text-left">OccType
+									<label id="occTypeLabel" class="text-left">Occupancy Type Group
 											<select id="occTypeAudit" class="input-group-field round"  multiple="multiple">
 												<?php
 												foreach($OccType as $item){
@@ -506,19 +506,6 @@
 												}
 												?>
 											</select>
-									</label>
-								</div>
-								<!-- Interval -->
-								<div class="small-12 large-2 columns">
-									<label id="occTypeLabel" class="text-left">OccStatus
-										<div class="caja" >
-											<select id="occStatusAudit" class="txtSearch input-group-field round">
-											<option value="0">Choose an option</option>
-												<option value="1">All</option>
-												<option value="2">Ocupadas</option>
-												<option value="3">Desocupadas</option>
-											</select>
-										</div>
 									</label>
 								</div>
 							</div>
@@ -889,6 +876,6 @@
 <div id="dialog-CreditLimit"  title="Credit Limit" style="display: none;"></div>
 <div id="dialog-ExchangeRate"  title="FrontDesk > New Exchange Rate" style="display: none;"></div>
 <div id="dialog-StatusRes"  title="Status" style="display: none;"></div>
-<div id="dialog-addTransactionsAudit"  title="Status" style="display: none;"></div>
+<div id="dialog-addTransactionsAudit"  title="Add Transaccions" style="display: none;"></div>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>reservation.js"></script>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>frontDesk.js"></script>
