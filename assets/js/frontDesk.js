@@ -233,7 +233,7 @@ function getFrontDesk(order, page){
 	}else if(section == "section7"){
 		filters = {};
 		dates = getDates(["dateAudit"]);
-		words = getWords(["unitAudit", "occStatusAudit"]);
+		words = getWords(["unitAudit"]);
 		words.statusAudit = OCCSTATUS.multipleSelect('getSelects');
 		words.occTypeAudit = OCCTYPE.multipleSelect('getSelects');
 		options = {};
@@ -358,7 +358,7 @@ function cleanAuditUnit(){
 	//$("#occTypeAudit").val(0);
 	OCCTYPE.multipleSelect("uncheckAll");
 	OCCSTATUS.multipleSelect("uncheckAll");	
-	$("#occStatusAudit").val(0);	
+	//$("#occStatusAudit").val(0);	
 }
 function cleanAuditUnitTRX(){
 	$("#userTrxAudit").val('');
@@ -1534,7 +1534,7 @@ function addHTMLAddTrx(data){
 }
 
 function saveTrxAudit(){
-	console.log("YO");
+	msgTrxAudit = alertify.success('Saving changes, please wait <i class="fa fa-spinner fa-spin fa-fw"></i>', 0);
 	var TRXS = AUDITTRX.multipleSelect('getSelects');
 	var RSS = getArrayValuesColumnTable("tablaAuditUnits", 1);
 	var ajaxDatos =  {
@@ -1551,13 +1551,14 @@ function saveTrxAudit(){
 }
 
 function saveExitoTrx(data){
+	msgTrxAudit.dismiss();
 	alertify.success(data.mensaje);
 }
 
 function generateReportAuditUnits(){
 	filters = {};
 		dates = getDates(["dateAudit"]);
-		words = getWords(["unitAudit", "occStatusAudit"]);
+		words = getWords(["unitAudit"]);
 		words.statusAudit = OCCSTATUS.multipleSelect('getSelects');
 		words.occTypeAudit = OCCTYPE.multipleSelect('getSelects');
 		options = {};

@@ -173,7 +173,7 @@ public function createTrxAudit(){
 				$this->insertAuditTransaction($RS[$j], $Precio, $Trx[$i]);
 			}	
 		}
-		echo json_encode(["mensaje" => "save transactions"]);
+		echo json_encode(["mensaje" => "Save Correctly"]);
 		}
 }
 
@@ -905,17 +905,61 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 	}
 	public function makeExcel($json, $nombre){
 			$date = new DateTime();
-            $objPHPExcel = new PHPExcel();
-            $lastColumn = $objPHPExcel->getActiveSheet()->getHighestColumn();
+			$objPHPExcel = new PHPExcel();
+			 $lastColumn = $objPHPExcel->getActiveSheet()->getHighestColumn();
+			//activate worksheet number 1
+			$objPHPExcel->setActiveSheetIndex(0);
+			//name the worksheet
+			$objPHPExcel->getActiveSheet()->setTitle("report 1");
+			//$objPHPExcel->excel->getActiveSheet()->setTitle('frontdesk report2');
+			//set cell A1 content with some text
+			$objPHPExcel->getActiveSheet()->setCellValue('C1', 'Front Desk');
+			//change the font size
+			$objPHPExcel->getActiveSheet()->getStyle('C1')->getFont()->setSize(20);
+			//make the font become bold
+			$objPHPExcel->getActiveSheet()->getStyle('C1')->getFont()->setBold(true);
+			//merge cell A1 until D1
+			$objPHPExcel->getActiveSheet()->mergeCells('C1:J3');
+			//set aligment to center for that merged cell (A1 to D1)
+			$objPHPExcel->getActiveSheet()->getStyle('C1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			
+			$objPHPExcel->getActiveSheet()->setCellValue('C5', 	$nombre);
+			$objPHPExcel->getActiveSheet()->getStyle('C5')->getFont()->setSize(16);
+			$objPHPExcel->getActiveSheet()->getStyle('C5')->getFont()->setBold(true);
+			$objPHPExcel->getActiveSheet()->mergeCells('C5:J5');
+			$objPHPExcel->getActiveSheet()->getStyle('C5')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Logo');
+			$objDrawing->setDescription('Logo');
+			$logo = APPPATH."/third_party/logo.jpg";
+			$objDrawing->setPath($logo);
+			$objDrawing->setCoordinates('A1');
+			$objDrawing->setHeight(88);
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+           
             $inicio = $lastColumn;
 
-            $head = 1;
+            $head = 8;
             $activa = 0;
 
             foreach ($json[0] as $key => $value) {
                 $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($lastColumn.$head, $key);
                 $lastColumn++;
             }
+           
+
+            $objPHPExcel->getActiveSheet()->getRowDimension($head)->setRowHeight(30);
+           /* $cell = "A" . $firtCell;
+			$cell2 = $letter . $num;
+			//$this->excel->getActiveSheet()->setAutoFilter($cell . ":" . $cell2);*/
+			//$styleArray = array('font' => array('bold' => true));
+			//$this->excel->getActiveSheet()->getStyle($cell . ":" . $cell2)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+			//$this->excel->getActiveSheet()->getStyle($cell . ":" . $cell2)->getFill()->getStartColor()->setARGB('99ccff');
+			//$this->excel->getActiveSheet()->getStyle($cell . ":" . $cell2)->applyFromArray($styleArray);
+
+
+
             $estilos = array(
                 'font'    => array(
                     'bold'      => true
@@ -931,10 +975,19 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 				)
             );
 
-            $rango = $inicio."1".":".$lastColumn."1";
-            //var_dump($rango);
+            $rango = $inicio."8".":".$lastColumn."8";
+			$objPHPExcel->getActiveSheet()
+			    ->getStyle($rango)
+			    ->applyFromArray(
+			        array(
+			            'fill' => array(
+			                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+			                'color' => array('rgb' => '99ccff')
+			            )
+			        )
+			    );
             $objPHPExcel->getActiveSheet()->getStyle($rango)->applyFromArray($estilos);
-            //$objPHPExcel->getActiveSheet()->getStyle($rango)->applyFromArray($estilos);
+
             $objPHPExcel->getActiveSheet()->setAutoFilter($rango);
 
             for ($i = $inicio; $i != $lastColumn ; $i++) {
@@ -944,7 +997,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
             for ($j=0; $j <sizeof($json); $j++) {
                 $inicio = "A";
                 foreach ($json[$j] as $key => $value) {
-                    $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio++.($j+2), $value);
+                    $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio++.($j+9), $value);
                 }
             }
             // Rename worksheet
