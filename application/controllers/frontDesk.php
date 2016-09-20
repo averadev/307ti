@@ -250,9 +250,8 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 	public function getAuditUnits(){
 		if($this->input->is_ajax_request()){
 			$filtros = $this->receiveWords($_POST);
-			//var_dump($filtros);
 			$data = $this->frontDesk_db->getAuditUnits($filtros);
-			//$this->makeExcel($data, "Audit");
+			//var_dump($filtros);
 			echo json_encode(array('items' => $data));
 		}
 	}
@@ -266,7 +265,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 			$sql['dates'] = $this->receiveWords($dates);
 		}
 		$data = $this->frontDesk_db->getAuditUnits($sql);
-		$this->makeExcel($data, "AuditReportunits");
+		$this->makeExcel($data, "AuditReportunits", $sql);
 	}
 
 	public function getAuditTrxReport(){
@@ -278,7 +277,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		$sql['words'] = $this->receiveWords($sql['words']);
 		$data = $this->frontDesk_db->getAuditTrx($sql['words']);
 		//var_dump($sql);
-		$this->makeExcel($data, "AuditReportTrx");
+		$this->makeExcel($data, "AuditReportTrx", $sql);
 	}
 	
 	public function getAuditTrx(){
@@ -903,7 +902,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		$objWriter->save('php://output');
 		//$objWriter->save('C:/xampp/htdocs//307ti/assets/pdf/');
 	}
-	public function makeExcel($json, $nombre){
+	public function makeExcel($json, $nombre, $filtros){
 			$date = new DateTime();
 			$objPHPExcel = new PHPExcel();
 			 $lastColumn = $objPHPExcel->getActiveSheet()->getHighestColumn();
@@ -940,16 +939,42 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
            
             $inicio = $lastColumn;
 
-            $head = 8;
+            $head = 10;
             $activa = 0;
-
+            $c = 0;
             foreach ($json[0] as $key => $value) {
                 $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($lastColumn.$head, $key);
-                $lastColumn++;
+                if ($c+1<count((array)$json[0])) {
+                	$lastColumn++;
+                }
+                $c++;
             }
+            $objPHPExcel->getActiveSheet()->getRowDimension($head)->setRowHeight(30);
+            $c = 0;
+            $head = 7;
+            if (isset($filtros['dates'])) {
+            	foreach ($filtros['dates'] as $key => $value) {
+                	$objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio.$head, $key." ".$value);
+	                if ($c+1<sizeof($filtros['dates'])) {
+	                	$lastColumn++;
+	                }
+	                $c++;
+	            }
+            }
+            $c = 0;
+            $head = 8;
+
+	        if (isset($filtros['words']) && !empty($filtros['words'])) {
+	            foreach ($filtros['words'] as $key => $value) {
+	                $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio.$head, $key." ".$value);
+		            if ($c+1<sizeof($filtros['words'])) {
+		            	$lastColumn++;
+		            }
+		            $c++;
+		        }
+		    }
            
 
-            $objPHPExcel->getActiveSheet()->getRowDimension($head)->setRowHeight(30);
 
             $estilos = array(
                 'font'    => array(
@@ -966,7 +991,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 				)
             );
 
-            $rango = $inicio."8".":".$lastColumn."8";
+            $rango = $inicio."10".":".$lastColumn."10";
 			$objPHPExcel->getActiveSheet()
 			    ->getStyle($rango)
 			    ->applyFromArray(
@@ -988,7 +1013,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
             for ($j=0; $j <sizeof($json); $j++) {
                 $inicio = "A";
                 foreach ($json[$j] as $key => $value) {
-                    $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio++.($j+9), $value);
+                    $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio++.($j+11), $value);
                 }
             }
             // Rename worksheet

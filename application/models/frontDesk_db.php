@@ -372,7 +372,7 @@ Class frontDesk_db extends CI_MODEL
     }
 	public function getAuditUnits($filters){
 		$this->db->distinct();
-		$this->db->select("R.pkResId, U.UnitCode, FP.FloorPlanDesc, ES.StatusDesc, OC.OccTypeDesc, R.ResConf, P.LName, P.Name");
+		$this->db->select("R.pkResId, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc, ES.StatusDesc, OC.OccTypeDesc, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name");
 		$this->db->from("tblRes R");
 		$this->db->join('tblResType RT', 'RT.pkResTypeId = R.fkResTypeId');
 		$this->db->join('tblResInvt RI', '(RI.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)');
