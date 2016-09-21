@@ -385,6 +385,9 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
 		  $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) = ', $filters['dates']['dateAudit']);
 		$this->db->where("RP.ynPrimaryPeople", 1);
+		if (!isset($filters['words']['unitAudit'])) {
+			$filters['words']['unitAudit'] = 0;
+		}
 		if ($filters['words']['unitAudit'] != 0) {
 			$this->db->where("U.UnitCode", $filters['words']['unitAudit']);
 		}
@@ -455,7 +458,7 @@ Class frontDesk_db extends CI_MODEL
 		// 	}
 		// 	$this->db->where("( " . $condicion . ")");
 		// }
-		
+
 		$query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
@@ -463,7 +466,7 @@ Class frontDesk_db extends CI_MODEL
 	}
 	public function selectUnitsAudit(){
 		$this->db->distinct();
-        $this->db->select("	'' as pkResId, RTRIM(u.UnitCode) as unitCode");
+        $this->db->select("	'' as pkResId, RTRIM(u.UnitCode) as UnitCode");
         $this->db->select("RTRIM(fp.FloorPlanDesc) as FloorPlanDesc, '' as StatusDesc");
         $this->db->select("'' as OccTypeDesc, '' as ResConf, '' as LastName, '' as Name");
         $this->db->from('tblUnit U');

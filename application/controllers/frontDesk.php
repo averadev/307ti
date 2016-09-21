@@ -251,22 +251,60 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		if($this->input->is_ajax_request()){
 			$filtros = $this->receiveWords($_POST);
 			$data = $this->frontDesk_db->getAuditUnits($filtros);
-			$data2 = $this->frontDesk_db->selectUnitsAudit();
-			$datostotal = array_merge($data, $data2);
-			echo json_encode(array('items' => $datostotal));
+			//var_dump($filtros);
+			if ($filtros['words']["unitAudit"] || isset($filtros['words']["statusAudit"]) || isset($filtros['words']["occTypeAudit"])) {
+				echo json_encode(array('items' => $data));
+			}else{
+				$data2 = $this->frontDesk_db->selectUnitsAudit();
+				$datos = $this->mergeArrayDatos($data, $data2);
+				echo json_encode(array('items' => $datos));
+			}
+			
 		}
 	}
+
+
+	private function mergeArrayDatos($datos1, $datos2){
+		$Datos = [];
+		foreach( $datos1 as $key => $item ){
+				foreach( $datos2 as $item2 ){
+					if($item2->UnitCode == $item->UnitCode){
+						$unitDelete[] = $key;
+					}
+				}
+			}
+			foreach( $unitDelete as $item ){
+				unset( $datos2[$item] );
+			}
+		return array_merge($datos1, $datos2);
+	}
+
+
+
 	public function getAuditUnitsReport(){
 		if(isset($_GET['words'])){
 			$words = json_decode( $_GET['words'] );
 			$sql['words'] = $this->receiveWords($words);
+			// $sql['words'] = [
+			// 	"unitAudit" => 0,
+			// 	"statusAudit" => [15],
+			// 	"occTypeAudit" => []
+			// ];
 		}
 		if(isset($_GET['dates'])){
 			$dates = json_decode( $_GET['dates'] );
 			$sql['dates'] = $this->receiveWords($dates);
 		}
 		$data = $this->frontDesk_db->getAuditUnits($sql);
-		$this->makeExcel($data, "AuditReportunits", $sql);
+		//var_dump($sql['words']["unitAudit"]);
+		if (isset($sql['words']["unitAudit"]) || isset($sql['words']["statusAudit"]) || isset($sql['words']["occTypeAudit"])) {
+			$this->makeExcel($data, "AuditReportunits", $sql);
+		}else{
+			$data2 = $this->frontDesk_db->selectUnitsAudit();
+			$datos = $this->mergeArrayDatos($data, $data2);
+			$this->makeExcel($datos, "AuditReportunits", $sql);
+		}
+		
 	}
 
 	public function getAuditTrxReport(){
@@ -967,7 +1005,13 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 
 	        if (isset($filtros['words']) && !empty($filtros['words'])) {
 	            foreach ($filtros['words'] as $key => $value) {
-	                $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio.$head, $key." ".$value);
+	            	if (is_array($value)) {
+	            		for ($i=0; $i < sizeof($value) ; $i++) { 
+	            			$objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio.$head, $key." ".$value[$i]);
+	            		}
+	            	}else{
+	            		 $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio.$head, $key." ".$value);
+	            	}
 		            if ($c+1<sizeof($filtros['words'])) {
 		            	$lastColumn++;
 		            }
