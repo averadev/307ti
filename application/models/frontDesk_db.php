@@ -414,7 +414,67 @@ Class frontDesk_db extends CI_MODEL
             return $query->result();
         }
 	}
+	public function getAuditUnits2($filters){
+		$this->db->distinct();
+		$this->db->select("R.pkResId, u.pkUnitId, RTRIM(u.UnitCode) as unitCode, RTRIM(fp.FloorPlanDesc) as FloorPlan");
+		$this->db->select("ES.StatusDesc, OC.OccTypeDesc, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name");
+		$this->db->from("tblUnit U");
+		$this->db->join("tblFloorPlan fp", "fp.pkFloorPlanID = U.fkFloorPlanId");
+		$this->db->join("tblResInvt RI", "RI.fkUnitId = U.pkUnitId");
+		$CON = "";
 
+		$this->db->join("tblRes R", "R.pkResId = RI.fkResId and (select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 left JOIN tblCalendar c on  c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) = '09/17/2016'", "left");
+
+		$this->db->join("tblResPeopleAcc RP", "(RP.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)", "left");
+		$this->db->join("tblPeople P", " P.pkPeopleId = RP.fkPeopleId", "inner");
+		$this->db->join("tblResOcc RO", "RO.fkResId = R.pkResId", "inner");
+		$this->db->join("tblOccType OC", "OC.pkOccTypeId = RO.fkOccTypeId", "inner");
+		$this->db->join("tblStatus ES", "ES.pkStatusId = R.fkStatusId", "inner");
+		$this->db->join("tblFloorPlan FP", "U.fkFloorPlanId = FP.pkFloorPlanID", "inner");
+		
+		$this->db->where("RP.ynPrimaryPeople", 1);
+		// if ($filters['words']['unitAudit'] != 0) {
+		// 	$this->db->where("U.UnitCode", $filters['words']['unitAudit']);
+		// }
+		// $condicion = '';
+		// if (isset($filters['words']['statusAudit'])) {
+		// 	for ($i=0; $i < sizeof($filters['words']['statusAudit']); $i++) { 
+		// 		$condicion .= 'ES.pkStatusId = '.$filters['words']['statusAudit'][$i];
+		// 		if ($i+1 < sizeof($filters['words']['statusAudit'])) {
+		// 			$condicion .=' or ';
+		// 		}
+		// 	}
+		// 	$this->db->where("( " . $condicion . ")");
+		// }
+		// $condicion = '';
+		// if (isset($filters['words']['occTypeAudit'])) {
+		// 	for ($i=0; $i < sizeof($filters['words']['occTypeAudit']); $i++) { 
+		// 		$condicion .= 'OC.pkOccTypeId = '.$filters['words']['occTypeAudit'][$i];
+		// 		if ($i+1 < sizeof($filters['words']['occTypeAudit'])) {
+		// 			$condicion .=' or ';
+		// 		}
+		// 	}
+		// 	$this->db->where("( " . $condicion . ")");
+		// }
+
+		$query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+	}
+	public function selectUnitsAudit(){
+		$this->db->distinct();
+        $this->db->select('as pkResId, RTRIM(u.UnitCode) as unitCode');
+        $this->db->from('tblTrxType');
+        $this->db->where('pkTrxTypeId', $ID);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->Autoamount;
+        }
+    }
 	public function getAuditTrx($filtros){
 
 		$this->db->distinct();
