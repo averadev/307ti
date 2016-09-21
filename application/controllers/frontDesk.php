@@ -250,9 +250,10 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 	public function getAuditUnits(){
 		if($this->input->is_ajax_request()){
 			$filtros = $this->receiveWords($_POST);
-			$data = $this->frontDesk_db->getAuditUnits2($filtros);
-
-			echo json_encode(array('items' => $data));
+			$data = $this->frontDesk_db->getAuditUnits($filtros);
+			$data2 = $this->frontDesk_db->selectUnitsAudit();
+			$datostotal = array_merge($data, $data2);
+			echo json_encode(array('items' => $datostotal));
 		}
 	}
 	public function getAuditUnitsReport(){
