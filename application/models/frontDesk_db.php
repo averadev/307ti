@@ -376,7 +376,7 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->from("tblRes R");
 		$this->db->join('tblResType RT', 'RT.pkResTypeId = R.fkResTypeId');
 		$this->db->join('tblResInvt RI', '(RI.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)');
-		$this->db->join('tblUnit U', 'U.pkUnitId = RI.fkUnitId', 'inner');
+		$this->db->join('tblUnit U', 'U.pkUnitId = RI.fkUnitId', 'left');
 		$this->db->join('tblResPeopleAcc RP', '(RP.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)', 'inner');
 		$this->db->join('tblPeople P', ' P.pkPeopleId = RP.fkPeopleId', 'inner');
 		$this->db->join('tblResOcc RO', 'RO.fkResId = R.pkResId', 'inner');
@@ -418,7 +418,8 @@ Class frontDesk_db extends CI_MODEL
 	public function getAuditTrx($filtros){
 
 		$this->db->distinct();
-		$this->db->select("AC.pkAccTrxId as TrxID, U.UnitCode, AC.CrDt, AC.CrBy, US.UserLogin as AuditedBy, TT.TrxTypeDesc, TT.TrxSign,  round(AC.AbsAmount, 2) as Amount");
+		$this->db->select("AC.pkAccTrxId as TrxID, U.UnitCode, AC.CrDt, AC.CrBy, TT.TrxTypeDesc, TT.TrxSign");
+		$this->db->select("round(AC.AbsAmount, 2) as Amount, AC.NAuditDate as Date_Audit, US.UserLogin as AuditedBy");
 		$this->db->from("tblRes R");
 		$this->db->join('tblResInvt RI', 'R.pkResId = RI.fkResId', 'inner');
 		$this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
