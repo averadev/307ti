@@ -1200,8 +1200,20 @@ private function comprubaArray($valor, $array){
 				if( is_null( $item->RateAmtNight ) ){
 					$item->RateAmtNight = 0;
 				}
+				$item->Delete = "<button type='button' class='alert button btnDeleteOccRes' attr_id='" . $item->pkResOccId . "'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button>";
+				unset($item->pkResOccId);
 			}
 			echo json_encode($weeks);
+		}
+	}
+	
+	public function deleteResOcc(){
+		if($this->input->is_ajax_request()){
+			$id = $_POST['idResOcc'];
+			$condicion = "pkResOccId = " . $id;
+			$this->reservation_db->deleteReturnId('tblResOcc',$condicion);
+			$mensaje = ["message"=>"deleted occupation"];
+			echo json_encode($mensaje);
 		}
 	}
 	
@@ -1365,6 +1377,12 @@ private function comprubaArray($valor, $array){
 			$id = $_GET['id'];
 			$data['statusRes'] = $this->reservation_db->getStatusReservation($id);
 			$this->load->view('reservations/dialogStatus', $data);
+		}
+	}
+	
+	public function modalNewOccRes(){
+		if($this->input->is_ajax_request()) {
+			$this->load->view('reservations/newOccResDialog');
 		}
 	}
 	
