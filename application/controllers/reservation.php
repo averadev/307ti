@@ -1058,9 +1058,9 @@ private function comprubaArray($valor, $array){
 	public function getUnidades(){
 		if($this->input->is_ajax_request()) {
 			$filtros = $this->receiveWords($_POST);
-			$unidades = $this->reservation_db->getUnidades($filtros);
-			$noUnidades = $this->reservation_db->getUnidadesOcc($filtros);
-			$season = $this->reservation_db->getSeasonUnit($filtros);
+			$unidades = $this->reservation_db->getUnidades( $filtros );
+			$noUnidades = $this->reservation_db->getUnidadesOcc( $filtros, null );
+			$season = $this->reservation_db->getSeasonUnit( $filtros );
 			$unitDelete = array();
 			foreach( $unidades as $key => $item ){
 				foreach( $noUnidades as $item2 ){
@@ -1195,12 +1195,17 @@ private function comprubaArray($valor, $array){
 	public function selectWeeksReservation(){
 		if($this->input->is_ajax_request()) {
 			$id = $_POST['idreservation'];
+			$idResType = $_POST['idResType'];
 			$weeks = $this->reservation_db->selectWeeksReservation($id);
 			foreach($weeks as $item){
 				if( is_null( $item->RateAmtNight ) ){
 					$item->RateAmtNight = 0;
 				}
-				$item->Delete = "<button type='button' class='alert button btnDeleteOccRes' attr_id='" . $item->pkResOccId . "'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button>";
+				if($idResType == '7'){
+					$item->Delete = "<button type='button' class='alert button btnDeleteOccRes' attr_id='" . $item->pkResOccId . "'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button>";
+				}else{
+					unset($item->Delete);
+				}
 				unset($item->pkResOccId);
 			}
 			echo json_encode($weeks);
@@ -1210,11 +1215,86 @@ private function comprubaArray($valor, $array){
 	public function deleteResOcc(){
 		if($this->input->is_ajax_request()){
 			$id = $_POST['idResOcc'];
+			$idRes = $_POST['idRes'];
 			$condicion = "pkResOccId = " . $id;
 			$this->reservation_db->deleteReturnId('tblResOcc',$condicion);
+			$invt = $this->reservation_db->getResInvt($idRes);
+			if( count( $invt ) > 0 ){
+				$updateResInvt = [
+					"NightsNumber"	=> intval($invt[0]->NightsNumber) - 1,
+					"MdBy"			=> $this->nativesessions->get('id'),
+					"MdDt"			=> $this->getToday()
+				];
+				$condicion = "pkResInvtId = " . $invt[0]->pkResInvtId;
+				$afectados = $this->reservation_db->updateReturnId('tblResInvt', $updateResInvt, $condicion);
+			}
 			$mensaje = ["message"=>"deleted occupation"];
 			echo json_encode($mensaje);
 		}
+	}
+	
+	public function savedayForOccRes(){
+		if($this->input->is_ajax_request()){
+			$id = $_POST['id'];
+			$filtros = $this->receiveWords($_POST);
+			$invt = $this->reservation_db->getResInvt($id);
+			if( count( $invt ) > 0 ){
+				//$invt[0]->fkUnitId;
+				$noUnidades = $this->reservation_db->getUnidadesOcc( $filtros, $invt[0]->fkUnitId );
+				if( count( $noUnidades ) == 0 ){
+					$total = $this->addNewOcc($id, $_POST['fromDate'], $_POST['toDate'], $invt[0]->fkOccTypeId, $invt[0]->RateAmtNight);
+					if( $total > 0 ){
+						$updateResInvt = [
+							"NightsNumber"	=> intval($invt[0]->NightsNumber) + $total,
+							"MdBy"			=> $this->nativesessions->get('id'),
+							"MdDt"			=> $this->getToday()
+						];
+						$condicion = "pkResInvtId = " . $invt[0]->pkResInvtId;
+						$afectados = $this->reservation_db->updateReturnId('tblResInvt', $updateResInvt, $condicion);
+					}
+					$mensaje = [ "success" => True, "message"=>"Reserved nights"];
+				}else{
+					$mensaje = [ "success" => false, "message"=>"The nights are already occupied. </ br> Select another date please"];
+				}
+				
+			}else{
+				$mensaje = [ "success" => false, "message"=>"Reservation not found try again"];
+			}
+			echo json_encode($mensaje);
+		}
+	}
+	
+	public function addNewOcc($idContrato, $iniDate, $endDate, $OccTypeId, $RateAmtNight){
+		$Years = $this->reservation_db->selectYearsUnitiesContract($idContrato);
+
+		$Unidades = [];
+		$fYear = $Years[0]->FirstOccYear;
+		$lYear = $Years[0]->LastOccYear;
+		$resInt =  $this->reservation_db->selectUnitiesContract($idContrato);
+		$idCalendar =  $this->reservation_db->selectDateCalendar( $iniDate, $endDate );
+		$total = 0;
+		for ($i=0; $i < sizeof($idCalendar) - 1; $i++) {
+			for ($j=0; $j < sizeof($resInt); $j++) {
+				$OcupacionTable = [
+					"fkResId"    	=> $idContrato,
+					"fkResInvtId"   => $resInt[$j]->pkResInvtId,
+					"OccYear"       => $idCalendar[$i]->Year,
+					"NightId"       => $idCalendar[$i]->fkDayOfWeekId,
+					"fkResTypeId"   => 5,
+					"fkOccTypeId"   => $OccTypeId,
+					"fkCalendarId" 	=> $idCalendar[$i]->pkCalendarId,
+					"RateAmtNight"	=> $RateAmtNight,
+					"ynActive"   	=> 1,
+					"CrBy"          => $this->nativesessions->get('id'),
+					"CrDt"			=> $this->getToday()
+					
+					
+				];
+				$this->reservation_db->insertReturnId('tblResOcc', $OcupacionTable);
+				$total++;
+			 }
+		}
+		return $total;
 	}
 	
 	public function modalgetAllNotes(){

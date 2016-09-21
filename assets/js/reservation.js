@@ -222,11 +222,16 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 	
 	$(document).off( 'click', '#btnNewOccRes');
 	$(document).on( 'click', '#btnNewOccRes', function () {
-		if (dialogNewOccRes!=null) {
-			dialogNewOccRes.dialog( "destroy" );
+		if( $("#idResTypeX").text() == 7 ){
+			if (dialogNewOccRes!=null) {
+				dialogNewOccRes.dialog( "destroy" );
+			}
+			dialogNewOccRes = modalNewOccRes();
+			dialogNewOccRes.dialog("open");
+		}else{
+			alertify.error('You can not add nights occupations');
 		}
-		dialogNewOccRes = modalNewOccRes();
-		dialogNewOccRes.dialog("open");
+		
 	});
 
 
@@ -3068,7 +3073,8 @@ function getWeeksRes(id){
 	showLoading(div, true);
 	$.ajax({
 	    data:{
-	        idreservation: id
+	        idreservation: id,
+			idResType: $("#idResTypeX").text()
 	    },
 	    type: "POST",
 	    url: "reservation/selectWeeksReservation",
@@ -3078,7 +3084,13 @@ function getWeeksRes(id){
 				//drawTableIdOcupacionRes(data,);
 				drawTable2(data,"tableCOccupationSelected", false, "");
 				$(document).off('click','.btnDeleteOccRes')
-				$(document).on('click','.btnDeleteOccRes', function(){ confirmDeleteOccRes(this); });
+				$(document).on('click','.btnDeleteOccRes', function(){ 
+					if( $("#idResTypeX").text() == 7 ){
+						confirmDeleteOccRes(this); 
+					}else{
+						alertify.error('You can not delete nights occupations');
+					}
+				});
 			}else{
 				noResultsTable(div, "tableCOccupationSelected", "No results found");
 			}
@@ -3106,7 +3118,8 @@ function deleteOccRes(idOcc){
 	showLoading(div, true);
 	$.ajax({
 	    data:{
-	        idResOcc: idOcc
+	        idResOcc: idOcc,
+			idRes: $("#idReservationX").text()
 	    },
 	    type: "POST",
 	    url: "reservation/deleteResOcc",
@@ -4280,8 +4293,6 @@ function creditCardMsgR(data){
 
 function savePeopleRes(){
 	
-	console.log(getValueTablePersonasRes('peopleContractRes'))
-	
 	var personas = getValueTablePersonasRes('peopleContractRes');
 	if (personas.length<=0) {
 			alertify.error("You must add at least one person");
@@ -4318,14 +4329,23 @@ function modalNewOccRes(){
 				showLoading(div, true);
 				$(this).load ("reservation/modalNewOccRes" , function(){
 		    		showLoading(div, false);
-		    		/*$("#dialog-User").hide();
-	            	selectTable("tablePeople");*/
+					$( "#fromDateNewOccRes" ).Zebra_DatePicker({
+						format: 'm/d/Y',
+						show_icon: false,
+						direction: true,
+						pair: $('#toDateNewOccRes'),
+					});
+					$( "#toDateNewOccRes" ).Zebra_DatePicker({
+						format: 'm/d/Y',
+						show_icon: false,
+						direction: 1
+					});
 	    		});
 			}
 		},
 		autoOpen: false,
-		height: maxHeight,
-		width: "70%",
+		height: maxHeight/3,
+		width: "50%",
 		modal: true,
 		buttons: [{
 			text: "Cancel",
@@ -4337,7 +4357,11 @@ function modalNewOccRes(){
 			text: "Add",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
-				
+				if($('#fromDateNewOccRes').val().trim().length > 0 && $('#toDateNewOccRes').val().trim().length > 0 ){
+					savedayForOccRes( $('#fromDateNewOccRes').val(), $('#toDateNewOccRes').val() );
+				}else{
+					alertify.error("Choose dates for the reservation");
+				}
 			}
 		}],
 		close: function() {
@@ -4346,3 +4370,37 @@ function modalNewOccRes(){
 	});
 	return dialog;
 }
+
+function savedayForOccRes(iniDate, endDate){
+	var div = "#dialog-NewOccRes";
+	showLoading(div, true);
+	var id = $("#idReservationX").text();
+	$.ajax({
+	    data:{
+	        id: id,
+			fromDate: iniDate,
+			toDate: endDate,
+	    },
+	    type: "POST",
+	    url: "reservation/savedayForOccRes",
+	    dataType:'json',
+	    success: function(data){
+			showLoading(div, false);
+			if( data.success ){
+				alertify.success(data.message);
+				var id = $("#idReservationX").text();
+				getWeeksRes(id);
+				$(div).dialog('close');
+			}else{
+				alertify.error(data.message);
+			}
+			
+	    },
+	    error: function(){
+	        alertify.error("Try again");
+			showLoading(div, false);
+	    }
+	});
+}
+
+
