@@ -256,8 +256,14 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 				echo json_encode(array('items' => $data));
 			}else{
 				$data2 = $this->frontDesk_db->selectUnitsAudit();
-				$datos = $this->mergeArrayDatos($data, $data2);
-				echo json_encode(array('items' => $datos));
+				
+				if ($data) {
+					$datos = $this->mergeArrayDatos($data, $data2);
+					echo json_encode(array('items' => $datos));
+				}else{
+					echo json_encode(array('items' => $data2));
+				}
+				
 			}
 			
 		}

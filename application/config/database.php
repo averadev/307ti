@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '50.115.112.243,1434',
-	'username' => 'ResDBUser',
-	'password' => 'ResDb_04',
-	'database' => 'ResDB_QA',
+	'hostname' => '200.7.46.158',
+	'username' => 'user307',
+	'password' => 'passtowers',
+	'database' => 'ResDB_Test',
 	'dbdriver' => 'sqlsrv',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

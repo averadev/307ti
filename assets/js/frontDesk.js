@@ -64,7 +64,15 @@ $('#btnChgStatus').on('click', function() {  showModaChgStatus(); });
 
 
 $('#btnAddTrxAuditUnit').off();
-$('#btnAddTrxAuditUnit').on('click', function() {  showModalAuditAddTrx(); });
+$('#btnAddTrxAuditUnit').on('click', function() {
+	var SRSS = getArrayValuesColumnTableC("tablaAuditUnits", 1);
+	if (SRSS>0) {
+		alertify.error("Units Without Reservations");
+	}else{
+		showModalAuditAddTrx();
+	} 
+	
+});
 
 $('#btnReporAuditUnit').off();
 $('#btnReporAuditUnit').on('click', function() {  generateReportAuditUnits(); });
@@ -1614,4 +1622,14 @@ function closeDAYTRX(){
 
 function saveExitoTrxID(data){
 	alertify.success(data.mensaje);
+}
+
+function getArrayValuesColumnTableC(tabla, columna){
+	var items= 0;
+	$('#'+tabla+' tbody tr td:nth-child('+columna+')').each( function(){
+		if ($(this).text().replace(/\s+/g, " ")=="") {
+			items++;
+		}       
+	});
+	return items;
 }
