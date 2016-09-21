@@ -18,7 +18,10 @@ class Reservation_db extends CI_Model {
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
 		//$this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
-        $this->db->from('tblRes r');
+        if ($id!=NULL) {
+			$this->db->select('r.fkResTypeId');
+		}
+		$this->db->from('tblRes r');
 		$this->db->join('tblResType rt', 'rt.pkResTypeId = r.fkResTypeId');
 		$this->db->join('tblResInvt ri', '(ri.fkResId =  CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)');
         $this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId');
@@ -113,7 +116,7 @@ class Reservation_db extends CI_Model {
         }*/
     }
     
-    public function getUnidadesOcc($filters){
+    public function getUnidadesOcc($filters, $unitId){
         $arrivaDate = $filters['fromDate'];
         $depurateDate = $filters['toDate'];
         /*$where = "(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = ri.fkResId ORDER BY ro2.fkCalendarId ASC) 
@@ -138,6 +141,10 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId', 'inner');
         $this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId', 'inner');
         $this->db->where("c.Date between '" . $arrivaDate . "' and CONVERT(VARCHAR(11),dateadd(day, -1, '" . $depurateDate . "' ),101)  ");
+		if ($unitId != NULL) {
+			//$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7 or r.fkResTypeId = 10 )');
+			$this->db->where('u.pkUnitId', $unitId);
+        }
         $this->db->order_by('u.pkUnitId', 'ASC');
         $query = $this->db->get();
         return $query->result();
@@ -926,6 +933,16 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 		$query = $this->db->get();
         return $query->result();
     }
+	
+	public function getResInvt($id){
+		$this->db->limit(1);
+		$this->db->select("ri.pkResInvtId, ri.fkUnitId, ri.NightsNumber, ro.fkOccTypeId, ro.RateAmtNight");
+		$this->db->from('tblResInvt ri');
+		$this->db->join('tblResOcc ro with(nolock) ', 'ro.fkResInvtId = ri.pkResInvtId', 'inner');
+		$this->db->where('ri.fkResId = ', $id);
+		$query = $this->db->get();
+        return $query->result();
+	}
 	
     public function selectPaymentType(){
         $this->db->select("T.pkTrxTypeId as ID, RTRIM(T.TrxTypeDesc) as Type");

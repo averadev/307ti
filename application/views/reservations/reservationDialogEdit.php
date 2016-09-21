@@ -30,6 +30,7 @@
 <div class="row headerDescription headerGeneral" style="padding: 8px;">
 	<div class="small-12 medium-12 large-8 columns"  >
 	<p id="idReservationX" style="display: none;"><?php echo $contract[0]->ID; ?></p>
+	<p id="idResTypeX" style="display: none;"><?php echo $contract[0]->fkResTypeId; ?></p>
 		<label class="headerDescriptionTitle small-12 columns" id="editContractTitle"><?php  echo $contract[0]->Confirmation_code;?></label>
 		<label class="headerGeneral small-12 columns" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
 		<label class="headerGeneral small-12 columns" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
@@ -134,7 +135,7 @@
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
 							<a id="btnSavePeopleRes" class="btn btn-primary spanSelect">
-								<div class="label">Save peoples</div>
+								<div class="label">Save Changes</div>
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
                         </div>
@@ -521,6 +522,18 @@
 					</div>
 				</div>
 			</fieldset>
+			<?php 
+			if($contract[0]->fkResTypeId == 7){
+				?>
+				<div class="small-12 medium-12 large-12 columns" > 
+					<a id="btnNewOccRes" class="btn btn-primary btn-Search">
+						<div class="label">New Night</div>
+						<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+					</a>
+				</div>
+				<?php
+			}
+			?>
 		</form>
 	</div>
 	<!-- tabs años de ocupacion -->
