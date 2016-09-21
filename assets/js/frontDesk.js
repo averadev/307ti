@@ -1362,7 +1362,7 @@ function showNewReservation(selector){
 				if (unidadResDialog!=null) {
 					unidadResDialog.dialog( "destroy" );
 				}
-				unidadResDialog = addUnidadResDialog(iniDate,data.items[0]);
+				unidadResDialog = addUnidadResDialog(iniDate,data.items[0], 'alta');
 				unidadResDialog.dialog( "open" );
 			}else{
 				alertify.error('no unit found');

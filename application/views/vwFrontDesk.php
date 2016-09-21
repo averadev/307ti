@@ -877,6 +877,7 @@
 <div id="dialog-ExchangeRate"  title="FrontDesk > New Exchange Rate" style="display: none;"></div>
 <div id="dialog-StatusRes"  title="Status" style="display: none;"></div>
 <div id="dialog-NewOccRes"  title="New Night" style="display: none;"></div>
+<div id="dialog-ChangeUnitRes"  title="Change Unit" style="display: none;"></div>
 <div id="dialog-addTransactionsAudit"  title="Add Transaccions" style="display: none;"></div>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>reservation.js"></script>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>frontDesk.js"></script>

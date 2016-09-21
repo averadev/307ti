@@ -1298,6 +1298,16 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         return $query->result();
 	}
 	
+	public function getUnitOfRes($id){
+		$this->db->select('ri.pkResInvtId, ri.fkUnitId');
+		$this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = ri.fkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
+        $this->db->select('(select top 1 CONVERT(VARCHAR(11), c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = ri.fkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
+		$this->db->from('tblResInvt ri');
+		$this->db->where('ri.fkResId', $id);
+		$query = $this->db->get();
+        return $query->result();
+	}
+	
 	/*public function getStatusReservation(){
 		
 	}*/

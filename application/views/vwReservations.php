@@ -177,4 +177,5 @@
 <div id="dialog-CreditCardASR"  title="Card Associated" style="display: none;"></div>
 <div id="dialog-StatusRes"  title="Status" style="display: none;"></div>
 <div id="dialog-NewOccRes"  title="New Night" style="display: none;"></div>
+<div id="dialog-ChangeUnitRes"  title="Change Unit" style="display: none;"></div>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>reservation.js"></script>

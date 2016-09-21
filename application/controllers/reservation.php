@@ -1466,6 +1466,39 @@ private function comprubaArray($valor, $array){
 		}
 	}
 	
+	public function modalChangeUnit(){
+		if($this->input->is_ajax_request()) {
+			$id = $_GET['id'];
+			$unit= $this->reservation_db->getUnitOfRes($id);
+			
+			$this->load->view('reservations/ChangeUnitResDialog');
+		}
+	}
+	
+	/*
+	public function getUnidades(){
+		if($this->input->is_ajax_request()) {
+			$filtros = $this->receiveWords($_POST);
+			$unidades = $this->reservation_db->getUnidades( $filtros );
+			$noUnidades = $this->reservation_db->getUnidadesOcc( $filtros, null );
+			$season = $this->reservation_db->getSeasonUnit( $filtros );
+			$unitDelete = array();
+			foreach( $unidades as $key => $item ){
+				foreach( $noUnidades as $item2 ){
+					if($item2->pkUnitId == $item->ID){
+						$unitDelete[] = $key;
+					}
+				}
+			}
+			foreach( $unitDelete as $item ){
+				unset( $unidades[$item] );
+			}
+			$unidades = array_values($unidades);
+			echo json_encode(array('items' => $unidades, 'season' => $season));
+		}
+	}
+	*/
+	
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
 			$id = $_GET['id'];

@@ -59,7 +59,7 @@
 					</div>	
 				</div>
 				<!-- date time -->
-				<div class="row">
+				<div class="row" id="DatesUnitRes">
 					<!-- From Date -->
 					<div class="small-12 large-6 columns">
 						<label for="fromDateUnitRes" class="text-left">Arrival Date

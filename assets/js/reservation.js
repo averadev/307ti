@@ -17,7 +17,7 @@ $(document).ready(function(){
 	$( "#startDateRes" ).val( getCurrentDate() );
 	
 	var addReservation = null;
-	var unidadResDialog = addUnidadResDialog( null, null );
+	var unidadResDialog = addUnidadResDialog( null, null, 'alta' );
     
 	var dialogWeeksRes = getWeeksResDialog();
 	var dialogPackRes = PackReferenceRes();
@@ -40,7 +40,7 @@ $(document).ready(function(){
 		if (unidadResDialog!=null) {
 			unidadResDialog.dialog( "destroy" );
 		}
-		unidadResDialog = addUnidadResDialog( null, null );
+		unidadResDialog = addUnidadResDialog( null, null, 'alta' );
 		unidadResDialog.dialog( "open" );
 	});
 
@@ -58,13 +58,27 @@ $(document).ready(function(){
          peopleResDialog = addPeopleResDialog( $(this).attr('attr_table') );
          peopleResDialog.dialog( "open" );
 	});
+	
+	$(document).off( 'click', '#btnChangeUnitRes');
+	$(document).on( 'click', '#btnChangeUnitRes', function () {
+		// if (peopleResDialog != null) {
+		// 	peopleResDialog.dialog( "destroy" );
+		// }
+		if (unidadResDialog!=null) {
+			unidadResDialog.dialog( "destroy" );
+		}
+		unidadResDialog = addUnidadResDialog( null, null, 'change' );
+		unidadResDialog.dialog( "open" );
+        //changeUnitRes= changeUnitResDialog( $(this).attr('attr_table') );
+        //changeUnitRes.dialog( "open" );
+	});
 
 	$(document).off( 'click', '#btnAddUnidadesRes');
 	$(document).on( 'click', '#btnAddUnidadesRes', function () {
 		if (unidadResDialog!=null) {
 			unidadResDialog.dialog( "destroy" );
 		}
-		unidadResDialog = addUnidadResDialog( null, null );
+		unidadResDialog = addUnidadResDialog( null, null, 'alta' );
 		unidadResDialog.dialog( "open" );
 	        
 	});
@@ -584,7 +598,7 @@ function verifyLanguageRes(){
 	return value;
 }
 
-function addUnidadResDialog(iniDate, unit){
+function addUnidadResDialog(iniDate, unit, typeUnit){
 	var div = "#dialog-UnidadesRes";
 	dialog = $( "#dialog-UnidadesRes" ).dialog({
 		open : function (event){
@@ -594,17 +608,23 @@ function addUnidadResDialog(iniDate, unit){
 		    		ajaxSelectRes('contract/getProperties','try again', generalSelects, 'propertyRes');
 	    			ajaxSelectRes('contract/getUnitTypes','try again', generalSelects, 'floorPlanUnitRes');
 					ajaxSelectRes('reservation/getView','try again', generalSelects, 'viewUnitRes');
-					$( "#fromDateUnitRes" ).Zebra_DatePicker({
-						format: 'm/d/Y',
-						show_icon: false,
-						direction: true,
-						pair: $('#toDateUnitRes'),
-					});
-					$( "#toDateUnitRes" ).Zebra_DatePicker({
-						format: 'm/d/Y',
-						show_icon: false,
-						direction: 1
-					});
+					if( typeUnit == 'alta' ){
+						$( "#DatesUnitRes" ).show();
+						$( "#fromDateUnitRes" ).Zebra_DatePicker({
+							format: 'm/d/Y',
+							show_icon: false,
+							direction: true,
+							pair: $('#toDateUnitRes'),
+						});
+						$( "#toDateUnitRes" ).Zebra_DatePicker({
+							format: 'm/d/Y',
+							show_icon: false,
+							direction: 1
+						});
+					}else{
+						$( "#DatesUnitRes" ).hide();
+					}
+					
 					if(iniDate != null){
 						$('#fromDateUnitRes').val(iniDate);
 					}
@@ -633,13 +653,18 @@ function addUnidadResDialog(iniDate, unit){
 					}
 					$('#btnGetUnidadesRes').unbind('click');
 					$('#btnGetUnidadesRes').click(function(){
-						if($('#fromDateUnitRes').val().trim().length > 0 && $('#toDateUnitRes').val().trim().length > 0 ){
-							iniDateRes = $('#fromDateUnitRes').val();
-							endDateRes = $('#toDateUnitRes').val();
-							getUnidadesRes();
+						if( typeUnit == 'alta' ){
+							if($('#fromDateUnitRes').val().trim().length > 0 && $('#toDateUnitRes').val().trim().length > 0 ){
+								iniDateRes = $('#fromDateUnitRes').val();
+								endDateRes = $('#toDateUnitRes').val();
+								getUnidadesRes(typeUnit);
+							}else{
+								alertify.error("Choose dates for the reservation");
+							}
 						}else{
-							alertify.error("Choose dates for the reservation");
+							getUnidadesRes(typeUnit);
 						}
+						
 						
 					});
 		            //selectTableRes("tblUnidadesRes");
@@ -1706,8 +1731,9 @@ function selectMetodoPagoRes(){
 
 /****************Unit*****************/
 
-function getUnidadesRes(){
+function getUnidadesRes(typeUnit){
 	showLoading('#tblUnidadesRes',true);
+	
 	$.ajax({
 		data:{
 			property: $("#propertyRes").val(),
@@ -4402,5 +4428,43 @@ function savedayForOccRes(iniDate, endDate){
 	    }
 	});
 }
+
+/*
+function changeUnitResDialog(){
+	var div = "#dialog-ChangeUnitRes";	
+	var id = $("#idReservationX").text();
+	dialog = $(div).dialog({
+		open : function (event){
+			if ($(div).is(':empty')) {
+				showLoading(div, true);
+				$(this).load("reservation/modalChangeUnit?id="+id, function(){
+		    		showLoading(div, false);
+					
+	    		});
+			}
+		},
+		autoOpen: false,
+		height: maxHeight,
+		width: "70%",
+		modal: true,
+		buttons: [{
+			text: "Cancel",
+			"class": 'dialogModalButtonCancel',
+			click: function() {
+				$(this).dialog('close');
+			}
+		},{
+			text: "Add",
+			"class": 'dialogModalButtonAccept',
+			click: function() {
+				
+			}
+		}],
+		close: function() {
+			$('#dialog-NewOccRes').empty();
+		}
+	});
+	return dialog;
+}*/
 
 
