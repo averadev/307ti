@@ -222,11 +222,16 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 	
 	$(document).off( 'click', '#btnNewOccRes');
 	$(document).on( 'click', '#btnNewOccRes', function () {
-		if (dialogNewOccRes!=null) {
-			dialogNewOccRes.dialog( "destroy" );
+		if( $("#idResTypeX").text() == 7 ){
+			if (dialogNewOccRes!=null) {
+				dialogNewOccRes.dialog( "destroy" );
+			}
+			dialogNewOccRes = modalNewOccRes();
+			dialogNewOccRes.dialog("open");
+		}else{
+			alertify.error('You can not add nights occupations');
 		}
-		dialogNewOccRes = modalNewOccRes();
-		dialogNewOccRes.dialog("open");
+		
 	});
 
 
@@ -3079,7 +3084,13 @@ function getWeeksRes(id){
 				//drawTableIdOcupacionRes(data,);
 				drawTable2(data,"tableCOccupationSelected", false, "");
 				$(document).off('click','.btnDeleteOccRes')
-				$(document).on('click','.btnDeleteOccRes', function(){ confirmDeleteOccRes(this); });
+				$(document).on('click','.btnDeleteOccRes', function(){ 
+					if( $("#idResTypeX").text() == 7 ){
+						confirmDeleteOccRes(this); 
+					}else{
+						alertify.error('You can not delete nights occupations');
+					}
+				});
 			}else{
 				noResultsTable(div, "tableCOccupationSelected", "No results found");
 			}

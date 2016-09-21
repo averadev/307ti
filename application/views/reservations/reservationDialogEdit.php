@@ -167,6 +167,7 @@
 				<!-- Unidades -->
 				<div class="containerContract" style="margin-top:10px">
                     <div class="row">
+						
 						<div class="small-12 columns">
 							<table id="tableUnidades" width="100%" class="cell-border">
 								<thead>
