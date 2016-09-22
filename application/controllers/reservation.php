@@ -1057,9 +1057,14 @@ private function comprubaArray($valor, $array){
 	
 	public function getUnidades(){
 		if($this->input->is_ajax_request()) {
+			$id = $_POST['id'];
+			if($id != 0){
+				$unit= $this->reservation_db->getUnitOfRes($id);
+			}
+			
 			$filtros = $this->receiveWords($_POST);
 			$unidades = $this->reservation_db->getUnidades( $filtros );
-			$noUnidades = $this->reservation_db->getUnidadesOcc( $filtros, null );
+			$noUnidades = $this->reservation_db->getUnidadesOcc( $filtros, null  );
 			$season = $this->reservation_db->getSeasonUnit( $filtros );
 			$unitDelete = array();
 			foreach( $unidades as $key => $item ){
@@ -1197,12 +1202,19 @@ private function comprubaArray($valor, $array){
 			$id = $_POST['idreservation'];
 			$idResType = $_POST['idResType'];
 			$weeks = $this->reservation_db->selectWeeksReservation($id);
+			$cont = 0;
 			foreach($weeks as $item){
+				$cont++;
 				if( is_null( $item->RateAmtNight ) ){
 					$item->RateAmtNight = 0;
 				}
 				if($idResType == '7'){
-					$item->Delete = "<button type='button' class='alert button btnDeleteOccRes' attr_id='" . $item->pkResOccId . "'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button>";
+					if( $cont == 1 || $cont == count($weeks) ){
+						$item->Delete = "<button type='button' class='alert button btnDeleteOccRes' attr_id='" . $item->pkResOccId . "'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button>";
+					}else{
+						$item->Delete = "";
+					}
+					
 				}else{
 					unset($item->Delete);
 				}
@@ -1228,7 +1240,7 @@ private function comprubaArray($valor, $array){
 				$condicion = "pkResInvtId = " . $invt[0]->pkResInvtId;
 				$afectados = $this->reservation_db->updateReturnId('tblResInvt', $updateResInvt, $condicion);
 			}
-			$mensaje = ["message"=>"deleted occupation"];
+			$mensaje = ["message"=>"deleted Occupancy"];
 			echo json_encode($mensaje);
 		}
 	}
@@ -1239,6 +1251,12 @@ private function comprubaArray($valor, $array){
 			$filtros = $this->receiveWords($_POST);
 			$invt = $this->reservation_db->getResInvt($id);
 			if( count( $invt ) > 0 ){
+				//$FromDateStrtotime
+				
+				/*if( $_POST['fromDate'] ==  ){
+					
+				}*/
+				
 				//$invt[0]->fkUnitId;
 				$noUnidades = $this->reservation_db->getUnidadesOcc( $filtros, $invt[0]->fkUnitId );
 				if( count( $noUnidades ) == 0 ){
@@ -1254,7 +1272,7 @@ private function comprubaArray($valor, $array){
 					}
 					$mensaje = [ "success" => True, "message"=>"Reserved nights"];
 				}else{
-					$mensaje = [ "success" => false, "message"=>"The nights are already occupied. </ br> Select another date please"];
+					$mensaje = [ "success" => false, "message"=>"The nights are already occupancy. </ br> Select another date please"];
 				}
 				
 			}else{

@@ -243,7 +243,7 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 			dialogNewOccRes = modalNewOccRes();
 			dialogNewOccRes.dialog("open");
 		}else{
-			alertify.error('You can not add nights occupations');
+			alertify.error('You can not add nights Occupancy ');
 		}
 		
 	});
@@ -1733,6 +1733,12 @@ function selectMetodoPagoRes(){
 
 function getUnidadesRes(typeUnit){
 	showLoading('#tblUnidadesRes',true);
+	var id;
+	if(typeUnit == "alta"){
+		id = 0;
+	}else{
+		id: $("#idReservationX").text()
+	}
 	
 	$.ajax({
 		data:{
@@ -1743,6 +1749,7 @@ function getUnidadesRes(typeUnit){
 			toDate:$('#toDateUnitRes').val(),
 			floorPlan:$('#floorPlanUnitRes').val(),
 			view:$('#viewUnitRes').val(),
+			id:id
 		},
 		type: "POST",
 		url: "reservation/getUnidades",
@@ -1759,7 +1766,6 @@ function getUnidadesRes(typeUnit){
 				}else{
 					$('#section-reservations').data( 'season2', data.season[0].Season2 );
 				}
-				
 			}else{
 				alertify.error("No records found");
 			}
@@ -2683,15 +2689,12 @@ function setEventosEditarReservation(id){
 		if( array.length > 0 ){
 			var fullArray = $(array[0]).find("td");
 			var idDoc = fullArray.eq(1).text().replace(/\s+/g, " ");
-			alertify.confirm("You want to delete the document.",
-				function(){
-					deleteDocumentRes(idDoc, id);
-				},
-				function(){
-					//alertify.error('Cancel');
-				}
+			alertify.confirm('Delete document .', "You want to delete the document.", 
+				function(){ deleteDocumentRes(idDoc, id); },
+				function(){ }
+			).moveTo(screen.width - 500,screen.height - 100).set('resizable',true).resizeTo('25%',210).isOpen(
+				$('.ajs-dialog').css('min-width','100px')
 			);
-			//console.log(idDoc);
 		}else{
 			alertify.error('You must select a document');
 		}
@@ -3114,7 +3117,7 @@ function getWeeksRes(id){
 					if( $("#idResTypeX").text() == 7 ){
 						confirmDeleteOccRes(this); 
 					}else{
-						alertify.error('You can not delete nights occupations');
+						alertify.error('You can not delete nights Occupancy');
 					}
 				});
 			}else{
@@ -3132,10 +3135,12 @@ function getWeeksRes(id){
 
 function confirmDeleteOccRes(selector){
 	var idOcc = $(selector).attr('attr_id');
-	var msg = "sure you want to delete the occupation?";
-	alertify.confirm('Delete occupation.', msg, 
+	var msg = "sure you want to delete the Occupancy?";
+	alertify.confirm('Delete Occupancy .', msg, 
 		function(){ deleteOccRes(idOcc); },
 		function(){ }
+	).moveTo(screen.width - 500,screen.height - 100).set('resizable',true).resizeTo('25%',210).isOpen(
+		$('.ajs-dialog').css('min-width','100px')
 	);
 }
 
@@ -3707,12 +3712,13 @@ function opcionAccountRes(attrType){
 							amoutCur = amoutCur + parseFloat($(this).val());
 						});
 						if( amoutCur.toFixed(4) > parseFloat($('#AmountAcc').val().trim()).toFixed(4)){
-							var msg = "The stated amount does not cover all of the selected concepts.</br>A partial payment was stored.";
-							alertify.confirm(msg, function (e){
-								if(e){
-									saveAccContRes(attrType);
-								}
-							});
+							var msg = "The stated amount does not cover all of the selected concepts. A partial payment was stored.";
+							alertify.confirm('Transactions.', msg, 
+								function(){ saveAccContRes(attrType); },
+								function(){ }
+							).moveTo(screen.width - 500,screen.height - 100).set('resizable',true).resizeTo('25%',210).isOpen(
+								$('.ajs-dialog').css('min-width','100px')
+							);
 						}else{
 							saveAccContRes(attrType);
 						}
@@ -3993,8 +3999,11 @@ function seeDocumentRes(idFile){
 }
 
 function deleteFileRes(idFile){
-	alertify.confirm("To delete the file?", function (e) {
-		if (e) {
+	
+	
+	
+	alertify.confirm('Delete File.', "To delete the file?", 
+		function(){ 
 			showLoading("#tableCFilesSelectedRes", true);
 			$.ajax({
 				data:{
@@ -4015,11 +4024,18 @@ function deleteFileRes(idFile){
 					showLoading("#tableCFilesSelectedRes", false);
 				}
 			});
+		},
+		function(){ }
+	).moveTo(screen.width - 500,screen.height - 100).set('resizable',true).resizeTo('25%',210).isOpen( $('.ajs-dialog').css('min-width','100px') );
+	
+	/*alertify.confirm("To delete the file?", function (e) {
+		if (e) {
+			
 			// user clicked "ok"
 		} else {
 			// user clicked "cancel"
 		}
-	});
+	});*/
 	//alert('id');
 }
 

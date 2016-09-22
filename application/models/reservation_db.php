@@ -116,7 +116,7 @@ class Reservation_db extends CI_Model {
         }*/
     }
     
-    public function getUnidadesOcc($filters, $unitId){
+    public function getUnidadesOcc($filters, $unitId ){
         $arrivaDate = $filters['fromDate'];
         $depurateDate = $filters['toDate'];
         /*$where = "(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = ri.fkResId ORDER BY ro2.fkCalendarId ASC) 
@@ -937,6 +937,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 	public function getResInvt($id){
 		$this->db->limit(1);
 		$this->db->select("ri.pkResInvtId, ri.fkUnitId, ri.NightsNumber, ro.fkOccTypeId, ro.RateAmtNight");
+		$this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = ro.fkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
+        $this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = ro.fkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
 		$this->db->from('tblResInvt ri');
 		$this->db->join('tblResOcc ro with(nolock) ', 'ro.fkResInvtId = ri.pkResInvtId', 'inner');
 		$this->db->where('ri.fkResId = ', $id);
