@@ -544,8 +544,17 @@
 						<fieldset class="large-12 columns fieldsetFilter">
 							<div class="row">
 								<!-- Arrival Date -->
-								<div class="small-12 large-4 columns">
-									<label id="userTrxLabel" class="text-left"> User
+								<div class="small-12 large-3 columns">
+									<label class="text-left">Date
+										<div class="input-group date">
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="dateAuditTRX" class="txtSearch input-group-field roundRight" readonly/>
+										</div>
+									</label>
+								</div>
+								<!-- Arrival Date -->
+								<div class="small-12 large-3 columns">
+									<label id="userTrxLabel" class="text-left">User
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-user"></i></span>
 											<input type="text" id="userTrxAudit" class="txtSearch input-group-field roundRight"/>
@@ -553,7 +562,7 @@
 									</label>
 								</div>
 								<!-- Departure Date -->
-								<div class="small-12 large-4 columns">
+								<div class="small-12 large-3 columns">
 									<label id="trxAuditLabel" class="text-left">Trx Description
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
@@ -571,7 +580,7 @@
 									</label>
 								</div>
 								<!-- Year -->
-								<div class="small-12 large-4 columns">
+								<div class="small-12 large-3 columns">
 									<label id="alertYearFront" class="text-left">YnAudit
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-check-circle-o"></i></span>

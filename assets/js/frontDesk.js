@@ -187,7 +187,13 @@ function initDatesAudit(){
 		format: 'm/d/Y',
 		show_icon: false,
 	});
-	$('#dateAudit').val(getCurrentDate());
+	$('#dateAudit').val(getCurrentDateMENOS(1));
+
+	$("#dateAuditTRX").Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
+	$('#dateAuditTRX').val(getCurrentDateMENOS(1));
 }
 /**
 * Muestra la lista de front desk
@@ -251,7 +257,7 @@ function getFrontDesk(order, page){
 	}else if(section == "section8"){
 		filters = {};
 		dates = {};
-		words = getWords(["userTrxAudit", "idTrx", "isAudited"]);
+		words = getWords(["dateAuditTRX","userTrxAudit", "idTrx", "isAudited"]);
 		options = {};
 		url = "frontDesk/getAuditTrx";
 	}
@@ -1631,4 +1637,21 @@ function getArrayValuesColumnTableC(tabla, columna){
 		}       
 	});
 	return items;
+}
+
+function getCurrentDateMENOS(dias){
+	var today = new Date();
+	var dd = today.getDate() - dias;
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+	
+	if(dd<10) {
+		dd='0'+dd
+	} 
+
+	if(mm<10) {
+		mm='0'+mm
+	} 
+	
+	return  mm+'/'+dd+'/'+yyyy;
 }
