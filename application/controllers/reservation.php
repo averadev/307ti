@@ -1251,35 +1251,37 @@ private function comprubaArray($valor, $array){
 			$filtros = $this->receiveWords($_POST);
 			$invt = $this->reservation_db->getResInvt($id);
 			if( count( $invt ) > 0 ){
-				//$FromDateStrtotime
-				
-				/*if( $_POST['fromDate'] ==  ){
-					
-				}*/
-				
-				//$invt[0]->fkUnitId;
-				$noUnidades = $this->reservation_db->getUnidadesOcc( $filtros, $invt[0]->fkUnitId );
-				if( count( $noUnidades ) == 0 ){
-					$total = $this->addNewOcc($id, $_POST['fromDate'], $_POST['toDate'], $invt[0]->fkOccTypeId, $invt[0]->RateAmtNight);
-					if( $total > 0 ){
-						$updateResInvt = [
-							"NightsNumber"	=> intval($invt[0]->NightsNumber) + $total,
-							"MdBy"			=> $this->nativesessions->get('id'),
-							"MdDt"			=> $this->getToday()
-						];
-						$condicion = "pkResInvtId = " . $invt[0]->pkResInvtId;
-						$afectados = $this->reservation_db->updateReturnId('tblResInvt', $updateResInvt, $condicion);
+				$endDateAfter = $this->getDiffDate($invt[0]->depatureDate, $_POST['fromDate']);
+				$iniDateBefore = $this->getDiffDate($invt[0]->arrivaDate, $_POST['toDate']);
+				if( $endDateAfter == '+1' ||  $iniDateBefore == '+0' ){
+					$noUnidades = $this->reservation_db->getUnidadesOcc( $filtros, $invt[0]->fkUnitId );
+					if( count( $noUnidades ) == 0 ){
+						$total = $this->addNewOcc($id, $_POST['fromDate'], $_POST['toDate'], $invt[0]->fkOccTypeId, $invt[0]->RateAmtNight);
+						if( $total > 0 ){
+							$updateResInvt = [
+								"NightsNumber"	=> intval($invt[0]->NightsNumber) + $total,
+								"MdBy"			=> $this->nativesessions->get('id'),
+								"MdDt"			=> $this->getToday()
+							];
+							$condicion = "pkResInvtId = " . $invt[0]->pkResInvtId;
+							$afectados = $this->reservation_db->updateReturnId('tblResInvt', $updateResInvt, $condicion);
+						}
+						$mensaje = [ "success" => True, "message"=>"Reserved nights"];
+					}else{
+						$mensaje = [ "success" => false, "message"=>"The nights are already occupancy. </ br> Select another date please"];
 					}
-					$mensaje = [ "success" => True, "message"=>"Reserved nights"];
 				}else{
-					$mensaje = [ "success" => false, "message"=>"The nights are already occupancy. </ br> Select another date please"];
-				}
-				
+					$mensaje = [ "success" => false, "message"=>"You can only add nights at the beginning or end of the reservation"];
+				}			
 			}else{
 				$mensaje = [ "success" => false, "message"=>"Reservation not found try again"];
 			}
 			echo json_encode($mensaje);
 		}
+	}
+	
+	public function comDate(){
+		echo $this->getDiffDate('09/22/2016', '09/05/2016');
 	}
 	
 	public function addNewOcc($idContrato, $iniDate, $endDate, $OccTypeId, $RateAmtNight){
@@ -1563,24 +1565,27 @@ private function comprubaArray($valor, $array){
 			$afectados = $this->reservation_db->updateReturnId('tblRes', $Res, $condicion);
 			if ($afectados>0) {
 
-			//$next = $this->reservation_db->getNextStatus($IdStatus);
-			$actual = $this->reservation_db->getCurrentStatus($IdStatus);
-			if ($actual == "Out") {
-				$financiamiento = [
-					"CheckOut"	=> $this->getToday(),
-				];
-				$condicion = "pkResId = " . $id;
-				$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
+				//$next = $this->reservation_db->getNextStatus($IdStatus);
+				$actual = $this->reservation_db->getCurrentStatus($IdStatus);
+				if ($actual == "Out") {
+					$financiamiento = [
+						"CheckOut"	=> $this->getToday(),
+					];
+					$condicion = "pkResId = " . $id;
+					$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
 				}
-			if ($actual == "In House") {
-				$financiamiento = [
-					"checkIn"	=> $this->getToday(),
-				];
-				$condicion = "pkResId = " . $id;
-				$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
+				if ($actual == "In House") {
+					$financiamiento = [
+						"checkIn"	=> $this->getToday(),
+					];
+					$condicion = "pkResId = " . $id;
+					$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
 				}
 				$dateCheckIn = $this->reservation_db->getCheckIn($id);
 				$CheckOut = $this->reservation_db->getCheckOut($id);
+				if( $_POST['NextStatus'] == "Cancel" || $_POST['NextStatus'] == "Exchange" ){
+					
+				}
 				$mensaje = [
 					"mensaje"=>"save correctly",
 					"afectados" => $afectados,
@@ -1648,6 +1653,15 @@ private function comprubaArray($valor, $array){
 		}
 	}
 
+	public function prueba(){
+		;
+		if($this->db->query("CALL spCNXRes('OW-20055-16',6)")){
+            echo 'listo';
+        }else{
+            show_error('Error!');
+        }
+	}
+	
 	public function modalFinanciamiento(){
 		if($this->input->is_ajax_request()) {
 			/*$idReservation = $_POST['idReservation'];
@@ -1971,9 +1985,16 @@ private function comprubaArray($valor, $array){
 				"id"		=>	$IdStatus
 			];
 		$propiedad = $this->reservation_db->propertyTable($peticion);
-	return $propiedad;
+		return $propiedad;
 
-}
+	}
+	
+	private function getDiffDate($date1, $date2){
+		$datetime1 = new DateTime($date1);
+		$datetime2 = new DateTime($date2);
+		$interval = $datetime1->diff($datetime2);
+		return $interval->format('%R%a');
+	}
 	
 }
 

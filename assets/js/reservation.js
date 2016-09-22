@@ -3555,7 +3555,22 @@ function modalStatusRes(){
        		text: "Change",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-				nextStatusContractRes();
+				//alert("hola");
+				//$('#statusRes').val()
+				var newStatus = $('#statusRes option:selected').text();
+				if( newStatus == "Cancel" || newStatus == "Exchange" ){
+					var msg = "Are you sure you want to change the status? It eliminated the reservation.";
+					alertify.confirm('Change Status.', msg, 
+					function(){ nextStatusContractRes(); },
+					function(){ }
+					).moveTo(screen.width - 500,screen.height - 100).set('resizable',true).resizeTo('25%',210).isOpen(
+						$('.ajs-dialog').css('min-width','100px')
+					);
+					//nextStatusContractRes();
+				}else{
+					nextStatusContractRes();
+				}
+				
        		}
      	}],
      close: function() {
@@ -3578,7 +3593,8 @@ function nextStatusContractRes(){
 	$.ajax({
 	    data:{
 	        idContrato: id,
-			idNextStatus: $('#statusRes').val()
+			idNextStatus: $('#statusRes').val(),
+			NextStatus: $('#statusRes option:selected').text()
 	    },
 	    type: "POST",
 	    url: "reservation/nextStatusReservation",
