@@ -998,3 +998,40 @@ function getNumberTextString(div){
 		return 0;
 	}
 }
+
+
+function drawTable4(data, table ,funcion, cadena, option){
+	var headHTML = "<tr>";
+	if(funcion != false){ 
+		headHTML += "<th>"+cadena+"</th>";
+	}
+    var bodyHTML = '';
+	
+    //creación de la cabecera
+	for (var j in data[0]) {
+        headHTML+="<th>"+j+"</th>";
+    }
+	
+	
+	headHTML += "</tr>";
+    //creación del body
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr id='row" + data[i].ID + "'>";
+		if(funcion != false){
+			bodyHTML += '<td class="iconEdit" nowrap onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-info-circle" aria-hidden="true"></i></td>';
+		}
+		
+        for (var j in data[i]) {
+            bodyHTML+="<td nowrap>" + data[i][j] + "</td>";
+        };
+		
+		
+		
+        bodyHTML+="</tr>";
+    }
+	$('#' + table + " thead" ).html(headHTML);
+	$('#' + table + " tbody" ).html(bodyHTML);
+	
+	$('#' + table ).show();
+	
+}

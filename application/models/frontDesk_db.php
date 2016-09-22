@@ -341,13 +341,29 @@ Class frontDesk_db extends CI_MODEL
 	public function getTrxAudit(){
 		$this->db->select("pkTrxTypeId as ID, TrxTypeDesc");
 		$this->db->from("TblTrxType ");
-		//$this->db->where("ynNAuditAuto", 1);
 		$this->db->where("ynActive", 1);
 		$query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
         }
 	}
+	public function selectTrxTypeSigno($type, $trxType){
+        $this->db->distinct();
+        $this->db->select("tt.pkTrxTypeId as ID, tt.TrxTypeDesc, tt.TrxSign");
+        $this->db->from('TblTrxType tt');
+        $this->db->join('tblAccTypeTrxType attt', 'attt.fkTrxTypeId = tt.pkTrxTypeId');
+        if($type == "newTransAcc"){
+            $this->db->where('attt.fkAccTypeId = ', $trxType);
+        }else if($type == "addPayAcc"){
+            $this->db->where('TrxSign = -1');
+        }
+        $this->db->order_by('tt.TrxTypeDesc', 'ASC');
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
 	public function getTrxAudition(){
 		$this->db->select("pkTrxTypeId as ID, TrxTypeDesc");
 		$this->db->from("TblTrxType ");
@@ -372,7 +388,7 @@ Class frontDesk_db extends CI_MODEL
     }
 	public function getAuditUnits($filters){
 		$this->db->distinct();
-		$this->db->select("R.pkResId, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc, ES.StatusDesc, OC.OccTypeDesc, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name");
+		$this->db->select("LTRIM(R.pkResId) as pkResId, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc, ES.StatusDesc as Status, OC.OccTypeDesc as OccTypeGroup, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name");
 		$this->db->from("tblRes R");
 		$this->db->join('tblResType RT', 'RT.pkResTypeId = R.fkResTypeId');
 		$this->db->join('tblResInvt RI', '(RI.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)');
@@ -435,30 +451,6 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->join("tblFloorPlan FP", "U.fkFloorPlanId = FP.pkFloorPlanID", "inner");
 		
 		$this->db->where("RP.ynPrimaryPeople", 1);
-		// if ($filters['words']['unitAudit'] != 0) {
-		// 	$this->db->where("U.UnitCode", $filters['words']['unitAudit']);
-		// }
-		// $condicion = '';
-		// if (isset($filters['words']['statusAudit'])) {
-		// 	for ($i=0; $i < sizeof($filters['words']['statusAudit']); $i++) { 
-		// 		$condicion .= 'ES.pkStatusId = '.$filters['words']['statusAudit'][$i];
-		// 		if ($i+1 < sizeof($filters['words']['statusAudit'])) {
-		// 			$condicion .=' or ';
-		// 		}
-		// 	}
-		// 	$this->db->where("( " . $condicion . ")");
-		// }
-		// $condicion = '';
-		// if (isset($filters['words']['occTypeAudit'])) {
-		// 	for ($i=0; $i < sizeof($filters['words']['occTypeAudit']); $i++) { 
-		// 		$condicion .= 'OC.pkOccTypeId = '.$filters['words']['occTypeAudit'][$i];
-		// 		if ($i+1 < sizeof($filters['words']['occTypeAudit'])) {
-		// 			$condicion .=' or ';
-		// 		}
-		// 	}
-		// 	$this->db->where("( " . $condicion . ")");
-		// }
-
 		$query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
@@ -467,8 +459,8 @@ Class frontDesk_db extends CI_MODEL
 	public function selectUnitsAudit(){
 		$this->db->distinct();
         $this->db->select("	'' as pkResId, RTRIM(u.UnitCode) as UnitCode");
-        $this->db->select("RTRIM(fp.FloorPlanDesc) as FloorPlanDesc, '' as StatusDesc");
-        $this->db->select("'' as OccTypeDesc, '' as ResConf, '' as LastName, '' as Name");
+        $this->db->select("RTRIM(fp.FloorPlanDesc) as FloorPlanDesc, '' as Status");
+        $this->db->select("'' as OccTypeGroup, '' as ResConf, '' as LastName, '' as Name");
         $this->db->from('tblUnit U');
 		$this->db->join("tblFloorPlan fp", "fp.pkFloorPlanID = u.fkFloorPlanId", "inner");
 		$query = $this->db->get();

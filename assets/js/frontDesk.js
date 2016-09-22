@@ -318,10 +318,10 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 						drawTable2( data.items, "tableExchangeRateFront", false, "" );
 					break;
 					case "section7":
-						drawTable2( data.items, "tablaAuditUnits", false, "" );
+						drawTable4( data.items, "tablaAuditUnits", false, "" );
 					break;
 					case "section8":
-							drawTable2( data.items, "tablaAuditTrx", false, "" );
+							drawTable4( data.items, "tablaAuditTrx", false, "" );
 					break;
 				}
 			}else{
@@ -370,9 +370,8 @@ function cleanAuditUnit(){
 }
 function cleanAuditUnitTRX(){
 	$("#userTrxAudit").val('');
-	$("#idTrx").val(0);
-	$("#isAudited").val(0);
-	
+	$("#idTrx").val("");
+	$("#isAudited").val("");
 }
 /**
 * obtiene los semanas dependiendo del año seleccionado

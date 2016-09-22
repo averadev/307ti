@@ -13,6 +13,7 @@ class FrontDesk extends CI_Controller {
 		parent::__construct();
 		$this->load->helper('validation');
 		$this->load->library('nativesessions');
+		$this->load->library('Pdf');
 		$this->load->library('excel');
 		$this->load->helper('url');
 		$this->load->database('default');
@@ -30,7 +31,7 @@ class FrontDesk extends CI_Controller {
 		$campos = "pkOccTypeGroupId as ID, OccTypeGroupDesc as Description";
 		$tabla = "tblOccTypeGroup";
 		$data["OccType"] = $this->frontDesk_db->selectTypeGeneral($campos, $tabla);
-		$data['TrxTypes'] = $this->frontDesk_db->getTrxAudit();
+		$data['TrxTypes'] = $this->frontDesk_db->selectTrxTypeSigno("newTransAcc", 6);
 		$data['view'] = $this->frontDesk_db->getView();
 		$data['status'] = $this->frontDesk_db->getStatus();
 		$data['HKStatus'] = $this->frontDesk_db->getHKStatus();
@@ -258,6 +259,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 				$data2 = $this->frontDesk_db->selectUnitsAudit();
 				
 				if ($data) {
+					//var_dump($data);
 					$datos = $this->mergeArrayDatos($data, $data2);
 					echo json_encode(array('items' => $datos));
 				}else{
@@ -275,14 +277,21 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		foreach( $datos1 as $key => $item ){
 				foreach( $datos2 as $item2 ){
 					if($item2->UnitCode == $item->UnitCode){
-						$unitDelete[] = $key;
+						$item2->pkResId = $item->pkResId;
+						//$item2->UnitCode = $item->UnitCode;
+						$item2->FloorPlanDesc = $item->FloorPlanDesc;
+						$item2->Status = $item->Status;
+						$item2->OccTypeGroup = $item->OccTypeGroup;
+						$item2->ResConf = $item->ResConf;
+						$item2->LastName = $item->LastName;
+						$item2->Name = $item->Name;
 					}
 				}
 			}
-			foreach( $unitDelete as $item ){
-				unset( $datos2[$item] );
-			}
-		return array_merge($datos1, $datos2);
+			// foreach( $unitDelete as $item ){
+			// 	unset( $datos2[$item] );
+			// }
+		return $datos2;
 	}
 
 
@@ -291,24 +300,20 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		if(isset($_GET['words'])){
 			$words = json_decode( $_GET['words'] );
 			$sql['words'] = $this->receiveWords($words);
-			// $sql['words'] = [
-			// 	"unitAudit" => 0,
-			// 	"statusAudit" => [15],
-			// 	"occTypeAudit" => []
-			// ];
 		}
 		if(isset($_GET['dates'])){
 			$dates = json_decode( $_GET['dates'] );
 			$sql['dates'] = $this->receiveWords($dates);
 		}
 		$data = $this->frontDesk_db->getAuditUnits($sql);
-		//var_dump($sql['words']["unitAudit"]);
 		if (isset($sql['words']["unitAudit"]) || isset($sql['words']["statusAudit"]) || isset($sql['words']["occTypeAudit"])) {
 			$this->makeExcel($data, "AuditReportunits", $sql);
+			//$this->reportPDFUnits($data, $sql);
 		}else{
 			$data2 = $this->frontDesk_db->selectUnitsAudit();
 			$datos = $this->mergeArrayDatos($data, $data2);
 			$this->makeExcel($datos, "AuditReportunits", $sql);
+			//$this->reportPDFUnits($datos, $sql);
 		}
 		
 	}
@@ -1053,8 +1058,8 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 			            )
 			        )
 			    );
-            $objPHPExcel->getActiveSheet()->getStyle($rango)->applyFromArray($estilos);
 
+            $objPHPExcel->getActiveSheet()->getStyle($rango)->applyFromArray($estilos);
             $objPHPExcel->getActiveSheet()->setAutoFilter($rango);
 
             for ($i = $inicio; $i != $lastColumn ; $i++) {
@@ -1071,7 +1076,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
             $objPHPExcel->getActiveSheet()->setTitle($nombre);
             // Set active sheet index to the first sheet, so Excel opens this as the first sheet
             $objPHPExcel->setActiveSheetIndex(0);
-
+            $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);
             $filename= $nombre . $date->getTimestamp() . '.xlsx'; //save our workbook as this file name
 			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //mime type
 			header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
@@ -1180,5 +1185,113 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		$strHoy = $hoy["year"]."-".$hoy["mon"]."-".$hoy["mday"] . " " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
 		return $strHoy;
 	}
+
+	private function reportPDFUnits($data, $filtros){
+		
+		$title = "Audit";
+		$name = "Audit";
+		$saveFiler = "Audit";
+		$pdf = $this->generatePdfTemp( $name, $title );
+		$style = $this->generateStyle();
+		
+		$body = '';
+		$body .= '<table width="100%">';
+		foreach ($data as $item){
+			$body .= '<tr><td>' . $item->pkResId . '</td></tr>';
+			$body .= '<tr><td>' . $item->UnitCode . '</td></tr>';
+			$body .= '<tr><td>' . $item->FloorPlanDesc. '</td></tr>';
+			$body .= '<tr><td>' . $item->Status . '</td></tr>';
+			$body .= '<tr><td>' . $item->OccTypeGroup . '</td></tr>';
+			$body .= '<tr><td>' . $item->ResConf . '</td></tr>';
+			$body .= '<tr><td>' . $item->LastName . '</td></tr>';
+			$body .= '<tr><td>' . $item->Name . '</td></tr>';
+		}
+		$body .= '</table>';
+		$body .= '<h4></h4>';
+		
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
+		
+		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+		
+		$pdf = $this->showpdf( $pdf, $saveFiler );
+	}
+	
+	private function generatePdfTemp( $name, $title){
+
+		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('307ti');
+        $pdf->SetTitle($name);
+        $pdf->SetSubject('report');
+        $pdf->SetKeywords('report');
+
+		$logo = "logo.jpg";
+		$headerString = " " . $this->nativesessions->get('username') .  " \n      " . $this->getonlyDate2(0);
+		$pdf->SetHeaderData($logo, 20, "     " . $title, "     " . $headerString,  array( 102,44,25 ), array( 102,44,25 ));
+        $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
+
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+ 
+        $pdf->SetMargins(5, PDF_MARGIN_TOP, 5);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+ 
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        $pdf->setFontSubsetting(true);
+        $pdf->SetFont('freemono', '', 14, '', true);
+        $pdf->AddPage();
+ 
+		//fijar efecto de sombra en el texto
+        $pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
+ 
+		return $pdf;
+ 
+	}
+	private function showpdf( $pdf, $saveFiler){
+		$date = new DateTime();
+		
+		$saveFiler .= $date->getTimestamp() . ".pdf";
+		
+		$nombre_archivo = utf8_decode($saveFiler);
+		$nombre_archivo = $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/" . $nombre_archivo;
+		
+		$nombre_archivo2 = utf8_decode($saveFiler);
+
+		$pdf->Output($nombre_archivo,'FI');
+		
+		$pdf = null;
+		
+	}
+	private function getonlyDate2($restarDay){
+		$date = date( "Y-m-d" );
+		$date = date( "m/d/Y", strtotime( $restarDay . " day", strtotime( $date ) ) ); 
+		return $date;
+	}
+	private function generateStyle(){
+		$style = '';
+		$style .= ' <style type="text/css">';
+		$style .= ' *{ font-family: Arial; font-weight: normal;}';
+		$style .= ' table{ color: #662C19; font-size:14px; }';
+		$style .= ' table.balance{ font-size:12px; }';
+		$style .= ' table.balance tr td, table tr th{ height: 25px; }';
+		$style .= ' th{ color: #662C19;  background-color: #fdf0d8; }';
+		$style .= ' table.poll{ color: #666666; font-size:14px; }';
+		$style .= ' table.poll tr td{  height: 25px; }';
+		$style .= ' .blackLine{ border-bottom: solid 2px #000000; }';
+		$style .= ' h3{ color: #662C19; }';
+		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
+		$style .= '</style>';
+
+		return $style;
+	}
+	
 }
 
