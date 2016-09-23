@@ -349,6 +349,7 @@ class Pdfs extends CI_Controller {
 	
 	public function ReservationConfirmation(){
 		$idRes = $_GET['idRes'];
+		$people = $this->pdfs_db->getCheckOut($idRes);
 		$data = $this->pdfs_db->getReservationConf($idRes);
 		$RateAmtNigh = $this->pdfs_db->getRateAmtNigh($idRes);
 		$trans = $this->pdfs_db->getTraxRes($idRes);
@@ -360,11 +361,23 @@ class Pdfs extends CI_Controller {
 		$style = $this->generateStyle();
 		
 		$body = '';
-		$body .= '<img src="assets/img/logo/header.jpg"  width="1000" />';
+		//$body .= '<img src="assets/img/logo/header.jpg"  width="1000" />';
+		$body .= '<h3>Dear:</h3>';
+		$body .= '<h4>';
+		foreach ($people as $item){
+			$body .= $item->Name . " " . $item->Last_name . " ";
+			//$name = $item->Name;
+			//$lname = $item->Last_name;
+			//$body .= '<tr><td class="Name">' . $name . '</td><td class="Last name">' . $lname . '</td>';
+			
+		}
+		$body .= '</h4>';
+		
+		
 		$restype = 0;
 		foreach( $data as $item ){
 			$item = $data[0];
-			$body .= '<h3>Dear ' . $item->LName . ' ' . $item->Name . ' </h3>';
+			//$body .= '<h3>Dear ' . $item->LName . ' ' . $item->Name . ' </h3>';
 			$body .= '<h4>Your reservation with us has been completed successfully.</h4>';
 			$body .= '<h3>SUMMARY OF YOUR RESERVATION</h3>';
 			$body .= '<table class="balance" width="100%">';
@@ -438,9 +451,45 @@ class Pdfs extends CI_Controller {
 		$pdf->AddPage();
 		
 		$body = '';
+		$body .= '<h3>Hotel Policies & Reservations Confirmations</h3>';
+		$body .= '<h4>The Towers at Mullet Bay Policies and Reservation Information page will provide you with all information you will need to make a reservation and stay with us at THE TOWERS SINT MAARTEN.</h4>';
+		$body .= '<h4 class="header">Guaranteed Reservations</h4>';
+		$body .= '<h4>In order to guarantee your Reservation a credit is required at the time of booking.</h4>';
+		$body .= '<h4>All Reservations are subject to a 15% Service Charge and 5% Government Room Tax.</h4>';
+		$body .= '<h4 class="header">Photo ID</h4>';
+		$body .= '<h4>Valid photo ID is required upon check in.</h4>';
+		$body .= '<h4 class="header">Payment options</h4>';
+		$body .= '<h4>The Towers at Mullet Bay accepts all major credit cards, Visa, Master Card, American Express, Maestro, Discover, as well as Cash.</h4>';
+		$body .= '<h4 class="header">Pre-authorization	 Information</h4>';
+		$body .= '<h4>Any preauthorized Credit Card payment by a third party requires a preauthorized form, from the Credit Card holder authorizing the necessary transaction.</h4>';
+		$body .= '<h4 class="header">Cancellation Policy</h4>';
+		$body .= '<h4 class="header">	Winter: </h4>';
+		$body .= '<h4>		From December 18th.  To January 1st. Full refund of deposit can be granted if a 30 (thirty) day notice is provided prior to the arrival date.</h4>';
+		$body .= '<h4>		From To January 1st.  To March 26th. Full refund of deposit can be granted if a 31 (thirty one) day notice is provided prior to the arrival date.</h4>';
+		$body .= '<h4 class="header">	Spring and summer:</h4>';
+		$body .= '<h4>		A- From March 27th.  To December 18th. Full refund of deposit can be granted if a 14 (fourteen) day notice is provided prior to the arrival date.</h4>';
+		$body .= '<h4>		B- Other Times a three day cancellation policy is required, less than three days a one day penalty  including service and tax will be charged. </h4>';
+		$body .= '<h4>Group and Conference reservations are subject to the cancellation and deposit policies outlined at time of booking and may vary from standard hotel policies.</h4>';
+		$body .= '<h4 class="header">Pets</h4>';
+		$body .= '<h4 class="header">Service Dog:</h4>';
+		$body .= '<h4>The Towers at Mullet Bay unfortunately does not accept pets, except for Medical Service Dog with proper documents. A of fine $200 United State Dollars will be charged if anyone violates this rule.</h4>';
+		$body .= '<h4 class="header">Check in / Check out</h4>';
+		$body .= '<h4>Check in time at The Towers at Mullet Bay begins at 4:00PM. ';
+		$body .= 'Every Saturday If your party happens to arrive earlier and the room is not available at the time of arrival, our concierge desk will be happy to store your bags so you can enjoy your day in Our Pool Bar. ';
+		$body .= 'Check out time is for 10:00AM every Saturday the day of departure. During the week check out time is at 12:00PM.</h4>';
+		$body .= '<h4 class="header">Age Requirement</h4>';
+		$body .= '<h4>To reserve a room at The Towers at Mullet Bay, there must be at least 1 adult present in the room 18 years of age or older.</h4>';
+		$body .= '<h4 class="header">Taxes & Fee</h4>';
+		$body .= '<h4>Time Share Owners and Exchangers are subject to a $50.00 Time Share Government tax</h4>';
+		$body .= '<h4 class="header">Room Occupancy</h4>';
+		$body .= '<h4>A- 4 Guest in a Studio</h4>';
+		$body .= '<h4>B- 4 Guest in a 1 (One) Bedroom</h4>';
+		$body .= '<h4>C- 6 Guest in a 2 (Two) Bedroom</h4>';
+		$body .= '<h4>D- 8 Guest in a 3 (Three) Bedroom</h4>';
+		$body .= '<h4 class="header">All Rooms Are None Smoking</h4>';
+		$body .= '<h4>All rooms are non smoking, violators will be subjected to a $500.00, penalty.</h4>';
 		
-		$body .= '<h3>Resort Policies</h3>';
-		
+		/*$body .= '<h3>Resort Policies</h3>';
 		$body .= '<h4>Hotel Policies & Reservations Confirmations</h4>';
 		$body .= '<h4>The Towers at Mullet Bay Policies and Reservation Information page will provide you with all information you will need to make a reservation and stay with us at THE TOWERS SINT MAARTEN.</h4>';
 		$body .= '<h4>Guaranteed Reservations</h4>';
@@ -475,8 +524,7 @@ class Pdfs extends CI_Controller {
 		$body .= ' A reservation agent will be able to fax or e-mail you the form to be filled out at your request.</h4>';
 		$body .= '<h4>Photo ID</h4>';
 		$body .= '<h4>Valid photo ID is required both for the check in process, as well as being a necessity to process a credit card.</h4>';
-		
-		$html = '';
+		$html = '';*/
 		$html .= ' <html><head></head><body>';
 		$html .= $body;
 		$html .= $style;
@@ -540,6 +588,7 @@ class Pdfs extends CI_Controller {
 		$style .= ' .blackLine{ border-bottom: solid 2px #000000; }';
 		$style .= ' h3{ color: #662C19; }';
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
+		$style .= ' h4.header{ color: #666666; font-weight: normal; font-size:16px; }';
 		$style .= '</style>';
 		return $style;
 	}
@@ -631,7 +680,7 @@ class Pdfs extends CI_Controller {
 		
 		$pdf->Output($nombre_archivo,'FI');
 		
-		$saveDocument = array(
+		/*$saveDocument = array(
 			'fkDocTypeId' => 1,
 			'docPath' => $nombre_archivo,
 			'docDesc' => $nombre_archivo2,
@@ -653,7 +702,7 @@ class Pdfs extends CI_Controller {
 			'MdBy' => $this->nativesessions->get('id'),
 			'MdDt' => $this->getToday(),
 		);
-		$this->pdfs_db->insert($saveDocumentRes,"tblResDoc");
+		$this->pdfs_db->insert($saveDocumentRes,"tblResDoc");*/
 		
 		$pdf = null;
 		
