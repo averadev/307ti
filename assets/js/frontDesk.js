@@ -1591,7 +1591,8 @@ function generateReportAuditUnits(){
 	
 	url += "&dates=" + dates;
 	url += "&words=" + words;
-	dowloadExcel("frontDesk/getAuditUnitsReport"+ url)
+	//dowloadExcel("frontDesk/getAuditUnitsReport"+ url);
+	window.open("frontDesk/getAuditUnitsReport"+ url);
 	
 }
 
@@ -1609,7 +1610,8 @@ function generateReportAuditTrx(){
 		url+= "&"+j+"="+words[j];
 	}
 	
-	dowloadExcel("frontDesk/getAuditTrxReport" + url);
+	//dowloadExcel("frontDesk/getAuditTrxReport" + url);
+	window.open("frontDesk/getAuditTrxReport"+ url);
 }
 
 function closeDAYTRX(){
