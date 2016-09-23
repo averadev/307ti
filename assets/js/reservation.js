@@ -4469,7 +4469,7 @@ function savedayForOccRes(iniDate, endDate){
 	});
 }
 
-/*
+
 function changeUnitResDialog(){
 	var div = "#dialog-ChangeUnitRes";	
 	var id = $("#idReservationX").text();
@@ -4505,6 +4505,4 @@ function changeUnitResDialog(){
 		}
 	});
 	return dialog;
-}*/
-
-
+}

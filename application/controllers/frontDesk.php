@@ -1239,7 +1239,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 			
 			if ($Anterior != '') {
 				if ($Anterior != $item->TrxTypeDesc) {
-					$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">SUBTOTAL</td><td class="blackLine2">'.$total.'</td><td class="blackLine"></td><td class="blackLine"></td></tr>'; 
+					$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">SUBTOTAL</td><td class="blackLine2">$'.number_format((float)$total, 2, '.', '').'</td><td class="blackLine"></td><td class="blackLine"></td></tr>'; 
 				}
 			}
 			$total += floatval($item->Amount);
@@ -1252,12 +1252,12 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 			$body .= '<td  class="blackLine">' . $item->CrBy . '</td>';
 			$body .= '<td  class="blackLine">' . $item->TrxTypeDesc . '</td>';
 			$body .= '<td  class="blackLine">' . $item->TrxSign . '</td>';
-			$body .= '<td  class="blackLine">' . $item->Amount . '</td>';
+			$body .= '<td  class="blackLine">$' . $item->Amount . '</td>';
 			$body .= '<td  class="blackLine">' . $item->Date_Audit . '</td>';
 			$body .= '<td  class="blackLine">' . $item->AuditedBy . '</td>';
 			$body .= '</tr>';
 		}
-		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">TOTAL</td><td class="blackLine">'.$total.'</td><td class="blackLine"></td><td class="blackLine"></td></tr>'; 
+		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">TOTAL</td><td class="blackLine2">$'.number_format((float)$total, 2, '.', '').'</td><td class="blackLine"></td><td class="blackLine"></td></tr>'; 
 		$body .= '</table>';
 		$html = '';
 		$html .= ' <html><head></head><body>';
@@ -1333,7 +1333,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		$style .= ' table.balance tr td, table tr th{ height: 20px; }';
 		$style .= ' th{ color: #662C19;  background-color: #fdf0d8; }';
 		$style .= ' .blackLine{ border-bottom: solid .5px gray; height: 15px;}';
-		$style .= ' .blackLine2{ border-bottom: solid .5px gray; height: 30px; font-weight:bold; font-size:9px;}';
+		$style .= ' .blackLine2{ border-bottom: solid .5px gray; height: 40px; font-weight:bold; font-size:9px;}';
 		$style .= ' h3{ color: #662C19; }';
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
 		$style .= '</style>';
