@@ -437,6 +437,36 @@ Class frontDesk_db extends CI_MODEL
             return $query->result();
         }
 	}
+
+	public function getAuditUnitsQUERY($filters){
+		$sql = "SELECT  distinct LTRIM(R.pkResId) as pkResId, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc, ES.StatusDesc as Status, OC.OccTypeDesc as OccTypeGroup, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name";
+		$sql.= " from tblRes R inner join tblResType RT on RT.pkResTypeId = R.fkResTypeId inner join tblResInvt RI on (RI.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)";
+		$sql.=" left JOIN tblUnit U on RI.fkUnitId = U.pkUnitId inner join tblResPeopleAcc RP on (RP.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)";
+		$sql.= " INNER JOIN tblPeople P on RP.fkPeopleId = P.pkPeopleId INNER JOIN tblResOcc RO on RO.fkResInvtId = RI.pkResInvtId inner join tblOccType OC on OC.pkOccTypeId = RO.fkOccTypeId inner join tblStatus ES on ES.pkStatusId = R.fkStatusId INNER JOIN tblFloorPlan FP on U.fkFloorPlanId = FP.pkFloorPlanID";
+		$sql.= " where";
+		$sql.= "'".$filters['dates']['dateAudit']."'". "between (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId asc)";
+		$sql.= " and ";
+		$sql.= " (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId desc) and RP.ynPrimaryPeople = 1";
+		if (!isset($filters['words']['unitAudit'])) {
+			$filters['words']['unitAudit'] = 0;
+		}
+		$condicion = '';
+		// if (isset($filters['words']['statusAudit'])) {
+		// 	for ($i=0; $i < sizeof($filters['words']['statusAudit']); $i++) { 
+		// 		$condicion .= 'ES.pkStatusId = '.$filters['words']['statusAudit'][$i];
+		// 		if ($i+1 < sizeof($filters['words']['statusAudit'])) {
+		// 			$condicion .=' or ';
+		// 		}
+		// 	}
+		// 	$sql.="and ( " . $condicion . ")";
+		// }
+		//var_dump($sql);
+		$query = $this->db->query($sql);
+
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+	}
 	public function getAuditUnits2($filters){
 		$this->db->distinct();
 		$this->db->select("R.pkResId, u.pkUnitId, RTRIM(u.UnitCode) as unitCode, RTRIM(fp.FloorPlanDesc) as FloorPlan");

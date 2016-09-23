@@ -251,7 +251,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 	public function getAuditUnits(){
 		if($this->input->is_ajax_request()){
 			$filtros = $this->receiveWords($_POST);
-			$data = $this->frontDesk_db->getAuditUnits($filtros);
+			$data = $this->frontDesk_db->getAuditUnitsQUERY($filtros);
 			//var_dump($filtros);
 			if ($filtros['words']["unitAudit"] || isset($filtros['words']["statusAudit"]) || isset($filtros['words']["occTypeAudit"])) {
 				echo json_encode(array('items' => $data));
@@ -305,7 +305,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 			$dates = json_decode( $_GET['dates'] );
 			$sql['dates'] = $this->receiveWords($dates);
 		}
-		$data = $this->frontDesk_db->getAuditUnits($sql);
+		$data = $this->frontDesk_db->getAuditUnitsQUERY($sql);
 		if (isset($sql['words']["unitAudit"]) || isset($sql['words']["statusAudit"]) || isset($sql['words']["occTypeAudit"])) {
 			$this->makeExcel($data, "AuditReportunits", $sql);
 			//$this->reportPDFUnits($data, $sql);
