@@ -608,7 +608,7 @@ function addUnidadResDialog(iniDate, unit, typeUnit){
 		    		ajaxSelectRes('contract/getProperties','try again', generalSelects, 'propertyRes');
 	    			ajaxSelectRes('contract/getUnitTypes','try again', generalSelects, 'floorPlanUnitRes');
 					ajaxSelectRes('reservation/getView','try again', generalSelects, 'viewUnitRes');
-					if( typeUnit == 'alta' ){
+					//if( typeUnit == 'alta' ){
 						$( "#DatesUnitRes" ).show();
 						$( "#fromDateUnitRes" ).Zebra_DatePicker({
 							format: 'm/d/Y',
@@ -621,9 +621,6 @@ function addUnidadResDialog(iniDate, unit, typeUnit){
 							show_icon: false,
 							direction: 1
 						});
-					}else{
-						$( "#DatesUnitRes" ).hide();
-					}
 					
 					if(iniDate != null){
 						$('#fromDateUnitRes').val(iniDate);
@@ -3590,11 +3587,13 @@ function nextStatusContractRes(){
 		id = $('#tab-general .tabs-title.active').data('idRes');
 	}*/
 	var id = $("#idReservationX").text();
+	var idRestype = $("#idResTypeX").text();
 	$.ajax({
 	    data:{
 	        idContrato: id,
 			idNextStatus: $('#statusRes').val(),
-			NextStatus: $('#statusRes option:selected').text()
+			NextStatus: $('#statusRes option:selected').text(),
+			idRestype:idRestype
 	    },
 	    type: "POST",
 	    url: "reservation/nextStatusReservation",
@@ -3614,6 +3613,11 @@ function nextStatusContractRes(){
 					    balance = parseFloat(balance);
 					 verificarRED(status, balance);
 	    	}else{
+				if( data['status'] == "Cancel" || data['status'] == "Exchange" ){
+					$('#btnNextStatusRes').remove();
+					$('#btnsTransRes').empty();
+					$('#btnNewOccRes').remove();
+				}
 	    		//$( ".checkInPeople" ).prop( "disabled", true);
 	    	}
 	    	$("#iNextStatus").removeClass("fa-spin");
@@ -3622,6 +3626,10 @@ function nextStatusContractRes(){
 			showLoading(div, false);
 			dialogStatusRes.dialog('close');
 	    	alertify.success(data['mensaje']);
+			/*
+			var newStatus = $('#statusRes option:selected').text();
+				if( newStatus == "Cancel" || newStatus == "Exchange" ){
+			*/
 	    		
 	    },
 	    error: function(){

@@ -115,12 +115,18 @@
 							<i class="fa fa-user-plus">Refinancing reservation</i></a>-->
 						</div>
 						<div class="small-6 columns">
-							<a id="btnNextStatusRes" class="btn btn-primary btn-right">
-								<div class="label">Change Status</div>
-								<span>
-									<i id="iNextStatus" class="fa fa-refresh fa-lg"></i>
-								</span>
-							</a>
+							<?php
+								if( !($statusActual == "Cancel" || $statusActual == "Exchange") ){
+									?>
+									<a id="btnNextStatusRes" class="btn btn-primary btn-right">
+										<div class="label">Change Status</div>
+										<span>
+											<i id="iNextStatus" class="fa fa-refresh fa-lg"></i>
+										</span>
+									</a>
+									<?php
+								}
+							?>
 						</div>
 					</div>
 				</div>
@@ -425,23 +431,29 @@
 					</div>
 				</div>
 			</div>
-			<div class="small-12 large-12 columns" style="padding-top:5px;">
-				<a id="btNewTransAccRes" attr_type="newTransAcc" class="btn btn-primary btn-Search">
-					<div class="label">New Transaction</div>
-					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
-				</a>
-				<a id="btAddPayAccRes" attr_type="addPayAcc" class="btn btn-primary spanSelect">
-					<div class="label">Add Payment</div>
-					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
-				</a>
-				<a id="btnShowPayCardASR" attr_type="cardASR" class="btn btn-primary spanSelect">
-					<div class="label">Card Associated</div>
-					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
-				</a>
-				<a id="btAddCreditLimitRes" attr_type="addLimitAcc" class="btn btn-primary spanSelect">
-					<div class="label">Credit Limit</div>
-					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
-				</a>
+			<div class="small-12 large-12 columns" id="btnsTransRes" style="padding-top:5px;">
+				<?php
+					if( !($statusActual == "Cancel" || $statusActual == "Exchange") ){
+					?>
+						<a id="btNewTransAccRes" attr_type="newTransAcc" class="btn btn-primary btn-Search">
+							<div class="label">New Transaction</div>
+							<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+						</a>
+						<a id="btAddPayAccRes" attr_type="addPayAcc" class="btn btn-primary spanSelect">
+							<div class="label">Add Payment</div>
+							<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+						</a>
+						<a id="btnShowPayCardASR" attr_type="cardASR" class="btn btn-primary spanSelect">
+							<div class="label">Card Associated</div>
+							<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+						</a>
+						<a id="btAddCreditLimitRes" attr_type="addLimitAcc" class="btn btn-primary spanSelect">
+							<div class="label">Credit Limit</div>
+							<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+						</a>
+					<?php
+					}
+				?>
 			</div>
 		</div>
 	</div>
@@ -533,17 +545,19 @@
 					</div>
 				</div>
 			</fieldset>
-			<?php 
-			if($contract[0]->fkResTypeId == 7){
-				?>
-				<div class="small-12 medium-12 large-12 columns" > 
-					<a id="btnNewOccRes" class="btn btn-primary btn-Search">
-						<div class="label">New Night</div>
-						<img src="<?php echo base_url().IMG; ?>common/more.png"/>
-					</a>
-				</div>
-				<?php
-			}
+			<?php
+				if( !($statusActual == "Cancel" || $statusActual == "Exchange") ){
+					if($contract[0]->fkResTypeId == 7){
+						?>
+						<div class="small-12 medium-12 large-12 columns" > 
+							<a id="btnNewOccRes" class="btn btn-primary btn-Search">
+								<div class="label">New Night</div>
+								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+							</a>
+						</div>
+						<?php
+					}
+				}
 			?>
 		</form>
 	</div>

@@ -1556,6 +1556,8 @@ private function comprubaArray($valor, $array){
 		if($this->input->is_ajax_request()) {
 			$id = $_POST['idContrato'];
 			$IdStatus = $_POST['idNextStatus'];
+			$idRestype = $_POST['idRestype'];
+			
 			$Res = [
 				"fkStatusId"	=> $IdStatus,
 				"MdBy"			=> $this->nativesessions->get('id'),
@@ -1583,8 +1585,13 @@ private function comprubaArray($valor, $array){
 				}
 				$dateCheckIn = $this->reservation_db->getCheckIn($id);
 				$CheckOut = $this->reservation_db->getCheckOut($id);
+				
 				if( $_POST['NextStatus'] == "Cancel" || $_POST['NextStatus'] == "Exchange" ){
-					
+					if( $idRestype == 7){
+						$resConf = $this->reservation_db->getResConf($id);
+						$code = $this->reservation_db->getStatusCode($IdStatus);
+						$this->db->query("exec  spCNXRes @Resconf='" . $resConf . "', @StatusCode='" . $code . "'");
+					}
 				}
 				$mensaje = [
 					"mensaje"=>"save correctly",
@@ -1654,8 +1661,7 @@ private function comprubaArray($valor, $array){
 	}
 
 	public function prueba(){
-		;
-		if($this->db->query("CALL spCNXRes('OW-20055-16',6)")){
+		if($this->db->query("exec  spCNXRes @Resconf='OW-20055-16', @StatusCode='CNX'")){
             echo 'listo';
         }else{
             show_error('Error!');
