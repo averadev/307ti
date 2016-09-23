@@ -439,10 +439,11 @@ Class frontDesk_db extends CI_MODEL
 	}
 
 	public function getAuditUnitsQUERY($filters){
-		$sql = "SELECT  distinct RTRIM(R.pkResId) as pkResId, RTRIM(U.UnitCode) as UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc, ES.StatusDesc as Status, OC.OccTypeDesc as OccTypeGroup, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name";
+		$sql = "SELECT  distinct RTRIM(R.pkResId) as pkResId, RTRIM(U.UnitCode) as UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc, ES.StatusDesc as Status, OG.OccTypeGroupDesc as OccTypeGroup, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name";
 		$sql.= " from tblRes R inner join tblResType RT on RT.pkResTypeId = R.fkResTypeId inner join tblResInvt RI on (RI.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)";
 		$sql.=" left JOIN tblUnit U on RI.fkUnitId = U.pkUnitId inner join tblResPeopleAcc RP on (RP.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)";
-		$sql.= " INNER JOIN tblPeople P on RP.fkPeopleId = P.pkPeopleId INNER JOIN tblResOcc RO on RO.fkResInvtId = RI.pkResInvtId inner join tblOccType OC on OC.pkOccTypeId = RO.fkOccTypeId inner join tblStatus ES on ES.pkStatusId = R.fkStatusId INNER JOIN tblFloorPlan FP on U.fkFloorPlanId = FP.pkFloorPlanID";
+		$sql.= " INNER JOIN tblPeople P on RP.fkPeopleId = P.pkPeopleId INNER JOIN tblResOcc RO on RO.fkResInvtId = RI.pkResInvtId inner join tblOccType OC on OC.pkOccTypeId = RO.fkOccTypeId inner join tblStatus ES on ES.pkStatusId = R.fkStatusId INNER JOIN tblFloorPlan FP on U.fkFloorPlanId = FP.pkFloorPlanID ";
+		$sql.= " inner join tblOccTypeGroup OG on OC.pkOccTypeId = OG.pkOccTypeGroupId";
 		$sql.= " where";
 		$sql.= "'".$filters['dates']['dateAudit']."'". "between (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId asc)";
 		$sql.= " and ";
@@ -466,7 +467,7 @@ Class frontDesk_db extends CI_MODEL
 		$condicion = '';
 		if (isset($filters['words']['occTypeAudit'])) {
 			for ($i=0; $i < sizeof($filters['words']['occTypeAudit']); $i++) { 
-				$condicion .= 'OC.pkOccTypeId = '.$filters['words']['occTypeAudit'][$i];
+				$condicion .= 'OG.pkOccTypeGroupId = '.$filters['words']['occTypeAudit'][$i];
 				if ($i+1 < sizeof($filters['words']['occTypeAudit'])) {
 					$condicion .=' or ';
 				}

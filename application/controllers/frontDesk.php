@@ -1234,17 +1234,22 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		}
 		$body.= '</tr>';
 		$total = 0;
-		$Anterior = '';		
+		$Anterior = '';
+
 		foreach ($data as $item){
-			
 			if ($Anterior != '') {
 				if ($Anterior != $item->TrxTypeDesc) {
-					$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">SUBTOTAL</td><td class="blackLine2">$'.number_format((float)$total, 2, '.', '').'</td><td class="blackLine"></td><td class="blackLine"></td></tr>'; 
+					$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">SUBTOTAL</td><td class="blackLine2">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine"></td><td class="blackLine"></td></tr>';
+					$subtotal = floatval($item->Amount);	 
+				}else{
+					$subtotal += floatval($item->Amount);
 				}
+			}else{
+				$subtotal += floatval($item->Amount);
 			}
 			$total += floatval($item->Amount);
-			
 			$Anterior = $item->TrxTypeDesc;
+			
 			$body .= '<tr>'; 
 			$body .= '<td  class="blackLine">' . $item->TrxID . '</td>';
 			$body .= '<td  class="blackLine">' . $item->UnitCode . '</td>';
@@ -1257,7 +1262,8 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 			$body .= '<td  class="blackLine">' . $item->AuditedBy . '</td>';
 			$body .= '</tr>';
 		}
-		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">TOTAL</td><td class="blackLine2">$'.number_format((float)$total, 2, '.', '').'</td><td class="blackLine"></td><td class="blackLine"></td></tr>'; 
+		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">SUBTOTAL</td><td class="blackLine2">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine"></td><td class="blackLine"></td></tr>';
+		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">TOTAL</td><td class="blackLine3">$'.number_format((float)$total, 2, '.', '').'</td><td class="blackLine"></td><td class="blackLine"></td></tr>'; 
 		$body .= '</table>';
 		$html = '';
 		$html .= ' <html><head></head><body>';
@@ -1334,6 +1340,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		$style .= ' th{ color: #662C19;  background-color: #fdf0d8; }';
 		$style .= ' .blackLine{ border-bottom: solid .5px gray; height: 15px;}';
 		$style .= ' .blackLine2{ border-bottom: solid .5px gray; height: 40px; font-weight:bold; font-size:9px;}';
+		$style .= ' .blackLine3{ border-bottom: solid .5px gray; height: 20px; font-weight:bold; font-size:9px;}';
 		$style .= ' h3{ color: #662C19; }';
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
 		$style .= '</style>';
