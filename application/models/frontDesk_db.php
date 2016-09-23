@@ -450,16 +450,29 @@ Class frontDesk_db extends CI_MODEL
 		if (!isset($filters['words']['unitAudit'])) {
 			$filters['words']['unitAudit'] = 0;
 		}
+		if ($filters['words']['unitAudit'] != 0) {
+			$sql.= "and U.UnitCode = ". $filters['words']['unitAudit'];
+		}
 		$condicion = '';
-		// if (isset($filters['words']['statusAudit'])) {
-		// 	for ($i=0; $i < sizeof($filters['words']['statusAudit']); $i++) { 
-		// 		$condicion .= 'ES.pkStatusId = '.$filters['words']['statusAudit'][$i];
-		// 		if ($i+1 < sizeof($filters['words']['statusAudit'])) {
-		// 			$condicion .=' or ';
-		// 		}
-		// 	}
-		// 	$sql.="and ( " . $condicion . ")";
-		// }
+		if (isset($filters['words']['statusAudit'])) {
+			for ($i=0; $i < sizeof($filters['words']['statusAudit']); $i++) { 
+				$condicion .= 'ES.pkStatusId = '.$filters['words']['statusAudit'][$i];
+				if ($i+1 < sizeof($filters['words']['statusAudit'])) {
+					$condicion .=' or ';
+				}
+			}
+			$sql.="and ( " . $condicion . ")";
+		}
+		$condicion = '';
+		if (isset($filters['words']['occTypeAudit'])) {
+			for ($i=0; $i < sizeof($filters['words']['occTypeAudit']); $i++) { 
+				$condicion .= 'OC.pkOccTypeId = '.$filters['words']['occTypeAudit'][$i];
+				if ($i+1 < sizeof($filters['words']['occTypeAudit'])) {
+					$condicion .=' or ';
+				}
+			}
+			$sql.="and ( " . $condicion . ")";
+		}
 		//var_dump($sql);
 		$query = $this->db->query($sql);
 
