@@ -390,16 +390,20 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->distinct();
 		$this->db->select("LTRIM(R.pkResId) as pkResId, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc, ES.StatusDesc as Status, OC.OccTypeDesc as OccTypeGroup, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name");
 		$this->db->from("tblRes R");
-		$this->db->join('tblResType RT', 'RT.pkResTypeId = R.fkResTypeId');
-		$this->db->join('tblResInvt RI', '(RI.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)');
-		$this->db->join('tblUnit U', 'U.pkUnitId = RI.fkUnitId', 'left');
+		$this->db->join('tblResType RT', 'RT.pkResTypeId = R.fkResTypeId', 'inner');
+		$this->db->join('tblResInvt RI', '(RI.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)', 'inner');
+		$this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'left');
 		$this->db->join('tblResPeopleAcc RP', '(RP.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)', 'inner');
-		$this->db->join('tblPeople P', ' P.pkPeopleId = RP.fkPeopleId', 'inner');
-		$this->db->join('tblResOcc RO', 'RO.fkResId = R.pkResId', 'inner');
+		$this->db->join('tblPeople P', 'RP.fkPeopleId = P.pkPeopleId ', 'inner');
+		$this->db->join('tblResOcc RO', 'RO.fkResInvtId = RI.pkResInvtId', 'inner');
 		$this->db->join('tblOccType OC', 'OC.pkOccTypeId = RO.fkOccTypeId', 'inner');
 		$this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId', 'inner');
 		$this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
-		  $this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) = ', $filters['dates']['dateAudit']);
+		$sqlWhere1  = $this->db->escape("(SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId asc)");
+		$sqlWhere2  = $this->db->escape("(SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId desc)");
+		$sqlWhere1 = str_replace("'",'',$sqlWhere1);
+		$sqlWhere2 = str_replace("'",'',$sqlWhere1);
+		$this->db->where("'".$filters['dates']['dateAudit']."'". 'BETWEEN '. $sqlWhere1. ' and '. $sqlWhere2);
 		$this->db->where("RP.ynPrimaryPeople", 1);
 		if (!isset($filters['words']['unitAudit'])) {
 			$filters['words']['unitAudit'] = 0;
@@ -472,7 +476,7 @@ Class frontDesk_db extends CI_MODEL
 
 		$this->db->distinct();
 		$this->db->select("AC.pkAccTrxId as TrxID, U.UnitCode, AC.CrDt, AC.CrBy, TT.TrxTypeDesc, TT.TrxSign");
-		$this->db->select("round(AC.AbsAmount, 2) as Amount, AC.NAuditDate as Date_Audit, US.UserLogin as AuditedBy");
+		$this->db->select("round(AC.AbsAmount, 2) as Amount, REPLACE(ISNULL(CONVERT(DATE, AC.NAuditDate), ''), '1900-01-01', '') as Date_Audit, ISNULL(US.UserLogin, '') as AuditedBy");
 		$this->db->from("tblRes R");
 		$this->db->join('tblResInvt RI', 'R.pkResId = RI.fkResId', 'inner');
 		$this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');

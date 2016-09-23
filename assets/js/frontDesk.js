@@ -81,7 +81,15 @@ $('#btnReporAuditTrx').off();
 $('#btnReporAuditTrx').on('click', function() {  generateReportAuditTrx(); });
 
 $('#btncloseDayAuditTransactions').off();
-$('#btncloseDayAuditTransactions').on('click', function() {  closeDAYTRX(); });
+$('#btncloseDayAuditTransactions').on('click', function() {  
+	var SRSS = getArrayValuesColumnTable("tablaAuditTrx", 8).length;
+	if (SRSS > 0) {
+		alertify.error("There are Transactions Audited");
+	}else{
+		closeDAYTRX();
+	}
+	
+});
 
 
 /************Funciones**************/
@@ -327,7 +335,7 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 						drawTable4( data.items, "tablaAuditUnits", false, "" );
 					break;
 					case "section8":
-							drawTable4( data.items, "tablaAuditTrx", false, "" );
+						drawTable4( data.items, "tablaAuditTrx", false, "" );
 					break;
 				}
 			}else{
@@ -1612,7 +1620,8 @@ function closeDAYTRX(){
 		url: "frontDesk/createTrxAuditById",
 		tipo: "json",
 		datos: {
-			TRX: TRXS
+			TRX: TRXS,
+			fecha: $("#dateAuditTRX").val()
 		},
 		funcionExito : saveExitoTrxID,
 		funcionError: mensajeAlertify

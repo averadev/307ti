@@ -181,18 +181,18 @@ public function createTrxAudit(){
 public function createTrxAuditById(){
 	if($this->input->is_ajax_request()){	
 		$Trx = $_POST['TRX'];
+		$fecha = $_POST['fecha'];
 		$T = [];
 		for ($i=0; $i < sizeof($Trx); $i++) {
-			$this->updateTRXByID($Trx[$i]);
-			//echo $Trx[$i]. "<br>";
+			$this->updateTRXByID($Trx[$i], $fecha);
 		}
 		echo json_encode(["mensaje" => "save Correctly"]);
 		}
 }
 
-private function updateTRXByID($ID){
-	$fecha =  new DateTime($this->getToday());
-	$fecha->modify("-1 day");
+private function updateTRXByID($ID, $fecha){
+	$fecha =  new DateTime($fecha);
+	// $fecha->modify("-1 day");
 	$fechaActual = $fecha->format('Y-m-d H:i:s');
 	$TRX =[
 		"NAuditDate"	=> $fechaActual,
