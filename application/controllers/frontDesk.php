@@ -307,13 +307,13 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		}
 		$data = $this->frontDesk_db->getAuditUnitsQUERY($sql);
 		if (isset($sql['words']["unitAudit"]) || isset($sql['words']["statusAudit"]) || isset($sql['words']["occTypeAudit"])) {
-			$this->makeExcel($data, "AuditReportunits", $sql);
-			//$this->reportPDFUnits($data, $sql);
+			//$this->makeExcel($data, "AuditReportunits", $sql);
+			$this->reportPDFUnits($data,"AuditReportunits", $sql);
 		}else{
 			$data2 = $this->frontDesk_db->selectUnitsAudit();
 			$datos = $this->mergeArrayDatos($data, $data2);
-			$this->makeExcel($datos, "AuditReportunits", $sql);
-			//$this->reportPDFUnits($datos, $sql);
+			//$this->makeExcel($datos, "AuditReportunits", $sql);
+			$this->reportPDFUnits($datos,"AuditReportunits", $sql);
 		}
 		
 	}
@@ -326,8 +326,8 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		];
 		$sql['words'] = $this->receiveWords($sql['words']);
 		$data = $this->frontDesk_db->getAuditTrx($sql['words']);
-		//var_dump($sql);
-		$this->makeExcel($data, "AuditReportTrx", $sql);
+		$data = $this->ParseNumberTRX($data);
+		$this->reportPDFTRX($data, "AuditReportTrx", $sql);
 	}
 	
 	public function getAuditTrx(){
@@ -1186,29 +1186,79 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		return $strHoy;
 	}
 
-	private function reportPDFUnits($data, $filtros){
+	private function reportPDFUnits($data, $titulo, $filtros){
 		
-		$title = "Audit";
-		$name = "Audit";
-		$saveFiler = "Audit";
+		$title = $titulo;
+		$name = $titulo;
+		$saveFiler = $titulo;
 		$pdf = $this->generatePdfTemp( $name, $title );
-		$style = $this->generateStyle();
-		
+		$style = $this->generateStyles();
 		$body = '';
-		$body .= '<table width="100%">';
-		foreach ($data as $item){
-			$body .= '<tr><td>' . $item->pkResId . '</td></tr>';
-			$body .= '<tr><td>' . $item->UnitCode . '</td></tr>';
-			$body .= '<tr><td>' . $item->FloorPlanDesc. '</td></tr>';
-			$body .= '<tr><td>' . $item->Status . '</td></tr>';
-			$body .= '<tr><td>' . $item->OccTypeGroup . '</td></tr>';
-			$body .= '<tr><td>' . $item->ResConf . '</td></tr>';
-			$body .= '<tr><td>' . $item->LastName . '</td></tr>';
-			$body .= '<tr><td>' . $item->Name . '</td></tr>';
+		$body .= '<table width="100%" cellpadding="2">';
+		$body.= '<tr>';
+		foreach ($data[0] as $clave => $valor){
+			$body .= '<th>' . $clave . '</th>';
+		}
+		$body.= '</tr>';
+		for ($i=0; $i <sizeof($data) ; $i++) {
+		$body .= '<tr>'; 
+			foreach ($data[$i] as $clave => $valor){
+				$body .= '<td  class="blackLine">' . $valor . '</td>';
+			}
+			$body .= '</tr>';
 		}
 		$body .= '</table>';
-		$body .= '<h4></h4>';
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
 		
+		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+		
+		$pdf = $this->showpdf( $pdf, $saveFiler );
+	}
+
+	private function reportPDFTRX($data, $titulo, $filtros){
+		
+		$title = $titulo;
+		$name = $titulo;
+		$saveFiler = $titulo;
+		$pdf = $this->generatePdfTemp( $name, $title );
+		$style = $this->generateStyles();
+		$body = '';
+		$body .= '<table width="100%" cellpadding="2">';
+		$body.= '<tr>';
+		foreach ($data[0] as $clave => $valor){
+			$body .= '<th>' . $clave . '</th>';
+		}
+		$body.= '</tr>';
+		$total = 0;
+		$Anterior = '';		
+		foreach ($data as $item){
+			
+			if ($Anterior != '') {
+				if ($Anterior != $item->TrxTypeDesc) {
+					$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">SUBTOTAL</td><td class="blackLine2">'.$total.'</td><td class="blackLine"></td><td class="blackLine"></td></tr>'; 
+				}
+			}
+			$total += floatval($item->Amount);
+			
+			$Anterior = $item->TrxTypeDesc;
+			$body .= '<tr>'; 
+			$body .= '<td  class="blackLine">' . $item->TrxID . '</td>';
+			$body .= '<td  class="blackLine">' . $item->UnitCode . '</td>';
+			$body .= '<td  class="blackLine">' . $item->CrDt . '</td>';
+			$body .= '<td  class="blackLine">' . $item->CrBy . '</td>';
+			$body .= '<td  class="blackLine">' . $item->TrxTypeDesc . '</td>';
+			$body .= '<td  class="blackLine">' . $item->TrxSign . '</td>';
+			$body .= '<td  class="blackLine">' . $item->Amount . '</td>';
+			$body .= '<td  class="blackLine">' . $item->Date_Audit . '</td>';
+			$body .= '<td  class="blackLine">' . $item->AuditedBy . '</td>';
+			$body .= '</tr>';
+		}
+		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">TOTAL</td><td class="blackLine">'.$total.'</td><td class="blackLine"></td><td class="blackLine"></td></tr>'; 
+		$body .= '</table>';
 		$html = '';
 		$html .= ' <html><head></head><body>';
 		$html .= $body;
@@ -1244,7 +1294,6 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
         $pdf->setFontSubsetting(true);
         $pdf->SetFont('freemono', '', 14, '', true);
         $pdf->AddPage();
@@ -1275,17 +1324,16 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
 		$date = date( "m/d/Y", strtotime( $restarDay . " day", strtotime( $date ) ) ); 
 		return $date;
 	}
-	private function generateStyle(){
+	private function generateStyles(){
 		$style = '';
 		$style .= ' <style type="text/css">';
 		$style .= ' *{ font-family: Arial; font-weight: normal;}';
-		$style .= ' table{ color: #662C19; font-size:14px; }';
+		$style .= ' table{ color: #662C19; font-size:8px; }';
 		$style .= ' table.balance{ font-size:12px; }';
-		$style .= ' table.balance tr td, table tr th{ height: 25px; }';
+		$style .= ' table.balance tr td, table tr th{ height: 20px; }';
 		$style .= ' th{ color: #662C19;  background-color: #fdf0d8; }';
-		$style .= ' table.poll{ color: #666666; font-size:14px; }';
-		$style .= ' table.poll tr td{  height: 25px; }';
-		$style .= ' .blackLine{ border-bottom: solid 2px #000000; }';
+		$style .= ' .blackLine{ border-bottom: solid .5px gray; height: 15px;}';
+		$style .= ' .blackLine2{ border-bottom: solid .5px gray; height: 30px; font-weight:bold; font-size:9px;}';
 		$style .= ' h3{ color: #662C19; }';
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
 		$style .= '</style>';

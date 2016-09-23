@@ -388,7 +388,7 @@ Class frontDesk_db extends CI_MODEL
     }
 	public function getAuditUnits($filters){
 		$this->db->distinct();
-		$this->db->select("LTRIM(R.pkResId) as pkResId, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc, ES.StatusDesc as Status, OC.OccTypeDesc as OccTypeGroup, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name");
+		$this->db->select("LTRIM(RTRIM(R.pkResId)) as pkResId, RTRIM(LTRIM(U.UnitCode)) as UnitCode, RTRIM(LTRIM(FP.FloorPlanDesc)) as FloorPlanDesc, ES.StatusDesc as Status, OC.OccTypeDesc as OccTypeGroup, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name");
 		$this->db->from("tblRes R");
 		$this->db->join('tblResType RT', 'RT.pkResTypeId = R.fkResTypeId', 'inner');
 		$this->db->join('tblResInvt RI', '(RI.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)', 'inner');
@@ -439,7 +439,7 @@ Class frontDesk_db extends CI_MODEL
 	}
 
 	public function getAuditUnitsQUERY($filters){
-		$sql = "SELECT  distinct LTRIM(R.pkResId) as pkResId, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc, ES.StatusDesc as Status, OC.OccTypeDesc as OccTypeGroup, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name";
+		$sql = "SELECT  distinct RTRIM(R.pkResId) as pkResId, RTRIM(U.UnitCode) as UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc, ES.StatusDesc as Status, OC.OccTypeDesc as OccTypeGroup, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name";
 		$sql.= " from tblRes R inner join tblResType RT on RT.pkResTypeId = R.fkResTypeId inner join tblResInvt RI on (RI.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)";
 		$sql.=" left JOIN tblUnit U on RI.fkUnitId = U.pkUnitId inner join tblResPeopleAcc RP on (RP.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)";
 		$sql.= " INNER JOIN tblPeople P on RP.fkPeopleId = P.pkPeopleId INNER JOIN tblResOcc RO on RO.fkResInvtId = RI.pkResInvtId inner join tblOccType OC on OC.pkOccTypeId = RO.fkOccTypeId inner join tblStatus ES on ES.pkStatusId = R.fkStatusId INNER JOIN tblFloorPlan FP on U.fkFloorPlanId = FP.pkFloorPlanID";
@@ -518,7 +518,7 @@ Class frontDesk_db extends CI_MODEL
 	public function getAuditTrx($filtros){
 
 		$this->db->distinct();
-		$this->db->select("AC.pkAccTrxId as TrxID, U.UnitCode, AC.CrDt, AC.CrBy, TT.TrxTypeDesc, TT.TrxSign");
+		$this->db->select("AC.pkAccTrxId as TrxID, U.UnitCode, AC.CrDt, ISNULL(US.UserLogin, '') as CrBy, TT.TrxTypeDesc, TT.TrxSign");
 		$this->db->select("round(AC.AbsAmount, 2) as Amount, REPLACE(ISNULL(CONVERT(DATE, AC.NAuditDate), ''), '1900-01-01', '') as Date_Audit, ISNULL(US.UserLogin, '') as AuditedBy");
 		$this->db->from("tblRes R");
 		$this->db->join('tblResInvt RI', 'R.pkResId = RI.fkResId', 'inner');
@@ -556,6 +556,7 @@ Class frontDesk_db extends CI_MODEL
 		if (isset($filtros['dateAuditTRX'])) {
 			$this->db->where("CONVERT(VARCHAR(10),R.CrDt,101)", $filtros['dateAuditTRX']);
 		}
+		$this->db->order_by('TT.TrxTypeDesc', 'ASC');
 		$query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();
