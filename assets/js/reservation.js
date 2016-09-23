@@ -35,7 +35,7 @@ $(document).ready(function(){
 	//$("#newReservation").on( 'click', function () {
 	$(document).off( 'click', '#newReservation');
 	$(document).on( 'click', '#newReservation', function () {
-		addReservation = createDialogReservation(addReservation);
+		addReservation = createDialogReservation(addReservation, 'alta');
 		addReservation.dialog("open");
 		if (unidadResDialog!=null) {
 			unidadResDialog.dialog( "destroy" );
@@ -61,16 +61,13 @@ $(document).ready(function(){
 	
 	$(document).off( 'click', '#btnChangeUnitRes');
 	$(document).on( 'click', '#btnChangeUnitRes', function () {
-		// if (peopleResDialog != null) {
-		// 	peopleResDialog.dialog( "destroy" );
-		// }
+		addReservation = createDialogReservation(addReservation, 'change');
+		addReservation.dialog("open");
 		if (unidadResDialog!=null) {
 			unidadResDialog.dialog( "destroy" );
 		}
 		unidadResDialog = addUnidadResDialog( null, null, 'change' );
 		unidadResDialog.dialog( "open" );
-        //changeUnitRes= changeUnitResDialog( $(this).attr('attr_table') );
-        //changeUnitRes.dialog( "open" );
 	});
 
 	$(document).off( 'click', '#btnAddUnidadesRes');
@@ -466,7 +463,7 @@ function cambiarCantidadDERes(monto){
 
 
 
-function createDialogReservation(addReservation) {
+function createDialogReservation(addReservation, typeRes) {
 	var div = "#dialog-Reservations";
 	if (addReservation!=null) {
 	    	addReservation.dialog( "destroy" );
@@ -477,6 +474,10 @@ function createDialogReservation(addReservation) {
 			showLoading(div,true);
 			$(this).load ("reservation/modal" , function(){
 		    	showLoading(div,false);
+				if( typeRes == "change"){
+					$('#languageDialogRes').remove();
+					$('#peopleDialogRes').remove();
+				}
 		 		//ajaxSelectRes('contract/getLanguages','try again', generalSelects, 'selectLanguageRes');
 				//ajaxSelectRes('reservation/getOccupancyTypes','try again', generalSelectsDefaultRes, 'occupancySalesRes');
 				
@@ -503,20 +504,27 @@ function createDialogReservation(addReservation) {
 				text: "Save",
 				"class": 'dialogModalButtonAccept',
 				click: function() {
-						if (verifyContractALLRes()) {
+					if( typeRes == "alta"){
+						if (verifyContractALLRes()){
 							createNewReservation();
 							$(this).dialog('close');
 						}
-				}
-			},/*{
+					}else if( typeRes == "change"){
+						if (verifyChangeUnitRes()) {
+							changeUnitRes();
+							$(this).dialog('close');
+						}
+					}
+					
+				},/*{
 				text: "Save",
 				"class": 'dialogModalButtonAccept',
 				click: function() {
 					if (verifyContractALLRes()) {
 						createNewReservation();
 					}
-				}
-			}*/
+				}*/
+			}
 		],
 		close: function() {
 			$('#dialog-Reservations').empty();
@@ -551,6 +559,16 @@ function verifyContractALLRes(){
 	return value;
 }
 
+function verifyChangeUnitRes(){
+	var value = false;
+	if (verifyContractRes()) {
+		if (verifyTablesUnitsRes()) {
+			value = true;
+		}
+	}
+	return value;
+}
+
 function verifyContractRes(){
 	//var arrayWords = ["depositoEngancheRes", "precioUnidadRes", "precioVentaRes"];
 	var value = true;
@@ -580,6 +598,16 @@ function verifyTablesContractRes(){
 		alertify.error("You should add one people or more");
 		value = false;
 	}else if (unidades.length<=0) {
+		alertify.error("You should add one unity or more");
+		value = false;
+	}
+	return value;
+}
+
+function verifyTablesUnitsRes(){
+	var value = true;
+	var unidades = getValueTableUnidadesRes();
+	if (unidades.length<=0) {
 		alertify.error("You should add one unity or more");
 		value = false;
 	}
@@ -650,19 +678,13 @@ function addUnidadResDialog(iniDate, unit, typeUnit){
 					}
 					$('#btnGetUnidadesRes').unbind('click');
 					$('#btnGetUnidadesRes').click(function(){
-						if( typeUnit == 'alta' ){
-							if($('#fromDateUnitRes').val().trim().length > 0 && $('#toDateUnitRes').val().trim().length > 0 ){
-								iniDateRes = $('#fromDateUnitRes').val();
-								endDateRes = $('#toDateUnitRes').val();
-								getUnidadesRes(typeUnit);
-							}else{
-								alertify.error("Choose dates for the reservation");
-							}
-						}else{
+						if($('#fromDateUnitRes').val().trim().length > 0 && $('#toDateUnitRes').val().trim().length > 0 ){
+							iniDateRes = $('#fromDateUnitRes').val();
+							endDateRes = $('#toDateUnitRes').val();
 							getUnidadesRes(typeUnit);
+						}else{
+							alertify.error("Choose dates for the reservation");
 						}
-						
-						
 					});
 		            //selectTableRes("tblUnidadesRes");
 					selectTableUnicoRes("tblUnidadesRes");
@@ -691,10 +713,8 @@ function addUnidadResDialog(iniDate, unit, typeUnit){
 					endDate = endDate[2];
 					var frequency = "every Year";
 	       			tablUnidadadesRes(unidades, frequency, intDate, endDate);
-					///$('#occupancySalesRes').val(2);
 					id = $('#occupancyTypeGroupRes').val();
 					ajaxSelectRes('reservation/getOccupancyTypes?id='+id,'try again', getOccupancyTypes, 'occupancySalesRes');
-					//getOpctionOccType();
 	       			$(this).dialog('close');
 				}else{
 					alertify.error("Search and click over for choose one");
@@ -1731,11 +1751,11 @@ function selectMetodoPagoRes(){
 function getUnidadesRes(typeUnit){
 	showLoading('#tblUnidadesRes',true);
 	var id;
-	if(typeUnit == "alta"){
+	/*if(typeUnit == "alta"){
 		id = 0;
 	}else{
 		id: $("#idReservationX").text()
-	}
+	}*/
 	
 	$.ajax({
 		data:{
@@ -1746,7 +1766,6 @@ function getUnidadesRes(typeUnit){
 			toDate:$('#toDateUnitRes').val(),
 			floorPlan:$('#floorPlanUnitRes').val(),
 			view:$('#viewUnitRes').val(),
-			id:id
 		},
 		type: "POST",
 		url: "reservation/getUnidades",
@@ -4469,42 +4488,65 @@ function savedayForOccRes(iniDate, endDate){
 	});
 }
 
-/*
-function changeUnitResDialog(){
-	var div = "#dialog-ChangeUnitRes";	
-	var id = $("#idReservationX").text();
-	dialog = $(div).dialog({
-		open : function (event){
-			if ($(div).is(':empty')) {
-				showLoading(div, true);
-				$(this).load("reservation/modalChangeUnit?id="+id, function(){
-		    		showLoading(div, false);
+function changeUnitRes(){
+	var id = "saveDataReservation";
+	var arrayWords = ["depositoEngancheRes", "precioUnidadRes", "precioVentaRes"];
+	var form = $("#"+id);
+	var elem = new Foundation.Abide(form, {});
+
+		var unidades = getValueTableUnidadesRes();
+		if (unidades.length<=0) {
+			alertify.error("You must add at least one unit");
+		}else{
+			var id = $('#idReservationX').text();
+			var unidadRes = getValueTableUnidadesRes();
+			var date1 = new Date(iniDateRes);
+			var date2 = new Date(endDateRes);
+			var dayDif = date2.getTime() - date1.getTime();
+			var day = Math.round(dayDif/(1000 * 60 * 60 * 24));
+			//showAlert(true,"Saving changes, please wait ....",'progressbar');
+			msgReservation = alertify.success('Saving changes, please wait ....', 0);
+			$.ajax({
+					data: {
+						id: id,
+						unidades: unidadRes,
+						weeks: getArrayValuesColumnTableRes("tableUnidadesResSelected",7),
+						firstYear : unidadRes[0].fyear,
+						lastYear : unidadRes[0].lyear,
+						occType : $("#occupancySalesRes").val(),
+						occCode : $('#occupancyTypeGroupRes option:selected').attr('occCode'),
+						amountTransfer:getNumberTextInputRes("amountTransferRes"),
+						financeBalance: $("#financeBalanceRes").val(),
+						viewId: 1,
+						day:day,
+						iniDate:iniDateRes,
+						endDate:endDateRes,
+						RateAmtNight:$('#RateRes').val(),
+					},
+
+					type: "POST",
+					dataType:'json',
+					url: 'reservation/changeUnitRes'
+				})
+				.done(function( data, textStatus, jqXHR ) {
+					//showAlert(false,"Saving changes, please wait ....",'progressbar');
+					msgReservation.dismiss();
+					if(data["unities"].length > 0){
+						drawTableSinHeadReservation(data["unities"], "tableUnidadesReservation");
+					}
+					$('#tableUnidadesResSelected tbody').empty();
+					alertify.success(data['mensaje']);
+					var tabCurrent = $('#tab-general .active').attr('attr-screen');
+					if(tabCurrent == "frontDesk"){
+						getFrontDesk("",1);
+					}else{	
+						getReservations();
+					}
 					
-	    		});
-			}
-		},
-		autoOpen: false,
-		height: maxHeight,
-		width: "70%",
-		modal: true,
-		buttons: [{
-			text: "Cancel",
-			"class": 'dialogModalButtonCancel',
-			click: function() {
-				$(this).dialog('close');
-			}
-		},{
-			text: "Add",
-			"class": 'dialogModalButtonAccept',
-			click: function() {
-				
-			}
-		}],
-		close: function() {
-			$('#dialog-NewOccRes').empty();
+				})
+				.fail(function( jqXHR, textStatus, errorThrown ) {
+					alertify.error("Try again");
+				});
+		//}
 		}
-	});
-	return dialog;
-}*/
-
-
+}

@@ -1057,10 +1057,10 @@ private function comprubaArray($valor, $array){
 	
 	public function getUnidades(){
 		if($this->input->is_ajax_request()) {
-			$id = $_POST['id'];
-			if($id != 0){
+			//$id = $_POST['id'];
+			/*if($id != 0){
 				$unit= $this->reservation_db->getUnitOfRes($id);
-			}
+			}*/
 			
 			$filtros = $this->receiveWords($_POST);
 			$unidades = $this->reservation_db->getUnidades( $filtros );
@@ -1832,6 +1832,32 @@ private function comprubaArray($valor, $array){
 			$data = $this->reservation_db->getPeopleReservation($id);
 			echo json_encode( array( 'success' => true, 'message' => "People save", 'items' => $data) );
 		}
+	}
+	
+	function changeUnitRes(){
+		$id = $_POST['id'];
+		$this->db->delete('tblResInvt', array('fkResId' => $id));
+		$this->db->delete('tblResOcc', array('fkResId' => $id));
+		$this->createUnidades($id);
+		$this->createSemanaOcupacion($id, $_POST['iniDate'], $_POST['endDate']);
+		$unities = $this->reservation_db->getUnitiesReservation($id);
+		foreach($unities as $item){
+			if( $item->fkResTypeId == 7 ){
+				$RateAmtNight = $this->reservation_db->getRateAmtNightByDay( $id );
+				$price = 0;
+				foreach( $RateAmtNight as $item2 ){
+					$price += $item2->RateAmtNight;
+				}
+				$item->Price = $price;
+			}
+			unset( $item->fkResTypeId, $item->fkFloorPlanId, $item->fkViewId, $item->fkFloorId, $item->iniDate, $item->endDate );
+		}
+		$datos['unities'] = $unities;
+	 	echo  json_encode([
+			"mensaje" => 'Reservation Save',
+			"idContrato" =>$id,
+			"unities" =>$unities,
+		]);
 	}
 	
 	

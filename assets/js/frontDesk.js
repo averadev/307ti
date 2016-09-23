@@ -1370,7 +1370,7 @@ function showNewReservation(selector){
 			if ( data.items.length > 0 ){
 				var addReservation = null;
 				var unidadResDialog = addUnidadResDialog();
-				addReservation = createDialogReservation(addReservation);
+				addReservation = createDialogReservation(addReservation, 'alta');
 				addReservation.dialog("open");
 				if (unidadResDialog!=null) {
 					unidadResDialog.dialog( "destroy" );

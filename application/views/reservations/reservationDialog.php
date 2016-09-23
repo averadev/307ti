@@ -9,7 +9,7 @@
             </div>
         </div>
         <form id="saveDataReservation" data-abide>
-            <div class="fieldset large-12 columns">
+            <div class="fieldset large-12 columns" id="languageDialogRes">
                 <legend>
                     Language
                 </legend>
@@ -32,7 +32,7 @@
                     </div>
                 </div>
 			</div>
-			<div class="fieldset large-12 columns">
+			<div class="fieldset large-12 columns" id="peopleDialogRes">
                 <legend>
                     People
                 </legend>
