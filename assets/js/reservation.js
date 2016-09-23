@@ -4488,7 +4488,6 @@ function savedayForOccRes(iniDate, endDate){
 	});
 }
 
-<<<<<<< HEAD
 function changeUnitRes(){
 	var id = "saveDataReservation";
 	var arrayWords = ["depositoEngancheRes", "precioUnidadRes", "precioVentaRes"];
@@ -4550,42 +4549,4 @@ function changeUnitRes(){
 				});
 		//}
 		}
-=======
-
-function changeUnitResDialog(){
-	var div = "#dialog-ChangeUnitRes";	
-	var id = $("#idReservationX").text();
-	dialog = $(div).dialog({
-		open : function (event){
-			if ($(div).is(':empty')) {
-				showLoading(div, true);
-				$(this).load("reservation/modalChangeUnit?id="+id, function(){
-		    		showLoading(div, false);
-					
-	    		});
-			}
-		},
-		autoOpen: false,
-		height: maxHeight,
-		width: "70%",
-		modal: true,
-		buttons: [{
-			text: "Cancel",
-			"class": 'dialogModalButtonCancel',
-			click: function() {
-				$(this).dialog('close');
-			}
-		},{
-			text: "Add",
-			"class": 'dialogModalButtonAccept',
-			click: function() {
-				
-			}
-		}],
-		close: function() {
-			$('#dialog-NewOccRes').empty();
-		}
-	});
-	return dialog;
->>>>>>> origin/master
 }
