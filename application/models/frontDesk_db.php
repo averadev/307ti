@@ -498,13 +498,16 @@ Class frontDesk_db extends CI_MODEL
 						break;
 			}
 		}else{
-			$this->db->join('tblUser US', 'AC.NAuditUserId = US.pkUserId', 'left');
+			$this->db->join('tblUser US', 'AC.NAuditUserId = US.pkUserID', 'left');
 		}
 		if (isset($filtros["userTrxAudit"])) {
 			$this->db->where("AC.NAuditUserId = (select pkUserID from tblUser where UserLogin = '".$filtros["userTrxAudit"]."')");
 		}
 		if (isset($filtros["idTrx"])) {
 			$this->db->where("TT.pkTrxTypeId", $filtros["idTrx"]);
+		}
+		if (isset($filtros['dateAuditTRX'])) {
+			$this->db->where("CONVERT(VARCHAR(10),R.CrDt,101)", $filtros['dateAuditTRX']);
 		}
 		$query = $this->db->get();
         if($query->num_rows() > 0 ){
