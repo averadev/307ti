@@ -160,23 +160,48 @@ public function createTrxAudit(){
 	if($this->input->is_ajax_request()){	
 		$Trx = $_POST['TRX'];
 		$RS = $_POST['RS'];
+		$fecha = $_POST['fecha'];
 		$T = [];
+		$Rate = [];
+		for ($j=0; $j < sizeof($RS); $j++) { 
+			$P = $this->frontDesk_db->selectRateTRX($RS[$j], $fecha);
+			$Rate[$RS[$j]] = $P;
+		}
 		for ($i=0; $i < sizeof($Trx); $i++) {
-			$OK = $this->frontDesk_db->selectValorTrx($Trx[$i]);
-			$object = (object) $OK[0];
-			if ($object->Porcetaje) {
-				$Porcetaje = $object->AutoAmount / 100;
-				$Precio = $Porcetaje * ($this->frontDesk_db->selectAmountTrx($object->fkTrxTypeId));
+			if ($Trx[$i] != 45 && $Trx[$i] != 47 &&  $Trx[$i] != 58) {
+		
+				$OK = $this->frontDesk_db->selectValorTrx($Trx[$i]);
+				$object = (object) $OK[0];
+				if ($object->Porcetaje) {
+					$Porcetaje = $object->AutoAmount / 100;
+					$Precio = $Porcetaje * ($this->frontDesk_db->selectAmountTrx($object->fkTrxTypeId));
+				}else{
+					$Precio = $object->AutoAmount;
+				}
+				for ($j=0; $j < sizeof($RS); $j++) {
+					$this->insertAuditTransaction($RS[$j], $Precio, $Trx[$i], $fecha);
+				}	
 			}else{
-				$Precio = $object->AutoAmount;
+				for ($j=0; $j < sizeof($RS); $j++) {
+					if ($Trx[$i] == 45) {
+						$Precio = $Rate[$RS[$j]];
+					}else{
+						$Porcetaje = $this->frontDesk_db->selectPorcentajeTRX($Trx[$i]);
+						$Precio = $Rate[$RS[$j]];
+						if ($Porcetaje == 0) {
+							$Precio = $Precio;
+						}else{
+							$Precio = $Precio * ($Porcetaje/100);
+						}
+					}
+					$this->insertAuditTransaction($RS[$j], $Precio, $Trx[$i], $fecha);
+				}
 			}
-			for ($j=0; $j < sizeof($RS); $j++) { 
-				$this->insertAuditTransaction($RS[$j], $Precio, $Trx[$i]);
-			}	
 		}
+
 		echo json_encode(["mensaje" => "Save Correctly"]);
-		}
-}
+}}
+
 
 public function createTrxAuditById(){
 	if($this->input->is_ajax_request()){	
@@ -203,42 +228,53 @@ private function updateTRXByID($ID, $fecha){
 }
 
 
-private function insertAuditTransaction($IdReserva, $Precio, $TrxID){
+private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
+	$IDCuenta = $this->frontDesk_db->getACCIDByContracID($IdReserva);
+	$TRXSAVED = $this->frontDesk_db->selectTRXSAVED($fecha, $IDCuenta);
+	$TRXX = [];
+	for ($i=0; $i < sizeof($TRXSAVED); $i++) { 
+		array_push($TRXX, $TRXSAVED[$i]->fkTrxTypeId);
+	}
+	if (!in_array($TrxID, $TRXX)) {
+	
+		$fecha =  new DateTime($fecha);
+		$fechaActual = $fecha->format('Y-m-d H:i:s');
+		$precio = valideteNumber($Precio);
+		$Dolares = $this->frontDesk_db->selectIdCurrency('USD');
+		$Florinres  = $this->frontDesk_db->selectIdCurrency('NFL');
+		$Euros  = $this->frontDesk_db->selectIdCurrency('EUR');
+		$tipoCambioFlorines  = $this->frontDesk_db->selectTypoCambio($Dolares, $Florinres);
+		$tipoCambioEuros = $this->frontDesk_db->selectTypoCambio($Dolares, $Euros);
+		$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
+		$tipoCambioEuros = valideteNumber($tipoCambioEuros);
+		$euros = $precio * $tipoCambioEuros;
+		$florines = $precio * $tipoCambioFlorines;
 
-	$precio = valideteNumber($Precio);
-	$Dolares = $this->frontDesk_db->selectIdCurrency('USD');
-	$Florinres  = $this->frontDesk_db->selectIdCurrency('NFL');
-	$Euros  = $this->frontDesk_db->selectIdCurrency('EUR');
-	$tipoCambioFlorines  = $this->frontDesk_db->selectTypoCambio($Dolares, $Florinres);
-	$tipoCambioEuros = $this->frontDesk_db->selectTypoCambio($Dolares, $Euros);
-	$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
-	$tipoCambioEuros = valideteNumber($tipoCambioEuros);
-	$euros = $precio * $tipoCambioEuros;
-	$florines = $precio * $tipoCambioFlorines;
+		$transaction = [
+			"fkAccid"		=> $IDCuenta,//la cuenta
+			"fkTrxTypeId"	=> $TrxID,
+			"fkTrxClassID"	=> $this->frontDesk_db->gettrxClassID('LOA'),
+			"Debit-"		=> 0,
+			"Credit+"		=> 0,
+			"Amount"		=> $precio,
+			"AbsAmount"		=> $precio,
+			"Curr1Amt"		=> valideteNumber($euros),
+			"Curr2Amt"		=> valideteNumber($florines),
+			"Remark"		=> '', //
+			"Doc"			=> '',
+			"DueDt"			=> $this->getToday(),
+			"ynActive"		=> 1,
+			"NAuditDate"	=> $fechaActual,
+			"NAuditUserId"	=> $this->nativesessions->get('id'),
+			"fkCurrencyId"	=> 2,
+			"CrBy"			=> $this->nativesessions->get('id'),
+			"CrDt"			=> $fechaActual,
+			"MdBy"			=> $this->nativesessions->get('id'),
+			"MdDt"			=> $this->getToday(),
+		];
+		$this->frontDesk_db->insertReturnId('tblAccTrx', $transaction);
+	}
 
-	$transaction = [
-		"fkAccid"		=> $this->frontDesk_db->getACCIDByContracID($IdReserva),//la cuenta
-		"fkTrxTypeId"	=> $TrxID,
-		"fkTrxClassID"	=> $this->frontDesk_db->gettrxClassID('LOA'),
-		"Debit-"		=> 0,
-		"Credit+"		=> 0,
-		"Amount"		=> $precio,
-		"AbsAmount"		=> $precio,
-		"Curr1Amt"		=> valideteNumber($euros),
-		"Curr2Amt"		=> valideteNumber($florines),
-		"Remark"		=> '', //
-		"Doc"			=> '',
-		"DueDt"			=> $this->getToday(),
-		"ynActive"		=> 1,
-		"NAuditDate"	=> $this->getToday(),
-		"NAuditUserId"	=> $this->nativesessions->get('id'),
-		"fkCurrencyId"	=> 2,
-		"CrBy"			=> $this->nativesessions->get('id'),
-		"CrDt"			=> $this->getToday(),
-		"MdBy"			=> $this->nativesessions->get('id'),
-		"MdDt"			=> $this->getToday(),
-	];
-	$this->frontDesk_db->insertReturnId('tblAccTrx', $transaction);
 }
 	public function getWeekByYear(){
 		if($this->input->is_ajax_request()){

@@ -1559,15 +1559,19 @@ function addHTMLAddTrx(data){
 }
 
 function saveTrxAudit(){
-	msgTrxAudit = alertify.success('Saving changes, please wait <i class="fa fa-spinner fa-spin fa-fw"></i>', 0);
+		msgTrxAudit = alertify.success('Saving changes, please wait <i class="fa fa-spinner fa-spin fa-fw"></i>', 0);
 	var TRXS = AUDITTRX.multipleSelect('getSelects');
+	var TRXSTEXT = AUDITTRX.multipleSelect('getSelects', 'text');
 	var RSS = getArrayValuesColumnTable("tablaAuditUnits", 1);
+	var fecha = $("#dateAudit").val();
 	var ajaxDatos =  {
 		url: "frontDesk/createTrxAudit",
 		tipo: "json",
 		datos: {
 			TRX: TRXS,
-			RS: RSS
+			TRXSTEXT: TRXSTEXT,
+			RS: RSS,
+			fecha: fecha
 		},
 		funcionExito : saveExitoTrx,
 		funcionError: mensajeAlertify

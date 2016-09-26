@@ -338,6 +338,18 @@ Class frontDesk_db extends CI_MODEL
             return $query->result();
         }
 	}
+	public function selectTRXSAVED($fecha, $idACC){
+		$this->db->select("AT.fkTrxTypeId");
+		$this->db->from("tblAccTrx AT");
+		$this->db->join('tblTrxType TT', 'AT.fkTrxTypeId = TT.pkTrxtypeId');
+		$this->db->where("TT.ynNAuditAuto", 1);
+		$this->db->where("CONVERT(VARCHAR(10),AT.CrDt,101)", $fecha);
+		$this->db->where("fkAccId", $idACC);
+		$query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+	}
 	public function getTrxAudit(){
 		$this->db->select("pkTrxTypeId as ID, TrxTypeDesc");
 		$this->db->from("TblTrxType ");
@@ -347,6 +359,31 @@ Class frontDesk_db extends CI_MODEL
             return $query->result();
         }
 	}
+	public function selectPorcentajeTRX($ID){
+        $this->db->select('TT.AutoAmount as Porcetaje');
+        $this->db->from('tblTrxType TT');
+        $this->db->where('pkTrxTypeId', $ID);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->Porcetaje;
+        }
+    }
+    public function selectRateTRX($ID, $fecha){
+        $this->db->select('RC.RateAmtNight as Rate');
+        $this->db->from('tblResOcc RC');
+        $this->db->join('tblCalendar C', "RC.fkCalendarId = C.pkCalendarId and CONVERT(VARCHAR(10),C.Date,101) = '".$fecha."'");
+        $this->db->where('RC.fkResId', $ID);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->Rate;
+        }
+    }
 	public function selectTrxTypeSigno($type, $trxType){
         $this->db->distinct();
         $this->db->select("tt.pkTrxTypeId as ID, tt.TrxTypeDesc, tt.TrxSign");
