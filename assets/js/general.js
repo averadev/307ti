@@ -269,6 +269,10 @@ function showLoading(parentElement, isOpen,message, success){
 
 function drawTable(data, funcion, cadena, table){
 
+	/*if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
+        var tabla = $('#' + table).DataTable();
+        tabla.destroy();
+    }*/
 
     var headHTML = "<th>"+cadena+"</th>";
     var bodyHTML = '';
@@ -287,6 +291,21 @@ function drawTable(data, funcion, cadena, table){
     }
     $('#' + table + "thead" ).html(headHTML);
     $('#' + table + "tbody" ).html(bodyHTML);
+	
+	$('#' + table ).show();
+	var heightScroll = $('#' + table ).parents(".table").first();
+	heightScroll = heightScroll.height();
+	if(heightScroll == null){
+		heightScroll = 400;
+	}
+	$('#' + table ).DataTable({
+		"scrollY": heightScroll - 50,
+		"scrollX": true,
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		"filter": 	false,
+	});
     //pluginTables(table);
 }
 
@@ -372,7 +391,7 @@ function drawTable2(data, table ,funcion, cadena, option){
 	if(heightScroll == null){
 		heightScroll = 400;
 	}
-	$('#' + table ) .on( 'order.dt',  function (event, a){
+	$('#' + table ).on( 'order.dt',  function (event, a){
 	}).DataTable({
 		"scrollY": heightScroll - 50,
 		"scrollX": true,

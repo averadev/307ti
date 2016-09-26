@@ -4,7 +4,6 @@ maxHeight = screen.height - maxHeight;
 
 $(document).ready(function(){
 	
-
 	var dialogAddTour = null;
 	var dialogStatus = null;
 
@@ -508,10 +507,13 @@ function getContratos(){
        	url: "contract/getContratos",
 		dataType:'json',
 		success: function(data){
+			console.log(data)
 			showLoading('#contracts',false);
 			if(data){
 				alertify.success("Found "+ data.length + " Contracts");
-				drawTable3(data, "details", "contracts");
+				//drawTable3(data, "details", "contracts");
+				//drawTable2(data,"details",false,"contracts");
+				drawTable2(data,"contracts","details","details");
 			}else{
 				$('#contractstbody').empty();
 				alertify.error("No records found");
@@ -521,6 +523,10 @@ function getContratos(){
 			alertify.error("Try again");
 		}
     });
+}
+
+function details(){
+	
 }
 
 function getDetalleContratoByID(i){
@@ -1571,6 +1577,7 @@ function selectMetodoPagoProgramados(){
                 if(data != null){
                     alertify.success("Found "+ data.length);
                     drawTable(data, 'add', "Details", "Unidades");
+					//drawTable2(data,"Unidades","add","Details");
                 }else{
                     $('#contractstbody').empty();
                     alertify.error("No records found");
