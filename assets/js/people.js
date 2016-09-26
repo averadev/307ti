@@ -872,9 +872,9 @@ function searchPeople(page){
 		},
 		success: function(data){
 			if(data.items.length > 0){
-				var total = data.total;
-				alertify.success("Found "+ total + " People");
-				if( parseInt(total) == 0 ){ total = 1; }
+				//var total = data.total;
+				alertify.success("Found "+ 25 + " People");
+				/*if( parseInt(total) == 0 ){ total = 1; }
 				total = parseInt( total/25 );
 				if(data.total%25 == 0){
 					total = total - 1;		
@@ -883,7 +883,9 @@ function searchPeople(page){
 				if(page == 0){
 					$('#paginationPeople').val(true);
 					loadPaginatorPeople(total);
-				}
+				}*/
+				$('#paginationPeople').val(true);
+				//loadPaginatorPeople(total);
 				drawTable2(data.items,"tablePeople","showModal","Edit");
 				
 				if( jQuery.isFunction( "markRowTableFrontDesk" ) ){

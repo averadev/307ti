@@ -642,7 +642,6 @@ function createTableLookUp(data){
 			//$('#' + + j + "-" + dates[j].pkCalendarId).css('width', wiCell + "%");
 		}
 		
-		
 		for(l=0;l<items.length;l++){
 			var item = items[l];
 			if( itemUnit.unit == item.unit ){
@@ -664,8 +663,13 @@ function createTableLookUp(data){
 									//$('#' + + i + "-" + dates[j].pkCalendarId).attr('class',values.occType + " rightPanel Tooltips showReservation FDBorder");
 								}
 								$('#' + + i + "-" + dates[j].pkCalendarId).attr('class',values.occType + " rightPanel Tooltips showReservation");
+								if( totaltd == 1 ){
+									values.people = values.people.slice(0,9) + "...";
+								}else if( totaltd == 2 ){
+									values.people = values.people.slice(0,18) + "...";
+								}
 								$('#' + + i + "-" + dates[j].pkCalendarId).text(values.people);
-								$('#' + + i + "-" + dates[j].pkCalendarId).css('width', (wiCell *  totaltd ) + "%");
+								$('#' + + i + "-" + dates[j].pkCalendarId).css('width', (wiCell * totaltd ) + "%");
 								exist = true;
 							}else{
 								$('#' + + i + "-" + dates[j].pkCalendarId).remove();

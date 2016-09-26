@@ -124,7 +124,7 @@ table#tableFrontDesk tbody {
 	width: 100%;*/
 }
 
-/*table#tableFrontDesk1,
+table#tableFrontDesk1,
 table#tableFrontDesk1 thead,
 table#tableFrontDesk1 tbody,
 table#tableFrontDesk1 tfoot,
@@ -159,7 +159,7 @@ table#tableFrontDesk1 tbody {
     overflow-y:scroll;
     display:block;
 	width: 100%;
-}*/
+}
 
 /*table#tableFrontDesk1{
 	table-layout:fixed;
@@ -177,7 +177,7 @@ tr {
   display: block;
   overflow: hidden;
 }*/
-/*
+
 table#tableFrontDesk{
     table-layout: fixed;
     width: 100%;
@@ -197,14 +197,14 @@ table#tableFrontDesk{
 #tableFrontDesk tbody {
     display: block;
     overflow-Y: scroll;
-	height:400px;
+	height:300px;
 	
 }
 
 #tableFrontDesk tr {
     display: block;
     overflow: hidden;
-}*/
+}
 
 /*#tableFrontDesk td {
     padding: .5rem 0 .5rem 1rem;
@@ -216,7 +216,7 @@ table#tableFrontDesk{
     float: left;
 }*/
 
-/*.gHeaderMonth .panelLeftHead{
+.gHeaderMonth .panelLeftHead{
 	width: 40%;
     float: left;
 }
@@ -259,4 +259,4 @@ table#tableFrontDesk{
 
 .rightPanel.showReservation{
     float: left;
-}*/
+}

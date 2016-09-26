@@ -440,11 +440,11 @@ function expandBox(section,relation){
 				if ($('#' + relation + ' .pagina').is(':visible')){
 					neHeight = neHeight - 35;
 				}
-				
 			}
 			$('#' + relation + ' .table').css('height', neHeight + "px" );
 			var tableH = $('#' + relation + ' .table').find("table");
-			tableH.each( function( index ) {
+			
+			tableH.each( function( index ){
 				idT = $(this).attr('id');
 				if ( $.fn.dataTable.isDataTable( '#' + idT ) ) {
 					var tabla = $('#' + idT).DataTable();
@@ -452,8 +452,16 @@ function expandBox(section,relation){
 					$('#' + idT + '_wrapper').children('.dataTables_scroll').children('.dataTables_scrollBody').css('height', newHeightTable + "px");
 					
 				}
+			});
+			
+			var classTable = $(tableH).attr('class');
+			if( classTable == "ganttTable" ){
+				console.log(neHeight)
+				var newHeightTable = neHeight - 160;
+				$('#tableFrontDesk tbody').css("height", newHeightTable + "px");
 			}
-    );
+			//console.log($(tableH).attr('class'));
+    
 		}
 	}
 }
