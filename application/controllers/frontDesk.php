@@ -231,10 +231,13 @@ private function updateTRXByID($ID, $fecha){
 private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 	$IDCuenta = $this->frontDesk_db->getACCIDByContracID($IdReserva);
 	$TRXSAVED = $this->frontDesk_db->selectTRXSAVED($fecha, $IDCuenta);
-	if (!in_array($TrxID, $TRXSAVED)) {
+	$TRXX = [];
+	for ($i=0; $i < sizeof($TRXSAVED); $i++) { 
+		array_push($TRXX, $TRXSAVED[$i]->fkTrxTypeId);
+	}
+	if (!in_array($TrxID, $TRXX)) {
 	
 		$fecha =  new DateTime($fecha);
-		// $fecha->modify("-1 day");
 		$fechaActual = $fecha->format('Y-m-d H:i:s');
 		$precio = valideteNumber($Precio);
 		$Dolares = $this->frontDesk_db->selectIdCurrency('USD');
