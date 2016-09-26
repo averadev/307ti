@@ -566,7 +566,7 @@
 									<label id="trxAuditLabel" class="text-left">Trx Description
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-											<select  id="idTrx" class="txtSearch input-group-field roundRight">
+											<select  id="Transaction" class="txtSearch input-group-field roundRight">
 											<option value="">Choose an option</option>
 												<?php
 												foreach($TrxTypes as $item){

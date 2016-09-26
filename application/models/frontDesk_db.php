@@ -423,6 +423,18 @@ Class frontDesk_db extends CI_MODEL
             return $row->Autoamount;
         }
     }
+    public function selectTRXDescription($ID){
+        $this->db->select('TrxTypeDesc');
+        $this->db->from('tblTrxType');
+        $this->db->where('pkTrxTypeId', $ID);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->TrxTypeDesc;
+        }
+    }
 	public function getAuditUnits($filters){
 		$this->db->distinct();
 		$this->db->select("LTRIM(RTRIM(R.pkResId)) as pkResId, RTRIM(LTRIM(U.UnitCode)) as UnitCode, RTRIM(LTRIM(FP.FloorPlanDesc)) as FloorPlanDesc, ES.StatusDesc as Status, OC.OccTypeDesc as OccTypeGroup, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name");
@@ -566,8 +578,8 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->join('tblAccTrx AC', 'RP.fkAccId = AC.fkAccid', 'inner');
 		$this->db->join('TblTrxType TT', 'AC.fkTrxTypeId = TT.pkTrxTypeId', 'inner');
 		$this->db->where("RP.ynPrimaryPeople", 1);
-		if (isset($filtros["isAudited"])) {
-			switch ($filtros["isAudited"]) {
+		if (isset($filtros["YnAudit"]) && !empty($filtros["YnAudit"])) {
+			switch ($filtros["YnAudit"]) {
 				case 1:
 					$this->db->join('tblUser US', 'AC.NAuditUserId = US.pkUserId', 'left');
 					break;
@@ -585,14 +597,14 @@ Class frontDesk_db extends CI_MODEL
 		}else{
 			$this->db->join('tblUser US', 'AC.NAuditUserId = US.pkUserID', 'left');
 		}
-		if (isset($filtros["userTrxAudit"])) {
-			$this->db->where("AC.NAuditUserId = (select pkUserID from tblUser where UserLogin = '".$filtros["userTrxAudit"]."')");
+		if (isset($filtros["User"]) && !empty($filtros["User"])) {
+			$this->db->where("AC.NAuditUserId = (select pkUserID from tblUser where UserLogin = '".$filtros["User"]."')");
 		}
-		if (isset($filtros["idTrx"])) {
-			$this->db->where("TT.pkTrxTypeId", $filtros["idTrx"]);
+		if (isset($filtros["Transaction"])&& !empty($filtros["Transaction"])) {
+			$this->db->where("TT.pkTrxTypeId", $filtros["Transaction"]);
 		}
-		if (isset($filtros['dateAuditTRX'])) {
-			$this->db->where("CONVERT(VARCHAR(10),R.CrDt,101)", $filtros['dateAuditTRX']);
+		if (isset($filtros['Transaction_Date']) && !empty($filtros['Transaction_Date'])) {
+			$this->db->where("CONVERT(VARCHAR(10),AC.CrDt,101)", $filtros['Transaction_Date']);
 		}
 		$this->db->order_by('TT.TrxTypeDesc', 'ASC');
 		$query = $this->db->get();

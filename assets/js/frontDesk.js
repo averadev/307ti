@@ -265,7 +265,7 @@ function getFrontDesk(order, page){
 	}else if(section == "section8"){
 		filters = {};
 		dates = {};
-		words = getWords(["dateAuditTRX","userTrxAudit", "idTrx", "isAudited"]);
+		words = getWords(["dateAuditTRX","userTrxAudit", "Transaction", "isAudited"]);
 		options = {};
 		url = "frontDesk/getAuditTrx";
 	}
@@ -1611,7 +1611,7 @@ function dowloadExcel(url){
 function generateReportAuditTrx(){
 	filters = {};
 	dates = {};
-	words = getWords(["userTrxAudit", "idTrx", "isAudited"]);
+	words = getWords(["dateAuditTRX", "userTrxAudit", "Transaction", "isAudited"]);
 	options = {};
 	url = "?type=report";
 	for(j in words){

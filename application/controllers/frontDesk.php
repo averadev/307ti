@@ -264,8 +264,6 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 			"Doc"			=> '',
 			"DueDt"			=> $this->getToday(),
 			"ynActive"		=> 1,
-			"NAuditDate"	=> $fechaActual,
-			"NAuditUserId"	=> $this->nativesessions->get('id'),
 			"fkCurrencyId"	=> 2,
 			"CrBy"			=> $this->nativesessions->get('id'),
 			"CrDt"			=> $fechaActual,
@@ -356,13 +354,29 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 
 	public function getAuditTrxReport(){
 		$sql['words'] =[
-			"userTrxAudit" => $_GET['userTrxAudit'],
-			"idTrx" => $_GET['idTrx'],
-			"isAudited" => $_GET['isAudited']
+			"User" => $_GET['userTrxAudit'],
+			"Transaction" => $_GET['Transaction'],
+			"YnAudit" => $_GET['isAudited'],
+			"Transaction_Date" => $_GET['dateAuditTRX']
 		];
 		$sql['words'] = $this->receiveWords($sql['words']);
 		$data = $this->frontDesk_db->getAuditTrx($sql['words']);
 		$data = $this->ParseNumberTRX($data);
+		if (isset($sql['words']['YnAudit'])) {
+			if($sql['words']['YnAudit'] == 1){
+			$sql['words']['YnAudit'] = 'All';
+			}
+			if($sql['words']['YnAudit'] == 2){
+				$sql['words']['YnAudit'] = 'Audit';
+			}
+			if($sql['words']['YnAudit'] == 3){
+				$sql['words']['YnAudit'] = 'No Audit';
+			}
+		}
+		if (isset($sql['words']['Transaction'])) {
+			$sql['words']['Transaction'] = $this->frontDesk_db->selectTRXDescription($sql['words']['Transaction']);
+		}
+		
 		$this->reportPDFTRX($data, "AuditReportTrx", $sql);
 	}
 	
@@ -371,7 +385,13 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 			$sql = '';
 			if(isset($_POST['words'])){
 				$words = $_POST['words'];
-				$sql['words'] = $this->receiveWords($words);
+				//$sql['words'] = $this->receiveWords($words);
+				$sql['words'] =[
+					"User" => $words['userTrxAudit'],
+					"Transaction" => $words['Transaction'],
+					"YnAudit" => $words['isAudited'],
+					"Transaction_Date" => $words['dateAuditTRX']
+				];
 			}
 			//var_dump($sql);
 			$data = $this->frontDesk_db->getAuditTrx($sql['words']);
@@ -1256,13 +1276,13 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 	}
 
 	private function reportPDFTRX($data, $titulo, $filtros){
-		
+		$body = '';
 		$title = $titulo;
 		$name = $titulo;
 		$saveFiler = $titulo;
-		$pdf = $this->generatePdfTemp( $name, $title );
+		$pdf = $this->generatePdfTempTRX( $name, $title, $filtros);
 		$style = $this->generateStyles();
-		$body = '';
+		
 		$body .= '<table width="100%" cellpadding="2">';
 		$body.= '<tr>';
 		foreach ($data[0] as $clave => $valor){
@@ -1312,7 +1332,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		$pdf = $this->showpdf( $pdf, $saveFiler );
 	}
 	
-	private function generatePdfTemp( $name, $title){
+	private function generatePdfTempTRX( $name, $title, $filtros){
 
 		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
@@ -1323,6 +1343,48 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 
 		$logo = "logo.jpg";
 		$headerString = " " . $this->nativesessions->get('username') .  " \n      " . $this->getonlyDate2(0);
+		$headerString.= " \n" ;
+		foreach ($filtros['words'] as $key => $value) {
+			$headerString.= "\t \t \t". $key." : ".$value;
+		}
+		// $pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $headerString2, $border = 0, $ln = 2, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+
+		$pdf->SetHeaderData($logo, 20, "     " . $title, "     " . $headerString,  array( 102,44,25 ), array( 102,44,25 ));
+		//$pdf->SetHeaderData($logo, 40, "     " . $title, "     " . $headerString2,  array( 102,44,25 ), array( 102,44,25 ));
+        $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
+
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+ 
+        $pdf->SetMargins(5, PDF_MARGIN_TOP, 5);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+ 
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->setFontSubsetting(true);
+        $pdf->SetFont('freemono', '', 14, '', true);
+        $pdf->AddPage();
+ 
+		//fijar efecto de sombra en el texto
+        $pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
+ 
+		return $pdf;
+ 
+	}
+	private function generatePdfTemp( $name, $title, $filtros){
+
+		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('307ti');
+        $pdf->SetTitle($name);
+        $pdf->SetSubject('report');
+        $pdf->SetKeywords('report');
+
+		$logo = "logo.jpg";
+		$headerString = " " . $this->nativesessions->get('username') .  " \n      " . $this->getonlyDate2(0);
+		
 		$pdf->SetHeaderData($logo, 20, "     " . $title, "     " . $headerString,  array( 102,44,25 ), array( 102,44,25 ));
         $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
 
@@ -1378,6 +1440,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		$style .= ' .blackLine2{ border-bottom: solid .5px gray; height: 40px; font-weight:bold; font-size:9px;}';
 		$style .= ' .blackLine3{ border-bottom: solid .5px gray; height: 20px; font-weight:bold; font-size:9px;}';
 		$style .= ' h3{ color: #662C19; }';
+		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
 		$style .= '</style>';
 
