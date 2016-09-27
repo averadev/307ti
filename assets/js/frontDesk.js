@@ -384,6 +384,8 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 
 function cleanAuditUnit(){
 	$("#unitAudit").val('');
+	$("#DateArrival").val('');
+	$("#DateDeparture").val('');
 	//$("#statusAudit").val(0);
 	//$("#occTypeAudit").val(0);
 	OCCTYPE.multipleSelect("uncheckAll");
