@@ -475,7 +475,6 @@ function expandBox(section,relation){
 			
 			var classTable = $(tableH).attr('class');
 			if( classTable == "ganttTable" ){
-				console.log(neHeight)
 				var newHeightTable = neHeight - 160;
 				$('#tableFrontDesk tbody').css("height", newHeightTable + "px");
 			}

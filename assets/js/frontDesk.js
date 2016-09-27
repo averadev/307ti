@@ -274,8 +274,7 @@ function getFrontDesk(order, page){
 	ajaxFrontDesk( url, filters, dates, words, options, order, page );
 }
 function getWordsByArrayAudit(names, values) {
-	console.table(names);
-	console.table(values);
+	
     words = {};
 	for(i=0;i<names.length;i++){
 		words[names[i]] = values[i];
@@ -597,7 +596,7 @@ function createTableLookUp(data){
 	
 	var existMoth = "";
 	var existYear = "";
-	
+	var wiCell = 73/dates.length;
 	for (var j in dates) {
 		/*if(existYear != dates[j].year ){
 			headYearHTML = "<th colspan='1' id='thYear" + dates[j].year + "' class='rightPanel'>"+dates[j].year+"</th>";
@@ -612,9 +611,16 @@ function createTableLookUp(data){
 			headMonthHTML = "<th colspan='1' id='thMonth" + dates[j].month + "' class='rightPanel'>"+dates[j].month+ "/" + dates[j].year +"</th>";
 			existMoth = dates[j].month;
 			$('#tableFrontDesk .gHeaderMonth').append(headMonthHTML);
+			$('#thMonth' + dates[j].month ).css('width', (wiCell * 1 ) + "%");
 		}else{
 			var colspan = $('#thMonth' + dates[j].month ).attr('colspan');
 			$('#thMonth' + dates[j].month ).attr('colspan', (parseInt(colspan) + 1));
+			console.log(colspan);
+			console.log(wiCell * colspan);
+			console.log("");
+			//colspan = colspan + 1;
+			//console.log(wiCell * colspan);
+			$('#thMonth' + dates[j].month ).css('width', (wiCell * (parseInt(colspan) + 1) ) + "%");
 		}
 				
 		headHTML+="<th id='"+dates[j].pkCalendarId+"' class='rightPanel'>"+dates[j].day+"</th>";
@@ -624,7 +630,7 @@ function createTableLookUp(data){
 	for(i=0;i<units.length;i++){
 		
 		var itemUnit = units[i];
-		var wiCell = 60/dates.length;
+		
 		
 		bodyHTML = "<tr id='tr" + i + "'>";
 		bodyHTML+="<td nowrap class='panelLeft typeFd'>"+ itemUnit.FloorPlan +"</th>";
@@ -700,8 +706,6 @@ function createTableLookUp(data){
 	$('.emptyUnitsFront').on('click', function(){ showNewReservation(this); });
 	
 	initializeTooltips('.Tooltips');
-	
-	
 	
 }
 
@@ -1333,7 +1337,6 @@ function generateReportFrontDesk(){
 }
 
 function createExcel(url){
-	console.log("frontDesk/getReportFrontDesk" + url);
 	window.location = "frontDesk/getReportFrontDesk" + url;
 }
 

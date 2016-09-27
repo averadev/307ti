@@ -217,17 +217,17 @@ table#tableFrontDesk{
 }*/
 
 .gHeaderMonth .panelLeftHead{
-	width: 40%;
+	width: 27%;
     float: left;
 }
 
 .gHeaderMonth .rightPanel{
-	width:60%;
+	width:73%;
 	float:left;
 }
 
 .typeFd{
-	width: 20%;
+	width: 12%;
     float: left;
 }
 
@@ -242,19 +242,20 @@ table#tableFrontDesk{
 }
 
 .ViewFd{
-	width: 10%;
+	width: 5%;
     float: left;
 }
 
 .gHeaderDay .rightPanel{
-	width: 5.45%;
+	width: 6.63%;
     float: left;
 }
 
 .rightPanel.emptyUnitsFront{
-	width: 5.45%;
+	/*width: 5.45%;*/
+	width: 6.63%;
     float: left;
-	height:36px;
+	height:38px;
 }
 
 .rightPanel.showReservation{

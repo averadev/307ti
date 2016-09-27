@@ -580,7 +580,7 @@ function verifyContractRes(){
 		$("#RateRes").addClass('is-invalid-input');
 		alertify.error("Choose a rate");
 	}else{
-		if (!/^([0-9])*$/.test($('#RateRes').val().trim())){
+		if (!/^[0-9]+(\.[0-9]+)?$/.test($('#RateRes').val().trim())){
 			value = false;
 			gotoDiv("contentModalReservation", "RateRes");
 			$("#RateRes").addClass('is-invalid-input');

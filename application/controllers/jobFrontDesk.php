@@ -19,7 +19,6 @@ class JobFrontDesk extends CI_Controller {
 	}
     
 	public function index(){
-		//echo "hola";
 		$units  = $this->frontDesk_db->getUnitsDes();
 		$unitsOcc  = $this->frontDesk_db->getUnitsOcc();
 		$unitsOccToday  = $this->frontDesk_db->getUnitsOcc();
