@@ -266,7 +266,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 			"ynActive"		=> 1,
 			"fkCurrencyId"	=> 2,
 			"CrBy"			=> $this->nativesessions->get('id'),
-			"CrDt"			=> $fechaActual,
+			"CrDt"			=> $this->getToday(),
 			"MdBy"			=> $this->nativesessions->get('id'),
 			"MdDt"			=> $this->getToday(),
 		];

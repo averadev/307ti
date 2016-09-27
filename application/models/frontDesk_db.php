@@ -496,12 +496,12 @@ Class frontDesk_db extends CI_MODEL
 		$sql.= " where";
 		$sql.= "'".$filters['words']['DateAudit']."'". "between (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId asc)";
 		$sql.= " and ";
-		$sql.= " (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId desc) and RP.ynPrimaryPeople = 1";
+		$sql.= " (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId desc) and RP.ynPrimaryPeople = 1 ";
 		if (!isset($filters['words']['unitAudit'])) {
 			$filters['words']['unitAudit'] = 0;
 		}
 		if ($filters['words']['unitAudit'] != 0) {
-			$sql.= "and U.UnitCode = ". $filters['words']['unitAudit'];
+			$sql.= " and U.UnitCode = ". $filters['words']['unitAudit'];
 		}
 		$condicion = '';
 		if (isset($filters['words']['statusAudit'])) {
@@ -522,6 +522,12 @@ Class frontDesk_db extends CI_MODEL
 				}
 			}
 			$sql.="and ( " . $condicion . ")";
+		}
+		if (isset($filters['words']['DateArrival'])) {
+			$sql.=" and '". $filters['words']['DateArrival']."' = CONVERT(VARCHAR(10),R.CheckIn,101)";
+		}
+		if (isset($filters['words']['DateDeparture'])) {
+			$sql.=" and '". $filters['words']['DateDeparture']."' = CONVERT(VARCHAR(10),R.CheckOut,101)";
 		}
 		$query = $this->db->query($sql);
 
