@@ -52,11 +52,11 @@ $(document).ready(function(){
 	
 	$(document).off( 'click', '#btnAddPeopleRes, #btnAddPeopleResEdit');
 	$(document).on( 'click', '#btnAddPeopleRes, #btnAddPeopleResEdit', function () {
-		// if (peopleResDialog != null) {
-		// 	peopleResDialog.dialog( "destroy" );
-		// }
-         peopleResDialog = addPeopleResDialog( $(this).attr('attr_table') );
-         peopleResDialog.dialog( "open" );
+		if (peopleResDialog != null) {
+			peopleResDialog.dialog( "destroy" );
+		}
+		peopleResDialog = addPeopleResDialog( $(this).attr('attr_table') );
+        peopleResDialog.dialog( "open" );
 	});
 	
 	$(document).off( 'click', '#btnChangeUnitRes');
@@ -1191,7 +1191,6 @@ function getValueTableUnidadesRes(){
 	return unidades;
 }
 function getValueTablePersonasRes(tabla){
-	//var tabla = "tablePeopleResSelected";
 	var unidades = [];
 	var personas = [];
 	$('#'+tabla+' tbody tr').each( function(i){

@@ -22,7 +22,12 @@ class People extends CI_Controller {
 		$data['qualifications'] = $this->people_db->getQualifications();
         $this->load->view('vwPeople',$data);
 	}
-
+	public function indexContratos(){
+			$data['country'] = $this->people_db->getCountry();
+			$data['nationality'] = $this->people_db->getNationality();
+			$data['qualifications'] = $this->people_db->getQualifications();
+	        $this->load->view('vwPeopleContratos',$data);
+		}
 	public function peopleDetailView(){
 		$data['country'] = $this->people_db->getCountry();
 		$data['nationality'] = $this->people_db->getNationality();

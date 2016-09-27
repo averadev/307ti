@@ -335,10 +335,10 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 			$words = json_decode( $_GET['words'] );
 			$sql['words'] = $this->receiveWords($words);
 		}
-		if(isset($_GET['dates'])){
-			$dates = json_decode( $_GET['dates'] );
-			$sql['dates'] = $this->receiveWords($dates);
-		}
+		// if(isset($_GET['dates'])){
+		// 	$dates = json_decode( $_GET['dates'] );
+		// 	$sql['dates'] = $this->receiveWords($dates);
+		// }
 		$data = $this->frontDesk_db->getAuditUnitsQUERY($sql);
 		if (isset($sql['words']["unitAudit"]) || isset($sql['words']["statusAudit"]) || isset($sql['words']["occTypeAudit"])) {
 			//$this->makeExcel($data, "AuditReportunits", $sql);
@@ -1247,7 +1247,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		$title = $titulo;
 		$name = $titulo;
 		$saveFiler = $titulo;
-		$pdf = $this->generatePdfTemp( $name, $title );
+		$pdf = $this->generatePdfTempTRX( $name, $title, $filtros);
 		$style = $this->generateStyles();
 		$body = '';
 		$body .= '<table width="100%" cellpadding="2">';
@@ -1347,10 +1347,8 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		foreach ($filtros['words'] as $key => $value) {
 			$headerString.= "\t \t \t". $key." : ".$value;
 		}
-		// $pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $headerString2, $border = 0, $ln = 2, $fill = 0, $reseth = true, $align = '', $autopadding = true);
-
+		
 		$pdf->SetHeaderData($logo, 20, "     " . $title, "     " . $headerString,  array( 102,44,25 ), array( 102,44,25 ));
-		//$pdf->SetHeaderData($logo, 40, "     " . $title, "     " . $headerString2,  array( 102,44,25 ), array( 102,44,25 ));
         $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
 
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
@@ -1373,7 +1371,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		return $pdf;
  
 	}
-	private function generatePdfTemp( $name, $title, $filtros){
+	private function generatePdfTemp( $name, $title){
 
 		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);

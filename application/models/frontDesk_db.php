@@ -494,7 +494,7 @@ Class frontDesk_db extends CI_MODEL
 		$sql.= " INNER JOIN tblPeople P on RP.fkPeopleId = P.pkPeopleId INNER JOIN tblResOcc RO on RO.fkResInvtId = RI.pkResInvtId inner join tblOccType OC on OC.pkOccTypeId = RO.fkOccTypeId inner join tblStatus ES on ES.pkStatusId = R.fkStatusId INNER JOIN tblFloorPlan FP on U.fkFloorPlanId = FP.pkFloorPlanID ";
 		$sql.= " inner join tblOccTypeGroup OG on OC.pkOccTypeId = OG.pkOccTypeGroupId";
 		$sql.= " where";
-		$sql.= "'".$filters['dates']['dateAudit']."'". "between (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId asc)";
+		$sql.= "'".$filters['words']['DateAudit']."'". "between (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId asc)";
 		$sql.= " and ";
 		$sql.= " (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId desc) and RP.ynPrimaryPeople = 1";
 		if (!isset($filters['words']['unitAudit'])) {
@@ -523,7 +523,6 @@ Class frontDesk_db extends CI_MODEL
 			}
 			$sql.="and ( " . $condicion . ")";
 		}
-		//var_dump($sql);
 		$query = $this->db->query($sql);
 
         if($query->num_rows() > 0 ){

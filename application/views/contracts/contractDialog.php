@@ -78,18 +78,18 @@
                         <div class="small-12 columns">
                             <table id="tablePeopleSelected" width="100%">
                                 <thead class="colorCrema">
-                                <tr>
-                                    <th class="cellEdit" >ID</th>
-                                    <th class="cellGeneral">Name</th>
-                                    <th class="cellGeneral">Last Name</th>
-                                    <th class="cellGeneral" >Address</th>
-                                    <th class="cellGeneral" >Primary</th>
-                                    <th class="cellGeneral" >Beneficiary</th>
-                                    <th></th>
-                                </tr>
+                                    <tr>
+                                        <th class="cellEdit" >ID</th>
+                                        <th class="cellGeneral">Name</th>
+                                        <th class="cellGeneral">Last Name</th>
+                                        <th class="cellGeneral" >Address</th>
+                                        <th class="cellGeneral" >Primary</th>
+                                        <th class="cellGeneral" >Beneficiary</th>
+                                        <th></th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td colspan="10" ></td></tr>
+                                    <tr><td colspan="10"></td></tr>
                                 </tbody>
                         </table>
                         </div>

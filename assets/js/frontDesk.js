@@ -191,17 +191,26 @@ function gepPageFrontDesk(page){
 }
 
 function initDatesAudit(){
-	$( "#dateAudit" ).Zebra_DatePicker({
+	$( "#DateAudit" ).Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false,
 	});
-	$('#dateAudit').val(getCurrentDateMENOS(1));
+	$('#DateAudit').val(getCurrentDateMENOS(1));
 
 	$("#dateAuditTRX").Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false,
 	});
 	$('#dateAuditTRX').val(getCurrentDateMENOS(1));
+
+	$( "#DateArrival" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
+	$( "#DateDeparture" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false,
+	});
 }
 /**
 * Muestra la lista de front desk
@@ -254,8 +263,8 @@ function getFrontDesk(order, page){
 		url = "frontDesk/getExchangeRate";
 	}else if(section == "section7"){
 		filters = {};
-		dates = getDates(["dateAudit"]);
-		words = getWords(["unitAudit"]);
+		dates = {};
+		words = getWords(["unitAudit", "DateAudit", "DateArrival", "DateDeparture"]);
 		words.statusAudit = OCCSTATUS.multipleSelect('getSelects');
 		words.occTypeAudit = OCCTYPE.multipleSelect('getSelects');
 		options = {};
@@ -1566,7 +1575,7 @@ function saveTrxAudit(){
 	var TRXS = AUDITTRX.multipleSelect('getSelects');
 	var TRXSTEXT = AUDITTRX.multipleSelect('getSelects', 'text');
 	var RSS = getArrayValuesColumnTable("tablaAuditUnits", 1);
-	var fecha = $("#dateAudit").val();
+	var fecha = $("#DateAudit").val();
 	var ajaxDatos =  {
 		url: "frontDesk/createTrxAudit",
 		tipo: "json",
@@ -1589,8 +1598,8 @@ function saveExitoTrx(data){
 
 function generateReportAuditUnits(){
 	filters = {};
-		dates = getDates(["dateAudit"]);
-		words = getWords(["unitAudit"]);
+		dates = {};
+		words = getWords(["unitAudit", "DateAudit", "DateArrival", "DateDeparture"]);
 		words.statusAudit = OCCSTATUS.multipleSelect('getSelects');
 		words.occTypeAudit = OCCTYPE.multipleSelect('getSelects');
 		options = {};
@@ -1600,7 +1609,7 @@ function generateReportAuditUnits(){
 	dates = JSON.stringify(dates);
 	words = JSON.stringify(words);
 	
-	url += "&dates=" + dates;
+	//url += "&dates=" + dates;
 	url += "&words=" + words;
 	//dowloadExcel("frontDesk/getAuditUnitsReport"+ url);
 	window.open("frontDesk/getAuditUnitsReport"+ url);

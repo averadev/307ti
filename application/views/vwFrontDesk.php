@@ -463,16 +463,34 @@
 						<fieldset class="large-12 columns fieldsetFilter">
 							<div class="row">
 								<!-- Arrival Date -->
-								<div class="small-12 large-3 columns">
+								<div class="small-12 large-2 columns">
 									<label id="dateAuditLabel" class="text-left">Date
 										<div class="input-group date">
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-											<input type="text" id="dateAudit" class="txtSearch input-group-field roundRight" readonly/>
+											<input type="text" id="DateAudit" class="txtSearch input-group-field roundRight" readonly/>
+										</div>
+									</label>
+								</div>
+								<!-- Arrival Date -->
+								<div class="small-12 large-2 columns">
+									<label id="dateAuditLabel" class="text-left">Expected Arrivals
+										<div class="input-group date">
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="DateArrival" class="txtSearch input-group-field roundRight" readonly/>
+										</div>
+									</label>
+								</div>
+								<!-- Arrival Date -->
+								<div class="small-12 large-2 columns">
+									<label id="dateAuditLabel" class="text-left">Expected Departures
+										<div class="input-group date">
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="DateDeparture" class="txtSearch input-group-field roundRight" readonly/>
 										</div>
 									</label>
 								</div>
 								<!-- Departure Date -->
-								<div class="small-12 large-3 columns">
+								<div class="small-12 large-2 columns">
 									<label id="unitAuditLabel" class="text-left">Unit
 										<div class="input-group date" >
 											<span  class="input-group-label prefix"><i class="fa fa-home"></i></span>
@@ -481,7 +499,7 @@
 									</label>
 								</div>
 								<!-- Year -->
-								<div class="small-12 large-3 columns">
+								<div class="small-12 large-2 columns">
 									<label id="statusAuditLabel" class="text-left">Status
 											<select  id="statusAudit"  class="input-group-field round"  multiple="multiple">
 												<?php
@@ -495,7 +513,7 @@
 									</label>
 								</div>
 								<!-- Interval -->
-								<div class="small-12 large-3 columns">
+								<div class="small-12 large-2 columns">
 									<label id="occTypeLabel" class="text-left">Occupancy Type Group
 											<select id="occTypeAudit" class="input-group-field round"  multiple="multiple">
 												<?php

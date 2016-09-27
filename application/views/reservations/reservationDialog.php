@@ -47,22 +47,20 @@
                         </div>
                         <div class="small-12 columns">
                             <table id="tablePeopleResSelected" width="100%">
-                                <thead>
+                                <thead class="colorCrema">
 									<tr>
-										
-										<th class="cellEdit" >ID</th>
+										<th class="cellEdit">ID</th>
 										<th class="cellGeneral">Name</th>
 										<th class="cellGeneral">Last Name</th>
 										<th class="cellGeneral" >Address</th>
-										<th class="cellGeneral" >Main</th>
-										<th class="cellGeneral" >Secondary</th>
+										<th class="cellGeneral" >Primary</th>
 										<th class="cellGeneral" >Beneficiary</th>
 										<th class="cellGeneral">Delete</th>
 										<th></th>
 									</tr>
                                 </thead>
                                 <tbody>
-									<tr><td colspan="10" ></td></tr>
+									<tr><td colspan="10"></td></tr>
 								</tbody>
 							</table>
                         </div>
@@ -71,7 +69,7 @@
             </div>
             <!-- Unidades -->
             <div class="fieldset large-12 columns">
-                <legend class="btnAddressData">Unities</legend>
+                <legend class="btnAddressData">Units</legend>
                 <div class="containerPeople">
                     <div class="row">
                         <div class="small-12 columns">
@@ -83,7 +81,7 @@
                         </div>
                         <div class="small-12 columns table-section2">
                             <table id="tableUnidadesResSelected" width="100%">
-                                <thead>
+                                <thead class="colorCrema">
                                     <tr>
                                         <th class="cellEdit" >Id</th>
                                         <th class="cellGeneral">Description</th>

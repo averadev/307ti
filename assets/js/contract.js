@@ -20,9 +20,21 @@ $(document).ready(function(){
 	});
 	$(document).off( 'click', '#btnAddPeople');
 	$(document).on( 'click', '#btnAddPeople', function () {
+		if (typeof unidadResDialog !== 'undefined') {
+		if (unidadResDialog!=null) {
+			unidadResDialog.dialog( "destroy" );
+		}
+	}
+	if (typeof peopleDialog !== 'undefined') {
 		if (peopleDialog != null) {
 			peopleDialog.dialog( "destroy" );
 		}
+	}
+	if (typeof dialogUser !== 'undefined') {
+		if (dialogUser!=null) {
+		dialogUser.dialog( "destroy" );
+	}
+	}
 		peopleDialog = addPeopleDialog();
 		peopleDialog.dialog( "open" );
 	});
@@ -151,19 +163,25 @@ $(document).ready(function(){
 	$("#busquedaAvanazada").click(function(){
 		$("#avanzada").slideToggle("slow");
 	});
+
 	//Enganche
+	$(document).off( 'change', '#downpayment');
 	$(document).on( 'change', '#downpayment', function () {
 		updateDownpayment();
 	});
+	$(document).off( 'change', "input[name='engancheR']:checked");
 	$(document).on('change', "input[name='engancheR']:checked", function () {
 		updateDownpayment();
 	});
+	$(document).off( 'change', '#descuentoEspecial');
 	$(document).on( 'change', '#descuentoEspecial', function () {
 		updateDescuentoEspecial();
 	});
+	$(document).off( 'change', "input[name='especialDiscount']:checked");
 	$(document).on( 'change', "input[name='especialDiscount']:checked", function () {
 		updateDescuentoEspecial();
 	});
+	$(document).off( 'change', "#amountTransfer");
 	$(document).on('change', "#amountTransfer", function () {
 		updateBalanceFinal();
 	});

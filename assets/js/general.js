@@ -448,7 +448,9 @@ function activeTable(table){
 })(jQuery);
 
 
-function expandBox(section,relation){
+function expandBox(section, relation){
+	console.log(section);
+	console.log(relation);
 	$(".module").css('height',($( window ).height() - 110) + "px");
 	if(section != undefined && relation != undefined){
 		var position = $('#' + relation).position();

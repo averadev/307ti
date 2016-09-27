@@ -294,6 +294,23 @@ function showModal(id){
 	//cleanUserFields();
 	//$('.tab-modal').hide();
 	//$('#tab-PGeneral').show();
+	/*
+		if (typeof unidadResDialog !== 'undefined') {
+		if (unidadResDialog!=null) {
+			unidadResDialog.dialog( "destroy" );
+		}
+	}
+	if (typeof peopleDialog !== 'undefined') {
+		if (peopleDialog != null) {
+			peopleDialog.dialog( "destroy" );
+		}
+	}
+	if (typeof dialogUser !== 'undefined') {
+		if (dialogUser!=null) {
+		dialogUser.dialog( "destroy" );
+	}
+	}
+	*/
 	if (dialogUser!=null) {
 		dialogUser.dialog( "destroy" );
 	}
