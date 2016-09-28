@@ -25,14 +25,10 @@ $(document).ready(function(){
 	var dialogScheduledPaymentsRes = modalScheduledPaymentsRes();
 	var dialogDiscountAmountRes = modalDiscountAmountRes();
 	var dialogEditReservation = modalEditReservation();
-	/*var dialogAddTour = addTourContract();*/
 	var dialogAccount = opcionAccountRes();
 	var dialogStatusRes = modalStatusRes();
 	var dialogNewOccRes = modalNewOccRes();
 	
-
-	//$("#newReservation").off();
-	//$("#newReservation").on( 'click', function () {
 	$(document).off( 'click', '#newReservation');
 	$(document).on( 'click', '#newReservation', function () {
 		addReservation = createDialogReservation(addReservation, 'alta');

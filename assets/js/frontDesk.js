@@ -386,11 +386,8 @@ function cleanAuditUnit(){
 	$("#unitAudit").val('');
 	$("#DateArrival").val('');
 	$("#DateDeparture").val('');
-	//$("#statusAudit").val(0);
-	//$("#occTypeAudit").val(0);
 	OCCTYPE.multipleSelect("uncheckAll");
 	OCCSTATUS.multipleSelect("uncheckAll");	
-	//$("#occStatusAudit").val(0);	
 }
 function cleanAuditUnitTRX(){
 	$("#userTrxAudit").val('');
@@ -437,7 +434,6 @@ function orderRowFront(selector){
 	var order = $(selector).attr('attr-order');
 	$('.orderRow').removeClass("active");
 	$(selector).addClass("active");
-	//getFrontDesk(field + " " + order,1);
 }
 
 /**
