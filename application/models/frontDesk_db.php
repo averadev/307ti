@@ -523,11 +523,11 @@ Class frontDesk_db extends CI_MODEL
 			}
 			$sql.="and ( " . $condicion . ")";
 		}
-		if (isset($filters['words']['DateArrival'])) {
-			$sql.=" and '". $filters['words']['DateArrival']."' = CONVERT(VARCHAR(10),R.CheckIn,101)";
+		if (isset($filters['words']['DateArrival']) && !empty($filters['words']['DateArrival'])) {
+			$sql.=" or '". $filters['words']['DateArrival']."' = CONVERT(VARCHAR(10),R.CheckIn,101)";
 		}
-		if (isset($filters['words']['DateDeparture'])) {
-			$sql.=" and '". $filters['words']['DateDeparture']."' = CONVERT(VARCHAR(10),R.CheckOut,101)";
+		if (isset($filters['words']['DateDeparture']) && !empty($filters['words']['DateArrival'])) {
+			$sql.=" or '". $filters['words']['DateDeparture']."' = CONVERT(VARCHAR(10),R.CheckOut,101)";
 		}
 		$query = $this->db->query($sql);
 
@@ -617,6 +617,31 @@ Class frontDesk_db extends CI_MODEL
             return $query->result();
         }
 	}
+	
+	public function selectDescStatus($ID){
+        $this->db->select('StatusDesc');
+        $this->db->from('tblStatus');
+        $this->db->where('pkStatusId', $ID);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->StatusDesc;
+        }
+    }
+    public function selectDescOCCGroup($ID){
+        $this->db->select('OccTypeGroupDesc');
+        $this->db->from('tblOccTypegroup');
+        $this->db->where('pkOccTypeGroupId', $ID);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->OccTypeGroupDesc;
+        }
+    }
 	public function insert($data, $table){
 		$this->db->insert($table, $data);
 	}

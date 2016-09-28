@@ -335,18 +335,35 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 			$words = json_decode( $_GET['words'] );
 			$sql['words'] = $this->receiveWords($words);
 		}
-		// if(isset($_GET['dates'])){
-		// 	$dates = json_decode( $_GET['dates'] );
-		// 	$sql['dates'] = $this->receiveWords($dates);
-		// }
+
 		$data = $this->frontDesk_db->getAuditUnitsQUERY($sql);
+
+		if (isset($sql['words']['statusAudit']) && !empty($sql['words']['statusAudit'])) {
+			$Descriptions = '';
+			for ($i=0; $i < sizeof($sql['words']['statusAudit']); $i++) {
+				$Descriptions .= $this->frontDesk_db->selectDescStatus($sql['words']['statusAudit'][$i]);
+				if ($i+1 < sizeof($sql['words']['statusAudit'])) {
+					$Descriptions.= ", ";
+				}
+			}
+			$sql['words']['statusAudit'] = $Descriptions;
+		}
+		if (isset($sql['words']['occTypeAudit']) && !empty($sql['words']['occTypeAudit'])) {
+			$Descriptions = '';
+			for ($i=0; $i < sizeof($sql['words']['occTypeAudit']); $i++) {
+				$Descriptions .= $this->frontDesk_db->selectDescOCCGroup($sql['words']['occTypeAudit'][$i]);
+				if ($i+1 < sizeof($sql['words']['occTypeAudit'])) {
+					$Descriptions.= ", ";
+				}
+			}
+			$sql['words']['occTypeAudit'] = $Descriptions;
+		}
+
 		if (isset($sql['words']["unitAudit"]) || isset($sql['words']["statusAudit"]) || isset($sql['words']["occTypeAudit"])) {
-			//$this->makeExcel($data, "AuditReportunits", $sql);
 			$this->reportPDFUnits($data,"AuditReportunits", $sql);
 		}else{
 			$data2 = $this->frontDesk_db->selectUnitsAudit();
 			$datos = $this->mergeArrayDatos($data, $data2);
-			//$this->makeExcel($datos, "AuditReportunits", $sql);
 			$this->reportPDFUnits($datos,"AuditReportunits", $sql);
 		}
 		
