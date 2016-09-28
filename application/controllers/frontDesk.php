@@ -402,7 +402,6 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 			$sql = '';
 			if(isset($_POST['words'])){
 				$words = $_POST['words'];
-				//$sql['words'] = $this->receiveWords($words);
 				$sql['words'] =[
 					"User" => $words['userTrxAudit'],
 					"Transaction" => $words['Transaction'],
@@ -410,7 +409,6 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 					"Transaction_Date" => $words['dateAuditTRX']
 				];
 			}
-			//var_dump($sql);
 			$data = $this->frontDesk_db->getAuditTrx($sql['words']);
 			$data = $this->ParseNumberTRX($data);
 			echo json_encode(array('items' => $data));
@@ -1287,7 +1285,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		$html .= $style;
 		$html .= '</body></html>';
 		
-		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+		$pdf->writeHTMLCell(0, 0, '','', $html, 0, 1, 0, true, '', true);
 		
 		$pdf = $this->showpdf( $pdf, $saveFiler );
 	}
@@ -1344,7 +1342,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		$html .= $style;
 		$html .= '</body></html>';
 		
-		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+		$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 		
 		$pdf = $this->showpdf( $pdf, $saveFiler );
 	}
