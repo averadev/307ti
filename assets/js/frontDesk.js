@@ -926,21 +926,6 @@ function deleteElementTable(div){
 	});
 }
 
-function createNombreLegal(){
-	/*var texto = "";
-	var nombres = getArrayValuesColumnTable("tablePeopleMaidSelectedHKC", 2);
-	var apellidos = getArrayValuesColumnTable("tablePeopleMaidSelectedHKC", 3);
-	for (var i = 0; i < nombres.length; i++) {
-		texto += nombres[i]+" "+apellidos[i];
-		if (i!=nombres.length-1) {
-			texto += " and ";
-		}
-	}
-	if ($("#legalName").val()=="") {
-		$("#legalName").val(texto);
-	}*/
-}
-
 function addUnitDialogHKC(){
 	var div = "#dialog-unit-hkConfig";	
 	dialog = $(div).dialog({
@@ -1471,29 +1456,26 @@ function addHtmlExchangeRate(data){
 	$('#validFromEx').val(getCurrentDate());
 }
 
-function saveExchangeRate(){
-	if($("#fromCurrency").val() == $("#toCurrency").val()){
-	       			alertify.error("Verify Data");
-	       			
-	       		}else{
-	       			
-	       			if ($("#fromAmount").val() && $("#toAmount").val() && $("#validFromEx").val()) {
-	       				alertify.success("saving");
-	       					var ajaxData =  {
-							url: "frontDesk/createNewExchangeRate",
-							tipo: "json",
-							datos: {
-								exchangeRate: getDatosExchangeRate()
-							},
-							funcionExito : mensajeExchangeRate,
-							funcionError: mensajeAlertify
-						};
-						ajaxDATA(ajaxData);
-	       			}else{
-	       				alertify.error("fill all filds")
-	       			}
-	       		}
-	
+function saveExchangeRate() {
+    if ($("#fromCurrency").val() == $("#toCurrency").val()) {
+        alertify.error("Verify Data");
+    } else {
+        if ($("#fromAmount").val() && $("#toAmount").val() && $("#validFromEx").val()) {
+            alertify.success("saving");
+            var ajaxData = {
+                url: "frontDesk/createNewExchangeRate",
+                tipo: "json",
+                datos: {
+                    exchangeRate: getDatosExchangeRate()
+                },
+                funcionExito: mensajeExchangeRate,
+                funcionError: mensajeAlertify
+            };
+            ajaxDATA(ajaxData);
+        } else {
+            alertify.error("fill all filds")
+        }
+    }
 }
 
 function getDatosExchangeRate(){
@@ -1596,20 +1578,15 @@ function saveExitoTrx(data){
 
 function generateReportAuditUnits(){
 	filters = {};
-		dates = {};
-		words = getWords(["unitAudit", "DateAudit", "DateArrival", "DateDeparture"]);
-		words.statusAudit = OCCSTATUS.multipleSelect('getSelects');
-		words.occTypeAudit = OCCTYPE.multipleSelect('getSelects');
-		options = {};
-		//options = getWordsByArray(OCCTYPE.multipleSelect('getSelects'));
-		
-		url = "?type=report";
+	dates = {};
+	words = getWords(["unitAudit", "DateAudit", "DateArrival", "DateDeparture"]);
+	words.statusAudit = OCCSTATUS.multipleSelect('getSelects');
+	words.occTypeAudit = OCCTYPE.multipleSelect('getSelects');
+	options = {};
+	url = "?type=report";
 	dates = JSON.stringify(dates);
 	words = JSON.stringify(words);
-	
-	//url += "&dates=" + dates;
 	url += "&words=" + words;
-	//dowloadExcel("frontDesk/getAuditUnitsReport"+ url);
 	window.open("frontDesk/getAuditUnitsReport"+ url);
 	
 }
@@ -1627,14 +1604,10 @@ function generateReportAuditTrx(){
 	for(j in words){
 		url+= "&"+j+"="+words[j];
 	}
-	
-	//dowloadExcel("frontDesk/getAuditTrxReport" + url);
 	window.open("frontDesk/getAuditTrxReport"+ url);
 }
 
 function closeDAYTRX(){
-
-	//var TRXS = AUDITTRX.multipleSelect('getSelects');
 	var TRXS = getArrayValuesColumnTable("tablaAuditTrx", 1);
 	var ajaxDatos =  {
 		url: "frontDesk/createTrxAuditById",
@@ -1671,7 +1644,7 @@ function getArrayValuesColumnTableC(tabla, columna){
 function getCurrentDateMENOS(dias){
 	var today = new Date();
 	var dd = today.getDate() - dias;
-	var mm = today.getMonth()+1; //January is 0!
+	var mm = today.getMonth()+1;
 	var yyyy = today.getFullYear();
 	
 	if(dd<10) {
