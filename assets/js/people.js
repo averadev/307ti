@@ -556,12 +556,7 @@ function validateUserFields(){
 			infoEmployee = false;
 		}
 		
-		/*if($('#textRoster').val() == null || $('#textRoster').val() == 0){
-			$('#alertRoster').addClass('error');
-			$('#textRoster').focus();
-			errorText = "Nómina<br>" + errorText;
-			infoEmployee = false;
-		}*/
+		
 		
 		if(infoEmployee == false){
 			$('#alertValPeopleEmployee .alert-box').html("<label>Please complete fields in red</label>" );
@@ -581,13 +576,7 @@ function validateUserFields(){
 		}
 	}
 	
-	//Email
-	/*if($('#textEmail1').val().trim().length == 0){
-		$('#alertEmail1').addClass('error');
-		$('#textEmail1').focus();
-		errorText = "Correo<br>"  + errorText;
-		infoContact = false;
-	}else*/
+	
 	if($('#textEmail1').val().trim().length > 0){
 		if(!regex.test($('#textEmail1').val().trim())){
 			$('#alertEmail1').addClass('error');
@@ -621,20 +610,6 @@ function validateUserFields(){
 		infoContact = false;
 	}
 	
-	//Telefono
-	/*if($('#textPhone1').val().trim().length == 0){
-		$('#alertPhone1').addClass('error');
-		$('#textPhone1').focus();
-		errorText = "Telefono<br>"  + errorText;
-		infoContact = false;
-	}
-	if($('#textPhone1').val().trim().length > 14){
-		$('#alertPhone1').addClass('error');
-		$('#textPhone1').focus();
-		errorText = "El telefono debe tener maximo 11 caracteres<br>"  + errorText;
-		infoContact = false;
-	}*/
-	
 	if(infoContact == false){
 		result = false;
 		$('#alertValPeopleContact .alert-box').html("<label>Please complete fields in red</label>" + errorText );
@@ -643,59 +618,6 @@ function validateUserFields(){
 	}
 	
 	errorText = "";
-	
-	//fecha de nacimiento
-	if($('#textPostalCode').val().trim().length == 0){
-		$('#alertPostalCode').addClass('error');
-		$('#textPostalCode').focus();
-		errorText = "Codigo postal<br>"  + errorText;
-		infoAddress = false;
-	}
-	
-	//Ciudad
-	if($('#textCity').val().trim().length == 0){
-		$('#alertCity').addClass('error');
-		$('#textCity').focus();
-		errorText = "Ciudad<br>"  + errorText;
-		infoAddress = false;
-	}
-	
-	//country
-	if($('#textCountry').val() == 0){
-		$('#alertCountry').addClass('error');
-		$('#textCountry').focus();
-		errorText = "Pais<br>"  + errorText;
-		infoAddress = false;
-	}
-	
-	//estado
-	if($('#textState').val() == 0){
-		$('#alertState').addClass('error');
-		$('#textState').focus();
-		errorText = "Estado<br>"  + errorText;
-		infoAddress = false;
-	}
-	
-	//colonia
-	/*if($('#textColony').val().trim().length == 0){
-		$('#alertColony').addClass('error');
-		$('#textColony').focus();
-		errorText = "Colonia<br>"  + errorText;
-		infoAddress = false;
-	}*/
-	//calle
-	if($('#textStreet').val().trim().length == 0){
-		$('#alertStreet').addClass('error');
-		$('#textStreet').focus();
-		errorText = "Calle<br>"  + errorText;
-		infoAddress = false;
-	}
-	if(infoAddress == false){
-		result = false;
-		$('#alertValPeopleAddress .alert-box').html("<label>Please complete fields in red</label>" + errorText );
-		$('#alertValPeopleAddress').show(100);
-		$('#containerAddress').show();
-	}
 	
 	errorText = "";
 	
@@ -721,14 +643,6 @@ function validateUserFields(){
 		}
 	}
 	
-	//fecha de nacimiento
-	if($('#textBirthdate').val().trim().length == 0){
-		$('#alertBirthdate').addClass('error');
-		//$('#textBirthdate').focus();
-		errorText = "Fecha de nacimiento<br>"  + errorText;
-		infoPeople = false;
-	}
-	
 	//genero
 	var gender = 0;
 	$(".RadioGender").each(function (index){
@@ -751,12 +665,12 @@ function validateUserFields(){
 		infoPeople = false;
 	}
 	//nombre
-	if($('#textName').val().trim().length == 0){
+	/*if($('#textName').val().trim().length == 0){
 		$('#alertName').addClass('error');
 		$('#textName').focus();
 		errorText =  "Nombre<br>" + errorText;
 		infoPeople = false;
-	}
+	}*/
 	
 	if(infoPeople == false){
 		$('#alertValPeopleGeneral .alert-box').html("<label>Please complete fields in red</label>" + errorText );

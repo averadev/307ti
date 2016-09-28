@@ -111,7 +111,8 @@ Class frontDesk_db extends CI_MODEL
 		//$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'LEFT');
 		$this->db->join('tblRes r', 'r.pkResId = ro.fkResId', 'LEFT');
 		//$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'LEFT');
-		$this->db->join('tblResInvt ri', '(ri.fkResId =  CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)', 'LEFT');
+		//$this->db->join('tblResInvt ri', '(ri.fkResId =  CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)', 'LEFT');
+		$this->db->join('tblResInvt ri', ' ri.fkResId = r.pkResId ');
 		$this->db->join('tblFloorPlan fpi', 'fpi.pkFloorPlanID = ri.fkFloorPlanId', 'LEFT');
 		$this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId', 'LEFT');
 		$this->db->join('tblView v', 'v.pkViewId = ri.fkViewId', 'LEFT');
@@ -119,7 +120,8 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->join('tblUnitHKStatus uhks', 'uhks.fkUnitId = u.pkUnitId and (uhks.fkCalendarID = tblCalendar.pkCalendarId or uhks.fkCalendarID = (SELECT MAX( uhks2.fkCalendarID ) FROM tblUnitHKStatus uhks2 WHERE uhks2.fkUnitId = u.pkUnitId ) )', 'LEFT');
 		$this->db->join('tblHKStatus hks', 'hks.pkHKStatusId = uhks.fkHkStatusId', 'LEFT');
 		//$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = ro.fkResId', 'LEFT');
-		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = r.pkResRelatedId or rpa.fkResId = r.pkResId', 'LEFT');
+		//$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = r.pkResRelatedId or rpa.fkResId = r.pkResId', 'LEFT');
+		$this->db->join('tblResPeopleAcc rpa', ' rpa.fkResId = r.pkResId ');
 		//$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = ro.fkResId and rpa.ynPrimaryPeople = 1', 'LEFT');
 		$this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId', 'LEFT');
 		if($filters['words'] != false){

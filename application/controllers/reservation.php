@@ -82,8 +82,6 @@ class Reservation extends CI_Controller {
 		$this->insertPagosDownpayment($idContrato);
 		$this->insertScheduledPaymentsTrx($idContrato);
 	}
-	
-	
 
 	private function insertTarjeta($id, $type){
 

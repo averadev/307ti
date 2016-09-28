@@ -23,9 +23,11 @@ class Reservation_db extends CI_Model {
 		}
 		$this->db->from('tblRes r');
 		$this->db->join('tblResType rt', 'rt.pkResTypeId = r.fkResTypeId');
-		$this->db->join('tblResInvt ri', '(ri.fkResId =  CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)');
+		//$this->db->join('tblResInvt ri', '(ri.fkResId =  CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)');
+		$this->db->join('tblResInvt ri', ' ri.fkResId = r.pkResId ');
         $this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId');
-		$this->db->join('tblResPeopleAcc rpa', '(rpa.fkResId =  CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)');
+		//$this->db->join('tblResPeopleAcc rpa', '(rpa.fkResId =  CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)');
+		$this->db->join('tblResPeopleAcc rpa', ' rpa.fkResId = r.pkResId ');
         $this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId');
         $this->db->join('tblEmployee em', 'em.fkPeopleId = p.pkPeopleId', 'LEFT');
         $this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId', 'LEFT');
@@ -39,6 +41,7 @@ class Reservation_db extends CI_Model {
 		//$this->db->where('rpa.ynPrimaryPeople', '1');
 		$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
 		$this->db->where('rpa.ynActive',1);
+		$this->db->where('rpa.ynPrimaryPeople', '1');
         if (!is_null($filters)){
             if($filters['words'] != false){
                 if ($filters['checks'] != false){
@@ -66,7 +69,7 @@ class Reservation_db extends CI_Model {
 			//$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7 or r.fkResTypeId = 10 )');
 			$this->db->where('R.pkResId', $id);
         }else{
-			$this->db->where('rpa.ynPrimaryPeople', '1');
+			
 			//$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
 		}
 		
@@ -190,7 +193,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 		$this->db->select('( SELECT top 1 CONVERT( VARCHAR(11), C2.Date, 101 )FROM tblResOcc RO2 INNER JOIN tblCalendar C2 on C2.pkCalendarId = RO2.fkCalendarId where RO2.fkResId = RO.fkResId and RO2.OccYear = RO.OccYear ORDER BY RO2.NightId ASC) as iniDate');
 		$this->db->select('( SELECT top 1 CONVERT( VARCHAR(11), C2.Date, 101 )FROM tblResOcc RO2 INNER JOIN tblCalendar C2 on C2.pkCalendarId = RO2.fkCalendarId where RO2.fkResId = RO.fkResId and RO2.OccYear = RO.OccYear ORDER BY RO2.NightId DESC) as endDate');
         $this->db->from('tblRes R');
-		$this->db->join('tblResInvt RI ', ' RI.fkResId = R.pkResRelatedId OR RI.fkResId = R.pkResId', 'inner');
+		//$this->db->join('tblResInvt RI ', ' RI.fkResId = R.pkResRelatedId OR RI.fkResId = R.pkResId', 'inner');
+		$this->db->join('tblResInvt RI ', ' RI.fkResId = R.pkResId', 'inner');
         $this->db->join('tblFloorplan TFP', 'RI.fkFloorPlanId = TFP.pkFloorPlanId', 'inner');
         $this->db->join('tblFrequency TF', 'RI.fkFrequencyId = TF.pkFrequencyId', 'inner');
         $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
@@ -922,7 +926,8 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 		$this->db->from('tblres r ');
 		$this->db->join('tblStatus s with(nolock) ', ' s.pkStatusid = r.fkStatusId', 'inner');
 		$this->db->join('tblResType rt with(nolock) ', ' rt.pkResTypeid = r.fkResTypeId', 'inner');
-		$this->db->join('tblResinvt ri with(nolock) ', ' ri.fkResid = r.pkResRelatedId or ri.fkResid = r.pkResId', 'inner');
+		//$this->db->join('tblResinvt ri with(nolock) ', ' ri.fkResid = r.pkResRelatedId or ri.fkResid = r.pkResId', 'inner');
+		$this->db->join('tblResinvt ri with(nolock) ', ' ri.fkResid = r.pkResId', 'inner');
 		$this->db->join('tblFloorPlan fp with(nolock) ', ' fp.pkFloorPlanid = ri.fkFloorPlanId', 'inner');
 		$this->db->join('tblResOcc ro with(nolock) ', ' ro.fkResid = r.pkResId', 'inner');
 		$this->db->join('tblOccType oty with(nolock) ', ' oty.pkOccTypeId = ro.fkOccTypeId', 'inner');

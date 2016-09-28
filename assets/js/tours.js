@@ -79,7 +79,8 @@ function getTours(){
             showLoading('#tours',false);
             if(data != null){
                 alertify.success("Found "+ data.length);
-                drawTable(data, 'getDetalleContratoByID', "details", "tours");
+                //drawTable(data, 'getDetalleTourByID', "details", "tours");
+				drawTable2(data, "tours", false, "");
             }else{
                 alertify.error("No data found");
                 showLoading("#tblToursbody", false);
@@ -91,4 +92,8 @@ function getTours(){
             alertify.error("Conection Error");
         }
     });
+}
+
+function getDetalleTourByID(id){
+	
 }

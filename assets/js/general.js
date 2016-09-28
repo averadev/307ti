@@ -269,10 +269,10 @@ function showLoading(parentElement, isOpen,message, success){
 
 function drawTable(data, funcion, cadena, table){
 
-	/*if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
+	if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
         var tabla = $('#' + table).DataTable();
         tabla.destroy();
-    }*/
+    }
 
     var headHTML = "<th>"+cadena+"</th>";
     var bodyHTML = '';
@@ -391,8 +391,7 @@ function drawTable2(data, table ,funcion, cadena, option){
 	if(heightScroll == null){
 		heightScroll = 400;
 	}
-	$('#' + table ).on( 'order.dt',  function (event, a){
-	}).DataTable({
+	$('#' + table ).DataTable({
 		"scrollY": heightScroll - 50,
 		"scrollX": true,
 		"paging":   false,

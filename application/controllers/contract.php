@@ -45,6 +45,7 @@ class Contract extends CI_Controller {
 				//$this->insertPeoples($idContrato, $acc);
 				$this->makeTransactions($idContrato);
 				$this->createUnidades($idContrato);
+				//$this->createUnidadesOcc($Ocupaciones);
 				$this->createGifts($idContrato);
 				$balanceFinal = $this->insertFinanciamiento($idContrato);
 				$this->createSemanaOcupacion($idContrato, $Ocupaciones);
@@ -270,6 +271,28 @@ private function createUnidades($idContrato){
 		$this->contract_db->insertReturnId('tblResInvt', $Unidades);
 	}
 }
+
+/*private function createUnidadesOcc($occupacy){
+	//$cont2 = count($occupacy);
+	for($j =0; $j< count($occupacy); $j++){
+		$typeAcc = ['6'];
+		$resultAcc = array();
+		for($i =0; $i< count($typeAcc); $i++){
+			$cuenta = [
+				"fkAccTypeId"     	=> $typeAcc[$i],
+				"fkCompanyId"    	=> 1,
+				"AccCode"       	=> 1000,
+				"ynActive"		 	=> 1,
+				"CrBy"      		=> $this->nativesessions->get('id'),
+				"CrDt"   			=> $this->getToday(),
+				"MdBy" 				=> $this->nativesessions->get('id'),
+				"MdDt"  			=> $this->getToday()
+			];
+			$resultAcc[$i] = $this->contract_db->insertReturnId('tblAcc', $cuenta);
+		}
+		$this->insertPeoples($occupacy[$j], $resultAcc);
+	}
+}*/
 
 private function createAcc(){
 	$typeAcc = ['1','2','3'];

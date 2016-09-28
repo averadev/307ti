@@ -1094,7 +1094,7 @@ class Contract_db extends CI_Model {
 
     public function getTours($filters){
         $sql = "";
-        $this->db->select('t.pkTourId, p.pkPeopleId, p.Name, p.LName,  CONVERT(VARCHAR(11),t.TourDate,106) as date');
+        $this->db->select('t.pkTourId as ID, p.pkPeopleId, p.Name, p.LName,  CONVERT(VARCHAR(11),t.TourDate,106) as date');
         $this->db->from('tblTour t');
         $this->db->join('tblTourLocation tl', 'tl.pkTourLcationId = t.fkTourLocationId', 'left');
         $this->db->join('tblPeople p', 'p.pkPeopleId = tl.fkPeopleId', 'left');
