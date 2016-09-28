@@ -226,7 +226,44 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 		mocalCreditLimit = modalGeneral2(modalPropiedades, ajaxData);
 		mocalCreditLimit.dialog( "open" );
 	});
-	
+
+$(document).off( 'click', '#btAddLinkACC');
+$(document).on( 'click', '#btAddLinkACC', function(){
+	var ajaxData =  {
+			url: "reservation/modalCreditLimit",
+			tipo: "html",
+			datos: {},
+			funcionExito : addHTMLCreditLimit,
+			funcionError: mensajeAlertify
+		};
+	var modalPropiedades = {
+		div: "dialog-CreditLimit",
+		altura: 260,
+		width: 500,
+		onOpen: ajaxDATA,
+		onSave: createNewLimit,
+		botones :[{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');
+	       }
+	   	},{
+       		text: "Ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       
+       		}
+     	}]
+	};
+
+	if (mocalCreditLimit!=null) {
+			mocalCreditLimit.dialog( "destroy" );
+		}
+		mocalCreditLimit = modalGeneral2(modalPropiedades, ajaxData);
+		mocalCreditLimit.dialog( "open" );
+	});
+
 	$(document).off( 'click', '#btnNewOccRes');
 	$(document).on( 'click', '#btnNewOccRes', function () {
 		if( $("#idResTypeX").text() == 7 ){

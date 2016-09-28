@@ -451,6 +451,10 @@
 							<div class="label">Credit Limit</div>
 							<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 						</a>
+						<a id="btAddLinkACC" attr_type="linkACC" class="btn btn-primary spanSelect">
+							<div class="label">Link Reservation</div>
+							<i class="fa fa-arrow-right" ></i>
+						</a>
 					<?php
 					}
 				?>

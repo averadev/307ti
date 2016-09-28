@@ -1657,3 +1657,20 @@ function getCurrentDateMENOS(dias){
 	
 	return  mm+'/'+dd+'/'+yyyy;
 }
+
+function ConvertDate(fecha){
+	var today = new Date(fecha);
+	var dd = today.getDate() - 1;
+	var mm = today.getMonth()+1;
+	var yyyy = today.getFullYear();
+	
+	if(dd<10) {
+		dd='0'+dd
+	} 
+
+	if(mm<10) {
+		mm='0'+mm
+	} 
+	
+	return  mm+'/'+dd+'/'+yyyy;
+}

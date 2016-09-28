@@ -526,10 +526,13 @@ Class frontDesk_db extends CI_MODEL
 			$sql.="and ( " . $condicion . ")";
 		}
 		if (isset($filters['words']['DateArrival']) && !empty($filters['words']['DateArrival'])) {
-			$sql.=" or '". $filters['words']['DateArrival']."' = CONVERT(VARCHAR(10),R.CheckIn,101)";
+			$sql.=" and '". $filters['words']['DateArrival']."' = (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId asc)";
 		}
-		if (isset($filters['words']['DateDeparture']) && !empty($filters['words']['DateArrival'])) {
-			$sql.=" or '". $filters['words']['DateDeparture']."' = CONVERT(VARCHAR(10),R.CheckOut,101)";
+		if (isset($filters['words']['DateDeparture']) && !empty($filters['words']['DateDeparture'])) {
+			$fecha =  new DateTime($filters['words']['DateDeparture']);
+			$fecha->modify("-1 day");
+			$fechaActual = $fecha->format('m/d/Y');
+			$sql.=" and '". $fechaActual ."' = (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId desc)";
 		}
 		$query = $this->db->query($sql);
 
