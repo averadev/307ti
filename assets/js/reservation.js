@@ -257,6 +257,7 @@ $(document).on( 'click', '#btAddLinkACC', function(){
 				var ResConf = $("#resConfReservation").val().trim();
        			if ( ResConf != "" && accauntID != "") {
        				updateLinkAcc(ResConf, accauntID);
+       				$(this).dialog('close');
        			}else{
        				alertify.error("Add a Reservation Code");
        			}
@@ -390,12 +391,21 @@ function updateLinkAcc(ResConf, accauntID){
 			'resConfR': ResConf,
 			'accauntID': accauntID
 		},
-		funcionExito : mensajeLimit,
+		funcionExito : mesnajeLinkAcc,
 		funcionError: mensajeAlertify
 	};
 	ajaxDATA(ajaxData);
 }
 
+function mesnajeLinkAcc(data){
+	getAccountsRes( $('#btNewTransAccRes').data( 'idRes' ), "account", "" );
+	if (data['success'] == 1) {
+		alertify.success(data["mensaje"]);
+	}
+	if (data['success'] == 0) {
+		alertify.error(data["mensaje"]);
+	}
+}
 
 function updateDownpaymentRes(){
 	var downpayment = getNumberTextInput("downpaymentRes");
@@ -446,8 +456,6 @@ function mensajeLimit(data){
 	if (data['creditLimit']) {
 		$("#creditLimitRes").text(parseFloat(data['creditLimit']).toFixed(2));
 	}
-	
-	//creditLimitRes
 }
 
 function ajaxSelectsRes(url,errorMsj, funcion, divSelect) {

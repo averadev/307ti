@@ -1689,20 +1689,28 @@ private function comprubaArray($valor, $array){
 		if($this->input->is_ajax_request()) {
 			$accauntID = $_POST['accauntID'];
 			$idReserva = $this->reservation_db->validateResDate($_POST['resConfR']);
+			
+			if ($idReserva) {
+				$IDACC = $this->reservation_db->getACCIDByContracID($idReserva);
+				$financiamiento = [
+					"fkAccid"	=> $IDACC,
+				];
+				$condicion = "fkAccid = " . $accauntID;
 
-			$financiamiento = [
-				"fkAccId"	=> $accauntID,
-			];
-			$condicion = "fkResId = " . $idReserva. " and ynPrimaryPeople = 1";
-
-			$afectados = $this->reservation_db->updateReturnId('tblResPeopleAcc', $financiamiento, $condicion);
-			if ($afectados>0) {
-				$mensaje = ["mensaje"=>"It was successfully saved"];
-				echo json_encode($mensaje);
+				$afectados = $this->reservation_db->updateReturnId('tblAccTrx', $financiamiento, $condicion);
+				if ($afectados>0) {
+					$mensaje = ["success" => 1, "mensaje"=>"Transactions Linked"];
+					echo json_encode($mensaje);
+				}else{
+					$mensaje = ["success" => 0, "mensaje"=>"An error occurred"];	
+					echo json_encode($mensaje);
+				}
 			}else{
-				$mensaje = ["mesaje"=>"an error occurred"];	
+				$mensaje = ["success" => 0, "mensaje"=>"Verify Reservation Date"];	
 				echo json_encode($mensaje);
-			}		
+			}
+			
+					
 		}
 	}
 	public function updateCreditLimit(){
