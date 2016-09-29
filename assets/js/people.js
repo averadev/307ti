@@ -665,12 +665,12 @@ function validateUserFields(){
 		infoPeople = false;
 	}
 	//nombre
-	/*if($('#textName').val().trim().length == 0){
+	if($('#textName').val().trim().length == 0){
 		$('#alertName').addClass('error');
 		$('#textName').focus();
 		errorText =  "Nombre<br>" + errorText;
 		infoPeople = false;
-	}*/
+	}
 	
 	if(infoPeople == false){
 		$('#alertValPeopleGeneral .alert-box').html("<label>Please complete fields in red</label>" + errorText );
