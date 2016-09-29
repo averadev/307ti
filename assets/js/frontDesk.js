@@ -203,14 +203,14 @@ function initDatesAudit(){
 	});
 	$('#dateAuditTRX').val(getCurrentDateMENOS(1));
 
-	$( "#DateArrival" ).Zebra_DatePicker({
-		format: 'm/d/Y',
-		show_icon: false,
-	});
-	$( "#DateDeparture" ).Zebra_DatePicker({
-		format: 'm/d/Y',
-		show_icon: false,
-	});
+	// $( "#DateArrival" ).Zebra_DatePicker({
+	// 	format: 'm/d/Y',
+	// 	show_icon: false,
+	// });
+	// $( "#DateDeparture" ).Zebra_DatePicker({
+	// 	format: 'm/d/Y',
+	// 	show_icon: false,
+	// });
 }
 /**
 * Muestra la lista de front desk
@@ -264,7 +264,18 @@ function getFrontDesk(order, page){
 	}else if(section == "section7"){
 		filters = {};
 		dates = {};
-		words = getWords(["unitAudit", "DateAudit", "DateArrival", "DateDeparture"]);
+		//words = getWords(["unitAudit", "DateAudit", "DateArrival", "DateDeparture"]);
+		words = getWords(["unitAudit", "DateAudit"]);
+		var Seleccionado = $("#ArrivalDeparture").val();
+		switch(Seleccionado) {
+		    case "1":
+		        words.DateArrival = $("#DateAudit").val();
+		        break;
+		    case "2":
+		         words.DateDeparture = $("#DateAudit").val();
+		        break;
+		}
+
 		words.statusAudit = OCCSTATUS.multipleSelect('getSelects');
 		words.occTypeAudit = OCCTYPE.multipleSelect('getSelects');
 		options = {};
@@ -384,8 +395,9 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 
 function cleanAuditUnit(){
 	$("#unitAudit").val('');
-	$("#DateArrival").val('');
-	$("#DateDeparture").val('');
+	//$("#DateArrival").val('');
+	//$("#DateDeparture").val('');
+	$("#ArrivalDeparture").val(0);
 	OCCTYPE.multipleSelect("uncheckAll");
 	OCCSTATUS.multipleSelect("uncheckAll");	
 }
@@ -1579,7 +1591,19 @@ function saveExitoTrx(data){
 function generateReportAuditUnits(){
 	filters = {};
 	dates = {};
-	words = getWords(["unitAudit", "DateAudit", "DateArrival", "DateDeparture"]);
+	//words = getWords(["unitAudit", "DateAudit", "DateArrival", "DateDeparture"]);
+	words = getWords(["unitAudit", "DateAudit"]);
+	var Seleccionado = $("#ArrivalDeparture").val();
+	switch(Seleccionado) {
+		case "1":
+			words.DateDeparture = "";
+			words.DateArrival = $("#DateAudit").val();
+			break;
+		case "2":
+			words.DateArrival = "";
+		    words.DateDeparture = $("#DateAudit").val();
+		    break;
+	}
 	words.statusAudit = OCCSTATUS.multipleSelect('getSelects');
 	words.occTypeAudit = OCCTYPE.multipleSelect('getSelects');
 	options = {};

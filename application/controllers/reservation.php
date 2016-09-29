@@ -1668,11 +1668,6 @@ private function comprubaArray($valor, $array){
 	
 	public function modalFinanciamiento(){
 		if($this->input->is_ajax_request()) {
-			/*$idReservation = $_POST['idReservation'];
-			$data['precio'] = $this->reservation_db->selectPriceFin($idReservation);
-			$data['factores'] = $this->reservation_db->selectFactors();
-			$data['CostCollection'] = $this->reservation_db->selectCostCollection();
-			$this->load->view('reservations/reservationDialogFinanciamiento', $data);	*/
 			$idReservation = $_POST['idReservation'];
 			$data['precio'] = $this->reservation_db->selectPriceFin($idReservation);
 			$data['factores'] = $this->reservation_db->selectFactors();
@@ -1683,6 +1678,31 @@ private function comprubaArray($valor, $array){
 	public function modalCreditLimit(){
 		if($this->input->is_ajax_request()) {
 			$this->load->view('reservations/dialogCreditLimtit');			
+		}
+	}
+	public function modalLinkAcc(){
+		if($this->input->is_ajax_request()) {
+			$this->load->view('reservations/modalLinkAcc');			
+		}
+	}
+	public function LinkAcc(){
+		if($this->input->is_ajax_request()) {
+			$accauntID = $_POST['accauntID'];
+			$idReserva = $this->reservation_db->validateResDate($_POST['resConfR']);
+
+			$financiamiento = [
+				"fkAccId"	=> $accauntID,
+			];
+			$condicion = "fkResId = " . $idReserva. " and ynPrimaryPeople = 1";
+
+			$afectados = $this->reservation_db->updateReturnId('tblResPeopleAcc', $financiamiento, $condicion);
+			if ($afectados>0) {
+				$mensaje = ["mensaje"=>"It was successfully saved"];
+				echo json_encode($mensaje);
+			}else{
+				$mensaje = ["mesaje"=>"an error occurred"];	
+				echo json_encode($mensaje);
+			}		
 		}
 	}
 	public function updateCreditLimit(){

@@ -26,7 +26,6 @@ Class frontDesk_db extends CI_MODEL
 		$this->db->where('tblStatus.ynActive = 1');
 		$this->db->where('tblStatusTypeStatus.ynActive = 1');
 		$this->db->where('tblStatusTypeStatus.fkStatusTypeId = 2');
-		/*$this->db->where('tblStatusType.StatusTypeCode = ', "RES");*/
 		return  $this->db->get()->result();
 	}
 	
@@ -977,6 +976,7 @@ Class frontDesk_db extends CI_MODEL
             return $row->pkAccID;
         }
     }
+
    public function selectTypoCambio($MonedaActual, $ACovertir){
         $this->db->limit('1');
         $this->db->select('ER.AmtTo as AMT');

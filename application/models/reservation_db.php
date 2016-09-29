@@ -1150,6 +1150,18 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkTrxConceptId;
         }
     }
+    public function validateResDate($ResConf){
+        $sql = "select pkResId from tblRes R where ResConf = '". $ResConf. "' ";
+        $sql.= " and getdate() <= (SELECT top 1 c2.Date from tblResOcc ro2 ";
+        $sql.= " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId ";
+        $sql.=" where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId asc)";  
+        $query = $this->db->query($sql);
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->pkResId;
+        }
+    }
     public function getCreditLimitActual($idAccount){
         $this->db->select('CrdLimit');
         $this->db->from('tblResPeopleAcc');

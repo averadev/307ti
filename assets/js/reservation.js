@@ -230,18 +230,18 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
 $(document).off( 'click', '#btAddLinkACC');
 $(document).on( 'click', '#btAddLinkACC', function(){
 	var ajaxData =  {
-			url: "reservation/modalCreditLimit",
+			url: "reservation/modalLinkAcc",
 			tipo: "html",
 			datos: {},
-			funcionExito : addHTMLCreditLimit,
+			funcionExito : addHTMLLinkAcc,
 			funcionError: mensajeAlertify
 		};
 	var modalPropiedades = {
-		div: "dialog-CreditLimit",
+		div: "dialog-LinkAcc",
 		altura: 260,
 		width: 500,
 		onOpen: ajaxDATA,
-		onSave: createNewLimit,
+		onSave: updateLinkAcc,
 		botones :[{
 	       	text: "Cancel",
 	       	"class": 'dialogModalButtonCancel',
@@ -252,7 +252,15 @@ $(document).on( 'click', '#btAddLinkACC', function(){
        		text: "Ok",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-       
+       			var accauntType = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
+				var accauntID = $('#btNewTransAccRes').data( 'idAcc' + accauntType );
+				var ResConf = $("#resConfReservation").val().trim();
+       			if ( ResConf != "" && accauntID != "") {
+       				updateLinkAcc(ResConf, accauntID);
+       			}else{
+       				alertify.error("Add a Reservation Code");
+       			}
+       			
        		}
      	}]
 	};
@@ -368,6 +376,27 @@ $(document).on( 'click', '#btAddLinkACC', function(){
 	
 });
 
+
+function addHTMLLinkAcc(data){
+	$("#dialog-LinkAcc").html(data);
+	//initEventosFinanciamiento();
+}
+
+function updateLinkAcc(ResConf, accauntID){
+	var ajaxData =  {
+		url: "reservation/LinkAcc",
+		tipo: "json",
+		datos: {
+			'resConfR': ResConf,
+			'accauntID': accauntID
+		},
+		funcionExito : mensajeLimit,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
+
+
 function updateDownpaymentRes(){
 	var downpayment = getNumberTextInput("downpaymentRes");
 	$("#montoTotalRes").val(downpayment.toFixed(2));
@@ -394,7 +423,6 @@ function addHTMLCreditLimit(data){
 function createNewLimit (){
 	var accauntType = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
 	var accauntID = $('#btNewTransAccRes').data( 'idAcc' + accauntType );
-	console.log(accauntType,accauntID );
 	var amount = $("#creditLimitResInput").val();
 	var ajaxData =  {
 		url: "reservation/updateCreditLimit",

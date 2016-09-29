@@ -174,6 +174,7 @@
 <div id="dialog-accountsRes"  title="Accounts" style="display: none;"></div>
 <div id="dialog-newFileRes"  title="New File" style="display: none;"></div>
 <div id="dialog-CreditLimit"  title="Credit Limit" style="display: none;"></div>
+<div id="dialog-LinkAcc"  title="Link Account" style="display: none;"></div>
 <div id="dialog-CreditCardASR"  title="Card Associated" style="display: none;"></div>
 <div id="dialog-StatusRes"  title="Status" style="display: none;"></div>
 <div id="dialog-NewOccRes"  title="New Night" style="display: none;"></div>

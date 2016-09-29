@@ -463,7 +463,7 @@
 						<fieldset class="large-12 columns fieldsetFilter">
 							<div class="row">
 								<!-- Arrival Date -->
-								<div class="small-12 large-2 columns">
+								<div class="small-12 large-3 columns">
 									<label id="dateAuditLabel" class="text-left">Date
 										<div class="input-group date">
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
@@ -472,23 +472,26 @@
 									</label>
 								</div>
 								<!-- Arrival Date -->
-								<div class="small-12 large-2 columns">
-									<label id="dateAuditLabel" class="text-left">Expected Arrivals
+								<div class="small-12 large-3 columns">
+									<label id="dateAuditLabel" class="text-left">Expected Arrivals-Departures
 										<div class="input-group date">
-											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-											<input type="text" id="DateArrival" class="txtSearch input-group-field roundRight" readonly/>
+											<select id="ArrivalDeparture" class="txtSearch input-group-field round">
+											<option value="0">Choose an option</option>
+											<option value="1">Arrival</option>
+											<option value="2">Departure</option>
+											</select>
 										</div>
 									</label>
 								</div>
 								<!-- Arrival Date -->
-								<div class="small-12 large-2 columns">
+<!-- 								<div class="small-12 large-2 columns">
 									<label id="dateAuditLabel" class="text-left">Expected Departures
 										<div class="input-group date">
 											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
 											<input type="text" id="DateDeparture" class="txtSearch input-group-field roundRight" readonly/>
 										</div>
 									</label>
-								</div>
+								</div> -->
 								<!-- Departure Date -->
 								<div class="small-12 large-2 columns">
 									<label id="unitAuditLabel" class="text-left">Unit
