@@ -1202,6 +1202,7 @@ private function comprubaArray($valor, $array){
 			$weeks = $this->reservation_db->selectWeeksReservation($id);
 			$cont = 0;
 			foreach($weeks as $item){
+				$item->Date = $item->Date1;
 				$cont++;
 				if( is_null( $item->RateAmtNight ) ){
 					$item->RateAmtNight = 0;
@@ -1216,7 +1217,7 @@ private function comprubaArray($valor, $array){
 				}else{
 					unset($item->Delete);
 				}
-				unset($item->pkResOccId);
+				unset($item->pkResOccId, $item->Date1);
 			}
 			echo json_encode($weeks);
 		}

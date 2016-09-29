@@ -508,7 +508,7 @@
 								<tr>
 									<th class="cellGeneral">Code</th>
 									<th class="cellGeneral">Description</th>
-									<th class="cellGeneral" >Precio</th>
+									<th class="cellGeneral" >Price</th>
 									<th></th>
 								</tr>
 							</thead>
@@ -644,7 +644,7 @@
 									<tr>
 										<th class="cellGeneral">ID</th>
 										<th class="cellGeneral">Code</th>
-										<th class="cellGeneral">Descripción</th>
+										<th class="cellGeneral">Description</th>
 									</tr>
 								</thead>
 								<tbody id="tableFlagsListBodyRes"></tbody>
@@ -660,7 +660,7 @@
 										<th class="cellGeneral">DELETE</th>
 										<th class="cellGeneral">ID</th>
 										<th class="cellGeneral">Code</th>
-										<th class="cellGeneral">Descripción</th>
+										<th class="cellGeneral">Description</th>
 									</tr>
 								</thead>
 								<tbody id="flagsAsignedBodyRes"></tbody>

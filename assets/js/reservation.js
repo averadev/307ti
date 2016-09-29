@@ -710,13 +710,13 @@ function addUnidadResDialog(iniDate, unit, typeUnit){
 						$( "#fromDateUnitRes" ).Zebra_DatePicker({
 							format: 'm/d/Y',
 							show_icon: false,
-							direction: true,
+							//direction: true,
 							pair: $('#toDateUnitRes'),
 						});
 						$( "#toDateUnitRes" ).Zebra_DatePicker({
 							format: 'm/d/Y',
 							show_icon: false,
-							direction: 1
+							//direction: 1
 						});
 					
 					if(iniDate != null){

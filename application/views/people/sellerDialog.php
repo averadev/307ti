@@ -11,7 +11,7 @@
 					<span>Search</span>
 				</h3>
 				<a data-widget="newContrat" id="newUser" class="btn btn-new">
-					<div class="label">Nuevo</div>
+					<div class="label">New</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
 			</div>
@@ -73,11 +73,11 @@
 								</div>
 								<div class="small-12 large-6 columns" style="padding-left: 0;">
 									<a id="btnSearchSeller" class="btn btn-primary btn-Search" attr_people="">
-										<div class="label">Buscar</div>
+										<div class="label">Search</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 									</a>
 									<a id="btnCleanSearchSeller" class="btn btn-primary spanSelect">
-										<div class="label">Limpiar</div>
+										<div class="label">Clean</div>
 										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 									</a>
 								</div>
@@ -103,8 +103,8 @@
 							<thead>
 								<tr>
 									<th>ID</th>
-									<th>Codigo</th>
-									<th>Nombre completo</th>
+									<th>Code</th>
+									<th>Full name</th>
 									<!--<th>Rol</th>-->
 								</tr>
 							</thead>

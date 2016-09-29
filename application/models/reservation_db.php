@@ -922,7 +922,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->where('r.pkResId = ', $id);*/
 		$this->db->distinct();
 		$this->db->select("r.pkResId as ID, r.folio as ContractNum,r.ResConf, ro.RateAmtNight, s.StatusDesc,r.FirstOccYear as OccYear,Fp.FloorPlanDesc");
-        $this->db->select("u.UnitCode as FixedUnitCode,ri.Intv as Intv,rt.resTypeDesc, ro.NightId, CONVERT(VARCHAR(11),cal.Date,106) as Date, us.UserLogin, 0 as Delete, ro.pkResOccId");
+        $this->db->select("u.UnitCode as FixedUnitCode,ri.Intv as Intv,rt.resTypeDesc, ro.NightId, cal.Date, CONVERT(VARCHAR(11),cal.Date,106) as Date1, us.UserLogin, 0 as Delete, ro.pkResOccId");
 		$this->db->from('tblres r ');
 		$this->db->join('tblStatus s with(nolock) ', ' s.pkStatusid = r.fkStatusId', 'inner');
 		$this->db->join('tblResType rt with(nolock) ', ' rt.pkResTypeid = r.fkResTypeId', 'inner');
@@ -936,7 +936,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
 		$this->db->join('tblCalendar cal	with(nolock) ', ' cal.pkCalendarid = ro.fkCalendarId', 'inner');
 		$this->db->join('tblUser us with(nolock) ', ' us.pkUserId = ro.CrBy ', 'left');
 		$this->db->where('r.pkResId = ', $id);
-		$this->db->order_by('Date ASC');
+		$this->db->order_by('cal.Date ASC');
 		$query = $this->db->get();
         return $query->result();
     }

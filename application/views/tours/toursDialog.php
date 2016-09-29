@@ -11,7 +11,7 @@
                     <span>Add Tour ID</span>
                 </h3>
 				<a data-widget="newTour" id="newTour" class="btn btn-new">
-					<div class="label">Nuevo</div>
+					<div class="label">New</div>
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
             </div>

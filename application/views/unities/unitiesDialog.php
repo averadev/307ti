@@ -69,7 +69,7 @@
 						<div class="small-9 columns">
 							<div class="caja" >
 							<select type="text" id="interval" name="interval" class="input-group-field round" required>
-								<option value="0">Elige una opcion</option>
+								<option value="0">Choose an option</option>
 								 <option value="1">1</option>
 								 <option value="2">2</option>
 								 <option value="3">3</option>
