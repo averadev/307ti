@@ -216,8 +216,8 @@ public function createTrxAuditById(){
 }
 
 private function updateTRXByID($ID, $fecha){
-	$fecha =  new DateTime($fecha);
-	// $fecha->modify("-1 day");
+	$fecha =  new DateTime($this->getToday());
+	$fecha->modify("-1 day");
 	$fechaActual = $fecha->format('Y-m-d H:i:s');
 	$TRX =[
 		"NAuditDate"	=> $fechaActual,
@@ -1244,7 +1244,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		$date = date( "m/d/Y", strtotime( $restarDay . " day", strtotime( $date ) ) ); 
 		return $date;
 	}
-		private function getToday(){
+	private function getToday(){
 		$hoy = getdate();
 		$strHoy = $hoy["year"]."-".$hoy["mon"]."-".$hoy["mday"] . " " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
 		return $strHoy;
