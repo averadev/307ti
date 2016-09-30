@@ -508,6 +508,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             $this->db->where('TrxSign = -1');
         }
         //$this->db->where('TrxSign = -1');
+		//$this->db->order_by('att.TrxTypeDesc ASC');
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {
@@ -814,6 +815,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->from('tblOccType ot');
         $this->db->where('ot.fkOccTypeGroupId', $idGroup);
         $this->db->where('ynActive', 1);
+		$this->db->order_by('ot.OccTypeDesc ASC');
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();

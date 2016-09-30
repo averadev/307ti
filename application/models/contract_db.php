@@ -1193,6 +1193,7 @@ class Contract_db extends CI_Model {
         }else if($type == "addPayAcc"){
             $this->db->where('TrxSign = -1');
         }
+		$this->db->order_by('tt.TrxTypeDesc ASC');
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {
