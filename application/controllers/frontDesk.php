@@ -251,7 +251,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		$florines = $precio * $tipoCambioFlorines;
 
 		$transaction = [
-			"fkAccid"		=> $IDCuenta,//la cuenta
+			"fkAccid"		=> $IDCuenta,
 			"fkTrxTypeId"	=> $TrxID,
 			"fkTrxClassID"	=> $this->frontDesk_db->gettrxClassID('LOA'),
 			"Debit-"		=> 0,
@@ -277,7 +277,6 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 	public function getWeekByYear(){
 		if($this->input->is_ajax_request()){
 			$data = $this->frontDesk_db->getWeekByYear($_POST['year']);
-			//faustino es bn puto
 			echo json_encode(array('items' => $data));
 		}
 	}
@@ -292,7 +291,6 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 				$data2 = $this->frontDesk_db->selectUnitsAudit();
 				
 				if ($data) {
-					//var_dump($data);
 					$datos = $this->mergeArrayDatos($data, $data2);
 					echo json_encode(array('items' => $datos));
 				}else{
@@ -311,7 +309,6 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 				foreach( $datos2 as $item2 ){
 					if($item2->UnitCode == $item->UnitCode){
 						$item2->pkResId = $item->pkResId;
-						//$item2->UnitCode = $item->UnitCode;
 						$item2->FloorPlanDesc = $item->FloorPlanDesc;
 						$item2->Status = $item->Status;
 						$item2->OccTypeGroup = $item->OccTypeGroup;
@@ -321,9 +318,6 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 					}
 				}
 			}
-			// foreach( $unitDelete as $item ){
-			// 	unset( $datos2[$item] );
-			// }
 		return $datos2;
 	}
 

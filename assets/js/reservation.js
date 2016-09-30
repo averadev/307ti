@@ -220,11 +220,11 @@ $(document).on( 'click', '#btAddCreditLimitRes', function(){
      	}]
 	};
 
-	if (mocalCreditLimit!=null) {
-			mocalCreditLimit.dialog( "destroy" );
+	if (modalCreditLimit!=null) {
+			modalCreditLimit.dialog( "destroy" );
 		}
-		mocalCreditLimit = modalGeneral2(modalPropiedades, ajaxData);
-		mocalCreditLimit.dialog( "open" );
+		modalCreditLimit = modalGeneral2(modalPropiedades, ajaxData);
+		modalCreditLimit.dialog( "open" );
 	});
 
 $(document).off( 'click', '#btAddLinkACC');
@@ -266,11 +266,11 @@ $(document).on( 'click', '#btAddLinkACC', function(){
      	}]
 	};
 
-	if (mocalCreditLimit!=null) {
-			mocalCreditLimit.dialog( "destroy" );
+	if (modalLinkAcc!=null) {
+			modalLinkAcc.dialog( "destroy" );
 		}
-		mocalCreditLimit = modalGeneral2(modalPropiedades, ajaxData);
-		mocalCreditLimit.dialog( "open" );
+		modalLinkAcc = modalGeneral2(modalPropiedades, ajaxData);
+		modalLinkAcc.dialog( "open" );
 	});
 
 	$(document).off( 'click', '#btnNewOccRes');
@@ -2517,22 +2517,14 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 				var frontDesk = data["frontDesk"];
 				
 				var acc = data["acc"];
-				//frontDesk = parsearFrontDesk(frontDesk);
-				//reservation = parsearFrontDesk(reservation);
 				if(reservation.length > 0){
 					var reservation = parsearSALERes(reservation);
 					drawTable2(reservation, "tableAccountSeller", false, "");
 					setTableAccountRes( reservation, "tableReservationAccRes" );
 				}else{
-					alertify.error('no results found')
+					alertify.error('no results found');
+					$("#tableAccountSeller tbody").empty();
 				}
-				/*if(frontDesk.length > 0){
-					var frontDesk = parsearSALERes(frontDesk);
-					drawTable2(frontDesk, "tableAccountLoan", false, "");
-					setTableAccountRes( frontDesk, "tableFrontDeskAccRes" );
-				}else{
-					alertify.error('no results found')
-				}*/
 				for( i=0; i<acc.length; i++ ){
 					var nameSafe = acc[i].accType;
 					$('#btNewTransAccRes').data( 'idAcc' + nameSafe, acc[i].fkAccId );	
