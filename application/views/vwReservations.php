@@ -161,7 +161,7 @@
 <div id="dialog-Edit-Reservation" title="Reservation > Edit Reservation" style="display: none;"></div>
 <div id="dialog-tourID" title="Tour ID" style="display: none;"></div>
 <div id="dialog-PeopleRes" title="Reservation > Create Reservation > Add People" style="display: none;"></div>
-<div id="dialog-UnidadesRes" title="Reservation > Create Reservation > Add Unidades" style="display: none;"></div>
+<div id="dialog-UnidadesRes" title="Reservation > Create Reservation > Add Units" style="display: none;"></div>
 <div id="dialog-WeeksRes" title="Weeks" style="display: none;"></div>
 <div id="dialog-Pack" title="Pack Reference" style="display: none;"></div>
 <div id="dialog-DownpaymentRes" title="Downpayment" style="display: none;"></div>

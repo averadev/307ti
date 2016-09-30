@@ -325,13 +325,13 @@ class Pdfs extends CI_Controller {
 				}
 				$body .= '<tr><td>' . $item3->date . '</td><td>' . $item3->Doc . '</td><td>' . $item3->TrxTypeDesc . '</td>';
 				$body .= '<td></td><td></td>';
-				$body .= '<td>' . $Credit . '</td><td>' . $Charge . '</td></tr>';
+				$body .= '<td>' . round($Credit, 2) . '</td><td>' . round($Charge,2) . '</td></tr>';
 				$finalCredit = $finalCredit + $Credit;
 				$finalCharge = $finalCharge + $Charge;
 			}
 			$balance = $finalCredit - $finalCharge;
 			$body .= '<tr><th></th><th></th><th></th><th></th><th>Bill</th><th>Final Credit</th><th>Final Charge</th></tr>';
-			$body .= '<tr><td></td><td></td><td></td><td></td><td>' . $balance . '</td><td>' . $finalCredit . '</td><td>' . $finalCharge . '</td></tr>';
+			$body .= '<tr><td></td><td></td><td></td><td></td><td>' . round($balance,2) . '</td><td>' . round($finalCredit,2) . '</td><td>' . round($finalCharge,2) . '</td></tr>';
 			$body .= '</table>';
 			$body .= '<h4></h4>';
 		}
@@ -364,12 +364,17 @@ class Pdfs extends CI_Controller {
 		//$body .= '<img src="assets/img/logo/header.jpg"  width="1000" />';
 		$body .= '<h3>Dear:</h3>';
 		$body .= '<h4>';
+		$cont = 0;
 		foreach ($people as $item){
-			$body .= $item->Name . " " . $item->Last_name . " ";
+			if( $cont > 0 ){
+				$body .= " And ";
+			}
+			$body .= $item->Name . " " . $item->Last_name;
+			
 			//$name = $item->Name;
 			//$lname = $item->Last_name;
 			//$body .= '<tr><td class="Name">' . $name . '</td><td class="Last name">' . $lname . '</td>';
-			
+			$cont++;
 		}
 		$body .= '</h4>';
 		
@@ -381,14 +386,20 @@ class Pdfs extends CI_Controller {
 			$body .= '<h4>Your reservation with us has been completed successfully.</h4>';
 			$body .= '<h3>SUMMARY OF YOUR RESERVATION</h3>';
 			$body .= '<table class="balance" width="100%">';
-			$body .= '<tr><td>Confirmation number</td><td>' . $item->ResConf . '</td></tr>';
+			$body .= '<tr><td>Confirmation Number</td><td>' . $item->ResConf . '</td></tr>';
+			$body .= '<tr><td>Reservation Status</td><td>' . $item->StatusDesc . '</td></tr>';
+			if( count($RateAmtNigh) > 0 ){
+				if( $RateAmtNigh[0]->OccTypeGroupCode == "AG" ){
+					$body .= '<tr><td>Account Name</td><td>' . $RateAmtNigh[0]->OccTypeDesc . '</td></tr>';
+				}
+			}
 			$body .= '<tr><td>Check-In Date</td><td>' . $item->arrivaDate . '</td></tr>';
 			$body .= '<tr><td>Check-Out Date</td><td>' . $item->depatureDate . '</td></tr>';
 			$body .= '<tr><td>Resort</td><td>' . $item->PropertyName . '</td></tr>';
 			$body .= '<tr><td>Unit Type</td><td>' . $item->FloorPlanDesc . '</td></tr>';
 			$body .= '<tr><td>Max Number of Persons</td><td>' . $item->MaxPersons . '</td></tr>';
 			$body .= '<tr><td>Meal Plan Type</td><td> </td></tr>';
-			$body .= '<tr><td>View</td><td>' . $item->ViewDesc . '</td></tr>';
+			//$body .= '<tr><td>View</td><td>' . $item->ViewDesc . '</td></tr>';
 			$body .= '<tr><td>Resort Type</td><td></td></tr>';
 			$body .= '<tr><td>Call Address</td><td></td></tr>';
 			$restype = $item->fkResTypeId; 
@@ -416,13 +427,13 @@ class Pdfs extends CI_Controller {
 		}*/
 		if($restype == 7){
 			if( count($RateAmtNigh) > 0){
-				$body .= '<tr><td>Us Toll Free</td><td>The rate is ' . $RateAmtNigh[0]->RateAmtNight . ' By ' . count($RateAmtNigh)  . ' days</td></tr>';
+				$body .= '<tr><td>Us Toll Free</td><td>The rate is ' . round($RateAmtNigh[0]->RateAmtNight, 2) . ' By ' . count($RateAmtNigh)  . ' days</td></tr>';
 			}
 			$totalRate = 0;
 			foreach( $RateAmtNigh as $item ){
 				$totalRate += $item->RateAmtNight;
 			}
-			$body .= '<tr><td>Rate</td><td>$ ' . $totalRate . '</td></tr>';
+			$body .= '<tr><td>Rate</td><td>$ ' . round( $totalRate, 2 ) . '</td></tr>';
 		}else{
 			$body .= '<tr><td>Us Toll Free</td><td>The rate is 6 day</td></tr>';
 			$body .= '<tr><td>Rate</td><td>$0.00</td></tr>';
@@ -431,14 +442,14 @@ class Pdfs extends CI_Controller {
 		foreach($trans as $item){
 			$totalPayment += $item->Amount;
 		}
-		$body .= '<tr><td>Payment Remaining</td><td>$ ' . $totalPayment . '</td></tr>';
-		$body .= '<tr><td>Balance</td><td>$ ' . $balance . '</td></tr>';
+		$body .= '<tr><td>Payment Remaining</td><td>$ ' . round( $totalPayment, 2 ) . '</td></tr>';
+		$body .= '<tr><td>Balance</td><td>$ ' . round( $balance, 2 ) . '</td></tr>';
 		
 		$body .= '</table>';
 		
 		$body .= '<h4></h4>';
-		$body .= '<h4>Please contact our Concierge Team at Phone:  1(721 )545-3069</h4>';
-		$body .= '<h4>Email:  info@thetowersatmulletbay.com</h4>';
+		$body .= '<h4>Please contact our Concierge Team at Phone:  1(721 )545-3069 US TOLL FREE: 1-800-414-6058 </h4> ';
+		$body .= '<h4>Email:  reservations@thetowersatmulletbay.com</h4>';
 		
 		$html = '';
 		$html .= ' <html><head></head><body>';
@@ -603,7 +614,7 @@ class Pdfs extends CI_Controller {
  
 	
 		$logo = "logo.jpg";
-		$headerString = " " . $this->nativesessions->get('username') .  " \n      " . $this->getonlyDate(0);
+		$headerString = " Created by: " . $this->nativesessions->get('username') .  " \n      " . $this->getonlyDate(0);
 		$pdf->SetHeaderData($logo, 20, "     " . $title, "     " . $headerString,  array( 102,44,25 ), array( 102,44,25 ));
         $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
  
@@ -680,7 +691,7 @@ class Pdfs extends CI_Controller {
 		
 		$pdf->Output($nombre_archivo,'FI');
 		
-		$saveDocument = array(
+		/*$saveDocument = array(
 			'fkDocTypeId' => 1,
 			'docPath' => $nombre_archivo,
 			'docDesc' => $nombre_archivo2,
@@ -702,7 +713,7 @@ class Pdfs extends CI_Controller {
 			'MdBy' => $this->nativesessions->get('id'),
 			'MdDt' => $this->getToday(),
 		);
-		$this->pdfs_db->insert($saveDocumentRes,"tblResDoc");
+		$this->pdfs_db->insert($saveDocumentRes,"tblResDoc");*/
 		
 		$pdf = null;
 		

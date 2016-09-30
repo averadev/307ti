@@ -7,7 +7,7 @@
                     </span>
                 </div>
                 <h3 class="box-title">
-                    <span>Add Unidades</span>
+                    <span>Add Units</span>
                 </h3>
                 <div class="pull-left box-tools">
                     <span data-widget="newContrat" id="newContract">
@@ -106,7 +106,7 @@
             <div class="row">
                 <div class="large-12 columns">
 					<a id="btnGetUnidadesRes" class="btn btn-primary btn-right">
-						<div class="label">Buscar</div>
+						<div class="label">Search</div>
 						<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 					</a>
 					<!--<a  id="btnGetUnidadesRes" href="#" class="button postfix"><i class="fa fa-search"></i></a>-->

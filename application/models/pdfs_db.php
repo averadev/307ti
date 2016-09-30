@@ -95,16 +95,19 @@ class pdfs_db extends CI_Model{
 	
 	public function getReservationConf($idRes){
 		$this->db->distinct();
-		$this->db->select('r.pkResId, r.fkResTypeId,  r.Folio, r.ResConf, p.LName, p.Name, r.CheckIn, r.CheckOut, pr.PropertyName, fp.FloorPlanDesc, fp.MaxPersons, v.ViewDesc');
+		$this->db->select('r.pkResId, r.fkResTypeId,   r.Folio, r.ResConf, p.LName, p.Name, r.CheckIn, r.CheckOut, pr.PropertyName, fp.FloorPlanDesc, fp.MaxPersons, v.ViewDesc, s.StatusDesc');
 		$this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
 		$this->db->from('tblRes r');
-		$this->db->join('tblResInvt ri ', '(ri.fkResId = CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)', 'INNER');
+		//$this->db->join('tblResInvt ri ', '(ri.fkResId = CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)', 'INNER');
+		$this->db->join('tblResInvt ri', ' ri.fkResId =  r.pkResId ', 'INNER');
+		$this->db->join('tblStatus s ', ' s.pkStatusId = r.fkStatusId', 'INNER');
 		$this->db->join('tblUnit u ', ' u.pkUnitId = ri.fkUnitId', 'INNER');
 		$this->db->join('tblProperty pr ', ' pr.pkPropertyId = u.fkPropertyId', 'INNER');
 		$this->db->join('tblFloorPlan fp ', ' fp.pkFloorPlanID = u.fkFloorPlanId', 'INNER');
 		$this->db->join('tblView v ', ' v.pkViewId = u.fkViewId', 'INNER');
-		$this->db->join('tblResPeopleAcc rpa ', 'rpa.fkResId = r.pkResRelatedId or rpa.fkResId = r.pkResId', 'INNER');
+		//$this->db->join('tblResPeopleAcc rpa ', 'rpa.fkResId = r.pkResRelatedId or rpa.fkResId = r.pkResId', 'INNER');
+		$this->db->join('tblResPeopleAcc rpa ', ' rpa.fkResId = r.pkResId', 'INNER');
 		$this->db->join('tblPeople p ', ' p.pkPeopleId = rpa.fkPeopleId', 'INNER');
 		$this->db->where('r.pkResId  = ', $idRes);
 		$this->db->where('( r.fkResTypeId = 7 or r.fkResTypeId = 6 )');
@@ -139,8 +142,10 @@ class pdfs_db extends CI_Model{
 	}*/
 	
 	public function getRateAmtNigh($idRes){
-		$this->db->select("CONVERT(VARCHAR(11), c.Date, 106) as Date, ro.RateAmtNight, c.Date");
+		$this->db->select("CONVERT(VARCHAR(11), c.Date, 106) as Date, ro.RateAmtNight, c.Date, ot.OccTypeDesc, otg.OccTypeGroupCode");
 		$this->db->from('tblResOcc ro');
+		$this->db->join('tblOccType ot ', ' ot.pkOccTypeId = ro.fkOccTypeId ');
+		$this->db->join('tblOccTypeGroup otg ', ' otg.pkOccTypeGroupId = ot.fkOccTypeGroupId ');
 		$this->db->join('tblCalendar c ', ' c.pkCalendarId = ro.fkCalendarId ');
 		$this->db->where('ro.fkResId', $idRes);
 		$query = $this->db->get();

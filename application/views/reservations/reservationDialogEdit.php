@@ -551,7 +551,7 @@
 			</fieldset>
 			<?php
 				if( !($statusActual == "Cancel" || $statusActual == "Exchange") ){
-					if($contract[0]->fkResTypeId == 7){
+					//if($contract[0]->fkResTypeId == 7){
 						?>
 						<div class="small-12 medium-12 large-12 columns" > 
 							<a id="btnNewOccRes" class="btn btn-primary btn-Search">
@@ -560,7 +560,7 @@
 							</a>
 						</div>
 						<?php
-					}
+					//}
 				}
 			?>
 		</form>

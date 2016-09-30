@@ -1207,16 +1207,16 @@ private function comprubaArray($valor, $array){
 				if( is_null( $item->RateAmtNight ) ){
 					$item->RateAmtNight = 0;
 				}
-				if($idResType == '7'){
-					if( $cont == 1 || $cont == count($weeks) ){
-						$item->Delete = "<button type='button' class='alert button btnDeleteOccRes' attr_id='" . $item->pkResOccId . "'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button>";
-					}else{
-						$item->Delete = "";
-					}
-					
+				//if($idResType == '7'){
+				if( $cont == 1 || $cont == count($weeks) ){
+					$item->Delete = "<button type='button' class='alert button btnDeleteOccRes' attr_id='" . $item->pkResOccId . "'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button>";
 				}else{
-					unset($item->Delete);
+					$item->Delete = "";
 				}
+					
+				/*}else{
+					unset($item->Delete);
+				}*/
 				unset($item->pkResOccId, $item->Date1);
 			}
 			echo json_encode($weeks);
