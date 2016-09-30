@@ -4368,7 +4368,7 @@ function showCreditCardASR(){
      	}]
 	};
 	if (modalCCR != null) {
-			modalCCR.dialog( "destroy" );
+		modalCCR.dialog( "destroy" );
 	}
 	modalCCR = modalGeneral2(modalPropiedades, ajaxData);
 	modalCCR.dialog( "open" );
