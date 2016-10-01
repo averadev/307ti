@@ -275,15 +275,15 @@ $(document).on( 'click', '#btAddLinkACC', function(){
 
 	$(document).off( 'click', '#btnNewOccRes');
 	$(document).on( 'click', '#btnNewOccRes', function () {
-		if( $("#idResTypeX").text() == 7 ){
+		//if( $("#idResTypeX").text() == 7 ){
 			if (dialogNewOccRes!=null) {
 				dialogNewOccRes.dialog( "destroy" );
 			}
 			dialogNewOccRes = modalNewOccRes();
 			dialogNewOccRes.dialog("open");
-		}else{
+		/*}else{
 			alertify.error('You can not add nights Occupancy ');
-		}
+		}*/
 		
 	});
 
