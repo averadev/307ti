@@ -904,6 +904,8 @@
 <div id="dialog-unit-hkConfig" title="Unit " style="display: none;"></div>
 <div id="dialog-edit-HKStatus" title="HK status" style="display: none;"></div>
 <div id="dialog-CreditLimit"  title="Credit Limit" style="display: none;"></div>
+<div id="dialog-LinkAcc"  title="Link Account" style="display: none;"></div>
+<div id="dialog-CreditCardASR"  title="Card Associated" style="display: none;"></div>
 <div id="dialog-ExchangeRate"  title="FrontDesk > New Exchange Rate" style="display: none;"></div>
 <div id="dialog-StatusRes"  title="Status" style="display: none;"></div>
 <div id="dialog-NewOccRes"  title="New Night" style="display: none;"></div>
