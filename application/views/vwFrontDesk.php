@@ -25,17 +25,20 @@
 						<fieldset class="large-12 columns fieldsetFilter" Id="sectionFilter" >
 
 							<legend class="legendSearch">Choose Search Type</legend>
-
+							 <?php $PeopleB = [9, 16, 19, 20]; $elemento = $this->nativesessions->get('id'); ?>
 							<!-- Type of Availability -->
 							<select id="typeSearchFrontDesk" class="txtSearch input-group-field round">
+							<?php if(!in_array($elemento, $PeopleB)){?>
 								<option value="section1">Front Desk Look Up</option>
-<!-- 								<option value="section2">Housekeeping Job Config</option> -->
+							<?php }; ?>
 								<option value="section3">Housekeeping Configuration</option>
 								<option value="section4">Housekeeping Lookup</option>
+							<?php if(!in_array($elemento, $PeopleB)){?>
 								<option value="section6">Exchange Rate</option>
 								<option value="section5">Report</option>
 								<option value="section7">Audit Units</option>
 								<option value="section8">Audit Transactions</option>
+							<?php }; ?>
 							</select>
 						</fieldset>
 					</div>
@@ -704,6 +707,9 @@
 							
 							</tbody>
 						</table>
+					<div class="pages">
+					<span id="NFL">Total:</span>
+					</div>
 						<!--<table id="tableFrontDesk1" class="" style="">
 							<thead>
 								<tr>
@@ -749,6 +755,9 @@
 							<tbody>
 							</tbody>
 						</table>
+						<div class="pages">
+						<span id="NHK"></span>
+						</div>
 					</div>
 					
 					<div class="section4 tableSection" style="display:none;">
@@ -772,6 +781,9 @@
 							<tbody>
 							</tbody>
 						</table>
+						<div class="pages">
+						<span id="NHKL"></span>
+						</div>
 					</div>
 					
 					<div class="section5 tableSection" style="display:none;">
@@ -795,6 +807,9 @@
 							<tbody>
 							</tbody>
 						</table>
+						<div class="pages">
+						<span id="NHKR"></span>
+						</div>
 					</div>
 					
 					<div class="section6 tableSection" style="display:none;">
@@ -818,6 +833,9 @@
 							<tbody>
 							</tbody>
 						</table>
+						<div class="pages">
+						<span id="NRF"></span>
+						</div>
 					</div>
 				<div class="section7 tableSection" style="display:none;">
 						<table id="tablaAuditUnits" style="width:100%">
@@ -836,6 +854,9 @@
 							<tbody>
 							</tbody>
 						</table>
+						<div class="pages">
+						<span id="NUA"></span>
+						</div>
 					</div>
 					<div class="section8 tableSection" style="display:none;">
 						<table id="tablaAuditTrx" style="width:100%">
@@ -856,6 +877,9 @@
 							<tbody>
 							</tbody>
 						</table>
+						<div class="pages">
+						<span id="NTA"></span>
+						</div>
 					</div>
 				</div>
 				<div class="pagina" id="generalPage" style="display:none;" >

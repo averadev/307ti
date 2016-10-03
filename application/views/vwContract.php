@@ -120,18 +120,11 @@
 						<tbody id="contractstbody"></tbody>
 					</table>
 				</div>
-<!-- 				<div class="pagina" >
-					<div class="pages">
-						<div class="pagination" id="paginationPeople">
-							<a href="#" class="first" data-action="first">&laquo;</a>
-							<a href="#" class="previous" data-action="previous">&lsaquo;</a>
-							<input type="text" class="general" readonly="readonly" />
-							<a href="#" class="next" data-action="next">&rsaquo;</a>
-							<a href="#" class="last" data-action="last">&raquo;</a>
-						</div>
-						<input type="hidden" id="paginationPeople" value="true" />
-					</div>
-				</div> -->
+				<div class="pagina" >
+				<div class="pages">
+					<span id="NC">Total:</span>
+				</div>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -329,31 +329,38 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 				switch(section) {
 					case "section1":
 						//createTableLookUp(data);
+						$("#NFL").text("Total: "+ data.items.length);
 					break;
 					case "section2":
-						
+						//$("#NHK").text("Total: "+ data.items.length);
 					break;
 					case "section3":
+						$("#NHK").text("Total: "+ data.items.length);
 						drawTable2(data.items,"tableHKConfiguration","showModaFrontDesk","Edit");
 						paginadorFrontDesk(data.total,"paginationHKConfig",0);
 						
 						//alert( 'Column '+order[0][0]+' is the ordering column' );
 					break;
 					case "section4":
+						$("#NHKL").text("Total: "+ data.items.length);
 						var option = {type:"input", input:"checkbox", title:"Change_status", name:"HKLookUpStatus", id:"Status_id"};
 						drawTable2( data.items,"tableHKLookUp","showModaFrontDesk","Edit", option );
 						paginadorFrontDesk(data.total,"paginationHKLookUp",0);
 					break;
 					case "section5":
+						$("#NHKR").text("Total: "+ data.items.length);
 						drawTable2( data.items, "tableHKReport", false, "" );
 					break;
 					case "section6":
+						$("#NRF").text("Total: "+ data.items.length);
 						drawTable2( data.items, "tableExchangeRateFront", false, "" );
 					break;
 					case "section7":
+						$("#NUA").text("Total: "+ data.items.length);
 						drawTable4( data.items, "tablaAuditUnits", false, "" );
 					break;
 					case "section8":
+						$("#NTA").text("Total: "+ data.items.length);
 						drawTable4( data.items, "tablaAuditTrx", false, "" );
 					break;
 				}

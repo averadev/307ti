@@ -803,6 +803,7 @@ function searchPeople(page){
 		},
 		success: function(data){
 			if(data.items.length > 0){
+				$("#NP").text("Total: "+ data.items.length);
 				//var total = data.total;
 				alertify.success("Found "+ 25 + " People");
 				/*if( parseInt(total) == 0 ){ total = 1; }

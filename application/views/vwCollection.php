@@ -166,6 +166,9 @@
 						</table>
 					</div>
 				</div>
+				<div class="pages">
+						<span id="NCO"></span>
+						</div>
 			</div>
 		</div>
 	</div>

@@ -113,6 +113,7 @@ function getCollection(){
 		dataType:'json',
 		success: function(data){
 			if( data.items.length > 0 ){
+				$("#NCO").text("Total: "+ data.items.length);
 				alertify.success("Found "+ data.items.length);
 				drawTable2(data.items,"tableColletion","getColletionById","editColletion");
 			}else{

@@ -135,6 +135,7 @@
 				</div>
 				<div class="pagina" >
 					<div class="pages">
+					<span id="NP">Total:</span>
 						<div class="pagination" id="paginationPeople">
 							<a href="#" class="first" data-action="first">&laquo;</a>
 							<a href="#" class="previous" data-action="previous">&lsaquo;</a>

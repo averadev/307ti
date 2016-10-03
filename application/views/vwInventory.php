@@ -149,6 +149,11 @@
 						</table>
 					</div>
 				</div>
+				<div class="pagina" >
+					<div class="pages">
+					<span id="NI">Total:</span>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

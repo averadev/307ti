@@ -87,6 +87,9 @@ function searchInventary(page){
 				drawTable2(data.items,"tableInvDetailed",false,"tabla");
 				showLoading('#divTableInvDetailed',false);
 				$('#tableInvDetailed').show();
+				if (data) {
+					$("#NI").text("Total: "+ data.items.length);
+				}
 			},
 			error: function(error){
 				if(error.statusText != "abort"){

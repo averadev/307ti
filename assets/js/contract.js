@@ -528,9 +528,8 @@ function getContratos(){
 			console.log(data)
 			showLoading('#contracts',false);
 			if(data){
+				$("#NC").text("Total: "+ data.length);
 				alertify.success("Found "+ data.length + " Contracts");
-				//drawTable3(data, "details", "contracts");
-				//drawTable2(data,"details",false,"contracts");
 				drawTable2(data,"contracts","details","details");
 			}else{
 				$('#contractstbody').empty();
