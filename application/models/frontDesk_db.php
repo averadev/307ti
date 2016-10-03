@@ -253,14 +253,14 @@ Class frontDesk_db extends CI_MODEL
 	
 	public function getHousekeepingConfiguration($filters){
 		$this->db->distinct();
-		$this->db->select('cfg.pkUnitHKId as ID, u.unitcode, fp.FloorPlanDesc, p.name as MaidName, p.lname as MaidLName, e.EmployeeCode as EmployeeCodeMaid');
-		$this->db->select('p2.name as SuperName, p2.lname as SuperLName, e2.EmployeeCode, cfg.section,f.level as Floor, b.buildingDesc, GETDATE() as reportDt');
+		$this->db->select('cfg.pkUnitHKId as ID, u.unitcode, fp.FloorPlanDesc, p.name as MaidName, p.lname as MaidLName');
+		$this->db->select('p2.name as SuperName, p2.lname as SuperLName,f.level as Floor, CONVERT(VARCHAR(10),cfg.Date,106) as reportDt');
 		$this->db->from('tblUnitHkconfig cfg');
 		$this->db->join('tblunit u', 'u.pkunitid = cfg.fkUnitid', 'inner');
 		$this->db->join('tblUnithkstatus uhs', 'uhs.fkunitid = u.pkunitid', 'inner');
 		$this->db->join('tblhkStatus hs', 'hs.pkHkStatusid = uhs.fkHkStatusid ', 'inner');
 		$this->db->join('tblFloor f', 'f.pkFloorid = u.fkFloorid', 'inner');
-		$this->db->join('tblBuilding b', 'b.pkBuildingid =f.fkbuildingid', 'inner');
+		//$this->db->join('tblBuilding b', 'b.pkBuildingid =f.fkbuildingid', 'inner');
 		$this->db->join('tblpeople p', 'pkPeopleid = cfg.fkPeopleMaidid', 'inner');
 		$this->db->join('tblpeople p2', 'p2.pkPeopleid = cfg.fkPeopleSuperid', 'inner');
 		$this->db->join('tblhkServicetype st', 'st.pkhkServiceTypeid = cfg.fkhkServiceTypeid', 'inner');
@@ -698,8 +698,8 @@ Class frontDesk_db extends CI_MODEL
 	/*************** Housekeeping Look Up******************/
 	
 	public function getHousekeepingLookUp($filters){
-	$this->db->select('cfg.pkUnitHKId as ID, hs.HKStatusDesc as Status, u.unitcode as Unit, fp.FloorPlanDesc as Floor_plan, p.name as Maid_Name, p.lname as Maid_Last_Name, e.EmployeeCode as Employee_Code_Maid');
-		$this->db->select('p2.name as Superior_Name, p2.lname as Superior_Last_Name, e2.EmployeeCode as Super_Employe_code, cfg.Date, cfg.section as Section, f.level as Floor, b.buildingDesc as Building');
+	$this->db->select('cfg.pkUnitHKId as ID, hs.HKStatusDesc as Status, u.unitcode as Unit, fp.FloorPlanDesc as Floor_plan, p.name as Maid_Name, p.lname as Maid_Last_Name');
+		$this->db->select('p2.name as Superior_Name, p2.lname as Superior_Last_Name, CONVERT(VARCHAR(10),cfg.Date,106) as reportDt, f.level as Floor');
 		$this->db->select('hkc.HkCodeDesc as Status_Unit, st.HkServiceTypeDesc as Service_Type, uhs.pkUnitHKStatusId as Status_id');
 		$this->db->from('tblUnitHkconfig cfg');
 		$this->db->join('tblunit u', 'u.pkunitid = cfg.fkUnitid', 'inner');

@@ -212,6 +212,21 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $query->result();
         }*/
     }
+	
+	public function getDataChangeRoom($id){
+		$this->db->distinct();
+        $this->db->select('U.fkPropertyId');
+		$this->db->select('( SELECT top 1 CONVERT( VARCHAR(11), C2.Date, 101 )FROM tblResOcc RO2 INNER JOIN tblCalendar C2 on C2.pkCalendarId = RO2.fkCalendarId where RO2.fkResId = RO.fkResId and RO2.OccYear = RO.OccYear ORDER BY RO2.NightId ASC) as iniDate');
+		$this->db->select('( SELECT top 1 CONVERT( VARCHAR(11), dateadd(day, 1, C2.Date), 101 )FROM tblResOcc RO2 INNER JOIN tblCalendar C2 on C2.pkCalendarId = RO2.fkCalendarId where RO2.fkResId = RO.fkResId and RO2.OccYear = RO.OccYear ORDER BY RO2.NightId DESC) as endDate');
+        $this->db->from('tblRes R');
+		$this->db->join('tblResInvt RI ', ' RI.fkResId = R.pkResId', 'inner');
+		$this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
+		$this->db->join('tblResOcc RO ', ' RO.fkResId = R.pkResId', 'inner');
+        $this->db->where('R.pkResId', $id);
+		$this->db->order_by('', 'DESC');
+        $query = $this->db->get();
+		return $query->result();
+	}
     
     public function createContract(){
 
@@ -1031,6 +1046,38 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
     }
     
+	public function selectProperties(){
+        $this->db->select("pkPropertyId as ID, PropertyName");
+        $this->db->from('tblProperty');
+        $query = $this->db->get();
+        $this->db->where('ynActive', 1);
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+	
+	public function selectUnitypes(){
+        $this->db->select("pkFloorPlanID as ID,  FloorPlanDesc");
+        $this->db->from('tblFloorPlan');
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+	
+	public function selectViewsType(){
+        $this->db->select("pkViewId as ID, ViewDesc");
+        $this->db->from('tblView');
+        $this->db->where('ynActive', 1);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+	
     public function getDownpaymentsContrac($string){
         $this->db->select('sum(Amount) as downpayment');
         $this->db->from('tblAccTrx');

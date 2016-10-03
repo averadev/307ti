@@ -57,13 +57,7 @@ $(document).ready(function(){
 	
 	$(document).off( 'click', '#btnChangeUnitRes');
 	$(document).on( 'click', '#btnChangeUnitRes', function () {
-		addReservation = createDialogReservation(addReservation, 'change');
-		addReservation.dialog("open");
-		if (unidadResDialog!=null) {
-			unidadResDialog.dialog( "destroy" );
-		}
-		unidadResDialog = addUnidadResDialog( null, null, 'change' );
-		unidadResDialog.dialog( "open" );
+		changeStatus();
 	});
 
 	$(document).off( 'click', '#btnAddUnidadesRes');
@@ -702,9 +696,9 @@ function addUnidadResDialog(iniDate, unit, typeUnit){
 				showLoading(div,true);
 				$(this).load ("reservation/modalUnidades" , function(){
 		    		showLoading(div,false);
-		    		ajaxSelectRes('contract/getProperties','try again', generalSelects, 'propertyRes');
-	    			ajaxSelectRes('contract/getUnitTypes','try again', generalSelects, 'floorPlanUnitRes');
-					ajaxSelectRes('reservation/getView','try again', generalSelects, 'viewUnitRes');
+		    		//ajaxSelectRes('contract/getProperties','try again', generalSelects, 'propertyRes');
+	    			//ajaxSelectRes('contract/getUnitTypes','try again', generalSelects, 'floorPlanUnitRes');
+					//ajaxSelectRes('reservation/getView','try again', generalSelects, 'viewUnitRes');
 					//if( typeUnit == 'alta' ){
 						$( "#DatesUnitRes" ).show();
 						$( "#fromDateUnitRes" ).Zebra_DatePicker({
@@ -723,7 +717,44 @@ function addUnidadResDialog(iniDate, unit, typeUnit){
 						$('#fromDateUnitRes').val(iniDate);
 					}
 					if(unit != null){
-						var delay=1000;
+						if( typeof(unit.fkPropertyId) != "undefined"  ){
+							if( $('#propertyRes option').length > 1){
+								$('#propertyRes').val(unit.fkPropertyId);
+								//clearInterval(timer1);
+							}
+						}
+						if( typeof(unit.fkFloorPlanId) != "undefined"  ){
+							if( $('#floorPlanUnitRes option').length > 1){
+								$('#floorPlanUnitRes').val(unit.fkFloorPlanId);
+								//clearInterval(timer2);
+							}
+						}
+						if( typeof(unit.fkViewId) != "undefined"  ){
+							if( $('#viewUnitRes option').length > 1){
+								$('#viewUnitRes').val(unit.fkViewId);
+								//clearInterval(timer2);
+							}
+						}
+						if( typeof(unit.MaxAdults) != "undefined"  ){
+							if( $('#guestsAdultRes option').length > 1){
+								$('#guestsAdultRes').val(unit.MaxAdults);
+								//clearInterval(timer2);
+							}
+						}
+						if( typeof(unit.MaxKids) != "undefined"  ){
+							if( $('#guestChildRes option').length > 1){
+								$('#guestChildRes').val(unit.MaxKids);
+								//clearInterval(timer2);
+							}
+						}
+						if( typeof(unit.iniDate) != "undefined"  ){
+							$('#fromDateUnitRes').val(unit.iniDate);
+						}
+						if( typeof(unit.endDate) != "undefined"  ){
+							$('#toDateUnitRes').val(unit.endDate);
+						}
+						//if(typeof(miVariable) != "undefined")
+						/*var delay=1000;
 						var timer1 = setInterval(function(){ 
 							if( $('#propertyRes option').length > 1){
 								$('#propertyRes').val(unit.fkPropertyId);
@@ -743,7 +774,7 @@ function addUnidadResDialog(iniDate, unit, typeUnit){
 							}
 						}, delay);
 						$('#guestsAdultRes').val(unit.MaxAdults);
-						$('#guestChildRes').val(unit.MaxKids);
+						$('#guestChildRes').val(unit.MaxKids);*/
 					}
 					$('#btnGetUnidadesRes').unbind('click');
 					$('#btnGetUnidadesRes').click(function(){
@@ -4609,4 +4640,50 @@ function changeUnitRes(){
 				});
 		//}
 		}
+}
+
+function changeStatus(){
+	
+	var div = "#dialog-Edit-Reservation";
+	showLoading(div,true);
+	
+	$.ajax({
+		data:{
+			id:$("#idReservationX").text()
+		},
+   		type: "POST",
+       	url: "reservation/getDataChangeRoom",
+		dataType:'json',
+		success: function(data){
+			showLoading(div,false);
+			if ( data.items.length > 0 ){
+				
+				var addReservation = null;
+				var unidadResDialog = addUnidadResDialog();
+				addReservation = createDialogReservation(addReservation, 'change');
+				addReservation.dialog("open");
+				if (unidadResDialog!=null) {
+					unidadResDialog.dialog( "destroy" );
+				}
+				unidadResDialog = addUnidadResDialog( null, data.items[0], 'change' );
+				unidadResDialog.dialog( "open" );
+				
+			}else{
+				alertify.error('no unit found');
+			}
+		},
+		error: function(){
+			showLoading(div,false);
+			//showAlert(true,"Error to open new reservation, try again later. ",'button',showAlert);
+			alertify.error('Error to open new reservation, try again later.');
+		}
+    });
+	
+	/*addReservation = createDialogReservation(addReservation, 'change');
+		addReservation.dialog("open");
+		if (unidadResDialog!=null) {
+			unidadResDialog.dialog( "destroy" );
+		}
+		unidadResDialog = addUnidadResDialog( null, null, 'change' );
+		unidadResDialog.dialog( "open" );*/
 }

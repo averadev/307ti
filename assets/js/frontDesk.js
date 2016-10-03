@@ -1364,18 +1364,6 @@ function showNewReservation(selector){
 	var div = "#table-frontDesk";
 	showLoading(div,true);
 	
-	/*var delay=3000;
-	var a = 0;
-	var timer = setInterval(function(){ 
-		if(a == 2){
-			console.log("adios");
-			clearInterval(timer);
-		}else{
-			console.log("ciclando");
-			a++;
-		}
-	}, delay);*/
-	
 	$.ajax({
 		data:{
 			unitId:unitId

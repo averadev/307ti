@@ -1436,8 +1436,16 @@ private function comprubaArray($valor, $array){
 							"status" => 0
 						]);
 					}
+		}
 	}
-}
+	
+	public function getDataChangeRoom(){
+		if($this->input->is_ajax_request()){
+			$data = $this->reservation_db->getDataChangeRoom($_POST['id']);
+			$mensaje = [ "success" => true, "items" => $data];
+			echo json_encode($mensaje);
+		}
+	}
 	
 	/*****************************************/
 	/**************** Vistas *****************/
@@ -1467,7 +1475,10 @@ private function comprubaArray($valor, $array){
 	
 	public function modalUnidades(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('unities/unitiesResDialog');
+			$datos['property'] = $this->reservation_db->selectProperties();
+			$datos['floorPlan'] = $this->reservation_db->selectUnitypes();
+			$datos['view'] = $this->reservation_db->selectViewsType();
+			$this->load->view('unities/unitiesResDialog', $datos);
 		}
 	}
 	
@@ -1576,21 +1587,22 @@ private function comprubaArray($valor, $array){
 					$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
 				}
 				if ($actual == "In House") {
+					
 					$financiamiento = [
 						"checkIn"	=> $this->getToday(),
 					];
-					$condicion = "pkResId = " . $id;
+					$condicion = " CheckIn is NULL and pkResId = " . $id;
 					$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
 				}
 				$dateCheckIn = $this->reservation_db->getCheckIn($id);
 				$CheckOut = $this->reservation_db->getCheckOut($id);
 				
 				if( $_POST['NextStatus'] == "Cancel" || $_POST['NextStatus'] == "Exchange" ){
-					if( $idRestype == 7){
+					//if( $idRestype == 7){
 						$resConf = $this->reservation_db->getResConf($id);
 						$code = $this->reservation_db->getStatusCode($IdStatus);
 						$this->db->query("exec  spCNXRes @Resconf='" . $resConf . "', @StatusCode='" . $code . "'");
-					}
+					//}
 				}
 				$mensaje = [
 					"mensaje"=>"save correctly",

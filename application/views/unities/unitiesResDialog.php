@@ -23,7 +23,14 @@
                     </div>
                     <div class="small-9 columns">
 						<div class="caja" >
-							<select type="text" id="propertyRes" name="propertyRes" class="input-group-field round" required></select>
+							<select type="text" id="propertyRes" name="propertyRes" class="input-group-field round" required>
+							<?php
+								foreach($property as $item){?>
+									<option value="<?php echo $item->ID; ?>"><?php echo $item->PropertyName; ?></option>
+									<?php
+								}
+							?>
+							</select>
 						</div>
                     </div>
                 </div>
@@ -88,6 +95,12 @@
 							<div class="caja" >
 								<select id="floorPlanUnitRes" name="floorPlanUnitRes" class="input-group-field round" required>
 									<option value="0">Choose an option</option>
+									<?php
+									foreach($floorPlan as $item){?>
+										<option value="<?php echo $item->ID; ?>"><?php echo $item->FloorPlanDesc; ?></option>
+										<?php
+									}
+									?>
 								</select>
 							</div>
 						</label>
@@ -98,6 +111,12 @@
 							<div class="caja" >
 								<select id="viewUnitRes" name="viewUnitRes" class="input-group-field round" required >
 									<option value="0">Choose an option</option>
+									<?php
+									foreach($view as $item){?>
+										<option value="<?php echo $item->ID; ?>"><?php echo $item->ViewDesc; ?></option>
+										<?php
+									}
+									?>
 								</select>
 							</div>
 						</label>
