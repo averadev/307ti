@@ -49,12 +49,15 @@ class pdfs_db extends CI_Model{
 	
 	function getResAcc($idRes){
 		$this->db->distinct();
-		$this->db->select('r.ResConf, r.Folio, rpa.fkAccId, p.PropertyName');
+		$this->db->select('r.ResConf, r.Folio, rpa.fkAccId, p.PropertyName,  p.PropertyShortName, otg.OccTypeGroupDesc');
 		$this->db->from('tblRes r');
 		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = r.pkResId', 'INNER');
 		$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'INNER');
 		$this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId', 'INNER');
 		$this->db->join('tblProperty p', 'p.pkPropertyId = u.fkPropertyId', 'INNER');
+		$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId', 'INNER');
+		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId', 'INNER');
+		$this->db->join('tblOccTypeGroup otg', 'otg.pkOccTypeGroupId = ot.fkOccTypeGroupId', 'INNER');
 		$this->db->where('r.pkResId = ', $idRes);
 		return  $this->db->get()->result();
 	}

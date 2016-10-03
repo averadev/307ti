@@ -281,6 +281,17 @@ class Pdfs extends CI_Controller {
 		$style = $this->generateStyle();
 		
 		$body = '';
+		
+		foreach ($data2 as $item){
+			$data3 = $this->pdfs_db->getAccTrx($item->fkAccId);
+			$body .= '<table width="100%">';
+			$body .= '<tr><td>' . $item->PropertyName . '</td><td>Reservation Confirmation # ' . $item->ResConf . '</td></tr>';
+			$body .= '<tr><td>' . $item->PropertyShortName . '</td><td>Account Name: ' . $item->OccTypeGroupDesc . '</td></tr>';
+			$body .= '<tr><td>St. MAARTEN</td><td>Account Id: ' . $item->fkAccId . '</td></tr>';
+			$body .= '<tr><td>Netherlands Antilles</td></tr>';
+			$body .= '</table>';
+		}
+		
 		$body .= '<table width="100%">';
 		foreach ($data as $item){
 			$name = $item->Name;
@@ -296,13 +307,9 @@ class Pdfs extends CI_Controller {
 			$body .= '<tr><td>' . $item->City . ' ' . $item->ZipCode . ' ' . $item->StateCode . '</td></tr>';
 		}
 		$body .= '</table>';
-		$body .= '<h4></h4>';
+		//$body .= '<h4></h4>';
 		
 		foreach ($data2 as $item){
-			$data3 = $this->pdfs_db->getAccTrx($item->fkAccId);
-			$body .= '<table width="100%">';
-			$body .= '<tr><td>' . $item->PropertyName . '</td><td>' . $item->ResConf . $item->Folio . $item->fkAccId . '</td></tr>';
-			$body .= '</table>';
 			$body .= '<h4></h4>';
 			$body .= '<table class="balance" width="100%">';
 			$finalCredit = 0;
@@ -683,8 +690,6 @@ class Pdfs extends CI_Controller {
 		
 		$nombre_archivo = utf8_decode($saveFiler);
 		$nombre_archivo = $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/" . $nombre_archivo;
-		
-		
 		
 		$nombre_archivo2 = utf8_decode($saveFiler);
 		

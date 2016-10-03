@@ -178,6 +178,8 @@ class Reservation extends CI_Controller {
 				"NightsNumber"  => $_POST['day'],
 				"FirstOccYear"  => $_POST['firstYear'],
 				"LastOccYear"   => $_POST['lastYear'],
+				"OrgCheckInDt"   => $_POST['iniDate'],
+				"OrgCheckOutDt"   => $_POST['endDate'],
 				"ynActive"      => 1,
 				"CrBy"          => $this->nativesessions->get('id'),
 				"CrDt"			=> $this->getToday()
@@ -1230,9 +1232,12 @@ private function comprubaArray($valor, $array){
 			$condicion = "pkResOccId = " . $id;
 			$this->reservation_db->deleteReturnId('tblResOcc',$condicion);
 			$invt = $this->reservation_db->getResInvt($idRes);
+			$dates = $this->reservation_db->getResInvtOcc($idRes);
 			if( count( $invt ) > 0 ){
 				$updateResInvt = [
 					"NightsNumber"	=> intval($invt[0]->NightsNumber) - 1,
+					"OrgCheckInDt"		=> $dates[0]->arrivaDate,
+					"OrgCheckOutDt"		=> $dates[0]->depatureDate,
 					"MdBy"			=> $this->nativesessions->get('id'),
 					"MdDt"			=> $this->getToday()
 				];
@@ -1257,13 +1262,19 @@ private function comprubaArray($valor, $array){
 					if( count( $noUnidades ) == 0 ){
 						$total = $this->addNewOcc($id, $_POST['fromDate'], $_POST['toDate'], $invt[0]->fkOccTypeId, $invt[0]->RateAmtNight);
 						if( $total > 0 ){
+							$dates = $this->reservation_db->getResInvtOcc($id);
 							$updateResInvt = [
-								"NightsNumber"	=> intval($invt[0]->NightsNumber) + $total,
-								"MdBy"			=> $this->nativesessions->get('id'),
-								"MdDt"			=> $this->getToday()
+								"NightsNumber"		=> intval($invt[0]->NightsNumber) + $total,
+								"OrgCheckInDt"		=> $dates[0]->arrivaDate,
+								"OrgCheckOutDt"		=> $dates[0]->depatureDate,
+								"MdBy"				=> $this->nativesessions->get('id'),
+								"MdDt"				=> $this->getToday()
 							];
 							$condicion = "pkResInvtId = " . $invt[0]->pkResInvtId;
 							$afectados = $this->reservation_db->updateReturnId('tblResInvt', $updateResInvt, $condicion);
+							
+							
+							
 						}
 						$mensaje = [ "success" => True, "message"=>"Reserved nights"];
 					}else{
@@ -1313,6 +1324,7 @@ private function comprubaArray($valor, $array){
 				$total++;
 			 }
 		}
+		
 		return $total;
 	}
 	
@@ -1892,6 +1904,18 @@ private function comprubaArray($valor, $array){
 			unset( $item->fkResTypeId, $item->fkFloorPlanId, $item->fkViewId, $item->fkFloorId, $item->iniDate, $item->endDate );
 		}
 		$datos['unities'] = $unities;
+		$invt = $this->reservation_db->getResInvt($id);
+		if( count( $invt ) > 0 ){
+			$updateResInvt = [
+				"NightsNumber"	=> intval($invt[0]->NightsNumber) - 1,
+				"OrgCheckInDt"		=> $invt[0]->arrivaDate,
+				"OrgCheckOutDt"		=> $invt[0]->depatureDate,
+				"MdBy"			=> $this->nativesessions->get('id'),
+				"MdDt"			=> $this->getToday()
+			];
+			$condicion = "pkResInvtId = " . $invt[0]->pkResInvtId;
+			$afectados = $this->reservation_db->updateReturnId('tblResInvt', $updateResInvt, $condicion);
+		}
 	 	echo  json_encode([
 			"mensaje" => 'Reservation Save',
 			"idContrato" =>$id,
