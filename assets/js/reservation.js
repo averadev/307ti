@@ -3217,6 +3217,7 @@ function getWeeksRes(id){
 	    dataType:'json',
 	    success: function(data){
 			if(data.length > 0){
+				//var data = parsearOCC(data);
 				drawTable2(data,"tableCOccupationSelected", false, "");
 				$(document).off('click','.btnDeleteOccRes')
 				$(document).on('click','.btnDeleteOccRes', function(){ 
