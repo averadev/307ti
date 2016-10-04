@@ -1650,11 +1650,11 @@ function tablUnidadadesRes(unidades, frequency, primero, ultimo){
 		bodyHTML += "<td>"+unidades[i].view+"</td>";
 		bodyHTML += "<td>"+frequency+"</td>";
 		bodyHTML += "<td>"+unidades[i].floor+"</td>";
-		//bodyHTML += "<td>"+unidades[i].intv+"</td>";
 		bodyHTML += "<td>"+unidades[i].season+"</td>";
 		bodyHTML += "<td>"+unidades[i].week+"</td>";
 		bodyHTML += "<td>"+primero+"</td>";
         bodyHTML += "<td>"+ultimo+"</td>";
+        bodyHTML += "<td>"+ unidades[i].code +"</td>";
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
         bodyHTML+="</tr>";
 	}
@@ -3229,7 +3229,6 @@ function getWeeksRes(id){
 	    dataType:'json',
 	    success: function(data){
 			if(data.length > 0){
-				//var data = parsearOCC(data);
 				drawTable2(data,"tableCOccupationSelected", false, "");
 				$(document).off('click','.btnDeleteOccRes')
 				$(document).on('click','.btnDeleteOccRes', function(){ 
