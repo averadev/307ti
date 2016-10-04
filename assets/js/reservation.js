@@ -3217,7 +3217,6 @@ function getWeeksRes(id){
 	    dataType:'json',
 	    success: function(data){
 			if(data.length > 0){
-				//drawTableIdOcupacionRes(data,);
 				drawTable2(data,"tableCOccupationSelected", false, "");
 				$(document).off('click','.btnDeleteOccRes')
 				$(document).on('click','.btnDeleteOccRes', function(){ 
@@ -3238,6 +3237,14 @@ function getWeeksRes(id){
 			showLoading(div, false);
 	    }
 	});
+}
+
+function parsearOCC(data){
+	for(var i = 0; i < data.length; i++){
+		data[i].RateAmtNight = parseFloat(data[i].RateAmtNight ).toFixed(2);
+	}
+
+	return data;
 }
 
 function confirmDeleteOccRes(selector){
