@@ -302,14 +302,14 @@ class Pdfs extends CI_Controller {
 				$typeProple = "Primary People";
 			}
 			$body .= '<td class="type">' . $typeProple . '</td></tr>';
-			$body .= '<tr><td>' . $item->Street1 . '</td></tr>';
-			$body .= '<tr><td>' . $item->Street2 . '</td></tr>';
+			$body .= '<tr><td>' . $item->Street1 . '</td>';
+			$body .= '<td>' . $item->Street2 . '</td></tr>';
 			$body .= '<tr><td>' . $item->City . ' ' . $item->ZipCode . ' ' . $item->StateCode . '</td></tr>';
 		}
 		$body .= '</table>';
-		//$body .= '<h4></h4>';
 		
-		foreach ($data2 as $item){
+		
+		foreach($data2 as $item){
 			$body .= '<h4></h4>';
 			$body .= '<table class="balance" width="100%">';
 			$finalCredit = 0;

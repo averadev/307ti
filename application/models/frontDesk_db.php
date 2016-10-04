@@ -253,8 +253,10 @@ Class frontDesk_db extends CI_MODEL
 	
 	public function getHousekeepingConfiguration($filters){
 		$this->db->distinct();
-		$this->db->select('cfg.pkUnitHKId as ID, u.unitcode, fp.FloorPlanDesc, p.name as MaidName, p.lname as MaidLName');
-		$this->db->select('p2.name as SuperName, p2.lname as SuperLName,f.level as Floor, CONVERT(VARCHAR(10),cfg.Date,106) as reportDt');
+		//$this->db->select('cfg.pkUnitHKId as ID, u.unitcode, fp.FloorPlanDesc, p.name as MaidName, p.lname as MaidLName');
+		//$this->db->select('p2.name as SuperName, p2.lname as SuperLName,f.level as Floor, CONVERT(VARCHAR(10),cfg.Date,106) as reportDt');
+		$this->db->select('cfg.pkUnitHKId as ID, u.unitcode, fp.FloorPlanDesc, p.name as MaidName');
+		$this->db->select('p2.name as SuperName, f.level as Floor, CONVERT(VARCHAR(10),cfg.Date,106) as reportDt');
 		$this->db->from('tblUnitHkconfig cfg');
 		$this->db->join('tblunit u', 'u.pkunitid = cfg.fkUnitid', 'inner');
 		$this->db->join('tblUnithkstatus uhs', 'uhs.fkunitid = u.pkunitid', 'inner');
@@ -698,9 +700,9 @@ Class frontDesk_db extends CI_MODEL
 	/*************** Housekeeping Look Up******************/
 	
 	public function getHousekeepingLookUp($filters){
-	$this->db->select('cfg.pkUnitHKId as ID, hs.HKStatusDesc as Status, u.unitcode as Unit, fp.FloorPlanDesc as Floor_plan, p.name as Maid_Name, p.lname as Maid_Last_Name');
-		$this->db->select('p2.name as Superior_Name, p2.lname as Superior_Last_Name, CONVERT(VARCHAR(10),cfg.Date,106) as reportDt, f.level as Floor');
-		$this->db->select('hkc.HkCodeDesc as Status_Unit, st.HkServiceTypeDesc as Service_Type, uhs.pkUnitHKStatusId as Status_id');
+	$this->db->select('cfg.pkUnitHKId as ID, hs.HKStatusCode as Status, u.unitcode as Unit, fp.FloorPlanCode as FlPlan, p.name as Maid');
+		$this->db->select('p2.name as Sup, CONVERT(VARCHAR(10),cfg.Date,106) as reportDt');
+		$this->db->select('hkc.HkCodeCode as StatusHK, st.HkServiceTypeCode as Service');
 		$this->db->from('tblUnitHkconfig cfg');
 		$this->db->join('tblunit u', 'u.pkunitid = cfg.fkUnitid', 'inner');
 		$this->db->join('tblUnithkstatus uhs', 'uhs.fkunitid = u.pkunitid and  uhs.fkCalendarID = (select top 1 uhs2.fkCalendarID  from tblUnithkstatus uhs2 where uhs2.fkUnitId = uhs.fkUnitId ORDER BY uhs2.fkCalendarID  DESC )', 'inner');

@@ -435,7 +435,8 @@
 				<?php
 					if( !($statusActual == "Cancel" || $statusActual == "Exchange") ){
 					?>
-						<a id="btNewTransAccRes" attr_type="newTransAcc" class="btn btn-primary btn-Search">
+						
+						<a  id="btNewTransAccRes" attr_type="newTransAcc" class="btn btn-primary btn-Search" <?php if( $statusActual == "Out"){ ?> style="display:none;" <?php  }?> >
 							<div class="label">New Transaction</div>
 							<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 						</a>

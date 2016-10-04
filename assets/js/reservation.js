@@ -151,23 +151,11 @@ $(document).ready(function(){
 			$("#btAddCreditLimitRes").hide();
 		}
 	});*/
-	$(document).off( 'click', '#btNewTransAccRes'); 
+	$(document).off( 'click', '#btNewTransAccRes, #btAddPayAccRes'); 
 	$(document).on( 'click', '#btNewTransAccRes, #btAddPayAccRes', function ( ) {
-		var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
-		var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
-		var statusRes = $('#editReservationStatus').attr( 'statusRes' );
-		if(idAccColl != undefined){
-			if( accCode == "FDK" && statusRes != "In House" && $(this).attr('id') == "btNewTransAccRes" ){
-				alertify.error('You can not add transactions');
-			}else{
-				var dialogAccount = opcionAccountRes($(this).attr('attr_type'));
-				dialogAccount.dialog("open");
-			}
-			
-		}else{
-			alertify.error('No acc found');
-		}
+		eventTransAccRes(this);
 	});
+	
 	$(document).off( 'change', '#occupancyTypeGroupRes');
 	$(document).on( 'change', '#occupancyTypeGroupRes', function () {
 		id = $(this).val();
@@ -371,6 +359,21 @@ $(document).on( 'click', '#btAddLinkACC', function(){
 	
 });
 
+function eventTransAccRes(selector){
+	var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
+	var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
+	var statusRes = $('#editReservationStatus').attr( 'statusRes' );
+	if(idAccColl != undefined){
+		if( accCode == "FDK" && statusRes != "In House" && $(selector).attr('id') == "btNewTransAccRes" ){
+			alertify.error('You can not add transactions');
+		}else{
+			var dialogAccount = opcionAccountRes($(selector).attr('attr_type'));
+			dialogAccount.dialog("open");
+		}	
+	}else{
+		alertify.error('No acc found');
+	}
+}
 
 function addHTMLLinkAcc(data){
 	$("#dialog-LinkAcc").html(data);
@@ -1758,9 +1761,18 @@ function modalEditReservation(id){
 					$('#tab-general .tabs-title.active').data('idRes', id);
 				}
 	 			showLoading('#dialog-Edit-Reservation',false);
+				if ($('#editReservationStatus').text() == "Status: Out") {
+					$(document).off( 'click', '#btNewTransAccRes'); 
+				}else{
+					$(document).off( 'click', '#btNewTransAccRes, #btAddPayAccRes'); 
+					$(document).on( 'click', '#btNewTransAccRes, #btAddPayAccRes', function ( ) {
+						eventTransAccRes(this);
+					});
+				}
 	 			getDatosReservation(id);
 	 			setEventosEditarReservation(id);
 				selectTableUnicoRes("tableCDocumentsSelected");
+				
 	    	});
 		},
 		autoOpen: false,
@@ -3738,6 +3750,17 @@ function nextStatusContractRes(){
 				}
 	    		//$( ".checkInPeople" ).prop( "disabled", true);
 	    	}
+			if (data['status'] == "Out") {
+				$('#btNewTransAccRes').hide();
+				$(document).off( 'click', '#btNewTransAccRes'); 
+			}else{
+				$('#btNewTransAccRes').show();
+				$(document).off( 'click', '#btNewTransAccRes, #btAddPayAccRes'); 
+				$(document).on( 'click', '#btNewTransAccRes, #btAddPayAccRes', function ( ) {
+					eventTransAccRes(this);
+				});
+			}
+			
 	    	$("#iNextStatus").removeClass("fa-spin");
 			$("#editReservationStatus").text("Status: "+data['status']);
 			$('#editReservationStatus').attr( 'statusRes', data['status'] );

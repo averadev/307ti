@@ -1208,6 +1208,8 @@ private function comprubaArray($valor, $array){
 				$cont++;
 				if( is_null( $item->RateAmtNight ) ){
 					$item->RateAmtNight = 0;
+				}else{
+					$item->RateAmtNight = round( $item->RateAmtNight, 2 );
 				}
 				//if($idResType == '7'){
 				if( $cont == 1 || $cont == count($weeks) ){
@@ -1904,10 +1906,9 @@ private function comprubaArray($valor, $array){
 			unset( $item->fkResTypeId, $item->fkFloorPlanId, $item->fkViewId, $item->fkFloorId, $item->iniDate, $item->endDate );
 		}
 		$datos['unities'] = $unities;
-		$invt = $this->reservation_db->getResInvt($id);
+		$invt = $this->reservation_db->getResInvtOcc($id);
 		if( count( $invt ) > 0 ){
 			$updateResInvt = [
-				"NightsNumber"	=> intval($invt[0]->NightsNumber) - 1,
 				"OrgCheckInDt"		=> $invt[0]->arrivaDate,
 				"OrgCheckOutDt"		=> $invt[0]->depatureDate,
 				"MdBy"			=> $this->nativesessions->get('id'),

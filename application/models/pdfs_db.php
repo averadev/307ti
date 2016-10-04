@@ -30,7 +30,7 @@ class pdfs_db extends CI_Model{
 		$this->db->join('tblAddress a', 'a.pkAddressid = pa.fkAddressId ', 'left');
 		$this->db->join('tblState st', 'st.pkStateId = a.FkStateId ', 'left');
 		$this->db->where('rpa.fkResId = ', $idRes);
-		$this->db->where('(rpa.ynPrimaryPeople = 1)');
+		//$this->db->where('(rpa.ynPrimaryPeople = 1)');
 		$this->db->order_by("rpa.ynPrimaryPeople DESC");
 		return  $this->db->get()->result();
 	}
