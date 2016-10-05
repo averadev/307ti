@@ -1208,7 +1208,8 @@ private function comprubaArray($valor, $array){
 				$cont++;
 				if( is_null( $item->RateAmtNight ) ){
 					$item->RateAmtNight = 0;
-				}else{
+				}
+				else{
 					$item->RateAmtNight = round( $item->RateAmtNight, 2 );
 				}
 				//if($idResType == '7'){

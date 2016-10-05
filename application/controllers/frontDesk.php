@@ -266,7 +266,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 			"ynActive"		=> 1,
 			"fkCurrencyId"	=> 2,
 			"CrBy"			=> $this->nativesessions->get('id'),
-			"CrDt"			=> $this->getToday(),
+			"CrDt"			=> $fechaActual,
 			"MdBy"			=> $this->nativesessions->get('id'),
 			"MdDt"			=> $this->getToday(),
 		];
@@ -1249,7 +1249,6 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		$strHoy = $hoy["year"]."-".$hoy["mon"]."-".$hoy["mday"] . " " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
 		return $strHoy;
 	}
-
 	private function reportPDFUnits($data, $titulo, $filtros){
 		
 		$title = $titulo;

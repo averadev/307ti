@@ -92,7 +92,7 @@
 										<th class="cellGeneral"># Week</th>
                                         <th class="cellGeneral">First Year OCC</th>
                                         <th class="cellGeneral">Last Year OCC</th>
-                                        <th class="cellGeneral">Code</th>
+                                        <th class="cellGeneral">Unit</th>
                                         <th class="cellGeneral"></th>
                                     </tr>
                                 </thead>

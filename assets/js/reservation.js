@@ -3229,6 +3229,7 @@ function getWeeksRes(id){
 	    dataType:'json',
 	    success: function(data){
 			if(data.length > 0){
+				data = parsearOCC(data);
 				drawTable2(data,"tableCOccupationSelected", false, "");
 				$(document).off('click','.btnDeleteOccRes')
 				$(document).on('click','.btnDeleteOccRes', function(){ 
@@ -3253,7 +3254,10 @@ function getWeeksRes(id){
 
 function parsearOCC(data){
 	for(var i = 0; i < data.length; i++){
-		data[i].RateAmtNight = parseFloat(data[i].RateAmtNight ).toFixed(2);
+		if (data[i].RateAmtNight != 0) {
+			data[i].RateAmtNight = parseFloat(data[i].RateAmtNight ).toFixed(2);
+		}
+		
 	}
 
 	return data;
