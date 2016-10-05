@@ -700,11 +700,11 @@ Class frontDesk_db extends CI_MODEL
 	/*************** Housekeeping Look Up******************/
 	
 	public function getHousekeepingLookUp($filters){
-	$this->db->select('cfg.pkUnitHKId as ID, hs.HKStatusCode as Status, u.unitcode as Unit, fp.FloorPlanCode as FlPlan, p.name as Maid');
+	$this->db->select('cfg.pkUnitHKId as ID, u.pkUnitId, hs.HKStatusCode as Status, u.unitcode as Unit, fp.FloorPlanCode as FlPlan, p.name as Maid');
 		$this->db->select('p2.name as Sup, CONVERT(VARCHAR(10),cfg.Date,106) as reportDt');
 		$this->db->select('hkc.HkCodeCode as StatusHK, st.HkServiceTypeCode as Service');
 		$this->db->from('tblUnitHkconfig cfg');
-		$this->db->join('tblunit u', 'u.pkunitid = cfg.fkUnitid', 'inner');
+		$this->db->join('tblunit u', 'u.pkUnitId = cfg.fkUnitid', 'inner');
 		$this->db->join('tblUnithkstatus uhs', 'uhs.fkunitid = u.pkunitid and  uhs.fkCalendarID = (select top 1 uhs2.fkCalendarID  from tblUnithkstatus uhs2 where uhs2.fkUnitId = uhs.fkUnitId ORDER BY uhs2.fkCalendarID  DESC )', 'inner');
 		$this->db->join('tblhkStatus hs', 'hs.pkHkStatusid = uhs.fkHkStatusid ', 'inner');
 		$this->db->join('tblFloor f', 'f.pkFloorid = u.fkFloorid', 'inner');

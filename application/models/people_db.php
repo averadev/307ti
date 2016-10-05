@@ -238,7 +238,7 @@ Class people_db extends CI_MODEL
 		$this->db->from('tblres r');
 		$this->db->join('tblStatus s with(nolock) ', ' s.pkStatusid = r.fkStatusId', 'left');
 		$this->db->join('tblResType rt with(nolock) ', ' rt.pkResTypeid = r.fkResTypeId', 'left');
-		$this->db->join('tblResinvt ri with(nolock) ', ' ri.fkResid = r.pkResId', 'left');
+		$this->db->join('tblResinvt ri with(nolock) ', ' ri.fkResid = r.pkResId or ri.fkResId = r.pkResRelatedId', 'left');
 		$this->db->join('tblFloorPlan fp with(nolock) ', ' fp.pkFloorPlanid = ri.fkFloorPlanId', 'left');
 		$this->db->join('tblResTypeUnitType ru with(nolock) ', ' ru.fkResTypeid = rt.pkResTypeId', 'left');
 		$this->db->join('tblResfin rfi with(nolock) ', ' rfi.fkResid = r.pkResId', 'left');
@@ -251,7 +251,7 @@ Class people_db extends CI_MODEL
 		$this->db->join('tblFlag f with(nolock) ', ' f.pkflagId = rf.fkFlagId', 'left');
 		$this->db->join('tblres r2 with(nolock) ', ' r2.pkResId = r.PkResRelatedId', 'inner');
 		$this->db->where('p.pkpeopleid ', $id);
-		$this->db->where("r.fkResTypeId = ( select pkResTypeId from tblResType where ResTypeCode ='Occ' )");
+		$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
 		return  $this->db->get()->result();
 	}
 	
@@ -287,7 +287,7 @@ Class people_db extends CI_MODEL
 		$this->db->from('tblres r');
 		$this->db->join('tblStatus s with(nolock) ', ' s.pkStatusid = r.fkStatusId', 'inner');
 		$this->db->join('tblResType rt with(nolock) ', ' rt.pkResTypeid = r.fkResTypeId', 'inner');
-		$this->db->join('tblResinvt ri with(nolock) ', ' ri.fkResid = r.pkResId', 'inner');
+		$this->db->join('tblResinvt ri with(nolock) ', ' ri.fkResid = r.pkResId or ri.fkResId = r.pkResRelatedId', 'inner');
 		$this->db->join('tblFloorPlan fp with(nolock) ', ' fp.pkFloorPlanid = ri.fkFloorPlanId', 'inner');
 		$this->db->join('tblResTypeUnitType ru with(nolock) ', ' ru.fkResTypeid = rt.pkResTypeId', 'inner');
 		$this->db->join('tblResfin rfi with(nolock) ', ' rfi.fkResid = r.pkResId', 'inner');
@@ -300,7 +300,7 @@ Class people_db extends CI_MODEL
 		$this->db->join('tblResflag rf with(nolock) ', ' rf.fkResid = r.pkResId and rf.ynActive= 1', 'left');
 		$this->db->join('tblFlag f with(nolock) ', ' f.pkflagId = rf.fkFlagId', 'left');
 		$this->db->where('p.pkpeopleid ', $id);
-		$this->db->where("r.fkResTypeId = ( select pkResTypeId from tblResType where ResTypeCode ='ContFx' )");
+		$this->db->where('r.fkResTypeId = 10');
 		if($search != ""){
 			$this->db->where('tblRes.Folio =', $search);
 		}

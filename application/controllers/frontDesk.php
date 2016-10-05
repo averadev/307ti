@@ -530,6 +530,78 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 			}
 			$page = ($page - 1) * 25;
 			$data = $this->frontDesk_db->getHousekeepingLookUp($sql);
+			
+			$unitsOcc = $this->frontDesk_db->getUnitOccReport($sql);
+			
+			$unitActive = array();
+			$unitOcc = 0;
+			$cont = 0;
+			$dateToday = $this->getonlyDate(0, null );
+			if(isset($sql['dates']['dateArrivalReport'])){
+				$dateToday = $_POST['dates']['dateArrivalReport'];
+			}
+			$dateYesterday = $this->getonlyDate(-1, $dateToday );
+			$dateTomorrow = $this->getonlyDate(1, $dateToday );
+			
+			foreach($unitsOcc as $item){
+				if($item->ResConf == "" ){
+					$item->ResConf = "No confirmation code";
+				}
+				if($item->pkUnitId == $unitOcc){
+					//$unitActive[$cont - 1]['statusT'] = $item->StatusDesc;
+					if($item->date1 == $dateYesterday){
+						$unitActive[$cont - 1]['res_yesterday'] = $item->ResConf;
+						$unitActive[$cont - 1]['resId_yesterday'] = $item->pkResId;
+					}else if($item->date1 == $dateToday){
+						$unitActive[$cont - 1]['res_today'] = $item->ResConf;
+						$unitActive[$cont - 1]['resId_today'] = $item->pkResId;
+					}else if($item->date1 == $dateTomorrow){
+						$unitActive[$cont - 1]['res_tomorrow'] = $item->ResConf;
+						$unitActive[$cont - 1]['resId_tomorrow'] = $item->pkResId;
+					}
+				}else{
+					$unitOcc = $item->pkUnitId;
+					$unitActive[$cont]['pkUnitId'] = $item->pkUnitId;
+					if($item->date1 == $dateYesterday){
+						$unitActive[$cont]['res_yesterday'] = $item->ResConf;
+						$unitActive[$cont]['resId_yesterday'] = $item->pkResId;
+					}else if($item->date1 == $dateToday){
+						$unitActive[$cont]['res_today'] = $item->ResConf;
+						$unitActive[$cont]['resId_today'] = $item->pkResId;
+					}else if($item->date1 == $dateTomorrow){
+						$unitActive[$cont]['res_tomorrow'] = $item->ResConf;
+						$unitActive[$cont]['resId_tomorrow'] = $item->pkResId;
+					}
+					$cont++;
+				}
+			}
+			
+			foreach( $data as $item ){
+				$item->StatusHK = "Empty & Empty";
+				
+				foreach($unitActive as $item3){
+					if($item->pkUnitId == $item3['pkUnitId']){
+						
+						if( isset( $item3['resId_yesterday'] ) && isset( $item3['resId_today'] ) ){
+							if( $item3['resId_yesterday'] == $item3['resId_today'] ){
+								$item->StatusHK = "Occupied";
+							}else if( $item3['resId_yesterday'] != $item3['resId_today'] ){
+								$item->StatusHK = "Departure & Arrival";
+							}
+							
+						}else if( !isset( $item3['resId_today'] ) && isset( $item3['res_tomorrow'] ) ){
+							$item->StatusHK = "Empty & Arrival";
+						}else if( isset( $item3['resId_yesterday'] ) && !isset( $item3['resId_today'] ) ){
+							$item->StatusHK = "Departure & Empty";
+						}else{
+							$item->StatusHK = "Empty & Empty";
+						}
+					}
+				}
+				
+				unset( $item->pkUnitId );
+			}
+			
 			$total = count($data);
 			//$data = array_slice($data, $page, 25);
 			
@@ -677,7 +749,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 								$item->HKCode = "Departure & Arrival";
 							}
 							
-						}else if( !isset( $item3['resId_yesterday'] ) && isset( $item3['resId_today'] ) ){
+						}else if( !isset( $item3['resId_today'] ) && isset( $item3['res_tomorrow'] ) ){
 							$item->HKCode = "Empty & Arrival";
 						}else if( isset( $item3['resId_yesterday'] ) && !isset( $item3['resId_today'] ) ){
 							$item->HKCode = "Departure & Empty";
