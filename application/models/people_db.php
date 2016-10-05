@@ -60,6 +60,9 @@ Class people_db extends CI_MODEL
 			}
 			$cadena = $cadena . ' tblPeople.Name LIKE \'%'.$text.'%\'';
 		}
+		// if($lastName == "true" && $name == "true"){
+		// 	$cadena = $cadena . ' (RTRIM(tblPeople.Name) + " " + tblPeople.LName) LIKE \'%'.$text.'%\'';
+		// }
 		if($advanced != ""){
 			if($cadena != "("){
 				$cadena = $cadena . ' OR ';
@@ -75,6 +78,7 @@ Class people_db extends CI_MODEL
 		}else if($typePeople == "superior"){
 			$this->db->where("tblPeopleType.ynSup", 1);
 		}
+		$this->db->order_by('tblPeople.pkPeopleId', 'DESC');
 		return  $this->db->get()->result();
 	}
 	
