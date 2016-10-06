@@ -82,7 +82,7 @@ class FrontDesk extends CI_Controller {
 					}else{
 						$p2 = 0;
 					}
-					$color = array("cellOwners", "cellOwners", "cellRentals", "cellOwnersLoan", "cellNoChange", "cellOwners", "cellOwners", "cellOwners");
+					$color = array("cellContractOwner", "cellContractOwner", "cellTransient", "cellExchanger", "cellComplimentary", "cellCompanyAgreements", "cellInternalExchange", "cellBonusWeek", "cellOwnerExpedia");
 					$res[$p]['values'][$p2]['from'] = $item->pkCalendarId;
 					$res[$p]['values'][$p2]['to'] = $item->pkCalendarId;
 					$res[$p]['values'][$p2]['people'] = $item->Name . " " . $item->LName . " " . $item->LName2;

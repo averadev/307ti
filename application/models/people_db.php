@@ -252,7 +252,7 @@ Class people_db extends CI_MODEL
 		$this->db->where('(tblRes.fkResTypeId = 6 or tblRes.fkResTypeId = 9)');
 		$this->db->where('tblRes.ynActive = 1');*/
 		$this->db->distinct();
-		$this->db->select('r.pkResid as ID, r2.folio, r.ResConf,u.UnitCode as UnitCode,ri.Intv as Intv,s.StatusDesc,r.firstOccYear as OccYear');
+		$this->db->select('r.pkResid as ID, r.folio, r.ResConf,u.UnitCode as UnitCode,ri.Intv as Intv,s.StatusDesc,r.firstOccYear as OccYear');
 		$this->db->from('tblres r');
 		$this->db->join('tblStatus s with(nolock) ', ' s.pkStatusid = r.fkStatusId', 'left');
 		$this->db->join('tblResType rt with(nolock) ', ' rt.pkResTypeid = r.fkResTypeId', 'left');
@@ -267,7 +267,7 @@ Class people_db extends CI_MODEL
 		$this->db->join('tblUnit u with(nolock) ', ' u.pkUnitId = ri.fkUnitId', 'left');
 		$this->db->join('tblResflag rf with(nolock) ', ' rf.fkResid = r.pkResId and rf.ynActive= 1', 'left');
 		$this->db->join('tblFlag f with(nolock) ', ' f.pkflagId = rf.fkFlagId', 'left');
-		$this->db->join('tblres r2 with(nolock) ', ' r2.pkResId = r.PkResRelatedId', 'inner');
+		//$this->db->join('tblres r2 with(nolock) ', ' r2.pkResId = r.PkResRelatedId', 'inner');
 		$this->db->where('p.pkpeopleid ', $id);
 		$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
 		return  $this->db->get()->result();
