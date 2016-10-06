@@ -89,37 +89,38 @@ table.ganttTable{
 }
 
 .ganttTable td.cellTransient.rightPanel{
-	background:#fcec4d;
+	background:#9ad3eb;
 	border-right: 2px solid #FFFFFF;
 }
 
 .ganttTable td.cellExchanger.rightPanel{
-	background:#fcec4d;
+	background:#fdf394;
 	border-right: 2px solid #FFFFFF;
 }
 
 .ganttTable td.cellComplimentary.rightPanel{
-	background:#fcec4d;
+	background:#7bc043;
 	border-right: 2px solid #FFFFFF;
 }
 
 .ganttTable td.cellCompanyAgreements.rightPanel{
-	background:#fcec4d;
+	background:#fdbf94;
 	border-right: 2px solid #FFFFFF;
 }
 
 .ganttTable td.cellInternalExchange.rightPanel{
-	background:#fcec4d;
+	background:#afd98e
+;
 	border-right: 2px solid #FFFFFF;
 }
 
 .ganttTable td.cellBonusWeek.rightPanel{
-	background:#fcec4d;
+	background:#ff4c4c;
 	border-right: 2px solid #FFFFFF;
 }
 
 .ganttTable td.cellOwnerExpedia.rightPanel{
-	background:#fcec4d;
+	background:#FDF5E6;
 	border-right: 2px solid #FFFFFF;
 }
 

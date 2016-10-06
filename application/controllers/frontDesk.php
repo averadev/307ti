@@ -52,7 +52,8 @@ class FrontDesk extends CI_Controller {
 			//echo json_encode($data);
 			$calendary = $this->frontDesk_db->getCalendary($sql);
 			//$color = array("cellOwners", "cellOwners", "cellRentals", "cellOwnersLoan", "cellNoChange", "cellOwners", "cellOwners", "cellOwners","cellOwners","cellOwners","cellOwners","cellOwners","cellOwners");
-			$color = array("cellOwners", "cellOwners", "cellRentals", "cellOwnersLoan", "cellNoChange", "cellOwners", "cellOwners", "cellOwners","cellOwners","cellOwners","cellOwners","cellOwners","cellOwners");
+			//$color = array("cellOwners", "cellOwners", "cellRentals", "cellOwnersLoan", "cellNoChange", "cellOwners", "cellOwners", "cellOwners","cellOwners","cellOwners","cellOwners","cellOwners","cellOwners");
+			$color = array("cellContractOwner", "cellContractOwner", "cellTransient", "cellExchanger", "cellComplimentary", "cellCompanyAgreements", "cellInternalExchange", "cellBonusWeek", "cellOwnerExpedia");
 			$res = array();
 			$lastResId = 0;
 			$p = 0;
