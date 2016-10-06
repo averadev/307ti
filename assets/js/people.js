@@ -75,8 +75,6 @@ $(document).ready(function(){
 		paged: function(page) {
 			if($('#paginationPeople').val() == true){
 				$('#paginationPeople').val(false);
-			}else{
-				searchPeople(page);
 			}
 		}
 	});
