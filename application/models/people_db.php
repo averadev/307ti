@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+	<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 Class people_db extends CI_MODEL
 {
  
@@ -48,7 +48,7 @@ Class people_db extends CI_MODEL
 		if($peopleId == "true"){
 			$cadena = $cadena . 'tblPeople.pkPeopleId LIKE \'%'.$text.'%\'';
 		}
-		if($lastName == "true"){
+/*		if($lastName == "true"){
 			if($cadena != "("){
 				$cadena = $cadena . ' OR';
 			}
@@ -59,10 +59,24 @@ Class people_db extends CI_MODEL
 				$cadena = $cadena . ' OR';
 			}
 			$cadena = $cadena . ' tblPeople.Name LIKE \'%'.$text.'%\'';
+		}*/
+		if($lastName == "true" && $name == "true"){
+			$texto = str_replace(' ', '', $text);
+			$cadena = $cadena . 'RTRIM(tblPeople.Name) '. ' +  '. ' RTRIM(tblPeople.LName) LIKE \'%'.$texto.'%\'';
+		}else{
+			if($lastName == "true"){
+				if($cadena != "("){
+					$cadena = $cadena . ' OR';
+				}
+				$cadena = $cadena . ' tblPeople.LName LIKE \'%'.$text.'%\' or tblPeople.LName2 LIKE \'%'.$text.'%\'';
+			}
+			if($name == "true"){
+				if($cadena != "("){
+					$cadena = $cadena . ' OR';
+				}
+				$cadena = $cadena . ' tblPeople.Name LIKE \'%'.$text.'%\'';
+			}
 		}
-		// if($lastName == "true" && $name == "true"){
-		// 	$cadena = $cadena . ' (RTRIM(tblPeople.Name) + " " + tblPeople.LName) LIKE \'%'.$text.'%\'';
-		// }
 		if($advanced != ""){
 			if($cadena != "("){
 				$cadena = $cadena . ' OR ';
