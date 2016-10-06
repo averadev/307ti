@@ -69,18 +69,37 @@ $(document).ready(function(){
 	maxHeight = screen.height - maxHeight;
 	
 	dialogUser = createModalDialog();
-	
-	$('#paginationPeople').jqPagination({
+	activarPAG();
+/*	$('#paginationPeople').jqPagination({
 		max_page: 1,
 		paged: function(page) {
 			if($('#paginationPeople').val() == true){
 				$('#paginationPeople').val(false);
 			}
+			else if ($('#paginationPeople').val() == false) {
+				searchPeople(page);
+			}
+
 		}
-	});
+	});*/
 	
 	expandBox("section-people","box-people-relation")
 });
+
+function activarPAG(){
+		$('#paginationPeople').jqPagination({
+		max_page: 1,
+		paged: function(page) {
+			if($('#paginationPeople').val() == true){
+				$('#paginationPeople').val(false);
+			}
+			else if ($('#paginationPeople').val() == false) {
+				searchPeople(page);
+			}
+
+		}
+	});
+}
 
 function createModalDialog(id){
 	
@@ -771,7 +790,7 @@ function cleanUserFields(){
 * @param page nueva pagina a buscar/ si es 0 es una busqueda nueva
 */
 function searchPeople(page){
-	
+	//activarPAG();
 	
 	//var msg = alertify.message('Default message');
 	//msg.delay(3).setContent('Wait time updated to 3 Seconds');

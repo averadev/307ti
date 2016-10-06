@@ -88,7 +88,6 @@ $('#btncloseDayAuditTransactions').on('click', function() {
 	}else{
 		closeDAYTRX();
 	}
-	
 });
 
 
