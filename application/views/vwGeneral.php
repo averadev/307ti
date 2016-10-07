@@ -122,7 +122,7 @@
 
 				<div class="menu-sel" attr-screen="collection">
 					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/1.png"/></span>
-					<div class="label-menu-sel">Collection</div>
+					<div class="label-menu-sel">Admin</div>
 				</div>
 				<?php }; ?>
                 <div class="menu-fix">&nbsp;</div>

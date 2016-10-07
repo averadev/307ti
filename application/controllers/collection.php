@@ -21,6 +21,8 @@ class collection extends CI_Controller {
 		$data['trxType'] = $this->collection_db->getTrxType();
 		$data['accType'] = $this->collection_db->getAccType();
 		$data['status'] = $this->collection_db->getStatus();
+		$data['occTypeGroup'] = $this->collection_db->getOccTypeGroup();
+		//$data['occType'] = $this->collection_db->getOccType();
         $this->load->view('vwCollection',$data);
 	}
 	
@@ -50,6 +52,12 @@ class collection extends CI_Controller {
 		$id = $_POST['id'];
 		$items = $this->collection_db->getInfoColl($id);
 		echo json_encode(array('items' => $items));
+	}
+	
+	public function getOccupancyTypes(){
+		$id = $_GET['id'];
+		$items = $this->collection_db->getOccupancyTypes($id);
+		echo json_encode( $items );
 	}
 	
 	public function getGeneralInfo(){

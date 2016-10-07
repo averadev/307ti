@@ -44,8 +44,28 @@ $(document).ready(function() {
 		}
 	});
 	
+	$('#OccTypeGroupColl').on( 'change', function(){
+		id = $(this).val();
+		//ajaxSelectRes('collection/getOccupancyTypes?id='+id,'try again', getOccupancyTypes, 'occupancySalesRes');
+		ajaxSelectColl('collection/getOccupancyTypes?id='+id,'try again', generalSelects, 'OccTypeColl');
+	});
+	
 	//$('#textInvStartDate').val(getCurrentDate())
 });
+
+function ajaxSelectColl(url,errorMsj, funcion, divSelect) {
+	$.ajax({
+		type: "POST",
+		url: url,
+		dataType:'json',
+		success: function(data){
+			funcion(data, divSelect);
+		},
+		error: function(){
+			alertify.error(errorMsj);
+		}
+	});
+}
 
 function modalEditColletion(id){
 	
@@ -100,7 +120,7 @@ function getCollection(){
     var dates = getDates(arrayDate);
     var arrayWords = ["TrxIdColl", "FolioColl", "TrxAmtColl", "PastDueDateColl"];
     var words = getWords(arrayWords);
-	var arrayOption = ["TrxTypeColl", "AccTypeColl"];
+	var arrayOption = ["TrxTypeColl", "AccTypeColl","OccTypeGroupColl", "OccTypeColl" ];
     var options = getWords(arrayOption);
 	$.ajax({
 		data:{

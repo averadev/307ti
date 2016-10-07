@@ -10,7 +10,7 @@
 					</span>
 				</div>
 				<h3 class="box-title">
-					<span>Collection Search</span>
+					<span>Admin Search</span>
 				</h3>
 			</div>
 			<!-- body search-->
@@ -85,21 +85,45 @@
 									<input type="number" id="PastDueDateColl" class="txtSearch"/>
 								</label>
 							</div>
-							<!-- next   -->
-							<!--<div class="small-12 large-3 columns">
-								<label id="alertNextIntDateColl" for="NextIntDateColl" class="text-left">Next interaction Date
-									<div class="input-group date" >
-										<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-										<input type="text" id="NextIntDateColl" class="txtSearch input-group-field roundRight" readonly/>
-									</div>
-								</label>
-							</div>-->
 							<!-- trx Amt -->
 							<div class="small-12 large-3 columns float-left">
 								<label id="alertTrxAmtColl" for="TrxAmtColl" class="text-left">Amt
 									<input type="text" id="TrxAmtColl" class="txtSearch"/>
 								</label>
 							</div>
+						</div>
+					</div>
+					<!----->
+					<div class="small-12 medium-12 large-12 columns">
+						<div class="row">
+							<!-- Occ type Group -->
+							<div class="small-12 large-3 columns">
+								<label id="alertTypeGroupColl" for="OccTypeGroupColl" class="text-left">Occ Type Group
+									<div class="caja" >
+										<select id="OccTypeGroupColl" class="txtSearch input-group-field round">
+											<option value="">choose an option</option>
+											<?php
+											foreach($occTypeGroup as $item){
+												?>
+												<option value="<?php echo $item->ID; ?>"><?php echo $item->OccTypeGroupDesc; ?></option>
+												<?php
+											}
+											?>
+										</select>
+									</div>
+								</label>
+							</div>
+							<!-- Past Due Days -->
+							<div class="small-12 large-3 columns">
+								<label id="alertOccTypeColl" for="OccTypeColl" class="text-left">Occ type
+									<div class="caja" >
+										<select id="OccTypeColl" class="txtSearch input-group-field round">
+											<option value="">choose an option</option>
+										</select>
+									</div>
+								</label>
+							</div>
+							<!-- btn -->
 							<div class="small-12 large-3 columns" style="padding-top:25px;">
 								<a id="btnCollSearch" class="btn btn-primary btn-Search">
 									<div class="label">Search</div>
@@ -110,34 +134,6 @@
 									<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 								</a>
 							</div>
-						</div>
-					</div>
-					<div class="small-12 medium-12 large-12 columns">
-						<div class="row">
-							<!-- status -->
-							<!--<div class="small-12 large-3 columns">
-								<label id="alertStatusColl" for="StatusColl" class="text-left">Status
-									<div class="caja" >
-										<select id="StatusColl" class="txtSearch input-group-field round">
-											<option value="">choose an option</option>
-											<?php
-											foreach($status as $item){
-												?>
-												<option value="<?php echo $item->ID; ?>"><?php echo $item->StatusDesc; ?></option>
-												<?php
-											}
-											?>
-										</select>
-									</div>
-								</label>
-							</div>-->
-							<!-- Asigned to -->
-							<!--<div class="small-12 large-3 columns">
-								<label id="alertAsignedToColl" for="AsignedToColl" class="text-left">Asigned to
-									<input type="text" id="AsignedToColl" class="txtSearch"/>
-								</label>
-							</div>-->
-							
 						</div>
 					</div>
 				</div>
@@ -151,7 +147,7 @@
 				<div class="pull-right box-tools">
 				</div>
 				<h3 class="box-title">
-					<span>Inventory Relation</span>
+					<span>Admin Relation</span>
 				</h3>
 			</div>
 			<div class="box-body" id="section-Colletion" style="display: block;">
@@ -167,8 +163,8 @@
 					</div>
 				</div>
 				<div class="pages">
-						<span id="NCO"></span>
-						</div>
+					<span id="NCO"></span>
+				</div>
 			</div>
 		</div>
 	</div>
