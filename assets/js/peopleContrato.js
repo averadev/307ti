@@ -16,33 +16,35 @@ var msgPeople = null;
 /**************Index****************/
 
 //muestra el modal de usuarios
-$('#Contrato-newUser').off();
-$('#Contrato-newUser').on('click', function() {  showModal(0); });
-$('#Contrato-btnSearch').off();
-$('#Contrato-btnSearch').on('click', function() {  searchPeople(0); });
-$('#Contrato-txtSearch').keyup(function(e){
+$('#'+SECCION+'-newUser').off();
+$('#'+SECCION+'-newUser').on('click', function() {
+	showModal(0); 
+});
+$('#'+SECCION+'-btnSearch').off();
+$('#'+SECCION+'-btnSearch').on('click', function() {  searchPeople(0); });
+$('#'+SECCION+'-txtSearch').keyup(function(e){
     if(e.keyCode ==13){
 		searchPeople(0);	
     }
 });
 //limpia el campo busqueda
-$('#Contrato-btnCleanSearch').off();
-$('#Contrato-btnCleanSearch').on('click', function() {  CleandFieldSearch(); });
+$('#'+SECCION+'-btnCleanSearch').off();
+$('#'+SECCION+'-btnCleanSearch').on('click', function() {  CleandFieldSearch(); });
 //muestra u oculta la busqueda avanzada
-$('#Contrato-checkFilterAdvance').off();
-$('#Contrato-checkFilterAdvance').on('click', function() {  searchAdvanced(); });
+$('#'+SECCION+'-checkFilterAdvance').off();
+$('#'+SECCION+'-checkFilterAdvance').on('click', function() {  searchAdvanced(); });
 
 //editar persomas
 
-$('#Contrato-textSearchContractPeople').keyup(function(e){
+$('#'+SECCION+'-textSearchContractPeople').keyup(function(e){
     if(e.keyCode ==13){
-		getInfoTabsPeople( "tab-PContratos", "people/getContractByPeople" ); 	
+		getInfoTabsPeople( SECCION+"-tab-PContratos", "people/getContractByPeople" ); 	
     }
 });
 
 //borra la busqueda
-$('#Contrato-btnCleanSearchContractPeople').off();
-$('#Contrato-btnCleanSearchContractPeople').on('click', function() {  CleandFieldSearchPContract(); });
+$('#'+SECCION+'-btnCleanSearchContractPeople').off();
+$('#'+SECCION+'-btnCleanSearchContractPeople').on('click', function() {  CleandFieldSearchPContract(); });
 
 
 
@@ -57,43 +59,46 @@ $(document).ready(function(){
 	
 	dialogUser = createModalDialog();
 	
-	$('#Contrato-paginationPeople').jqPagination({
+$('#'+SECCION+'-paginationPeople').jqPagination({
 		max_page: 1,
 		paged: function(page) {
-			if($('#Contrato-paginationPeople').val() == true){
-				$('#Contrato-paginationPeople').val(false);
-			}else{
+			var PI = $('#'+SECCION+'-paginationPeopleInput').val();
+			if(PI == "true"){
+				$('#'+SECCION+'-paginationPeopleInput').val(false);
+			}
+			else if (PI == "false") {
 				searchPeople(page);
+				$('#'+SECCION+'-paginationPeopleInput').val(true);
 			}
 		}
 	});
 	
-	expandBox("section-people","box-people-relation")
+	expandBox("section-people"+SECCION,"box-people"+SECCION+"-relation")
 });
 
 function createModalDialog(id){
 	
-	var div = "#Contrato-dialog-User";
-	dialog = $( "#Contrato-dialog-User" ).dialog({
+	var div = "#"+SECCION+"-dialog-User";
+	dialog = $( "#"+SECCION+"-dialog-User" ).dialog({
 		open : function (event){
 				showLoading(div,true);
-				$(this).load("people/modalPeople2" , function(){
+				$(this).load("people/"+SECCION+"modalPeople" , function(){
 		    		showLoading(div,false);
-					$("#Contrato-textPhone1").mask("(999) 999-9999");
-					$("#Contrato-textPhone2").mask("(999) 999-9999");
-					$("#Contrato-textPhone3").mask("(999) 999-9999");
-					$( "#Contrato-textBirthdate" ).Zebra_DatePicker({
+					$("#"+SECCION+"-textPhone1").mask("(999) 999-9999");
+					$("#"+SECCION+"-textPhone2").mask("(999) 999-9999");
+					$("#"+SECCION+"-textPhone3").mask("(999) 999-9999");
+					$( "#"+SECCION+"-textBirthdate" ).Zebra_DatePicker({
 						format: 'm/d/Y',
 						show_icon: false,
 					});
 					
-					$( "#Contrato-textWeddingAnniversary" ).Zebra_DatePicker({
+					$( "#"+SECCION+"-textWeddingAnniversary" ).Zebra_DatePicker({
 						format: 'm/d/Y',
 						show_icon: false,
 					});
 					cleanUserFields();
-					$('#Contrato-contentModalPeople .tab-modal').hide();
-					$('#Contrato-contentModalPeople #tab-PGeneral').show();
+					$('#'+SECCION+'-contentModalPeople .tab-modal').hide();
+					$('#'+SECCION+'-contentModalPeople #'+SECCION+'-tab-PGeneral').show();
 					
 					//muestra o oculta los datos del domicilio
 					$('.btnAddressData').off();
@@ -104,29 +109,29 @@ function createModalDialog(id){
 					
 					if(id == 0){
 						$('.dialogModalButtonSecondary').hide();
-						$("#Contrato-tabsModalPeople").hide();
+						$("#"+SECCION+"-tabsModalPeople").hide();
 						
-						$('#Contrato-imgCloseModal').off();
+						$('#'+SECCION+'-imgCloseModal').off();
 						$('.imgCloseModal').on('click', function() {  hideModal(); });
 					}else{
-						//$( "#Contrato-dialog-User" ).dialog( "option", "title", "People > Edit person" );
+						//$( "#"+SECCION+"-dialog-User" ).dialog( "option", "title", "People > Edit person" );
 						$('.dialogModalButtonSecondary').show();
-						$("#Contrato-tabsModalPeople").show();
-						$('#Contrato-dialog-User .contentModal').css('height', "90%" );
+						$("#"+SECCION+"-tabsModalPeople").show();
+						$('#'+SECCION+'-dialog-User .contentModal').css('height', "90%" );
 						getInfoPeople(id);
 					}
 					
 					//activa los tap del modal
-					$('#Contrato-tabsModalPeople .tabs .tabs-title').off();
-					$('#Contrato-tabsModalPeople .tabs .tabs-title').on('click', function() { changeTabsModalPeople($(this).attr('attr-screen')) });
+					$('#'+SECCION+'-tabsModalPeople .tabs .tabs-title').off();
+					$('#'+SECCION+'-tabsModalPeople .tabs .tabs-title').on('click', function() { changeTabsModalPeople($(this).attr('attr-screen')) });
 
 					//busqueda de contrado por folio
-					$('#Contrato-btnSearchContractPeople').off();
-					$('#Contrato-btnSearchContractPeople').on('click', function() { getInfoTabsPeople( "tab-PContratos", "people/getContractByPeople" );  });
+					$('#'+SECCION+'-btnSearchContractPeople').off();
+					$('#'+SECCION+'-btnSearchContractPeople').on('click', function() { getInfoTabsPeople( SECCION+"-tab-PContratos", "people/getContractByPeople" );  });
 					
 					//detecta cuando se cambia el valor del select de pais(country)
-					$(document).off('change', "#Contrato-textCountry");
-					$(document).on('change', "#Contrato-textCountry", function () {
+					$(document).off('change', "#"+SECCION+"-textCountry");
+					$(document).on('change', "#"+SECCION+"-textCountry", function () {
 						changeState(this);
 					});
 					
@@ -151,18 +156,18 @@ function createModalDialog(id){
 				click: function() {
 					dialogUser.dialog('close');
 					cleanUserFields();
-					$("#Contrato-idPeople").removeData("pkPeopleId");
-					$("#Contrato-idPeople").removeData("pkEmployeeId");
+					$("#"+SECCION+"-idPeople").removeData("pkPeopleId");
+					$("#"+SECCION+"-idPeople").removeData("pkEmployeeId");
 				}
 			},
 			{
 				text: "Save and close",
 				"class": 'dialogModalButtonAccept',
 				click: function() {
-					if($("#Contrato-idPeople").data("pkPeopleId") == undefined ){
+					if($("#"+SECCION+"-idPeople").data("pkPeopleId") == undefined ){
 						CreateNewUser(false)
 					}else{
-						EditUser(false, $("#Contrato-idPeople").data("pkPeopleId") )
+						EditUser(false, $("#"+SECCION+"-idPeople").data("pkPeopleId") )
 					}
 				}
 			},
@@ -170,20 +175,20 @@ function createModalDialog(id){
 				text: "Save",
 				"class": 'dialogModalButtonAccept',
 				click: function() {
-					if($("#Contrato-idPeople").data("pkPeopleId") == undefined){
+					if($("#"+SECCION+"-idPeople").data("pkPeopleId") == undefined){
 						CreateNewUser(true)
 					}else{
-						EditUser(true, $("#Contrato-idPeople").data("pkPeopleId") )
+						EditUser(true, $("#"+SECCION+"-idPeople").data("pkPeopleId") )
 					}
 					
 				}
 			},
 		],
 		close: function() {
-			$("#Contrato-idPeople").removeData("pkPeopleId");
-			$("#Contrato-idPeople").removeData("pkEmployeeId");
+			$("#"+SECCION+"-idPeople").removeData("pkPeopleId");
+			$("#"+SECCION+"-idPeople").removeData("pkEmployeeId");
 			cleanUserFields();
-			$('#Contrato-dialog-Unidades').empty();
+			$('#'+SECCION+'-dialog-Unidades').empty();
 		}
 	});
 	return dialog;
@@ -191,8 +196,8 @@ function createModalDialog(id){
 }
 function showModal(id){
 	
-	$("#Contrato-idPeople").removeData("pkPeopleId");
-	$("#Contrato-idPeople").removeData("pkEmployeeId");
+	$("#"+SECCION+"-idPeople").removeData("pkPeopleId");
+	$("#"+SECCION+"-idPeople").removeData("pkEmployeeId");
 	if (dialogUser!=null) {
 		dialogUser.dialog( "destroy" );
 	}
@@ -213,28 +218,28 @@ function hideModal(){
 
 function showDivModal(div){
 	if(div == "address"){
-		$('#Contrato-containerAddress').toggle(1000);
-		if($("#Contrato-imgCoppapseAddress").attr('class') == "imgCollapseFieldset down"){
-			$("#Contrato-imgCoppapseAddress").removeClass('down');
-			$("#Contrato-imgCoppapseAddress").addClass('up');
-			$("#Contrato-imgCoppapseAddress").attr( 'src', BASE_URL+'assets/img/common/iconCollapseUp.png' );
-			gotoDiv('contentModalPeople','textPostalCode');
+		$('#'+SECCION+'-containerAddress').toggle(1000);
+		if($("#"+SECCION+"-imgCoppapseAddress").attr('class') == "imgCollapseFieldset down"){
+			$("#"+SECCION+"-imgCoppapseAddress").removeClass('down');
+			$("#"+SECCION+"-imgCoppapseAddress").addClass('up');
+			$("#"+SECCION+"-imgCoppapseAddress").attr( 'src', BASE_URL+'assets/img/common/iconCollapseUp.png' );
+			gotoDiv(SECCION+'-contentModalPeople','textPostalCode');
 		}else{
-			$("#Contrato-imgCoppapseAddress").removeClass('up');
-			$("#Contrato-imgCoppapseAddress").addClass('down');
-			$("#Contrato-imgCoppapseAddress").attr( 'src', BASE_URL+'assets/img/common/iconCollapseDown.png' )
+			$("#"+SECCION+"-imgCoppapseAddress").removeClass('up');
+			$("#"+SECCION+"-imgCoppapseAddress").addClass('down');
+			$("#"+SECCION+"-imgCoppapseAddress").attr( 'src', BASE_URL+'assets/img/common/iconCollapseDown.png' )
 		}
 	}else if(div == "contact"){
-		$('#Contrato-containerContact').toggle(1000);
-		if($("#Contrato-imgCoppapseContact").attr('class') == "imgCollapseFieldset down"){
-			$("#Contrato-imgCoppapseContact").removeClass('down');
-			$("#Contrato-imgCoppapseContact").addClass('up');
-			$("#Contrato-imgCoppapseContact").attr( 'src', BASE_URL+'assets/img/common/iconCollapseUp.png' );
-			gotoDiv('contentModalPeople','textEmail2');
+		$('#'+SECCION+'-containerContact').toggle(1000);
+		if($("#"+SECCION+"-imgCoppapseContact").attr('class') == "imgCollapseFieldset down"){
+			$("#"+SECCION+"-imgCoppapseContact").removeClass('down');
+			$("#"+SECCION+"-imgCoppapseContact").addClass('up');
+			$("#"+SECCION+"-imgCoppapseContact").attr( 'src', BASE_URL+'assets/img/common/iconCollapseUp.png' );
+			gotoDiv(SECCION+'-contentModalPeople','textEmail2');
 		}else{
-			$("#Contrato-imgCoppapseContact").removeClass('up');
-			$("#Contrato-imgCoppapseContact").addClass('down');
-			$("#Contrato-imgCoppapseContact").attr( 'src', BASE_URL+'assets/img/common/iconCollapseDown.png' )
+			$("#"+SECCION+"-imgCoppapseContact").removeClass('up');
+			$("#"+SECCION+"-imgCoppapseContact").addClass('down');
+			$("#"+SECCION+"-imgCoppapseContact").attr( 'src', BASE_URL+'assets/img/common/iconCollapseDown.png' )
 		}
 	}
 }
@@ -275,7 +280,7 @@ function saveUserData(id, isClosed){
 	var jsonEmail = JSON.stringify(emailArray);
 	
 	var gender;
-	if($("#Contrato-RadioMale").is(':checked')) {
+	if($("#"+SECCION+"-RadioMale").is(':checked')) {
 		gender = "2";
 	}else{
 		gender = "1";
@@ -286,9 +291,9 @@ function saveUserData(id, isClosed){
 	//si se estan editando los datos
 	if( id > 0 ){
 		//si esta activado la opcion de empleado
-		if($("#Contrato-checkPeopleEmployee").is(':checked')) {
+		if($("#"+SECCION+"-checkPeopleEmployee").is(':checked')) {
 			employee = 1;
-			pkEmployeeId = $('#Contrato-idPeople').data("pkEmployeeId");
+			pkEmployeeId = $('#'+SECCION+'-idPeople').data("pkEmployeeId");
 		}
 	}
 	
@@ -298,32 +303,32 @@ function saveUserData(id, isClosed){
 		dataType:'json',
 		data: { 
 			id:id,
-			name:$('#Contrato-textName').val().trim().toUpperCase(),
-			SecondName:$('#Contrato-textMiddleName').val().trim().toUpperCase(),
-			lName:$('#Contrato-textLastName').val().trim().toUpperCase(),
-			lName2:$('#Contrato-TextSecondLastName').val().trim().toUpperCase(),
-			birthDate:$('#Contrato-textBirthdate').val().trim(),
+			name:$('#'+SECCION+'-textName').val().trim().toUpperCase(),
+			SecondName:$('#'+SECCION+'-textMiddleName').val().trim().toUpperCase(),
+			lName:$('#'+SECCION+'-textLastName').val().trim().toUpperCase(),
+			lName2:$('#'+SECCION+'-TextSecondLastName').val().trim().toUpperCase(),
+			birthDate:$('#'+SECCION+'-textBirthdate').val().trim(),
 			gender:gender,
-			WeddingAnniversary:$('#Contrato-textWeddingAnniversary').val().trim(),
-			nationality:$('#Contrato-textNationality').val(),
-			qualification:$('#Contrato-textQualification').val(),
-			street:$('#Contrato-textStreet').val().trim(),
-			colony:$('#Contrato-textColony').val().trim(),
-			city:$('#Contrato-textCity').val().trim(),
-			state:$('#Contrato-textState').val(),
-			country:$('#Contrato-textCountry').val(),
-			postalCode:$('#Contrato-textPostalCode').val().trim(),
-			stateCode:$('#Contrato-textState option:selected').attr('code'),
-			countryCode:$('#Contrato-textCountry option:selected').attr('code'),
+			WeddingAnniversary:$('#'+SECCION+'-textWeddingAnniversary').val().trim(),
+			nationality:$('#'+SECCION+'-textNationality').val(),
+			qualification:$('#'+SECCION+'-textQualification').val(),
+			street:$('#'+SECCION+'-textStreet').val().trim(),
+			colony:$('#'+SECCION+'-textColony').val().trim(),
+			city:$('#'+SECCION+'-textCity').val().trim(),
+			state:$('#'+SECCION+'-textState').val(),
+			country:$('#'+SECCION+'-textCountry').val(),
+			postalCode:$('#'+SECCION+'-textPostalCode').val().trim(),
+			stateCode:$('#'+SECCION+'-textState option:selected').attr('code'),
+			countryCode:$('#'+SECCION+'-textCountry option:selected').attr('code'),
 			phone:jsonPhone,
 			email:jsonEmail,
 			pkEmployeeId:pkEmployeeId,
 			employee:employee,
-			codeCollaborator:$('#Contrato-textCodeCollaborator').val().trim(),
-			initials:$('#Contrato-textInitials').val().trim(),
-			codeNumber:$('#Contrato-textCodeNumber').val().trim(),
-			typeSeller:$('#Contrato-textTypeSeller').val(),
-			roster:$('#Contrato-textRoster').val(),
+			codeCollaborator:$('#'+SECCION+'-textCodeCollaborator').val().trim(),
+			initials:$('#'+SECCION+'-textInitials').val().trim(),
+			codeNumber:$('#'+SECCION+'-textCodeNumber').val().trim(),
+			typeSeller:$('#'+SECCION+'-textTypeSeller').val(),
+			roster:$('#'+SECCION+'-textRoster').val(),
 		},
 		success: function(data){
 			//showAlert(true,data.message,'button',showAlert);
@@ -334,14 +339,14 @@ function saveUserData(id, isClosed){
 				if(!isClosed){
 					dialogUser.dialog('close');
 					cleanUserFields();
-					$("#Contrato-idPeople").removeData("pkPeopleId");
-					$("#Contrato-idPeople").removeData("pkEmployeeId");
+					$("#"+SECCION+"-idPeople").removeData("pkPeopleId");
+					$("#"+SECCION+"-idPeople").removeData("pkEmployeeId");
 				}else{
-					$("#Contrato-idPeople").data("pkPeopleId",data.pkPeopleId);
+					$("#"+SECCION+"-idPeople").data("pkPeopleId",data.pkPeopleId);
 					$('.dialogModalButtonSecondary').show();
 				}
-				if($('#Contrato-tablePeople >tbody >tr').length != 0){
-					var currentPage = $('#Contrato-paginationPeople').jqPagination('option', 'current_page');
+				if($('#'+SECCION+'-tablePeople >tbody >tr').length != 0){
+					var currentPage = $('#'+SECCION+'-paginationPeople').jqPagination('option', 'current_page');
 					searchPeople(currentPage);
 				}
 			}
@@ -353,8 +358,8 @@ function saveUserData(id, isClosed){
 			//showAlert(true,"Error inserting data, try again later. ",'button',showAlert);
 			dialogUser.dialog('close');
 			cleanUserFields();
-			$("#Contrato-idPeople").removeData("pkPeopleId");
-			$("#Contrato-idPeople").removeData("pkEmployeeId");
+			$("#"+SECCION+"-idPeople").removeData("pkPeopleId");
+			$("#"+SECCION+"-idPeople").removeData("pkEmployeeId");
 		}
 	});	
 }
@@ -372,141 +377,141 @@ function validateUserFields(){
 	var errorText = "";
 	hideAlertUserFields();
 	
-//	alert($("#Contrato-checkPeopleEmployee").is(':checked'))
+//	alert($("#"+SECCION+"-checkPeopleEmployee").is(':checked'))
 	
-	if($("#Contrato-checkPeopleEmployee").is(':checked')){
+	if($("#"+SECCION+"-checkPeopleEmployee").is(':checked')){
 		
-		if($('#Contrato-textCodeCollaborator').val().trim().length == 0 ){
-			$('#Contrato-alertCodeCollaborator').addClass('error');
-			$('#Contrato-textCodeCollaborator').focus();
+		if($('#'+SECCION+'-textCodeCollaborator').val().trim().length == 0 ){
+			$('#'+SECCION+'-alertCodeCollaborator').addClass('error');
+			$('#'+SECCION+'-textCodeCollaborator').focus();
 			errorText = "Código del colaborador<br>" + errorText;
 			infoEmployee = false;
 		}
 		
-		if($('#Contrato-textInitials').val().trim().length == 0 ){
-			$('#Contrato-alertInitials').addClass('error');
-			$('#Contrato-textInitials').focus();
+		if($('#'+SECCION+'-textInitials').val().trim().length == 0 ){
+			$('#'+SECCION+'-alertInitials').addClass('error');
+			$('#'+SECCION+'-textInitials').focus();
 			errorText = "Iniciales<br>" + errorText;
 			infoEmployee = false;
 		}
 		
-		if($('#Contrato-textCodeNumber').val().trim().length == 0 ){
-			$('#Contrato-alertCodeNumber').addClass('error');
-			$('#Contrato-textCodeNumber').focus();
+		if($('#'+SECCION+'-textCodeNumber').val().trim().length == 0 ){
+			$('#'+SECCION+'-alertCodeNumber').addClass('error');
+			$('#'+SECCION+'-textCodeNumber').focus();
 			errorText = "Código numérico<br>" + errorText;
 			infoEmployee = false;
 		}
 		
-		if($('#Contrato-textTypeSeller').val() == null || $('#Contrato-textTypeSeller').val() == 0){
-			$('#Contrato-alertTypeSeller').addClass('error');
-			$('#Contrato-textTypeSeller').focus();
+		if($('#'+SECCION+'-textTypeSeller').val() == null || $('#'+SECCION+'-textTypeSeller').val() == 0){
+			$('#'+SECCION+'-alertTypeSeller').addClass('error');
+			$('#'+SECCION+'-textTypeSeller').focus();
 			errorText = "Tipo de vendedor<br>" + errorText;
 			infoEmployee = false;
 		}
 		
 		if(infoEmployee == false){
-			$('#Contrato-alertValPeopleEmployee .alert-box').html("<label>Please complete fields in red</label>" );
-			$('#Contrato-alertValPeopleEmployee').show(100);
+			$('#'+SECCION+'-alertValPeopleEmployee .alert-box').html("<label>Please complete fields in red</label>" );
+			$('#'+SECCION+'-alertValPeopleEmployee').show(100);
 			result = false;
 		}
 	}
 	
 	var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
 	//email 2
-	if($('#Contrato-textEmail2').val().trim().length > 0){
-		if(!regex.test($('#Contrato-textEmail2').val().trim())){
-			$('#Contrato-alertEmail2').addClass('error');
-			$('#Contrato-textEmail2').focus();
+	if($('#'+SECCION+'-textEmail2').val().trim().length > 0){
+		if(!regex.test($('#'+SECCION+'-textEmail2').val().trim())){
+			$('#'+SECCION+'-alertEmail2').addClass('error');
+			$('#'+SECCION+'-textEmail2').focus();
 			errorText = "El correo 2 debe ser valido<br>"  + errorText;
 			infoContact = false;
 		}
 	}
-	if($('#Contrato-textEmail1').val().trim().length > 0){
-		if(!regex.test($('#Contrato-textEmail1').val().trim())){
-			$('#Contrato-alertEmail1').addClass('error');
-			$('#Contrato-textEmail1').focus();
+	if($('#'+SECCION+'-textEmail1').val().trim().length > 0){
+		if(!regex.test($('#'+SECCION+'-textEmail1').val().trim())){
+			$('#'+SECCION+'-alertEmail1').addClass('error');
+			$('#'+SECCION+'-textEmail1').focus();
 			errorText = "EL correo debe ser valido</br>"  + errorText;
 			infoContact = false;
 		}
 	}
 	
 	//Telefono 3
-	if($('#Contrato-textPhone3').val().trim().length > 0 && $('#Contrato-textPhone3').val().trim().length > 14 ){
-		$('#Contrato-alertPhone3').addClass('error');
-		$('#Contrato-textPhone3').focus();
+	if($('#'+SECCION+'-textPhone3').val().trim().length > 0 && $('#'+SECCION+'-textPhone3').val().trim().length > 14 ){
+		$('#'+SECCION+'-alertPhone3').addClass('error');
+		$('#'+SECCION+'-textPhone3').focus();
 		errorText = "El telefono 3 debe tener maximo 11 caracteres<br>"  + errorText;
 		infoContact = false;
 	}
 	
 	//Telefono 2
-	if($('#Contrato-textPhone2').val().trim().length > 0 && $('#Contrato-textPhone2').val().trim().length > 14 ){
-		$('#Contrato-alertPhone2').addClass('error');
-		$('#Contrato-textPhone2').focus();
+	if($('#'+SECCION+'-textPhone2').val().trim().length > 0 && $('#'+SECCION+'-textPhone2').val().trim().length > 14 ){
+		$('#'+SECCION+'-alertPhone2').addClass('error');
+		$('#'+SECCION+'-textPhone2').focus();
 		errorText = "El telefono 2 debe tener maximo 11 caracteres<br>"  + errorText;
 		infoContact = false;
 	}
 	
 	//Telefono 2
-	if($('#Contrato-textPhone1').val().trim().length > 0 && $('#Contrato-textPhone1').val().trim().length > 14 ){
-		$('#Contrato-alertPhone1').addClass('error');
-		$('#Contrato-textPhone1').focus();
+	if($('#'+SECCION+'-textPhone1').val().trim().length > 0 && $('#'+SECCION+'-textPhone1').val().trim().length > 14 ){
+		$('#'+SECCION+'-alertPhone1').addClass('error');
+		$('#'+SECCION+'-textPhone1').focus();
 		errorText = "El telefono 1 debe tener maximo 11 caracteres<br>"  + errorText;
 		infoContact = false;
 	}
 	
 	if(infoContact == false){
 		result = false;
-		$('#Contrato-alertValPeopleContact .alert-box').html("<label>Please complete fields in red</label>" + errorText );
-		$('#Contrato-alertValPeopleContact').show(100);
-		$('#Contrato-containerContact').show();
+		$('#'+SECCION+'-alertValPeopleContact .alert-box').html("<label>Please complete fields in red</label>" + errorText );
+		$('#'+SECCION+'-alertValPeopleContact').show(100);
+		$('#'+SECCION+'-containerContact').show();
 	}
 	
 	errorText = "";
 	
 	//fecha de nacimiento
-	if($('#Contrato-textPostalCode').val().trim().length == 0){
-		$('#Contrato-alertPostalCode').addClass('error');
-		$('#Contrato-textPostalCode').focus();
+	if($('#'+SECCION+'-textPostalCode').val().trim().length == 0){
+		$('#'+SECCION+'-alertPostalCode').addClass('error');
+		$('#'+SECCION+'-textPostalCode').focus();
 		errorText = "Codigo postal<br>"  + errorText;
 		infoAddress = false;
 	}
 	
 	//Ciudad
-	if($('#Contrato-textCity').val().trim().length == 0){
-		$('#Contrato-alertCity').addClass('error');
-		$('#Contrato-textCity').focus();
+	if($('#'+SECCION+'-textCity').val().trim().length == 0){
+		$('#'+SECCION+'-alertCity').addClass('error');
+		$('#'+SECCION+'-textCity').focus();
 		errorText = "Ciudad<br>"  + errorText;
 		infoAddress = false;
 	}
 	
 	//country
-	if($('#Contrato-textCountry').val() == 0){
-		$('#Contrato-alertCountry').addClass('error');
-		$('#Contrato-textCountry').focus();
+	if($('#'+SECCION+'-textCountry').val() == 0){
+		$('#'+SECCION+'-alertCountry').addClass('error');
+		$('#'+SECCION+'-textCountry').focus();
 		errorText = "Pais<br>"  + errorText;
 		infoAddress = false;
 	}
 	
 	//estado
-	if($('#Contrato-textState').val() == 0){
-		$('#Contrato-alertState').addClass('error');
-		$('#Contrato-textState').focus();
+	if($('#'+SECCION+'-textState').val() == 0){
+		$('#'+SECCION+'-alertState').addClass('error');
+		$('#'+SECCION+'-textState').focus();
 		errorText = "Estado<br>"  + errorText;
 		infoAddress = false;
 	}
 	
 	//calle
-	if($('#Contrato-textStreet').val().trim().length == 0){
-		$('#Contrato-alertStreet').addClass('error');
-		$('#Contrato-textStreet').focus();
+	if($('#'+SECCION+'-textStreet').val().trim().length == 0){
+		$('#'+SECCION+'-alertStreet').addClass('error');
+		$('#'+SECCION+'-textStreet').focus();
 		errorText = "Calle<br>"  + errorText;
 		infoAddress = false;
 	}
 	if(infoAddress == false){
 		result = false;
-		$('#Contrato-alertValPeopleAddress .alert-box').html("<label>Please complete fields in red</label>" + errorText );
-		$('#Contrato-alertValPeopleAddress').show(100);
-		$('#Contrato-containerAddress').show();
+		$('#'+SECCION+'-alertValPeopleAddress .alert-box').html("<label>Please complete fields in red</label>" + errorText );
+		$('#'+SECCION+'-alertValPeopleAddress').show(100);
+		$('#'+SECCION+'-containerAddress').show();
 	}
 	
 	errorText = "";
@@ -514,29 +519,29 @@ function validateUserFields(){
 	//validate fecha
 	
 	//aniversario
-	if($('#Contrato-textWeddingAnniversary').val().trim().length > 0){
-			if(!isDate($('#Contrato-textWeddingAnniversary').val())){
-			$('#Contrato-alertWeddingAnniversary').addClass('error');
-			//$('#Contrato-textWeddingAnniversary').focus();
+	if($('#'+SECCION+'-textWeddingAnniversary').val().trim().length > 0){
+			if(!isDate($('#'+SECCION+'-textWeddingAnniversary').val())){
+			$('#'+SECCION+'-alertWeddingAnniversary').addClass('error');
+			//$('#'+SECCION+'-textWeddingAnniversary').focus();
 			errorText = "Selecione una fecha de aniversario correcta>"  + errorText;
 			infoPeople = false;
 		}
 	}
-	//alert(regex2.test($('#Contrato-textBirthdate').val())
+	//alert(regex2.test($('#'+SECCION+'-textBirthdate').val())
 	//fecha
-	if($('#Contrato-textBirthdate').val().trim().length > 0){
-		if(!isDate($('#Contrato-textBirthdate').val())){
-			$('#Contrato-alertBirthdate').addClass('error');
-			//$('#Contrato-textBirthdate').focus();
+	if($('#'+SECCION+'-textBirthdate').val().trim().length > 0){
+		if(!isDate($('#'+SECCION+'-textBirthdate').val())){
+			$('#'+SECCION+'-alertBirthdate').addClass('error');
+			//$('#'+SECCION+'-textBirthdate').focus();
 			errorText = "Selecione una fecha correctabr>"  + errorText;
 			infoPeople = false;
 		}
 	}
 	
 	//fecha de nacimiento
-	if($('#Contrato-textBirthdate').val().trim().length == 0){
-		$('#Contrato-alertBirthdate').addClass('error');
-		//$('#Contrato-textBirthdate').focus();
+	if($('#'+SECCION+'-textBirthdate').val().trim().length == 0){
+		$('#'+SECCION+'-alertBirthdate').addClass('error');
+		//$('#'+SECCION+'-textBirthdate').focus();
 		errorText = "Fecha de nacimiento<br>"  + errorText;
 		infoPeople = false;
 	}
@@ -550,29 +555,29 @@ function validateUserFields(){
 	});
 	
 	if(gender != 1){
-		$('#Contrato-alertGender').addClass('error');
+		$('#'+SECCION+'-alertGender').addClass('error');
 		errorText = "Genero<br>"  + errorText;
 		infoPeople = false;
 	}
 	
 	//apellido paterno
-	if($('#Contrato-textLastName').val().trim().length == 0){
-		$('#Contrato-alertLastName').addClass('error');
-		$('#Contrato-textLastName').focus();
+	if($('#'+SECCION+'-textLastName').val().trim().length == 0){
+		$('#'+SECCION+'-alertLastName').addClass('error');
+		$('#'+SECCION+'-textLastName').focus();
 		errorText = "Apellido paterno<br>"  + errorText;
 		infoPeople = false;
 	}
 	//nombre
-	if($('#Contrato-textName').val().trim().length == 0){
-		$('#Contrato-alertName').addClass('error');
-		$('#Contrato-textName').focus();
+	if($('#'+SECCION+'-textName').val().trim().length == 0){
+		$('#'+SECCION+'-alertName').addClass('error');
+		$('#'+SECCION+'-textName').focus();
 		errorText =  "Nombre<br>" + errorText;
 		infoPeople = false;
 	}
 	
 	if(infoPeople == false){
-		$('#Contrato-alertValPeopleGeneral .alert-box').html("<label>Please complete fields in red</label>" + errorText );
-		$('#Contrato-alertValPeopleGeneral').show(100);
+		$('#'+SECCION+'-alertValPeopleGeneral .alert-box').html("<label>Please complete fields in red</label>" + errorText );
+		$('#'+SECCION+'-alertValPeopleGeneral').show(100);
 		result = false;
 	}
 	
@@ -583,35 +588,35 @@ function validateUserFields(){
 * esconde las alertas de validacion
 */
 function hideAlertUserFields(){
-	$('#Contrato-alertValPeopleGeneral').hide();
-	$('#Contrato-alertValPeopleAddress').hide();
-	$('#Contrato-alertValPeopleContact').hide();
-	$('#Contrato-alertValPeopleEmployee').hide();
+	$('#'+SECCION+'-alertValPeopleGeneral').hide();
+	$('#'+SECCION+'-alertValPeopleAddress').hide();
+	$('#'+SECCION+'-alertValPeopleContact').hide();
+	$('#'+SECCION+'-alertValPeopleEmployee').hide();
 	
-	$('#Contrato-alertName').removeClass('error');
-	$('#Contrato-alertLastName').removeClass('error');
-	$('#Contrato-alertBirthdate').removeClass('error');
-	$('#Contrato-alertGender').removeClass('error');
-	$('#Contrato-alertWeddingAnniversary').removeClass('error');
+	$('#'+SECCION+'-alertName').removeClass('error');
+	$('#'+SECCION+'-alertLastName').removeClass('error');
+	$('#'+SECCION+'-alertBirthdate').removeClass('error');
+	$('#'+SECCION+'-alertGender').removeClass('error');
+	$('#'+SECCION+'-alertWeddingAnniversary').removeClass('error');
 	
-	$('#Contrato-alertStreet').removeClass('error');
-	$('#Contrato-alertColony').removeClass('error');
-	$('#Contrato-alertCity').removeClass('error');
-	$('#Contrato-alertState').removeClass('error');
-	$('#Contrato-alertCountry').removeClass('error');
-	$('#Contrato-alertPostalCode').removeClass('error');
+	$('#'+SECCION+'-alertStreet').removeClass('error');
+	$('#'+SECCION+'-alertColony').removeClass('error');
+	$('#'+SECCION+'-alertCity').removeClass('error');
+	$('#'+SECCION+'-alertState').removeClass('error');
+	$('#'+SECCION+'-alertCountry').removeClass('error');
+	$('#'+SECCION+'-alertPostalCode').removeClass('error');
 	
-	$('#Contrato-alertPhone1').removeClass('error');
-	$('#Contrato-alertPhone2').removeClass('error');
-	$('#Contrato-alertPhone3').removeClass('error');
-	$('#Contrato-alertEmail1').removeClass('error');
-	$('#Contrato-alertEmail2').removeClass('error');
+	$('#'+SECCION+'-alertPhone1').removeClass('error');
+	$('#'+SECCION+'-alertPhone2').removeClass('error');
+	$('#'+SECCION+'-alertPhone3').removeClass('error');
+	$('#'+SECCION+'-alertEmail1').removeClass('error');
+	$('#'+SECCION+'-alertEmail2').removeClass('error');
 	
-	$('#Contrato-alertCodeCollaborator').removeClass('error');
-	$('#Contrato-alertInitials').removeClass('error');
-	$('#Contrato-alertCodeNumber').removeClass('error');
-	$('#Contrato-alertTypeSeller').removeClass('error');
-	$('#Contrato-alertRoster').removeClass('error');
+	$('#'+SECCION+'-alertCodeCollaborator').removeClass('error');
+	$('#'+SECCION+'-alertInitials').removeClass('error');
+	$('#'+SECCION+'-alertCodeNumber').removeClass('error');
+	$('#'+SECCION+'-alertTypeSeller').removeClass('error');
+	$('#'+SECCION+'-alertRoster').removeClass('error');
 }
 
 /**
@@ -619,62 +624,62 @@ function hideAlertUserFields(){
 */
 function cleanUserFields(){
 	hideAlertUserFields();
-	$('#Contrato-textName').val("");
-	$('#Contrato-textLastName').val("");
-	$('#Contrato-TextSecondLastName').val("");
-	$('#Contrato-textBirthdate').val("");
-	$('#Contrato-textWeddingAnniversary').val("");
-	//$('#Contrato-textNationality').val("");
-	//$('#Contrato-textQualification').val("");
-	$('#Contrato-RadioMale').prop( "checked", false );
-	$("#Contrato-RadioFemale").prop( "checked", false );
+	$('#'+SECCION+'-textName').val("");
+	$('#'+SECCION+'-textLastName').val("");
+	$('#'+SECCION+'-TextSecondLastName').val("");
+	$('#'+SECCION+'-textBirthdate').val("");
+	$('#'+SECCION+'-textWeddingAnniversary').val("");
+	//$('#'+SECCION+'-textNationality').val("");
+	//$('#'+SECCION+'-textQualification').val("");
+	$('#'+SECCION+'-RadioMale').prop( "checked", false );
+	$("#"+SECCION+"-RadioFemale").prop( "checked", false );
 	
-	$('#Contrato-textStreet').val("");
-	$('#Contrato-textColony').val("");
-	$('#Contrato-textCity').val("");
-	$('#Contrato-textCountry').val(0);
-	$('#Contrato-textState').val(0);
+	$('#'+SECCION+'-textStreet').val("");
+	$('#'+SECCION+'-textColony').val("");
+	$('#'+SECCION+'-textCity').val("");
+	$('#'+SECCION+'-textCountry').val(0);
+	$('#'+SECCION+'-textState').val(0);
 	$("select#textCountry").val("0");
 	$("select#textState").val("0");
-	$('#Contrato-textPostalCode').val("");
+	$('#'+SECCION+'-textPostalCode').val("");
 	
-	$('#Contrato-textPhone1').val("");
-	$('#Contrato-textPhone2').val("");
-	$('#Contrato-textPhone3').val("");
-	$('#Contrato-textEmail1').val("");
-	$('#Contrato-textEmail2').val("");
+	$('#'+SECCION+'-textPhone1').val("");
+	$('#'+SECCION+'-textPhone2').val("");
+	$('#'+SECCION+'-textPhone3').val("");
+	$('#'+SECCION+'-textEmail1').val("");
+	$('#'+SECCION+'-textEmail2').val("");
 	
-	$('#Contrato-textCodeCollaborator').val("");
-	$('#Contrato-textInitials').val("");
-	$('#Contrato-textCodeNumber').val("");
-	$('#Contrato-textTypeSeller').val(0);
-	$('#Contrato-textRoster').val(0);
-	$('#Contrato-checkPeopleEmployee').prop( "checked", false );
+	$('#'+SECCION+'-textCodeCollaborator').val("");
+	$('#'+SECCION+'-textInitials').val("");
+	$('#'+SECCION+'-textCodeNumber').val("");
+	$('#'+SECCION+'-textTypeSeller').val(0);
+	$('#'+SECCION+'-textRoster').val(0);
+	$('#'+SECCION+'-checkPeopleEmployee').prop( "checked", false );
 	
-	$('#Contrato-containerAddress').hide();
-	$('#Contrato-containerContact').hide();
+	$('#'+SECCION+'-containerAddress').hide();
+	$('#'+SECCION+'-containerContact').hide();
 	
-	$("#Contrato-idPeople").removeData("pkPeopleId");
-	$("#Contrato-idPeople").removeData("pkEmployeeId");
+	$("#"+SECCION+"-idPeople").removeData("pkPeopleId");
+	$("#"+SECCION+"-idPeople").removeData("pkEmployeeId");
 	
-	$('#Contrato-tableReservationsPeople tbody').empty();
-	$('#Contrato-tableContractPeople tbody').empty();
+	$('#'+SECCION+'-tableReservationsPeople tbody').empty();
+	$('#'+SECCION+'-tableContractPeople tbody').empty();
 	
-	$('#Contrato-textSearchContractPeople').val("");
+	$('#'+SECCION+'-textSearchContractPeople').val("");
 	
-	changeTabsModalPeople("tab-PGeneral");
+	changeTabsModalPeople(SECCION+'-tab-PGeneral');
 }
 
 function searchPeople(page){
 	
-	$('#Contrato-tablePeople tbody').empty();
-	showLoading('#Contrato-section-table-people',true);
+	$('#'+SECCION+'-tablePeople tbody').empty();
+	showLoading('#'+SECCION+'-section-table-people',true);
 	
-	var typePeople = $('#Contrato-btnSearch').attr('attr_people');
+	var typePeople = $('#'+SECCION+'-btnSearch').attr('attr_people');
 	
-	//noResults('#Contrato-section-table-people',false);
+	//noResults('#'+SECCION+'-section-table-people',false);
 	opcionAdvanced = "";
-	if($('#Contrato-checkFilterAdvance').is(':checked')){
+	if($('#'+SECCION+'-checkFilterAdvance').is(':checked')){
 		opcionAdvanced = $('.RadioSearchPeople:checked').val();
 	}
 	$.ajax({
@@ -682,36 +687,46 @@ function searchPeople(page){
        	url: "people/getPeopleBySearch",
 		dataType:'json',
 		data: {
-			search:$("#Contrato-txtSearch").val().trim(),
-			peopleId:$("#Contrato-checkFilter1").is(':checked'),
-			lastName:$("#Contrato-checkFilter2").is(':checked'),
-			name:$("#Contrato-checkFilter3").is(':checked'),
+			search:$("#"+SECCION+"-txtSearch").val().trim(),
+			peopleId:$("#"+SECCION+"-checkFilter1").is(':checked'),
+			lastName:$("#"+SECCION+"-checkFilter2").is(':checked'),
+			name:$("#"+SECCION+"-checkFilter3").is(':checked'),
 			advanced:opcionAdvanced,
 			typePeople:typePeople,
 			page:page,
 		},
 		success: function(data){
 			if(data.items.length > 0){
+				$("#"+SECCION+"-NP").text("Total: "+ data.items.length);
+				var total = data.total;
 				alertify.success("Found "+ 25 + " People");
-				$('#Contrato-paginationPeople').val(true);
-				drawTable2(data.items,"tablePeople","showModal","Edit");
+				if( parseInt(total) == 0 ){ total = 1; }
+				total = parseInt( total/25 );
+				if(data.total%25 == 0){
+					total = total - 1;		
+				}
+				total = total + 1
+				$('#'+SECCION+'-paginationPeopleInput').val(true);
+				loadPaginatorPeople(total);
+
+				drawTable2(data.items,SECCION+"-tablePeople","showModal","Edit");
 				
 				if( jQuery.isFunction( "markRowTableFrontDesk" ) ){
-					var typePeople = $("#Contrato-dialog-people-hkConfig").find('#Contrato-btnSearch').attr('attr_people');
+					var typePeople = $("#"+SECCION+"-dialog-people-hkConfig").find('#'+SECCION+'-btnSearch').attr('attr_people');
 					if(typePeople == "maid"){
-						markRowTableFrontDesk( "tablePeople", "tablePeopleMaidSelectedHKC" );
+						markRowTableFrontDesk( SECCION+"-tablePeople", "tablePeopleMaidSelectedHKC" );
 					}else if(typePeople == "superior"){
-						markRowTableFrontDesk( "tablePeople", "tablePeopleSupeSelectedHKC" );
+						markRowTableFrontDesk( SECCION+"-tablePeople", "tablePeopleSupeSelectedHKC" );
 					}
 				}
 			}else{
-				noResultsPeople("section-table-people", "tablePeople", "No results found");
+				noResultsPeople("section-table-people", SECCION+"-tablePeople", "No results found");
 			}
-			showLoading('#Contrato-section-table-people',false);
+			showLoading('#'+SECCION+'-section-table-people',false);
 		},
 		error: function(error){
-			noResultsPeople("section-table-people", "tablePeople", "Try again");
-			showLoading('#Contrato-section-table-people',false);
+			noResultsPeople("section-table-people", SECCION+"-tablePeople", "Try again");
+			showLoading('#'+SECCION+'-section-table-people',false);
 		}
 	});
 }
@@ -720,20 +735,20 @@ function searchPeople(page){
 * Limpia el campo de busqueda de personas
 */
 function CleandFieldSearch(){
-	$("#Contrato-txtSearch").val("");
+	$("#"+SECCION+"-txtSearch").val("");
 }
 
 /**
 * muestra las busquedas avanzadas
 */
 function searchAdvanced(){
-	$('#Contrato-containerFilterAdv').toggle(1000);
-	if($("#Contrato-checkFilterAdvance").is(':checked')) {
-		$('#Contrato-fieldsetFilterAdvanced').removeClass('fieldsetFilter-advanced-hide');
-		$('#Contrato-fieldsetFilterAdvanced').addClass('fieldsetFilter-advanced-show');
+	$('#'+SECCION+'-containerFilterAdv').toggle(1000);
+	if($("#"+SECCION+"-checkFilterAdvance").is(':checked')) {
+		$('#'+SECCION+'-fieldsetFilterAdvanced').removeClass('fieldsetFilter-advanced-hide');
+		$('#'+SECCION+'-fieldsetFilterAdvanced').addClass('fieldsetFilter-advanced-show');
 	}else{
-		$('#Contrato-fieldsetFilterAdvanced').addClass('fieldsetFilter-advanced-hide');
-		$('#Contrato-fieldsetFilterAdvanced').removeClass('fieldsetFilter-advanced-show');
+		$('#'+SECCION+'-fieldsetFilterAdvanced').addClass('fieldsetFilter-advanced-hide');
+		$('#'+SECCION+'-fieldsetFilterAdvanced').removeClass('fieldsetFilter-advanced-show');
 	}
 }
 
@@ -741,11 +756,11 @@ function searchAdvanced(){
  * Carga el paginador
  */
 function loadPaginatorPeople(maxPage){
-	$('#Contrato-paginationPeople').jqPagination('option', 'max_page', maxPage);
+	$('#'+SECCION+'-paginationPeople').jqPagination('option', 'max_page', maxPage);
 }
 
 function getInfoPeople(id){
-	showLoading('#Contrato-section-table-people',true);
+	showLoading('#'+SECCION+'-section-table-people',true);
 	$.ajax({
    		type: "POST",
        	url: "people/getPeopleById",
@@ -756,35 +771,35 @@ function getInfoPeople(id){
 		success: function(data){
 			console.table(data);
 			var item = data.item[0];
-			$('#Contrato-textName').val(item.Name.toUpperCase());
-			$('#Contrato-textMiddleName').val(item.SecondName);
-			$('#Contrato-textLastName').val(item.LName);
-			$('#Contrato-TextSecondLastName').val(item.LName2);
+			$('#'+SECCION+'-textName').val(item.Name.toUpperCase());
+			$('#'+SECCION+'-textMiddleName').val(item.SecondName);
+			$('#'+SECCION+'-textLastName').val(item.LName);
+			$('#'+SECCION+'-TextSecondLastName').val(item.LName2);
 			
 			if(item.fkGenderId == "2"){
-				$('#Contrato-RadioMale').prop("checked", true);
+				$('#'+SECCION+'-RadioMale').prop("checked", true);
 			}else if(item.fkGenderId == "1"){
-				$("#Contrato-RadioFemale").prop("checked", true);
+				$("#"+SECCION+"-RadioFemale").prop("checked", true);
 			}
-			$('#Contrato-textBirthdate').val(item.birthdate);
-			$('#Contrato-textWeddingAnniversary').val(item.Anniversary);
-			$('#Contrato-textNationality').val(item.Nationality.trim())
-			$('#Contrato-textQualification').val(item.Qualification.trim());
-			$('#Contrato-textStreet').val(item.Street1.trim());
-			$('#Contrato-textColony').val(item.Street2.trim());
-			$('#Contrato-textCity').val(item.City.trim());
-			$('#Contrato-textPostalCode').val(item.ZipCode.trim());
+			$('#'+SECCION+'-textBirthdate').val(item.birthdate);
+			$('#'+SECCION+'-textWeddingAnniversary').val(item.Anniversary);
+			$('#'+SECCION+'-textNationality').val(item.Nationality.trim())
+			$('#'+SECCION+'-textQualification').val(item.Qualification.trim());
+			$('#'+SECCION+'-textStreet').val(item.Street1.trim());
+			$('#'+SECCION+'-textColony').val(item.Street2.trim());
+			$('#'+SECCION+'-textCity').val(item.City.trim());
+			$('#'+SECCION+'-textPostalCode').val(item.ZipCode.trim());
 			if(item.pkCountryId != null || item.pkCountryId == ""){
 				$("select#textCountry").val(item.pkCountryId);
 			}else{
 				$("select#textCountry").val(0);
 			}
-			$('#Contrato-textState').empty();
-			$('#Contrato-textState').append('<option value="0" code="0">Select your state</option>');
+			$('#'+SECCION+'-textState').empty();
+			$('#'+SECCION+'-textState').append('<option value="0" code="0">Select your state</option>');
 			if(data.states.length > 0){
 				for(i=0;i<data.states.length;i++){
 					var state = data.states[i];
-					$('#Contrato-textState').append('<option value="' + state.pkStateId + '" code="' + state.StateCode + '">' + state.StateDesc + '</option>');
+					$('#'+SECCION+'-textState').append('<option value="' + state.pkStateId + '" code="' + state.StateCode + '">' + state.StateDesc + '</option>');
 				}
 			}
 			if(item.pkStateId != null || item.pkStateId == ""){
@@ -793,44 +808,44 @@ function getInfoPeople(id){
 				$("select#textState").val(0);
 			}
 			
-			$('#Contrato-textPhone1').val(item.phone1.trim());
-			$('#Contrato-textPhone2').val(item.phone2.trim());
-			$('#Contrato-textPhone3').val(item.phone3.trim());
-			$('#Contrato-textEmail1').val(item.email1.trim());
-			$('#Contrato-textEmail2').val(item.email2.trim());
-			$("#Contrato-textPhone1").mask("(999) 999-9999");
-			$("#Contrato-textPhone2").mask("(999) 999-9999");
-			$("#Contrato-textPhone3").mask("(999) 999-9999");
-			$('#Contrato-textTypeSeller').empty();
-			$('#Contrato-textTypeSeller').append('<option value="0" code="0">Select a type of seller</option>');
+			$('#'+SECCION+'-textPhone1').val(item.phone1.trim());
+			$('#'+SECCION+'-textPhone2').val(item.phone2.trim());
+			$('#'+SECCION+'-textPhone3').val(item.phone3.trim());
+			$('#'+SECCION+'-textEmail1').val(item.email1.trim());
+			$('#'+SECCION+'-textEmail2').val(item.email2.trim());
+			$("#"+SECCION+"-textPhone1").mask("(999) 999-9999");
+			$("#"+SECCION+"-textPhone2").mask("(999) 999-9999");
+			$("#"+SECCION+"-textPhone3").mask("(999) 999-9999");
+			$('#'+SECCION+'-textTypeSeller').empty();
+			$('#'+SECCION+'-textTypeSeller').append('<option value="0" code="0">Select a type of seller</option>');
 			for(i=0;i<data.peopleType.length;i++){
 				var peopleType = data.peopleType[i];
-				$('#Contrato-textTypeSeller').append('<option value="' + peopleType.pkPeopleTypeId + '" code="' + peopleType.PeopleTypeCode + '">' + peopleType.PeopleTypeDesc + '</option>');
+				$('#'+SECCION+'-textTypeSeller').append('<option value="' + peopleType.pkPeopleTypeId + '" code="' + peopleType.PeopleTypeCode + '">' + peopleType.PeopleTypeDesc + '</option>');
 			}
 			
 			if(item.pkEmployeeId > 0){
-				$("#Contrato-checkPeopleEmployee").prop( "checked", true );
-				$('#Contrato-textCodeCollaborator').val(item.EmployeeCode.trim());
-				$('#Contrato-textInitials').val(item.InitialsEmplo.trim());
-				$('#Contrato-textCodeNumber').val(item.NumericCode);
-				$('#Contrato-textTypeSeller').val(item.fkPeopleTypeId);
-				$('#Contrato-textRoster').val(0);
-				$('#Contrato-textTypeSeller').val(item.fkPeopleTypeId);
-				$('#Contrato-textRoster').val(item.fkVendorTypeId);
+				$("#"+SECCION+"-checkPeopleEmployee").prop( "checked", true );
+				$('#'+SECCION+'-textCodeCollaborator').val(item.EmployeeCode.trim());
+				$('#'+SECCION+'-textInitials').val(item.InitialsEmplo.trim());
+				$('#'+SECCION+'-textCodeNumber').val(item.NumericCode);
+				$('#'+SECCION+'-textTypeSeller').val(item.fkPeopleTypeId);
+				$('#'+SECCION+'-textRoster').val(0);
+				$('#'+SECCION+'-textTypeSeller').val(item.fkPeopleTypeId);
+				$('#'+SECCION+'-textRoster').val(item.fkVendorTypeId);
 			}
 			
-			$("#Contrato-idPeople").data("pkPeopleId",item.pkPeopleId);
-			$("#Contrato-idPeople").data("pkEmployeeId",item.pkEmployeeId);
-			$('#Contrato-imgCloseModal').off();
+			$("#"+SECCION+"-idPeople").data("pkPeopleId",item.pkPeopleId);
+			$("#"+SECCION+"-idPeople").data("pkEmployeeId",item.pkEmployeeId);
+			$('#'+SECCION+'-imgCloseModal').off();
 			$('.imgCloseModal').on('click', function() {  hideModal(); });
 			$('body, html').animate({
 				scrollTop: '0px'
 			}, 0);
 			dialogUser.dialog( 'open' )
-			showLoading('#Contrato-section-table-people',false);
+			showLoading('#'+SECCION+'-section-table-people',false);
 		},
 		error: function(error){
-			showLoading('#Contrato-section-table-people',false);
+			showLoading('#'+SECCION+'-section-table-people',false);
 			alertify.error('Error inserting data, try again later.');
 			//showAlert(true,"Error in the search, try again later",'button',showAlert);
 		}
@@ -858,17 +873,17 @@ function convertToDateFormat( dd, mm, yy ){
  */
 function changeTabsModalPeople(screen){
 	//asigna la clase active
-	$('#Contrato-tabsModalPeople .tabs .tabs-title').removeClass('active');
-	$('#Contrato-tabsModalPeople .tabs li[attr-screen=' + screen + ']').addClass('active');
+	$('#'+SECCION+'-tabsModalPeople .tabs .tabs-title').removeClass('active');
+	$('#'+SECCION+'-tabsModalPeople .tabs li[attr-screen=' + screen + ']').addClass('active');
 	//muestra la pantalla selecionada
-	$('#Contrato-contentModalPeople .tab-modal').hide();
-	$('#Contrato-' + screen).show();
-	if($("#Contrato-idPeople").data("pkPeopleId") != undefined ){
-		if(screen == "tab-PReservaciones"){
+	$('#'+SECCION+'-contentModalPeople .tab-modal').hide();
+	$('#'+SECCION+'-' + screen).show();
+	if($("#"+SECCION+"-idPeople").data("pkPeopleId") != undefined ){
+		if(screen == SECCION+"-tab-PReservaciones"){
 			getInfoTabsPeople(screen, "people/getReservationsByPeople");
-		}else if(screen == "tab-PContratos"){
+		}else if(screen == SECCION+"-tab-PContratos"){
 			getInfoTabsPeople(screen, "people/getContractByPeople");
-		}else if(screen == "tab-PEmpleados"){
+		}else if(screen == SECCION+"-tab-PEmpleados"){
 			//getInfoTabsPeople(screen, "people/getEmployeeByPeople");
 		}
 	}
@@ -882,62 +897,62 @@ function changeTabsModalPeople(screen){
 function getInfoTabsPeople(screen, url){
 	
 	var search = "";
-	if(screen == "tab-PReservaciones"){
+	if(screen == SECCION+"-tab-PReservaciones"){
 		deleteTableInv("tableReservationsPeople");
-		showLoading('#Contrato-tab-PReservaciones',true);
-		$('#Contrato-tableReservationsPeople tbody').empty();
-		//noResults('#Contrato-' + screen,false);
+		showLoading('#'+SECCION+'-tab-PReservaciones',true);
+		$('#'+SECCION+'-tableReservationsPeople tbody').empty();
+		//noResults('#'+SECCION+'-' + screen,false);
 	}else{
-		deleteTableInv("tableContractPeople");
-		showLoading('#Contrato-tab-PContratos',true);
-		$('#Contrato-tableContractPeople tbody').empty();
-		search = $('#Contrato-textSearchContractPeople').val();
-		//noResults('#Contrato-' + screen,false);
+		deleteTableInv(SECCION+"-tableContractPeople");
+		showLoading('#'+SECCION+'-tab-PContratos',true);
+		$('#'+SECCION+'-tableContractPeople tbody').empty();
+		search = $('#'+SECCION+'-textSearchContractPeople').val();
+		//noResults('#'+SECCION+'-' + screen,false);
 	}
 	$.ajax({
    		type: "POST",
        	url: url,
 		dataType:'json',
 		data: {
-			id:$("#Contrato-idPeople").data("pkPeopleId"),
+			id:$("#"+SECCION+"-idPeople").data("pkPeopleId"),
 			search:search
 		},
 		success: function(data){
-			if(screen == "tab-PReservaciones"){
+			if(screen == SECCION+"-tab-PReservaciones"){
 				if(data.items.length > 0){
 					drawTable2(data.items,"tableReservationsPeople",false,"tabla");
 				}else{
-					//$('#Contrato-tableReservationsPeople tbody').empty();
-					noResultsPeople("tab-PReservaciones", "tableReservationsPeople", "No results found");
+					//$('#'+SECCION+'-tableReservationsPeople tbody').empty();
+					noResultsPeople(SECCION+"-tab-PReservaciones", "tableReservationsPeople", "No results found");
 				}
 				
-			}else if(screen == "tab-PContratos"){
+			}else if(screen == SECCION+"-tab-PContratos"){
 				if(data.items.length > 0){
-					drawTable2(data.items,"tableContractPeople",false,"tabla");
+					drawTable2(data.items,SECCION+"-tableContractPeople",false,"tabla");
 				}else{
-					noResultsPeople("divTableContractPeople", "tableContractPeople", "No results found");
+					noResultsPeople(SECCION+"-divTableContractPeople", SECCION+"-tableContractPeople", "No results found");
 				}
-			}else if(screen == "tab-PEmpleados"){
-				$('#Contrato-textTypeSeller').empty();
-				$('#Contrato-textTypeSeller').append('<option value="0" code="0">Select a type of seller</option>');
+			}else if(screen == SECCION+"-tab-PEmpleados"){
+				$('#'+SECCION+'-textTypeSeller').empty();
+				$('#'+SECCION+'-textTypeSeller').append('<option value="0" code="0">Select a type of seller</option>');
 				for(i=0;i<data.items.length;i++){
 					var item = data.items[i];
-					$('#Contrato-textTypeSeller').append('<option value="' + item.pkPeopleTypeId + '" code="' + item.PeopleTypeCode + '">' + item.PeopleTypeDesc + '</option>');
+					$('#'+SECCION+'-textTypeSeller').append('<option value="' + item.pkPeopleTypeId + '" code="' + item.PeopleTypeCode + '">' + item.PeopleTypeDesc + '</option>');
 				}
 			}
-			if(screen == "tab-PReservaciones"){
-				showLoading('#Contrato-tab-PReservaciones',false);
+			if(screen == SECCION+"-tab-PReservaciones"){
+				showLoading('#'+SECCION+'-tab-PReservaciones',false);
 			}else{
-				showLoading('#Contrato-tab-PContratos',false);
+				showLoading('#'+SECCION+'-tab-PContratos',false);
 			}
 		},
 		error: function(error){
 			if(screen == "tab-PReservaciones"){
-				showLoading('#Contrato-tab-PReservaciones',false);
-				noResultsPeople("tab-PReservaciones", "tableReservationsPeople", "Try again");
+				showLoading('#'+SECCION+'-tab-PReservaciones',false);
+				noResultsPeople(SECCION+"-tab-PReservaciones", "tableReservationsPeople", "Try again");
 			}else{
-				showLoading('#Contrato-tab-PContratos',false);
-				noResultsPeople("divTableContractPeople", "tableReservationsPeople", "Try again");
+				showLoading('#'+SECCION+'-tab-PContratos',false);
+				noResultsPeople(SECCION+"-divTableContractPeople", "tableReservationsPeople", "Try again");
 			}
 			//showAlert(true,"Error in the search, try again later.",'button',showAlert);
 		}
@@ -948,41 +963,41 @@ function getInfoTabsPeople(screen, url){
  * limpia el campo de busqueda de contactos-persona
  */
 function CleandFieldSearchPContract(){
-	$('#Contrato-textSearchContractPeople').val("");
+	$('#'+SECCION+'-textSearchContractPeople').val("");
 }
 
 /**
  * Clona los datos del usuario selecionado
  */
 function clonePeople(){
-	$("#Contrato-idPeople").removeData("pkPeopleId");
-	$("#Contrato-idPeople").removeData("pkEmployeeId");
-	$('#Contrato-textName').val("");
-	//$('#Contrato-textLastName').val("");
-	$('#Contrato-textMiddleName').val("");
-	$('#Contrato-TextSecondLastName').val("");
-	$('#Contrato-textNationality').val(0);
-	$('#Contrato-textQualification').val(0);
+	$("#"+SECCION+"-idPeople").removeData("pkPeopleId");
+	$("#"+SECCION+"-idPeople").removeData("pkEmployeeId");
+	$('#'+SECCION+'-textName').val("");
+	//$('#'+SECCION+'-textLastName').val("");
+	$('#'+SECCION+'-textMiddleName').val("");
+	$('#'+SECCION+'-TextSecondLastName').val("");
+	$('#'+SECCION+'-textNationality').val(0);
+	$('#'+SECCION+'-textQualification').val(0);
 	$('.RadioGender').prop('checked', false)
-	$('#Contrato-textBirthdate').val("");
-	$('#Contrato-textWeddingAnniversary').val("");
+	$('#'+SECCION+'-textBirthdate').val("");
+	$('#'+SECCION+'-textWeddingAnniversary').val("");
 	
-	$('#Contrato-textEmail1').val("");
-	$('#Contrato-textEmail2').val("");
+	$('#'+SECCION+'-textEmail1').val("");
+	$('#'+SECCION+'-textEmail2').val("");
 	
-	$('#Contrato-textCodeCollaborator').val("");
-	$('#Contrato-textInitials').val("");
-	$('#Contrato-textCodeNumber').val("");
-	$('#Contrato-textTypeSeller').val(0);
-	$('#Contrato-textRoster').val(0);
-	$('#Contrato-checkPeopleEmployee').prop( "checked", false );
+	$('#'+SECCION+'-textCodeCollaborator').val("");
+	$('#'+SECCION+'-textInitials').val("");
+	$('#'+SECCION+'-textCodeNumber').val("");
+	$('#'+SECCION+'-textTypeSeller').val(0);
+	$('#'+SECCION+'-textRoster').val(0);
+	$('#'+SECCION+'-checkPeopleEmployee').prop( "checked", false );
 	
-	$('#Contrato-tableReservationsPeople tbody').empty();
-	$('#Contrato-tableContractPeople tbody').empty();
+	$('#'+SECCION+'-tableReservationsPeople tbody').empty();
+	$('#'+SECCION+'-tableContractPeople tbody').empty();
 	
-	$('#Contrato-textSearchContractPeople').val("");
+	$('#'+SECCION+'-textSearchContractPeople').val("");
 	
-	changeTabsModalPeople("tab-PGeneral")
+	changeTabsModalPeople(SECCION+"-tab-PGeneral")
 	
 	validateUserFields();
 	
@@ -994,9 +1009,9 @@ function clonePeople(){
 */
 function changeState(selector){
 	var idCountry = $(selector).val();
-	$('#Contrato-textState').empty();
-	$('#Contrato-textState').append('<option value="0" code="0">Select your state</option>');
-	$('#Contrato-textState').attr('disabled',true);
+	$('#'+SECCION+'-textState').empty();
+	$('#'+SECCION+'-textState').append('<option value="0" code="0">Select your state</option>');
+	$('#'+SECCION+'-textState').attr('disabled',true);
 	$.ajax({
    		type: "POST",
        	url: "people/getStateByCountry",
@@ -1008,18 +1023,18 @@ function changeState(selector){
 			if(data.success == true){
 				for(i=0;i<data.items.length;i++){
 					var item = data.items[i];
-					$('#Contrato-textState').append('<option value="' + item.pkStateId + '" code="' + item.StateCode + '">' + item.StateDesc + '</option>');
+					$('#'+SECCION+'-textState').append('<option value="' + item.pkStateId + '" code="' + item.StateCode + '">' + item.StateDesc + '</option>');
 				}
 			}else{
-				$('#Contrato-textState').empty();
-				$('#Contrato-textState').append('<option value="0" code="0">' + data.message + '</option>');
+				$('#'+SECCION+'-textState').empty();
+				$('#'+SECCION+'-textState').append('<option value="0" code="0">' + data.message + '</option>');
 			}
-			$('#Contrato-textState').attr('disabled',false);
+			$('#'+SECCION+'-textState').attr('disabled',false);
 		},
 		error: function(error){
-			$('#Contrato-textState').empty();
-			$('#Contrato-textState').append('<option value="0" code="0">Select your state</option>');
-			$('#Contrato-textState').attr('false',false);
+			$('#'+SECCION+'-textState').empty();
+			$('#'+SECCION+'-textState').append('<option value="0" code="0">Select your state</option>');
+			$('#'+SECCION+'-textState').attr('false',false);
 			alertify.error('Error inserting data, try again later.');
 			//showAlert(true,"Error in the search, try again later.",'button',showAlert);
 		}
@@ -1028,38 +1043,38 @@ function changeState(selector){
 
 function noResultsPeople(section, table, message){
 	alertify.error(message);
-	//noResults('#Contrato-' + section,true);
+	//noResults('#'+SECCION+'-' + section,true);
 	deleteTableInv(table);
 }
 
 function deleteTableInv(table){
-	if ( $.fn.dataTable.isDataTable( '#Contrato-' + table ) ){
-		var tabla = $( '#Contrato-' + table ).DataTable();
+	if ( $.fn.dataTable.isDataTable( '#'+SECCION+'-' + table ) ){
+		var tabla = $( '#'+SECCION+'-' + table ).DataTable();
 		tabla.destroy();
 	}
-	$('#Contrato-' + table).hide();
+	$('#'+SECCION+'-' + table).hide();
 }
 
 function tesCreatePeople(){
-	$("#Contrato-textName").val(randomNames());
-	$("#Contrato-textMiddleName").val(randomNames());
-	$("#Contrato-textLastName").val(ramdomLastName());
-	$("#Contrato-TextSecondLastName").val(ramdomLastName());
+	$("#"+SECCION+"-textName").val(randomNames());
+	$("#"+SECCION+"-textMiddleName").val(randomNames());
+	$("#"+SECCION+"-textLastName").val(ramdomLastName());
+	$("#"+SECCION+"-TextSecondLastName").val(ramdomLastName());
 	setRandomGender();
-	$("#Contrato-textWeddingAnniversary").val(randomDate);
-	$("#Contrato-textBirthdate").val(randomDate);
-	$("#Contrato-textNationality").val("Mexican");
-	$("#Contrato-textQualification").val(getRandomInt(1,4));
-	$("#Contrato-textStreet").val(makeRandonNames(7));
-	$("#Contrato-textColony").val(makeRandonNames(7))
-	$("#Contrato-textCountry").val(41);
-	$("#Contrato-textState").val(957);
-	$("#Contrato-textCity").val("Cancun");
-	$("#Contrato-textPostalCode").val(getRandomNumber(5));
-	$("#Contrato-textPhone1").val(getRandomNumber(10));
-	$("#Contrato-textPhone1").val(getRandomNumber(10));
-	$("#Contrato-textPhone2").val(getRandomNumber(10));
-	$("#Contrato-textEmail1").val(getRandomEmail());
+	$("#"+SECCION+"-textWeddingAnniversary").val(randomDate);
+	$("#"+SECCION+"-textBirthdate").val(randomDate);
+	$("#"+SECCION+"-textNationality").val("Mexican");
+	$("#"+SECCION+"-textQualification").val(getRandomInt(1,4));
+	$("#"+SECCION+"-textStreet").val(makeRandonNames(7));
+	$("#"+SECCION+"-textColony").val(makeRandonNames(7))
+	$("#"+SECCION+"-textCountry").val(41);
+	$("#"+SECCION+"-textState").val(957);
+	$("#"+SECCION+"-textCity").val("Cancun");
+	$("#"+SECCION+"-textPostalCode").val(getRandomNumber(5));
+	$("#"+SECCION+"-textPhone1").val(getRandomNumber(10));
+	$("#"+SECCION+"-textPhone1").val(getRandomNumber(10));
+	$("#"+SECCION+"-textPhone2").val(getRandomNumber(10));
+	$("#"+SECCION+"-textEmail1").val(getRandomEmail());
 }
 
 function randomNames(){
@@ -1085,9 +1100,9 @@ function setRandomGender(){
 	var posicion = getRandomInt(0,1);
 	console.log(posicion);
 	if (posicion == 0) {
-		$("#Contrato-RadioFemale").prop( "checked", true );
+		$("#"+SECCION+"-RadioFemale").prop( "checked", true );
 	}else{
-		$("#Contrato-RadioMale").prop( "checked", true );
+		$("#"+SECCION+"-RadioMale").prop( "checked", true );
 	}
 }
 

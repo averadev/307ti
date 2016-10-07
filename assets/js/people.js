@@ -70,33 +70,24 @@ $(document).ready(function(){
 	
 	dialogUser = createModalDialog();
 	activarPAG();
-/*	$('#paginationPeople').jqPagination({
-		max_page: 1,
-		paged: function(page) {
-			if($('#paginationPeople').val() == true){
-				$('#paginationPeople').val(false);
-			}
-			else if ($('#paginationPeople').val() == false) {
-				searchPeople(page);
-			}
-
-		}
-	});*/
 	
 	expandBox("section-people","box-people-relation")
 });
 
 function activarPAG(){
+
 		$('#paginationPeople').jqPagination({
 		max_page: 1,
 		paged: function(page) {
-			if($('#paginationPeople').val() == true){
-				$('#paginationPeople').val(false);
-			}
-			else if ($('#paginationPeople').val() == false) {
-				searchPeople(page);
-			}
+			var PI = $('#paginationPeopleInput').val();
 
+			if(PI == "true"){
+				$('#paginationPeopleInput').val(false);
+			}
+			else if (PI == "false") {
+				searchPeople(page);
+				$('#paginationPeopleInput').val(true);
+			}
 		}
 	});
 }
@@ -829,11 +820,11 @@ function searchPeople(page){
 					total = total - 1;		
 				}
 				total = total + 1
-				if(page == 0){
-					$('#paginationPeople').val(true);
-					loadPaginatorPeople(total);
-				}
-				$('#paginationPeople').val(true);
+				// if(page == 0){
+				// 	$('#paginationPeopleInput').val(true);
+				// 	loadPaginatorPeople(total);
+				// }
+				$('#paginationPeopleInput').val(true);
 				loadPaginatorPeople(total);
 				drawTable2(data.items,"tablePeople","showModal","Edit");
 				
@@ -883,6 +874,12 @@ function searchAdvanced(){
  */
 function loadPaginatorPeople(maxPage){
 	$('#paginationPeople').jqPagination('option', 'max_page', maxPage);
+	// var paginador = $('#paginationPeople').jqPagination({
+	// 	max_page: maxPage,
+	// 	paged: function(page) {
+	// 		searchPeople(page);
+	// 	}
+	// });
 }
 
 /**

@@ -20,21 +20,9 @@ $(document).ready(function(){
 	});
 	$(document).off( 'click', '#btnAddPeople');
 	$(document).on( 'click', '#btnAddPeople', function () {
-		if (typeof unidadResDialog !== 'undefined') {
-		if (unidadResDialog!=null) {
-			unidadResDialog.dialog( "destroy" );
-		}
-	}
-	if (typeof peopleDialog !== 'undefined') {
 		if (peopleDialog != null) {
 			peopleDialog.dialog( "destroy" );
 		}
-	}
-	if (typeof dialogUser !== 'undefined') {
-		if (dialogUser!=null) {
-		dialogUser.dialog( "destroy" );
-	}
-	}
 		peopleDialog = addPeopleDialog();
 		peopleDialog.dialog( "open" );
 	});
@@ -453,10 +441,10 @@ function addPeopleDialog() {
 		open : function (event){
 			if ($(div).is(':empty')) {
 				showLoading(div, true);
-				$(this).load ("people/index" , function(){
+				$(this).load ("people/indexContratos" , function(){
 		    		showLoading(div, false);
 		    		$("#dialog-User").hide();
-	            	selectTable("tablePeople");
+	            	selectTable("Contrato-tablePeople");
 	    		});
 			}
 		},
@@ -886,7 +874,7 @@ function selectAllPeople(){
 	var personasSeleccionaDas = getArrayValuesColumnTable("tablePeopleSelected", 1);
 	var personas = [];
 
-	var array = $("#tablePeople .yellow");
+	var array = $("#"+SECCION+"-tablePeople .yellow");
 	for (var i = 0; i < array.length; i++) {
 		var fullArray = $(array[i]).find("td");
 		if (personasSeleccionaDas.length>0) {

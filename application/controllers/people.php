@@ -26,6 +26,14 @@ class People extends CI_Controller {
 			$data['country'] = $this->people_db->getCountry();
 			$data['nationality'] = $this->people_db->getNationality();
 			$data['qualifications'] = $this->people_db->getQualifications();
+			$data['SECCION'] = 'Contrato';
+	        $this->load->view('vwPeopleContratos',$data);
+		}
+	public function indexReservations(){
+			$data['country'] = $this->people_db->getCountry();
+			$data['nationality'] = $this->people_db->getNationality();
+			$data['qualifications'] = $this->people_db->getQualifications();
+			$data['SECCION'] = 'Reservacion';
 	        $this->load->view('vwPeopleContratos',$data);
 		}
 	public function peopleDetailView(){
@@ -529,7 +537,154 @@ class People extends CI_Controller {
 		}
 		echo json_encode(array('items' => $arrayData, 'total' => $total));
 	}
-	
+
+	public function getPeopleBySearch2(){
+		ini_set('max_execution_time', 60);
+		$months = array('', 'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+		$peopleId = $_POST['peopleId'];
+		$lastName = $_POST['lastName'];
+		$name = $_POST['name'];
+		$advanced = $_POST['advanced'];
+		if($advanced == "initials"){
+			$advanced = "tblPeople.Initials";
+		}else if($advanced == "EmailDesc"){
+			$advanced = "tblEmail.EmailDesc";
+		}else if($advanced == "Folio"){
+			$advanced = "tblRes.Folio";
+		}else if($advanced == "ResCode"){
+			$advanced = "tblRes.ResCode";
+		}else if($advanced == "FloorPlanDesc"){
+			$advanced = "tblFloorPlan.FloorPlanDesc";
+		}
+		$page = $_POST['page'];
+		if($_POST['page'] == 0 || $_POST['page'] == "0"){
+			$page = 1;
+		}
+		$page = ($page - 1) * 25;
+		$data = $this->people_db->getPeople2($_POST['search'],$peopleId,$lastName,$name,$advanced,$page,$_POST['typePeople']);
+		$total = count($data);
+		$data = array_slice($data, $page, 25);
+		if($_POST['page'] == 0 || $_POST['page'] == "0"){
+			//$total = $this->people_db->getTotalPeople($_POST['search'],$peopleId,$lastName,$name);
+		}
+		
+		$arrayData = array();
+		$cont = 0;
+		
+		foreach($data as $item){
+			
+			$arrayData[$cont]['ID'] = $item->ID;
+			$arrayData[$cont]['Name'] = $item->Name;
+			if(is_null(!$item->SecondName) or $item->SecondName != "                         " ){
+				$arrayData[$cont]['Name'] = $arrayData[$cont]['Name'] . " " . $item->SecondName;
+			}
+			$arrayData[$cont]['LastName'] = $item->LName;
+			if(is_null(!$item->LName2) or $item->LName2 != "                         " ){
+				$arrayData[$cont]['LastName'] = $arrayData[$cont]['LastName'] . " " . $item->LName2;
+			}
+			if($item->fkGenderId == "2"){
+				$arrayData[$cont]['Gender'] = "Male";
+			}else if($item->fkGenderId == "1"){
+				$arrayData[$cont]['Gender'] = "Famale";
+			}else{
+				$arrayData[$cont]['Gender'] = "unknown";
+			}
+			
+			$arrayData[$cont]['Birthdate'] = $item->BirthDayDay . " " . $months[$item->BirthDayMonth] . " " . $item->BirthDayYear;
+			$arrayData[$cont]['Anniversary'] = $item->Anniversary;
+			$arrayData[$cont]['Nationality'] = $item->Nationality;
+			$arrayData[$cont]['Qualification'] = $item->Qualification;
+			$arrayData[$cont]['Street'] = $item->Street1;
+			$arrayData[$cont]['Street2'] = $item->Street2;
+			$arrayData[$cont]['City'] = $item->City;
+			$arrayData[$cont]['State'] = $item->StateDesc;
+			$arrayData[$cont]['Country'] = $item->CountryDesc;
+			$arrayData[$cont]['ZipCode'] = $item->ZipCode;
+			
+/*			if(is_null($item->Anniversary)){
+				$arrayData[$cont]['Anniversary'] = "";
+			}else{
+				$arrayData[$cont]['Anniversary'] = $item->Anniversary;
+			}
+			
+			if(is_null($item->Nationality)){
+				$arrayData[$cont]['Nationality'] = "";
+			}else{
+				$arrayData[$cont]['Nationality'] = $item->Nationality;
+			}
+			
+			if(is_null($item->Qualification)){
+				$arrayData[$cont]['Qualification'] = "";
+			}else{
+				$arrayData[$cont]['Qualification'] = $item->Qualification;
+			}
+			
+			if(is_null($item->Street1)){
+				$arrayData[$cont]['Street'] = "";
+			}else{
+				$arrayData[$cont]['Street'] = $item->Street1;
+			}
+			
+			if(is_null($item->Street2)){
+				$arrayData[$cont]['Street2'] = "";
+			}else{
+				$arrayData[$cont]['Street2'] = $item->Street2;
+			}
+			
+			if(is_null($item->City)){
+				$arrayData[$cont]['City'] = "";
+			}else{
+				$arrayData[$cont]['City'] = $item->City;
+			}
+			
+			if(is_null($item->StateDesc)){
+				$arrayData[$cont]['State'] = "";
+			}else{
+				$arrayData[$cont]['State'] = $item->StateDesc;
+			}
+			
+			if(is_null($item->CountryDesc)){
+				$arrayData[$cont]['Country'] = "";
+			}else{
+				$arrayData[$cont]['Country'] = $item->CountryDesc;
+			}
+			
+			if(is_null($item->ZipCode)){
+				$arrayData[$cont]['ZipCode'] = "";
+			}else{
+				$arrayData[$cont]['ZipCode'] = $item->ZipCode;
+			}*/
+			
+			$phone = $this->people_db->getPeoplePhone($item->ID);
+			
+			for($i = 0;$i<3;$i++){
+				$numPhone = "phone" . ($i + 1);
+				$phoneDesc = "";
+				$areaCode = "";
+				if(isset($phone[$i]->AreaCode)) {
+					$areaCode = $phone[$i]->AreaCode;
+				}
+				if(isset($phone[$i]->PhoneDesc)) {
+					$phoneDesc = $phone[$i]->PhoneDesc;
+				}
+				$arrayData[$cont][$numPhone] = $areaCode . $phoneDesc;
+			}
+			
+			$email = $this->people_db->getPeopleEmail($item->ID);
+			for($i = 0;$i<2;$i++){
+				$numEmail = "email" . ($i + 1);
+				$emailDesc = "";
+				if(isset($email[$i]->EmailDesc)) {
+					$emailDesc = $email[$i]->EmailDesc;
+				}
+				$arrayData[$cont][$numEmail] = $emailDesc;
+			}
+			
+			$cont = $cont + 1;
+			
+		}
+		echo json_encode(array('items' => $arrayData, 'total' => $total));
+	}	
 	/**
 	* obtiene la informacion de una persona por identificador
 	**/
@@ -723,7 +878,22 @@ class People extends CI_Controller {
 		$data['country'] = $this->people_db->getCountry();
 		$data['nationality'] = $this->people_db->getNationality();
 		$data['qualifications'] = $this->people_db->getQualifications();
+		//$data['SECCION'] = '';
 		$this->load->view('people/peopleDialogEdit.php', $data);
+	}
+	public function ContratomodalPeople(){
+		$data['country'] = $this->people_db->getCountry();
+		$data['nationality'] = $this->people_db->getNationality();
+		$data['qualifications'] = $this->people_db->getQualifications();
+		$data['SECCION'] = 'Contrato';
+		$this->load->view('people/peopleDialogEditContrato.php', $data);
+	}
+	public function ReservacionmodalPeople(){
+		$data['country'] = $this->people_db->getCountry();
+		$data['nationality'] = $this->people_db->getNationality();
+		$data['qualifications'] = $this->people_db->getQualifications();
+		$data['SECCION'] = 'Reservacion';
+		$this->load->view('people/peopleDialogEditContrato.php', $data);
 	}
 	
 	/*

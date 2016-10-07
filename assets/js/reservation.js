@@ -837,10 +837,10 @@ function addPeopleResDialog(table){
 		open : function (event){
 			if ($(div).is(':empty')) {
 				showLoading(div, true);
-				$(this).load ("people/index" , function(){
+				$(this).load ("people/indexReservations" , function(){
 		    		showLoading(div, false);
 		    		$("#dialog-User").hide();
-	            	selectTableRes("tablePeople");
+	            	selectTableRes(SECCION+"-tablePeople");
 	    		});
 			}
 		},
@@ -918,7 +918,7 @@ function selectAllPeopleRes(table){
 	var personasSeleccionaDas = getArrayValuesColumnTableRes("tablePeopleResSelected", 1);
 	var personas = [];
 
-	var array = $("#tablePeople .yellow");
+	var array = $("#"+SECCION+"-tablePeople .yellow");
 	for (var i = 0; i < array.length; i++) {
 		var fullArray = $(array[i]).find("td");
 		if (personasSeleccionaDas.length>0) {
