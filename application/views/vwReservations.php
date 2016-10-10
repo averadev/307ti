@@ -43,10 +43,9 @@
 						</fieldset>
 					</div>
 					
-					<div class="small-12 medium-12 large-12 columns">
+					<!--<div class="small-12 medium-12 large-12 columns">
 						<fieldset class="large-12 columns fieldsetFilter">
-						<!--<legend><input id="busquedaAvanazada" type="checkbox"></legend>-->
-						<!--<label for="busquedaAvanazada">Advanced search</label>-->
+						
 							<div class="rdoField">
 								<input type="checkbox" id="advancedSearchRes" class="checkFilter">
 								<label for="advancedSearchRes">Advanced search</label>
@@ -64,13 +63,10 @@
 									<input type="radio" name="filtro_reservations" value="emailRes" id="emailRes" />
 									<label for="emailRes">Email</label>
 								</div>
-								<!--<div class="rdoField">
-									<input type="radio" name="filtro_reservations" value="contratoRes" id="contratoRes">
-									<label for="contratoRes">Contract ID</label>
-								</div>-->
+								
 							</div>
 						</fieldset>
-					</div>
+					</div>-->
 					
 					<div class="small-12 medium-12 large-12 columns">
 						<fieldset class="large-12 columns fieldsetFilter">
@@ -91,12 +87,85 @@
 										</div>
 									</label>
 								</div>
+								
+								<!-- Occ type Group -->
+								<div class="small-12 large-3 columns">
+									<label id="alertTypeGroupRes" for="OccTypeGroupRes" class="text-left">Occ Type Group
+										<div class="caja" >
+											<select id="OccTypeGroupRes" class="txtSearch input-group-field round">
+												<option value="">choose an option</option>
+												<?php
+												foreach($occTypeGroup as $item){
+													?>
+													<option value="<?php echo $item->ID; ?>"><?php echo $item->OccTypeGroupDesc; ?></option>
+													<?php
+												}
+												?>
+											</select>
+										</div>
+									</label>
+								</div>
+								<!-- Past Due Days -->
+								<div class="small-12 large-3 columns">
+									<label id="alertOccTypeRes" for="OccTypeRes" class="text-left">Occ type
+										<div class="caja" >
+											<select id="OccTypeRes" class="txtSearch input-group-field round">
+												<option value="">choose an option</option>
+											</select>
+										</div>
+									</label>
+								</div>
+								
+							</div>
+						</fieldset>
+					</div>
+					
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row">
+								<!-- Status -->
+								<div class="small-12 large-3 columns">
+									<label id="alertStatusRes" for="statusRes" class="text-left">Status
+										<div class="caja" >
+											<select id="statusRes" class="txtSearch input-group-field round">
+												<option value="">choose an option</option>
+												<?php
+												foreach($status as $item){
+													?>
+													<option value="<?php echo $item->ID; ?>"><?php echo $item->StatusDesc; ?></option>
+													<?php
+												}
+												?>
+											</select>
+										</div>
+									</label>
+								</div>
+								<!-- CrBy -->
+								<div class="small-12 large-3 columns">
+									<label id="alertCreateByRes" for="createByRes" class="text-left">Creation by
+										<input id="createByRes" type="text" class="round" placeholder="Creation by" name="search"  required>
+									</label>
+								</div>
+								<!-- CrDt  -->
+								<div class="medium-3 columns">
+									<label id="alertCreateDtRes" class="text-left">Creation date
+										<div class="input-group date" >
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="createDtRes" class="txtSearch input-group-field roundRight" readonly />
+										</div>
+									</label>
+								</div>
 								<div class="medium-3 columns">
 									<label id="alertDepartureFront" class="text-left">Enter the filter
 									<input id="stringRes" type="text" class="round" placeholder="Search Field" name="search"  required>
 								</div>
-								<legend class="legendSearch" style="color: white;">-</legend>
-								<div class="medium-3 columns ">
+							</div>
+						</fieldset>
+					</div>
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row">
+								<div class="medium-12 columns">
 									<a id="btnfindRes" class="btn btn-primary btn-Search">
 										<div class="label">Search</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>

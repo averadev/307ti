@@ -44,9 +44,9 @@ $(document).ready(function() {
 		}
 	});
 	
+	$('#OccTypeGroupColl').off( 'change' );
 	$('#OccTypeGroupColl').on( 'change', function(){
 		id = $(this).val();
-		//ajaxSelectRes('collection/getOccupancyTypes?id='+id,'try again', getOccupancyTypes, 'occupancySalesRes');
 		ajaxSelectColl('collection/getOccupancyTypes?id='+id,'try again', generalSelects, 'OccTypeColl');
 	});
 	

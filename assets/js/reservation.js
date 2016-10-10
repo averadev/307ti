@@ -9,7 +9,7 @@ maxHeight = screen.height - maxHeight;
 $(document).ready(function(){
 	
 	//dateField
-	$( "#startDateRes, #endDateRes" ).Zebra_DatePicker({
+	$( "#startDateRes, #endDateRes, #createDtRes" ).Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false,
 	});
@@ -353,6 +353,12 @@ $(document).on( 'click', '#btAddLinkACC', function(){
 	$(document).off( 'click', '#btnSavePeopleRes');
 	$(document).on('click', "#btnSavePeopleRes", function () {
 		savePeopleRes();
+	});
+	
+	$('#OccTypeGroupRes').off( 'change' );
+	$('#OccTypeGroupRes').on( 'change', function(){
+		id = $(this).val();
+		ajaxSelectRes('collection/getOccupancyTypes?id='+id,'try again', generalSelects, 'OccTypeRes');
 	});
 	
 	getDatailByIDRes("reservationstbody");
@@ -877,10 +883,12 @@ function getReservations(){
 	showLoading( '#table-reservations', true );
 	
     var filters = getFiltersCheckboxs('filtro_reservations');
-    var arrayDate = ["startDateRes", "endDateRes"];
+    var arrayDate = ["startDateRes", "endDateRes", "createDtRes"];
     var dates = getDates(arrayDate);
-    var arrayWords = ["stringRes"];
+    var arrayWords = ["stringRes", "createByRes"];
     var words = getWords(arrayWords);
+	var arrayOption = ["statusRes", "OccTypeGroupRes", "OccTypeRes"];
+    var options = getWords(arrayOption);
 	
 	if( dates.startDateRes == "" && dates.endDateRes == "" && words.stringRes == "" ){
 		alertify.error("Choose at least filtering field");
@@ -891,7 +899,8 @@ function getReservations(){
 			data:{
 				filters: filters,
 				dates: dates,
-				words: words
+				words: words,
+				options: options
 			},
 			type: "POST",
 			url: "reservation/getReservations",

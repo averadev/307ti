@@ -20,7 +20,9 @@ class Reservation extends CI_Controller {
     
 	public function index(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('vwReservations.php');
+			$data['occTypeGroup'] = $this->reservation_db->getOccTypeGroup();
+			$data['status'] = $this->reservation_db->getStatus();
+			$this->load->view('vwReservations.php',$data);
 		}
 	}
 	
@@ -1945,6 +1947,11 @@ private function comprubaArray($valor, $array){
 			$sql['words'] = $this->receiveWords($array['words']);
 		}else{
 			$sql['words'] = false;
+		}
+		if(isset($array['options'])){
+			$sql['options'] = $this->receiveWords($array['options']);
+		}else{
+			$sql['options'] = false;
 		}
 		return $sql;
 	}

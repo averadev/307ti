@@ -6,7 +6,27 @@ class Reservation_db extends CI_Model {
     public function __construct(){
         parent::__construct();
     }
+	
+	public function getOccTypeGroup(){
+		$this->db->select('otg.pkOccTypeGroupId as ID, otg.OccTypeGroupDesc');
+		$this->db->from('tblOccTypeGroup otg');
+		$this->db->where('otg.ynActive = ', 1);
+		return  $this->db->get()->result();
+	}
     
+	/**
+	* obtiene la lista de tblStatusType
+	**/
+	public function getStatus(){
+		$this->db->select('tblStatus.pkStatusId as ID, tblStatus.StatusDesc');
+		$this->db->from('tblStatus');
+		$this->db->join('tblStatusTypeStatus', 'tblStatusTypeStatus.fkStatusId = tblStatus.pkStatusId', 'inner');
+		$this->db->where('tblStatus.ynActive = 1');
+		$this->db->where('tblStatusTypeStatus.ynActive = 1');
+		$this->db->where('tblStatusTypeStatus.fkStatusTypeId = 2');
+		return  $this->db->get()->result();
+	}
+	
     function getReservations($filters, $id){
         $sql = "";
         $this->db->distinct();
@@ -32,6 +52,7 @@ class Reservation_db extends CI_Model {
         $this->db->join('tblEmployee em', 'em.fkPeopleId = p.pkPeopleId', 'LEFT');
         $this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId', 'LEFT');
 		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId', 'LEFT');
+		$this->db->join('tblOccTypeGroup otg', 'otg.pkOccTypeGroupId = ot.fkOccTypeGroupId');
 		$this->db->join('tblStatus ES', 'ES.pkStatusId = r.fkStatusId ', 'INNER');
 		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = ri.fkFloorPlanId');
 		$this->db->join('tblView v', 'v.pkViewId = ri.fkViewId', 'LEFT');
@@ -46,10 +67,26 @@ class Reservation_db extends CI_Model {
 		$this->db->where('rpa.ynPrimaryPeople', '1');
         if (!is_null($filters)){
             if($filters['words'] != false){
-                if ($filters['checks'] != false){
-                    $this->filterReservations($filters);
-                }
+				if( isset($filters['words']['stringRes']) ){
+					if ($filters['checks'] != false){
+						$this->filterReservations($filters);
+					}
+				}
+				if( isset($filters['words']['createByRes']) ){
+					$this->db->join('tblUser ue', 'ue.pkUserId = r.CrBy', 'inner');
+					$this->db->where( 'ue.UserLogin = ', $filters['words']['createByRes']);
+				}
             }
+			if($filters['options'] != false){
+				if( isset($filters['options']['statusRes']) ){
+					$this->db->where( 'r.fkStatusId = ', $filters['options']['statusRes']);
+				}
+				if( isset($filters['options']['OccTypeGroupRes']) && !isset($filters['options']['OccTypeRes']) ){
+					$this->db->where('otg.pkOccTypeGroupId', $filters['options']['OccTypeGroupRes']);
+				}else if( isset($filters['options']['OccTypeGroupRes']) && isset($filters['options']['OccTypeRes'] ) ){
+					$this->db->where('ot.pkOccTypeId', $filters['options']['OccTypeRes']);
+				}
+			}
             if($filters['dates'] != false){
 				//$filters['checks']['folioRes']
 				if(!isset($filters['checks']['folioRes'])){
@@ -67,6 +104,9 @@ class Reservation_db extends CI_Model {
 							$this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) = ', $fechaActual);
 						}
 					}
+				}
+				if(isset($filters['dates']['createDtRes'])){
+					$this->db->where('CONVERT(VARCHAR(11),r.CrDt,101) = ', $filters['dates']['createDtRes']);
 				}
             }
         }
