@@ -126,9 +126,9 @@
 								<!-- Status -->
 								<div class="small-12 large-3 columns">
 									<label id="alertStatusRes" for="statusRes" class="text-left">Status
-										<div class="caja" >
-											<select id="statusRes" class="txtSearch input-group-field round">
-												<option value="">choose an option</option>
+										
+											<select id="statusRes" class="input-group-field round"  multiple="multiple">
+												<!--<option value="">choose an option</option>-->
 												<?php
 												foreach($status as $item){
 													?>
@@ -137,7 +137,6 @@
 												}
 												?>
 											</select>
-										</div>
 									</label>
 								</div>
 								<!-- CrBy -->

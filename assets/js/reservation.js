@@ -2,6 +2,7 @@ var unitReservacion = [];
 var iniDateRes = null;
 var endDateRes = null;
 var msgReservation = null;
+var statusResMS;
 
 var maxHeight = screen.height * .10;
 maxHeight = screen.height - maxHeight;
@@ -15,6 +16,14 @@ $(document).ready(function(){
 	});
 	
 	$( "#startDateRes" ).val( getCurrentDate() );
+	
+	statusResMS =  $('#statusRes').multipleSelect({
+		width: '100%',
+		placeholder: "Choose an option",
+		selectAll: false,
+		onClick: function(view) {
+		},
+	});
 	
 	var addReservation = null;
 	var unidadResDialog = addUnidadResDialog( null, null, 'alta' );
