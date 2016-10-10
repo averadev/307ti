@@ -342,7 +342,7 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 					break;
 					case "section4":
 						$("#NHKL").text("Total: "+ data.items.length);
-						var option = {type:"input", input:"checkbox", title:"Change_status", name:"HKLookUpStatus", id:"Status_id"};
+						var option = {type:"input", input:"checkbox", title:"Change_status", name:"HKLookUpStatus", id:"ID"};
 						drawTable2( data.items,"tableHKLookUp","showModaFrontDesk","Edit", option );
 						paginadorFrontDesk(data.total,"paginationHKLookUp",0);
 					break;
@@ -1175,7 +1175,7 @@ function editHKStatus(filters){
 	    	});
 		},
 		autoOpen: false,
-     	height: maxHeight,
+     	height: 355,
      	width: "50%",
      	modal: true,
      	buttons: [{
@@ -1189,6 +1189,7 @@ function editHKStatus(filters){
        		"class": 'dialogModalButtonAccept',
        		click: function() {
 				getStatusUnit();
+				$(this).dialog('close');
        		}
      	}],
 		close: function() {
@@ -1275,7 +1276,7 @@ function getStatusUnit(){
 		var status = {pkUnitHKStatusId:idUnitStatus, fkHkStatusId:idStatus};
 		rowStatus.push(status);
 	});
-	saveHKStatus(rowStatus)
+	saveHKStatus(rowStatus);
 	
 }
 
@@ -1292,15 +1293,11 @@ function saveHKStatus(rowStatus){
 		success: function(data){
 			showLoading(div,false);
 			alertify.success(data);
-			chgStatusDialog.dialog( 'close' );
 			getFrontDesk("",0);
 		},
 		error: function(){
 			showLoading(div,false);
-			//showAlert(true,"Error updating data, try again later. ",'button',showAlert);
 			alertify.error('Error updating data, try again later.');
-			//msgFrontDesk.dismiss();
-			chgStatusDialog.dialog( 'close' );
 		}
     });
 }

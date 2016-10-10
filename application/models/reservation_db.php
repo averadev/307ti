@@ -39,7 +39,7 @@ class Reservation_db extends CI_Model {
 		$this->db->join('tblPeopleEmail pe', 'pe.fkPeopleId = p.pkPeopleId', 'LEFT');
 		$this->db->join('tblEmail e', 'e.pkEmail = pe.fkEmailId', 'LEFT');
         $this->db->join('tblUser US', 'r.CrBy = US.pkUserId', 'inner');
-        $this->db->join('tblUser USS', 'r.MdBy = USS.pkUserId', 'inner');
+        $this->db->join('tblUser USS', 'r.MdBy = USS.pkUserId', 'left');
 		//$this->db->where('rpa.ynPrimaryPeople', '1');
 		$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
 		$this->db->where('rpa.ynActive',1);

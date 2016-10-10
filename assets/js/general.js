@@ -367,6 +367,7 @@ function drawTable2(data, table ,funcion, cadena, option){
 			if(option.type == "input"){
 				var idOption = data[i].ID;
 				if(typeof(option.id) != "undefined"){
+					console.log(option.id);
 					var opt = option.id;
 					idOption = data[i][opt];
 				}

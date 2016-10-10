@@ -1547,7 +1547,7 @@ private function comprubaArray($valor, $array){
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
 			$id = $_GET['id'];
-			$data['contract']= $this->reservation_db->getReservations(null,$id);
+			$data['contract']= $this->reservation_db->getReservations(null, $id);
 			$data['flags'] = $this->reservation_db->selectFlags($id);
 			$peticion = [
 				"tabla" 	=> 'tblRes',
