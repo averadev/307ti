@@ -896,8 +896,9 @@ function getReservations(){
     var dates = getDates(arrayDate);
     var arrayWords = ["stringRes", "createByRes"];
     var words = getWords(arrayWords);
-	var arrayOption = ["statusRes", "OccTypeGroupRes", "OccTypeRes"];
+	var arrayOption = ["OccTypeGroupRes", "OccTypeRes"];
     var options = getWords(arrayOption);
+    options.statusRes = statusResMS.multipleSelect('getSelects');
 	
 	if( dates.startDateRes == "" && dates.endDateRes == "" && words.stringRes == "" ){
 		alertify.error("Choose at least filtering field");

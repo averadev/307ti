@@ -77,9 +77,18 @@ class Reservation_db extends CI_Model {
 					$this->db->where( 'ue.UserLogin = ', $filters['words']['createByRes']);
 				}
             }
+            $condicion = '';
 			if($filters['options'] != false){
 				if( isset($filters['options']['statusRes']) ){
-					$this->db->where( 'r.fkStatusId = ', $filters['options']['statusRes']);
+					//$this->db->where( 'r.fkStatusId = ', $filters['options']['statusRes']);
+                    for ($i=0; $i < sizeof($filters['options']['statusRes']); $i++) { 
+                        $condicion .= 'r.fkStatusId = '.$filters['options']['statusRes'][$i];
+                        if ($i+1 < sizeof($filters['options']['statusRes'])) {
+                            $condicion .=' or ';
+                        }
+                    }
+                    $fl =" ( " . $condicion . ")";
+                    $this->db->where($fl);
 				}
 				if( isset($filters['options']['OccTypeGroupRes']) && !isset($filters['options']['OccTypeRes']) ){
 					$this->db->where('otg.pkOccTypeGroupId', $filters['options']['OccTypeGroupRes']);
