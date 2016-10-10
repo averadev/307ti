@@ -1273,7 +1273,8 @@ function getStatusUnit(){
 				break;
 			}
 		});
-		var status = {pkUnitHKStatusId:idUnitStatus, fkHkStatusId:idStatus};
+		//var status = {pkUnitHKStatusId:idUnitStatus, fkHkStatusId:$("#txthkStatus1").val()};
+		var status = {pkUnitHKStatusId:idUnitStatus, fkHkStatusId:$("#txthkStatus1").val()};
 		rowStatus.push(status);
 	});
 	saveHKStatus(rowStatus);

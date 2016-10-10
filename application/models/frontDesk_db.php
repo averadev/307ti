@@ -668,7 +668,7 @@ Class frontDesk_db extends CI_MODEL
         $this->db->update($table, $data);
         return $this->db->affected_rows();
     }
-	public function updateBatch($data,$table, $field){
+	public function updateBatch($data, $table, $field){
 		$this->db->update_batch( $table, $data, $field ); 
 	}
 	
