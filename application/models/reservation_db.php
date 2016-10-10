@@ -55,7 +55,7 @@ class Reservation_db extends CI_Model {
 		$this->db->join('tblOccTypeGroup otg', 'otg.pkOccTypeGroupId = ot.fkOccTypeGroupId');
 		$this->db->join('tblStatus ES', 'ES.pkStatusId = r.fkStatusId ', 'INNER');
 		$this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = ri.fkFloorPlanId');
-		$this->db->join('tblView v', 'v.pkViewId = ri.fkViewId', 'LEFT');
+		$this->db->join('tblView v', 'v.pkViewId = ri.fkViewId and v.ynActive = 1', 'LEFT');
 		$this->db->join('tblSeason s', 's.pkSeasonId = ri.fkSeassonId', 'LEFT');
 		$this->db->join('tblPeopleEmail pe', 'pe.fkPeopleId = p.pkPeopleId', 'LEFT');
 		$this->db->join('tblEmail e', 'e.pkEmail = pe.fkEmailId', 'LEFT');
