@@ -635,13 +635,6 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		if($this->input->is_ajax_request()){
 			$field = "pkUnitHKStatusId";
 			$data = $this->frontDesk_db->updateBatch($_POST['rowStatus'],"tblUnitHKStatus",$field);
-			// for ($i=0; $i < sizeof($_POST['rowStatus']); $i++) { 
-			// 	$TRX =[
-			// 		"fkHkStatusId"	=> $_POST['rowStatus'][$i]['fkHkStatusId'],
-			// 	];
-			// 	$condicion = "pkUnitHKStatusId = " . $_POST['rowStatus'][$i]['pkUnitHKStatusId'];
-			// 	$afectados = $this->frontDesk_db->updateReturnId('tblUnitHKStatus', $TRX, $condicion);
-			// }
 			$data = "unit status save";
 			echo json_encode($data);
 		}

@@ -513,7 +513,6 @@ function getContratos(){
        	url: "contract/getContratos",
 		dataType:'json',
 		success: function(data){
-			console.log(data)
 			showLoading('#contracts',false);
 			if(data){
 				$("#NC").text("Total: "+ data.length);
@@ -2085,14 +2084,12 @@ function getUnitiesContract(id){
 }
 
 function drawTableSinHead(data, table){
-	var deleteButton = "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
     var bodyHTML = '';
     for (var i = 0; i < data.length; i++) {
         bodyHTML += "<tr>";
         for (var j in data[i]) {
             bodyHTML+="<td>" + data[i][j] + "</td>";
         };
-        //bodyHTML += deleteButton;
         bodyHTML+="</tr>";
     }
     $('#' + table).html(bodyHTML);
@@ -2110,7 +2107,7 @@ function getDatosContract(id){
 
 	    	var c = parseFloat(data['CollectionCost']);
 	    	$("#CollectionCost").text(c);
-	    	drawTableSinHead(data["peoples"], "peoplesContract");
+	    	drawTableSinHeadPeople(data["peoples"], "peoplesContract");
 	    	drawTableSinHead(data["unities"], "tableUnidadesContract");
 	    	drawTerminosVenta(data["terminosVenta"][0]);
 	    	drawTerminoFinanciamiento(data["terminosFinanciamiento"][0]);
@@ -2123,6 +2120,25 @@ function getDatosContract(id){
 	        alertify.error("Try again");
 	    }
 	});
+}
+
+function drawTableSinHeadPeople(data, table){
+    for (var i = 0; i < data.length; i++) {
+		var bodyHTML = '';
+		bodyHTML += "<tr>";
+        bodyHTML += "<td>" +data[i].ID + "</td>";
+		bodyHTML += "<td>" +data[i].Name + "</td>";
+		bodyHTML += "<td>" +data[i].lastName + "</td>";
+		bodyHTML += "<td>" +data[i].address + "</td>";
+        bodyHTML += "<td><div class='rdoField'><input class='primy' value='"+i+"'  type='radio'  name='peopleType1'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><div class='rdoField'><input disabled class='benefy' value='"+i+"' type='checkbox' name='peopleType2'><label for='folio'>&nbsp;</label></div></td>";
+        bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
+        bodyHTML+="</tr>";
+		$('#' + table).append(bodyHTML);
+		if(data[i].ynPrimaryPeople){
+			$('.primy')[i].checked = true;
+		}
+    }
 }
 
 function addFunctionality(){
@@ -2157,7 +2173,6 @@ function getAccounts( id, typeInfo, typeAcc ){
 				var sale = data["sale"];
 
 				var maintenance = data["maintenance"];
-				//var loan = data["loan"];
 				var acc = data["acc"];
 				
 				

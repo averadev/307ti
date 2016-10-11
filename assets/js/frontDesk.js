@@ -1175,7 +1175,7 @@ function editHKStatus(filters){
 	    	});
 		},
 		autoOpen: false,
-     	height: 355,
+     	height: maxHeight,
      	width: "50%",
      	modal: true,
      	buttons: [{
@@ -1273,8 +1273,8 @@ function getStatusUnit(){
 				break;
 			}
 		});
+		var status = {pkUnitHKStatusId:idUnitStatus, fkHkStatusId:idStatus};
 		//var status = {pkUnitHKStatusId:idUnitStatus, fkHkStatusId:$("#txthkStatus1").val()};
-		var status = {pkUnitHKStatusId:idUnitStatus, fkHkStatusId:$("#txthkStatus1").val()};
 		rowStatus.push(status);
 	});
 	saveHKStatus(rowStatus);

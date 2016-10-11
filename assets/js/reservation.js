@@ -1028,7 +1028,7 @@ function tablePeopleRes(personas, table){
         bodyHTML+="</tr>";
     }
     $('#' + table + ' tbody').append(bodyHTML);
-    defaultValuesRes();
+    //defaultValuesRes();
     onChangePrimaryRes();
 	deleteElementTableRes(table);
 }
@@ -2469,21 +2469,7 @@ function drawTableSinHeadReservationPeople(data, table){
 	var checkboxT = "<td><div class='rdoField'>"+option1+"</td>";
 	var checkboxT2 = "<td><div class='rdoField'>"+option2+"</div></td>";
 	
-  /*  var bodyHTML = '';
-    for (var i = 0; i < data.length; i++) {
-        bodyHTML += "<tr>";
-        bodyHTML += checkboxT;
-        statusActuales.push(data[i].fkPeopleStatusId); 
-       	bodyHTML += "<td>" +data[i].ID + "</td>";
-        bodyHTML += "<td>" +data[i].Name + "</td>";
-        bodyHTML += "<td>" +data[i].lastName + "</td>";
-        bodyHTML += "<td>" +data[i].address + "</td>";
-        bodyHTML += "<td>" +data[i].ynPrimaryPeople + "</td>";
-        bodyHTML += "<td>" +data[i].YnBenficiary + "</td>";
-        bodyHTML+="</tr>";
-    }
-    $('#' + table).html(bodyHTML);*/
-	
+	var X;
 	$('#' + table).empty();
     for (var i = 0; i < data.length; i++) {
 		var bodyHTML = '';
@@ -2500,9 +2486,11 @@ function drawTableSinHeadReservationPeople(data, table){
 		$('#' + table).append(bodyHTML);
 		if(data[i].ynPrimaryPeople){
 			$('.primy')[i].checked = true;
+		}else{
+			$('.benefy')[i].checked = true;
 		}
     }
-	defaultValuesRes();
+	//defaultValuesRes();
     onChangePrimaryRes();
 	deleteElementTableRes(table);
 	
@@ -2522,7 +2510,6 @@ function getDatosReservation(id){
 			var c = parseFloat(data['CollectionCost']);
 	    	$("#CollectionCostRes").text(c);
 			if(data["peoples"].length > 0){
-				//var status = drawTableSinHeadReservationPeople(data["peoples"], "peoplesReservation");
 				var status = drawTableSinHeadReservationPeople(data["peoples"], "peoplesReservation");
 				ajaxSelectsPeopleStatus(status);
 			}
@@ -4536,7 +4523,6 @@ function savePeopleRes(){
 				dataType:'json',
 				url: 'reservation/savePeople'
 			}).done(function( data, textStatus, jqXHR ) {
-				//showAlert(false,"Saving changes, please wait ....",'progressbar');
 				msgReservation.dismiss();
 				if(data.items.length > 0){
 					var status = drawTableSinHeadReservationPeople(data.items, "peoplesReservation");
