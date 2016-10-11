@@ -1028,7 +1028,7 @@ function tablePeopleRes(personas, table){
         bodyHTML+="</tr>";
     }
     $('#' + table + ' tbody').append(bodyHTML);
-    //defaultValuesRes();
+    defaultValuesRes();
     onChangePrimaryRes();
 	deleteElementTableRes(table);
 }
