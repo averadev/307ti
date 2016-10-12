@@ -667,20 +667,40 @@ class Pdfs extends CI_Controller {
 	
 	public function seeDocument(){
 		$file = $this->pdfs_db->getFiles($_GET['idFile']);
-		if( count($file) > 0 ){
-			//echo $file[0]->docPath;
-			//$filee = "C:/xampp/htdocs/307ti/assets/pdf/";
-			$mi_pdf = fopen ($file[0]->docPath, "r");
-			if (!$mi_pdf) {
-				echo "<p>You can not open the file for reading</p>";
-				exit;
+		$path = $_SERVER['DOCUMENT_ROOT'].str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME'])."assets/img/files/";
+
+		$extension = ($ext = pathinfo($file[0]->docPath, PATHINFO_EXTENSION));
+		if ($extension != 'pdf') {
+				switch( $extension ) {
+    			case "gif": $ctype="image/gif"; break;
+    			case "png": $ctype="image/png"; break;
+    			case "jpeg":
+    			case "jpg": $ctype="image/jpeg"; break;
 			}
-			header('Content-type: application/pdf');
-			fpassthru($mi_pdf); // Esto hace la magia
+			$mi_img = fopen ($path.$file[0]->docPath, "r");
+			header('Content-type: ' . $ctype);
+			fpassthru($mi_img);
 			fclose ($archivo);
 		}else{
-			echo "No documents found";
+			if( count($file) > 0 ){
+				$SERVER = substr($_SERVER['DOCUMENT_ROOT'],0, -1);
+				$path = $SERVER . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) ."assets/pdf/";
+				//var_dump($_SERVER['DOCUMENT_ROOT']);
+				
+				//var_dump(str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']));
+				$mi_pdf = fopen ($path.$file[0]->docPath, "r");
+				if (!$mi_pdf) {
+					echo "<p>You can not open the file for reading</p>";
+					exit;
+				}
+				header('Content-type: application/pdf');
+				fpassthru($mi_pdf); // Esto hace la magia
+				fclose ($archivo);
+			}else{
+				echo "No documents found";
+			}
 		}
+		
 	}
 	
 	private function showpdf( $pdf, $saveFiler, $idRes ){
@@ -689,15 +709,15 @@ class Pdfs extends CI_Controller {
 		$saveFiler .= $date->getTimestamp() . ".pdf";
 		
 		$nombre_archivo = utf8_decode($saveFiler);
-		$nombre_archivo = $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/" . $nombre_archivo;
+		//$nombre_archivo = $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/" . $nombre_archivo;
 		
 		$nombre_archivo2 = utf8_decode($saveFiler);
 		
 		
-		$pdf->Output($nombre_archivo,'FI');
+		$pdf->Output($_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/".$nombre_archivo,'FI');
 		
-		/*$saveDocument = array(
-			'fkDocTypeId' => 1,
+		$saveDocument = array(
+			'fkDocTypeId' => 8,
 			'docPath' => $nombre_archivo,
 			'docDesc' => $nombre_archivo2,
 			'ynActive' => 1,
@@ -718,8 +738,8 @@ class Pdfs extends CI_Controller {
 			'MdBy' => $this->nativesessions->get('id'),
 			'MdDt' => $this->getToday(),
 		);
-		$this->pdfs_db->insert($saveDocumentRes,"tblResDoc");*/
-		
+		$this->pdfs_db->insert($saveDocumentRes,"tblResDoc");
+
 		$pdf = null;
 		
 	}

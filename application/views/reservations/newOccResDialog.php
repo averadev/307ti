@@ -37,6 +37,15 @@
 						</div>
 					</label>
 				</div>
+			<div class="row">
+			<div class="small-2 columns">
+				<label for="legalName" class="text-left">Rate</label>
+			</div>
+			<div class="small-4 columns">
+				<input class="round general" name="rateNewNigth" id="rateNewNigth" type="text">
+			</div>
+			<div class="small-6 columns">
+		</div>
 			</div>
         </div>
     </div>

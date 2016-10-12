@@ -1257,6 +1257,7 @@ private function comprubaArray($valor, $array){
 	public function savedayForOccRes(){
 		if($this->input->is_ajax_request()){
 			$id = $_POST['id'];
+			$RateNight = $_POST['RateNight'];
 			$filtros = $this->receiveWords($_POST);
 			$invt = $this->reservation_db->getResInvt($id);
 			if( count( $invt ) > 0 ){
@@ -1265,7 +1266,7 @@ private function comprubaArray($valor, $array){
 				if( $endDateAfter == '+1' ||  $iniDateBefore == '+0' ){
 					$noUnidades = $this->reservation_db->getUnidadesOcc( $filtros, $invt[0]->fkUnitId );
 					if( count( $noUnidades ) == 0 ){
-						$total = $this->addNewOcc($id, $_POST['fromDate'], $_POST['toDate'], $invt[0]->fkOccTypeId, $invt[0]->RateAmtNight);
+						$total = $this->addNewOcc($id, $_POST['fromDate'], $_POST['toDate'], $invt[0]->fkOccTypeId, $RateNight);
 						if( $total > 0 ){
 							$dates = $this->reservation_db->getResInvtOcc($id);
 							$updateResInvt = [

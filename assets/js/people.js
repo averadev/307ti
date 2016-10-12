@@ -813,7 +813,7 @@ function searchPeople(page){
 			if(data.items.length > 0){
 				$("#NP").text("Total: "+ data.items.length);
 				var total = data.total;
-				alertify.success("Found "+ 25 + " People");
+				alertify.success("Found "+ data.items.length  + " People");
 				if( parseInt(total) == 0 ){ total = 1; }
 				total = parseInt( total/25 );
 				if(data.total%25 == 0){

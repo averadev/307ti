@@ -591,12 +591,12 @@
 					</div>
 				</div>
 			</fieldset>
-			<div class="small-12 medium-12 large-12 columns" > 
+<!-- 			<div class="small-12 medium-12 large-12 columns" > 
 				<a id="btnDeleteDocRes" class="btn btn-primary btn-Search">
 					<div class="label">Delete Document</div>
 					<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 				</a>
-			</div>
+			</div> -->
 		</form>
 	</div>
 	<!-- tabs notas -->

@@ -1054,6 +1054,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->join('tblResDoc rd', 'rd.fkdocId = d.pkDocId');
         $this->db->where('rd.fkResId = ', $id);
         $this->db->where('d.ynActive = 1');
+        $this->db->where('dt.ynDoc = 1');
         $query = $this->db->get();
         return $query->result();
     }
@@ -1067,6 +1068,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->join('tblResDoc rd', 'rd.fkdocId = d.pkDocId');
         $this->db->where('rd.fkResId = ', $id);
         $this->db->where('d.ynActive = 1');
+        $this->db->where('dt.ynDoc = 0');
         $query = $this->db->get();
         return $query->result();
     }

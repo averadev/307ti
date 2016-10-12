@@ -2807,23 +2807,23 @@ function setEventosEditarReservation(id){
 	$('.btnReportRes').on('click', function(){
 		generateReportRes(id, this);
 	});
-	$('#btnDeleteDocRes').off('click');
-	$('#btnDeleteDocRes').on('click', function(){
-		//var idDoc = $('')
-		var array = $("#tableCDocumentsSelected .yellow");
-		if( array.length > 0 ){
-			var fullArray = $(array[0]).find("td");
-			var idDoc = fullArray.eq(1).text().replace(/\s+/g, " ");
-			alertify.confirm('Delete document .', "You want to delete the document.", 
-				function(){ deleteDocumentRes(idDoc, id); },
-				function(){ }
-			).moveTo(screen.width - 500,screen.height - 100).set('resizable',true).resizeTo('25%',210).isOpen(
-				$('.ajs-dialog').css('min-width','100px')
-			);
-		}else{
-			alertify.error('You must select a document');
-		}
-	});
+	// $('#btnDeleteDocRes').off('click');
+	// $('#btnDeleteDocRes').on('click', function(){
+	// 	//var idDoc = $('')
+	// 	var array = $("#tableCDocumentsSelected .yellow");
+	// 	if( array.length > 0 ){
+	// 		var fullArray = $(array[0]).find("td");
+	// 		var idDoc = fullArray.eq(1).text().replace(/\s+/g, " ");
+	// 		alertify.confirm('Delete document .', "You want to delete the document.", 
+	// 			function(){ deleteDocumentRes(idDoc, id); },
+	// 			function(){ }
+	// 		).moveTo(screen.width - 500,screen.height - 100).set('resizable',true).resizeTo('25%',210).isOpen(
+	// 			$('.ajs-dialog').css('min-width','100px')
+	// 		);
+	// 	}else{
+	// 		alertify.error('You must select a document');
+	// 	}
+	// });
 	var status = $("#editReservationStatus").text();
 	var balance = $("#tableReservationAccRes .balanceAccount").text().replace("$ ", "");
 	    balance = parseFloat(balance);
@@ -4072,7 +4072,7 @@ function uploadFileContRes(){
 	var archivos = document.getElementById("fileToUpload");//Damos el valor del input tipo file
  	var archivo = archivos.files; //obtenemos los valores de la imagen
 	data.append('image',archivo[0]);
-	ruta = "assets/img/files/";
+	ruta = "assets/pdf/";
 	
 	//rutaJson = JSON.stringify(ruta);
 	data.append('ruta',ruta);
@@ -4125,9 +4125,10 @@ function getFilesRes(id){
 	    dataType:'json',
 	    success: function(data){
 			if(data.length > 0){
-				drawTable2(data, "tableCFilesSelectedRes", "deleteFileRes", "eliminar");
+				drawTableFiles(data, "tableCFilesSelectedRes", "seeDocumentRes", "See", "deleteFileRes");
 			}else{
-				noResultsTable("contentTableFileRes", "tableCFilesSelectedRes", "No results found");
+				alertify.error("No results found");
+				$("#tableCFilesSelectedRes tbody").empty();
 			}
 			
 			showLoading("#tableCFilesSelectedRes", false);
@@ -4152,22 +4153,22 @@ function getDocumentsRes(id){
 	    dataType:'json',
 	    success: function(data){
 			if(data.length > 0){
-				drawTable2(data, "tableCDocumentsSelected", "seeDocumentRes", "See");
+				drawTableFiles(data, "tableCDocumentsSelected", "seeDocumentRes", "See", "deleteDocumentRes");
 			}else{
-				noResultsTable("tableCDocumentsSelected", "tableCDocumentsSelected", "No results found");
+				alertify.error("No results found");
+				$("#tableCDocumentsSelected tbody").empty();
 			}
 			showLoading("#tableCDocumentsSelected", false);
 	    },
 	    error: function(){
-			showLoading("#tableCDocumentsSelected", false);
-			noResultsTable("tableCDocumentsSelected", "tableCDocumentsSelected", "Try again");
+			//showLoading("#tableCDocumentsSelected", false);
+			//noResultsTable("tableCDocumentsSelected", "tableCDocumentsSelected", "Try again");
 	        alertify.error("Try again");
 	    }
 	});
 }
 
 function seeDocumentRes(idFile){
-	//console.log(idFile);
 	var url = "Pdfs/seeDocument?idFile=" + idFile;
 	window.open(url);
 }
@@ -4212,7 +4213,35 @@ function deleteFileRes(idFile){
 	});*/
 	//alert('id');
 }
+function deleteDocumentRes(idDoc, id){
+	id = $("#idReservationX").text().trim();
+	alertify.confirm('Delete document .', "You want to delete the document.", 
+				function(){ 
+					$.ajax({
+		data:{
+			idDoc: idDoc
+		},
+   		type: "POST",
+       	url: "reservation/deleteDocumentRes",
+		dataType:'json',
+		success: function(data){
+			if(data.success){
+				getDatosContractDocuments(id);
+			}
+			alertify.success(data.message);
+			//showLoading('#table-reservations',false);
+		},
+		error: function(){
+			alertify.error("Try again");
+			//showLoading('#table-reservations',false);
+		}
+    }) },
+				function(){ }
+			).moveTo(screen.width - 500,screen.height - 100).set('resizable',true).resizeTo('25%',210).isOpen(
+				$('.ajs-dialog').css('min-width','100px')
+			);
 
+}
 function verifyFileRes( inputArray, selectArray ){
 	
 	var v = true;
@@ -4377,27 +4406,7 @@ function mensajeGeneral(data){
 	}
 }
 
-function deleteDocumentRes(idDoc, id){
-	$.ajax({
-		data:{
-			idDoc: idDoc
-		},
-   		type: "POST",
-       	url: "reservation/deleteDocumentRes",
-		dataType:'json',
-		success: function(data){
-			if(data.success){
-				getDatosContractDocuments(id);
-			}
-			alertify.success(data.message);
-			//showLoading('#table-reservations',false);
-		},
-		error: function(){
-			alertify.error("Try again");
-			//showLoading('#table-reservations',false);
-		}
-    });
-}
+
 
 function showCreditCardASR(){
 	var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
@@ -4559,7 +4568,7 @@ function modalNewOccRes(){
 			}
 		},
 		autoOpen: false,
-		height: maxHeight/3,
+		height: maxHeight/2,
 		width: "50%",
 		modal: true,
 		buttons: [{
@@ -4573,7 +4582,11 @@ function modalNewOccRes(){
 			"class": 'dialogModalButtonAccept',
 			click: function() {
 				if($('#fromDateNewOccRes').val().trim().length > 0 && $('#toDateNewOccRes').val().trim().length > 0 ){
-					savedayForOccRes( $('#fromDateNewOccRes').val(), $('#toDateNewOccRes').val() );
+					if ($("#rateNewNigth").val().trim().length>0) {
+						savedayForOccRes( $('#fromDateNewOccRes').val(), $('#toDateNewOccRes').val(), $("#rateNewNigth").val().trim() );
+					}else{
+						alertify.error("Add a Rate");
+					}
 				}else{
 					alertify.error("Choose dates for the reservation");
 				}
@@ -4586,7 +4599,7 @@ function modalNewOccRes(){
 	return dialog;
 }
 
-function savedayForOccRes(iniDate, endDate){
+function savedayForOccRes(iniDate, endDate, Rate){
 	var div = "#dialog-NewOccRes";
 	showLoading(div, true);
 	var id = $("#idReservationX").text();
@@ -4595,6 +4608,7 @@ function savedayForOccRes(iniDate, endDate){
 	        id: id,
 			fromDate: iniDate,
 			toDate: endDate,
+			RateNight: Rate
 	    },
 	    type: "POST",
 	    url: "reservation/savedayForOccRes",

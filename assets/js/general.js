@@ -344,7 +344,6 @@ function drawTable2(data, table ,funcion, cadena, option){
 	
 	if( option != false ){
 		if(option.type == "input"){
-			console.log(option.title)
 			 headHTML+="<th>"+option.title+"</th>";
 		}
 	}
@@ -403,7 +402,86 @@ function drawTable2(data, table ,funcion, cadena, option){
 	});
 	
 }
-
+function drawTableFiles(data, table ,funcion, cadena, funcion2 , option){
+	if( option == undefined ){
+		option = false;
+	}
+	if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
+		var tabla = $('#' + table).DataTable();
+		tabla.destroy();
+	}
+	
+	
+	
+	var headHTML = "<tr>";
+	if(funcion != false){ 
+		headHTML += "<th>"+cadena+"</th>";
+	}
+    var bodyHTML = '';
+	
+	if( option != false ){
+		if(option.type == "input"){
+			 headHTML+="<th>"+option.title+"</th>";
+		}
+	}
+	
+    //creación de la cabecera
+	for (var j in data[0]) {
+        headHTML+="<th>"+j+"</th>";
+    }
+	
+	if(funcion2 != false){ 
+		headHTML += "<th>"+"Delete"+"</th>";
+	}
+	headHTML += "</tr>";
+    //creación del body
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr id='row" + data[i].ID + "'>";
+		if(funcion != false){
+			bodyHTML += '<td class="iconEdit" nowrap onclick="'+funcion+'('+data[i].ID+');"><i class="fa fa-eye" aria-hidden="true"></i></td>';
+		}
+		
+		if( option != false ){
+			if(option.type == "input"){
+				var idOption = data[i].ID;
+				if(typeof(option.id) != "undefined"){
+					var opt = option.id;
+					idOption = data[i][opt];
+				}
+				bodyHTML+='<td nowrap><input name="' + option.name + '" type="checkbox" id="'+idOption+'" class="' + option.name + '" value="'+idOption+'"><label>&nbsp;</label></td>';
+			}
+		}
+		
+        for (var j in data[i]) {
+            bodyHTML+="<td nowrap>" + data[i][j] + "</td>";
+        };
+		
+		if(funcion2 != false){
+			bodyHTML += '<td class="iconEdit" nowrap onclick="'+funcion2+'('+data[i].ID+');"><i class="fa fa-trash" aria-hidden="true"></i></td>';
+		}
+		
+        bodyHTML+="</tr>";
+    }
+	$('#' + table + " thead" ).html(headHTML);
+	$('#' + table + " tbody" ).html(bodyHTML);
+	
+	$('#' + table ).show();
+	
+	var heightScroll = $('#' + table ).parents(".table").first();
+	heightScroll = heightScroll.height();
+	if(heightScroll == null){
+		heightScroll = 400;
+	}
+	$('#' + table ).DataTable({
+		"scrollY": heightScroll - 50,
+		"scrollX": true,
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		"filter": 	false,
+	});
+	
+}
 
 function activeTable(table){
 	

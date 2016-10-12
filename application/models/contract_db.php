@@ -1252,6 +1252,7 @@ class Contract_db extends CI_Model {
 	public function getDocType(){
 		$this->db->select("dt.pkDocTypeId as ID, dt.DocTypeDesc");
         $this->db->from('tblDocType dt');
+        $this->db->where('dt.ynDoc', 1);
         $query = $this->db->get();
 		return $query->result();
 	}
