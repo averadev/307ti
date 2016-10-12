@@ -88,7 +88,7 @@ class Pdfs extends CI_Controller {
 		
 		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
 		
-		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes );
+		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes, $title);
 	}
 	
 	public function Farewell(){
@@ -137,7 +137,7 @@ class Pdfs extends CI_Controller {
 		
 		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
 		
-		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes );
+		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes, $title );
 	}
 	
 	public function GuestInfromation(){
@@ -264,7 +264,7 @@ class Pdfs extends CI_Controller {
 		
 		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
 		
-		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes );
+		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes, $title );
 		
 	}
 	
@@ -351,7 +351,7 @@ class Pdfs extends CI_Controller {
 		
 		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
 		
-		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes );
+		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes, $title );
 	}
 	
 	public function ReservationConfirmation(){
@@ -549,7 +549,7 @@ class Pdfs extends CI_Controller {
 		$html .= '</body></html>';
 		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
 		
-		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes );
+		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes, $title );
 	}
 	
 	public function RoomChange(){
@@ -590,7 +590,7 @@ class Pdfs extends CI_Controller {
 		
 		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
 		
-		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes );
+		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes, $title );
 	}
 	
 	private function generateStyle(){
@@ -703,7 +703,7 @@ class Pdfs extends CI_Controller {
 		
 	}
 	
-	private function showpdf( $pdf, $saveFiler, $idRes ){
+	private function showpdf( $pdf, $saveFiler, $idRes, $title ){
 		$date = new DateTime();
 		
 		$saveFiler .= $date->getTimestamp() . ".pdf";
@@ -719,7 +719,7 @@ class Pdfs extends CI_Controller {
 		$saveDocument = array(
 			'fkDocTypeId' => 8,
 			'docPath' => $nombre_archivo,
-			'docDesc' => $nombre_archivo2,
+			'docDesc' => $title,
 			'ynActive' => 1,
 			'CrBy' => $this->nativesessions->get('id'),
 			'CrDt' => $this->getToday(),
