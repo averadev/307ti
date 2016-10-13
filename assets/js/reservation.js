@@ -266,16 +266,11 @@ $(document).on( 'click', '#btAddLinkACC', function(){
 
 	$(document).off( 'click', '#btnNewOccRes');
 	$(document).on( 'click', '#btnNewOccRes', function () {
-		//if( $("#idResTypeX").text() == 7 ){
 			if (dialogNewOccRes!=null) {
 				dialogNewOccRes.dialog( "destroy" );
 			}
 			dialogNewOccRes = modalNewOccRes();
 			dialogNewOccRes.dialog("open");
-		/*}else{
-			alertify.error('You can not add nights Occupancy ');
-		}*/
-		
 	});
 
 
@@ -4546,12 +4541,13 @@ function savePeopleRes(){
 }
 
 function modalNewOccRes(){
-	var div = "#dialog-NewOccRes";	
+	var div = "#dialog-NewOccRes";
+	var id = $("#idReservationX").text().trim();	
 	dialog = $(div).dialog({
 		open : function (event){
 			if ($(div).is(':empty')) {
 				showLoading(div, true);
-				$(this).load ("reservation/modalNewOccRes" , function(){
+				$(this).load ("reservation/modalNewOccRes?id="+id , function(){
 		    		showLoading(div, false);
 					$( "#fromDateNewOccRes" ).Zebra_DatePicker({
 						format: 'm/d/Y',

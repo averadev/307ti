@@ -42,7 +42,7 @@
 				<label for="legalName" class="text-left">Rate</label>
 			</div>
 			<div class="small-4 columns">
-				<input class="round general" name="rateNewNigth" id="rateNewNigth" type="text">
+				<input value=<?= $RateNight;?> class="round general" name="rateNewNigth" id="rateNewNigth" type="number" min="0">
 			</div>
 			<div class="small-6 columns">
 		</div>

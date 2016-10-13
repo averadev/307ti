@@ -1510,7 +1510,10 @@ private function comprubaArray($valor, $array){
 	
 	public function modalNewOccRes(){
 		if($this->input->is_ajax_request()) {
-			$this->load->view('reservations/newOccResDialog');
+			$id = $_GET['id'];
+			$invt = $this->reservation_db->getResInvt($id);
+			$data['RateNight'] = number_format((float)$invt[0]->RateAmtNight, 2, '.', '');
+			$this->load->view('reservations/newOccResDialog', $data);
 		}
 	}
 	
