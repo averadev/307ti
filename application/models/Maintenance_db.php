@@ -33,7 +33,8 @@ Class Maintenance_db extends CI_MODEL
 				 $this->db->like('B.BatchDesc', $filters['filters']['MSearch']);
 			}
 			if (isset($filters['filters']['floorPlans']) && !empty($filters['filters']['floorPlans'])) {
-				for ($i=0; $i < sizeof($filters['options']['floorPlans']); $i++) { 
+				$condicion ='';
+				for ($i=0; $i < sizeof($filters['filters']['floorPlans']); $i++) { 
                         $condicion .= 'B.fkFloorPlanId = '.$filters['filters']['floorPlans'][$i];
                         if ($i+1 < sizeof($filters['filters']['floorPlans'])) {
                             $condicion .=' or ';
