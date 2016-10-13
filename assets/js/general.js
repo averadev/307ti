@@ -366,7 +366,6 @@ function drawTable2(data, table ,funcion, cadena, option){
 			if(option.type == "input"){
 				var idOption = data[i].ID;
 				if(typeof(option.id) != "undefined"){
-					console.log(option.id);
 					var opt = option.id;
 					idOption = data[i][opt];
 				}
@@ -528,8 +527,6 @@ function activeTable(table){
 
 
 function expandBox(section, relation){
-	console.log(section);
-	console.log(relation);
 	$(".module").css('height',($( window ).height() - 110) + "px");
 	if(section != undefined && relation != undefined){
 		var position = $('#' + relation).position();
@@ -983,6 +980,20 @@ function ajaxDATA(datos){
 	    }
 	});
 }
+function ajaxDATAG(datos, div){
+	$.ajax({
+	    data:datos.datos,
+	    type: "POST",
+	    url: datos.url,
+	    dataType: datos.tipo,
+	    success: function(data){
+			datos.funcionExito(data, div);
+	    },
+	    error: function(){
+	        datos.funcionError();
+	    }
+	});
+}
 
 function modalGeneral(propiedades, datosAjax) {
 	showLoading("#"+propiedades.div,true);
@@ -1013,6 +1024,23 @@ function modalGeneral2(propiedades, datosAjax) {
 	dialogo = $("#"+propiedades.div).dialog ({
   		open : function (event){
   			propiedades.onOpen(datosAjax);
+  		},  			
+		autoOpen: false,
+     	height: propiedades.altura,
+     	width: propiedades.width,
+     	modal: true,
+     	buttons: propiedades.botones,
+     close: function() {
+    	$(this).empty();
+     }
+	});
+	return dialogo;
+}
+function modalGeneralG(propiedades, datosAjax) {
+	showLoading("#"+propiedades.div,true);
+	dialogo = $("#"+propiedades.div).dialog ({
+  		open : function (event){
+  			propiedades.onOpen(datosAjax, propiedades.div);
   		},  			
 		autoOpen: false,
      	height: propiedades.altura,
@@ -1141,4 +1169,20 @@ function drawTable4(data, table ,funcion, cadena, option){
 	
 	$('#' + table ).show();
 	
+}
+
+function addHTMLGeneral(data, div){
+	$("#"+div).html(data);
+}
+
+function drawTableSinHead(data, table){
+    var bodyHTML = '';
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        };
+        bodyHTML+="</tr>";
+    }
+    $('#' + table).html(bodyHTML);
 }

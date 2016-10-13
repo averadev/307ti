@@ -406,7 +406,7 @@ public function updateFinanciamiento(){
 		$this->CreateTransferToLoan();
 		$this->insertTransaccionesCredito();
 		if ($afectados>0) {
-			$mensaje = ["mensaje"=>"Se guardo Correctamente","afectados" => $afectados];
+			$mensaje = ["mensaje"=>"Save Correctly","afected" => $afectados];
 			echo json_encode($mensaje);
 		}else{
 			$mensaje = ["mesaje"=>"ocurrio un error"];	
