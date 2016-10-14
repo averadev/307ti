@@ -40,14 +40,26 @@ class Maintenance extends CI_Controller {
 			$this->load->view('maintenance/dialogNewBatch', $data);
 		}
 	}
+	public function dialogDetailBatch(){
+		if($this->input->is_ajax_request()) {
+			$ID = $_POST['ID'];
+			$data['Batch'] = $this->Maintenance_db->getBatchByID($ID);
+			$data['Batchs'] = $this->Maintenance_db->getBatchsDetailByID($ID);
+			$this->load->view('maintenance/dialogDetailBatch', $data);
+		}
+	}
 	
 	public function getBatchs(){
 		if($this->input->is_ajax_request()) {
 			$sql = $this->receiveWords($_POST);
-			//var_dump($sql);
-			//$sql = null;
 			$id = null;
 			$baths = $this->Maintenance_db->getBatchs($sql, $id);
+			echo json_encode($baths);
+		}
+	}
+	public function getContrats(){
+		if($this->input->is_ajax_request()) {
+			$baths = $this->Maintenance_db->getContracts();
 			echo json_encode($baths);
 		}
 	}
@@ -72,6 +84,7 @@ class Maintenance extends CI_Controller {
 				"CrBy"			=> $this->nativesessions->get('id'),
 				"CrDt"			=> $this->getToday()
 			];
+
 			$afectados =  $this->Maintenance_db->insertReturnId('tblBatch', $Card);
 			if ($afectados>0) {
 				$mensaje = ["success" => 1, "mensaje"=>"Save Correctly","afected" => $afectados];

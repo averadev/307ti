@@ -161,5 +161,6 @@
 </div>
 
 <div id="dialog-NewBatch" title="Maintenance" style="display: none;"></div>
+<div id="dialog-DetailBatch" title="Detail" style="display: none;"></div>
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>maintenance.js"></script>

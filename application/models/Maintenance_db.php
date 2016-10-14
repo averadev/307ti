@@ -59,6 +59,78 @@ Class Maintenance_db extends CI_MODEL
         }
 
     }
+    public function getBatchByID($ID){
+
+    	$this->db->select("B.pkBatchId as ID, P.PropertyShortName as Property, BT.BatchTypeDesc as BatchType, B.TotalRecords as Total");
+		$this->db->select("B.BatchDesc, B.Year, T.StatusDesc, B.TotalAmount, B.ynActive, B.CrDt");
+		$this->db->select("U.UserLogin as CreateBy, B.MdDt, U2.UserLogin as MdBy");
+        $this->db->from('tblBatch B');
+        $this->db->join('tblProperty P', 'B.fkPropertyId = P.pkPropertyId');
+        $this->db->join('tblBatchType BT', 'B.fkBatchTypeId = BT.pkBatchTypeId');
+        $this->db->join('tblStatus T', 'B.fkStatusId = T.pkStatusId');
+        $this->db->join('tblUser U', 'B.CrBy = U.pkUserId');
+        $this->db->join('tblUser U2', 'B.MdBy = U2.pkUserId', 'LEFT');
+        $this->db->where('B.pkBatchId', $ID);
+        $this->db->order_by('ID', 'DESC');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+    public function getBatchsDetailByID($ID){
+
+    	$this->db->select("B.pkCSFBatchId as ID , R.Folio, R.LegalName, B.Year, BT.BatchTypeDesc, F.FloorPlanDesc");
+		$this->db->select("U.UnitCode, RI.Intv, V.ViewDesc, BA.Year as Y2, B.TotalAmount, B.PreviousBalance");
+        $this->db->from('tblCsfBatch B');
+        $this->db->join('tblRes R', 'B.fkResId = R.pkResId');
+        $this->db->join('tblFloorPlan F', 'B.fkFloorPlanId = F.pkFloorPlanID');
+        $this->db->join('tblResInvt RI', 'B.fkResID = RI.fkResId');
+        $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId');
+        $this->db->join('tblView V', 'RI.fkViewId = V.pkViewId');
+        $this->db->join('tblBatch BA', 'B.fkBatchId = BA.pkBatchId');
+        $this->db->join('tblBatchType BT', 'BA.fkBatchTypeId = BT.pkBatchTypeId');
+        $this->db->where('B.fkBatchId', $ID);
+        $this->db->order_by('ID', 'DESC');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+    public function getContracts(){
+
+    	$this->db->select("R.pkResId as ID, R.Folio, R.LegalName, F.FloorPlanDesc");
+		$this->db->select("S.StatusDesc, R.CrDt, R.FirstOccYear, R.LastOccYear, 0 as UnitPrice, 0 as MaintenancePrice");
+        $this->db->from('tblRes R');
+      
+        $this->db->join('tblResinvt RI', 'R.pkResId = RI.fkResId');
+        $this->db->join('tblFloorPlan F', 'RI.fkFloorPlanId = F.pkFloorPlanID');
+        $this->db->join('tblStatus S', 'R.fkStatusId = S.pkStatusId');
+
+        	if (isset($filters['filters']['MProperty']) && !empty($filters['filters']['MProperty'])) {
+				$this->db->where('R.fkSaleTypeId', $filters['filters']['MProperty']);
+			}
+			if (isset($filters['filters']['MProperty']) && !empty($filters['filters']['MProperty'])) {
+				$this->db->where('RI.fkFloorPlanId', $filters['filters']['MProperty']);
+			}
+			if (isset($filters['filters']['MProperty']) && !empty($filters['filters']['MProperty'])) {
+				$this->db->where('RI.fkseassonId', $filters['filters']['MProperty']);
+			}
+			if (isset($filters['filters']['MProperty']) && !empty($filters['filters']['MProperty'])) {
+				$this->db->where('RI.fkFrequencyId', $filters['filters']['MProperty']);
+			}
+        $this->db->where('2017'.' BETWEEN R.FirstOccYear and R.LastOccYear');
+        $this->db->order_by('ID', 'DESC');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
  	/**
 	* obtiene la lista de floor plan
 	**/

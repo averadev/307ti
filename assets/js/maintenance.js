@@ -1,4 +1,7 @@
 var msgMan = null;
+var maxHeight = screen.height * .20;
+maxHeight = screen.height - maxHeight;
+
 $(document).ready(function(){
 
 	FloorPlanMA =  $('#MFloorPlan').multipleSelect({
@@ -8,6 +11,7 @@ $(document).ready(function(){
 		onClick: function(view) {
 		}
 	});
+	FloorPlanDetail = null;
 
 	$(document).off( 'click', '#btnManCleanSearch');
 	$(document).on( 'click', '#btnManCleanSearch', function () {
@@ -23,6 +27,11 @@ $(document).ready(function(){
 	$(document).on( 'click', '#newBatch', function(){
 		newBacth();
 	});
+	$(document).off( 'click', '#btnSearchContracts');
+	$(document).on( 'click', '#btnSearchContracts', function(){
+		console.log("OK");
+		searchMaintenanceContracts();
+	});
 });
 
 function newBacth(){
@@ -35,12 +44,12 @@ function newBacth(){
 	};
 	var modalPropiedades = {
 		div: "dialog-NewBatch",
-		altura: 500,
-		width: 600,
+		altura: maxHeight,
+		width: "70%",
 		onOpen: ajaxDATAG,
 		onSave: createNewBatch,
 		botones :[{
-			text: "Cancel",
+			text: "Close",
 		    "class": 'dialogModalButtonCancel',
 		    click: function() {
 		    	$(this).dialog('close');
@@ -64,10 +73,8 @@ function newBacth(){
 
 function createNewBatch(){
 	msgMan = alertify.success('Saving changes, please wait ....', 0);
-	var Description = $("#NProperty option:selected").text().trim() + '_'+$("#NYears option:selected").text().trim();
-	Description += '_'+$("#NSaleType option:selected").text().trim();
-	Description += '_'+$("#NFloorPlan option:selected").text().trim();
-	Description += '_'+$("#NSeason option:selected").text().trim();
+	var Description = getDetailBatch();
+
 	var ajaxDatos =  {
 		url: "Maintenance/newBatch",
 		tipo: "json",
@@ -128,5 +135,97 @@ function drawBatchs(datos){
 }
 
 function datailBatch(id){
-	console.log(id)
+
+	var ajaxData =  {
+		url: "Maintenance/dialogDetailBatch",
+		tipo: "html",
+		datos: {
+			ID: id
+		},
+		funcionExito : addHTMLGeneral,
+		funcionError: mensajeAlertify
+	};
+	var modalPropiedades = {
+		div: "dialog-DetailBatch",
+		altura: maxHeight,
+		width: "70%",
+		onOpen: ajaxDATAG,
+		onSave: createNewBatch,
+		botones :[{
+			text: "Cancel",
+		    "class": 'dialogModalButtonCancel',
+		    click: function() {
+		    	$(this).dialog('close');
+		    }
+		   	}
+		   ]
+		};
+
+	if (modalCreditLimit!=null) {
+		modalCreditLimit.dialog( "destroy" );
+	}
+	modalCreditLimit = modalGeneralG(modalPropiedades, ajaxData);
+	modalCreditLimit.dialog( "open" );
+}
+
+function addHTMLDetailBatch(data, div){
+	addHTMLGeneral(data, div);
+
+	$('#tabsDetailBatch .tabs-title').on('click', function() { 
+		changeTabsModalBatch($(this).attr('attr-screen'));
+	});
+	FloorPlanDetail =  $('#MFloorPlanDetail').multipleSelect({
+		width: '100%',
+		placeholder: "Choose an option",
+		selectAll: false,
+		onClick: function(view) {
+		}
+	});
+}
+
+function getDetailBatch(){
+	var Description = $("#NProperty option:selected").text().trim();
+	Description += '_'+$("#NYears option:selected").text().trim();
+	Description += '_'+$("#NSaleType option:selected").text().trim();
+	Description += '_'+$("#NFloorPlan option:selected").text().trim();
+	Description += '_'+$("#NSeason option:selected").text().trim();
+	return Description;
+}
+
+function changeTabsModalBatch(screen){
+	$('#tabsDetailBatch .tabs-title').removeClass('active');
+	$('#tabsDetailBatch li[attr-screen=' + screen + ']').addClass('active');
+	$('#tabsDetailBatch .tab-modal').hide();
+	$('#' + screen).show();
+	switch(screen){
+		case "tab-DetailBatch":
+			break;
+		case "tab-Maintenance":
+			break;
+	}
+}
+
+
+function searchMaintenanceContracts(){
+	var ajaxDatos =  {
+		url: "Maintenance/getContrats",
+		tipo: "json",
+		datos: {},
+		funcionExito : drawTableM,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATAG(ajaxDatos);
+}
+
+function drawTableM(data, div){
+	var table = "tablaSearcBatchsBody";
+	  var bodyHTML = '';
+    for (var i = 0; i < data.length; i++) {
+        bodyHTML += "<tr>";
+        for (var j in data[i]) {
+            bodyHTML+="<td>" + data[i][j] + "</td>";
+        };
+        bodyHTML+="</tr>";
+    }
+    $('#' + table).html(bodyHTML);
 }

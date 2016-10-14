@@ -83,7 +83,42 @@
 				</select>
 			</div>
 	</div>
+	<div class="row">
+		<a id="btnSearchContracts" class="btn btn-primary btn-Search float-right">
+				<div class="label">Search</div>
+				<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+			</a>
+	</div>
+	
 </fieldset>
+			<fieldset class="fieldset" id="fieldsetNoteCon">
+				<div class="containerContract">
+					<div class="row">
+						<table id="tablaSearcBatchs" width="100%">
+							<thead>
+								<tr class="trColspan" >
+									<th colspan="12" class="thColspan colorCrema" >Detail</th>
+								</tr> 
+								<tr>
+									<th class="cellEdit">ContractID</th>
+									<th class="cellGeneral">Contract Num</th>
+									<th class="cellGeneral">Legal Name</th>
+									<th class="cellGeneral">FloorPlan</th>
+									<th class="cellGeneral">Frequency</th>
+									<th class="cellGeneral">Status</th>
+									<th class="cellGeneral">CrDt</th>
+									<th class="cellGeneral">FirstOccYear</th>
+									<th class="cellGeneral">LastOccYear</th>
+									<th class="cellGeneral">Unit Price</th>
+									<th class="cellGeneral">Maintenance Price</th>
+								</tr>
+							</thead>
+							<tbody id="tablaSearcBatchsBody">
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</fieldset>
 
 
 

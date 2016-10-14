@@ -554,16 +554,6 @@ function createDialogReservation(addReservation, typeRes) {
 					$('#languageDialogRes').remove();
 					$('#peopleDialogRes').remove();
 				}
-		 		//ajaxSelectRes('contract/getLanguages','try again', generalSelects, 'selectLanguageRes');
-				//ajaxSelectRes('reservation/getOccupancyTypes','try again', generalSelectsDefaultRes, 'occupancySalesRes');
-				
-				/*$(document).on( 'change', '#occupancySalesRes', function () {
-					getOpctionOccType();
-				});*/
-				
-				/*$(document).on( 'change', '#RateRes', function () {
-					setValueUnitPriceRes();
-				});*/
 	    	});
 		},
 		autoOpen: false,
@@ -592,7 +582,7 @@ function createDialogReservation(addReservation, typeRes) {
 						}
 					}
 					
-				},/*{
+				}/*,{
 				text: "Save",
 				"class": 'dialogModalButtonAccept',
 				click: function() {

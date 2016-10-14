@@ -58,8 +58,6 @@ class Contract_db extends CI_Model {
         $this->db->select('ES.StatusDesc, RI.CrDt, R.FirstOccYear, R.LastOccYear, RF.ListPrice, RF.NetSalePrice as netsale');
         $this->db->from('tblRes R');
         $this->db->join('tblResinvt RI', 'RI.fkResId = R.pkResId');
-		// $this->db->join('tblResOcc RO ', ' RO.fkResInvtId = RI.pkResInvtId');
-		// $this->db->join('tblOccType ot ', ' ot.pkOccTypeId = RO.fkOccTypeId');
         $this->db->join('tblFloorPlan UT', 'UT.pkFloorPlanID = RI.fkFloorPlanId');
         $this->db->join('tblFrequency FR', 'FR.pkFrequencyId = RI.fkFrequencyId');
         $this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId');

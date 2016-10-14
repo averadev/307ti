@@ -1554,16 +1554,8 @@ private function search($array, $key, $value){
 				"codicion"	=> 'pkResID',
 				"id"		=>	$id
 			];
-			//$maximo = $this->contract_db->selectMaxStatus();
 
 			$IdStatus = $this->contract_db->selectContractID($id);
-			/*if ($IdStatus<$maximo) {
-				$IdStatus = $IdStatus;
-			}else{
-				$IdStatus = $maximo;
-			}
-			$next = $this->contract_db->selectNextStatusDesc2(intval($IdStatus)+1);
-			$actual = $this->contract_db->selectNextStatusDesc2($IdStatus);*/
 			$next = $this->contract_db->getNextStatus($IdStatus);
 			$actual = $this->contract_db->getCurrentStatus($IdStatus);
 			$IDAccount  = $this->contract_db->getACCIDByContracID($id);
