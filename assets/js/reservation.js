@@ -3676,7 +3676,7 @@ function modalStatusRes(){
        		text: "Change",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-				var newStatus = $('#statusRes option:selected').text();
+				var newStatus = $('#statusResChange option:selected').text();
 				if( newStatus == "Cancel" || newStatus == "Exchange" ){
 					var msg = "Are you sure you want to change the status? It eliminated the reservation.";
 					alertify.confirm('Change Status.', msg, 
@@ -3713,8 +3713,8 @@ function nextStatusContractRes(){
 	$.ajax({
 	    data:{
 	        idContrato: id,
-			idNextStatus: $('#statusRes').val(),
-			NextStatus: $('#statusRes option:selected').text(),
+			idNextStatus: $('#statusResChange').val(),
+			NextStatus: $('#statusResChange option:selected').text(),
 			idRestype:idRestype
 	    },
 	    type: "POST",

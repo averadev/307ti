@@ -851,9 +851,12 @@ private function comprubaArray($valor, $array){
 			ini_set('max_execution_time', 120);
 			$sql = $this->getFilters($_POST, 'r.CrDt', 'Res');
 			$id = null;
-			$reservations = $this->reservation_db->getReservationsCancel($sql, $id);
-			$reservationsCancel = $this->reservation_db->getReservations($sql, $id);
-			$reservations = array_merge($reservations, $reservationsCancel);
+			$reservationsCancel = $this->reservation_db->getReservationsCancel($sql, $id);
+			$reservations = $this->reservation_db->getReservations($sql, $id);
+			if ($reservationsCancel) {
+				$reservations = array_merge($reservations, $reservationsCancel);
+			}
+			
 			$keys = array();
 			if( count($reservations) > 0 ){
 				foreach( $reservations[0] as $key => $item ){

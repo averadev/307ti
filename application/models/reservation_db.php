@@ -162,7 +162,7 @@ class Reservation_db extends CI_Model {
         $this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
         $this->db->where('rpa.ynActive',1);
         $this->db->where('rpa.ynPrimaryPeople', '1');
-        $this->db->where('R.fkStatusId', 0);
+        $this->db->where('R.fkStatusId', 6);
         if (!is_null($filters)){
             if($filters['words'] != false){
                 if( isset($filters['words']['stringRes']) ){

@@ -4,7 +4,7 @@
 			<div class="small-12 columns">
 				<label  class="text-left">Status</label>
 				<div class="caja" >
-					<select id="statusRes" class="input-group-field round">
+					<select id="statusResChange" class="input-group-field round">
 						<?php
 						foreach($statusRes as $item){
 							?>
