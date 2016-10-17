@@ -855,8 +855,12 @@ private function comprubaArray($valor, $array){
 			$reservationsCancel = $this->reservation_db->getReservationsCancel($sql, $id);
 			//var_dump($reservationsCancel);
 			//var_dump($reservations);
-			if ($reservationsCancel) {
+			if ($reservationsCancel && $reservations) {
 				$reservations = array_merge($reservations, $reservationsCancel);
+			}else{
+				if ($reservationsCancel) {
+					$reservations = $reservationsCancel;
+				}
 			}
 			
 			$keys = array();
