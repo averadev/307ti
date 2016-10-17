@@ -29,14 +29,14 @@
 </div>
 <div class="row headerDescription headerGeneral" style="padding: 8px;">
 	<div class="small-12 medium-12 large-8 columns"  >
-	<p id="idReservationX" style="display: none;"><?php echo $contract[0]->ID; ?></p>
-	<p id="idResTypeX" style="display: none;"><?php echo $contract[0]->fkResTypeId; ?></p>
-		<label class="headerDescriptionTitle small-12 columns" id="editContractTitle"><?php  echo $contract[0]->Confirmation_code;?></label>
-		<label class="headerGeneral small-12 columns" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
-		<label class="headerGeneral small-12 columns" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
-		<label class="headerGeneral small-6 columns"><?php  echo "Expected Arrival: ". $contract[0]->arrivaDate;?></label>
+	<p id="idReservationX" style="display: none;"><?php if(isset($contract[0]->ID)){echo $contract[0]->ID;};  ?></p>
+	<p id="idResTypeX" style="display: none;"><?php if(isset($contract[0]->fkResTypeId)){echo $contract[0]->fkResTypeId;};  ?></p>
+		<label class="headerDescriptionTitle small-12 columns" id="editContractTitle"><?php if(isset($contract[0]->contract[0]->Confirmation_code)){echo $contract[0]->Confirmation_code;}; ?></label>
+		<label class="headerGeneral small-12 columns" id="editContracFloorPlan"><?php if(isset($contract[0]->FloorPlan)){echo $contract[0]->FloorPlan;};?></label>
+		<label class="headerGeneral small-12 columns" id="editContracYear">Year: <?php if(isset($contract[0]->FirstOccYear)){echo $contract[0]->FirstOccYear;}; ?></label>
+		<label class="headerGeneral small-6 columns"><?php if(isset($contract[0]->arrivaDate)){echo "Expected Arrival: ". $contract[0]->arrivaDate;}; ?></label>
 		<label class="headerGeneral small-6 columns" id="dateCheckIn"><?php  echo "Check In: ". $dateCheckIn;?></label>
-		<label class="headerGeneral small-6 columns"><?php  echo "Expected Deperture: ".$contract[0]->depatureDate;?></label>
+		<label class="headerGeneral small-6 columns"><?php if(isset($contract[0]->depatureDate)){echo "Expected Deperture: ".$contract[0]->depatureDate;}; ?></label>
 		<label class="headerGeneral small-6 columns" id="dateCheckOut"><?php  echo "Check Out: ". $dateCheckOut;?></label>
 
 	</div>
@@ -50,7 +50,7 @@
 			 	}
 			}
 		?></label>
-		<label class="headerGeneral" id="editOccTypeCodeRes"><?php  echo "OccTypeCode: ". $contract[0]->Occ_type;?></label>
+		<label class="headerGeneral" id="editOccTypeCodeRes"><?php if(isset($contract[0]->Occ_type)){echo "OccTypeCode: ". $contract[0]->Occ_type;}  ?></label>
 	</div>
 </div>
 <!-- tabs de los modales -->
