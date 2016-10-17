@@ -132,7 +132,7 @@
                     </div>
 					<div class="small-3 columns">
 						<label for="RateRes" class="text-left">Rate</label>
-						<input class="round general" id="RateRes" name="RateRes" type="text">
+						<input value="0" class="round general" id="RateRes" name="RateRes" type="text">
                     </div>
                     <div class="small-3 columns">
 						<div class="row collapse">

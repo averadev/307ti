@@ -221,13 +221,11 @@ function getFrontDesk(order, page){
 	var words = null;
 	var options = null;
 	var url = "";
-	//var section = $('.SectionFrontDesk:checked').val();
 	var section = $('#typeSearchFrontDesk').val();
 	if(section == "section1"){
 		$('.rightPanel').remove();
 		$('.panelLeft').remove();
 		$('#tableFrontDesk tbody').empty();
-		//filters = getFiltersCheckboxs('FilterFrontDesk');
 		filters = {};
 		dates = getDates(["dateArrivalFront", "dateDepartureFront", "textIntervalFront"]);
 		words = getWords(["textUnitCodeFront","textConfirmationFront","textViewFront"]);
@@ -640,9 +638,9 @@ function createTableLookUp(data){
 		}else{
 			var colspan = $('#thMonth' + dates[j].month ).attr('colspan');
 			$('#thMonth' + dates[j].month ).attr('colspan', (parseInt(colspan) + 1));
-			console.log(colspan);
-			console.log(wiCell * colspan);
-			console.log("");
+			// console.log(colspan);
+			// console.log(wiCell * colspan);
+			// console.log("");
 			//colspan = colspan + 1;
 			//console.log(wiCell * colspan);
 			$('#thMonth' + dates[j].month ).css('width', (wiCell * (parseInt(colspan) + 1) ) + "%");
@@ -711,21 +709,15 @@ function createTableLookUp(data){
 			}
 		}
 	}
-	/*var wiCell = 60/dates.length;
-	$('.gHeaderDay .rightPanel').css('width', wiCell + "%");
-	$('.rightPanel.emptyUnitsFront').css('width', wiCell + "%");*/
 	if(isUnit != 0){
-		//var idTrFD = $('#tr' + isUnit);
 		var currentTopFK = $('#tr' + isUnit).position().top;
-		//console.log($('#tr' + isUnit));
-		//console.log(currentTopFK);
-		$('#FrontDeskRes').scrollTop( currentTopFK -250 );
+		$('#tableFrontDesk tbody').scrollTop( currentTopFK -250 );
 		$('#tr' + isUnit).addClass('borderSelectFront');
 		
 	}else if( isUnit == 0 && ( $('#textUnitCodeFront').val().trim().length != 0 || $('#textConfirmationFront').val().trim().length != 0 ) ){
 		alertify.error("No reservations found");
 	}
-	//}else if( isUnit == 0 && ( $('#textUnitCodeFront').val().trim().length != 0 || $('#textConfirmationFront').val().trim().length != 0 ) ){
+
 	
 	$('.showReservation').on('click', function(){ showReservation(this); });
 	$('.emptyUnitsFront').on('click', function(){ showNewReservation(this); });

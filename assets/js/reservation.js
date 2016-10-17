@@ -3676,18 +3676,20 @@ function modalStatusRes(){
        		text: "Change",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-				//alert("hola");
-				//$('#statusRes').val()
 				var newStatus = $('#statusRes option:selected').text();
 				if( newStatus == "Cancel" || newStatus == "Exchange" ){
 					var msg = "Are you sure you want to change the status? It eliminated the reservation.";
 					alertify.confirm('Change Status.', msg, 
-					function(){ nextStatusContractRes(); },
+					function(){ nextStatusContractRes();
+						var screen = $("#tab-general .tabs-title.active").attr('attr-screen');
+						if ( screen == "frontDesk") {
+							$("#dialog-Edit-Reservation").dialog('close');
+							getFrontDesk("",1);
+						} },
 					function(){ }
 					).moveTo(screen.width - 500,screen.height - 100).set('resizable',true).resizeTo('25%',210).isOpen(
 						$('.ajs-dialog').css('min-width','100px')
 					);
-					//nextStatusContractRes();
 				}else{
 					nextStatusContractRes();
 				}
@@ -3701,15 +3703,11 @@ function modalStatusRes(){
 }
 
 function nextStatusContractRes(){
-	//deactiveEventClickRes("btnNextStatusRes");
+
 	var div = "#dialog-StatusRes";
 	showLoading(div, true);
 	$("#iNextStatus").addClass("fa-spin");
-	/*var id = getValueFromTableSelectedRes("reservationsTable", 1);
-	var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
-	if( screen == "frontDesk" ){
-		id = $('#tab-general .tabs-title.active').data('idRes');
-	}*/
+
 	var id = $("#idReservationX").text();
 	var idRestype = $("#idResTypeX").text();
 	$.ajax({
@@ -3731,7 +3729,6 @@ function nextStatusContractRes(){
 	    		$("#dateCheckIn").text("Check In: "+ data["dateCheckIn"]);
 	    	}
 	    	if (data['status'] == "In House") {
-	    		//$( ".checkInPeople" ).prop( "disabled", false);
 	    			var status = "Status: In House";
 					var balance = $("#tableReservationAccRes .balanceAccount").text().replace("$ ", "");
 					    balance = parseFloat(balance);

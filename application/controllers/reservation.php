@@ -851,7 +851,9 @@ private function comprubaArray($valor, $array){
 			ini_set('max_execution_time', 120);
 			$sql = $this->getFilters($_POST, 'r.CrDt', 'Res');
 			$id = null;
-			$reservations = $this->reservation_db->getReservations($sql, $id);
+			$reservations = $this->reservation_db->getReservationsCancel($sql, $id);
+			$reservationsCancel = $this->reservation_db->getReservations($sql, $id);
+			$reservations = array_merge($reservations, $reservationsCancel);
 			$keys = array();
 			if( count($reservations) > 0 ){
 				foreach( $reservations[0] as $key => $item ){
@@ -1832,14 +1834,12 @@ private function comprubaArray($valor, $array){
 	public function savePeople(){
 		if($this->input->is_ajax_request()){
 			$id = $_POST['id'];
-			//$_POST['peoples'][$i]["id"],
 			$people = $_POST['peoples'];
 			$resPeople = $this->reservation_db->getResPeople($id);
 			foreach($resPeople as $item){
 				$exist = 0;
 				foreach($people as $person){
 					if($item->fkPeopleId == $person['id']){
-						//echo "hola ";
 						$exist = 1;
 						$update = [
 							"ynPrimaryPeople"	=> $person['primario'],

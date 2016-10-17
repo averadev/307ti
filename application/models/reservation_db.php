@@ -30,23 +30,18 @@ class Reservation_db extends CI_Model {
     function getReservations($filters, $id){
         $sql = "";
         $this->db->distinct();
-		//$this->db->limit(100);
-        //$this->db->select("r.pkResId as ID, rt.ResTypeDesc as Reservacion_type, ( CONVERT(varchar(10),  r.folio ) + '-' +  CONVERT(varchar(10),  1 ) ) as Folio, (ot.OccTypeCode + '-' + CONVERT(varchar(10), r.folio ) + '-' + substring(CONVERT(varchar(10), r.FirstOccYear ), 3, 4) ) as Confirmation_code, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name");
 		$this->db->select("r.pkResId as ID, rt.ResTypeDesc as Reservacion_type, ( CONVERT(varchar(10),  r.folio ) + '-' +  CONVERT(varchar(10),  1 ) ) as Folio, r.ResConf as Confirmation_code, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name");
         $this->db->select('ot.OccTypeDesc as Occ_type, fp.FloorPlanDesc as FloorPlan, v.ViewDesc as View_, s.SeasonDesc as Season, R.FirstOccYear, ES.StatusDesc');
         $this->db->select('US.UserLogin as Create_by, r.CrDt as Create_date, USS.UserLogin as Modified_by, r.MdDt as Modified_date');
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
-		//$this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
         if ($id!=NULL) {
 			$this->db->select('r.fkResTypeId');
 		}
 		$this->db->from('tblRes r');
 		$this->db->join('tblResType rt', 'rt.pkResTypeId = r.fkResTypeId');
-		//$this->db->join('tblResInvt ri', '(ri.fkResId =  CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)');
 		$this->db->join('tblResInvt ri', ' ri.fkResId = r.pkResId ');
         $this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId');
-		//$this->db->join('tblResPeopleAcc rpa', '(rpa.fkResId =  CASE WHEN r.fkResTypeId = 6 THEN r.pkResRelatedId ELSE r.pkResId END)');
 		$this->db->join('tblResPeopleAcc rpa', ' rpa.fkResId = r.pkResId ');
         $this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId');
         $this->db->join('tblEmployee em', 'em.fkPeopleId = p.pkPeopleId', 'LEFT');
@@ -61,7 +56,6 @@ class Reservation_db extends CI_Model {
 		$this->db->join('tblEmail e', 'e.pkEmail = pe.fkEmailId', 'LEFT');
         $this->db->join('tblUser US', 'r.CrBy = US.pkUserId', 'inner');
         $this->db->join('tblUser USS', 'r.MdBy = USS.pkUserId', 'left');
-		//$this->db->where('rpa.ynPrimaryPeople', '1');
 		$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
 		$this->db->where('rpa.ynActive',1);
 		$this->db->where('rpa.ynPrimaryPeople', '1');
@@ -96,7 +90,6 @@ class Reservation_db extends CI_Model {
 				}
 			}
             if($filters['dates'] != false){
-				//$filters['checks']['folioRes']
 				if(!isset($filters['checks']['folioRes'])){
 					if( isset($filters['dates']['startDateRes']) && isset($filters['dates']['endDateRes']) ){
 						$this->db->where('(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) = ', $filters['dates']['startDateRes']);
@@ -138,6 +131,110 @@ class Reservation_db extends CI_Model {
         }
     }
     
+        function getReservationsCancel($filters, $id){
+        $sql = "";
+        $this->db->distinct();
+        $this->db->select("r.pkResId as ID, rt.ResTypeDesc as Reservacion_type, ( CONVERT(varchar(10),  r.folio ) + '-' +  CONVERT(varchar(10),  1 ) ) as Folio, r.ResConf as Confirmation_code, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name");
+        $this->db->select('ot.OccTypeDesc as Occ_type, fp.FloorPlanDesc as FloorPlan, v.ViewDesc as View_, s.SeasonDesc as Season, R.FirstOccYear, ES.StatusDesc');
+        $this->db->select('US.UserLogin as Create_by, r.CrDt as Create_date, USS.UserLogin as Modified_by, r.MdDt as Modified_date');
+        $this->db->select('RI.OrgCheckInDt as arrivaDate, RI.OrgCheckOutDt as depatureDate');
+        if ($id!=NULL) {
+            $this->db->select('r.fkResTypeId');
+        }
+        $this->db->from('tblRes r');
+        $this->db->join('tblResType rt', 'rt.pkResTypeId = r.fkResTypeId');
+        $this->db->join('tblResInvt ri', ' ri.fkResId = r.pkResId ');
+        $this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId');
+        $this->db->join('tblResPeopleAcc rpa', ' rpa.fkResId = r.pkResId ');
+        $this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId');
+        $this->db->join('tblEmployee em', 'em.fkPeopleId = p.pkPeopleId', 'LEFT');
+        $this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId', 'LEFT');
+        $this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId', 'LEFT');
+        $this->db->join('tblOccTypeGroup otg', 'otg.pkOccTypeGroupId = ot.fkOccTypeGroupId');
+        $this->db->join('tblStatus ES', 'ES.pkStatusId = r.fkStatusId ', 'left');
+        $this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = ri.fkFloorPlanId');
+        $this->db->join('tblView v', 'v.pkViewId = ri.fkViewId and v.ynActive = 1', 'LEFT');
+        $this->db->join('tblSeason s', 's.pkSeasonId = ri.fkSeassonId', 'LEFT');
+        $this->db->join('tblPeopleEmail pe', 'pe.fkPeopleId = p.pkPeopleId', 'LEFT');
+        $this->db->join('tblEmail e', 'e.pkEmail = pe.fkEmailId', 'LEFT');
+        $this->db->join('tblUser US', 'r.CrBy = US.pkUserId', 'inner');
+        $this->db->join('tblUser USS', 'r.MdBy = USS.pkUserId', 'left');
+        $this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
+        $this->db->where('rpa.ynActive',1);
+        $this->db->where('rpa.ynPrimaryPeople', '1');
+        $this->db->where('R.fkStatusId', 0);
+        if (!is_null($filters)){
+            if($filters['words'] != false){
+                if( isset($filters['words']['stringRes']) ){
+                    if ($filters['checks'] != false){
+                        $this->filterReservations($filters);
+                    }
+                }
+                if( isset($filters['words']['createByRes']) ){
+                    $this->db->join('tblUser ue', 'ue.pkUserId = r.CrBy', 'inner');
+                    $this->db->where( 'ue.UserLogin = ', $filters['words']['createByRes']);
+                }
+            }
+            $condicion = '';
+            if($filters['options'] != false){
+                if( isset($filters['options']['statusRes']) ){
+                    for ($i=0; $i < sizeof($filters['options']['statusRes']); $i++) { 
+                        $condicion .= 'r.fkStatusId = '.$filters['options']['statusRes'][$i];
+                        if ($i+1 < sizeof($filters['options']['statusRes'])) {
+                            $condicion .=' or ';
+                        }
+                    }
+                    $fl =" ( " . $condicion . ")";
+                    $this->db->where($fl);
+                }
+                if( isset($filters['options']['OccTypeGroupRes']) && !isset($filters['options']['OccTypeRes']) ){
+                    $this->db->where('otg.pkOccTypeGroupId', $filters['options']['OccTypeGroupRes']);
+                }else if( isset($filters['options']['OccTypeGroupRes']) && isset($filters['options']['OccTypeRes'] ) ){
+                    $this->db->where('ot.pkOccTypeId', $filters['options']['OccTypeRes']);
+                }
+            }
+            if($filters['dates'] != false){
+                if(!isset($filters['checks']['folioRes'])){
+                    if( isset($filters['dates']['startDateRes']) && isset($filters['dates']['endDateRes']) ){
+                        $this->db->where('CONVERT(VARCHAR(11),ri.OrgCheckInDt,101) = ', $filters['dates']['startDateRes']);
+                        $this->db->where('CONVERT(VARCHAR(11),ri.OrgCheckOutDt,101) = ', $filters['dates']['endDateRes']);
+                    }else{
+                        if(isset($filters['dates']['startDateRes'])){
+                             $this->db->where('CONVERT(VARCHAR(11),ri.OrgCheckInDt,101) = ', $filters['dates']['startDateRes']);
+                        }
+                        if(isset($filters['dates']['endDateRes'])){
+                            $fecha =  new DateTime($filters['dates']['endDateRes']);
+                            $fecha->modify("-1 day");
+                            $fechaActual = $fecha->format('m/d/Y');
+                            $this->db->where('CONVERT(VARCHAR(11),ri.OrgCheckInDt,101) = ', $fechaActual);
+                        }
+                    }
+                }
+                if(isset($filters['dates']['createDtRes'])){
+                    $this->db->where('CONVERT(VARCHAR(11),r.CrDt,101) = ', $filters['dates']['createDtRes']);
+                }
+            }
+        }
+        if ($id!=NULL) {
+            //$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7 or r.fkResTypeId = 10 )');
+            $this->db->where('R.pkResId', $id);
+        }else{
+            
+            //$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7)');
+        }
+        
+        if($sql!=""){
+        
+           $this->db->where($sql, NULL);
+        }
+        $this->db->order_by('ID', 'DESC');
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+
     public function getUnidades($filters){
         $arrivaDate = $filters['fromDate'];
         $depurateDate = $filters['toDate'];
