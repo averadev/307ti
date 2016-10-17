@@ -142,17 +142,16 @@ class Reservation_db extends CI_Model {
             $this->db->select('r.fkResTypeId');
         }
         $this->db->from('tblRes r');
-        $this->db->join('tblResType rt', 'rt.pkResTypeId = r.fkResTypeId');
-        $this->db->join('tblResInvt ri', ' ri.fkResId = r.pkResId ');
-        $this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId');
-        $this->db->join('tblResPeopleAcc rpa', ' rpa.fkResId = r.pkResId ');
-        $this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId');
+        $this->db->join('tblResType rt', 'rt.pkResTypeId = r.fkResTypeId', 'INNER');
+        $this->db->join('tblResInvt ri', ' ri.fkResId = r.pkResId ', 'INNER');
+        $this->db->join('tblUnit u', 'u.pkUnitId = ri.fkUnitId', 'INNER');
+        $this->db->join('tblResPeopleAcc rpa', ' rpa.fkResId = r.pkResId ', 'INNER');
+        $this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId', 'INNER');
         $this->db->join('tblEmployee em', 'em.fkPeopleId = p.pkPeopleId', 'LEFT');
         $this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId', 'LEFT');
         $this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId', 'LEFT');
-        $this->db->join('tblOccTypeGroup otg', 'otg.pkOccTypeGroupId = ot.fkOccTypeGroupId');
         $this->db->join('tblStatus ES', 'ES.pkStatusId = r.fkStatusId ', 'left');
-        $this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = ri.fkFloorPlanId');
+        $this->db->join('tblFloorPlan fp', 'fp.pkFloorPlanID = ri.fkFloorPlanId', 'INNER');
         $this->db->join('tblView v', 'v.pkViewId = ri.fkViewId and v.ynActive = 1', 'LEFT');
         $this->db->join('tblSeason s', 's.pkSeasonId = ri.fkSeassonId', 'LEFT');
         $this->db->join('tblPeopleEmail pe', 'pe.fkPeopleId = p.pkPeopleId', 'LEFT');
