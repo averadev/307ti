@@ -59,8 +59,10 @@ class Maintenance extends CI_Controller {
 	}
 	public function getContrats(){
 		if($this->input->is_ajax_request()) {
-			$baths = $this->Maintenance_db->getContracts();
-			echo json_encode($baths);
+			$sql = $this->receiveWords($_POST);
+			//var_dump($sql);
+			$contracts = $this->Maintenance_db->getContracts($sql);
+			echo json_encode($contracts);
 		}
 	}
 
@@ -68,7 +70,7 @@ class Maintenance extends CI_Controller {
 		if($this->input->is_ajax_request()) {
 
 
-			$Card = [
+			$Batch = [
 				"fkPropertyId"	=> $_POST['Property'],
 				"fkBatchTypeId"	=> 2,
 				"fkBatchClassId"=> 1,
@@ -85,8 +87,26 @@ class Maintenance extends CI_Controller {
 				"CrDt"			=> $this->getToday()
 			];
 
-			$afectados =  $this->Maintenance_db->insertReturnId('tblBatch', $Card);
+			$afectados =  $this->Maintenance_db->insertReturnId('tblBatch', $Batch);
 			if ($afectados>0) {
+				$contrats = $_POST['Contracts'];
+				for($i = 0; $i < sizeof($contrats); $i++){
+					$BatchDetail = [
+						"fkBatchId"			=> $afectados,
+						"fkResId"			=> $contrats[$i],
+						"fkfloorPlanId"		=> $_POST['FloorPlan'],
+						"Year"				=> $_POST['Year'],
+						"Amount"			=> $_POST['Season'],
+						"PreviousBalance" 	=> 0,
+						"BatchDesc"			=> $_POST['BatchDesc'],
+						"TotalAmount"		=> 0,
+						"fkDocId"			=> 1,
+						"CrBy"				=> $this->nativesessions->get('id'),
+						"CrDt"				=> $this->getToday()
+					];
+					$detail =  $this->Maintenance_db->insertReturnId('tblCsfBatch', $BatchDetail);
+				}
+				
 				$mensaje = ["success" => 1, "mensaje"=>"Save Correctly","afected" => $afectados];
 				echo json_encode($mensaje);
 			}else{

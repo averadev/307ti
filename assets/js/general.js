@@ -1186,3 +1186,20 @@ function drawTableSinHead(data, table){
     }
     $('#' + table).html(bodyHTML);
 }
+
+//reducir a una funcion
+function deleteElementTableGeneral(div){
+	$("#"+div+" tr").on("click", "button", function(){
+		$(this).closest("tr").remove();
+	});
+}
+
+function getArrayValuesColumnTable(tabla, columna){
+	var items=[];
+	$('#'+tabla+' tbody tr td:nth-child('+columna+')').each( function(){
+		if ($(this).text().replace(/\s+/g, " ")!="") {
+			items.push( $(this).text().replace(/\s+/g, " "));
+		}       
+	});
+	return items;
+}

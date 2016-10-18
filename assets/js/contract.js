@@ -1849,16 +1849,6 @@ function totalDescPackMain(){
 	$("#totalDiscountPacks").val(totalCp);
 }
 
-
-function getArrayValuesColumnTable(tabla, columna){
-	var items=[];
-	$('#'+tabla+' tbody tr td:nth-child('+columna+')').each( function(){
-		if ($(this).text().replace(/\s+/g, " ")!="") {
-			items.push( $(this).text().replace(/\s+/g, " "));
-		}       
-	});
-	return items;
-}
 function getArrayValuesCheckbox(){
 	var items=[];
 	var Primario = $("#tablePeopleSelected .primy");

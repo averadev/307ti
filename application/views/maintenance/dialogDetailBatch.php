@@ -176,6 +176,7 @@
 								<?php
 								if (isset($Batchs)) {
 									foreach($Batchs as $item){?>
+									<tr>
 									<td><?php echo $item->ID; ?></td>
 									<td><?php echo $item->Folio; ?></td>
 									<td><?php echo $item->LegalName; ?></td>
@@ -188,8 +189,7 @@
 									<td><?php echo $item->Y2; ?></td>
 									<td><?php echo $item->TotalAmount; ?></td>
 									<td><?php echo $item->PreviousBalance; ?></td>
-									
-									
+									<tr>
 									<?php
 								}
 								

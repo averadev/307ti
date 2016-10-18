@@ -58,8 +58,13 @@ function newBacth(){
 	       		text: "Save",
 	       		"class": 'dialogModalButtonAccept',
 	       		click: function() {
-	       			createNewBatch();
-	       			$(this).dialog('close');
+	       			var rowCount = $('#tablaSearcBatchsBody tr').length;
+	       			if (rowCount > 0) {
+	       				createNewBatch();
+	       				$(this).dialog('close');
+	       			}else{
+	       				alertify.error("Search Contracts");
+	       			}
 	       		}
 	     	}]
 		};
@@ -74,7 +79,7 @@ function newBacth(){
 function createNewBatch(){
 	msgMan = alertify.success('Saving changes, please wait ....', 0);
 	var Description = getDetailBatch();
-
+	var Contracts = getArrayValuesColumnTable("tablaSearcBatchs", 1);
 	var ajaxDatos =  {
 		url: "Maintenance/newBatch",
 		tipo: "json",
@@ -85,7 +90,8 @@ function createNewBatch(){
 			FloorPlan: $("#NFloorPlan").val(),
 			Frequency: $("#NFrequency").val(),
 			Season: $("#NSeason").val(),
-			BatchDesc : Description
+			BatchDesc : Description,
+			Contracts : Contracts
 		},
 		funcionExito : mensajeSaveBatch,
 		funcionError: mensajeAlertify
@@ -207,10 +213,18 @@ function changeTabsModalBatch(screen){
 
 
 function searchMaintenanceContracts(){
+	showLoading('#tablaSearcBatchs',true);
 	var ajaxDatos =  {
 		url: "Maintenance/getContrats",
 		tipo: "json",
-		datos: {},
+		datos: {
+				Property: $("#NProperty").val(),
+				Year: $("#NYears").val(),
+				SaleType: $("#NSaleType").val(),
+				FloorPlan: $("#NFloorPlan").val(),
+				Frequency: $("#NFrequency").val(),
+				Season: $("#NSeason").val()
+		},
 		funcionExito : drawTableM,
 		funcionError: mensajeAlertify
 	};
@@ -218,14 +232,24 @@ function searchMaintenanceContracts(){
 }
 
 function drawTableM(data, div){
-	var table = "tablaSearcBatchsBody";
-	  var bodyHTML = '';
-    for (var i = 0; i < data.length; i++) {
-        bodyHTML += "<tr>";
-        for (var j in data[i]) {
-            bodyHTML+="<td>" + data[i][j] + "</td>";
-        };
-        bodyHTML+="</tr>";
-    }
-    $('#' + table).html(bodyHTML);
+
+	showLoading('#tablaSearcBatchs',false);
+	if (data) {
+		var table = "tablaSearcBatchsBody";
+		var bodyHTML = '';
+	    for (var i = 0; i < data.length; i++) {
+	        bodyHTML += "<tr>";
+	        for (var j in data[i]) {
+	            bodyHTML+="<td>" + data[i][j] + "</td>";
+	        };
+	        bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
+	        bodyHTML+="</tr>";
+	    }
+	    $('#' + table).html(bodyHTML);
+	    deleteElementTableGeneral(table);
+	}else{
+		$('#tablaSearcBatchsBody').empty();
+		alertify.error("No Data Found");
+	}
+	
 }

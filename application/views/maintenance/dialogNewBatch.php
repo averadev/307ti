@@ -1,5 +1,19 @@
+		<div class="box" relation-attr="box-contract-relation">
+			<div class="box-header pr-color">
+				<div class="pull-right box-tools">
+					<span class="box-btn" data-widget="collapse">
+						<i class="fa fa-minus"></i>
+					</span>
+				</div>
+				<h3 class="box-title">
+               		<span>Search</span>
+               	</h3>
+			</div>
+			<div class="box-body box-filter">
+			<div class="row">
+					<div class="small-12 medium-12 large-12 columns">
 <fieldset class="fieldset">
-	<div class="row">
+	<div class="small-6 columns">
 		<div class="small-3 columns">
 			<label class="text-left" for="legalName">Property</label>
 		</div>
@@ -13,7 +27,7 @@
 				</select>
 			</div>
 	</div>
-	<div class="row">
+	<div class="small-6 columns">
 		<div class="small-3 columns">
 			<label class="text-left" for="legalName">Year</label>
 		</div>
@@ -27,7 +41,7 @@
 				</select>
 			</div>
 	</div>
-	<div class="row">
+	<div class="small-6 columns">
 		<div class="small-3 columns">
 			<label class="text-left" for="legalName">Sale Type</label>
 		</div>
@@ -41,7 +55,7 @@
 				</select>
 			</div>
 	</div>
-	<div class="row">
+	<div class="small-6 columns">
 		<div class="small-3 columns">
 			<label class="text-left" for="legalName">Floor Plan</label>
 		</div>
@@ -55,7 +69,7 @@
 				</select>
 			</div>
 	</div>
-	<div class="row">
+	<div class="small-6 columns">
 		<div class="small-3 columns">
 			<label class="text-left" for="legalName">Frequency</label>
 		</div>
@@ -69,7 +83,7 @@
 				</select>
 			</div>
 	</div>
-	<div class="row">
+	<div class="small-6 columns">
 		<div class="small-3 columns">
 			<label class="text-left" for="legalName">Season</label>
 		</div>
@@ -89,8 +103,8 @@
 				<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 			</a>
 	</div>
-	
-</fieldset>
+
+</fieldset></div></div></div></div>
 			<fieldset class="fieldset" id="fieldsetNoteCon">
 				<div class="containerContract">
 					<div class="row">
@@ -111,6 +125,7 @@
 									<th class="cellGeneral">LastOccYear</th>
 									<th class="cellGeneral">Unit Price</th>
 									<th class="cellGeneral">Maintenance Price</th>
+									<th class="cellGeneral">Remove</th>
 								</tr>
 							</thead>
 							<tbody id="tablaSearcBatchsBody">
