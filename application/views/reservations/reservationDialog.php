@@ -136,9 +136,9 @@
                     </div>
                     <div class="small-3 columns">
 						<div class="row collapse">
-							<label id="alertLastName" for="contractR" class="text-left">Reservation Related</label>
+							<label id="alertLastName" for="RRelated" class="text-left">Reservation Related</label>
 							<div class="small-10 columns">
-								<input class="round general" id="contractR" name="contractR" type="text" placeholder="Folio" value="0">
+								<input class="round general" id="RRelated" name="RRelated" type="text" placeholder="Folio" value="0">
 							</div>
 							<div class="small-2 columns">
 								<a class="button postfix img"><img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/></a>

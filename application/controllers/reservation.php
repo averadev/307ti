@@ -112,7 +112,7 @@ class Reservation extends CI_Controller {
 			"fkPaymentProcessTypeId"    => $this->reservation_db->selectPaymentProcessTypeId('RG'),
 			"fkLanguageId"              => $_POST['idiomaID'],
 			"fkLocationId"              => $this->reservation_db->selectLocationId('CUN'),
-			"pkResRelatedId"            => null,
+			"pkResRelatedId"            => $_POST['RelatedR'],
 			"FirstOccYear"              => $_POST['firstYear'],
 			"LastOccYear"               => $_POST['lastYear'],
 			"ResCode"                   => $_POST['occCode'] . "-" . $folioRes . "-" . substr($_POST['firstYear'],2,4),
@@ -853,8 +853,6 @@ private function comprubaArray($valor, $array){
 			$id = null;
 			$reservations = $this->reservation_db->getReservations($sql, $id);
 			$reservationsCancel = $this->reservation_db->getReservationsCancel($sql, $id);
-			//var_dump($reservationsCancel);
-			//var_dump($reservations);
 			if ($reservationsCancel && $reservations) {
 				$reservations = array_merge($reservations, $reservationsCancel);
 			}else{

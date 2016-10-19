@@ -1051,7 +1051,7 @@ function updateValuePeopleRes(){
 }
 function getArrayValuesCheckboxRes(){
 	var items=[];
-	var Primario = $("#tablePeopleResSelected .primy");
+	var Primario = $("#peopleContractRes .primy");
 	for (var i = 0; i < Primario.length; i++) {
 		items.push(Primario[i].checked);
 	}
@@ -1190,6 +1190,7 @@ function createNewReservation(){
 						day:day,
 						iniDate:iniDateRes,
 						endDate:endDateRes,
+						RelatedR: $("#RRelated").val(),
 						RateAmtNight:$('#RateRes').val(),
 					},
 
@@ -4648,7 +4649,7 @@ function changeUnitRes(){
 						day:day,
 						iniDate:iniDateRes,
 						endDate:endDateRes,
-						RateAmtNight:$('#RateRes').val(),
+						RateAmtNight:$('#RateRes').val()
 					},
 
 					type: "POST",

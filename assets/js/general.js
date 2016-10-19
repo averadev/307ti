@@ -926,6 +926,7 @@ function getIndexCheckbox(){
 
 function checkAllBeneficiary(selected){
 	$(".benefy").each(function (i) {
+		console.log(i);
 		if (selected != i) {
 			this.checked = true;
 		}else{
