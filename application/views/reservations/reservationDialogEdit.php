@@ -1,4 +1,7 @@
 <?php 
+if (!isset($contract)) {
+	$contract[0] = new StdClass;
+}
 if(!isset($contract[0]->ID)){$contract[0]->ID = "";};
 if(!isset($contract[0]->fkResTypeId)){$contract[0]->fkResTypeId = "";};
 if(!isset($contract[0]->Confirmation_code)){$contract[0]->Confirmation_code ="";};

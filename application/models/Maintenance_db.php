@@ -124,7 +124,7 @@ Class Maintenance_db extends CI_MODEL
 				$this->db->where('RI.fkFrequencyId', $filters['Frequency']);
 			}
             if (isset($filters['Season']) && !empty($filters['Season'])) {
-                //$this->db->where('RI.fkseassonId', $filters['Season']);
+                $this->db->where('RI.fkseassonId', $filters['Season']);
             }
             if (isset($filters['Year']) && !empty($filters['Year'])) {
                 $this->db->where( $filters['Year'].' BETWEEN R.FirstOccYear and R.LastOccYear');

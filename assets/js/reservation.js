@@ -2439,7 +2439,7 @@ function ajaxSelectsPeopleStatus(status) {
         	$(".checkInPeople").html(select);
         	for (var i = 0; i < status.length; i++) {
    		 			$(".checkInPeople")[i].value = status[i];
-   				}
+   			}
 		},
 		error: function(){
 			alertify.error(errorMsj);
@@ -2447,7 +2447,6 @@ function ajaxSelectsPeopleStatus(status) {
 	});
 }
 function drawTableSinHeadReservationPeople(data, table){
-	console.log(data)
 	var statusActuales = [];
 	var status = $("#editReservationStatus").text().replace("Status: ", "");
 	var option1 = "<select class='checkInPeople'>"+status+"</select>";
@@ -2458,6 +2457,7 @@ function drawTableSinHeadReservationPeople(data, table){
 	var X;
 	$('#' + table).empty();
     for (var i = 0; i < data.length; i++) {
+    	statusActuales.push(data[i].fkPeopleStatusId);
 		var bodyHTML = '';
 		bodyHTML += "<tr>";
 		bodyHTML += checkboxT;
@@ -2479,7 +2479,6 @@ function drawTableSinHeadReservationPeople(data, table){
 	//defaultValuesRes();
     onChangePrimaryRes();
 	deleteElementTableRes(table);
-	
     return statusActuales;
 }
 
