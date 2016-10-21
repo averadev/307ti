@@ -79,7 +79,7 @@ class Maintenance extends CI_Controller {
 				"Intv"			=> 7,
 				"fkSeasonid"	=> $_POST['Season'],
 				"BatchDesc"		=> $_POST['BatchDesc'],
-				"TotalRecords"	=> 0,
+				"TotalRecords"	=> sizeof($_POST['Contracts']),
 				"TotalAmount"	=> 0,
 				"ynActive"		=> 1,
 				"fkStatusId"	=> 20,
