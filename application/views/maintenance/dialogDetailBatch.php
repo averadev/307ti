@@ -59,7 +59,7 @@
 								<td>Status:</td>
 								<td id="cventaHitch"><?= $Batch[0]->StatusDesc;?></td>
 								<td>Total Amount:</td>
-								<td id="cventaTransferA"><?= $Batch[0]->TotalAmount;?></td>
+								<td id="cventaTransferA"><?= number_format((float)$Batch[0]->TotalAmount, 2, '.', '');?></td>
 							</tr>
 							<tr>
 								<td>YnActive:</td>
@@ -124,7 +124,7 @@
 								<td>Status:</td>
 								<td id="cventaHitch"><?= $Batch[0]->StatusDesc;?></td>
 								<td>Total Amount:</td>
-								<td id="cventaTransferA"><?= $Batch[0]->TotalAmount;?></td>
+								<td id="cventaTransferA"><?= number_format((float)$Batch[0]->TotalAmount, 2, '.', '');?></td>
 							</tr>
 							<tr>
 								<td>YnActive:</td>
@@ -187,8 +187,8 @@
 									<td><?php echo $item->Intv; ?></td>
 									<td><?php echo $item->ViewDesc; ?></td>
 									<td><?php echo $item->Y2; ?></td>
-									<td><?php echo $item->TotalAmount; ?></td>
-									<td><?php echo $item->PreviousBalance; ?></td>
+									<td><?php echo number_format((float)$item->TotalAmount, 2, '.', ''); ?></td>
+									<td><?php echo number_format((float)$item->PreviousBalance, 2, '.', ''); ?></td>
 									<tr>
 									<?php
 								}

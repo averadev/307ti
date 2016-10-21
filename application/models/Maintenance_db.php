@@ -100,6 +100,22 @@ Class Maintenance_db extends CI_MODEL
             return $query->result();
         }
     }
+    public function getPriceUnit($ID){
+
+        $this->db->select("P.PriceMtn as Price");
+        $this->db->from('tblResInvt RI');
+        $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId');
+        $this->db->join('tblPrice P', 'U.pkUnitId = P.fkUnitId');
+        $this->db->where('RI.fkResId', $ID);
+        $this->db->where('P.Week = RI.WeeksNumber');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->Price;
+        }
+    }
     public function getContracts($filters){
 
     	$this->db->select("R.pkResId as ID, R.Folio, R.LegalName, F.FloorPlanDesc, FR.FrequencyDesc");

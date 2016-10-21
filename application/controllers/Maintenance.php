@@ -62,6 +62,7 @@ class Maintenance extends CI_Controller {
 			$sql = $this->receiveWords($_POST);
 			//var_dump($sql);
 			$contracts = $this->Maintenance_db->getContracts($sql);
+			//$contracts = $this->ParseNumber($contracts);
 			echo json_encode($contracts);
 		}
 	}
@@ -91,15 +92,16 @@ class Maintenance extends CI_Controller {
 			if ($afectados>0) {
 				$contrats = $_POST['Contracts'];
 				for($i = 0; $i < sizeof($contrats); $i++){
+					$price = $this->Maintenance_db->getPriceUnit($contrats[$i]);
 					$BatchDetail = [
 						"fkBatchId"			=> $afectados,
 						"fkResId"			=> $contrats[$i],
 						"fkfloorPlanId"		=> $_POST['FloorPlan'],
 						"Year"				=> $_POST['Year'],
-						"Amount"			=> $_POST['Season'],
+						"Amount"			=> $price,
 						"PreviousBalance" 	=> 0,
 						"BatchDesc"			=> $_POST['BatchDesc'],
-						"TotalAmount"		=> 0,
+						"TotalAmount"		=> $price,
 						"fkDocId"			=> 1,
 						"CrBy"				=> $this->nativesessions->get('id'),
 						"CrDt"				=> $this->getToday()
@@ -114,6 +116,16 @@ class Maintenance extends CI_Controller {
 				echo json_encode($mensaje);
 			}
 		}
+	}
+	private function ParseNumber($data){
+		for ($i=0; $i < sizeof($data); $i++) { 
+			foreach ($data[$i] as $key => $value) {
+				if ($data[$i]->TotalAmount == $value) {
+					$data[$i]->TotalAmount = number_format((float)$data[$i]->$key, 2, '.', '');
+				}
+			}
+		}
+		return $data;
 	}
 	private function properties(){
 		$campos = "pkPropertyId as ID , PropertyShortName as Description";
