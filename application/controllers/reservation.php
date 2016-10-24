@@ -1018,8 +1018,16 @@ private function comprubaArray($valor, $array){
 							'AbsAmount'		=>	$totalAmou,
 						);
 						$condicion = "pkAccTrxId = " . $idTrans[$i];
-						$this->reservation_db->updateReturnId( 'tblAccTrx', $transU, $condicion );
+						$ID = $this->reservation_db->updateReturnId( 'tblAccTrx', $transU, $condicion );
+						if ($ID) {
+							array_push($insertTrx, $idTrans[$i]);
+						}
 						//array_push($update, $transU);
+						
+						//array_push($insertTrx, $transI);
+					}
+				}
+				
 						$conversion = $this->convertMoney($Moneda, $totalAmou2);
 						$totalAmou2 = $conversion['precio'];
 						$euros = str_replace(",", ".", $conversion['euro']);
@@ -1030,7 +1038,7 @@ private function comprubaArray($valor, $array){
 						$transI = array(
 							"fkAccid" 			=> $_POST['accId'],
 							"fkTrxTypeId"		=> $_POST['trxTypeId'],
-							"fkTrxClassID"		=> $trxClass[$i],
+							"fkTrxClassID"		=> $this->reservation_db->gettrxClassID('PAY'),
 							"Debit-"			=> $debit,
 							"Credit+"			=> 0,
 							"Amount"			=> $totalAmou2,
@@ -1046,10 +1054,18 @@ private function comprubaArray($valor, $array){
 							"MdBy"				=> $this->nativesessions->get('id'),
 							"MdDt"				=> $this->getToday()
 						);
-						$this->reservation_db->insertReturnId( 'tblAccTrx', $transI );
-						//array_push($insertTrx, $transI);
-					}
-				}
+						$IDPago = $this->reservation_db->insertReturnId( 'tblAccTrx', $transI );
+						for ($i=0; $i < sizeof($insertTrx) ; $i++) { 
+							$pagos = [
+								"fkAccTrxId"	=> $insertTrx[$i],
+								"fkPayId"		=> $IDPago,
+								"Amount"		=> valideteNumber($_POST['amount']),
+								"ynActive"		=> 1,
+								"CrBy"			=> $this->nativesessions->get('id'),
+								"CrDt"			=> $this->getToday(),
+							];
+							$this->reservation_db->insertReturnId( 'tblPayTrx', $pagos );
+						}
 				
 				$message= array('success' => true, 'message' => "transaction save");
 			}
@@ -1181,7 +1197,9 @@ private function comprubaArray($valor, $array){
 								$item->Overdue_Amount = $item->Pay_Amount;
 							}
 						}
+						unset( $item->idpay, $item->fkPay );
 					}
+					
 					$datos[$tyTr] = $data;
 				}
 				

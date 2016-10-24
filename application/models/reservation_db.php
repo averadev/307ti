@@ -624,6 +624,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->distinct();
         if($typeInfo == "account"){
             $this->db->select('att.pkAccTrxId as ID');
+			$this->db->select("PT.fkPayId as idpay, CASE WHEN PT.fkPayId is NULL THEN att.pkAccTrxId ELSE PT.fkAccTrxId END as 'fkPay'");
             $this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Sign_transaction, att.fkAccId as AccID');
             $this->db->select('tc.TrxClassDesc as Concept_Trxid');
             $this->db->select('CONVERT(VARCHAR(10),att.DueDt,101) as Due_Date, att.Amount, att.AbsAmount as Pay_Amount,0 as Balance, 0 as Overdue_Amount');
@@ -638,6 +639,7 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         }
         $this->db->from('tblAccTrx att');
         $this->db->join('tblAcc a', 'a.pkAccId = att.fkAccId');
+		$this->db->join('tblPayTrx PT', ' att.pkAccTrxID = PT.fkPayId and PT.pkPayTrxId = (select top 1 PT2.pkPayTrxId from tblPayTrx PT2 where PT2.fkPayId =  PT.fkPayId ORDER BY PT2.pkPayTrxId DESC) ', 'left');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId');
         $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = att.fkTrxTypeId');
         $this->db->join('tblTrxClass tc', 'tc.pkTrxClassid = att.fkTrxClassID');
@@ -653,6 +655,10 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             $this->db->where('a.fkAccTypeId = ', $typeAcc);
             $this->db->where('att.AbsAmount > 0');
         }
+		if($typeInfo == "account"){
+			$this->db->order_by("fkPay", "ASC");
+			//$this->db->order_by("ID", "DESC");
+		}
 		$this->db->where('rpa.ynActive',1);
         $query = $this->db->get();
         return $query->result();
