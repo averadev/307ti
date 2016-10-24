@@ -1330,7 +1330,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		$pdf = $this->generatePdfTempTRX( $name, $title, $filtros);
 		$style = $this->generateStyles();
 		$body = '';
-		$body .= '<table width="100%" cellpadding="2">';
+		$body .= '<table width="100%" cellpadding="2" class="audit">';
 		$body.= '<tr>';
 		foreach ($data[0] as $clave => $valor){
 			$body .= '<th>' . $clave . '</th>';
@@ -1520,6 +1520,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		$style .= ' h3{ color: #662C19; }';
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
+		$style .= ' table.audit{ font-size:12px; }';
 		$style .= '</style>';
 
 		return $style;

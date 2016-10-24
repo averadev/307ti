@@ -582,7 +582,7 @@ Class frontDesk_db extends CI_MODEL
 	public function getAuditTrx($filtros){
 
 		$this->db->distinct();
-		$this->db->select("AC.pkAccTrxId as TrxID, U.UnitCode, AC.CrDt, ISNULL(US.UserLogin, '') as CrBy, TT.TrxTypeDesc, TT.TrxSign");
+		$this->db->select("AC.pkAccTrxId as TrxID, U.UnitCode, AC.CrDt, ISNULL(USS.UserLogin, '') as CrBy, TT.TrxTypeDesc, TT.TrxSign");
 		$this->db->select("round(AC.AbsAmount, 2) as Amount, REPLACE(ISNULL( AC.NAuditDate, ''), 'Jan  1 1900 12:00AM', '') as Date_Audit, ISNULL(US.UserLogin, '') as AuditedBy");
 		$this->db->from("tblRes R");
 		$this->db->join('tblResInvt RI', 'R.pkResId = RI.fkResId', 'inner');
@@ -596,20 +596,25 @@ Class frontDesk_db extends CI_MODEL
 			switch ($filtros["YnAudit"]) {
 				case 1:
 					$this->db->join('tblUser US', 'AC.NAuditUserId = US.pkUserId', 'left');
+					$this->db->join('tblUser USS', 'AC.CrBy = USS.pkUserID', 'left');
 					break;
 				case 2:
 					$this->db->join('tblUser US', 'AC.NAuditUserId = US.pkUserId', 'inner');
+					$this->db->join('tblUser USS', 'AC.CrBy = USS.pkUserID', 'left');
 					break;
 				case 3:
 					$this->db->join('tblUser US', 'AC.NAuditUserId = US.pkUserId', 'left');
 					$this->db->where("AC.NAuditUserId IS NULL");
+					$this->db->join('tblUser USS', 'AC.CrBy = USS.pkUserID', 'left');
 					break;
 				default:
 				$this->db->join('tblUser US', 'AC.NAuditUserId = US.pkUserId', 'left');
-						break;
+				$this->db->join('tblUser USS', 'AC.CrBy = USS.pkUserID', 'left');
+				break;
 			}
 		}else{
 			$this->db->join('tblUser US', 'AC.NAuditUserId = US.pkUserID', 'left');
+			$this->db->join('tblUser USS', 'AC.CrBy = USS.pkUserID', 'left');
 		}
 		if (isset($filtros["User"]) && !empty($filtros["User"])) {
 			$this->db->where("AC.NAuditUserId = (select pkUserID from tblUser where UserLogin = '".$filtros["User"]."')");
