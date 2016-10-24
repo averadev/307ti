@@ -91,6 +91,15 @@
 									<input type="text" id="TrxAmtColl" class="txtSearch"/>
 								</label>
 							</div>
+							<!-- cr Date -->
+							<div class="small-12 large-3 columns">
+								<label id="alertCrDateColl" for="CrDateColl" class="text-left">Create Date
+									<div class="input-group date" >
+										<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+										<input type="text" id="CrDateColl" class="txtSearch input-group-field roundRight" readonly/>
+									</div>
+								</label>
+							</div>
 						</div>
 					</div>
 					<!----->
@@ -121,6 +130,12 @@
 											<option value="">choose an option</option>
 										</select>
 									</div>
+								</label>
+							</div>
+							<!-- login user -->
+							<div class="small-12 large-3 columns float-left">
+								<label id="alertLoginUserColl" for="LoginUserColl" class="text-left">User
+									<input type="text" id="LoginUserColl" class="txtSearch"/>
 								</label>
 							</div>
 							<!-- btn -->

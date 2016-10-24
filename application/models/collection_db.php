@@ -54,9 +54,9 @@ Class collection_db extends CI_MODEL
 	public function getCollection($filters){
 		$sql = "";
         $this->db->distinct();
-        $this->db->select('at1.pkAccTrxId as ID, r.Folio, tt.TrxTypeDesc as trxType, at1.Amount, CONVERT(VARCHAR(11),at1.DueDt,106) as dueDate');
+        $this->db->select('at1.pkAccTrxId as ID, r.Folio, r.resCode, tt.TrxTypeDesc as trxType, at1.Amount, CONVERT(VARCHAR(11),at1.DueDt,106) as dueDate, CONVERT(VARCHAR(11),at1.CrDt,106) as Create_Date');
         $this->db->select('DATEDIFF(day, CONVERT(VARCHAR(11),at1.DueDt,106), CONVERT(VARCHAR(11),GETDATE(),106)) AS DiffDate');
-		$this->db->select('att.AccTypeDesc as accType,  ( ph.PhoneDesc + ph.AreaCode ) AS Phone, em.EmailDesc as Email');
+		$this->db->select('att.AccTypeDesc as accType,  ( ph.PhoneDesc + ph.AreaCode ) AS Phone, em.EmailDesc as Email, us.UserLogin as User');
 		//$this->db->select("CONVERT(VARCHAR(11)");
 		//$this->db->select("CONVERT(VARCHAR(11), il.NextInteractionDueDt, 106) as NextInteractionDate, s.StatusDesc as Status, (p2.Name + ' ' + p2.LName) as Asigned_To");
 		$this->db->from('tblAccTrx at1');
@@ -73,6 +73,7 @@ Class collection_db extends CI_MODEL
 		$this->db->join('tblPhone ph', 'ph.pkPhoneId = pph.fkPhoneId', 'LEFT');
 		$this->db->join('tblPeopleEmail pem', 'pem.fkPeopleId = p.pkPeopleId and pem.ynPrimaryEmail = 1', 'LEFT');
 		$this->db->join('tblEmail em', 'em.pkEmail = pem.fkEmailId', 'LEFT');
+		$this->db->join('tblUser us', 'us.pkUserId = at1.CrBy');
 		//$this->db->join('tblInteractionLog il', 'il.fkAccTrxId =  at1.pkAccTrxId', 'LEFT');
 		//$this->db->join('tblStatus s', 's.pkStatusId = il.fkStatusId', 'LEFT');
 		//$this->db->join('tblPeople p2', 'p2.pkPeopleId = il.fkPeopleId', 'LEFT');
@@ -94,6 +95,9 @@ Class collection_db extends CI_MODEL
 						$date = $filters['dates']['DueDateColl'];
 						$this->db->where(" DATEDIFF(day, CONVERT(VARCHAR(11),'" . $date . "',106), CONVERT(VARCHAR(11),GETDATE(),106)) = ", $filters['words']['PastDueDateColl']);
 					}
+				}
+				if(isset($filters['words']['LoginUserColl'])){
+					$this->db->where('us.UserLogin', $filters['words']['LoginUserColl']);
 				}
 				/*if(isset($filters['words']['AsignedToColl'])){
 					$name =  $filters['words']['AsignedToColl'];
@@ -119,6 +123,9 @@ Class collection_db extends CI_MODEL
 			if($filters['dates'] != false){
 				if(isset($filters['dates']['DueDateColl'])){
 					$this->db->where('CONVERT(VARCHAR(10),at1.DueDt,101)', $filters['dates']['DueDateColl']);
+				}
+				if(isset($filters['dates']['CrDateColl'])){
+					$this->db->where('CONVERT(VARCHAR(10),at1.CrDt,101)', $filters['dates']['CrDateColl']);
 				}
 				/*if(isset($filters['dates']['NextIntDateColl'])){
 					$this->db->where('CONVERT(VARCHAR(10),il.NextInteractionDueDt,101)', $filters['dates']['NextIntDateColl']);

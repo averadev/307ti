@@ -28,7 +28,7 @@ $(document).ready(function() {
 	var editColletionDialog = modalEditColletion(0);
 	
 	//alertify.success("Found "+ 50);
-	$( "#DueDateColl" ).Zebra_DatePicker({
+	$( "#DueDateColl, #CrDateColl" ).Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false,
 	});
@@ -116,9 +116,9 @@ function modalEditColletion(id){
 function getCollection(){
 	noResults('#section-Colletion',false);
 	showLoading('#section-Colletion',true);
-    var arrayDate = ["DueDateColl"];
+    var arrayDate = ["DueDateColl", "CrDateColl"];
     var dates = getDates(arrayDate);
-    var arrayWords = ["TrxIdColl", "FolioColl", "TrxAmtColl", "PastDueDateColl"];
+    var arrayWords = ["TrxIdColl", "FolioColl", "TrxAmtColl", "PastDueDateColl", "LoginUserColl"];
     var words = getWords(arrayWords);
 	var arrayOption = ["TrxTypeColl", "AccTypeColl","OccTypeGroupColl", "OccTypeColl" ];
     var options = getWords(arrayOption);
