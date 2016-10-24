@@ -48,6 +48,7 @@
 		<div class="small-9 columns"></div>
 			<div class="caja" >
 				<select id="NSaleType" class="txtSearch input-group-field round">
+<!-- 					<option value="">Choose an option</option> -->
 					<?php
 						foreach($MSaleType as $item){?>
 							<option value="<?php echo $item->ID; ?>"><?php echo $item->Description; ?></option><?php
@@ -61,7 +62,9 @@
 		</div>
 		<div class="small-9 columns"></div>
 			<div class="caja" >
+					
 				<select id="NFloorPlan" class="txtSearch input-group-field round">
+<!-- 				<option value="">Choose an option</option> -->
 					<?php
 						foreach($MFloorPlan as $item){?>
 							<option value="<?php echo $item->ID; ?>"><?php echo $item->Description; ?></option><?php
@@ -76,6 +79,7 @@
 		<div class="small-9 columns"></div>
 			<div class="caja" >
 				<select id="NFrequency" class="txtSearch input-group-field round">
+<!-- 								<option value="">Choose an option</option> -->
 					<?php
 						foreach($MFrequency as $item){?>
 							<option value="<?php echo $item->ID; ?>"><?php echo $item->Description; ?></option><?php
@@ -90,6 +94,7 @@
 		<div class="small-9 columns"></div>
 			<div class="caja" >
 				<select id="NSeason" class="txtSearch input-group-field round">
+<!-- 								<option value="">Choose an option</option> -->
 					<?php
 						foreach($MSeason as $item){?>
 							<option value="<?php echo $item->ID; ?>"><?php echo $item->Description; ?></option><?php

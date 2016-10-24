@@ -80,6 +80,8 @@ function createNewBatch(){
 	msgMan = alertify.success('Saving changes, please wait ....', 0);
 	var Description = getDetailBatch();
 	var Contracts = getArrayValuesColumnTable("tablaSearcBatchs", 1);
+	var Precios = getArrayValuesColumnTableInt("tablaSearcBatchs", 11);
+	var total = Precios.reduce((x, y) => x + y);
 	var ajaxDatos =  {
 		url: "Maintenance/newBatch",
 		tipo: "json",
@@ -90,8 +92,10 @@ function createNewBatch(){
 			FloorPlan: $("#NFloorPlan").val(),
 			Frequency: $("#NFrequency").val(),
 			Season: $("#NSeason").val(),
+			Total: total,
 			BatchDesc : Description,
-			Contracts : Contracts
+			Contracts : Contracts,
+			Precios: Precios
 		},
 		funcionExito : mensajeSaveBatch,
 		funcionError: mensajeAlertify

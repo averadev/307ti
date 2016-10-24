@@ -2117,6 +2117,8 @@ function drawTableSinHeadPeople(data, table){
 		$('#' + table).append(bodyHTML);
 		if(data[i].ynPrimaryPeople){
 			$('.primy')[i].checked = true;
+		}else{
+			$('.benefy')[i].checked = true;
 		}
     }
 }

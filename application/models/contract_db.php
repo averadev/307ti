@@ -110,6 +110,7 @@ class Contract_db extends CI_Model {
     }
         public function getUnitiesContract($string){
         $sql = "";
+        $this->db->distinct();
         $this->db->select('U.pkUnitId,U.UnitCode, RTRIM(TFP.floorPlanDesc) as description, CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price');
         $this->db->select('RI.WeeksNumber, RI.FirstOccYear, RI.LastOccYear');
         $this->db->from('tblResInvt RI');

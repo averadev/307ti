@@ -80,7 +80,7 @@ class Maintenance extends CI_Controller {
 				"fkSeasonid"	=> $_POST['Season'],
 				"BatchDesc"		=> $_POST['BatchDesc'],
 				"TotalRecords"	=> sizeof($_POST['Contracts']),
-				"TotalAmount"	=> 0,
+				"TotalAmount"	=> $_POST['Total'],
 				"ynActive"		=> 1,
 				"fkStatusId"	=> 20,
 				"Year"			=>	$_POST['Year'],
@@ -91,17 +91,18 @@ class Maintenance extends CI_Controller {
 			$afectados =  $this->Maintenance_db->insertReturnId('tblBatch', $Batch);
 			if ($afectados>0) {
 				$contrats = $_POST['Contracts'];
+				$precios = $_POST['Precios'];
 				for($i = 0; $i < sizeof($contrats); $i++){
-					$price = $this->Maintenance_db->getPriceUnit($contrats[$i]);
+					//$price = $this->Maintenance_db->getPriceUnit($contrats[$i]);
 					$BatchDetail = [
 						"fkBatchId"			=> $afectados,
 						"fkResId"			=> $contrats[$i],
 						"fkfloorPlanId"		=> $_POST['FloorPlan'],
 						"Year"				=> $_POST['Year'],
-						"Amount"			=> $price,
+						"Amount"			=> $precios[$i],
 						"PreviousBalance" 	=> 0,
 						"BatchDesc"			=> $_POST['BatchDesc'],
-						"TotalAmount"		=> $price,
+						"TotalAmount"		=> $precios[$i],
 						"fkDocId"			=> 1,
 						"CrBy"				=> $this->nativesessions->get('id'),
 						"CrDt"				=> $this->getToday()

@@ -1204,3 +1204,12 @@ function getArrayValuesColumnTable(tabla, columna){
 	});
 	return items;
 }
+function getArrayValuesColumnTableInt(tabla, columna){
+	var items=[];
+	$('#'+tabla+' tbody tr td:nth-child('+columna+')').each( function(){
+		if ($(this).text().replace(/\s+/g, " ")!="") {
+			items.push( parseInt($(this).text().replace(/\s+/g, " ")));
+		}       
+	});
+	return items;
+}

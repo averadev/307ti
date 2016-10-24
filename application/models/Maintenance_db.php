@@ -119,32 +119,34 @@ Class Maintenance_db extends CI_MODEL
     public function getContracts($filters){
 
     	$this->db->select("R.pkResId as ID, R.Folio, R.LegalName, F.FloorPlanDesc, FR.FrequencyDesc");
-		$this->db->select("S.StatusDesc, R.CrDt, R.FirstOccYear, R.LastOccYear, 0 as UnitPrice, 0 as MaintenancePrice");
+		$this->db->select("S.StatusDesc, R.CrDt, R.FirstOccYear, R.LastOccYear, 0 as UnitPrice, PM.Amount as MaintenancePrice");
         $this->db->from('tblRes R');
       
         $this->db->join('tblResinvt RI', 'R.pkResId = RI.fkResId');
         $this->db->join('tblFloorPlan F', 'RI.fkFloorPlanId = F.pkFloorPlanID');
         $this->db->join('tblStatus S', 'R.fkStatusId = S.pkStatusId');
         $this->db->join('tblFrequency FR', 'RI.fkFrequencyId = FR.pkFrequencyId');
+        $this->db->join('tblPriceMnt PM', 'RI.fkFloorPlanId = PM.fkFloorPlanId');
 
         	/*if (isset($filters['Property']) && !empty($filters['Property'])) {
 				$this->db->where('R.fkSaleTypeId', $filters['Property']);
 			}*/
-			if (isset($filters['SaleType']) && !empty($filters['SaleType'])) {
-				$this->db->where('R.fkSaleTypeId', $filters['SaleType']);
-			}
-			if (isset($filters['FloorPlan']) && !empty($filters['FloorPlan'])) {
-				$this->db->where('RI.fkFloorPlanId', $filters['FloorPlan']);
-			}
-			if (isset($filters['Frequency']) && !empty($filters['Frequency'])) {
-				$this->db->where('RI.fkFrequencyId', $filters['Frequency']);
-			}
-            if (isset($filters['Season']) && !empty($filters['Season'])) {
-                $this->db->where('RI.fkseassonId', $filters['Season']);
-            }
+			// if (isset($filters['SaleType']) && !empty($filters['SaleType'])) {
+			// 	$this->db->where('R.fkSaleTypeId', $filters['SaleType']);
+			// }
+			// if (isset($filters['FloorPlan']) && !empty($filters['FloorPlan'])) {
+			// 	$this->db->where('RI.fkFloorPlanId', $filters['FloorPlan']);
+			// }
+			// if (isset($filters['Frequency']) && !empty($filters['Frequency'])) {
+			// 	$this->db->where('RI.fkFrequencyId', $filters['Frequency']);
+			// }
+   //          if (isset($filters['Season']) && !empty($filters['Season'])) {
+   //              $this->db->where('RI.fkseassonId', $filters['Season']);
+   //          }
             if (isset($filters['Year']) && !empty($filters['Year'])) {
                 $this->db->where( $filters['Year'].' BETWEEN R.FirstOccYear and R.LastOccYear');
             }
+        $this->db->limit('10');
         $this->db->where('R.fkResTypeId', 10);
         $this->db->order_by('ID', 'DESC');
         $query = $this->db->get();
