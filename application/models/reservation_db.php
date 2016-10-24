@@ -430,6 +430,18 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
             return $row->pkPaymentProcessTypeId;
         }
     }
+    public function getIDByConfirmationCode($code){
+        $this->db->select('R.pkResId');
+        $this->db->from('tblRes R');
+        $this->db->where('R.ResConf', $code);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkResId;
+        }
+    }
     public function selectlanguageId($string){
         $this->db->select('pklanguageId');
         $this->db->from('tblLanguage');

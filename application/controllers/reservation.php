@@ -112,7 +112,7 @@ class Reservation extends CI_Controller {
 			"fkPaymentProcessTypeId"    => $this->reservation_db->selectPaymentProcessTypeId('RG'),
 			"fkLanguageId"              => $_POST['idiomaID'],
 			"fkLocationId"              => $this->reservation_db->selectLocationId('CUN'),
-			"pkResRelatedId"            => $_POST['RelatedR'],
+			"pkResRelatedId"            => $this->reservation_db->getIDByConfirmationCode($_POST['RelatedR']),
 			"FirstOccYear"              => $_POST['firstYear'],
 			"LastOccYear"               => $_POST['lastYear'],
 			"ResCode"                   => $_POST['occCode'] . "-" . $folioRes . "-" . substr($_POST['firstYear'],2,4),
