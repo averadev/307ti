@@ -146,7 +146,7 @@ Class Maintenance_db extends CI_MODEL
             if (isset($filters['Year']) && !empty($filters['Year'])) {
                 $this->db->where( $filters['Year'].' BETWEEN R.FirstOccYear and R.LastOccYear');
             }
-        $this->db->limit('10');
+        $this->db->limit('50');
         $this->db->where('R.fkResTypeId', 10);
         $this->db->order_by('ID', 'DESC');
         $query = $this->db->get();
