@@ -308,9 +308,9 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		$Datos = [];
 		foreach( $datos1 as $key => $item ){
 				foreach( $datos2 as $item2 ){
-					if($item2->UnitCode == $item->UnitCode){
+					if($item2->Unit == $item->Unit){
 						$item2->pkResId = $item->pkResId;
-						$item2->FloorPlanDesc = $item->FloorPlanDesc;
+						$item2->FloorPlan = $item->FloorPlan;
 						$item2->Status = $item->Status;
 						$item2->OccTypeGroup = $item->OccTypeGroup;
 						$item2->ResConf = $item->ResConf;
@@ -1330,13 +1330,16 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		$pdf = $this->generatePdfTempTRX( $name, $title, $filtros);
 		$style = $this->generateStyles();
 		$body = '';
-		$body .= '<table width="100%" cellpadding="2" class="audit">';
+		$body .= '<table id="auditUnits" width="100%" cellpadding="2" class="audit">';
 		$body.= '<tr>';
 		foreach ($data[0] as $clave => $valor){
-			$body .= '<th>' . $clave . '</th>';
+			if ($clave != 'pkResId') {
+				$body .= '<th>' . $clave . '</th>';
+			}
+			
 		}
 		$body.= '</tr>';
-		for ($i=0; $i <sizeof($data) ; $i++) {
+		for ($i=1; $i <sizeof($data) ; $i++) {
 		$body .= '<tr>'; 
 			foreach ($data[$i] as $clave => $valor){
 				$body .= '<td  class="blackLine">' . $valor . '</td>';
@@ -1520,7 +1523,8 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		$style .= ' h3{ color: #662C19; }';
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
-		$style .= ' table.audit{ font-size:12px; }';
+		$style .= ' table.audit{ font-size:13px; }';
+		
 		$style .= '</style>';
 
 		return $style;

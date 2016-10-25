@@ -30,8 +30,8 @@ class Reservation_db extends CI_Model {
     function getReservations($filters, $id){
         $sql = "";
         $this->db->distinct();
-		$this->db->select("r.pkResId as ID, rt.ResTypeDesc as Reservacion_type, ( CONVERT(varchar(10),  r.folio ) + '-' +  CONVERT(varchar(10),  1 ) ) as Folio, r.ResConf as Confirmation_code,R.pkResRelatedId as ResRelated, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name");
-        $this->db->select('ot.OccTypeDesc as Occ_type, fp.FloorPlanDesc as FloorPlan, v.ViewDesc as View_, s.SeasonDesc as Season, R.FirstOccYear, ES.StatusDesc');
+		$this->db->select("r.pkResId as ID, rt.ResTypeDesc as Reservacion_type, ( CONVERT(varchar(10),  r.folio ) + '-' +  CONVERT(varchar(10),  1 ) ) as Folio, r.ResConf as Confirmation_code, R.pkResRelatedId as ResRelated, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name");
+        $this->db->select('R.LegalName as LegalName, ot.OccTypeDesc as Occ_type, fp.FloorPlanDesc as FloorPlan, v.ViewDesc as View_, s.SeasonDesc as Season, R.FirstOccYear, ES.StatusDesc');
         $this->db->select('US.UserLogin as Create_by, r.CrDt as Create_date, USS.UserLogin as Modified_by, r.MdDt as Modified_date');
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
@@ -135,7 +135,7 @@ class Reservation_db extends CI_Model {
         $sql = "";
         $this->db->distinct();
         $this->db->select("r.pkResId as ID, rt.ResTypeDesc as Reservacion_type, ( CONVERT(varchar(10),  r.folio ) + '-' +  CONVERT(varchar(10),  1 ) ) as Folio, r.ResConf as Confirmation_code,R.pkResRelatedId as ResRelated, u.UnitCode as Unit, p.Name as First_Name, p.LName as Last_name");
-        $this->db->select('ot.OccTypeDesc as Occ_type, fp.FloorPlanDesc as FloorPlan, v.ViewDesc as View_, s.SeasonDesc as Season, R.FirstOccYear, ES.StatusDesc');
+        $this->db->select('R.LegalName as LegalName, ot.OccTypeDesc as Occ_type, fp.FloorPlanDesc as FloorPlan, v.ViewDesc as View_, s.SeasonDesc as Season, R.FirstOccYear, ES.StatusDesc');
         $this->db->select('US.UserLogin as Create_by, r.CrDt as Create_date, USS.UserLogin as Modified_by, r.MdDt as Modified_date');
         $this->db->select('RI.OrgCheckInDt as arrivaDate, RI.OrgCheckOutDt as depatureDate');
         if ($id!=NULL) {
@@ -273,21 +273,6 @@ class Reservation_db extends CI_Model {
     public function getUnidadesOcc($filters, $unitId ){
         $arrivaDate = $filters['fromDate'];
         $depurateDate = $filters['toDate'];
-        /*$where = "(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = ri.fkResId ORDER BY ro2.fkCalendarId ASC) 
-between '" . $arrivaDate . "' and '" . $depurateDate . "'";
-        $where .= " or ";
-        $where .= "(select top 1 CONVERT(VARCHAR(11),c.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = ri.fkResId ORDER BY ro2.fkCalendarId DESC)
-between '" . $arrivaDate . "' and '" . $depurateDate . "'";
-        $this->db->distinct();
-        $this->db->select('u.pkUnitId');
-        $this->db->from('tblUnit u');
-        $this->db->join('tblResInvt ri', 'ri.fkUnitId = u.pkUnitId', 'inner');
-        $this->db->join('tblResOcc ro', 'ro.fkResInvtId = ri.pkResInvtId', 'inner');
-        $this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId', 'inner');
-         $this->db->where($where);
-        $this->db->order_by('u.pkUnitId', 'ASC');
-        $query = $this->db->get();
-        return $query->result();*/
 		$this->db->distinct();
         $this->db->select('u.pkUnitId');
         $this->db->from('tblUnit u');
@@ -296,7 +281,6 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId', 'inner');
         $this->db->where("c.Date between '" . $arrivaDate . "' and CONVERT(VARCHAR(11),dateadd(day, -1, '" . $depurateDate . "' ),101)  ");
 		if ($unitId != NULL) {
-			//$this->db->where('(r.fkResTypeId = 6 or r.fkResTypeId = 7 or r.fkResTypeId = 10 )');
 			$this->db->where('u.pkUnitId', $unitId);
         }
         $this->db->order_by('u.pkUnitId', 'ASC');
@@ -325,6 +309,21 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         $this->db->where('fkResId', $string);
 		$this->db->where('PC.ynActive',1);
         $this->db->order_by('ID', 'DESC');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+
+    public function getPeopleNamesReservation($ID){
+        $sql = "";
+        $this->db->select("(RTRIM(P.Name) + ' '+ RTRIM(P.LName) + ' '+ RTRIM(P.LName2)) as LegalName");
+        $this->db->from('tblResPeopleAcc  PA');
+        $this->db->join('tblPeople P', 'PA.fkPeopleId = P.pkPeopleId', 'INNER');
+        $this->db->where('PA.fkResID', $ID);
+        $this->db->where('PA.ynActive',1);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )
@@ -440,6 +439,18 @@ between '" . $arrivaDate . "' and '" . $depurateDate . "'";
         {
             $row = $query->row();
             return $row->pkResId;
+        }
+    }
+    public function getConfirmationCodeByID($ID){
+        $this->db->select('R.ResConf');
+        $this->db->from('tblRes R');
+        $this->db->where('R.pkResId', $ID);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->ResConf;
         }
     }
     public function selectlanguageId($string){

@@ -160,6 +160,19 @@ $(document).ready(function(){
 			$("#btAddCreditLimitRes").hide();
 		}
 	});*/
+	$(document).off('change', '#RRelated');
+	$(document).on( 'change', '#RRelated', function () {
+		var ajaxDatos =  {
+			url: "reservation/verifyConfirmationCode",
+			tipo: "json",
+			datos: {
+					ResRelated: $("#RRelated").val()
+			},
+			funcionExito : messageRR,
+			funcionError: mensajeAlertify
+		};
+	ajaxDATAG(ajaxDatos);
+	});
 	$(document).off( 'click', '#btNewTransAccRes, #btAddPayAccRes'); 
 	$(document).on( 'click', '#btNewTransAccRes, #btAddPayAccRes', function ( ) {
 		eventTransAccRes(this);
@@ -402,6 +415,15 @@ function updateLinkAcc(ResConf, accauntID){
 		funcionError: mensajeAlertify
 	};
 	ajaxDATA(ajaxData);
+}
+
+function messageRR(data){
+if (data['success'] == 1) {
+		alertify.success(data["mensaje"]);
+	}
+	if (data['success'] == 0) {
+		alertify.error(data["mensaje"]);
+	}
 }
 
 function mesnajeLinkAcc(data){
@@ -2508,7 +2530,7 @@ function getDatosReservation(id){
 				drawTerminosVentaRes(data["terminosVenta"][0]);
 			}
 			var contraTemp = 0;
-			if(data["reservation"].length > 0){
+			if(data["reservation"]){
 				contraTemp = data["reservation"][0];
 				$('td.folioAccount').text(contraTemp.Folio);
 				$('#editReservationStatus').attr( 'statusRes', contraTemp.StatusDesc );
@@ -3549,7 +3571,7 @@ function deleteSelectFlagRes(div){
 }
 
 function deleteFlagRes(id){
-	var id = $("#idReservationX").text();
+	var idReservation = $("#idReservationX").text();
 	var datos =  {
 		url: "reservation/deleteFlag",
 		tipo: "json",
@@ -3557,7 +3579,7 @@ function deleteFlagRes(id){
 			id:id,
 			idReservation:idReservation
 		},
-		funcionExito : drawTableFlagsAsignedFlags,
+		funcionExito : drawTableFlagsAsignedFlagsRes,
 		funcionError: mensajeAlertify
 	};
 	ajaxDATA(datos);

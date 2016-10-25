@@ -667,9 +667,10 @@ class Pdfs extends CI_Controller {
 	
 	public function seeDocument(){
 		$file = $this->pdfs_db->getFiles($_GET['idFile']);
-		$path = $_SERVER['DOCUMENT_ROOT'].str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME'])."assets/img/files/";
+		$path = $_SERVER['DOCUMENT_ROOT'].str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME'])."assets/pdf/";
 
 		$extension = ($ext = pathinfo($file[0]->docPath, PATHINFO_EXTENSION));
+		//var_dump($extension);
 		if ($extension != 'pdf') {
 				switch( $extension ) {
     			case "gif": $ctype="image/gif"; break;

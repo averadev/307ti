@@ -1741,3 +1741,7 @@ table tbody tr td{
 	font-size: 12px;
 	font-weight: bold;
 }
+
+#reservationstbody > tbody > tr:first-child > td:first-child{
+	display: none;
+}

@@ -224,7 +224,7 @@ class Reservation extends CI_Controller {
 					"CrBy"             	=> $this->nativesessions->get('id'),
 					"CrDt"				=> $this->getToday()
 				];
-				$this->reservation_db->insertReturnId('tblResPeopleAcc ', $personas);
+				$this->reservation_db->insertReturnId('tblRespeopleacc ', $personas);
 			}
 		}
 	}
@@ -882,7 +882,7 @@ private function comprubaArray($valor, $array){
 	public function saveFile(){
 		$message = "";
 		$result = $this->uploadFile($_FILES, $_POST['ruta']);
-		if($result != false){
+		if($result){
 			$file = [
 				"fkDocTypeId" 	=> 	$_POST['typeDoc'],
 				"docPath" 		=> 	$result,
@@ -1491,6 +1491,19 @@ private function comprubaArray($valor, $array){
 			echo json_encode($mensaje);
 		}
 	}
+	public function verifyConfirmationCode(){
+		if($this->input->is_ajax_request()){
+			$data = $this->reservation_db->getIDByConfirmationCode($_POST['ResRelated']);
+			if (sizeof($data) > 0) {
+				$mensaje = [ "success" => true, "mensaje" => "Correct Confirmation Code"];
+			}else{
+				$mensaje = [ "success" => false, "mensaje" => "Invalid Confirmation Code"];
+			}
+			
+			echo json_encode($mensaje);
+		}
+	}
+	
 	
 	/*****************************************/
 	/**************** Vistas *****************/
@@ -1589,9 +1602,17 @@ private function comprubaArray($valor, $array){
 				"codicion"	=> 'pkResID',
 				"id"		=>	$id
 			];
-
+			$personas = $this->reservation_db->getPeopleNamesReservation($id);
+			$legalName = '';
+			for ($i=0; $i < sizeof($personas); $i++) {
+				$legalName .= $personas[$i]->LegalName;
+				if ($i+1 != sizeof($personas)) {
+					$legalName .=  ' and ';
+				}
+				
+			}
 			$IdStatus = $this->reservation_db->selectStatusResID($id);
-
+			$ResConf = $this->reservation_db->getConfirmationCodeByID($id);
 			$next = $this->reservation_db->getNextStatus($IdStatus);
 			$actual = $this->reservation_db->getCurrentStatus($IdStatus);
 			$IDAccount = $this->reservation_db->getACCIDByContracIDFDK($id);
@@ -1604,7 +1625,9 @@ private function comprubaArray($valor, $array){
 			$data['statusNext'] = $next;
 			$data['creditLimit'] = $creditLimit;
 			$data['financeBalance'] = $financeBalance;
+			$data['ResConf'] = $ResConf;
 			$data['Balance'] = $this->reservation_db->selectBalance($IDACC);
+			$data['legalName'] = $legalName;
 
 			$this->load->view('reservations/reservationDialogEdit', $data);
 		}
@@ -2034,7 +2057,6 @@ private function comprubaArray($valor, $array){
 	}
 	
 	private function uploadFile($files, $route){
-		//$route = "http://pmsweb.307ti.com/assets/img/files/";
 		
 		foreach ($files as $key) {
     		if($key['error'] == UPLOAD_ERR_OK ){//Verificamos si se subio correctamente

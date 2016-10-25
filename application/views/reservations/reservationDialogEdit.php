@@ -46,6 +46,7 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 	<p id="idReservationX" style="display: none;"><?php echo $contract[0]->ID;  ?></p>
 	<p id="idResTypeX" style="display: none;"><?php echo $contract[0]->fkResTypeId;  ?></p>
 		<label class="headerDescriptionTitle small-12 columns" id="editContractTitle"><?php echo $contract[0]->Confirmation_code; ?></label>
+		<label class="headerDescriptionTitle small-12 columns"><?php echo "LegalName :". $legalName; ?></label>
 		<label class="headerGeneral small-12 columns" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
 		<label class="headerGeneral small-12 columns" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
 		<label class="headerGeneral small-6 columns"><?php echo "Expected Arrival: ". $contract[0]->arrivaDate; ?></label>
@@ -56,7 +57,7 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
 		<label class="headerGeneral" id="editReservationStatus">Status: <?php echo $statusActual;?></label>
-		<label class="headerGeneral" id="editReservationStatus">ResRelated : <?php echo $contract[0]->ResRelated; ?></label>
+		<label class="headerGeneral" id="editReservationStatus">ResRelated : <?php echo $ResConf; ?></label>
 		<label id="flagsContracEditRes" class="headerGeneral">Flags: 
 		<?php
 			if (!empty($flags)) {
@@ -655,7 +656,7 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 							<table id="tableFlagsListRes" width="100%" style="min-height:250px;" class="cell-border">
 								<thead>
 									<tr class="trColspan" >
-										<th colspan="3" class="thColspan" >List of flags</th>
+										<th colspan="4" class="thColspan" >List of flags</th>
 									</tr> 
 									<tr>
 										<th class="cellGeneral">ID</th>
