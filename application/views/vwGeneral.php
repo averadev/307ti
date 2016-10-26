@@ -124,10 +124,10 @@
 					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/1.png"/></span>
 					<div class="label-menu-sel">Admin</div>
 				</div>
-				<div class="menu-sel" attr-screen="Maintenance">
+<!-- 				<div class="menu-sel" attr-screen="Maintenance">
 					<span class="icon-menu-sel"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></span>
 					<div class="label-menu-sel">Maintenance</div>
-				</div>
+				</div> -->
 				<?php }; ?>
                 <div class="menu-fix">&nbsp;</div>
             </div>
