@@ -1593,7 +1593,7 @@ private function comprubaArray($valor, $array){
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
 			$id = $_GET['id'];
-			$data['contract']= $this->reservation_db->getReservations(null, $id);
+			$data['contract'] = $this->reservation_db->getReservations(null, $id);
 			$data['flags'] = $this->reservation_db->selectFlags($id);
 			$peticion = [
 				"tabla" 	=> 'tblRes',
@@ -1612,7 +1612,7 @@ private function comprubaArray($valor, $array){
 				
 			}
 			$IdStatus = $this->reservation_db->selectStatusResID($id);
-			$ResConf = $this->reservation_db->getConfirmationCodeByID($id);
+			$ResConf = $this->reservation_db->getConfirmationCodeByID($data['contract'][0]->ResRelated);
 			$next = $this->reservation_db->getNextStatus($IdStatus);
 			$actual = $this->reservation_db->getCurrentStatus($IdStatus);
 			$IDAccount = $this->reservation_db->getACCIDByContracIDFDK($id);

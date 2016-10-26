@@ -1339,12 +1339,17 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 			
 		}
 		$body.= '</tr>';
-		for ($i=1; $i <sizeof($data) ; $i++) {
-		$body .= '<tr>'; 
+		for ($i=0; $i <sizeof($data) ; $i++) {
+			$body .= '<tr>'; 
 			foreach ($data[$i] as $clave => $valor){
-				$body .= '<td  class="blackLine">' . $valor . '</td>';
+				if ($clave != 'pkResId') {
+					$body .= '<td  class="blackLine">' . $valor . '</td>';
+				}
 			}
 			$body .= '</tr>';
+
+			
+			
 		}
 		$body .= '</table>';
 		$html = '';

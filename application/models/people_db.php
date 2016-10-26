@@ -15,21 +15,16 @@ Class people_db extends CI_MODEL
         $this->db->select('tblPeople.pkPeopleId as ID, tblPeople.Name, tblPeople.SecondName, tblPeople.LName, tblPeople.LName2');
 		
 		$this->db->select('tblPeople.fkGenderId,tblPeople.BirthDayMonth, tblPeople.BirthDayDay, tblPeople.BirthDayYear');
-		$this->db->select('CONVERT(VARCHAR(11),tblPeople.Anniversary,106) as Anniversary, Qualification, tblPeople.Nationality');
+		$this->db->select('CONVERT(VARCHAR(11),tblPeople.Anniversary,106) as Anniversary, Q.QualificationDesc as Qualification, tblPeople.Nationality');
 		$this->db->select('tblAddress.Street1, tblAddress.Street2, tblAddress.City, tblAddress.ZipCode');
 		$this->db->select('tblState.StateDesc, tblCountry.CountryDesc');
         $this->db->from('tblPeople');
-		/*if($typePeople == "maid"){
-			//$this->db->join('tblPeopleType', 'tblPeopleType.fkPeopleId = tblPeople.pkPeopleId', 'inner');
-		}
-		if($typePeople == "superior"){
-			$this->db->join('tblEmployee', 'tblEmployee.fkPeopleId = tblPeople.pkPeopleId', 'inner');
-		}*/
 		$this->db->join('tblPeopleType', 'tblPeopleType.pkPeopleTypeId = tblPeople.fkPeopleTypeId', 'inner');
 		$this->db->join('tblPeopleAddress', 'tblPeopleAddress.fkPeopleId = tblPeople.pkPeopleId', 'left');
 		$this->db->join('tblAddress', 'tblAddress.pkAddressid = tblPeopleAddress.fkAddressId', 'left');
 		$this->db->join('tblState', 'tblState.pkStateId = tblAddress.FkStateId', 'left');
 		$this->db->join('tblCountry', 'tblCountry.pkCountryId = tblAddress.fkCountryId', 'left');
+		$this->db->join('tblQualification Q', 'tblPeople.Qualification = Q.pkQualificationId', 'LEFT');
 		if($advanced == "tblEmail.EmailDesc"){
 			$this->db->join('tblPeopleEmail', 'tblPeopleEmail.fkPeopleId = tblPeople.pkPeopleId', 'left');
 			$this->db->join('tblEmail', 'tblEmail.pkEmail = tblPeopleEmail.fkEmailId', 'left');
@@ -48,18 +43,6 @@ Class people_db extends CI_MODEL
 		if($peopleId == "true"){
 			$cadena = $cadena . 'tblPeople.pkPeopleId LIKE \'%'.$text.'%\'';
 		}
-/*		if($lastName == "true"){
-			if($cadena != "("){
-				$cadena = $cadena . ' OR';
-			}
-			$cadena = $cadena . ' tblPeople.LName LIKE \'%'.$text.'%\' or tblPeople.LName2 LIKE \'%'.$text.'%\'';
-		}
-		if($name == "true"){
-			if($cadena != "("){
-				$cadena = $cadena . ' OR';
-			}
-			$cadena = $cadena . ' tblPeople.Name LIKE \'%'.$text.'%\'';
-		}*/
 		if($lastName == "true" && $name == "true"){
 			$texto = str_replace(' ', '', $text);
 			$cadena = $cadena . 'RTRIM(tblPeople.Name) '. ' +  '. ' RTRIM(tblPeople.LName) LIKE \'%'.$texto.'%\'';
