@@ -46,7 +46,8 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 	<p id="idReservationX" style="display: none;"><?php echo $contract[0]->ID;  ?></p>
 	<p id="idResTypeX" style="display: none;"><?php echo $contract[0]->fkResTypeId;  ?></p>
 		<label class="headerDescriptionTitle small-12 columns" id="editContractTitle"><?php echo $contract[0]->Confirmation_code; ?></label>
-		<label class="headerDescriptionTitle small-12 columns"><?php echo "LegalName :". $legalName; ?></label>
+		<label class="headerDescriptionTitle small-12 columns"><?php echo "Legal Name :". $legalName; ?></label>
+		<label class="headerDescriptionTitle small-12 columns"><?php echo "Balance :". floatval($Balance); ?></label>
 		<label class="headerGeneral small-12 columns" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
 		<label class="headerGeneral small-12 columns" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
 		<label class="headerGeneral small-6 columns"><?php echo "Expected Arrival: ". $contract[0]->arrivaDate; ?></label>

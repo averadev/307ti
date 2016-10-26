@@ -108,6 +108,23 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
+    public function getPeopleContractPrimary($string){
+
+        $this->db->distinct();
+        $this->db->select("RTRIM(P.Name)  + ' '+ RTRIM(P.LName) AS Name");
+        $this->db->from('tblResPeopleAcc PC');
+        $this->db->join('tblPeople P', 'P.pkPeopleId = PC.fkPeopleId', 'left');
+        $this->db->where('fkResId', $string);
+        $this->db->where('PC.ynPrimaryPeople', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            //return $query->result();
+            $row = $query->row();
+            return $row->Name;
+        }
+    }
         public function getUnitiesContract($string){
         $sql = "";
         $this->db->distinct();
@@ -128,6 +145,18 @@ class Contract_db extends CI_Model {
         }
     }
 
+    public function getIDByFolio($code){
+        $this->db->select('R.pkResId');
+        $this->db->from('tblRes R');
+        $this->db->where('R.Folio', $code);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkResId;
+        }
+    }
     public function createContract(){
 
         $restTypeId = $this->selectRestType();

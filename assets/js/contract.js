@@ -106,6 +106,19 @@ $(document).ready(function(){
 		dialogDiscountAmount = modalDiscountAmount();
 		dialogDiscountAmount.dialog("open");
 	});
+	$(document).off('change', '#contractR');
+	$(document).on( 'change', '#contractR', function () {
+		var ajaxDatos =  {
+			url: "contract/verifyConfirmationCode",
+			tipo: "json",
+			datos: {
+					ResRelated: $("#contractR").val().replace("1-", "")
+			},
+			funcionExito : messageRC,
+			funcionError: mensajeAlertify
+		};
+	ajaxDATAG(ajaxDatos);
+	});
 	$(document).off( 'click', '#btnAddTourID');
 	$(document).on( 'click', '#btnAddTourID', function () {
 		if (dialogAddTour!=null) {
@@ -176,6 +189,34 @@ $(document).ready(function(){
 	
 	getDatailByID("contractstbody");
 });
+
+function messageRC(data){
+	if (data['success'] == 1) {
+		var msg = data["mensaje"];
+					alertify.confirm(msg, "Primary: "+ data["primary"], 
+					function(){
+						console.log("Ok");
+					},
+					function(){
+						console.log("Cancel");
+						$("#contractR").val(0);
+					}
+					).moveTo(screen.width - 500,screen.height - 100).set('resizable',true).resizeTo('25%',210).isOpen(
+						$('.ajs-dialog').css('min-width','100px')
+					);
+	}else{
+		alertify.error(data["mensaje"]);
+		$("#contractR").val(0);
+	}
+
+	
+// if (data['success'] == 1) {
+// 		alertify.success(data["mensaje"]);
+// 	}
+// 	if (data['success'] == 0) {
+// 		alertify.error(data["mensaje"]);
+// 	}
+}
 
 function initDatesContract(){
 	$( "#startDateContract" ).Zebra_DatePicker({
@@ -665,7 +706,8 @@ function createNewContract(){
 				gifts: getValueTablePacks(),
 				viewId: 1,
 				closingCost: sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7)),
-				card: datosCard()
+				card: datosCard(),
+				RelatedR: $("#contractR").val().replace("1-", "")
 				//totalDiscountPacks
 			},
 			type: "POST",

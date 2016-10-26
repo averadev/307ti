@@ -176,7 +176,7 @@ private function createContract(){
 			"fkPaymentProcessTypeId"    => $this->contract_db->selectPaymentProcessTypeId('RG'),
 			"fkLanguageId"              => $_POST['idiomaID'],
 		    "fkLocationId"              => $this->contract_db->selectLocationId('CUN'),
-		    "pkResRelatedId"            => null,
+		    "pkResRelatedId"            => $this->contract_db->getIDByFolio($_POST['RelatedR']),
 		    "FirstOccYear"              => $_POST['firstYear'],
 		    "LastOccYear"               => $_POST['lastYear'],
 		    "ResCode"                   => "OW" . "-" . $folioCon . "-" . substr($_POST['firstYear'],2,4),
@@ -1244,6 +1244,25 @@ public function getPropertyStatus($IdStatus){
 
 }
 
+public function verifyConfirmationCode(){
+		if($this->input->is_ajax_request()){
+			$Folio = intval($_POST['ResRelated']);
+			if (gettype($Folio) == 'integer') {
+				$data = $this->contract_db->getIDByFolio($Folio);
+				if (sizeof($data) > 0) {
+					$primary = $this->contract_db->getPeopleContractPrimary($data);
+					$mensaje = [ "success" => true, "mensaje" => "Correct Confirmation Code ", "primary" => $primary];
+				}else{
+					$mensaje = [ "success" => false, "mensaje" => "Invalid Confirmation Code"];
+				}
+			}else{
+				$mensaje = [ "success" => false, "mensaje" => "Invalid Confirmation Code"];
+			}
+			
+			
+			echo json_encode($mensaje);
+		}
+}
 public function getTypesGiftContract(){
 	if($this->input->is_ajax_request()) {
 		$campos = "pkGiftId as ID, GiftDesc";
