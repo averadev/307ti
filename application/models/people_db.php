@@ -156,6 +156,7 @@ Class people_db extends CI_MODEL
 		$this->db->from('tblCountry');
 		$this->db->join('tblState', 'tblState.fkCountryId = tblCountry.pkCountryId', 'inner');
 		$this->db->where('tblCountry.YnActive = ', 1);
+		$this->db->order_by('tblCountry.CountryDesc', 'ASC');
 		return  $this->db->get()->result();
 	}
 	
@@ -408,6 +409,7 @@ Class people_db extends CI_MODEL
 		$this->db->select('tblState.pkStateId, tblState.StateCode, tblState.StateDesc');
 		$this->db->from('tblState');
 		$this->db->where('tblState.fkCountryId = ', $idCountry);
+		$this->db->order_by('tblState.StateDesc', 'ASC');
 		return  $this->db->get()->result();
 	}
 	

@@ -1172,9 +1172,17 @@ public function nextStatusContract(){
 		$condicion = "pkResId = " . $id;
 		$afectados = $this->contract_db->updateReturnId('tblRes', $Res, $condicion);
 		if ($afectados>0) {
-			//$next = $this->contract_db->getNextStatus($IdStatus);
+			//var_dump($_POST['NextStatus']);
+			if( $_POST['NextStatus'] == "Cancel" || $_POST['NextStatus'] == "Exchange" ){
+					//if( $idRestype == 7){
+						$resConf = $this->contract_db->getConfirmationCodeByID($id);
+						$code = $this->contract_db->getStatusCode($IdStatus);
+						$this->db->query("exec  spCNXRes @Resconf='" . $resConf . "', @StatusCode='" . $code . "'");
+					//}
+				}
 			$actual = $this->contract_db->getCurrentStatus($IdStatus);
 			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $actual];
+
 			echo json_encode($mensaje);
 		}else{
 			$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
@@ -1442,6 +1450,8 @@ public function getFlagsContract(){
 				$tyTr = $_POST['typeAcc'];
 				$data = $this->contract_db->getAccountsById( $id, $typeInfo, $tyTr);
 				foreach($data as $item){
+						$item->Amount = floatval($item->Amount);
+						$item->AbsAmount = floatval($item->AbsAmount);
 					$item->inputAll = '<input type="checkbox" id="' . $item->ID . '" class="checkPayAcc" name="checkPayAcc[]" value="' . $item->AbsAmount . '" trxClass="' . $item->pkTrxClassid . '"  ><label for="checkFilter1">&nbsp;</label>';
 					unset($item->pkTrxClassid);
 				}
@@ -1555,7 +1565,7 @@ private function search($array, $key, $value){
 		if($this->input->is_ajax_request()) {
 			$id = $_GET['id'];
 			$data['statusRes'] = $this->contract_db->getStatuContract($id);
-			$this->load->view('reservations/dialogStatus', $data);
+			$this->load->view('contracts/dialogStatus', $data);
 		}
 	}
 
@@ -1573,7 +1583,7 @@ private function search($array, $key, $value){
 				"codicion"	=> 'pkResID',
 				"id"		=>	$id
 			];
-
+			$data['Folio'] = $this->contract_db->getFolioByID($data['contract'][0]->ResRelated);
 			$IdStatus = $this->contract_db->selectContractID($id);
 			$next = $this->contract_db->getNextStatus($IdStatus);
 			$actual = $this->contract_db->getCurrentStatus($IdStatus);

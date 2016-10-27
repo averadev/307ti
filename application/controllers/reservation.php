@@ -1207,10 +1207,14 @@ private function comprubaArray($valor, $array){
 				$tyTr = $_POST['typeAcc'];
 				$data = $this->reservation_db->getAccountsById( $id, $typeInfo, $tyTr);
 				foreach($data as $item){
+						$item->Amount = floatval($item->Amount);
+						$item->AbsAmount = floatval($item->AbsAmount);
+
 					$item->inputAll = '<input type="checkbox" id="' . $item->ID . '" class="checkPayAcc" name="checkPayAcc[]" value="' . $item->AbsAmount . '" trxClass="' . $item->pkTrxClassid . '"  ><label for="checkFilter1">&nbsp;</label>';
 					unset($item->pkTrxClassid);
 				}
 				$datos['acc'] = $data;
+				//var_dump($data);
 				
 			}
 			

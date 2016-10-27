@@ -1137,6 +1137,10 @@ function getNumberTextString(div){
 
 
 function drawTable4(data, table ,funcion, cadena, option){
+	if ( $.fn.dataTable.isDataTable( '#' + table ) ) {
+		var tabla = $('#' + table).DataTable();
+		tabla.destroy();
+	}
 	var headHTML = "<tr>";
 	if(funcion != false){ 
 		headHTML += "<th>"+cadena+"</th>";
@@ -1169,6 +1173,19 @@ function drawTable4(data, table ,funcion, cadena, option){
 	$('#' + table + " tbody" ).html(bodyHTML);
 	
 	$('#' + table ).show();
+	var heightScroll = $('#' + table ).parents(".table").first();
+	heightScroll = heightScroll.height();
+	if(heightScroll == null){
+		heightScroll = 400;
+	}
+	$('#' + table ).DataTable({
+		"scrollY": heightScroll - 50,
+		"scrollX": true,
+		"paging":   false,
+		"ordering": false,
+		"info":     false,
+		"filter": 	false,
+	});
 	
 }
 

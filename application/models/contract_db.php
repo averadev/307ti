@@ -53,7 +53,7 @@ class Contract_db extends CI_Model {
         $sql = "";
         $this->db->distinct();
         $this->db->select("R.pkResId as ID, cast(R.Prefix as varchar) + '-' + cast(R.Folio as varchar) as Folio");
-		$this->db->select("R.ResConf as Confirmation_code");
+		$this->db->select("R.ResConf as Confirmation_code, R.pkResRelatedId as ResRelated");
 		$this->db->select("R.LegalName as LegalName, RTRIM(UT.FloorPlanDesc) as FloorPlan, FR.FrequencyDesc");
         $this->db->select('ES.StatusDesc, RI.CrDt, R.FirstOccYear, R.LastOccYear, RF.ListPrice, RF.NetSalePrice as netsale');
         $this->db->from('tblRes R');
@@ -840,7 +840,38 @@ class Contract_db extends CI_Model {
                 return $query->result();
             }
 	}
-	
+	public function getConfirmationCodeByID($ID){
+        $this->db->select('R.ResConf');
+        $this->db->from('tblRes R');
+        $this->db->where('R.pkResId', $ID);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->ResConf;
+        }
+    }
+    public function getStatusCode($id){
+        $this->db->select('s.StatusCode as code');
+        $this->db->from('tblStatus s');
+        $this->db->where('s.pkStatusId', $id);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->code;
+        }
+    }
+        public function getFolioByID($id){
+        $this->db->select('R.Folio');
+        $this->db->from('tblREs R');
+        $this->db->where('R.pkResID', $id);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->Folio;
+        }
+    }
 	 public function getResByContCon($idContrato, $year){
 		$sql = "";
         $this->db->distinct();
@@ -1162,7 +1193,7 @@ class Contract_db extends CI_Model {
 			$this->db->select('0 as inputAll');
 			$this->db->select('att.pkAccTrxId as ID');
 			$this->db->select('tt.TrxTypeCode as Code');
-			$this->db->select('tc.pkTrxClassid, tc.TrxClassDesc as Concept_Trxid');
+			$this->db->select('tc.pkTrxClassid, tc.TrxClassDesc as Concept_Trxid, tt.TrxTypeDesc as Type');
 			$this->db->select('att.DueDt as Due_Date, att.Amount, att.AbsAmount');
 		}
         $this->db->from('tblAccTrx att');

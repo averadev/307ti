@@ -3137,7 +3137,19 @@ function modalStatusCon(){
        		text: "Change",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-				nextStatusContract();
+				//nextStatusContract();
+				var newStatus = $('#statusResChange option:selected').text();
+				if( newStatus == "Cancel" || newStatus == "Exchange" ){
+					var msg = "Are you sure you want to cancel de contract?";
+					alertify.confirm('Change Status.', msg, 
+					function(){ nextStatusContract(); },
+					function(){ }
+					).moveTo(screen.width - 500,screen.height - 100).set('resizable',true).resizeTo('25%',210).isOpen(
+						$('.ajs-dialog').css('min-width','100px')
+					);
+				}else{
+					nextStatusContract();
+				}
        		}
      	}],
      close: function() {
@@ -3153,12 +3165,14 @@ function nextStatusContract(){
 	$.ajax({
 	    data:{
 	        idContrato: id,
-			idNextStatus: $('#statusRes').val()
+			idNextStatus: $('#statusRes').val(),
+			NextStatus: $('#statusRes option:selected').text()
 	    },
 	    type: "POST",
 	    url: "contract/nextStatusContract",
 	    dataType:'json',
 	    success: function(data){
+	    	dialogStatus.dialog('close');
 	    	$("#iNextStatus").removeClass("fa-spin");
 	    	$("#editContracStatus").text("Status: "+data['status']);
 	    	/*if (data['next'] != null) {

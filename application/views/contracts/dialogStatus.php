@@ -6,7 +6,7 @@
 				<div class="caja" >
 					<select id="statusRes" class="input-group-field round">
 						<?php
-						foreach($statusCon as $item){
+						foreach($statusRes as $item){
 							?>
 							<option value="<?php echo $item->ID; ?>" <?php if($item->fkStatusId != null){ ?> selected  <?php }?>  ><?php echo $item->StatusDesc; ?></option>
 							<?php

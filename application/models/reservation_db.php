@@ -657,7 +657,7 @@ class Reservation_db extends CI_Model {
             $this->db->select('0 as inputAll');
             $this->db->select('att.pkAccTrxId as ID');
             $this->db->select('tt.TrxTypeCode as Code');
-            $this->db->select('tc.pkTrxClassid, tc.TrxClassDesc as Concept_Trxid');
+            $this->db->select('tc.pkTrxClassid, tc.TrxClassDesc as Concept_Trxid, tt.TrxTypeDesc as Type');
             $this->db->select('att.DueDt as Due_Date, att.Amount, att.AbsAmount');
         }
         $this->db->from('tblAccTrx att');

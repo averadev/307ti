@@ -1351,6 +1351,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 			
 			
 		}
+		$body .= '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td>Total: '. sizeof($data).'</td></tr>'; 
 		$body .= '</table>';
 		$html = '';
 		$html .= ' <html><head></head><body>';
