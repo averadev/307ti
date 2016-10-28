@@ -166,6 +166,20 @@ class pdfs_db extends CI_Model{
 		$this->db->where('tt.TrxSign = -1');
 		return  $this->db->get()->result();
 	}
+	public function getOCCTypeByID($idContrato){
+        $this->db->distinct();
+        $this->db->select('OG.pkOccTypeGroupId as ID, OG.OccTypeGroupDesc, OT.OccTypeDesc');
+        $this->db->from('tblRes R');
+        $this->db->join('tblResOcc RO', 'R.pkResId = RO.fkResId', 'inner');
+        $this->db->join('tblOccType OT', 'RO.fkOccTypeId = OT.pkOccTypeId', 'inner');
+        $this->db->join('tblOccTypeGroup OG', 'OT.fkOccTypeGroupId = OG.pkOccTypeGroupId', 'inner');
+        $this->db->where('R.pkResId', $idContrato);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
 	
 	public function getBalance($idRes){
 		$this->db->select('sum(TT.TrxSign * AT.Amount) as Balance');

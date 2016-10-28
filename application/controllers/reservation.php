@@ -1607,16 +1607,24 @@ private function comprubaArray($valor, $array){
 				"id"		=>	$id
 			];
 			$personas = $this->reservation_db->getPeopleNamesReservation($id);
+			//var_dump($personas);
 			$legalName = '';
-			for ($i=0; $i < sizeof($personas); $i++) {
-				$legalName .= $personas[$i]->LegalName;
-				if ($i+1 != sizeof($personas)) {
-					$legalName .=  ' and ';
+			if (sizeof($personas)> 0) {
+				for ($i=0; $i < sizeof($personas); $i++) {
+					$legalName .= $personas[$i]->LegalName;
+					if ($i+1 != sizeof($personas)) {
+						$legalName .=  ' and ';
+					}
 				}
-				
 			}
+
 			$IdStatus = $this->reservation_db->selectStatusResID($id);
-			$ResConf = $this->reservation_db->getConfirmationCodeByID($data['contract'][0]->ResRelated);
+			if (isset($data['contract'][0]->ResRelated)) {
+				$ResConf = $this->reservation_db->getConfirmationCodeByID($data['contract'][0]->ResRelated);
+			}else{
+				$ResConf = '';
+			}
+			
 			$next = $this->reservation_db->getNextStatus($IdStatus);
 			$actual = $this->reservation_db->getCurrentStatus($IdStatus);
 			$IDAccount = $this->reservation_db->getACCIDByContracIDFDK($id);

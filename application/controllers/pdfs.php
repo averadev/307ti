@@ -50,9 +50,9 @@ class Pdfs extends CI_Controller {
 	public function CheckOut(){
 		$idRes = $_GET['idRes'];
 		$data = $this->pdfs_db->getCheckOut($idRes);
-		$title = "Check Out";
-		$name = "CheckOut";
-		$saveFiler = "CheckOut" . $idRes;
+		$title = "Out Letter";
+		$name = "OutLetter";
+		$saveFiler = "OutLetter" . $idRes;
 		$pdf = $this->generatePdfTemp( $name, $title );
 		$style = $this->generateStyle();
 		
@@ -145,9 +145,9 @@ class Pdfs extends CI_Controller {
 		$idRes = $_GET['idRes'];
 		$data = $this->pdfs_db->getCheckOut($idRes);
 		$data2 = $this->pdfs_db->getRoom($idRes);
-		$title = "Guest Infromation form";
-		$name = "Guest Infromation form";
-		$saveFiler = "Guest_Infromation" . $idRes;
+		$title = "Guest Information form";
+		$name = "Guest Information form";
+		$saveFiler = "Guest_Information" . $idRes;
 		$pdf = $this->generatePdfTemp( $name, $title );
 		$style = $this->generateStyle();
 		
@@ -272,6 +272,7 @@ class Pdfs extends CI_Controller {
 		
 		$idRes = $_GET['idRes'];
 		//$idRes = 125;
+		$OccTypeDesc = $this->pdfs_db->getOCCTypeByID($idRes);
 		$data = $this->pdfs_db->getPeople($idRes);
 		$data2 = $this->pdfs_db->getResAcc($idRes);
 		$title = "Statement";
@@ -288,6 +289,9 @@ class Pdfs extends CI_Controller {
 			$body .= '<tr><td>' . $item->PropertyName . '</td><td>Reservation Confirmation # ' . $item->ResConf . '</td></tr>';
 			$body .= '<tr><td>' . $item->PropertyShortName . '</td><td>Account Name: ' . $item->OccTypeGroupDesc . '</td></tr>';
 			$body .= '<tr><td>St. MAARTEN</td><td>Account Id: ' . $item->fkAccId . '</td></tr>';
+			if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
+				$body .= '<tr><td>St. MAARTEN</td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
+			}
 			$body .= '<tr><td>Netherlands Antilles</td></tr>';
 			$body .= '</table>';
 		}
@@ -353,7 +357,95 @@ class Pdfs extends CI_Controller {
 		
 		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes, $title );
 	}
-	
+	public function Invoice(){
+		
+		$idRes = $_GET['idRes'];
+		//$idRes = 125;
+		$OccTypeDesc = $this->pdfs_db->getOCCTypeByID($idRes);
+		$data = $this->pdfs_db->getPeople($idRes);
+		$data2 = $this->pdfs_db->getResAcc($idRes);
+		$title = "Invoice";
+		$name = "Invoice";
+		$saveFiler = "Invoice" . $idRes;
+		$pdf = $this->generatePdfTemp2( $name, $title );
+		$style = $this->generateStyle();
+		
+		$body = '';
+		
+		foreach ($data2 as $item){
+			$data3 = $this->pdfs_db->getAccTrx($item->fkAccId);
+			$body .= '<table width="100%">';
+			$body .= '<tr><td>' . $item->PropertyName . '</td><td>Reservation Confirmation # ' . $item->ResConf . '</td></tr>';
+			$body .= '<tr><td>' . $item->PropertyShortName . '</td><td>Account Name: ' . $item->OccTypeGroupDesc . '</td></tr>';
+			$body .= '<tr><td></td><td>Account Id: ' . $item->fkAccId . '</td></tr>';
+			if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
+				$body .= '<tr><td>St. MAARTEN</td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
+			}
+			$body .= '<tr><td>Netherlands Antilles</td></tr>';
+			$body .= '</table>';
+		}
+		$body.= '<h4>Guest Information</h4> <hr>';
+		$body .= '<table width="100%">';
+		foreach ($data as $item){
+			$name = $item->Name;
+			$lname = $item->Last_name;
+			$body .= '<tr><td class="Name">' . $name . '</td><td class="Last name">' . $lname . '</td>';
+			$typeProple = "Benficiary People";
+			if($item->ynPrimaryPeople == 1){
+				$typeProple = "Primary People";
+			}
+			$body .= '<td class="type">' . $typeProple . '</td></tr>';
+			$body .= '<tr><td>' . $item->Street1 . '</td>';
+			$body .= '<td>' . $item->Street2 . '</td></tr>';
+			$body .= '<tr><td>' . $item->City . ' ' . $item->ZipCode . ' ' . $item->StateCode . '</td></tr>';
+		}
+		$body .= '</table>';
+		
+		
+		foreach($data2 as $item){
+			$body .= '<h4></h4>';
+			$body .= '<table class="balance" width="100%">';
+			$finalCredit = 0;
+			$finalCharge = 0;
+			$balance = 0;
+			$body .= "<tr><th>Date</th><th>Doc#</th><th>Description</th><th>Source</th><th>Bill</th><th>Credit</th><th>Charge</th></tr>";
+			foreach ($data3 as $item3){
+				$Credit = 0;
+				$Charge = 0;
+				if($item3->TrxSign == 1){
+					$Credit = $item3->Amount;
+					if($Credit == 0){
+						$Credit = 0;
+					}
+				}else if($item3->TrxSign == -1){
+					$Charge = $item3->Amount;
+					if($Charge == 0){
+						$Charge = 0;
+					}
+				}
+				$body .= '<tr><td>' . $item3->date . '</td><td>' . $item3->Doc . '</td><td>' . $item3->TrxTypeDesc . '</td>';
+				$body .= '<td></td><td></td>';
+				$body .= '<td>' . round($Credit, 2) . '</td><td>' . round($Charge,2) . '</td></tr>';
+				$finalCredit = $finalCredit + $Credit;
+				$finalCharge = $finalCharge + $Charge;
+			}
+			$balance = $finalCredit - $finalCharge;
+			$body .= '<tr><th></th><th></th><th></th><th></th><th>Bill</th><th>Final Credit</th><th>Final Charge</th></tr>';
+			$body .= '<tr><td></td><td></td><td></td><td></td><td>' . round($balance,2) . '</td><td>' . round($finalCredit,2) . '</td><td>' . round($finalCharge,2) . '</td></tr>';
+			$body .= '</table>';
+			$body .= '<h4></h4>';
+		}
+		
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
+		
+		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+		
+		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes, $title );
+	}
 	public function ReservationConfirmation(){
 		$idRes = $_GET['idRes'];
 		$people = $this->pdfs_db->getCheckOut($idRes);
@@ -449,7 +541,7 @@ class Pdfs extends CI_Controller {
 		foreach($trans as $item){
 			$totalPayment += $item->Amount;
 		}
-		$body .= '<tr><td>Payment Remaining</td><td>$ ' . round( $totalPayment, 2 ) . '</td></tr>';
+		$body .= '<tr><td>Payment Remaining</td><td>$ ' . round( $balance, 2 ) . '</td></tr>';
 		$body .= '<tr><td>Balance</td><td>$ ' . round( $balance, 2 ) . '</td></tr>';
 		
 		$body .= '</table>';
@@ -664,6 +756,59 @@ class Pdfs extends CI_Controller {
 		return $pdf;
  
 	}
+	private function generatePdfTemp2( $name, $title ){
+		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('307ti');
+        $pdf->SetTitle($name);
+        $pdf->SetSubject('report');
+        $pdf->SetKeywords('report');
+ 
+	
+		$logo = "logo.jpg";
+		$headerString = " ";
+		$pdf->SetHeaderData($logo, 20, "     " . $title, "     " . $headerString,  array( 102,44,25 ), array( 102,44,25 ));
+        $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
+ 
+		// datos por defecto de cabecera, se pueden modificar en el archivo tcpdf_config.php de libraries/config
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+ 
+		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+        //$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+ 
+		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+        $pdf->SetMargins(5, PDF_MARGIN_TOP, 5);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+ 
+		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+ 
+		//relación utilizada para ajustar la conversión de los píxeles
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+ 
+ 
+		// ---------------------------------------------------------
+		// establecer el modo de fuente por defecto
+        $pdf->setFontSubsetting(true);
+ 
+		// Establecer el tipo de letra
+ 
+		//Si tienes que imprimir carácteres ASCII estándar, puede utilizar las fuentes básicas como
+		// Helvetica para reducir el tamaño del archivo.
+        $pdf->SetFont('freemono', '', 14, '', true);
+ 
+		// Añadir una página
+		// Este método tiene varias opciones, consulta la documentación para más información.
+        $pdf->AddPage();
+ 
+		//fijar efecto de sombra en el texto
+        $pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
+ 
+		return $pdf;
+ 
+	}
 	
 	public function seeDocument(){
 		$file = $this->pdfs_db->getFiles($_GET['idFile']);
@@ -677,11 +822,16 @@ class Pdfs extends CI_Controller {
     			case "png": $ctype="image/png"; break;
     			case "jpeg":
     			case "jpg": $ctype="image/jpeg"; break;
+    			case "xls": $ctype="application/vnd.ms-excel"; break;
+    			case "xlsx": $ctype="application/vnd.ms-excel"; break;
+    			case "doc": $ctype="application/msword"; break;
+    			case "dot": $ctype="application/msword"; break;
+    			case "docx": $ctype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"; break;
 			}
 			$mi_img = fopen ($path.$file[0]->docPath, "r");
 			header('Content-type: ' . $ctype);
 			fpassthru($mi_img);
-			fclose ($archivo);
+			//fclose ($archivo);
 		}else{
 			if( count($file) > 0 ){
 				$SERVER = substr($_SERVER['DOCUMENT_ROOT'],0, -1);

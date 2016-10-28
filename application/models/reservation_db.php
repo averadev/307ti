@@ -1109,19 +1109,12 @@ class Reservation_db extends CI_Model {
     }
     
 	public function selectWeeksReservation($id){
-        /*$this->db->select("ro.pkResOccId as ID, ro.OccYear as Year, ro.NightId, ri.Intv, CONVERT(VARCHAR(11),c.Date,106) as Date");
-        $this->db->from('tblResOcc ro');
-        $this->db->join('tblRes r', 'r.pkResId = ro.fkResId');
-        $this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId');
-		$this->db->join('tblResInvt ri', 'ri.pkResInvtId = ro.fkResInvtId');
-        $this->db->where('r.pkResId = ', $id);*/
 		$this->db->distinct();
 		$this->db->select("r.pkResId as ID, r.folio as ContractNum,r.ResConf, ro.RateAmtNight, s.StatusDesc,r.FirstOccYear as OccYear,Fp.FloorPlanDesc");
         $this->db->select("u.UnitCode as FixedUnitCode,ri.Intv as Intv,rt.resTypeDesc, ro.NightId, cal.Date, CONVERT(VARCHAR(11),cal.Date,106) as Date1, us.UserLogin, 0 as Delete, ro.pkResOccId");
 		$this->db->from('tblres r ');
 		$this->db->join('tblStatus s with(nolock) ', ' s.pkStatusid = r.fkStatusId', 'inner');
 		$this->db->join('tblResType rt with(nolock) ', ' rt.pkResTypeid = r.fkResTypeId', 'inner');
-		//$this->db->join('tblResinvt ri with(nolock) ', ' ri.fkResid = r.pkResRelatedId or ri.fkResid = r.pkResId', 'inner');
 		$this->db->join('tblResinvt ri with(nolock) ', ' ri.fkResid = r.pkResId', 'inner');
 		$this->db->join('tblFloorPlan fp with(nolock) ', ' fp.pkFloorPlanid = ri.fkFloorPlanId', 'inner');
 		$this->db->join('tblResOcc ro with(nolock) ', ' ro.fkResid = r.pkResId', 'inner');
@@ -1221,6 +1214,7 @@ class Reservation_db extends CI_Model {
             return $row->pkAccID;
         }
     }
+
     
     public function selectTotalFinance($id){
         $this->db->select('TotalFinanceAmt as total');

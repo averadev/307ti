@@ -16,7 +16,7 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 <div class="row collapse headerGeneral" >
 	<div class="small-12 medium-12 large-12 columns headerModalBtn"  > 
 		<a id="" class="btn btn-primary spanSelect btnReportRes" attr_type="CheckOutRes" >
-			<div class="label">Check Out</div>
+			<div class="label">Out Letter</div>
 			<i class="fa fa-columns fa-lg"></i>
 		</a>
 		<a id="" class="btn btn-primary spanSelect btnReportRes" attr_type="FarewellRes" >
@@ -24,7 +24,11 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 			<i class="fa fa-money fa-lg"></i>
 		</a>
 		<a id="" class="btn btn-primary spanSelect btnReportRes" attr_type="GuestInfromationRes">
-			<div class="label">Guest Infromation Form</div>
+			<div class="label">Guest Information Form</div>
+			<i class="fa fa-file-text-o fa-lg"></i>
+		</a>
+		<a id="" class="btn btn-primary spanSelect btnReportRes" attr_type="Invoice">
+			<div class="label">Invoice</div>
 			<i class="fa fa-file-text-o fa-lg"></i>
 		</a>
 		<a id="" class="btn btn-primary spanSelect btnReportRes" attr_type="Statement">
