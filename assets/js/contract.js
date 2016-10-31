@@ -3137,10 +3137,9 @@ function modalStatusCon(){
        		text: "Change",
        		"class": 'dialogModalButtonAccept',
        		click: function() {
-				//nextStatusContract();
-				var newStatus = $('#statusResChange option:selected').text();
+				var newStatus = $('#statusContract option:selected').text();
 				if( newStatus == "Cancel" || newStatus == "Exchange" ){
-					var msg = "Are you sure you want to cancel de contract?";
+					var msg = "Are you sure you want to cancel the contract?";
 					alertify.confirm('Change Status.', msg, 
 					function(){ nextStatusContract(); },
 					function(){ }
@@ -3159,14 +3158,13 @@ function modalStatusCon(){
 }
 
 function nextStatusContract(){
-	//deactiveEventClick("btnNextStatus");
 	$("#iNextStatus").addClass("fa-spin");
 	var id = getIDContrato();
 	$.ajax({
 	    data:{
 	        idContrato: id,
-			idNextStatus: $('#statusRes').val(),
-			NextStatus: $('#statusRes option:selected').text()
+			idNextStatus: $('#statusContract').val(),
+			NextStatus: $('#statusContract option:selected').text()
 	    },
 	    type: "POST",
 	    url: "contract/nextStatusContract",

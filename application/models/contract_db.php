@@ -237,6 +237,17 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
+    public function getRRelatedByID($ID){
+        $this->db->select('R.pkResId as ID');
+        $this->db->from('tblRes R');
+        $this->db->where('R.pkResRelatedId', $ID);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
 
     public function getSaleTypes(){
         $this->db->select('pkSaletypeId as ID, SaleTypeDesc');

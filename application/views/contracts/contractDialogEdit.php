@@ -32,7 +32,9 @@
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
 		<label class="headerGeneral" id="editContracStatus">Status: <?php echo $statusActual;?></label>
-		<label class="headerGeneral" id="editContracStatus">ResRelated: <?php echo $Folio;?></label>
+		<label class="headerGeneral" id="editContracStatus">ResRelated: <?php if ($Folio){echo "1-". $Folio;} {
+			# code...
+		}?></label>
 		<label id="flagsContracEdit" class="headerGeneral">Flags: 
 		<?php
 			if (!empty($flags)) {

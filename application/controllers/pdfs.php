@@ -288,14 +288,15 @@ class Pdfs extends CI_Controller {
 			$body .= '<table width="100%">';
 			$body .= '<tr><td>' . $item->PropertyName . '</td><td>Reservation Confirmation # ' . $item->ResConf . '</td></tr>';
 			$body .= '<tr><td>' . $item->PropertyShortName . '</td><td>Account Name: ' . $item->OccTypeGroupDesc . '</td></tr>';
-			$body .= '<tr><td>St. MAARTEN</td><td>Account Id: ' . $item->fkAccId . '</td></tr>';
+			$body .= '<tr><td>Account Id: ' . $item->fkAccId . '</td>';
 			if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
-				$body .= '<tr><td>St. MAARTEN</td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
+				$body .= '<td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td>';
 			}
+			$body.= '</tr>';
 			$body .= '<tr><td>Netherlands Antilles</td></tr>';
 			$body .= '</table>';
 		}
-		
+		$body.= '<h4 class="cafe">Guest Information</h4> <hr>';
 		$body .= '<table width="100%">';
 		foreach ($data as $item){
 			$name = $item->Name;
@@ -377,14 +378,15 @@ class Pdfs extends CI_Controller {
 			$body .= '<table width="100%">';
 			$body .= '<tr><td>' . $item->PropertyName . '</td><td>Reservation Confirmation # ' . $item->ResConf . '</td></tr>';
 			$body .= '<tr><td>' . $item->PropertyShortName . '</td><td>Account Name: ' . $item->OccTypeGroupDesc . '</td></tr>';
-			$body .= '<tr><td></td><td>Account Id: ' . $item->fkAccId . '</td></tr>';
+			$body .= '<tr><td>Account Id: ' . $item->fkAccId . '</td>';
 			if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
-				$body .= '<tr><td>St. MAARTEN</td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
+				$body .= '<td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td>';
 			}
+			$body.= '</tr>';
 			$body .= '<tr><td>Netherlands Antilles</td></tr>';
 			$body .= '</table>';
 		}
-		$body.= '<h4>Guest Information</h4> <hr>';
+		$body.= '<h4 class="cafe">Guest Information</h4> <hr>';
 		$body .= '<table width="100%">';
 		foreach ($data as $item){
 			$name = $item->Name;
@@ -698,6 +700,7 @@ class Pdfs extends CI_Controller {
 		$style .= ' .blackLine{ border-bottom: solid 2px #000000; }';
 		$style .= ' h3{ color: #662C19; }';
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
+		$style .= ' .cafe{ color: #662C19; font-size:15px; }';
 		$style .= ' h4.header{ color: #666666; font-weight: normal; font-size:16px; }';
 		$style .= '</style>';
 		return $style;
@@ -766,7 +769,7 @@ class Pdfs extends CI_Controller {
  
 	
 		$logo = "logo.jpg";
-		$headerString = " ";
+		$headerString = $this->getonlyDate(0);
 		$pdf->SetHeaderData($logo, 20, "     " . $title, "     " . $headerString,  array( 102,44,25 ), array( 102,44,25 ));
         $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
  

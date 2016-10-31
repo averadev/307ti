@@ -48,6 +48,7 @@ class Contract extends CI_Controller {
 				//$this->createUnidadesOcc($Ocupaciones);
 				$this->createGifts($idContrato);
 				$balanceFinal = $this->insertFinanciamiento($idContrato);
+				//var_dump($Ocupaciones);
 				$this->createSemanaOcupacion($idContrato, $Ocupaciones);
 				if ($_POST['card']) {
 					$Tarjeta = isValidateCreditCard();
@@ -815,16 +816,17 @@ public function createSemanaOcupacion($idContrato, $Ocupaciones){
 	$Unidades = [];
 	$fYear = $Years[0]->FirstOccYear;
 	$lYear = $Years[0]->LastOccYear;
+
 	if ($lYear <= $fYear + 10) {
-		$rango = $lYear - $fYear; 
+		$rango = $lYear; 
 	}else{
 		//$rango = 10;
 		$rango = $fYear + 10;
 	}
-	for ($i = $fYear; $i <= $rango ; $i++) { 
+
+	for ($i = $fYear; $i <= $rango ; $i++) {
 		array_push($Unidades, $this->contract_db->selectUnitiesContract($idContrato, $i));
 	}
-
 	for ($i=0; $i < sizeof($Unidades); $i++) {
 		for ($j=0; $j < sizeof($Unidades[$i]); $j++) {
 			$OcupacionTable = [
@@ -1152,17 +1154,6 @@ public function nextStatusContract(){
 	if($this->input->is_ajax_request()) {
 		$id = $_POST['idContrato'];
 		$IdStatus = $_POST['idNextStatus'];
-		/*$peticion = [
-			"tabla" 	=> 'tblRes',
-			"valor" 	=> 'fkStatusId',
-			"alias" 	=> 'ID',
-			"codicion"	=> 'pkResID',
-			"id"		=>	$id
-		];
-		//$IdStatus = $this->contract_db->propertyTable($peticion);
-		$IdStatus = $this->contract_db->selectContractID($id);
-		$maximo = $this->contract_db->selectMaxStatus();
-		$IdStatus = $this->contract_db->getNextStatusID($IdStatus);*/
 		
 		$Res = [
 			"fkStatusId"	=> $IdStatus,
@@ -1172,14 +1163,17 @@ public function nextStatusContract(){
 		$condicion = "pkResId = " . $id;
 		$afectados = $this->contract_db->updateReturnId('tblRes', $Res, $condicion);
 		if ($afectados>0) {
-			//var_dump($_POST['NextStatus']);
 			if( $_POST['NextStatus'] == "Cancel" || $_POST['NextStatus'] == "Exchange" ){
-					//if( $idRestype == 7){
-						$resConf = $this->contract_db->getConfirmationCodeByID($id);
-						$code = $this->contract_db->getStatusCode($IdStatus);
-						$this->db->query("exec  spCNXRes @Resconf='" . $resConf . "', @StatusCode='" . $code . "'");
-					//}
+				
+				$code = $this->contract_db->getStatusCode($IdStatus);
+				$RESRELATED = $this->contract_db->getRRelatedByID($id);
+
+				for ($i=0; $i < sizeof($RESRELATED); $i++) { 
+					$resConf = $this->contract_db->getConfirmationCodeByID($RESRELATED[$i]->ID);
+					$this->db->query("exec  spCNXRes @Resconf='" . $resConf . "', @StatusCode='" . $code . "'");
 				}
+				
+			}
 			$actual = $this->contract_db->getCurrentStatus($IdStatus);
 			$mensaje = ["mensaje"=>"save correctly","afectados" => $afectados, "status" => $actual];
 
