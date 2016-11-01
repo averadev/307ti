@@ -49,7 +49,8 @@ class Contract extends CI_Controller {
 				$this->createGifts($idContrato);
 				$balanceFinal = $this->insertFinanciamiento($idContrato);
 				//var_dump($Ocupaciones);
-				$this->createSemanaOcupacion($idContrato, $Ocupaciones);
+				$Intervalos = $this->createIntvContract($Ocupaciones);
+				$this->createSemanaOcupacion($idContrato, $Ocupaciones, $Intervalos);
 				if ($_POST['card']) {
 					$Tarjeta = isValidateCreditCard();
 					if ($Tarjeta['valido']) {
@@ -809,7 +810,7 @@ private function insertScheduledPaymentsTrx($idContrato){
 		}
 	}
 }
-public function createSemanaOcupacion($idContrato, $Ocupaciones){
+public function createSemanaOcupacion($idContrato, $Ocupaciones, $Intervalos){
 
 	$Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
 
@@ -823,10 +824,12 @@ public function createSemanaOcupacion($idContrato, $Ocupaciones){
 		//$rango = 10;
 		$rango = $fYear + 10;
 	}
-
-	for ($i = $fYear; $i <= $rango ; $i++) {
-		array_push($Unidades, $this->contract_db->selectUnitiesContract($idContrato, $i));
+	for ($j=0; $j < sizeof($Intervalos); $j++) { 
+		for ($i = $fYear; $i <= $rango ; $i++) {
+			array_push($Unidades, $this->contract_db->selectUnitiesContract($Intervalos[$j], $i));
+		}
 	}
+	
 	for ($i=0; $i < sizeof($Unidades); $i++) {
 		for ($j=0; $j < sizeof($Unidades[$i]); $j++) {
 			$OcupacionTable = [
@@ -844,6 +847,35 @@ public function createSemanaOcupacion($idContrato, $Ocupaciones){
 			$this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
 		 }
 	}
+}
+
+public function createIntvContract($Ocupaciones) {
+	$Intervalos = [];
+	$rango = intval(sizeof($_POST['unidades']));
+	$dias = sizeof($_POST['weeks']) * 7;
+	for($i =0; $i< $rango; $i++){
+		for ($i=0; $i < sizeof($Ocupaciones); $i++) { 
+			$Unidades = [
+			"fkResId"       => $Ocupaciones[$i],
+			"fkUnitId"    	=> $_POST['unidades'][$i]['id'],
+			"Intv"          => $_POST['unidades'][$i]['week'],
+			"fkFloorPlanId" => $this->contract_db->selectIdFloorPlan($_POST['unidades'][$i]['floorPlan']),
+			"fkViewId"      => $_POST['viewId'],
+			"fkSeassonId"   => $this->contract_db->selectIdSeason($_POST['unidades'][$i]['season']),
+			"fkFrequencyId" => $this->contract_db->selectIdFrequency($_POST['unidades'][$i]['frequency']),
+			"WeeksNumber"   => $_POST['weeks'][$i],
+			"NightsNumber"  => $dias,
+			"FirstOccYear"  => $_POST['firstYear'],
+			"LastOccYear"   => $_POST['lastYear'],
+			"ynActive"      => 1,
+			"CrBy"          => $this->nativesessions->get('id'),
+			"CrDt"			=> $this->getToday()
+		];
+		$ID = $this->contract_db->insertReturnId('tblResInvt', $Unidades);
+		array_push($Intervalos, $ID);
+		}
+	}
+	return $Intervalos;
 }
 
 private function createGifts($id){

@@ -288,12 +288,10 @@ class Pdfs extends CI_Controller {
 			$body .= '<table width="100%">';
 			$body .= '<tr><td>' . $item->PropertyName . '</td><td>Reservation Confirmation # ' . $item->ResConf . '</td></tr>';
 			$body .= '<tr><td>' . $item->PropertyShortName . '</td><td>Account Name: ' . $item->OccTypeGroupDesc . '</td></tr>';
-			$body .= '<tr><td>Account Id: ' . $item->fkAccId . '</td>';
+			$body .= '<tr><td>Netherlands Antilles</td><td>Account Id: ' . $item->fkAccId . '</td></tr>';
 			if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
-				$body .= '<td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td>';
+				$body .= '<tr><td></td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
 			}
-			$body.= '</tr>';
-			$body .= '<tr><td>Netherlands Antilles</td></tr>';
 			$body .= '</table>';
 		}
 		$body.= '<h4 class="cafe">Guest Information</h4> <hr>';
@@ -378,12 +376,10 @@ class Pdfs extends CI_Controller {
 			$body .= '<table width="100%">';
 			$body .= '<tr><td>' . $item->PropertyName . '</td><td>Reservation Confirmation # ' . $item->ResConf . '</td></tr>';
 			$body .= '<tr><td>' . $item->PropertyShortName . '</td><td>Account Name: ' . $item->OccTypeGroupDesc . '</td></tr>';
-			$body .= '<tr><td>Account Id: ' . $item->fkAccId . '</td>';
+			$body .= '<tr><td>Netherlands Antilles</td><td>Account Id: ' . $item->fkAccId . '</td></tr>';
 			if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
-				$body .= '<td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td>';
+				$body .= '<tr><td></td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
 			}
-			$body.= '</tr>';
-			$body .= '<tr><td>Netherlands Antilles</td></tr>';
 			$body .= '</table>';
 		}
 		$body.= '<h4 class="cafe">Guest Information</h4> <hr>';

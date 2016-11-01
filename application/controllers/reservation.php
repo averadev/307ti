@@ -191,7 +191,7 @@ class Reservation extends CI_Controller {
 	}
 	
 	private function createAcc(){
-		$typeAcc = ['6'];
+		$typeAcc = ['6', '7'];
 		$resultAcc = array();
 		for($i =0; $i< count($typeAcc); $i++){
 			$cuenta = [
@@ -1183,7 +1183,7 @@ private function comprubaArray($valor, $array){
 			if($typeInfo == "account"){
 				$acc = $this->reservation_db->getAccByRes( $id );
 				$datos['acc'] = $acc;
-				$typeTr = array( 'reservation' );
+				$typeTr = array( 'reservation', 'ADV' );
 				foreach($typeTr as $tyTr){
 					$data = $this->reservation_db->getAccountsById( $id, $typeInfo, $tyTr);
 					foreach($data as $item){

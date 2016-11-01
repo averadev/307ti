@@ -151,7 +151,7 @@ $(document).ready(function(){
 		var dialogDiscountAmountRes = modalDiscountAmountRes();
 		dialogDiscountAmountRes.dialog("open");
 	});
-	/*$(document).off('click', '#tabsContratsAccounts');
+	$(document).off('click', '#tabsContratsAccounts');
 	$(document).on( 'click', '#tabsContratsAccounts', function(){
 		var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
 		if (accCode == "FDK") {
@@ -159,7 +159,7 @@ $(document).ready(function(){
 		}else{
 			$("#btAddCreditLimitRes").hide();
 		}
-	});*/
+	});
 	$(document).off('change', '#RRelated');
 	$(document).on( 'change', '#RRelated', function () {
 		var ajaxDatos =  {
@@ -2571,7 +2571,7 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 			if(typeInfo == "account"){
 				var reservation = data["reservation"];
 				var frontDesk = data["frontDesk"];
-				
+
 				var acc = data["acc"];
 				if(reservation.length > 0){
 					var reservation = parsearSALERes(reservation);
@@ -2580,6 +2580,8 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 				}else{
 					alertify.error('no results found');
 					$("#tableAccountSeller tbody").empty();
+				}
+				if (avdDeposit) {
 				}
 				for( i=0; i<acc.length; i++ ){
 					var nameSafe = acc[i].accType;
@@ -3930,6 +3932,9 @@ function setDataOpcionAccountRes(attrType){
 		$('#accountIdAcc').text( $('#btNewTransAccRes').data( 'idAccRes' ) );
 	}else if(accType == 5){
 		$('#accountIdAcc').text( $('#btNewTransAccRes').data( 'idAccFront' ) );
+	}
+	else if(accType == 7){
+		$('#accountIdAcc').text( $('#btNewTransAccRes').data( 'idAccADep' ) );
 	}
 	$('#dueDateAcc').val(getCurrentDate());
 	$('#legalNameAcc').text($('#editContractTitle').text());

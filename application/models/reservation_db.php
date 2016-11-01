@@ -673,6 +673,9 @@ class Reservation_db extends CI_Model {
         }else if($typeAcc == "frontDesk"){
             $this->db->where('a.fkAccTypeId = 5');
         }
+        else if($typeAcc == "ADV"){
+            $this->db->where('a.fkAccTypeId = 7');
+        }
         if($typeInfo == "payment"){
             $this->db->where("(tt.TrxSign = 1 or tt.TrxSign = 0)");
             $this->db->where('a.fkAccTypeId = ', $typeAcc);

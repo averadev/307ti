@@ -328,9 +328,9 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 				<li class="tabs-title active" attr-screen="tab-RARes" attr-accType="6" attr-accCode="RES" >
 					<a>Reservation</a>
 				</li>
-				<!--<li class="tabs-title" attr-screen="tab-RAFrontDesk" attr-accType="5" attr-accCode="FDK" >
-					<a>Front Desk</a>
-				</li>-->
+				<li class="tabs-title" attr-screen="ADVDeposit" attr-accType="7" attr-accCode="ADep" >
+					<a>ADV Deposit</a>
+				</li>
 			</ul>
 		</div>
 		<!-- contenido del modal -->
@@ -396,7 +396,7 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 				</div>
 			</div>
 			<!-- Misceláneos -->
-			<div id="tab-RAFrontDesk" class="large-12 columns tab-modal" style="display:none;">
+			<div id="ADVDeposit" class="large-12 columns tab-modal" style="display:none;">
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
 						<table class="tableAccountResult" id="tableFrontDeskAccRes" style="margin-top:16px;" class="cell-border" >
