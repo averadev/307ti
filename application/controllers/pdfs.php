@@ -282,18 +282,20 @@ class Pdfs extends CI_Controller {
 		$style = $this->generateStyle();
 		
 		$body = '';
-		
-		foreach ($data2 as $item){
-			$data3 = $this->pdfs_db->getAccTrx($item->fkAccId);
+		//var_dump($data2);
+		// var_dump($data2[0]);
+		// foreach ($data2 as $item){
+		// 	var_dump($item);
+			$data3 = $this->pdfs_db->getAccTrx($data2[0]->fkAccId);
 			$body .= '<table width="100%">';
-			$body .= '<tr><td>' . $item->PropertyName . '</td><td>Reservation Confirmation # ' . $item->ResConf . '</td></tr>';
-			$body .= '<tr><td>' . $item->PropertyShortName . '</td><td>Account Name: ' . $item->OccTypeGroupDesc . '</td></tr>';
-			$body .= '<tr><td>Netherlands Antilles</td><td>Account Id: ' . $item->fkAccId . '</td></tr>';
+			$body .= '<tr><td>' . $data2[0]->PropertyName . '</td><td>Reservation Confirmation # ' . $data2[0]->ResConf . '</td></tr>';
+			$body .= '<tr><td>' . $data2[0]->PropertyShortName . '</td><td>Account Name: ' . $data2[0]->OccTypeGroupDesc . '</td></tr>';
+			$body .= '<tr><td>Netherlands Antilles</td><td>Account Id: ' . $data2[0]->fkAccId . '</td></tr>';
 			if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
 				$body .= '<tr><td></td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
 			}
 			$body .= '</table>';
-		}
+		//}
 		$body.= '<h4 class="cafe">Guest Information</h4> <hr>';
 		$body .= '<table width="100%">';
 		foreach ($data as $item){
@@ -312,7 +314,7 @@ class Pdfs extends CI_Controller {
 		$body .= '</table>';
 		
 		
-		foreach($data2 as $item){
+		//foreach($data2 as $item){
 			$body .= '<h4></h4>';
 			$body .= '<table class="balance" width="100%">';
 			$finalCredit = 0;
@@ -344,7 +346,7 @@ class Pdfs extends CI_Controller {
 			$body .= '<tr><td></td><td></td><td></td><td></td><td>' . round($balance,2) . '</td><td>' . round($finalCredit,2) . '</td><td>' . round($finalCharge,2) . '</td></tr>';
 			$body .= '</table>';
 			$body .= '<h4></h4>';
-		}
+		//}
 		
 		$html = '';
 		$html .= ' <html><head></head><body>';
@@ -371,17 +373,17 @@ class Pdfs extends CI_Controller {
 		
 		$body = '';
 		
-		foreach ($data2 as $item){
-			$data3 = $this->pdfs_db->getAccTrx($item->fkAccId);
+		//foreach ($data2 as $item){
+			$data3 = $this->pdfs_db->getAccTrx($data2[0]->fkAccId);
 			$body .= '<table width="100%">';
-			$body .= '<tr><td>' . $item->PropertyName . '</td><td>Reservation Confirmation # ' . $item->ResConf . '</td></tr>';
-			$body .= '<tr><td>' . $item->PropertyShortName . '</td><td>Account Name: ' . $item->OccTypeGroupDesc . '</td></tr>';
-			$body .= '<tr><td>Netherlands Antilles</td><td>Account Id: ' . $item->fkAccId . '</td></tr>';
+			$body .= '<tr><td>' . $data2[0]->PropertyName . '</td><td>Reservation Confirmation # ' . $data2[0]->ResConf . '</td></tr>';
+			$body .= '<tr><td>' . $data2[0]->PropertyShortName . '</td><td>Account Name: ' . $data2[0]->OccTypeGroupDesc . '</td></tr>';
+			$body .= '<tr><td>Netherlands Antilles</td><td>Account Id: ' . $data2[0]->fkAccId . '</td></tr>';
 			if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
 				$body .= '<tr><td></td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
 			}
 			$body .= '</table>';
-		}
+		//}
 		$body.= '<h4 class="cafe">Guest Information</h4> <hr>';
 		$body .= '<table width="100%">';
 		foreach ($data as $item){
@@ -400,7 +402,7 @@ class Pdfs extends CI_Controller {
 		$body .= '</table>';
 		
 		
-		foreach($data2 as $item){
+		//foreach($data2 as $item){
 			$body .= '<h4></h4>';
 			$body .= '<table class="balance" width="100%">';
 			$finalCredit = 0;
@@ -432,7 +434,7 @@ class Pdfs extends CI_Controller {
 			$body .= '<tr><td></td><td></td><td></td><td></td><td>' . round($balance,2) . '</td><td>' . round($finalCredit,2) . '</td><td>' . round($finalCharge,2) . '</td></tr>';
 			$body .= '</table>';
 			$body .= '<h4></h4>';
-		}
+		//}
 		
 		$html = '';
 		$html .= ' <html><head></head><body>';
