@@ -2582,10 +2582,10 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 					alertify.error('no results found');
 					$("#tableAccountSeller tbody").empty();
 				}
-				if (avdDeposit) {
+				if (avdDeposit.length>0) {
 					var avdDeposit = parsearSALERes(avdDeposit);
 					drawTable2(avdDeposit, "tableAccountLoan", false, "");
-					setTableAccountRes( avdDeposit, "tableAccountLoan" );
+					//setTableAccountRes( avdDeposit, "tableAccountLoan" );
 				}
 				for( i=0; i<acc.length; i++ ){
 					var nameSafe = acc[i].accType;

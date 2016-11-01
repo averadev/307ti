@@ -49,8 +49,8 @@ class Contract extends CI_Controller {
 				$this->createGifts($idContrato);
 				$balanceFinal = $this->insertFinanciamiento($idContrato);
 				//var_dump($Ocupaciones);
-				$Intervalos = $this->createIntvContract($Ocupaciones);
-				$this->createSemanaOcupacion($idContrato, $Ocupaciones, $Intervalos);
+				//$Intervalos = $this->createIntvContract($Ocupaciones);
+				$this->createSemanaOcupacion($idContrato, $Ocupaciones);
 				if ($_POST['card']) {
 					$Tarjeta = isValidateCreditCard();
 					if ($Tarjeta['valido']) {
@@ -810,7 +810,7 @@ private function insertScheduledPaymentsTrx($idContrato){
 		}
 	}
 }
-public function createSemanaOcupacion($idContrato, $Ocupaciones, $Intervalos){
+public function createSemanaOcupacion($idContrato, $Ocupaciones){
 
 	$Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
 
@@ -824,12 +824,10 @@ public function createSemanaOcupacion($idContrato, $Ocupaciones, $Intervalos){
 		//$rango = 10;
 		$rango = $fYear + 10;
 	}
-	for ($j=0; $j < sizeof($Intervalos); $j++) { 
-		for ($i = $fYear; $i <= $rango ; $i++) {
-			array_push($Unidades, $this->contract_db->selectUnitiesContract($Intervalos[$j], $i));
-		}
+
+	for ($i = $fYear; $i <= $rango ; $i++) {
+		array_push($Unidades, $this->contract_db->selectUnitiesContract($idContrato, $i));
 	}
-	
 	for ($i=0; $i < sizeof($Unidades); $i++) {
 		for ($j=0; $j < sizeof($Unidades[$i]); $j++) {
 			$OcupacionTable = [
