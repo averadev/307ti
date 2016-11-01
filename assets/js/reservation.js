@@ -2571,6 +2571,7 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 			if(typeInfo == "account"){
 				var reservation = data["reservation"];
 				var frontDesk = data["frontDesk"];
+				var avdDeposit = data["ADV"];
 
 				var acc = data["acc"];
 				if(reservation.length > 0){
@@ -2582,6 +2583,9 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 					$("#tableAccountSeller tbody").empty();
 				}
 				if (avdDeposit) {
+					var avdDeposit = parsearSALERes(avdDeposit);
+					drawTable2(avdDeposit, "tableAccountLoan", false, "");
+					setTableAccountRes( avdDeposit, "tableAccountLoan" );
 				}
 				for( i=0; i<acc.length; i++ ){
 					var nameSafe = acc[i].accType;
