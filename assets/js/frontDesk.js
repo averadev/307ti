@@ -1651,10 +1651,11 @@ function getArrayValuesColumnTableC(tabla, columna){
 
 function getCurrentDateMENOS(dias){
 	var today = new Date();
-	var dd = today.getDate() - dias;
+	
 	var mm = today.getMonth()+1;
 	var yyyy = today.getFullYear();
-	
+	today.setDate(today.getDate()-dias);
+	var dd = today.getDate();
 	if(dd<10) {
 		dd='0'+dd
 	} 
