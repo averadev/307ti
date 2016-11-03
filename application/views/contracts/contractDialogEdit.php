@@ -32,7 +32,7 @@
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
 		<label class="headerGeneral" id="editContracStatus">Status: <?php echo $statusActual;?></label>
-		<label class="headerGeneral" id="editContracStatus">ResRelated: <?php if ($Folio){echo "1-". $Folio;} {
+		<label class="headerGeneral" id="editResRelated">ResRelated: <?php if ($Folio){echo "1-". $Folio;} {
 			# code...
 		}?></label>
 		<label id="flagsContracEdit" class="headerGeneral">Flags: 
@@ -104,6 +104,10 @@
 								<span>
 									<i class="fa fa-user-plus"></i>
 								</span>
+							</a>
+							<a id="btnSavePeople" class="btn btn-primary spanSelect">
+								<div class="label">Save Changes</div>
+								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
 						</div>
 					<div class="small-6 columns" >

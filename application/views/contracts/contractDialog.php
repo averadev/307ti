@@ -113,6 +113,7 @@
                                 <thead class="colorCrema">
                                     <tr>
                                         <th class="cellEdit" >Id</th>
+                                        <th class="cellGeneral">Code</th>
                                         <th class="cellGeneral">Description</th>
                                         <th class="cellGeneral">Price</th>
                                         <th class="cellGeneral">Frequency</th>

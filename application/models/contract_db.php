@@ -108,6 +108,53 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
+        public function getPeopleContract2($string){
+        $sql = "";
+        $this->db->distinct();
+        $this->db->select('PC.fkPeopleStatusId, P.pkPeopleId as ID, RTRIM(P.Name) as Name, RTRIM(P.LName) AS lastName');
+        $this->db->select('RTRIM(AD.Street1) as address, PC.ynPrimaryPeople, PC.YnBenficiary');
+        $this->db->from('tblResPeopleAcc PC');
+        $this->db->join('tblPeople P', 'P.pkPeopleId = PC.fkPeopleId', 'left');
+        $this->db->join('tblPeopleAddress PAD', 'PAD.fkPeopleId = P.pkPeopleId', 'left');
+        $this->db->join('tblAddress AD', 'AD.pkAddressid = PAD.fkAddressId', 'left');
+        $this->db->where('fkResId', $string);
+        $this->db->where('PC.ynActive',1);
+        $this->db->order_by('ID', 'DESC');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+    public function getPeople($idRes){
+        $this->db->select('rpa.pkResPeopleAccId as ID, rpa.fkPeopleId, rpa.ynPrimaryPeople, rpa.YnBenficiary, rpa.ynActive, rpa.fkAccId ');
+        $this->db->from('tblResPeopleAcc rpa');
+        $this->db->where('rpa.ynActive',1);
+        $this->db->where('rpa.fkResId', $idRes);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    public function getPeopleContract3($string){
+        $sql = "";
+        $this->db->distinct();
+        $this->db->select('PC.fkPeopleStatusId, P.pkPeopleId as ID, RTRIM(P.Name) as Name, RTRIM(P.LName) AS lastName');
+        $this->db->select('RTRIM(AD.Street1) as address, PC.ynPrimaryPeople, PC.YnBenficiary');
+        $this->db->from('tblResPeopleAcc PC');
+        $this->db->join('tblPeople P', 'P.pkPeopleId = PC.fkPeopleId', 'left');
+        $this->db->join('tblPeopleAddress PAD', 'PAD.fkPeopleId = P.pkPeopleId', 'left');
+        $this->db->join('tblAddress AD', 'AD.pkAddressid = PAD.fkAddressId', 'left');
+        $this->db->where('fkResId', $string);
+        $this->db->where('PC.ynActive',1);
+        $this->db->order_by('ID', 'DESC');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+
     public function getPeopleContractPrimary($string){
 
         $this->db->distinct();
@@ -1318,7 +1365,17 @@ class Contract_db extends CI_Model {
         $query = $this->db->get();
 		return $query->result();
 	}
-	
+
+    // public function selectPeopleStatus(){
+    //     $this->db->select('pkStatusId as ID, StatusDesc');
+    //     $this->db->from('tblstatus TS');
+    //     $this->db->join('tblstatustypestatus TST', 'TS.pkStatusId = TST.fkStatusid');
+    //     $this->db->where('TST.fkStatusTypeId', 6);
+    //     $query = $this->db->get();
+    //     if($query->num_rows() > 0 ){
+    //         return $query->result();
+    //     }
+    // }
 	public function getDocType(){
 		$this->db->select("dt.pkDocTypeId as ID, dt.DocTypeDesc");
         $this->db->from('tblDocType dt');

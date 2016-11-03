@@ -498,9 +498,9 @@ Class frontDesk_db extends CI_MODEL
 		$sql.= " INNER JOIN tblFloorPlan FP on U.fkFloorPlanId = FP.pkFloorPlanID inner join tblOccTypeGroup OG on OC.fkOccTypeGroupId = OG.pkOccTypeGroupId";
 		$sql.= " where  ";
 		if (!isset($filters['words']['DateDeparture']) && empty($filters['words']['DateDeparture'])) {
-			$sql.= "'".$filters['words']['DateAudit']."'". "= (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId asc)";
-			$sql.= " or ";
-			$sql.= "'".$filters['words']['DateAudit']."'". "= (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId desc) and"; 
+			$sql.= "'".$filters['words']['DateAudit']."'". "between (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId and c2.Year = ". date('Y', strtotime($filters['words']['DateAudit'])) ." ORDER By ro2.fkCalendarId asc)";
+			$sql.= " and ";
+			$sql.= "(SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId and c2.Year = ". date('Y', strtotime($filters['words']['DateAudit'])) ." ORDER By ro2.fkCalendarId desc) and"; 
 		}
 		$sql.= " RP.ynPrimaryPeople = 1";
 		if (!isset($filters['words']['unitAudit'])) {

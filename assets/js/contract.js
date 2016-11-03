@@ -18,6 +18,11 @@ $(document).ready(function(){
 		var id = getIDContrato();
 		showModalFin(id);
 	});
+
+	$(document).off( 'click', '#btnSavePeople');
+	$(document).on('click', "#btnSavePeople", function () {
+		savePeople();
+	});
 	$(document).off( 'click', '#btnAddPeople');
 	$(document).on( 'click', '#btnAddPeople', function () {
 		if (peopleDialog != null) {
@@ -249,7 +254,7 @@ function updateDescuentoEspecial(){
 }
 
 function updateBalanceFinal(){
-	var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
+	var closingCost = getClosingCost();
 	var precioVenta = getNumberTextInput("precioVenta");
 
 	var descuentoEspecial = getNumberTextInput("montoTotalDE");
@@ -266,7 +271,10 @@ function updateBalanceFinal(){
 	$("#financeBalance").val(total);
 	
 }
-		
+
+function getClosingCost(){
+	return sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 8));
+}		
 function cambiarCantidadP(monto)
 {
 	var seleccionado = $("input[name='engancheR']:checked").val();
@@ -689,7 +697,7 @@ function createNewContract(){
 				peoples: getValueTablePersonas(),
 				types: 	typePeople(),
 				unidades: getValueTableUnidades(),
-				weeks: getArrayValuesColumnTable("tableUnidadesSelected", 6),
+				weeks: getArrayValuesColumnTable("tableUnidadesSelected", 7),
 				tipoVentaId : $("#typeSales").val(),
 				listPrice: getNumberTextInput("precioUnidad"),
 				salePrice: getNumberTextInput("precioVenta"),
@@ -705,7 +713,7 @@ function createNewContract(){
 				tablaDownpayment : getValueTableDownpayment(),
 				gifts: getValueTablePacks(),
 				viewId: 1,
-				closingCost: sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7)),
+				closingCost: getClosingCost(),
 				card: datosCard(),
 				RelatedR: $("#contractR").val().replace("1-", "")
 				//totalDiscountPacks
@@ -810,36 +818,21 @@ function getValueTableUnidades(){
 		if ($(this).text().replace(/\s+/g, " ")!="") {
 			var unidad = {};
 			unidad.id = $(this).find('td').eq(0).text(),
-			unidad.floorPlan = $(this).find('td').eq(1).text(),
-			unidad.price = $(this).find('td').eq(2).text(),
-			unidad.frequency = $(this).find('td').eq(3).text(),
-			unidad.season = $(this).find('td').eq(4).text(),
-			unidad.week = $(this).find('td').eq(5).text(),
-			unidad.fyear = $(this).find('td').eq(7).text(),
-			unidad.lyear = $(this).find('td').eq(8).text()
+			unidad.floorPlan = $(this).find('td').eq(2).text(),
+			unidad.price = $(this).find('td').eq(3).text(),
+			unidad.frequency = $(this).find('td').eq(4).text(),
+			unidad.season = $(this).find('td').eq(5).text(),
+			unidad.week = $(this).find('td').eq(6).text(),
+			unidad.fyear = $(this).find('td').eq(8).text(),
+			unidad.lyear = $(this).find('td').eq(9).text()
 			unidades.push(unidad); 
 		}
 	});
 	return unidades;
 }
 function getValueTableUnidadesSize(){
-	var tabla = "tableUnidades";
-	var unidades = [];
-	$('#'+tabla+' tbody tr').each( function(){
-		if ($(this).text().replace(/\s+/g, " ")!="") {
-			var unidad = {};
-			unidad.id = $(this).find('td').eq(0).text(),
-			unidad.floorPlan = $(this).find('td').eq(1).text(),
-			unidad.price = $(this).find('td').eq(2).text(),
-			unidad.frequency = $(this).find('td').eq(3).text(),
-			unidad.season = $(this).find('td').eq(4).text(),
-			unidad.week = $(this).find('td').eq(5).text(),
-			unidad.fyear = $(this).find('td').eq(6).text(),
-			unidad.lyear = $(this).find('td').eq(7).text()
-			unidades.push(unidad); 
-		}
-	});
-	return unidades;
+	var tabla = "tableUnidadesContract";
+	return $( "#"+tabla+" tr" ).length;
 }
 function getValueTablePersonas(){
 	var tabla = "tablePeopleSelected";
@@ -856,7 +849,22 @@ function getValueTablePersonas(){
 	});
 	return personas;
 }
-
+function getValueTablePersonasMOD(){
+	var tabla = "peopleContract";
+	var unidades = [];
+	var personas = [];
+	$('#'+tabla+' tbody tr').each( function(i){
+		if ($(this).text().replace(/\s+/g, " ")!="") {
+			var persona = {};
+			persona.id = $(this).find('td').eq(0).text(),
+			persona.primario = $(this).find('td').eq(4).find('input[name=peopleType1]').is(':checked'),
+			persona.beneficiario = $(this).find('td').eq(5).find('input[name=peopleType2]').is(':checked')
+			persona.exist = 0
+			personas.push(persona);
+		}
+	});
+	return personas;
+}
 
 function converCheked(val){
 	console.log(val);
@@ -1364,10 +1372,12 @@ function modalDiscountAmount(){
 }
 
 function tablUnidadades(unidades, frequency, primero, ultimo){
+	//console.table(unidades);
 	var bodyHTML = '';
 	for (var i = 0; i < unidades.length; i++) {
 		bodyHTML += "<tr>";
 		bodyHTML += "<td>"+unidades[i].id+"</td>";
+		bodyHTML += "<td>"+unidades[i].code+"</td>";
 		bodyHTML += "<td>"+unidades[i].description+"</td>";
 		bodyHTML += "<td>"+unidades[i].price+"</td>";
 		bodyHTML += "<td>"+frequency+"</td>";
@@ -1457,8 +1467,8 @@ function getValueFromTableSelected(id, posicion){
 }
 
 function setValueUnitPrice(){
-	var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
-	var precio = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 3));
+	var closingCost = getClosingCost();
+	var precio = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 4));
 	$("#closingCostLabel").val(closingCost);
 	$("#precioUnidad").val(precio);
 	$("#precioVenta").val(precio);
@@ -1648,7 +1658,7 @@ function initEventosDownpayment(){
 	});
 	
 	$('#datePayDawnpayment').val(getCurrentDate());
-	var closingCost = sumarArray(getArrayValuesColumnTable("tableUnidadesSelected", 7));
+	var closingCost = getClosingCost();
 	$("#downpaymentGastos").val(closingCost);
 	var Downpayment = getNumberTextInput('montoTotal');
 	if (Downpayment > 0) {
@@ -2129,14 +2139,18 @@ function getDatosContract(id){
 
 	    	var c = parseFloat(data['CollectionCost']);
 	    	$("#CollectionCost").text(c);
-	    	drawTableSinHeadPeople(data["peoples"], "peoplesContract");
+	    	
+	    	if(data["peoples"].length > 0){
+				//var status = drawTableSinHeadReservationPeople(data["peoples"], "peoplesContract");
+				drawTableSinHeadPeople(data["peoples"], "peoplesContract");
+			}
 	    	drawTableSinHead(data["unities"], "tableUnidadesContract");
 	    	drawTerminosVenta(data["terminosVenta"][0]);
 	    	drawTerminoFinanciamiento(data["terminosFinanciamiento"][0]);
 			var contraTemp = data["contract"][0];
 			$('td.folioAccount').text(contraTemp.Folio);
 			setHeightModal('dialog-Edit-Contract');
-			addFunctionality();
+			//addFunctionality();
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -2145,6 +2159,13 @@ function getDatosContract(id){
 }
 
 function drawTableSinHeadPeople(data, table){
+	// var statusActuales = [];
+	// var status = $("#editContracStatus").text().replace("Status: ", "");
+	// var option1 = "<select class='checkInPeople'>"+status+"</select>";
+	// var option2 = "<select class='checkInPeople'>"+status+"</select>";
+	// var checkboxT = "<td><div class='rdoField'>"+option1+"</td>";
+	// var checkboxT2 = "<td><div class='rdoField'>"+option2+"</div></td>";
+	$('#' + table).empty();
     for (var i = 0; i < data.length; i++) {
 		var bodyHTML = '';
 		bodyHTML += "<tr>";
@@ -2163,6 +2184,8 @@ function drawTableSinHeadPeople(data, table){
 			$('.benefy')[i].checked = true;
 		}
     }
+	onChangePrimary();
+	deleteElementTable(table);
 }
 
 function addFunctionality(){
@@ -2381,7 +2404,7 @@ function drawTerminosVenta(data){
 	var costoContract = parseFloat(data.ClosingFeeAmt);
 	var packAmount = parseFloat(data.PackPrice);
 	var balanceFinal = parseFloat(data.BalanceActual);
-	var unidades = getValueTableUnidadesSize().length;
+	var unidades = getValueTableUnidadesSize();
 
 	$("#cventaPrice").text(price.toFixed(2));
 	$("#cventaWeeks").text(unidades);
@@ -3992,3 +4015,36 @@ function creditCardMsg(data){
 	}
 	
 }
+function savePeople(){
+	
+	var personas = getSizeTablePeoples();
+	if (personas <= 0) {
+			alertify.error("You must add at least one person");
+	}else{
+		msgSavePeople = alertify.success('Saving People, please wait ....', 0);
+			$.ajax({
+				data: {
+					peoplesMOD: getValueTablePersonasMOD(),
+					id: $("#idContratoX").text(),
+				},
+				type: "POST",
+				dataType:'json',
+				url: 'contract/savePeople'
+			}).done(function( data, textStatus, jqXHR ) {
+				msgSavePeople.dismiss();
+				if(data.items.length > 0){
+					drawTableSinHeadPeople(data.items, "peoplesContract");
+				}
+			}).fail(function( jqXHR, textStatus, errorThrown ) {
+				msgSavePeople.dismiss();
+				alertify.error("Try again");
+			});
+		//}
+	}
+}
+
+function getSizeTablePeoples(){
+	var tabla = "peoplesContract";
+	return $( "#"+tabla+" tr" ).length;
+}
+

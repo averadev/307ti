@@ -647,6 +647,7 @@ class Reservation_db extends CI_Model {
         $this->db->distinct();
         if($typeInfo == "account"){
             $this->db->select('att.pkAccTrxId as ID');
+             $this->db->select("ISNULL(PT1.fkPayId, 0) as PAYID");
 			$this->db->select("PT.fkPayId as idpay, CASE WHEN PT.fkPayId is NULL THEN att.pkAccTrxId ELSE PT.fkAccTrxId END as 'fkPay'");
             $this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Sign_transaction, att.fkAccId as AccID');
             $this->db->select('tc.TrxClassDesc as Concept_Trxid');
@@ -663,6 +664,7 @@ class Reservation_db extends CI_Model {
         $this->db->from('tblAccTrx att');
         $this->db->join('tblAcc a', 'a.pkAccId = att.fkAccId');
 		$this->db->join('tblPayTrx PT', ' att.pkAccTrxID = PT.fkPayId and PT.pkPayTrxId = (select top 1 PT2.pkPayTrxId from tblPayTrx PT2 where PT2.fkPayId =  PT.fkPayId ORDER BY PT2.pkPayTrxId DESC) ', 'left');
+        $this->db->join('tblPayTrx PT1', ' PT1.fkAccTrxId = att.pkAccTrxId ', 'left');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId');
         $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = att.fkTrxTypeId');
         $this->db->join('tblTrxClass tc', 'tc.pkTrxClassid = att.fkTrxClassID');

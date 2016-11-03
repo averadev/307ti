@@ -1198,6 +1198,9 @@ private function comprubaArray($valor, $array){
 							}
 						}
 						unset( $item->idpay, $item->fkPay );
+						if ($item->PAYID == 0) {
+							$item->PAYID = '';
+						}
 					}
 					
 					$datos[$tyTr] = $data;
