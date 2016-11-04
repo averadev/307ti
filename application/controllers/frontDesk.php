@@ -286,7 +286,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		if($this->input->is_ajax_request()){
 			$filtros = $this->receiveWords($_POST);
 			$data = $this->frontDesk_db->getAuditUnitsQUERY($filtros);
-			if ($filtros['words']["unitAudit"] || isset($filtros['words']["occTypeAudit"])) {
+			if ($filtros['words']["unitAudit"] || isset($filtros['words']["occTypeAudit"]) || isset($filtros['words']["statusAudit"])) {
 				echo json_encode(array('items' => $data));
 			}else{
 				$data2 = $this->frontDesk_db->selectUnitsAudit();

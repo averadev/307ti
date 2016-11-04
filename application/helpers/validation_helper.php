@@ -227,3 +227,10 @@ if (! function_exists('remplaceFloat')) {
 		return str_replace(",", ".", $valor);
 	}
 }
+
+if (! function_exists('parseToDecimal')) {
+	
+	function parseToDecimal($valor){
+		return number_format((float)$valor, 2, '.', '');
+	}
+}

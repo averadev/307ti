@@ -70,7 +70,7 @@
                 <div class="containerPeople">
                     <div class="row">
                         <div class="small-12 columns">
-                            <a id="btnAddPeople" class="btn btn-primary spanSelect">
+                            <a id="btnAddPeople" attr_table="tablePeopleSelected" class="btn btn-primary spanSelect">
                                 <div class="label">Add</div>
                                 <img src="<?php echo base_url().IMG; ?>common/more.png"/>
                             </a>
@@ -149,9 +149,9 @@
 							<div class="small-10 columns">
 								<input class="round general" id="contractR" name="contractR" type="text" placeholder="Folio" value="0">
 							</div>
-							<div class="small-2 columns">
+<!-- 							<div class="small-2 columns">
 								<a class="button postfix img"><img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/></a>
-							</div>
+							</div> -->
 						</div>
 					</div>
                 </div>

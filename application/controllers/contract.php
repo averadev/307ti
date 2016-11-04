@@ -50,6 +50,7 @@ class Contract extends CI_Controller {
 				$balanceFinal = $this->insertFinanciamiento($idContrato);
 				//var_dump($Ocupaciones);
 				//$Intervalos = $this->createIntvContract($Ocupaciones);
+				//CreatePeople
 				$this->createSemanaOcupacion($idContrato, $Ocupaciones);
 				if ($_POST['card']) {
 					$Tarjeta = isValidateCreditCard();
@@ -913,7 +914,7 @@ public function createSemanaOcupacion($idContrato, $Ocupaciones){
 public function createIntvContract($Ocupaciones) {
 	$Intervalos = [];
 	$rango = intval(sizeof($_POST['unidades']));
-	$dias = sizeof($_POST['weeks']) * 7;
+	$dias = 7;
 	for($i =0; $i< $rango; $i++){
 		for ($i=0; $i < sizeof($Ocupaciones); $i++) { 
 			$Unidades = [
@@ -1544,8 +1545,8 @@ public function getFlagsContract(){
 				$tyTr = $_POST['typeAcc'];
 				$data = $this->contract_db->getAccountsById( $id, $typeInfo, $tyTr);
 				foreach($data as $item){
-						$item->Amount = floatval($item->Amount);
-						$item->AbsAmount = floatval($item->AbsAmount);
+						$item->Amount = parseToDecimal($item->Amount);
+						$item->AbsAmount = parseToDecimal($item->AbsAmount);
 					$item->inputAll = '<input type="checkbox" id="' . $item->ID . '" class="checkPayAcc" name="checkPayAcc[]" value="' . $item->AbsAmount . '" trxClass="' . $item->pkTrxClassid . '"  ><label for="checkFilter1">&nbsp;</label>';
 					unset($item->pkTrxClassid);
 				}

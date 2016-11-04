@@ -1035,7 +1035,7 @@ function tablePeopleRes(personas, table){
         bodyHTML+="</tr>";
     }
     $('#' + table + ' tbody').append(bodyHTML);
-    defaultValuesRes();
+    defaultValuesRes(table);
     onChangePrimaryRes();
 	deleteElementTableRes(table);
 }
@@ -1047,10 +1047,11 @@ function onChangePrimaryRes(){
 		checkAllBeneficiary(this.value);
 	});
 }
-function defaultValuesRes(){
+function defaultValuesRes(div){
 	if ($('.primy').length>0) {
-		$('.primy')[0].checked = true;
-		checkAllBeneficiary(0);
+		var index = PrimaryPeopleRes2(div);
+		$('.primy')[index].checked = true;
+		checkAllBeneficiary(index);
 	}
 }
 
@@ -1062,7 +1063,7 @@ function deleteElementTableRes(div){
 		$(this).closest("tr").remove();
 		updateValuePeopleRes();
 		if (!PrimaryPeopleRes()) {
-			defaultValuesRes();
+			defaultValuesRes(div);
 		}
 	});
 }
@@ -1085,6 +1086,16 @@ function PrimaryPeopleRes(){
 	for (var i = 0; i < items.length; i++) {
 		if (items[i]) {
 			P = true;
+		}
+	}
+	return P;
+}
+function PrimaryPeopleRes2(div){
+	var P = 0;
+	var items = getArrayValuesCheckboxRes(div);
+	for (var i = 0; i < items.length; i++) {
+		if (items[i]) {
+			P = i;
 		}
 	}
 	return P;

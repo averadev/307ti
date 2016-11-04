@@ -28,7 +28,7 @@ $(document).ready(function(){
 		if (peopleDialog != null) {
 			peopleDialog.dialog( "destroy" );
 		}
-		peopleDialog = addPeopleDialog();
+		peopleDialog = addPeopleDialog($(this).attr('attr_table'));
 		peopleDialog.dialog( "open" );
 	});
 	$(document).off( 'click', '#btnAddUnidades');
@@ -38,6 +38,14 @@ $(document).ready(function(){
 		}
 		unidadDialog = addUnidadDialog();
 		unidadDialog.dialog( "open" );
+	});
+	$(document).off( 'click',  '#btnAddPeopleEdit');
+	$(document).on( 'click', '#btnAddPeopleEdit', function () {
+		if (peopleDialog != null) {
+			peopleDialog.dialog( "destroy" );
+		}
+		peopleDialog = addPeopleDialog( $(this).attr('attr_table') );
+        peopleDialog.dialog( "open" );
 	});
 	$(document).off( 'click', '#btnNewSeller'); 	
 	$(document).on( 'click', '#btnNewSeller', function () {
@@ -484,7 +492,8 @@ function addUnidadDialog() {
 	});
 	return dialog;
 }
-function addPeopleDialog() {
+function addPeopleDialog(table) {
+	console.log("stoy en el dialog" + table);
 	var div = "#dialog-People";	
 	dialog = $(div).dialog({
 		open : function (event){
@@ -511,7 +520,7 @@ function addPeopleDialog() {
 			text: "Add",
 			"class": 'dialogModalButtonAccept',
 			click: function() {
-				if(selectAllPeople()){
+				if(selectAllPeople(table)){
 					$(this).dialog('close');
 					updateValuePeople();
 					createNombreLegal();
@@ -919,7 +928,7 @@ function getDataFormContract(){
 	data.selectLanguage = $( "#selectLanguage" ).val();
 }
 
-function selectAllPeople(){
+function selectAllPeople(table){
 	var personasSeleccionaDas = getArrayValuesColumnTable("tablePeopleSelected", 1);
 	var personas = [];
 
@@ -951,7 +960,7 @@ function selectAllPeople(){
 		return false;
 	}else{
 		if (personas.length>0) {
-			tablaPersonas(personas);
+			tablaPersonas(personas, table);
 		}
 		return true;
 	}
@@ -986,7 +995,7 @@ function getValueTableUnidadesSeleccionadas(){
 
 
 
-function tablaPersonas(personas){
+function tablaPersonas(personas, table){
 	var bodyHTML = '';
 	    //creación del body
     for (var i = 0; i < personas.length; i++) {
@@ -999,21 +1008,25 @@ function tablaPersonas(personas){
         bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
         bodyHTML+="</tr>";
     }
-    $('#tablePeopleSelected tbody').append(bodyHTML);
-    defaultValues();
+    $('#'+table+' tbody').append(bodyHTML);
+
+    defaultValues(table);
     onChangePrimary();
-    deleteElementTable("tablePeopleSelected");
+    deleteElementTable(table);
 }
 
 function onChangePrimary(){
+	$(document).off( 'change', '.primy');
 	$(".primy").change(function(){
 		checkAllBeneficiary(this.value);
 	});
 }
-function defaultValues(){
+function defaultValues(div){
 	if ($('.primy').length>0) {
-		$('.primy')[0].checked = true;
-		checkAllBeneficiary(0);
+		var index = PrimaryPeople2(div);
+		$('.primy')[index].checked = true;
+		$( ".primy:checked" ).length
+		checkAllBeneficiary(index);
 	}
 	
 }
@@ -1022,8 +1035,8 @@ function deleteElementTable(div){
 	$("#"+div+" tr").on("click", "button", function(){
 		$(this).closest("tr").remove();
 		updateValuePeople();
-		if (!PrimaryPeople()) {
-			defaultValues();
+		if (!PrimaryPeople(div)) {
+			defaultValues(div);
 		}
 	});
 }
@@ -1901,20 +1914,31 @@ function totalDescPackMain(){
 	$("#totalDiscountPacks").val(totalCp);
 }
 
-function getArrayValuesCheckbox(){
+function getArrayValuesCheckbox(div){
+	console.log(div);
 	var items=[];
-	var Primario = $("#tablePeopleSelected .primy");
+	var Primario = $("#"+ div +" .primy");
 	for (var i = 0; i < Primario.length; i++) {
 		items.push(Primario[i].checked);
 	}
 	return items;
 }
-function PrimaryPeople(){
+function PrimaryPeople(div){
 	var P = false;
-	var items = getArrayValuesCheckbox();
+	var items = getArrayValuesCheckbox(div);
 	for (var i = 0; i < items.length; i++) {
 		if (items[i]) {
 			P = true;
+		}
+	}
+	return P;
+}
+function PrimaryPeople2(div){
+	var P = 0;
+	var items = getArrayValuesCheckbox(div);
+	for (var i = 0; i < items.length; i++) {
+		if (items[i]) {
+			P = i;
 		}
 	}
 	return P;
@@ -2159,12 +2183,6 @@ function getDatosContract(id){
 }
 
 function drawTableSinHeadPeople(data, table){
-	// var statusActuales = [];
-	// var status = $("#editContracStatus").text().replace("Status: ", "");
-	// var option1 = "<select class='checkInPeople'>"+status+"</select>";
-	// var option2 = "<select class='checkInPeople'>"+status+"</select>";
-	// var checkboxT = "<td><div class='rdoField'>"+option1+"</td>";
-	// var checkboxT2 = "<td><div class='rdoField'>"+option2+"</div></td>";
 	$('#' + table).empty();
     for (var i = 0; i < data.length; i++) {
 		var bodyHTML = '';
@@ -3775,7 +3793,7 @@ function makePeople(datos){
 		personas.push(p);
 	}
 
-	tablaPersonas(personas);
+	tablaPersonas(personas, 'tablePeopleSelected');
 }
 
 // function getUnitidadesRandom(){
