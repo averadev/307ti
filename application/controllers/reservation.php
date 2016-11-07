@@ -25,7 +25,17 @@ class Reservation extends CI_Controller {
 			$this->load->view('vwReservations.php',$data);
 		}
 	}
-	
+	public function pruebasReservations(){
+		if($this->input->is_ajax_request()) {
+			$typeAcc = ['3','6', '7'];
+			//echo sizeof($typeAcc);
+			$ACC = $this->reservation_db->getAccTypes($typeAcc);
+			for ($i=0; $i < sizeof($ACC); $i++) { 
+				echo $ACC[$i]->ID;
+			}
+			//echo  json_encode($ACC);
+		}
+	}
 	public function saveReservacion(){
 		if($this->input->is_ajax_request()){
 			ini_set('max_execution_time', 120);
@@ -192,12 +202,13 @@ class Reservation extends CI_Controller {
 	
 	private function createAcc(){
 		$typeAcc = ['6', '7'];
+		$accounts = $this->reservation_db->getAccTypes($typeAcc);
 		$resultAcc = array();
-		for($i =0; $i< count($typeAcc); $i++){
+		for($i =0; $i< count($accounts); $i++){
 			$cuenta = [
-				"fkAccTypeId"     	=> $typeAcc[$i],
+				"fkAccTypeId"     	=> $typeAcc[$i]->ID,
 				"fkCompanyId"    	=> 1,
-				"AccCode"       	=> 1000,
+				"AccCode"       	=> $accounts[$i]->AccTypeCode,
 				"ynActive"		 	=> 1,
 				"CrBy"      		=> $this->nativesessions->get('id'),
 				"CrDt"   			=> $this->getToday(),

@@ -12,6 +12,7 @@ class Maintenance extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->helper('url');
+		$this->load->helper('validation');
 		$this->load->database('default');
 		$this->load->model('Maintenance_db');
 		$this->load->library('nativesessions');
@@ -28,6 +29,13 @@ class Maintenance extends CI_Controller {
         $this->load->view('vwMaintenance', $data);
 	}
 	
+	public function pruebasMantienance(){
+		if($this->input->is_ajax_request()) {
+			$ACC = $this->Maintenance_db->getAccountsBatchs(27);
+			echo json_encode($ACC);
+		}
+	}
+
 	public function modalNewbatch(){
 		if($this->input->is_ajax_request()) {
 			
@@ -45,6 +53,7 @@ class Maintenance extends CI_Controller {
 			$ID = $_POST['ID'];
 			$data['Batch'] = $this->Maintenance_db->getBatchByID($ID);
 			$data['Batchs'] = $this->Maintenance_db->getBatchsDetailByID($ID);
+			//var_dump($data['Batchs']);
 			$this->load->view('maintenance/dialogDetailBatch', $data);
 		}
 	}
@@ -57,12 +66,70 @@ class Maintenance extends CI_Controller {
 			echo json_encode($baths);
 		}
 	}
+
+	public function postBatch(){
+		if($this->input->is_ajax_request()) {
+			$ID = $_POST['ID'];
+			$batchs = $this->Maintenance_db->getAccountsBatchs($ID);
+			for ($i=0; $i < sizeof($batchs); $i++) { 
+				$this->insertBatchTrx($batchs[$i]->pkAccId, $batchs[$i]->TotalAmount);
+			}
+			echo json_encode(["mensaje"=> "Transactions created"]);
+		}
+	}
+
+	public function insertBatchTrx($Account, $Price){
+
+		$precio = valideteNumber($Price);
+
+		$Dolares = $this->Maintenance_db->selectIdCurrency('USD');
+		$Florinres  = $this->Maintenance_db->selectIdCurrency('NFL');
+		$Euros  = $this->Maintenance_db->selectIdCurrency('EUR');
+		$tipoCambioFlorines  = $this->Maintenance_db->selectTypoCambio($Dolares, $Florinres);
+		$tipoCambioEuros = $this->Maintenance_db->selectTypoCambio($Dolares, $Euros);
+		$tipoCambioFlorines = valideteNumber($tipoCambioFlorines);
+		$tipoCambioEuros = valideteNumber($tipoCambioEuros);
+		$euros = $precio * $tipoCambioEuros;
+		$florines = $precio * $tipoCambioFlorines;
+
+		$transaction = [
+			"fkAccid"		=> $Account,  //la cuenta
+			"fkTrxTypeId"	=> $this->Maintenance_db->getTrxTypeContracByDesc('PRI'),
+			"fkTrxClassID"	=> $this->Maintenance_db->gettrxClassID('SAL'),
+			"Debit-"		=> 0,
+			"Credit+"		=> 0,
+			"Amount"		=> $precio,
+			"AbsAmount"		=> 0,
+			"Curr1Amt"		=> valideteNumber($euros),
+			"Curr2Amt"		=> valideteNumber($florines),
+			"Remark"		=> '', //
+			"Doc"			=> '',
+			"DueDt"			=> $this->getToday(),
+			"ynActive"		=> 1,
+			"CrBy"			=> $this->nativesessions->get('id'),
+			"CrDt"			=> $this->getToday(),
+			"MdBy"			=> $this->nativesessions->get('id'),
+			"MdDt"			=> $this->getToday()
+		];
+		$this->Maintenance_db->insertReturnId('tblAccTrx', $transaction);
+	}
 	public function getContrats(){
 		if($this->input->is_ajax_request()) {
 			$sql = $this->receiveWords($_POST);
-			//var_dump($sql);
+			$DELETE = [];
 			$contracts = $this->Maintenance_db->getContracts($sql);
-			//$contracts = $this->ParseNumber($contracts);
+			$contracts2 = $this->Maintenance_db->getContractsMTN();
+			foreach ($contracts as $key => $value) {
+				foreach ($contracts2 as $key2 => $value2) {
+					if ($value->ID == $value2->pkResId) {
+						$DELETE[] = $key;
+					}
+				}
+			}
+			foreach( $DELETE as $item ){
+				unset( $contracts[$item] );
+			}
+			$contracts = array_values($contracts);
 			echo json_encode($contracts);
 		}
 	}

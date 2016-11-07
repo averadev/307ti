@@ -88,7 +88,7 @@ Class Maintenance_db extends CI_MODEL
         $this->db->join('tblFloorPlan F', 'B.fkFloorPlanId = F.pkFloorPlanID');
         $this->db->join('tblResInvt RI', 'B.fkResID = RI.fkResId');
         $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId');
-        $this->db->join('tblView V', 'RI.fkViewId = V.pkViewId');
+        $this->db->join('tblView V', 'RI.fkViewId = V.pkViewId', 'left');
         $this->db->join('tblBatch BA', 'B.fkBatchId = BA.pkBatchId');
         $this->db->join('tblBatchType BT', 'BA.fkBatchTypeId = BT.pkBatchTypeId');
         $this->db->where('B.fkBatchId', $ID);
@@ -99,6 +99,42 @@ Class Maintenance_db extends CI_MODEL
         {
             return $query->result();
         }
+    }
+     public function getAccountsBatchs($ID){
+        $this->db->distinct();
+        $this->db->select("AC.pkAccId, B.TotalAmount");
+        $this->db->from('tblCsfBatch B');
+        $this->db->join('tblRes R', 'B.fkResId = R.pkResId');
+        $this->db->join('tblBatch BA', 'B.fkBatchId = BA.pkBatchId');
+        $this->db->join('tblBatchType BT', 'BA.fkBatchTypeId = BT.pkBatchTypeId');
+        $this->db->join('tblResPeopleAcc RPA', 'R.pkResId = RPA.fkResId');
+        $this->db->join('tblAcc AC', 'RPA.fkAccId = AC.pkAccId');
+        $this->db->join('tblAccType AT', 'AC.fkAccTypeId = AT.pkAccTypeId');
+        $this->db->where('B.fkBatchId', $ID);
+        $this->db->where('AT.pkAccTypeId', 3);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
+    public function getContractsMTN(){
+        $this->db->distinct();
+        $this->db->select("R.pkResId");
+        $this->db->from('tblRes R');
+        $this->db->join('tblResPeopleAcc RPA', 'R.pkResId = RPA.fkResId');
+        $this->db->join('tblAcc AC', 'RPA.fkAccId = AC.pkAccId');
+        $this->db->join('tblAccType AT', 'AC.fkAccTypeId = AT.pkAccTypeId');
+        $this->db->join('tblAccTrx ACT', 'AC.pkAccId = ACT.fkAccid');
+        $this->db->where('AT.pkAccTypeId', 3);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+             return $query->result();
+        }
+
     }
     public function getPriceUnit($ID){
 
@@ -128,25 +164,25 @@ Class Maintenance_db extends CI_MODEL
         $this->db->join('tblFrequency FR', 'RI.fkFrequencyId = FR.pkFrequencyId');
         $this->db->join('tblPriceMnt PM', 'RI.fkFloorPlanId = PM.fkFloorPlanId');
 
-        	/*if (isset($filters['Property']) && !empty($filters['Property'])) {
+        	if (isset($filters['Property']) && !empty($filters['Property'])) {
 				$this->db->where('R.fkSaleTypeId', $filters['Property']);
-			}*/
-			// if (isset($filters['SaleType']) && !empty($filters['SaleType'])) {
-			// 	$this->db->where('R.fkSaleTypeId', $filters['SaleType']);
-			// }
-			// if (isset($filters['FloorPlan']) && !empty($filters['FloorPlan'])) {
-			// 	$this->db->where('RI.fkFloorPlanId', $filters['FloorPlan']);
-			// }
-			// if (isset($filters['Frequency']) && !empty($filters['Frequency'])) {
-			// 	$this->db->where('RI.fkFrequencyId', $filters['Frequency']);
-			// }
-   //          if (isset($filters['Season']) && !empty($filters['Season'])) {
-   //              $this->db->where('RI.fkseassonId', $filters['Season']);
-   //          }
+			}
+			if (isset($filters['SaleType']) && !empty($filters['SaleType'])) {
+				$this->db->where('R.fkSaleTypeId', $filters['SaleType']);
+			}
+			if (isset($filters['FloorPlan']) && !empty($filters['FloorPlan'])) {
+				$this->db->where('RI.fkFloorPlanId', $filters['FloorPlan']);
+			}
+			if (isset($filters['Frequency']) && !empty($filters['Frequency'])) {
+				$this->db->where('RI.fkFrequencyId', $filters['Frequency']);
+			}
+            if (isset($filters['Season']) && !empty($filters['Season'])) {
+                $this->db->where('RI.fkseassonId', $filters['Season']);
+            }
             if (isset($filters['Year']) && !empty($filters['Year'])) {
                 $this->db->where( $filters['Year'].' BETWEEN R.FirstOccYear and R.LastOccYear');
             }
-        $this->db->limit('5 0');
+        $this->db->limit('20');
         $this->db->where('R.fkResTypeId', 10);
         $this->db->order_by('ID', 'DESC');
         $query = $this->db->get();
@@ -232,6 +268,56 @@ Class Maintenance_db extends CI_MODEL
         $this->db->update($table, $data);
         return $this->db->affected_rows();
     }
-	
+	public function selectIdCurrency($string){
+        $this->db->select('pkCurrencyId');
+        $this->db->from('tblCurrency');
+        $this->db->where('Currencycode', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkCurrencyId;
+        }
+    }
+    public function selectTypoCambio($MonedaActual, $ACovertir){
+        $this->db->select('ER.AmtTo as AMT');
+        $this->db->from('tblCurrency C');
+        $this->db->join('tblExchangeRate ER', 'C.pkCurrencyId = ER.fkCurrencyToId', 'inner');
+        $this->db->where('ER.fkCurrencyFromId', $MonedaActual);
+        $this->db->where('ER.fkCurrencyToId', $ACovertir);
+        $this->db->where('ER.ynActive', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->AMT;
+        }
+    }
+    public function getTrxTypeContracByDesc($string){
+        $this->db->select('pkTrxTypeId');
+        $this->db->from('tbltrxtype');
+        $this->db->where('TrxTypeCode', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkTrxTypeId;
+        }
+    }
+    public function gettrxClassID($string){
+        $this->db->select('pkTrxClassId');
+        $this->db->from('tbltrxclass');
+        $this->db->where('TrxClassCode', $string);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->pkTrxClassId;
+        }
+    }
 }
 //end model

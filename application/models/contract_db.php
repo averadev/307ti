@@ -259,6 +259,23 @@ class Contract_db extends CI_Model {
             return $row->pklanguageId;
         }
     }
+    public function getAccTypes($IDs){
+        $sql = '';
+        $this->db->select('AC.pkAccTypeId as ID, AC.AccTypeCode');
+        $this->db->from('tblAccType AC');
+        for ($i=0; $i < sizeof($IDs); $i++) {
+            $sql .= ' AC.pkAcctypeId = '. $IDs[$i];
+            if ($i+1 < sizeof($IDs)) {
+               $sql.= ' or ';
+            }
+        }
+        $fl =" ( " . $sql . ")";
+        $this->db->where($sql);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
     public function selectLocationId($string){
         $this->db->select('pkLocationId');
         $this->db->from('tblLocation');

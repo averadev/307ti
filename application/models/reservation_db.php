@@ -415,6 +415,23 @@ class Reservation_db extends CI_Model {
             return $query->result();
         }
     }
+    public function getAccTypes($IDs){
+        $sql = '';
+        $this->db->select('AC.pkAccTypeId as ID, AC.AccTypeCode');
+        $this->db->from('tblAccType AC');
+        for ($i=0; $i < sizeof($IDs); $i++) {
+            $sql .= ' AC.pkAcctypeId = '. $IDs[$i];
+            if ($i+1 < sizeof($IDs)) {
+               $sql.= ' or ';
+            }
+        }
+        $fl =" ( " . $sql . ")";
+        $this->db->where($sql);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
     public function selectArrivaDate($id){
         $this->db->select('top 1 CONVERT(VARCHAR(11),c.Date,106) as depatureDate');
         $this->db->from('tblResOcc ro2');

@@ -299,12 +299,13 @@ private function createUnidades($idContrato){
 
 private function createAcc(){
 	$typeAcc = ['1','2','3'];
+	$accounts = $this->contract_db->getAccTypes($typeAcc);
 	$resultAcc = array();
-	for($i =0; $i< count($typeAcc); $i++){
+	for($i =0; $i< count($accounts); $i++){
 		$cuenta = [
-			"fkAccTypeId"     	=> $typeAcc[$i],
+			"fkAccTypeId"     	=> $accounts[$i]->ID,
 			"fkCompanyId"    	=> 1,
-			"AccCode"       	=> 1000,
+			"AccCode"       	=> $accounts[$i]->AccTypeCode,
 			"ynActive"		 	=> 1,
 			"CrBy"      		=> $this->nativesessions->get('id'),
 			"CrDt"   			=> $this->getToday(),

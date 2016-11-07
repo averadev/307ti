@@ -29,8 +29,12 @@ $(document).ready(function(){
 	});
 	$(document).off( 'click', '#btnSearchContracts');
 	$(document).on( 'click', '#btnSearchContracts', function(){
-		console.log("OK");
 		searchMaintenanceContracts();
+	});
+
+	$(document).off( 'click', '#postBatch');
+	$(document).on( 'click', '#postBatch', function(){
+		postBatch();
 	});
 });
 
@@ -256,4 +260,22 @@ function drawTableM(data, div){
 		alertify.error("No Data Found");
 	}
 	
+}
+
+function postBatch(){
+	//showLoading('#tablaSearcBatchs',true);
+	var ajaxDatos =  {
+		url: "Maintenance/postBatch",
+		tipo: "json",
+		datos: {
+				ID: $("#cventaPrice").text().trim()
+		},
+		funcionExito : postBatchMsj,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATAG(ajaxDatos);
+}
+
+function postBatchMsj(data){
+	alertify.success(data["mensaje"]);
 }

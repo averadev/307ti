@@ -4768,3 +4768,19 @@ function changeStatus(){
 		unidadResDialog = addUnidadResDialog( null, null, 'change' );
 		unidadResDialog.dialog( "open" );*/
 }
+
+function testReservations(){
+	var ajaxData =  {
+		url: "Maintenance/pruebasMantienance",
+		tipo: "json",
+		datos: {
+		},
+		funcionExito : mensajeTEST,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
+
+function mensajeTEST(data){
+	console.table(data);
+}
