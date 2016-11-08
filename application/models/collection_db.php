@@ -13,6 +13,7 @@ Class collection_db extends CI_MODEL
 		$this->db->select('tt.pkTrxTypeId as ID, tt.TrxTypeDesc');
 		$this->db->from('TblTrxType tt');
 		$this->db->where('tt.ynActive = ', 1);
+		$this->db->order_by('tt.TrxTypeDesc', 'ASC');
 		return  $this->db->get()->result();
 	}
 	
@@ -54,7 +55,7 @@ Class collection_db extends CI_MODEL
 	public function getCollection($filters){
 		$sql = "";
         $this->db->distinct();
-        $this->db->select('at1.pkAccTrxId as ID, r.Folio, r.resCode, tt.TrxTypeDesc as trxType, at1.Amount, CONVERT(VARCHAR(11),at1.DueDt,106) as dueDate, CONVERT(VARCHAR(11),at1.CrDt,106) as Create_Date');
+        $this->db->select('at1.pkAccTrxId as ID, r.Folio, r.resCode, r.ResConf, tt.TrxTypeDesc as trxType, at1.Amount, CONVERT(VARCHAR(11),at1.DueDt,106) as dueDate, CONVERT(VARCHAR(11),at1.CrDt,106) as Create_Date');
         $this->db->select('DATEDIFF(day, CONVERT(VARCHAR(11),at1.DueDt,106), CONVERT(VARCHAR(11),GETDATE(),106)) AS DiffDate');
 		$this->db->select('att.AccTypeDesc as accType,  ( ph.PhoneDesc + ph.AreaCode ) AS Phone, em.EmailDesc as Email, us.UserLogin as User');
 		//$this->db->select("CONVERT(VARCHAR(11)");
@@ -153,7 +154,7 @@ Class collection_db extends CI_MODEL
 		$this->db->distinct();
         $this->db->limit(1);
         $this->db->select('ac.pkAccTrxId, p.pkPeopleId, p.Name, p.LName, p.LName2, p.Initials');
-		$this->db->select('p.BirthDayDay, p.BirthDayMonth, p.BirthDayYear, p.Anniversary, p.Nationality, p.Qualification, g.GenderDesc');
+		$this->db->select('p.BirthDayDay, p.BirthDayMonth, p.BirthDayYear, p.Anniversary, p.Nationality, Q.QualificationDesc as Qualification, g.GenderDesc');
 		$this->db->select('a.Street1, a.Street2, a.City, a.ZipCode, s.StateDesc, c.CountryDesc');
 		$this->db->from('tblAccTrx ac');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = ac.fkAccid and rpa.ynPrimaryPeople = 1');
@@ -163,6 +164,7 @@ Class collection_db extends CI_MODEL
 		$this->db->join('tblAddress a', 'a.pkAddressid = pa.fkAddressId');
 		$this->db->join('tblState s', 's.pkStateId = a.FkStateId');
 		$this->db->join('tblCountry c', 'c.pkCountryId = a.fkCountryId');
+		$this->db->join('tblQualification Q', 'p.Qualification = Q.pkQualificationId', 'LEFT');
 		$this->db->where('ac.pkAccTrxId', $id);
 		return  $this->db->get()->result();
 	}
@@ -188,7 +190,7 @@ Class collection_db extends CI_MODEL
 	public function getRes($id){
 		$this->db->distinct();
         $this->db->limit(1);
-        $this->db->select('ac.pkAccTrxId, r.pkResId, r.Folio, r.FirstOccYear, r.LastOccYear, r.LegalName, rt.ResTypeDesc, r.fkResTypeId');
+        $this->db->select('ac.pkAccTrxId, r.pkResId, r.Folio, r.FirstOccYear, r.LastOccYear, r.LegalName, rt.ResTypeDesc, r.fkResTypeId, r.ResConf');
 		$this->db->from('tblAccTrx ac');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = ac.fkAccid and rpa.ynPrimaryPeople = 1');
         $this->db->join('tblRes r', 'r.pkResId = rpa.fkResId and r.pkResRelatedId is Null');

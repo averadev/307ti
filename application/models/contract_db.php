@@ -301,6 +301,19 @@ class Contract_db extends CI_Model {
             return $query->result();
         }
     }
+    public function getLegalNames($ID){
+        $this->db->select("(RTRIM(P.Name) +' '+ RTRIM(P.LName) + ' '+ RTRIM(P.LName2)) as names");
+        $this->db->from('tblResPeopleAcc RPA');
+        $this->db->join('tblPeople P', 'P.pkPeopleId = RPA.fkPeopleId', 'inner');
+        $this->db->where('RPA.fkResId', $ID);
+        $this->db->where('RPA.ynActive', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            return $query->result();
+        }
+    }
     public function getRRelatedByID($ID){
         $this->db->select('R.pkResId as ID');
         $this->db->from('tblRes R');

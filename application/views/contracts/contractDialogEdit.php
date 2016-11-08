@@ -117,7 +117,8 @@
 					</div>
 					<br>
 					<div class="small-12 columns">
-													<a id="btnAddPeopleEdit" attr_table="peopleContract" class="btn btn-primary spanSelect">
+					<div class="small-5 columns">
+							<a id="btnAddPeopleEdit" attr_table="peopleContract" class="btn btn-primary spanSelect">
 								<div class="label">Add</div>
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
@@ -125,7 +126,18 @@
 								<div class="label">Save Changes</div>
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>
-					</div>
+						</div>
+<!-- 						<div class="input-group">
+											<span class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="endDateRes" class="txtSearch input-group-field roundRight" >
+										</div> -->
+					<div class="small-2 columns">
+                        <label for="legalNameEdit" class="text-left">Legal Name</label>
+                    </div>
+                    <div class="small-5 columns">
+                        <input type="text" id="legalNameEdit" value='<?php echo $contract[0]->LegalName; ?>' name="legalNameEdit" class="round general" required="">
+                    </div>
+                	</div>
 						<table id="peopleContract" width="100%">
 							<thead>
 								<tr class="trColspan" >

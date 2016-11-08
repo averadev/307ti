@@ -132,6 +132,10 @@ $(document).ready(function(){
 		};
 	ajaxDATAG(ajaxDatos);
 	});
+	$(document).off('change', '#legalNameEdit');
+	$(document).on( 'change', '#legalNameEdit', function () {
+		editLegalName();
+	});
 	$(document).off( 'click', '#btnAddTourID');
 	$(document).on( 'click', '#btnAddTourID', function () {
 		if (dialogAddTour!=null) {
@@ -548,7 +552,20 @@ function createNombreLegal(){
 		$("#legalName").val(texto);
 	}
 }
-
+function onChangeNombreLegal(){
+	var texto = "";
+	var nombres = getArrayValuesColumnTable("peopleContract", 2);
+	var apellidos = getArrayValuesColumnTable("peopleContract", 3);
+	for (var i = 0; i < nombres.length; i++) {
+		texto += nombres[i]+" "+apellidos[i];
+		if (i!=nombres.length-1) {
+			texto += " and ";
+		}
+	}
+	if ($("#legalNameEdit").val()=="") {
+		$("#legalNameEdit").val(texto);
+	}
+}
 
 function getContratos(){
 	//
@@ -4044,6 +4061,7 @@ function savePeople(){
 				data: {
 					peoplesMOD: getValueTablePersonasMOD(),
 					id: $("#idContratoX").text(),
+					LegalName: $("#legalNameEdit").val()
 				},
 				type: "POST",
 				dataType:'json',
@@ -4051,6 +4069,7 @@ function savePeople(){
 			}).done(function( data, textStatus, jqXHR ) {
 				msgSavePeople.dismiss();
 				if(data.items.length > 0){
+					$("#legalNameEdit").val(data.legalName);
 					drawTableSinHeadPeople(data.items, "peoplesContract");
 				}
 			}).fail(function( jqXHR, textStatus, errorThrown ) {
@@ -4066,3 +4085,26 @@ function getSizeTablePeoples(){
 	return $( "#"+tabla+" tr" ).length;
 }
 
+function editLegalName(){
+	var ajaxData =  {
+		url: "contract/updateLegalName",
+		tipo: "json",
+		datos: {
+			ID: $("#idContratoX").text().trim(),
+			LegalName: $("#legalNameEdit").val().trim()
+		},
+		funcionExito : msgeditLegalName,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATA(ajaxData);
+}
+
+function msgeditLegalName(data){
+	if (data['afectados']>0) {
+		alertify.success(data['mensaje']);
+		$("#legalNameEdit").val(data["legalName"]);
+	}else{
+		alertify.error(data['mensaje']);
+		$("#legalNameEdit").val('');
+	}
+}

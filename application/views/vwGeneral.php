@@ -126,7 +126,7 @@
 				</div>
 				<div class="menu-sel" attr-screen="Maintenance">
 					<span class="icon-menu-sel"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></span>
-					<div class="label-menu-sel">Maintenance</div>
+					<div class="label-menu-sel">Maintenance Fee</div>
 				</div>
 				<?php }; ?>
                 <div class="menu-fix">&nbsp;</div>

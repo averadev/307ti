@@ -326,7 +326,7 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 				switch(section) {
 					case "section1":
 						//createTableLookUp(data);
-						$("#NFL").text("Total: "+ data.items.length);
+						//$("#NFL").text("Total: "+ data.items.length);
 					break;
 					case "section2":
 						//$("#NHK").text("Total: "+ data.items.length);

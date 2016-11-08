@@ -416,8 +416,44 @@ private function insertPeoples($idContrato, $acc){
 					}
 				}
 			}
+			
+			// $peticion = [
+			// 	"tabla" 	=> 'tblRes',
+			// 	"valor" 	=> 'LegalName',
+			// 	"alias" 	=> 'legalName',
+			// 	"codicion"	=> 'pkResId',
+			// 	"id"		=>	$id 
+			// ];
+			$names = $this->contract_db->getLegalNames($id);
+			$nameL = '';
+
+			for ($i=0; $i < sizeof($names); $i++) {
+					$nameL .= $names[$i]->names;
+					if ($i+1 != sizeof($names)) {
+						$nameL .=  ' and ';
+					}
+				}
+
+			$legalName = $_POST['LegalName'];
+			if ($nameL != $legalName) {
+				//var_dump($nameL);
+				$condicion = "pkResId = " . $id;
+				$datos = [
+					"LegalName" => $nameL
+				];
+				$afectados = $this->contract_db->updateReturnId("tblRes", $datos, $condicion);
+				//var_dump($afectados);
+			}
+			$peticion = [
+					"tabla" 	=> 'tblRes',
+					"valor" 	=> 'LegalName',
+					"alias" 	=> 'legalName',
+					"codicion"	=> 'pkResId',
+					"id"		=>	$id 
+				];
+			$name = $this->contract_db->propertyTable($peticion);
 			$data = $this->contract_db->getPeopleContract3($id);
-			echo json_encode( array( 'success' => true, 'message' => "People save", 'items' => $data) );
+			echo json_encode( array( 'success' => true, 'message' => "People save", 'items' => $data, "legalName" => $name) );
 		}
 	}
 
@@ -1783,7 +1819,32 @@ private function search($array, $key, $value){
 			}
 		}
 	}
-
+	public function updateLegalName(){
+		if ($this->input->is_ajax_request()) {
+			$id = $_POST['ID'];
+			$legalName = $_POST["LegalName"];
+			$condicion = "pkResId = " . $id;
+			$datos = [
+				"LegalName" => $legalName
+			];
+			$afectados = $this->contract_db->updateReturnId("tblRes", $datos, $condicion);
+			if ($afectados>0) {
+				$peticion = [
+					"tabla" 	=> 'tblRes',
+					"valor" 	=> 'LegalName',
+					"alias" 	=> 'legalName',
+					"codicion"	=> 'pkResId',
+					"id"		=>	$id 
+				];
+				$name = $this->contract_db->propertyTable($peticion);
+				$mensaje = ["mensaje"=>"Legal Name Save Correctly","afectados" => $afectados, "legalName" => $name];
+				echo json_encode($mensaje);
+			}else{
+				$mensaje = ["mesaje"=>"Try Again", $afectados => $afectados];
+				echo json_encode($mensaje);
+			}
+		}
+	}
 
 	public function getSellers(){
 		if($this->input->is_ajax_request()) {

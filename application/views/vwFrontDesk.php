@@ -708,7 +708,7 @@
 							</tbody>
 						</table>
 					<div class="pages">
-					<span id="NFL">Total:</span>
+					<span id="NFL">Total:81</span>
 					</div>
 						<!--<table id="tableFrontDesk1" class="" style="">
 							<thead>

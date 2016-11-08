@@ -250,6 +250,7 @@ function getGeneralInfoColl(id){
 				$('#legalNameResColl p').html(res.LegalName);
 				$('#firstOccColl p').html(res.FirstOccYear);
 				$('#lastOccColl p').html(res.LastOccYear);
+				$('#ResConfClt p').html(res.ResConf);
 			}
 			//showLoading('#section-Colletion',false);
 		},
