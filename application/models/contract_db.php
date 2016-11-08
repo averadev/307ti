@@ -1078,6 +1078,16 @@ class Contract_db extends CI_Model {
             return $row->$p['alias'];
         }
     }
+     public function propertyTable2($id){
+        $this->db->select('R.LegalName');
+        $this->db->from('tblRes R');
+        $this->db->where('pkResId', $id);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->LegalName;
+        }
+    }
 
     public function selectContractID($p){
         $this->db->select('fkStatusId as ID');

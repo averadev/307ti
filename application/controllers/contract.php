@@ -444,14 +444,14 @@ private function insertPeoples($idContrato, $acc){
 				$afectados = $this->contract_db->updateReturnId("tblRes", $datos, $condicion);
 				//var_dump($afectados);
 			}
-			$peticion = [
+/*			$peticion = [
 					"tabla" 	=> 'tblRes',
 					"valor" 	=> 'LegalName',
 					"alias" 	=> 'legalName',
 					"codicion"	=> 'pkResId',
 					"id"		=>	$id 
-				];
-			$name = $this->contract_db->propertyTable($peticion);
+				];*/
+			$name = $this->contract_db->propertyTable2($id);
 			$data = $this->contract_db->getPeopleContract3($id);
 			echo json_encode( array( 'success' => true, 'message' => "People save", 'items' => $data, "legalName" => $name) );
 		}
@@ -1829,14 +1829,14 @@ private function search($array, $key, $value){
 			];
 			$afectados = $this->contract_db->updateReturnId("tblRes", $datos, $condicion);
 			if ($afectados>0) {
-				$peticion = [
+/*				$peticion = [
 					"tabla" 	=> 'tblRes',
 					"valor" 	=> 'LegalName',
 					"alias" 	=> 'legalName',
 					"codicion"	=> 'pkResId',
 					"id"		=>	$id 
-				];
-				$name = $this->contract_db->propertyTable($peticion);
+				];*/
+				$name = $this->contract_db->propertyTable2($id);
 				$mensaje = ["mensaje"=>"Legal Name Save Correctly","afectados" => $afectados, "legalName" => $name];
 				echo json_encode($mensaje);
 			}else{
