@@ -97,7 +97,7 @@ function createNewBatch(){
 			Frequency: $("#NFrequency").val(),
 			Season: $("#NSeason").val(),
 			Total: total,
-			BatchDesc : Description,
+			BatchDesc : Description.substring(0,50),
 			Contracts : Contracts,
 			Precios: Precios
 		},
@@ -166,7 +166,7 @@ function datailBatch(id){
 		onOpen: ajaxDATAG,
 		onSave: createNewBatch,
 		botones :[{
-			text: "Cancel",
+			text: "Close",
 		    "class": 'dialogModalButtonCancel',
 		    click: function() {
 		    	$(this).dialog('close');
@@ -278,4 +278,10 @@ function postBatch(){
 
 function postBatchMsj(data){
 	alertify.success(data["mensaje"]);
+}
+
+function reportMaintenance(id){
+
+	var url = "Pdfs/reportMaintanance?idRes=" + id;
+	window.open(url);
 }

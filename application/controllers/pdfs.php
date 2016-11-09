@@ -267,7 +267,51 @@ class Pdfs extends CI_Controller {
 		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes, $title );
 		
 	}
+	public function reportMaintanance(){
+		
+		$idRes = $_GET['idRes'];
+		$idRes = 20110;
+		//$data = $this->pdfs_db->getCheckOut($idRes);
+		$data2 = $this->pdfs_db->getRoom($idRes);
+		$title = "Maintenance Fee";
+		$name = "Maintenance Fee";
+		$saveFiler = "Guest_Information" . $idRes;
+		$pdf = $this->generatePdfTemp( $name, $title );
+		$style = $this->generateStyle();
+		
+/*		$body = '';
+		$body .= '</br>';
+		$body .= '</br>';
+		$body .= '<table class="poll" width="100%">';
+		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td></tr>';
+		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td></tr>';
+		
+		$body .= '<tr><td class="first">How was your check in?</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
+		$body .= '<tr><td class="first">Bellman service?</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
+		$body .= '<tr><td class="first">Front desk hospitality?</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
+		$body .= '<tr><td class="first">How was your check out?</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
 	
+		
+		//$body .= '<tr><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
+		$body .= '</table>';
+		
+		$body .= '<h4></h4>';
+		$body .= '<h4>FOR ADDITIONAL COMMENTS PLEASE USE BLANK SPACE PN THE BACK OF THIS PAGE</h4>';
+		
+		$html = '';
+		$html .= ' <html><head></head><body>';*/
+		/*$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';*/
+		//$html = $this->load->view('maintenance/pdfMaintanance');
+		//$html = include('application/views/maintenance/pdfMaintanance.php');
+		//var_dump($html);
+
+		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', include('application/views/maintenance/pdfMaintanance.php'), $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+		
+		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes, $title );
+		
+	}
 	public function Statement(){
 		
 		$idRes = $_GET['idRes'];

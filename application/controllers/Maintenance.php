@@ -118,18 +118,25 @@ class Maintenance extends CI_Controller {
 			$sql = $this->receiveWords($_POST);
 			$DELETE = [];
 			$contracts = $this->Maintenance_db->getContracts($sql);
+			//echo json_encode($contracts);
 			$contracts2 = $this->Maintenance_db->getContractsMTN();
-			foreach ($contracts as $key => $value) {
+			if ($contracts2 != null && $contracts != null) {
+				foreach ($contracts as $key => $value) {
 				foreach ($contracts2 as $key2 => $value2) {
 					if ($value->ID == $value2->pkResId) {
 						$DELETE[] = $key;
 					}
 				}
 			}
+			}
+			
 			foreach( $DELETE as $item ){
 				unset( $contracts[$item] );
 			}
-			$contracts = array_values($contracts);
+			if ($contracts != null) {
+				$contracts = array_values($contracts);
+			}
+			
 			echo json_encode($contracts);
 		}
 	}

@@ -53,7 +53,7 @@ class Contract_db extends CI_Model {
         $sql = "";
         $this->db->distinct();
         $this->db->select("R.pkResId as ID, cast(R.Prefix as varchar) + '-' + cast(R.Folio as varchar) as Folio");
-		$this->db->select("R.ResConf as Confirmation_code, R.pkResRelatedId as ResRelated");
+		$this->db->select("R.ResConf as Confirmation_code, ISNULL(cast(R.pkResRelatedId as varchar(10)), ' ') as ResRelated");
 		$this->db->select("R.LegalName as LegalName, RTRIM(UT.FloorPlanDesc) as FloorPlan, FR.FrequencyDesc");
         $this->db->select('ES.StatusDesc, RI.CrDt, R.FirstOccYear, R.LastOccYear, RF.ListPrice, RF.NetSalePrice as netsale');
         $this->db->from('tblRes R');
@@ -302,7 +302,8 @@ class Contract_db extends CI_Model {
         }
     }
     public function getLegalNames($ID){
-        $this->db->select("(RTRIM(P.Name) +' '+ RTRIM(P.LName) + ' '+ RTRIM(P.LName2)) as names");
+        $this->db->distinct();
+        $this->db->select("(RTRIM(P.Name) +' '+ RTRIM(P.LName)) as names");
         $this->db->from('tblResPeopleAcc RPA');
         $this->db->join('tblPeople P', 'P.pkPeopleId = RPA.fkPeopleId', 'inner');
         $this->db->where('RPA.fkResId', $ID);
@@ -1145,7 +1146,7 @@ class Contract_db extends CI_Model {
     }
 
     public function getUnidades($filters){
-
+        $this->db->distinct();
         $this->db->select('U.pkUnitId as ID, U.UnitCode, RTRIM(FP.FloorPlanDesc) as FloorPlanDesc');
         $this->db->select('CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price, PRI.Week, SE.SeasonDesc, PRI.ClosingCost, V.ViewDesc as View, ISNULL(IV.LastOccYear+1, year(getDate())) as LastOccYear');
         $this->db->from('tblUnit U');
