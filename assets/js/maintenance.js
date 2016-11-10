@@ -17,6 +17,11 @@ $(document).ready(function(){
 	$(document).on( 'click', '#btnManCleanSearch', function () {
 		$("#MSearch").val('');
 	});
+	$(document).off( 'click', '#printReportMaintenance');
+	$(document).on( 'click', '#printReportMaintenance', function () {
+		ID = $("#cventaPrice").text().trim();
+		reportMaintenance(ID);
+	});
 
 	$(document).off( 'click', '#btnManSearch');
 	$(document).on( 'click', '#btnManSearch', function () {
@@ -282,6 +287,6 @@ function postBatchMsj(data){
 
 function reportMaintenance(id){
 
-	var url = "Pdfs/reportMaintanance?idRes=" + id;
+	var url = "Pdfs/reportMaintanance?id=" + id;
 	window.open(url);
 }

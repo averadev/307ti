@@ -128,6 +128,7 @@ Class Maintenance_db extends CI_MODEL
         $this->db->join('tblAccType AT', 'AC.fkAccTypeId = AT.pkAccTypeId');
         $this->db->join('tblAccTrx ACT', 'AC.pkAccId = ACT.fkAccid');
         $this->db->where('AT.pkAccTypeId', 3);
+        $this->db->where('ACT.fkTrxTypeId', 57);
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )

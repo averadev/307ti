@@ -1,5 +1,6 @@
-    
-
+<html>
+<body>
+<h1><?php echo $title; ?></h1>
     <table class="poll" width="100%">
     <tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td></tr>
     <tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td></tr>
@@ -11,5 +12,5 @@
   </table>
 <h4></h4>
 <h4>FOR ADDITIONAL COMMENTS PLEASE USE BLANK SPACE PN THE BACK OF THIS PAGE</h4>
-<html><head></head><body>
+
 </body></html>

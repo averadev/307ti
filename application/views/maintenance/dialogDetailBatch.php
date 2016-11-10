@@ -146,6 +146,12 @@
 							<tr>
 								<td>MdBy:</td>
 								<td id="cventaHitch"><?= $Batch[0]->MdBy;?></td>
+								<td class="iconEdit">
+									<a id="printReportMaintenance" class="btn btn-primary">
+										<div class="label">Print</div>
+										<i class="fa fa-print" aria-hidden="true"></i>
+									</a>
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -183,7 +189,6 @@
 								if (isset($Batchs)) {
 									foreach($Batchs as $item){?>
 									<tr>
-									<td class="iconEdit" nowrap="" onclick="reportMaintenance(<?php echo $item->contractID; ?>);"><i class="fa fa-print" aria-hidden="true"></i></td>
 									<td><?php echo $item->ID; ?></td>
 									<td><?php echo $item->Folio; ?></td>
 									<td><?php echo $item->LegalName; ?></td>

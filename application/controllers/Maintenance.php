@@ -94,7 +94,7 @@ class Maintenance extends CI_Controller {
 
 		$transaction = [
 			"fkAccid"		=> $Account,  //la cuenta
-			"fkTrxTypeId"	=> $this->Maintenance_db->getTrxTypeContracByDesc('PRI'),
+			"fkTrxTypeId"	=> $this->Maintenance_db->getTrxTypeContracByDesc('MFE'),
 			"fkTrxClassID"	=> $this->Maintenance_db->gettrxClassID('SAL'),
 			"Debit-"		=> 0,
 			"Credit+"		=> 0,

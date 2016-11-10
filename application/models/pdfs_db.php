@@ -19,6 +19,20 @@ class pdfs_db extends CI_Model{
 		$this->db->order_by("rpa.ynPrimaryPeople DESC");
 		return  $this->db->get()->result();
 	}
+	function getDataPrimaryPeople($idRes){
+		$this->db->distinct();
+		$this->db->select('RTRIM(p.Name) as Name, RTRIM(p.LName) as Last_name');
+		$this->db->select('a.Street1, a.Street2, a.City, a.ZipCode, st.StateCode, st.StateDesc, C.CountryDesc');
+		$this->db->from('tblPeople p');
+		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkPeopleId = p.pkPeopleId ', 'INNER');
+		$this->db->join('tblPeopleAddress pa', 'pa.fkPeopleId = p.pkPeopleId ', 'left');
+		$this->db->join('tblAddress a', 'a.pkAddressid = pa.fkAddressId ', 'left');
+		$this->db->join('tblState st', 'st.pkStateId = a.FkStateId ', 'left');
+		$this->db->join('tblCountry C', 'st.fkCountryId = C.pkCountryId', 'left');
+		$this->db->where('rpa.fkResId = ', $idRes);
+		$this->db->where('rpa.ynPrimaryPeople = 1');
+		return  $this->db->get()->result();
+	}
 	
 	function getPeople($idRes){
 		$this->db->distinct();
@@ -34,7 +48,23 @@ class pdfs_db extends CI_Model{
 		$this->db->order_by("rpa.ynPrimaryPeople DESC");
 		return  $this->db->get()->result();
 	}
-	
+	function getDataMaintenanceContract($ID){
+		$this->db->distinct();
+		$this->db->select('R.pkResId, R.Folio, RI.Intv , U.UnitCode, B.Year, convert(varchar(10), ACT.CrDt, 111)as Date, ACT.Amount,  convert(varchar(10), ACT.DueDt, 111) as DueDt');
+		$this->db->from('tblCsfBatch B');
+		$this->db->join('tblRes R', 'R.pkResId = B.fkResId', 'INNER');
+		$this->db->join('tblResInvt RI', 'RI.fkResId = R.pkResId', 'INNER');
+		$this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'INNER');
+		$this->db->join('tblResPeopleAcc RPA', 'R.pkResId = RPA.fkResId', 'INNER');
+		$this->db->join('tblAcc AC', 'RPA.fkAccId = AC.pkAccId', 'INNER');
+		$this->db->join('tblAccType AT', 'AC.fkAccTypeId = AT.pkAccTypeId', 'INNER');
+		$this->db->join('tblAccTrx ACT', 'AC.pkAccId = ACT.fkAccid', 'INNER');
+
+		$this->db->where('B.fkBatchId = ', $ID);
+		$this->db->where('AT.pkAccTypeId = ', 3);
+		$this->db->where('ACT.fkTrxTypeId = ', 57);
+		return  $this->db->get()->result();
+	}	
 	function getRoom($idRes){
 		$this->db->distinct();
 		$this->db->select('u.UnitCode, rt.ResTypeDesc, r.Folio, r.ResConf, p.PropertyName');

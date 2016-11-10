@@ -1228,8 +1228,6 @@ private function comprubaArray($valor, $array){
 					unset($item->pkTrxClassid);
 				}
 				$datos['acc'] = $data;
-				//var_dump($data);
-				
 			}
 			
 			echo json_encode($datos);

@@ -41,16 +41,10 @@ class Contract extends CI_Controller {
 				$acc = $this->createAcc();
 				$this->insertPeoples($idContrato, $acc);
 				$this->createAccOcc($Ocupaciones);
-				//$acc = $this->createAcc();
-				//$this->insertPeoples($idContrato, $acc);
 				$this->makeTransactions($idContrato);
 				$this->createUnidades($idContrato);
-				//$this->createUnidadesOcc($Ocupaciones);
 				$this->createGifts($idContrato);
 				$balanceFinal = $this->insertFinanciamiento($idContrato);
-				//var_dump($Ocupaciones);
-				//$Intervalos = $this->createIntvContract($Ocupaciones);
-				//CreatePeople
 				$this->createSemanaOcupacion($idContrato, $Ocupaciones);
 				if ($_POST['card']) {
 					$Tarjeta = isValidateCreditCard();

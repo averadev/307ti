@@ -269,45 +269,65 @@ class Pdfs extends CI_Controller {
 	}
 	public function reportMaintanance(){
 		
-		$idRes = $_GET['idRes'];
-		$idRes = 20110;
-		//$data = $this->pdfs_db->getCheckOut($idRes);
-		$data2 = $this->pdfs_db->getRoom($idRes);
+		$idRes = $_GET['id'];
+		
+		$contracts = $this->pdfs_db->getDataMaintenanceContract($idRes);
 		$title = "Maintenance Fee";
 		$name = "Maintenance Fee";
 		$saveFiler = "Guest_Information" . $idRes;
 		$pdf = $this->generatePdfTemp( $name, $title );
 		$style = $this->generateStyle();
-		
-/*		$body = '';
-		$body .= '</br>';
-		$body .= '</br>';
+		$i = 0;
+		$body = '';
 		$body .= '<table class="poll" width="100%">';
-		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td></tr>';
-		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td></tr>';
 		
-		$body .= '<tr><td class="first">How was your check in?</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
-		$body .= '<tr><td class="first">Bellman service?</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
-		$body .= '<tr><td class="first">Front desk hospitality?</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
-		$body .= '<tr><td class="first">How was your check out?</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
-	
-		
-		//$body .= '<tr><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
-		$body .= '</table>';
-		
-		$body .= '<h4></h4>';
-		$body .= '<h4>FOR ADDITIONAL COMMENTS PLEASE USE BLANK SPACE PN THE BACK OF THIS PAGE</h4>';
-		
-		$html = '';
-		$html .= ' <html><head></head><body>';*/
-		/*$html .= $body;
-		$html .= $style;
-		$html .= '</body></html>';*/
-		//$html = $this->load->view('maintenance/pdfMaintanance');
-		//$html = include('application/views/maintenance/pdfMaintanance.php');
-		//var_dump($html);
 
-		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', include('application/views/maintenance/pdfMaintanance.php'), $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+		foreach ($contracts as $key) {
+			$i++;
+			$body .= '<h4></h4>';
+			$body .= '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt repellendus temporibus itaque atque facilis sed commodi blanditiis quod nulla totam modi, impedit, maiores sint reprehenderit laudantium quaerat! Quam, quisquam, debitis.</p>';
+			$body .= '<h4></h4>';
+			$body .= '<tr><td>Contract NO:</td><td> 1-'. $key->Folio .'</td><td>UNIT/WEEK:</td><td>'.$key->UnitCode .'/'.$key->Intv .'</td><td>2016</td><td>M/F: '. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
+			$body .= '<tr><td class="first">INVOICE DATE:</td><td>'.$key->Date.'</td><td>AMOUNT DUE:</td><td>'. $key->Amount .'</td><td>AMOUNT PAID:</td><td>'. $key->Amount .'</td></tr>';
+			$body .= '<tr><td class="first">DUE DATE:</td><td>'. $key->DueDt .'</td><td colspan="3">PLEASE RETURN THIS STUB WITH YOUR PAYMENT</td></tr>';
+			$People = $this->pdfs_db->getDataPrimaryPeople($key->pkResId);
+
+	
+		$body .= '<h4></h4>';
+		$body .= '<table width="100%">';
+		$body.= '<tr>';
+		$body.= '<th >Name</th><th >LName</th><th >Street1</th><th >Street2</th><th >City</th><th >State</th><th >ZipCode</th><th>Country</th></tr>';
+		foreach ($People as $item){
+
+			$body .= '<tr><td class="Name">' .  $item->Name . '</td><td class="Last name">' . $item->Last_name . '</td>';
+			$body .= '<td class="type">' .  $item->Street1 . '</td><td class="type">' . $item->Street2 . '</td>';
+			$body .= '<td class="type">' .  $item->City . '</td><td class="type">' . $item->StateDesc . '</td>';
+			$body .= '<td class="type">' .  $item->ZipCode . '</td><td class="type">' . $item->CountryDesc . '</td></tr>';
+		}
+		$body .= '</table>';
+		if ($i != sizeof($contracts)) {
+			$body .= '<br pagebreak="true" />';
+		}
+		
+		}
+		
+		//$body .= '</table>';
+
+
+		$html = '';
+		$html .= ' <html><head>';
+		$html .= $style;
+		$html .= '</head><body>';
+		$html .= $body;
+		$html .= '</body></html>';
+		//$html = $this->load->view('maintenance/pdfMaintanance');
+		// ob_start();
+		// $html = include('application/views/maintenance/pdfMaintanance.php');
+		// $a_div = ob_get_contents();
+		//echo gettype($html);
+		//var_dump($html);
+		//$html = echo 
+		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
 		
 		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes, $title );
 		
