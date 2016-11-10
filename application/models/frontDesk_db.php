@@ -538,6 +538,7 @@ Class frontDesk_db extends CI_MODEL
 			$fechaActual = $fecha->format('m/d/Y');
 			$sql.=" and '". $fechaActual ."' = (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId desc)";
 		}
+		$sql.=" ORDER BY Unit asc ";
 		$query = $this->db->query($sql);
 
         if($query->num_rows() > 0 ){
@@ -574,6 +575,7 @@ Class frontDesk_db extends CI_MODEL
         $this->db->select("'' as OccTypeGroup, '' as ResConf, '' as LastName, '' as Name");
         $this->db->from('tblUnit U');
 		$this->db->join("tblFloorPlan fp", "fp.pkFloorPlanID = u.fkFloorPlanId", "inner");
+		
 		$query = $this->db->get();
         if($query->num_rows() > 0 ){
             return $query->result();

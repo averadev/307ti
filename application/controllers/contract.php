@@ -1523,6 +1523,13 @@ public function getFlagsContract(){
 			echo json_encode($file);
 		}
 	}
+	
+	public function getDocumentsContract(){
+		if($this->input->is_ajax_request()) {
+			$file = $this->contract_db->getDocumentsContract($_POST['idCon']);
+			echo json_encode($file);
+		}
+	}
 
 	public function getDatosContractById(){
 		if($this->input->is_ajax_request()) {

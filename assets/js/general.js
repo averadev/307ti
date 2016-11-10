@@ -353,7 +353,6 @@ function drawTable2(data, table ,funcion, cadena, option){
         headHTML+="<th>"+j+"</th>";
     }
 	
-	
 	headHTML += "</tr>";
     //creación del body
     for (var i = 0; i < data.length; i++) {

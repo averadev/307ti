@@ -37,7 +37,7 @@
 			</div>
 			<!-- maind -->
 			<div class="fieldset large-12 columns">
-                <legend>People maid</legend>
+                <legend>Maid</legend>
 
                 <div class="containerPeopleHKC">
                     <div class="row">
@@ -69,7 +69,7 @@
             </div>
 			<!-- superior -->
 			<div class="fieldset large-12 columns">
-                <legend>People superior</legend>
+                <legend>Supervisor</legend>
 
                 <div class="containerPeopleHKC">
                     <div class="row">
@@ -94,7 +94,7 @@
 									<tr class="rowSpace"><td colspan="10" ></td></tr>
 								</tbody>
 							</table>
-							<small class="error hidden">please select a pleople superior.</small>
+							<small class="error hidden">please select a pleople supervisor.</small>
                         </div>
                     </div>
                 </div>

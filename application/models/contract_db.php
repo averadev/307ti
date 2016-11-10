@@ -1406,6 +1406,20 @@ class Contract_db extends CI_Model {
         $query = $this->db->get();
 		return $query->result();
 	}
+	
+	public function getDocumentsContract($id){
+        $this->db->select("d.pkDocId as ID, d.docDesc as Description");
+        $this->db->select("dt.DocTypeDesc");
+        $this->db->select("CONVERT(VARCHAR(11),rd.CrDt,106) as Date");
+        $this->db->from('tblDoc d');
+        $this->db->join('tblDocType dt', 'dt.pkDocTypeId = d.fkDocTypeId');
+        $this->db->join('tblResDoc rd', 'rd.fkdocId = d.pkDocId');
+        $this->db->where('rd.fkResId = ', $id);
+        $this->db->where('d.ynActive = 1');
+        $this->db->where('dt.ynDoc = 0');
+        $query = $this->db->get();
+        return $query->result();
+    }
 
     // public function selectPeopleStatus(){
     //     $this->db->select('pkStatusId as ID, StatusDesc');

@@ -2295,7 +2295,7 @@ function changeTabsModalContractRes(screen, id){
 			getDatosContractOcupationRes(id);
 			break;
 		case "tab-CDocuments":
-			getDatosContractDocuments(id);
+			getDatosContractDocumentsREs(id);
 			break;
 		case "tab-CNotes":
 			getDatosContractNotesRes(id);
@@ -2326,7 +2326,7 @@ function getDatosContractOcupationRes(id){
 		getWeeksRes(id);	
 	//}
 }
-function getDatosContractDocuments(id){
+function getDatosContractDocumentsREs(id){
 	getDocumentsRes(id);
 }
 function getDatosContractNotesRes(id){
@@ -4250,7 +4250,7 @@ function deleteDocumentRes(idDoc, id){
 		dataType:'json',
 		success: function(data){
 			if(data.success){
-				getDatosContractDocuments(id);
+				getDatosContractDocumentsREs(id);
 			}
 			alertify.success(data.message);
 			//showLoading('#table-reservations',false);

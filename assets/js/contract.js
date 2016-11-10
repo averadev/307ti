@@ -2054,7 +2054,7 @@ function getDatosContractOcupation(id){
 	}
 }
 function getDatosContractDocuments(id){
-	console.log("Documentos " + id);
+	getDocumentsCon(id);
 }
 function getDatosContractNotes(id){
 	if ($('#tableCNotesSelectedBody').is(':empty')){
@@ -3474,7 +3474,7 @@ function uploadFileCont(){
 	var archivos = document.getElementById("fileToUpload");//Damos el valor del input tipo file
  	var archivo = archivos.files; //obtenemos los valores de la imagen
 	data.append('image',archivo[0]);
-	ruta = "assets/img/files/";
+	ruta = "assets/pdf/";
 	
 	//rutaJson = JSON.stringify(ruta);
 	data.append('ruta',ruta);
@@ -3528,7 +3528,8 @@ function getFiles(id){
 	    success: function(data){
 			console.log(data);
 			if(data.length > 0){
-				drawTable2(data, "tableCFilesSelected", "deleteFile", "eliminar");
+				//drawTable2(data, "tableCFilesSelected", "deleteFile", "eliminar");
+				drawTableFiles(data, "tableCFilesSelected", "seeDocumentCon", "See", "deleteFile");
 			}else{
 				//noResultsTable("contentTableFile", "tableCFilesSelected", "No results found");
 				alertify.error("No Results Found");
@@ -3554,7 +3555,7 @@ function deleteFile(idFile){
 				url: "contract/deleteFile",
 				dataType:'json',
 				success: function(data){
-					var id = getIDContrato();
+					var id = $("#idContratoX").text().trim();
 					getFiles(id);
 					showLoading("#tableCFilesSelected", false);
 					alertify.success("deleted file");
@@ -4107,4 +4108,70 @@ function msgeditLegalName(data){
 		alertify.error(data['mensaje']);
 		$("#legalNameEdit").val('');
 	}
+}
+
+/********************************/
+/********** Documents ***********/
+/********************************/
+
+function getDocumentsCon(id){
+	var url = "contract/getDocumentsContract";
+	showLoading("#tableCDocumentsSelected", true);
+	$.ajax({
+	    data:{
+	        idCon: id
+	    },
+	    type: "POST",
+	    url: url,
+	    dataType:'json',
+	    success: function(data){
+			if(data.length > 0){
+				drawTableFiles(data, "tableCDocumentsSelected", "seeDocumentCon", "See", "deleteDocumentCon");
+			}else{
+				alertify.error("No results found");
+				$("#tableCDocumentsSelected tbody").empty();
+			}
+			showLoading("#tableCDocumentsSelected", false);
+	    },
+	    error: function(){
+			//showLoading("#tableCDocumentsSelected", false);
+			//noResultsTable("tableCDocumentsSelected", "tableCDocumentsSelected", "Try again");
+	        alertify.error("Try again");
+	    }
+	});
+}
+
+function seeDocumentCon(idFile){
+	var url = "Pdfs/seeDocument?idFile=" + idFile;
+	window.open(url);
+}
+
+function deleteDocumentCon(idDoc, id){
+	id = $("#idContratoX").text().trim();
+	alertify.confirm('Delete document .', "You want to delete the document.", 
+				function(){ 
+					$.ajax({
+		data:{
+			idDoc: idDoc
+		},
+   		type: "POST",
+       	url: "reservation/deleteDocumentRes",
+		dataType:'json',
+		success: function(data){
+			if(data.success){
+				getDatosContractDocuments(id);
+			}
+			alertify.success(data.message);
+			//showLoading('#table-reservations',false);
+		},
+		error: function(){
+			alertify.error("Try again");
+			//showLoading('#table-reservations',false);
+		}
+    }) },
+				function(){ }
+			).moveTo(screen.width - 500,screen.height - 100).set('resizable',true).resizeTo('25%',210).isOpen(
+				$('.ajs-dialog').css('min-width','100px')
+			);
+
 }
