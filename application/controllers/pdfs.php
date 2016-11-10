@@ -288,8 +288,8 @@ class Pdfs extends CI_Controller {
 			$body .= '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt repellendus temporibus itaque atque facilis sed commodi blanditiis quod nulla totam modi, impedit, maiores sint reprehenderit laudantium quaerat! Quam, quisquam, debitis.</p>';
 			$body .= '<h4></h4>';
 			$body .= '<tr><td>Contract NO:</td><td> 1-'. $key->Folio .'</td><td>UNIT/WEEK:</td><td>'.$key->UnitCode .'/'.$key->Intv .'</td><td>2016</td><td>M/F: '. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
-			$body .= '<tr><td class="first">INVOICE DATE:</td><td>'.$key->Date.'</td><td>AMOUNT DUE:</td><td>'. $key->Amount .'</td><td>AMOUNT PAID:</td><td>'. $key->Amount .'</td></tr>';
-			$body .= '<tr><td class="first">DUE DATE:</td><td>'. $key->DueDt .'</td><td colspan="3">PLEASE RETURN THIS STUB WITH YOUR PAYMENT</td></tr>';
+			$body .= '<tr><td class="first">INVOICE DATE:</td><td>'.$key->Date.'</td><td>AMOUNT DUE:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td><td>AMOUNT PAID:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
+			$body .= '<tr><td class="first">DUE DATE:</td><td>'. $key->DueDt .'</td><td colspan="4">PLEASE RETURN THIS STUB WITH YOUR PAYMENT</td></tr>';
 			$People = $this->pdfs_db->getDataPrimaryPeople($key->pkResId);
 
 	

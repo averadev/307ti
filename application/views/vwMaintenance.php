@@ -122,10 +122,10 @@
 									<div class="label">Clean</div>
 									<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 								</a>
-								<a id="printBatch" class="btn btn-primary">
+<!-- 								<a id="printBatch" class="btn btn-primary">
 									<div class="label">Print</div>
 									<i class="fa fa-print" aria-hidden="true"></i>
-								</a>
+								</a> -->
 								
 							</div>
 						</div>
