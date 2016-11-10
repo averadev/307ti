@@ -268,7 +268,7 @@ function drawTableM(data, div){
 }
 
 function postBatch(){
-	//showLoading('#tablaSearcBatchs',true);
+	msgMaintenance = alertify.success('Saving changes, please wait ....', 0);
 	var ajaxDatos =  {
 		url: "Maintenance/postBatch",
 		tipo: "json",
@@ -282,6 +282,7 @@ function postBatch(){
 }
 
 function postBatchMsj(data){
+	msgMaintenance.dismiss();
 	alertify.success(data["mensaje"]);
 }
 
