@@ -1177,14 +1177,6 @@ private function comprubaArray($valor, $array){
 						$price += $item2->RateAmtNight;
 					}
 					$item->Price = $price;
-					/*$SeasonByDay = $this->reservation_db->getSeasonByDay( $item->fkFloorPlanId, $item->fkFloorId, $item->fkViewId, 1, 1, 2, $item->OccYear, $item->iniDate, $item->endDate );
-					array_pop($SeasonByDay);
-					$price = 0;
-					foreach( $SeasonByDay as $item2 ){
-						$price += $item2->RateAmtNight;
-					}
-					$item->Price = $price;*/
-					//$item->Price = 0;
 				}
 				unset( $item->fkResTypeId, $item->fkFloorPlanId, $item->fkViewId, $item->fkFloorId, $item->iniDate, $item->endDate );
 			}
