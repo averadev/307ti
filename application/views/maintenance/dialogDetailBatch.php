@@ -177,7 +177,7 @@
 								<tr>
 									<th class="cellEdit">Print</th>
 									<th class="cellEdit">CSFBatchID</th>
-									<th class="cellGeneral">Contract Num</th>
+									
 									<th class="cellGeneral">Legal Name</th>
 									<th class="cellGeneral">Maintenance Year</th>
 									<th class="cellGeneral">MaintenanceType</th>

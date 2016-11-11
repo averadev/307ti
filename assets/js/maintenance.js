@@ -290,6 +290,7 @@ function postBatch(){
 function postBatchMsj(data){
 	msgMaintenance.dismiss();
 	alertify.success(data["mensaje"]);
+	$("#botonesBatch").empty();
 }
 
 function reportMaintenance(id){
