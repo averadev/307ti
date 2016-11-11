@@ -291,3 +291,17 @@ function reportMaintenance(id){
 	var url = "Pdfs/reportMaintanance?id=" + id;
 	window.open(url);
 }
+
+function updateStatusBatch(){
+	msgMaintenance = alertify.success('Saving changes, please wait ....', 0);
+	var ajaxDatos =  {
+		url: "Maintenance/postBatch",
+		tipo: "json",
+		datos: {
+				ID: $("#cventaPrice").text().trim()
+		},
+		funcionExito : postBatchMsj,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATAG(ajaxDatos);
+}

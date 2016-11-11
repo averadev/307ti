@@ -4771,7 +4771,7 @@ function changeStatus(){
 
 function testReservations(){
 	var ajaxData =  {
-		url: "Maintenance/pruebasMantienance",
+		url: "reservation/pruebasReservations",
 		tipo: "json",
 		datos: {
 		},

@@ -74,8 +74,25 @@ class Maintenance extends CI_Controller {
 			for ($i=0; $i < sizeof($batchs); $i++) { 
 				$this->insertBatchTrx($batchs[$i]->pkAccId, $batchs[$i]->TotalAmount);
 			}
+			$TRX =[
+				"fkStatusId"	=> 4
+			];
+			$condicion = "pkBatchId = " . $ID;
+			$this->Maintenance_db->updateReturnId("tblBatch", $TRX, $condicion);
 			echo json_encode(["mensaje"=> "Transactions created"]);
 		}
+	}
+
+	public function updateStatus(){
+		if($this->input->is_ajax_request()) {
+			$IDStatus = $_POST[''];
+			$TRX =[
+				"fkStatusId"	=> 
+			];
+			$condicion = "pkBatchId = " . $ID;
+			$this->Maintenance_db->updateReturnId("tblBatch", $TRX, $condicion);
+		}
+		
 	}
 
 	public function insertBatchTrx($Account, $Price){

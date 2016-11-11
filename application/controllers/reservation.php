@@ -27,13 +27,24 @@ class Reservation extends CI_Controller {
 	}
 	public function pruebasReservations(){
 		if($this->input->is_ajax_request()) {
-			$typeAcc = ['3','6', '7'];
-			//echo sizeof($typeAcc);
-			$ACC = $this->reservation_db->getAccTypes($typeAcc);
-			for ($i=0; $i < sizeof($ACC); $i++) { 
-				echo $ACC[$i]->ID;
+			$typeAcc = ['6', '7'];
+			$accounts = $this->reservation_db->getAccTypes($typeAcc);
+			//var_dump($accounts);
+			$resultAcc = array();
+			for($i =0; $i< count($accounts); $i++){
+				$cuenta = [
+					"fkAccTypeId"     	=> $accounts[$i]->ID,
+					"fkCompanyId"    	=> 1,
+					"AccCode"       	=> $accounts[$i]->AccTypeCode,
+					"ynActive"		 	=> 1,
+					"CrBy"      		=> $this->nativesessions->get('id'),
+					"CrDt"   			=> $this->getToday(),
+					"MdBy" 				=> $this->nativesessions->get('id'),
+					"MdDt"  			=> $this->getToday()
+				];
+				var_dump($cuenta);
+				//$resultAcc[$i] = $this->reservation_db->insertReturnId('tblAcc', $cuenta);
 			}
-			//echo  json_encode($ACC);
 		}
 	}
 	public function saveReservacion(){
@@ -206,7 +217,7 @@ class Reservation extends CI_Controller {
 		$resultAcc = array();
 		for($i =0; $i< count($accounts); $i++){
 			$cuenta = [
-				"fkAccTypeId"     	=> $typeAcc[$i]->ID,
+				"fkAccTypeId"     	=> $accounts[$i]->ID,
 				"fkCompanyId"    	=> 1,
 				"AccCode"       	=> $accounts[$i]->AccTypeCode,
 				"ynActive"		 	=> 1,
