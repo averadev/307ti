@@ -82,12 +82,18 @@
 				</div>
 				</div>
 			</fieldset>
+			<?php if($statusBatch != 21 && $statusBatch != 6){?>
+			<div id="botonesBatch">
 				<a data-widget="postBatch" id="postBatch" class="btn btn-primary">
 					<div class="label">Post Batch</div>
 				</a>
-				<a data-widget="postBatch" id="postBatch" class="btn btn-primary">
+				<a data-widget="cancelBatch" id="cancelBatch" class="btn btn-primary">
 					<div class="label">Cancel Batch</div>
 				</a>
+			</div>
+				
+			<?php }; ?>
+				
 	</div>
 	<!-- tabs notas -->
 	<div id="tab-Maintenance" class="large-12 columns tab-modal" style="display:inline-block;">

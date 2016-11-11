@@ -53,7 +53,7 @@ class Maintenance extends CI_Controller {
 			$ID = $_POST['ID'];
 			$data['Batch'] = $this->Maintenance_db->getBatchByID($ID);
 			$data['Batchs'] = $this->Maintenance_db->getBatchsDetailByID($ID);
-			//var_dump($data['Batchs']);
+			$data['statusBatch'] = $this->Maintenance_db->getStatusBatchByID($ID);
 			$this->load->view('maintenance/dialogDetailBatch', $data);
 		}
 	}
@@ -75,7 +75,7 @@ class Maintenance extends CI_Controller {
 				$this->insertBatchTrx($batchs[$i]->pkAccId, $batchs[$i]->TotalAmount);
 			}
 			$TRX =[
-				"fkStatusId"	=> 4
+				"fkStatusId"	=> 21
 			];
 			$condicion = "pkBatchId = " . $ID;
 			$this->Maintenance_db->updateReturnId("tblBatch", $TRX, $condicion);
@@ -85,12 +85,14 @@ class Maintenance extends CI_Controller {
 
 	public function updateStatus(){
 		if($this->input->is_ajax_request()) {
-			$IDStatus = $_POST[''];
+			$IDStatus = $_POST['IDStatus'];
+			$ID = $_POST['IDBatch'];
 			$TRX =[
-				"fkStatusId"	=> 
+				"fkStatusId"	=> $IDStatus
 			];
 			$condicion = "pkBatchId = " . $ID;
 			$this->Maintenance_db->updateReturnId("tblBatch", $TRX, $condicion);
+			echo json_encode(["mensaje"=> "Save Correctly"]);
 		}
 		
 	}
