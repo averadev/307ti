@@ -407,6 +407,7 @@ function opcionAccountColl(attrType){
 					setDataOpcionAccountColl(attrType);
 					getTrxTypeColl('collection/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
 					ajaxSelectsColl('collection/getTrxClass', 'try again', generalSelects, 'slcTrxClassAcc');
+					ajaxSelectsColl('contract/getCurrency', 'try again', generalSelects, 'CurrencyTrxClassAcc');
 				});
 			}else{
 				showLoading(div, true);

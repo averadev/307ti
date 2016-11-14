@@ -1402,7 +1402,7 @@ function showNewReservation(selector){
 function showReservation(selector){
 	//dialogEditContract.dialog('open');
 	var idRes = $(selector).attr('reservation');
-	 var dialogEditReservation = modalEditReservation(idRes);
+	var dialogEditReservation = modalEditReservation(idRes);
 	dialogEditReservation.dialog("open");
 }
 

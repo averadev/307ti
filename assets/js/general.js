@@ -388,7 +388,12 @@ function drawTable2(data, table ,funcion, cadena, option){
 	var heightScroll = $('#' + table ).parents(".table").first();
 	heightScroll = heightScroll.height();
 	if(heightScroll == null){
-		heightScroll = 400;
+		if (screen.height <= 768) {
+			heightScroll = 300;
+		}else{
+			heightScroll = 350;
+		}
+		
 	}
 	$('#' + table ).DataTable({
 		"scrollY": heightScroll - 50,
@@ -1228,4 +1233,14 @@ function getArrayValuesColumnTableInt(tabla, columna){
 		}       
 	});
 	return items;
+}
+
+
+function getSizeModalGeneral(){
+	maxHeight = screen.height;
+	if (screen.width < 760) {
+		maxWidth = "100%";
+	}else{
+		maxHeight = screen.height - parseInt(screen.height * .10);
+	}
 }

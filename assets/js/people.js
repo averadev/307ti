@@ -7,6 +7,7 @@
 
 var dataTablePeople = null;
 var dataTableReservationsPeople = null
+var dialogReservationPeople = modalEditReservationFromPeople();
 var maxHeight = 400;
 isSearch = true;
 var xhrPeople;
@@ -60,14 +61,10 @@ $('#btnCleanSearchContractPeople').on('click', function() {  CleandFieldSearchPC
 * Carga el modal
 */
 $(document).ready(function(){
-	
-	//noResults('#section-table-people',true);
-	
-	//$(document).foundation();
-	//maxHeight
-	maxHeight = screen.height * .10;
-	maxHeight = screen.height - maxHeight;
-	
+
+	/*maxHeight = screen.height * .10;
+	maxHeight = screen.height - maxHeight;*/
+	getSizeModal();
 	dialogUser = createModalDialog();
 	activarPAG();
 	
@@ -93,7 +90,6 @@ function activarPAG(){
 }
 
 function createModalDialog(id){
-	
 	var div = "#dialog-User";
 	dialog = $( "#dialog-User" ).dialog({
 		open : function (event){
@@ -152,20 +148,11 @@ function createModalDialog(id){
 					});
 					
 					dialogUser.css('overflow', 'hidden');
-					
-		    		/*ajaxSelects('contract/getProperties','try again', generalSelectsDefault, 'property');
-	    			ajaxSelects('contract/getUnitTypes','try again', generalSelects, 'unitType');
-	    			ajaxSelects('contract/getViewsType','try again', generalSelects, 'unitView');
-	    			ajaxSelects('contract/getSeasons','try again', generalSelects, 'season');
-					$('#btngetUnidades').click(function(){
-					        getUnidades();
-					});
-		            selectTable("tblUnidades");*/
 	    		});
 		},
 		autoOpen: false,
 		height: maxHeight,
-		width: "70%",
+		width: maxWidth,
 		modal: true,
 		buttons: [
 			{
@@ -200,7 +187,6 @@ function createModalDialog(id){
 				text: "Save",
 				"class": 'dialogModalButtonAccept',
 				click: function() {
-					//$("#idPeople").data("pkPeopleId",item.pkPeopleId);
 					if($("#idPeople").data("pkPeopleId") == undefined){
 						CreateNewUser(true)
 					}else{
@@ -221,73 +207,15 @@ function createModalDialog(id){
 	
 }
 
-/*function createModalDialog(){
-	
-	if(dialogUser != null){
-		dialogUser.dialog( "destroy" );
+function getSizeModal(){
+	maxHeight = screen.height;
+	if (screen.width < 760) {
+		maxWidth = "100%";
+	}else{
+		maxWidth = "55%";
+		maxHeight = screen.height - parseInt(screen.height * .10);
 	}
-	$("#textPhone1").mask("(999) 999-9999");
-	$("#textPhone2").mask("(999) 999-9999");
-	$("#textPhone3").mask("(999) 999-9999");
-	dialogUser = $( "#dialog-User" ).dialog({
-		autoOpen: false,
-		height: maxHeight,
-		width: "75%",
-		modal: true,
-		dialogClass: 'dialogModal',
-		buttons: [
-			{
-				text: "Clone person",
-				"class": 'dialogModalButtonSecondary',
-				click: function() {
-					clonePeople();
-				}
-			},
-			{
-				text: "Cancel",
-				"class": 'dialogModalButtonCancel',
-				click: function() {
-					dialogUser.dialog('close');
-					cleanUserFields();
-					$("#idPeople").removeData("pkPeopleId");
-					$("#idPeople").removeData("pkEmployeeId");
-				}
-			},
-			{
-				text: "Save and close",
-				"class": 'dialogModalButtonAccept',
-				click: function() {
-					if($("#idPeople").data("pkPeopleId") == undefined ){
-						CreateNewUser(false)
-					}else{
-						EditUser(false, $("#idPeople").data("pkPeopleId") )
-					}
-				}
-			},
-			{
-				text: "Save",
-				"class": 'dialogModalButtonAccept',
-				click: function() {
-					//$("#idPeople").data("pkPeopleId",item.pkPeopleId);
-					if($("#idPeople").data("pkPeopleId") == undefined){
-						CreateNewUser(true)
-					}else{
-						EditUser(true, $("#idPeople").data("pkPeopleId") )
-					}
-					
-				}
-			},
-		],
-		close: function() {
-			$("#idPeople").removeData("pkPeopleId");
-			$("#idPeople").removeData("pkEmployeeId");
-			cleanUserFields();
-			
-			//$('.ui-dialog-titlebar').empty();
-		}
-	});
-	//dialogUser.css('overflow', 'hidden');
-}*/
+}
 
 
 /**
@@ -1047,7 +975,7 @@ function getInfoTabsPeople(screen, url){
 		success: function(data){
 			if(screen == "tab-PReservaciones"){
 				if(data.items.length > 0){
-					drawTable2(data.items,"tableReservationsPeople",false,"tabla");
+					drawTable2(data.items,"tableReservationsPeople","showReservationPeople","Detail");
 				}else{
 					//$('#tableReservationsPeople tbody').empty();
 					noResultsPeople("tab-PReservaciones", "tableReservationsPeople", "No results found");
@@ -1243,4 +1171,55 @@ function randomDate(){
 function getRandomEmail(){
 	var name = makeRandonNames(7);
 	return  name + "@" + "gmail.com";
+}
+
+
+function modalEditReservationFromPeople(id){
+	showLoading('#dialog-Edit-ReservationPeople',true);
+	dialogo = $("#dialog-Edit-ReservationPeople").dialog ({
+  		open : function (event){
+	    	$(this).load("reservation/modalEdit?id="+id , function(){
+				//$('#tab-general .tabs-title.active').attr('attr-screen'));
+				var screen = $('#tab-general .tabs-title.active').attr('attr-screen');
+				if( screen == "frontDesk" ){
+					$('#tab-general .tabs-title.active').data('idRes', id);
+				}
+	 			showLoading('#dialog-Edit-ReservationPeople',false);
+				if ($('#editReservationStatus').text() == "Status: Out") {
+					$(document).off( 'click', '#btNewTransAccRes'); 
+				}else{
+					$(document).off( 'click', '#btNewTransAccRes, #btAddPayAccRes'); 
+					$(document).on( 'click', '#btNewTransAccRes, #btAddPayAccRes', function ( ) {
+						eventTransAccRes(this);
+					});
+				}
+	 			getDatosReservation(id);
+	 			setEventosEditarReservation(id);
+				selectTableUnicoRes("tableCDocumentsSelected");
+				
+	    	});
+		},
+		autoOpen: false,
+     	height: maxHeight,
+     	modal: true,
+     	buttons: [
+	   	{
+       		text: "Close",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       			$(this).dialog('close');
+       		}
+     	}],
+     close: function() {
+    	$('#dialog-Edit-ReservationPeople').empty();
+     }
+	});
+	return dialogo;
+}
+
+function showReservationPeople(id){
+	//dialogEditContract.dialog('open');
+	var idRes = id;
+	var dialogReservationPeople = modalEditReservationFromPeople(idRes);
+	dialogReservationPeople.dialog("open");
 }

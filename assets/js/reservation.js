@@ -4,11 +4,11 @@ var endDateRes = null;
 var msgReservation = null;
 var statusResMS;
 
-var maxHeight = screen.height * .10;
-maxHeight = screen.height - maxHeight;
+/*var maxHeight = screen.height * .10;
+maxHeight = screen.height - maxHeight;*/
 
 $(document).ready(function(){
-	
+	getSizeModalGeneral();
 	//dateField
 	$( "#startDateRes, #endDateRes, #createDtRes" ).Zebra_DatePicker({
 		format: 'm/d/Y',
@@ -580,7 +580,7 @@ function createDialogReservation(addReservation, typeRes) {
 		},
 		autoOpen: false,
 		height: maxHeight,
-		width: "75%",
+		width: maxWidth,
 		modal: true,
 		buttons: [{
 			text: "Cancel",
@@ -818,7 +818,7 @@ function addUnidadResDialog(iniDate, unit, typeUnit){
 		},
 		autoOpen: false,
 		height: maxHeight,
-		width: "75%",
+		width: maxWidth,
 		modal: true,
 		buttons: [{
 			text: "Cancel",
@@ -868,7 +868,7 @@ function addPeopleResDialog(table){
 		},
 		autoOpen: false,
 		height: maxHeight,
-		width: "75%",
+		width: maxWidth,
 		modal: true,
 		buttons: [{
 			text: "Cancel",
@@ -1521,7 +1521,7 @@ function modalDepositDownpaymentRes(){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: maxWidth,
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -1608,7 +1608,7 @@ function modalScheduledPaymentsRes() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: maxWidth,
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -1653,7 +1653,7 @@ function modalDiscountAmountRes(){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: maxWidth,
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -1815,7 +1815,7 @@ function modalEditReservation(id){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: maxWidth,
      	modal: true,
      	buttons: [
 	   	{
@@ -2866,7 +2866,7 @@ function modalFinanciamientoRes() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: maxWidth,
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -3064,7 +3064,7 @@ function modalSellersRes() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: maxWidth,
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -3439,7 +3439,7 @@ function modalGetAllNotesRes() {
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: maxWidth,
      	modal: true,
      	buttons: [{
 	       	text: "Close",
@@ -3868,7 +3868,7 @@ function opcionAccountRes(attrType){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "75%",
+     	width: maxWidth,
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
