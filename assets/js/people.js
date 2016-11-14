@@ -1201,6 +1201,7 @@ function modalEditReservationFromPeople(id){
 		},
 		autoOpen: false,
      	height: maxHeight,
+     	width: "70%",
      	modal: true,
      	buttons: [
 	   	{

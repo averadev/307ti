@@ -1241,6 +1241,7 @@ function getSizeModalGeneral(){
 	if (screen.width < 760) {
 		maxWidth = "100%";
 	}else{
+		maxWidth = "70%";
 		maxHeight = screen.height - parseInt(screen.height * .10);
 	}
 }
