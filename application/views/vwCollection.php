@@ -148,6 +148,10 @@
 									<div class="label">Clean</div>
 									<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 								</a>
+								<a id="btnCollReport" class="btn btn-primary spanSelect">
+									<div class="label">Report</div>
+									<i class="fa fa-print" aria-hidden="true"></i>
+								</a>
 							</div>
 						</div>
 					</div>
@@ -188,5 +192,7 @@
 
 <div id="dialog-Edit-colletion" title="Collection" style="display: none;"></div>
 <div id="dialog-accountsColl" title="Colletion accounts" style="display: none;"></div>
+<div id="dialog-AdminReport" title="Report" style="display: none;"></div>
+
 
 <script type="text/javascript" src="<?php echo base_url().JS; ?>collection.js"></script>

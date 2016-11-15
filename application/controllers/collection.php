@@ -223,7 +223,11 @@ class collection extends CI_Controller {
 			$this->load->view('collection/collectionDialogEdit');
 		}
 	}
-	
+	public function modalReport(){
+		if($this->input->is_ajax_request()) {
+			$this->load->view('collection/modalReport');
+		}
+	}
 	public function modalAcc(){
 		if($this->input->is_ajax_request()){
 			$typeAcc = $_GET['typeAcc'];
