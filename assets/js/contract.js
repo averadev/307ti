@@ -2,7 +2,7 @@ var msgContract = null;
 
 
 $(document).ready(function(){
-	getSizeModalContract();
+	getSizeModalGeneral();
 	var dialogAddTour = null;
 	var dialogStatus = null;
 
@@ -210,8 +210,8 @@ function getSizeModalContract(){
 	if (screen.width < 760) {
 		maxWidth = "100%";
 	}else{
-		maxWidth = "55%";
-		maxHeight = screen.height - parseInt(screen.height * .10);
+		maxWidth = "60%";
+		maxHeight = screen.height - parseInt(screen.height * .17);
 	}
 }
 function messageRC(data){
@@ -2002,16 +2002,16 @@ function changeTabsModalContract(screen, id){
 			break;
 		case "tab-COccupation":
 			getDatosContractOcupation(id);
-			var heightNote = $('#tab-COccupation').height() - 250;
-			$('#fieldsetOccuCon').height( heightNote + "px" );
+			//var heightNote = $('#tab-COccupation').height() - 250;
+			//$('#fieldsetOccuCon').height( heightNote + "px" );
 			break;
 		case "tab-CDocuments":
 			getDatosContractDocuments(id);
 			break;
 		case "tab-CNotes":
 			getDatosContractNotes(id);
-			var heightNote = $('#tab-CNotes').height() - 100;
-			$('#fieldsetNoteCon').height( heightNote + "px" );
+			/*var heightNote = $('#tab-CNotes').height() - 100;
+			$('#fieldsetNoteCon').height( heightNote + "px" );*/
 			break;
 		case "tab-CFlags":
 			getDatosContractFlags(id);

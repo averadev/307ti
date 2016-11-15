@@ -213,7 +213,7 @@ function getSizeModal(){
 		maxWidth = "100%";
 	}else{
 		maxWidth = "55%";
-		maxHeight = screen.height - parseInt(screen.height * .10);
+		maxHeight = screen.height - parseInt(screen.height * .17);
 	}
 }
 

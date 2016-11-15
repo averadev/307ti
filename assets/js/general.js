@@ -396,7 +396,9 @@ function drawTable2(data, table ,funcion, cadena, option){
 		
 	}
 	$('#' + table ).DataTable({
-		"scrollY": heightScroll - 50,
+		//"scrollY": heightScroll - 50,
+		"scrollY": '60vh',
+        "scrollCollapse": true,
 		"scrollX": true,
 		"paging":   false,
 		"ordering": false,
@@ -473,7 +475,7 @@ function drawTableFiles(data, table ,funcion, cadena, funcion2 , option){
 	var heightScroll = $('#' + table ).parents(".table").first();
 	heightScroll = heightScroll.height();
 	if(heightScroll == null){
-		heightScroll = 400;
+		heightScroll = 350;
 	}
 	$('#' + table ).DataTable({
 		"scrollY": heightScroll - 50,
@@ -911,7 +913,8 @@ function drawTableId(data, table){
 function setHeightModal(div){
 	var hTabs = $('#' + div + ' .contentModalHeader').height();
 	var hContent = $('#' + div + ' .contentModal').height();
-	$('#' + div + ' .contentModal').css('height', ( hContent - (hTabs) + 25 ));
+	$('#' + div + ' .contentModal').css('height', ( hContent - hTabs));
+	//$('#' + div + ' .contentModal').width('100%');
 }
 
 function  gotoDiv(contenedor, div){
@@ -1240,8 +1243,9 @@ function getSizeModalGeneral(){
 	maxHeight = screen.height;
 	if (screen.width < 760) {
 		maxWidth = "100%";
+		maxHeight = parseInt(screen.height);
 	}else{
 		maxWidth = "70%";
-		maxHeight = screen.height - parseInt(screen.height * .10);
+		maxHeight =  parseInt(screen.height * .85);
 	}
 }
