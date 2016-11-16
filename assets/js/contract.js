@@ -221,6 +221,18 @@ $(document).ready(function(){
 	
 	getDatailByID("contractstbody");
 });
+
+function getSizeModalGeneral(){
+	maxHeight = screen.height;
+	if (screen.width < 760) {
+		maxWidth = "100%";
+		maxHeight = parseInt(screen.height);
+	}else{
+		maxWidth = "70%";
+		maxHeight =  parseInt(screen.height * .85);
+	}
+}
+
 function getSizeModalContract(){
 	maxHeight = screen.height;
 	if (screen.width < 760) {
