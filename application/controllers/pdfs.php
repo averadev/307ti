@@ -331,9 +331,9 @@ class Pdfs extends CI_Controller {
 		$TRX = $this->pdfs_db->getCollection2($filters);
 		//var_dump($TRX);
 		$body = '';
-		$title = "State Account";
-		$name = "State Account";
-		$saveFiler = "State_Account";
+		$title = "Account Status";
+		$name = "Account Status";
+		$saveFiler = "Account_Status";
 		$pdf = $this->generatePdfTemp( $name, $title );
 		$style = $this->generateStyle();
 
