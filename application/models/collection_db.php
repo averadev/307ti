@@ -137,7 +137,7 @@ Class collection_db extends CI_MODEL
 		return  $this->db->get()->result();
 		
 	}
-	
+
 	public function getInfoColl($id){
 		$this->db->distinct();
         $this->db->limit(1);

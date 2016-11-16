@@ -31,7 +31,6 @@ class collection extends CI_Controller {
 			$page = 0;
 			$sql = $this->getFilters($_POST, '');
 			$data = $this->collection_db->getCollection($sql);
-			//$data = array_slice($collection, $page, 25);
 			if( count($data) > 0 ){
 				foreach( $data[0] as $key => $item ){
 					$keys[] = $key;

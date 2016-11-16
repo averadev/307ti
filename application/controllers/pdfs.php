@@ -310,26 +310,161 @@ class Pdfs extends CI_Controller {
 		}
 		
 		}
-		
-		//$body .= '</table>';
-
-
 		$html = '';
 		$html .= ' <html><head>';
 		$html .= $style;
 		$html .= '</head><body>';
 		$html .= $body;
 		$html .= '</body></html>';
-		//$html = $this->load->view('maintenance/pdfMaintanance');
-		// ob_start();
-		// $html = include('application/views/maintenance/pdfMaintanance.php');
-		// $a_div = ob_get_contents();
-		//echo gettype($html);
-		//var_dump($html);
-		//$html = echo 
+
 		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
 		
 		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes, $title );
+		
+	}
+
+	public function reportAdminTRX(){
+		$filters =[];
+		if ($_GET['IDOCC']) {
+			$filters['options']['OccTypeGroupColl'] = $_GET['IDOCC'];
+		}
+		$TRX = $this->pdfs_db->getCollection2($filters);
+		//var_dump($TRX);
+		$body = '';
+		$title = "State Account";
+		$name = "State Account";
+		$saveFiler = "State_Account";
+		$pdf = $this->generatePdfTemp( $name, $title );
+		$style = $this->generateStyle();
+
+		$body .= '<table width="100%" cellpadding="2">';
+		$body.= '<tr>';
+		foreach ($TRX[0] as $clave => $valor){
+			if ($clave != "OCCTYPECODE") {
+				$body .= '<th>' . $clave . '</th>';
+			}
+			
+		}
+		$body.= '</tr>';
+		$total = 0;
+		$totalOW = 0;
+		$totalRT = 0;
+		$totalEX = 0;
+		$totalNC = 0;
+		$totalAG = 0;
+		$totalIE = 0;
+		$totalBW = 0;
+		$totalOWE = 0;
+		$totalOWF = 0;
+		$totalOWB = 0;
+		$Anterior = '';
+		$subtotal = 0;
+		$RES = '';
+		$pagina = 0;
+		foreach ($TRX as $item){
+			if ($Anterior != '') {
+				if ($Anterior != $item->pkResId) {
+					$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">SUBTOTAL</td><td class="blackLine21">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+					$subtotal = floatval($item->Amount);	 
+				}else{
+					$subtotal += floatval($item->Amount);
+				}
+			}else{
+				$subtotal += floatval($item->Amount);
+			}
+			$body .= '<tr>'; 
+			$body .= '<td  class="blackLine1">' . $item->pkResId . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->UnitCode . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->arrivaDate . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->depatureDate . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->TrxTypeDesc . '</td>';
+			$body .= '<td  class="blackLine1">$' . number_format((float)$item->Amount, 2, '.', '') . '</td>';
+			
+			$body .= '</tr>';
+			$Anterior = $item->pkResId;
+/*			if ($pagina != $pdf->getAliasNumPage()) {
+				$body.= '<tr>';
+				foreach ($TRX[0] as $clave => $valor){
+					if ($clave != "OCCTYPECODE") {
+						$body .= '<th>' . $clave . '</th>';
+					}
+					
+				}
+				$body.= '</tr>';
+			}*/
+			switch ($item->OCCTYPECODE) {
+				case 'OW':
+					$totalOW += floatval($item->Amount);
+					break;
+				case 'RT':
+					$totalRT += floatval($item->Amount);
+					break;
+				case 'EX':
+					$totalEX += floatval($item->Amount);
+					break;
+				case 'NC':
+					$totalNC += floatval($item->Amount);
+				case 'AG':
+					$totalAG += floatval($item->Amount);
+				case 'IE':
+					$totalIE += floatval($item->Amount);
+					break;
+				case 'BW':
+					$totalBW += floatval($item->Amount);
+					break;
+				case 'OWE':
+					$totalOWE += floatval($item->Amount);
+					break;
+				case 'OWF':
+					$totalOWF += floatval($item->Amount);
+					break;
+				case 'OWB':
+					$totalOWB += floatval($item->Amount);
+					break;
+				default:
+					# code...
+					break;
+			}
+			$total += floatval($item->Amount);
+		}
+		$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">SUBTOTAL</td><td class="blackLine3">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+		if (!$_GET['IDOCC']) {
+			$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">Contract Owner</td><td class="blackLine21">$'.number_format((float)$totalOW, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+			$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">Transient</td><td class="blackLine21">$'.number_format((float)$totalRT, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+			$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">Exchanger</td><td class="blackLine21">$'.number_format((float)$totalEX, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+			$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">Complimentary</td><td class="blackLine21">$'.number_format((float)$totalNC, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+			$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">Company Agreements</td><td class="blackLine21">$'.number_format((float)$totalAG, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+			$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">Internal Exchange</td><td class="blackLine21">$'.number_format((float)$totalIE, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+			$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">Bonus Week</td><td class="blackLine21">$'.number_format((float)$totalBW, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+			$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">Owner - Expedia</td><td class="blackLine21">$'.number_format((float)$totalOWE, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+			$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">Owner - Friend</td><td class="blackLine21">$'.number_format((float)$totalOWF, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+			$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">Owner - Booking</td><td class="blackLine21">$'.number_format((float)$totalOWB, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+		}
+		$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">TOTAL</td><td class="blackLine21">$'.number_format((float)$total, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+		$body .= '</table>';
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
+		//var_dump($body);
+		$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+		
+		$pdf = $this->showpdf2( $pdf, $saveFiler );
+	}
+	private function showpdf2( $pdf, $saveFiler){
+		$date = new DateTime();
+		
+		$saveFiler .= $date->getTimestamp() . ".pdf";
+		
+		$nombre_archivo = utf8_decode($saveFiler);
+		$nombre_archivo = $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/" . $nombre_archivo;
+		
+		$nombre_archivo2 = utf8_decode($saveFiler);
+
+		$pdf->Output($nombre_archivo,'FI');
+		
+		$pdf = null;
 		
 	}
 	public function Statement(){
@@ -760,6 +895,10 @@ class Pdfs extends CI_Controller {
 		$style .= ' table.poll{ color: #666666; font-size:14px; }';
 		$style .= ' table.poll tr td{  height: 25px; }';
 		$style .= ' .blackLine{ border-bottom: solid 2px #000000; }';
+		$style .= ' .blackLine1{ border-bottom: solid 2px #E2E2E2; }';
+		$style .= ' .blackLine2{ border-bottom: solid .5px black; height: 40px; font-weight:bold;}';
+		$style .= ' .blackLine21{ border-bottom: solid .5px #A4A4A4; height: 40px; font-weight:bold;}';
+		$style .= ' .blackLine3{border-bottom: solid .5px #A4A4A4; height: 60px; font-weight:bold;}';
 		$style .= ' h3{ color: #662C19; }';
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
 		$style .= ' .cafe{ color: #662C19; font-size:15px; }';

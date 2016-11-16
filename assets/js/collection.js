@@ -52,11 +52,6 @@ $(document).ready(function() {
 	
 	$(document).off( 'click', '#btnCollReport');
 	$(document).on( 'click', '#btnCollReport', function () {
-		var TextoOCC = $("#OccTypeGroupColl option:selected").text();
-		var IDOCC = $("#OccTypeGroupColl").val();
-		if (IDOCC != "") {
-
-		}
 		showModalReportAdmin();
 	});
 	//$('#textInvStartDate').val(getCurrentDate())
@@ -670,7 +665,7 @@ function showModalReportAdmin(){
 	       		text: "Generate",
 	       		"class": 'dialogModalButtonAccept',
 	       		click: function() {
-					showReport(38);
+					showReport();
 	       		}
 	     	}]
 		};
@@ -683,6 +678,9 @@ function showModalReportAdmin(){
 }
 
 function showReport(id){
-	var url = "Pdfs/reportMaintanance?id=" + id;
+	var TextoOCC = $("#OccTypeGroupColl option:selected").text();
+	var IDOCC = $("#OccTypeGroupColl").val();
+
+	var url = "Pdfs/reportAdminTRX?IDOCC="+IDOCC;
 	window.open(url);
 }
