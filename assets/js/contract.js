@@ -23,6 +23,12 @@ $(document).ready(function(){
 	$(document).on('click', "#btnSavePeople", function () {
 		savePeople();
 	});
+	
+	$(document).off( 'click', '#btnSaveUnit');
+	$(document).on('click', "#btnSaveUnit", function () {
+		changeUnits();
+	});
+	
 	$(document).off( 'click', '#btnAddPeople');
 	$(document).on( 'click', '#btnAddPeople', function () {
 		if (peopleDialog != null) {
@@ -36,7 +42,7 @@ $(document).ready(function(){
 		if (unidadDialog!=null) {
 			unidadDialog.dialog( "destroy" );
 		}
-		unidadDialog = addUnidadDialog();
+		unidadDialog = addUnidadDialog('new');
 		unidadDialog.dialog( "open" );
 	});
 	$(document).off( 'click',  '#btnAddPeopleEdit');
@@ -202,6 +208,16 @@ $(document).ready(function(){
 	$(document).off( 'change', "#amountTransfer");
 	$(document).on('change', "#amountTransfer", function () {
 		updateBalanceFinal();
+	});
+	
+	$(document).off( 'click', '#btnChangeUnit');
+	$(document).on( 'click', '#btnChangeUnit', function (){
+		if (unidadDialog!=null) {
+			unidadDialog.dialog( "destroy" );
+		}
+		unidadDialog = addUnidadDialog('change');
+		unidadDialog.dialog( "open" );
+		//changeStatusUnitCon();
 	});
 	
 	getDatailByID("contractstbody");
@@ -441,7 +457,11 @@ function addTourContract(){
 	return dialogo;
 }
 
-function addUnidadDialog() {
+/*************************************/
+/**@todo muestra el modal para agregar/cambiar unidades/
+/**@param --typeModal indica si se trata de agregar nuevas o cambiar unidades ya asignadas a un contrato **/
+/*************************************/
+function addUnidadDialog(typeModal){
 	var div = "#dialog-Unidades";
 	dialog = $( "#dialog-Unidades" ).dialog({
 		open : function (event){
@@ -452,8 +472,10 @@ function addUnidadDialog() {
 	    			ajaxSelects('contract/getUnitTypes','try again', generalSelects, 'unitType');
 	    			ajaxSelects('contract/getViewsType','try again', generalSelects, 'unitView');
 	    			ajaxSelects('contract/getSeasons','try again', generalSelects, 'season');
-					$('#btngetUnidades').click(function(){
-					        getUnidades();
+					//$('#btngetUnidades').click(function(){
+					$('#btngetUnidades').off( 'click' );
+					$('#btngetUnidades').on( 'click', function(){
+						getUnidades(typeModal);
 					});
 		            selectTable("tblUnidades");
 	    		});
@@ -473,18 +495,33 @@ function addUnidadDialog() {
 			"class": 'dialogModalButtonAccept',
 			click: function() {
 				var unidades = getValueTableUnidadesSeleccionadas();
+				var repeat = 0
+				var isRepeat = false;
+				//detecta que una unidad no este seleccionado mas de una vez
+				for (var i = 0; i < unidades.length; i++) {
+					if(repeat != unidades[i].id){
+						repeat = unidades[i].id;
+					}else{
+						isRepeat = true;
+						break;
+					}
+				}
 				if (unidades.length>0) {
-					var ultimos = [];
-					$(this).dialog('close');
-					for (var i = 0; i < unidades.length; i++) {
-						ultimos.push(parseInt(unidades[i].lastYear));
+					if(!isRepeat){
+						var ultimos = [];
+						$(this).dialog('close');
+						for (var i = 0; i < unidades.length; i++) {
+							ultimos.push(parseInt(unidades[i].lastYear));
+						}
+						ultimo = Math.max.apply( Math, ultimos);
+						if (dialogWeeks!=null) {
+							dialogWeeks.dialog( "destroy" );
+						}
+						dialogWeeks = getWeeksDialog(unidades, ultimo,typeModal);
+						dialogWeeks.dialog("open");
+					}else{
+						alertify.error("Only one unit can be selected once");
 					}
-					ultimo = Math.max.apply( Math, ultimos);
-					if (dialogWeeks!=null) {
-						dialogWeeks.dialog( "destroy" );
-					}
-					dialogWeeks = getWeeksDialog(unidades, ultimo);
-					dialogWeeks.dialog("open");
 				}else{
 					alertify.error("Search and click over for choose one");
 				}
@@ -496,6 +533,7 @@ function addUnidadDialog() {
 	});
 	return dialog;
 }
+
 function addPeopleDialog(table) {
 	console.log("stoy en el dialog" + table);
 	var div = "#dialog-People";	
@@ -673,7 +711,7 @@ function verifyContract(){
 }
 function verifyTablesContract(){
 	var value = true;
-	var unidades = getValueTableUnidades();
+	var unidades = getValueTableUnidades('tableUnidadesSelected');
 	var personas = getValueTablePersonas();
 	if (personas.length<=0) {
 		alertify.error("You should add one people or more");
@@ -722,7 +760,7 @@ function createNewContract(){
 				tourID : $("#TourID").val().trim(),
 				peoples: getValueTablePersonas(),
 				types: 	typePeople(),
-				unidades: getValueTableUnidades(),
+				unidades: getValueTableUnidades('tableUnidadesSelected'),
 				weeks: getArrayValuesColumnTable("tableUnidadesSelected", 7),
 				tipoVentaId : $("#typeSales").val(),
 				listPrice: getNumberTextInput("precioUnidad"),
@@ -837,8 +875,8 @@ function getValueTableDownpayment(){
 	return pagos;
 }
 
-function getValueTableUnidades(){
-	var tabla = "tableUnidadesSelected";
+function getValueTableUnidades(table){
+	var tabla = table;
 	var unidades = [];
 	$('#'+tabla+' tbody tr').each( function(){
 		if ($(this).text().replace(/\s+/g, " ")!="") {
@@ -1104,8 +1142,11 @@ function selectTableUnico(div){
 	});
 }
 
-
-function getWeeksDialog(unidades, ultimo){
+/*************************************/
+/**@todo muestra el modal para asignar el tiempo de ocupacion de las unidades **/
+/**@param --typeModal indica si se trata de agregar nuevas o cambiar unidades ya asignadas a un contrato **/
+/*************************************/
+function getWeeksDialog(unidades, ultimo, typeModal){
 	showLoading('#dialog-Weeks', true);
 	var unidades = unidades;
 	dialogo = $("#dialog-Weeks").dialog ({
@@ -1114,16 +1155,28 @@ function getWeeksDialog(unidades, ultimo){
 	    		showLoading('#dialog-Weeks', false);
 	    		ajaxSelects('contract/getFrequencies','try again', generalSelectsDefault, 'frequency');
 	    		$("#weeksNumber").val(1);
-	    		if (ultimo>0) {
-	    			$("#firstYearWeeks").val(ultimo);
-	    			$('#firstYearWeeks').attr('min',ultimo);
-	    			$('#lastYearWeeks').attr('min',ultimo);
-	    		}else{
-	    			setYear("firstYearWeeks", 0);
-	    			$('#firstYearWeeks').attr('min',getOnlyYear());
-	    			$('#lastYearWeeks').attr('min',getOnlyYear());
-	    		}
-				$("#lastYearWeeks").val(2087);
+				if( typeModal == "new" ){
+					if (ultimo>0) {
+						$("#firstYearWeeks").val(ultimo);
+						$('#firstYearWeeks').attr('min',ultimo);
+						$('#lastYearWeeks').attr('min',ultimo);
+					}else{
+						setYear("firstYearWeeks", 0);
+						$('#firstYearWeeks').attr('min',getOnlyYear());
+						$('#lastYearWeeks').attr('min',getOnlyYear());
+					}
+					$("#firstYearWeeks").prop('disabled', false);
+					$("#lastYearWeeks").prop('disabled', false);
+					$("#lastYearWeeks").val(2087);
+				}else{
+					$("#firstYearWeeks").prop('disabled', true);
+					$("#lastYearWeeks").prop('disabled', true);
+					$("#firstYearWeeks").val( $('#FirstYearCon').text() );
+					$("#lastYearWeeks").val( $('#LastYearCon').text() );
+					$('#firstYearWeeks').attr('min',ultimo);
+					$('#lastYearWeeks').attr('min',ultimo);
+				}
+	    		
 				
 	    	});
 		},
@@ -1148,11 +1201,15 @@ function getWeeksDialog(unidades, ultimo){
        				var frequency = $("#frequency option:selected" ).text();
        				var primero = $("#firstYearWeeks").val();
 	       			var ultimo = $("#lastYearWeeks").val(); 
-					//var ultimo = getYear( $("#firstYearWeeks").val() ); 
-	       			tablUnidadades(unidades, frequency, primero, ultimo);	
-	       			$(this).dialog('close');
-	       			setValueUnitPrice();
-					
+					//var ultimo = getYear( $("#firstYearWeeks").val() );
+					if( typeModal == "new" ){
+						tablUnidadades(unidades, frequency, primero, ultimo, "tableUnidadesSelected");	
+						$(this).dialog('close');
+						setValueUnitPrice();
+					}else{
+						tablUnidadades(unidades, frequency, primero, ultimo, "tableUnidades");	
+						$(this).dialog('close');
+					}
 					//setYear("firstYearWeeks", 0);
 	    		//setYear("lastYearWeeks", 10);
        			}
@@ -1401,7 +1458,7 @@ function modalDiscountAmount(){
 	return dialogo;
 }
 
-function tablUnidadades(unidades, frequency, primero, ultimo){
+function tablUnidadades(unidades, frequency, primero, ultimo, tabla){
 	//console.table(unidades);
 	var bodyHTML = '';
 	for (var i = 0; i < unidades.length; i++) {
@@ -1420,26 +1477,26 @@ function tablUnidadades(unidades, frequency, primero, ultimo){
         bodyHTML+="</tr>";
 	}
    
-    $('#tableUnidadesSelected tbody').append(bodyHTML);
-    deleteElementTableUnidades("tableUnidadesSelected");
-    selectUnidadOcupada();
+    $('#' + tabla + ' tbody').append(bodyHTML);
+    deleteElementTableUnidades(tabla);
+    selectUnidadOcupada(tabla);
 }
 
-function selectUnidadOcupada(){
+function selectUnidadOcupada(tabla){
 	var ajaxDatos =  {
 		url: "contract/selectUnidadesOcupadas",
 		tipo: "json",
 		datos: {
-			unidades: getValueTableUnidades()
+			unidades: getValueTableUnidades(tabla)
 		},
 		funcionExito : UnidadesOcupadas,
 		funcionError: mensajeAlertify
 	};
-	ajaxDATA(ajaxDatos);
+	ajaxDATAG(ajaxDatos, tabla);
 
 }
-function UnidadesOcupadas(data){
-	var myTable = document.getElementById('tableUnidadesSelected');
+function UnidadesOcupadas(data, table){
+	var myTable = document.getElementById(table);
 	var rows =  myTable.rows;
 	for(j in data) {
 		if (data[j]>0) {
@@ -1645,36 +1702,42 @@ function selectMetodoPagoProgramados(){
   	});
 }
 /////////////////////////////////////////////////////////////////
- function getUnidades(){
-        showLoading('#tblUnidades',true);
-        $.ajax({
-            data:{
-                property: $("#property").val(),
-                unitType: $("#unitType").val(),
-                season: $("#season").val(),
-                interval: $("#interval").val(),
-                view: $("#unitView").val()
-            },
-            type: "POST",
-            url: "contract/getUnidades",
-            dataType:'json',
-            success: function(data){
-				showLoading('#tblUnidades',false);
-                if(data != null){
-                    alertify.success("Found "+ data.length);
-                    drawTable(data, 'add', "Details", "Unidades");
-					//drawTable2(data,"Unidades","add","Details");
-                }else{
-                    $('#contractstbody').empty();
-                    alertify.error("No records found");
-                }
-            },
-            error: function(){
-                alertify.error("Try again");
-            }
-        });
-    }
-
+ function getUnidades(typeModal){
+	var table = "";
+	if( typeModal == "new" ){
+		table = "tableUnidadesSelected";
+	}else{
+		table = "tableUnidades";
+	}
+	showLoading('#table-units',true);
+	$.ajax({
+		data:{
+			property: $("#property").val(),
+			unitType: $("#unitType").val(),
+			season: $("#season").val(),
+			interval: $("#interval").val(),
+			view: $("#unitView").val(),
+			units:getArrayValuesColumnTable(table, 1),
+		},
+		type: "POST",
+		url: "contract/getUnidades",
+		dataType:'json',
+		success: function(data){
+			showLoading('#table-units',false);
+			if(data != null){
+				alertify.success("Found "+ data.length);
+				drawTable(data, 'add', "Details", "Unidades");
+				//drawTable2(data,"Unidades","add","Details");
+			}else{
+				$('#contractstbody').empty();
+				alertify.error("No records found");
+			}
+		},
+		error: function(){
+			alertify.error("Try again");
+		}
+	});
+}
 
 function initEventosDownpayment(){
 
@@ -2158,7 +2221,7 @@ function getUnitiesContract(id){
 	    url: "contract/getUnitiesContract",
 	    dataType:'json',
 	    success: function(data){
-	    	drawTableSinHead(data, "tableUnidadesContract");
+	    	drawTableSinHeadUnit(data, "tableUnidadesContract");
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -2185,7 +2248,7 @@ function getDatosContract(id){
 				//var status = drawTableSinHeadReservationPeople(data["peoples"], "peoplesContract");
 				drawTableSinHeadPeople(data["peoples"], "peoplesContract");
 			}
-	    	drawTableSinHead(data["unities"], "tableUnidadesContract");
+	    	drawTableSinHeadUnit(data["unities"], "tableUnidadesContract");
 	    	drawTerminosVenta(data["terminosVenta"][0]);
 	    	drawTerminoFinanciamiento(data["terminosFinanciamiento"][0]);
 			var contraTemp = data["contract"][0];
@@ -2220,6 +2283,28 @@ function drawTableSinHeadPeople(data, table){
 		}
     }
 	onChangePrimary();
+	deleteElementTable(table);
+}
+
+function drawTableSinHeadUnit(data, table){
+	$('#' + table).empty();
+    for (var i = 0; i < data.length; i++) {
+		var bodyHTML = '';
+		bodyHTML += "<tr>";
+        bodyHTML += "<td>" +data[i].ID + "</td>";
+		bodyHTML += "<td>" +data[i].UnitCode + "</td>";
+		bodyHTML += "<td>" +data[i].description + "</td>";
+		bodyHTML += "<td>" +data[i].Price + "</td>";
+		bodyHTML += "<td>" +data[i].FrequencyDesc + "</td>";
+		bodyHTML += "<td>" +data[i].SeasonDesc + "</td>";
+		bodyHTML += "<td>" +data[i].WeeksNumber + "</td>";
+		bodyHTML += "<td>" +data[i].FirstOccYear + "</td>";
+		bodyHTML += "<td>" +data[i].LastOccYear + "</td>";
+        bodyHTML += "<td><button type='button' class='alert button'><i class='fa fa-minus-circle fa-lg' aria-hidden='true'></i></button></td>";
+        bodyHTML+="</tr>";
+		$('#' + table).append(bodyHTML);
+		
+    }
 	deleteElementTable(table);
 }
 
@@ -3846,7 +3931,7 @@ function recivePeople(datos){
 	}
 
 	//console.table(unidades);
-	tablUnidadades(unidades, frequency, primero, ultimo);	
+	tablUnidadades(unidades, frequency, primero, ultimo, "tableUnidadesSelected");	
 	setValueUnitPrice();
 }
 
@@ -4086,6 +4171,11 @@ function getSizeTablePeoples(){
 	return $( "#"+tabla+" tr" ).length;
 }
 
+function getSizeTableUnits(){
+	var tabla = "tableUnidades";
+	return $( "#"+tabla+" tr" ).length;
+}
+
 function editLegalName(){
 	var ajaxData =  {
 		url: "contract/updateLegalName",
@@ -4175,3 +4265,51 @@ function deleteDocumentCon(idDoc, id){
 			);
 
 }
+
+/////////change units//////////////
+
+/***************************************************/
+/**@todo cambia las unidades asignadas al contrato**/
+/***************************************************/
+function changeUnits(){
+	
+	var units = getSizeTableUnits();
+	console.log(units)
+	if (units <= 0) {
+			alertify.error("You must add at least one unit");
+	}else{
+		msgUnits = alertify.success('Saving changes, please wait ....', 0);
+		$.ajax({
+			data: {
+				id:$("#idContratoX").text(),
+				unidades: getValueTableUnidades('tableUnidades'),
+				firstYear : $('#FirstYearCon').text(),
+				lastYear : $('#LastYearCon').text(),
+				weeks: getArrayValuesColumnTable("tableUnidades", 7),
+				viewId: 1,
+				//totalDiscountPacks
+			},
+			type: "POST",
+			dataType:'json',
+			url: 'contract/changeUnits'
+		}).done(function( data, textStatus, jqXHR ){
+			msgUnits.dismiss();
+			if(data.success){
+				alertify.success(data.message);
+			}else{
+				alertify.error("Try again");
+			}
+			//alertify.success("Susses");
+			/*if(data.items.length > 0){
+				$("#legalNameEdit").val(data.legalName);
+				drawTableSinHeadPeople(data.items, "peoplesContract");
+			}*/
+		}).fail(function( jqXHR, textStatus, errorThrown ) {
+			msgUnits.dismiss();
+			alertify.error("Try again");
+		});
+	}
+}
+
+
+

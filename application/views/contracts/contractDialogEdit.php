@@ -29,6 +29,8 @@
 		<label class="headerDescriptionTitle" id="editContractTitle"><?php  echo "[".$contract[0]->Folio ."]".$contract[0]->LegalName;?></label>
 		<label class="headerGeneral" id="editContracFloorPlan"><b><?php echo $contract[0]->FloorPlan ."/ Unit ". $encabezado[0]->ID ."/ Intv ".$encabezado[0]->Intv;?><b></label>
 		<label class="headerGeneral" id="editContracYear"><b>Year: <?php echo $contract[0]->FirstOccYear; ?></b></label>
+		<label style="display:none;" id="FirstYearCon"><?php echo $contract[0]->FirstOccYear; ?></label>
+		<label style="display:none;" id="LastYearCon"><?php echo $contract[0]->LastOccYear; ?></label>
 	</div>
 	<div class="small-12 medium-12 large-4 columns"  >
 		<label class="headerGeneral" id="editContracStatus">Status: <?php echo $statusActual;?></label>
@@ -106,38 +108,34 @@
 								</span>
 							</a>
 						</div>
-					<div class="small-6 columns" >
-						<a id="btnNextStatus" class="btn btn-primary">
-							<div class="label">Change Status</div>
-							<span>
-								<i id="iNextStatus" class="fa fa-refresh fa-lg"></i>
-							</span>
-						</a>
-					<!--echo '<a id="btnNextStatus" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>'. "<span>Next Status: ".$statusNext.'</span></a>';-->
-					</div>
-					<br>
-					<div class="small-12 columns">
-					<div class="small-5 columns">
-							<a id="btnAddPeopleEdit" attr_table="peopleContract" class="btn btn-primary spanSelect">
-								<div class="label">Add</div>
-								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+						<div class="small-6 columns" >
+							<a id="btnNextStatus" class="btn btn-primary">
+								<div class="label">Change Status</div>
+								<span>
+									<i id="iNextStatus" class="fa fa-refresh fa-lg"></i>
+								</span>
 							</a>
-							<a id="btnSavePeople" class="btn btn-primary spanSelect">
-								<div class="label">Save Changes</div>
-								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
-							</a>
+						<!--echo '<a id="btnNextStatus" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>'. "<span>Next Status: ".$statusNext.'</span></a>';-->
 						</div>
-<!-- 						<div class="input-group">
-											<span class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-											<input type="text" id="endDateRes" class="txtSearch input-group-field roundRight" >
-										</div> -->
-					<div class="small-2 columns">
-                        <label for="legalNameEdit" class="text-left">Legal Name</label>
-                    </div>
-                    <div class="small-5 columns">
-                        <input type="text" id="legalNameEdit" value='<?php echo $contract[0]->LegalName; ?>' name="legalNameEdit" class="round general" required="">
-                    </div>
-                	</div>
+						<br>
+						<div class="small-12 columns">
+							<div class="small-5 columns">
+								<a id="btnAddPeopleEdit" attr_table="peopleContract" class="btn btn-primary spanSelect">
+									<div class="label">Add</div>
+									<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+								</a>
+								<a id="btnSavePeople" class="btn btn-primary spanSelect">
+									<div class="label">Save Changes</div>
+									<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+								</a>
+							</div>
+							<div class="small-2 columns">
+								<label for="legalNameEdit" class="text-left">Legal Name</label>
+							</div>
+							<div class="small-5 columns">
+								<input type="text" id="legalNameEdit" value='<?php echo $contract[0]->LegalName; ?>' name="legalNameEdit" class="round general" required="">
+							</div>
+						</div>
 						<table id="peopleContract" width="100%">
 							<thead>
 								<tr class="trColspan" >
@@ -161,23 +159,37 @@
 				<div class="containerContract" style="margin-top:10px">
 				
                     <div class="row">
-                        <table id="tableUnidades" width="100%">
-                            <thead>
-								<tr class="trColspan">
-									<th colspan="9" class="colorCrema">Units</th>
-								</tr>
-								<tr>
-									<th class="cellEdit">ID</th>
-									<th class="cellEdit" >Code</th>
-									<th class="cellGeneral">Description</th>
-									<th class="cellGeneral">Price</th>
-									<th class="cellGeneral" ># Week</th>
-									<th class="cellGeneral" >Fisrt Year OCC</th>
-									<th class="cellGeneral" >Last Year OCC</th>
-								</tr>
-							</thead>
-							<tbody id="tableUnidadesContract"></tbody>
-                        </table>
+						<div class="small-12 columns">
+                            <!--<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>-->
+							<a id="btnChangeUnit" attr_table="tableUnidades" class="btn btn-primary spanSelect">
+								<div class="label">Change Unit</div>
+								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+							</a>
+							<a id="btnSaveUnit" class="btn btn-primary spanSelect">
+								<div class="label">Save Changes</div>
+								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+							</a>
+							
+                        </div>
+						<div class="small-12 columns">
+							<table id="tableUnidades" width="100%">
+								<thead class="colorCrema">
+                                    <tr>
+                                        <th class="cellEdit" >Id</th>
+                                        <th class="cellGeneral">Code</th>
+                                        <th class="cellGeneral">Description</th>
+                                        <th class="cellGeneral">Price</th>
+                                        <th class="cellGeneral">Frequency</th>
+                                        <th class="cellGeneral">Season</th>
+                                        <th class="cellGeneral"># Week</th>
+                                        <th class="cellGeneral">First Year OCC</th>
+                                        <th class="cellGeneral">Last Year OCC</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+								<tbody id="tableUnidadesContract"></tbody>
+							</table>
+						</div>
                     </div>
                 </div>
 			</fieldset>

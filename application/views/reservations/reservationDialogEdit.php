@@ -196,7 +196,7 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
                     <div class="row">
 						<div class="small-12 columns">
                             <!--<a id="btnAddPeople" href="#" class="button tiny"><i class="fa fa-user-plus"></i></a>-->
-							<a id="btnChangeUnitRes" attr_table="peopleContractRes" class="btn btn-primary spanSelect">
+							<a id="btnChangeUnitRes" attr_table="tableUnidades" class="btn btn-primary spanSelect">
 								<div class="label">Change Unit</div>
 								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 							</a>

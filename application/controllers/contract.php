@@ -28,7 +28,6 @@ class Contract extends CI_Controller {
 	}
 
 	public function saveContract(){
-
 		if($this->input->is_ajax_request()){	
 			ini_set('max_execution_time', 300);
 			$VALIDO =[
@@ -43,9 +42,10 @@ class Contract extends CI_Controller {
 				$this->createAccOcc($Ocupaciones);
 				$this->makeTransactions($idContrato);
 				$this->createUnidades($idContrato);
+				$inventary = $this->createUnidadesOcc($Ocupaciones);
 				$this->createGifts($idContrato);
 				$balanceFinal = $this->insertFinanciamiento($idContrato);
-				$this->createSemanaOcupacion($idContrato, $Ocupaciones);
+				$this->createSemanaOcupacion($idContrato, $Ocupaciones, $inventary);
 				if ($_POST['card']) {
 					$Tarjeta = isValidateCreditCard();
 					if ($Tarjeta['valido']) {
@@ -73,8 +73,7 @@ class Contract extends CI_Controller {
 					]);
 			}
 		}
-
-}
+	}
 
 
 private function makeTransactions($idContrato){
@@ -269,6 +268,43 @@ private function createUnidades($idContrato){
 	}
 }
 
+	private function createUnidadesOcc($occupacy){
+		
+		$inventary = array();
+		
+		for($j =0; $j< count($occupacy); $j++){
+			
+			//$this->insertPeoples($occupacy[$j], $resultAcc);
+			
+			$rango = intval(sizeof($_POST['unidades']));
+			$dias = sizeof($_POST['weeks']) * 7;
+			for($i =0; $i< $rango; $i++){
+				$Unidades = [
+					"fkResId"       => $occupacy[$j],
+					"fkUnitId"    	=> $_POST['unidades'][$i]['id'],
+					"Intv"          => $_POST['unidades'][$i]['week'],
+					"fkFloorPlanId" => $this->contract_db->selectIdFloorPlan($_POST['unidades'][$i]['floorPlan']),
+					"fkViewId"      => $_POST['viewId'],
+					"fkSeassonId"   => $this->contract_db->selectIdSeason($_POST['unidades'][$i]['season']),
+					"fkFrequencyId" => $this->contract_db->selectIdFrequency($_POST['unidades'][$i]['frequency']),
+					"WeeksNumber"   => $_POST['weeks'][$i],
+					"NightsNumber"  => $dias,
+					"FirstOccYear"  => $_POST['firstYear'],
+					"LastOccYear"   => $_POST['lastYear'],
+					"ynActive"      => 1,
+					"CrBy"          => $this->nativesessions->get('id'),
+					"CrDt"			=> $this->getToday()
+				];
+				$ID = $this->contract_db->insertReturnId('tblResInvt', $Unidades);
+				array_push($inventary, array( 'id' => $ID, 'unit' => $_POST['unidades'][$i]['id'] ));
+			}
+		}
+		
+		return $inventary;
+	}
+	
+
+
 /*private function createUnidadesOcc($occupacy){
 	//$cont2 = count($occupacy);
 	for($j =0; $j< count($occupacy); $j++){
@@ -355,96 +391,83 @@ private function insertPeoples($idContrato, $acc){
 	public function savePeople(){
 		if($this->input->is_ajax_request()){
 			$id = $_POST['id'];
+			$reservation = $this->contract_db->getResOfContract($id);
 			$people = $_POST['peoplesMOD'];
-			$resPeople = $this->contract_db->getPeople($id);
-			foreach($resPeople as $item){
-				$exist = 0;
-				foreach($people as $person){
-					if($item->fkPeopleId == $person['id']){
-						$exist = 1;
+			
+			foreach($reservation as $res){
+				$resPeople = $this->contract_db->getPeople($res->ID);
+				foreach($resPeople as $item){
+					$exist = 0;
+					foreach($people as $person){
+						if($item->fkPeopleId == $person['id']){
+							$exist = 1;
+							$update = [
+								"ynPrimaryPeople"	=> $person['primario'],
+								"YnBenficiary"		=> $person['beneficiario'],
+								"ynActive"			=> 1,
+								"MdBy"             	=> $this->nativesessions->get('id'),
+								"MdDt"				=> $this->getToday()
+							];
+							$condicion = "pkResPeopleAccId = " . $item->ID ;
+							$this->contract_db->updateReturnId('tblResPeopleAcc', $update, $condicion);
+							$person['exist'] = 1;
+						}
+					}
+					if($exist == 0){
 						$update = [
-							"ynPrimaryPeople"	=> $person['primario'],
-							"YnBenficiary"		=> $person['beneficiario'],
-							"ynActive"			=> 1,
+							"ynPrimaryPeople"	=> 0,
+							"YnBenficiary"		=> 0,
+							"ynActive"			=> 0,
 							"MdBy"             	=> $this->nativesessions->get('id'),
 							"MdDt"				=> $this->getToday()
 						];
-						$condicion = "pkResPeopleAccId = " . $item->ID ;
+						$condicion = "pkResPeopleAccId = " . $item->ID;
 						$this->contract_db->updateReturnId('tblResPeopleAcc', $update, $condicion);
-						$person['exist'] = 1;
 					}
 				}
-				if($exist == 0){
-					$update = [
-						"ynPrimaryPeople"	=> 0,
-						"YnBenficiary"		=> 0,
-						"ynActive"			=> 0,
-						"MdBy"             	=> $this->nativesessions->get('id'),
-						"MdDt"				=> $this->getToday()
-					];
-					$condicion = "pkResPeopleAccId = " . $item->ID;
-					$this->contract_db->updateReturnId('tblResPeopleAcc', $update, $condicion);
-				}
-			}
-			foreach($people as $person){
-				$exist = 0;
-				foreach($resPeople as $item){
-					if($item->fkPeopleId == $person['id']){
-						$exist = 1;
+				foreach($people as $person){
+					$exist = 0;
+					
+					foreach($resPeople as $item){
+						if($item->fkPeopleId == $person['id']){
+							$exist = 1;
+						}
 					}
-				}
-				if($exist == 0){
-					if($resPeople > 0){
-						$acc = $resPeople[0];
-						$personas = [
-							"fkResId"    		=> $id,	
-							"fkPeopleId"        => $person["id"],
-							"fkAccId"           => $acc->fkAccId,
-							"ynPrimaryPeople"   => $person['primario'],
-							"ynBenficiary"		=> $person['beneficiario'],
-							"ynActive"          => 1,
-							"CrBy"             	=> $this->nativesessions->get('id'),
-							"CrDt"				=> $this->getToday()
-						];
-						$this->contract_db->insertReturnId('tblResPeopleAcc ', $personas);
+					//echo $exist;
+					if($exist == 0){
+						if($resPeople > 0){
+							$acc = $resPeople[0];
+							$personas = [
+								"fkResId"    		=> $res->ID,	
+								"fkPeopleId"        => $person["id"],
+								"fkAccId"           => $acc->fkAccId,
+								"ynPrimaryPeople"   => $person['primario'],
+								"ynBenficiary"		=> $person['beneficiario'],
+								"ynActive"          => 1,
+								"CrBy"             	=> $this->nativesessions->get('id'),
+								"CrDt"				=> $this->getToday()
+							];
+							$this->contract_db->insertReturnId('tblResPeopleAcc ', $personas);
+						}
 					}
 				}
 			}
-			
-			// $peticion = [
-			// 	"tabla" 	=> 'tblRes',
-			// 	"valor" 	=> 'LegalName',
-			// 	"alias" 	=> 'legalName',
-			// 	"codicion"	=> 'pkResId',
-			// 	"id"		=>	$id 
-			// ];
 			$names = $this->contract_db->getLegalNames($id);
 			$nameL = '';
-
-			for ($i=0; $i < sizeof($names); $i++) {
-					$nameL .= $names[$i]->names;
-					if ($i+1 != sizeof($names)) {
-						$nameL .=  ' and ';
-					}
+			for ($i=0; $i < sizeof($names); $i++){
+				$nameL .= $names[$i]->names;
+				if ($i+1 != sizeof($names)) {
+					$nameL .=  ' and ';
 				}
-
+			}
 			$legalName = $_POST['LegalName'];
 			if ($nameL != $legalName) {
-				//var_dump($nameL);
 				$condicion = "pkResId = " . $id;
 				$datos = [
 					"LegalName" => $nameL
 				];
 				$afectados = $this->contract_db->updateReturnId("tblRes", $datos, $condicion);
-				//var_dump($afectados);
 			}
-/*			$peticion = [
-					"tabla" 	=> 'tblRes',
-					"valor" 	=> 'LegalName',
-					"alias" 	=> 'legalName',
-					"codicion"	=> 'pkResId',
-					"id"		=>	$id 
-				];*/
 			$name = $this->contract_db->propertyTable2($id);
 			$data = $this->contract_db->getPeopleContract3($id);
 			echo json_encode( array( 'success' => true, 'message' => "People save", 'items' => $data, "legalName" => $name) );
@@ -905,42 +928,45 @@ private function insertScheduledPaymentsTrx($idContrato){
 		}
 	}
 }
-public function createSemanaOcupacion($idContrato, $Ocupaciones){
 
-	$Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
+	public function createSemanaOcupacion($idContrato, $Ocupaciones, $inventary){
 
-	$Unidades = [];
-	$fYear = $Years[0]->FirstOccYear;
-	$lYear = $Years[0]->LastOccYear;
+		$Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
 
-	if ($lYear <= $fYear + 10) {
-		$rango = $lYear; 
-	}else{
-		//$rango = 10;
-		$rango = $fYear + 10;
+		$Unidades = [];
+		$fYear = $Years[0]->FirstOccYear;
+		$lYear = $Years[0]->LastOccYear;
+
+		if ($lYear <= $fYear + 10) {
+			$rango = $lYear; 
+		}else{
+			//$rango = 10;
+			$rango = $fYear + 10;
+		}
+
+		$cont = 0;
+		for ($i = $fYear; $i <= $rango ; $i++) {
+			array_push($Unidades, $this->contract_db->selectUnitiesContract($Ocupaciones[$cont], $i));
+			$cont++;
+		}
+		for ($i=0; $i < sizeof($Unidades); $i++) {
+			for ($j=0; $j < sizeof($Unidades[$i]); $j++) {
+				$OcupacionTable = [
+					"fkResId"    	=> $Ocupaciones[$i],
+					"fkResInvtId"   => $Unidades[$i][$j]->pkResInvtId,
+					"OccYear"       => $Unidades[$i][$j]->Year,
+					"NightId"       => $Unidades[$i][$j]->fkDayOfWeekId,
+					"fkResTypeId"   => $this->contract_db->selectRestType('Occ'),
+					"fkOccTypeId"   => 1,
+					"fkCalendarId" 	=> $Unidades[$i][$j]->pkCalendarId,
+					"ynActive"   	=> 1,
+					"CrBy"          => $this->nativesessions->get('id'),
+					"CrDt"			=> $this->getToday()
+				];
+				$this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
+			 }
+		}
 	}
-
-	for ($i = $fYear; $i <= $rango ; $i++) {
-		array_push($Unidades, $this->contract_db->selectUnitiesContract($idContrato, $i));
-	}
-	for ($i=0; $i < sizeof($Unidades); $i++) {
-		for ($j=0; $j < sizeof($Unidades[$i]); $j++) {
-			$OcupacionTable = [
-				"fkResId"    	=> $Ocupaciones[$i],
-				"fkResInvtId"   => $Unidades[$i][$j]->pkResInvtId,
-				"OccYear"       => $Unidades[$i][$j]->Year,
-				"NightId"       => $Unidades[$i][$j]->fkDayOfWeekId,
-				"fkResTypeId"   => $this->contract_db->selectRestType('Occ'),
-				"fkOccTypeId"   => 1,
-				"fkCalendarId" 	=> $Unidades[$i][$j]->pkCalendarId,
-				"ynActive"   	=> 1,
-				"CrBy"          => $this->nativesessions->get('id'),
-				"CrDt"			=> $this->getToday()
-			];
-			$this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
-		 }
-	}
-}
 
 public function createIntvContract($Ocupaciones) {
 	$Intervalos = [];
@@ -1455,6 +1481,7 @@ public function getFlagsContract(){
 	public function getUnidades(){
 		if($this->input->is_ajax_request()) {
 			$filtros = $this->receiveWords($_POST);
+			$filtros = $this->filterUnits($filtros);
 			$unidades = $this->contract_db->getUnidades($filtros);
 			echo json_encode($unidades);
 		}
@@ -1890,6 +1917,82 @@ private function search($array, $key, $value){
 			echo json_encode($flags);
 		}
 	}
+	
+	/***************************************************/
+	/******************Change Units*********************/
+	/***************************************************/
+	
+	public function changeUnits(){
+		if($this->input->is_ajax_request()){
+			ini_set('max_execution_time', 300);
+			$id = $_POST['id'];
+			//elimina los ocupaciones y unidades
+			$resInv = $this->contract_db->getResInvByIdCon($id);
+			
+			foreach($resInv as $item){
+				$condicion = "fkResInvtId = " . $item->pkResInvtId;
+				$this->contract_db->deleteReturnId('tblResOcc',$condicion);
+				$condicion = "pkResInvtId = " . $item->pkResInvtId;
+				$this->contract_db->deleteReturnId('tblResInvt',$condicion);
+			}	
+			$this->createUnidades($id);
+			//creamos las nuevas reservaciones
+			$res = $this->contract_db->getResCon($id);
+			$Ocupaciones = [];
+			foreach( $res as $item){
+				array_push($Ocupaciones, $item->pkResId);
+			}
+			$inventary = $this->createUnidadesOcc($Ocupaciones);
+			$this->createSemanaOcupacion2($id, $Ocupaciones, $inventary, $res);
+				
+			echo json_encode( array( 'success' => true, 'message' => "Units save", 'items' => $res ) );
+		}
+	}
+	
+	public function createSemanaOcupacion2($idContrato, $Ocupaciones, $inventary, $res){
+
+		$Years = $this->contract_db->selectYearsUnitiesContract($idContrato);
+
+		$Unidades = [];
+		$fYear = $Years[0]->FirstOccYear;
+		$lYear = $Years[0]->LastOccYear;
+
+		if ($lYear <= $fYear + 10) {
+			$rango = $lYear; 
+		}else{
+			//$rango = 10;
+			$rango = $fYear + 10;
+		}
+
+		$cont = 0;
+		
+		foreach($res as $item){
+			array_push($Unidades, $this->contract_db->selectUnitiesContract($item->pkResId, $item->FirstOccYear ));
+		}
+		
+		/*for ($i = $fYear; $i <= $rango ; $i++) {
+			
+			array_push($Unidades, $this->contract_db->selectUnitiesContract($Ocupaciones[$cont], $i));
+			$cont++;
+		}*/
+		for ($i=0; $i < sizeof($Unidades); $i++) {
+			for ($j=0; $j < sizeof($Unidades[$i]); $j++) {
+				$OcupacionTable = [
+					"fkResId"    	=> $Ocupaciones[$i],
+					"fkResInvtId"   => $Unidades[$i][$j]->pkResInvtId,
+					"OccYear"       => $Unidades[$i][$j]->Year,
+					"NightId"       => $Unidades[$i][$j]->fkDayOfWeekId,
+					"fkResTypeId"   => $this->contract_db->selectRestType('Occ'),
+					"fkOccTypeId"   => 1,
+					"fkCalendarId" 	=> $Unidades[$i][$j]->pkCalendarId,
+					"ynActive"   	=> 1,
+					"CrBy"          => $this->nativesessions->get('id'),
+					"CrDt"			=> $this->getToday()
+				];
+				$this->contract_db->insertReturnId('tblResOcc', $OcupacionTable);
+			 }
+		}
+	}
 
 	private function getFilters($array, $dateTable, $section){
 		if(isset($array['filters'])){
@@ -1908,6 +2011,27 @@ private function search($array, $key, $value){
 			$sql['words'] = false;
 		}
 		return $sql;
+	}
+	
+	private function filterUnits($array){
+		$sql = $array;
+		if(isset($sql['units'])){
+			$sql['units'] = $this->receiveRestrict($array['units'], 'U.pkUnitId');
+		}
+		return $sql;
+	}
+	
+	private function receiveRestrict($array, $table) {
+		$restrict = " ";
+		for($i=0;$i<count($array);$i++){
+			$restrict .= $table . " != " . $array[$i];
+			if($i != ( count($array) - 1 ) ){
+				$restrict .= " AND ";
+			}else{
+				$restrict .= " ";
+			}
+		}
+		return $restrict;
 	}
 
 	private function receiveFilter($filters){

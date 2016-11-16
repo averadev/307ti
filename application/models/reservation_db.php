@@ -1570,7 +1570,7 @@ class Reservation_db extends CI_Model {
 	public function getResPeople($idRes){
 		$this->db->select('rpa.pkResPeopleAccId as ID, rpa.fkPeopleId, rpa.ynPrimaryPeople, rpa.YnBenficiary, rpa.ynActive, rpa.fkAccId ');
 		$this->db->from('tblResPeopleAcc rpa');
-		$this->db->where('rpa.ynActive',1);
+		//$this->db->where('rpa.ynActive',1);
 		$this->db->where('rpa.fkResId', $idRes);
 		$query = $this->db->get();
         return $query->result();
@@ -1668,7 +1668,7 @@ class Reservation_db extends CI_Model {
         return $this->db->affected_rows();
     }
 	
-	 public function deleteReturnId($table, $condicion){
+	public function deleteReturnId($table, $condicion){
 		$this->db->where($condicion);
 		$this->db->delete($table);
         //return $this->db->affected_rows();
