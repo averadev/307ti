@@ -108,12 +108,34 @@
 								</span>
 							</a>
 						</div>
+<<<<<<< HEAD
 						<div class="small-6 columns" >
 							<a id="btnNextStatus" class="btn btn-primary">
 								<div class="label">Change Status</div>
 								<span>
 									<i id="iNextStatus" class="fa fa-refresh fa-lg"></i>
 								</span>
+=======
+					<div class="small-6 columns" >
+						<a id="btnNextStatus" class="btn btn-primary">
+							<div class="label">Change Status</div>
+							<span>
+								<i id="iNextStatus" class="fa fa-refresh fa-lg"></i>
+							</span>
+						</a>
+
+					</div>
+					<br>
+
+					<div class="small-6 columns">
+							<a id="btnAddPeopleEdit" attr_table="peopleContract" class="btn btn-primary spanSelect">
+								<div class="label">Add</div>
+								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+							</a>
+							<a id="btnSavePeople" class="btn btn-primary spanSelect">
+								<div class="label">Save Changes</div>
+								<img src="<?php echo base_url().IMG; ?>common/more.png"/>
+>>>>>>> origin/master
 							</a>
 						<!--echo '<a id="btnNextStatus" class="button tiny"><i id="iNextStatus" class="fa fa-refresh fa-lg"></i>'. "<span>Next Status: ".$statusNext.'</span></a>';-->
 						</div>
@@ -136,6 +158,16 @@
 								<input type="text" id="legalNameEdit" value='<?php echo $contract[0]->LegalName; ?>' name="legalNameEdit" class="round general" required="">
 							</div>
 						</div>
+<<<<<<< HEAD
+=======
+					<div class="small-2 columns">
+                        <label for="legalNameEdit" class="text-left">Legal Name</label>
+                    </div>
+                    <div class="small-4 columns">
+                        <input type="text" id="legalNameEdit" value='<?php echo $contract[0]->LegalName; ?>' name="legalNameEdit" class="round general" required="">
+                    </div>
+
+>>>>>>> origin/master
 						<table id="peopleContract" width="100%">
 							<thead>
 								<tr class="trColspan" >
@@ -712,7 +744,6 @@
 	</div>
 	<!-- archivos -->
 	<div id="tab-CFiles" class="large-12 columns tab-modal" style="display:none;">
-		<form  data-abide='ajax'>
 			<fieldset class="fieldset">
 				<div class="containerContract" id="contentTableFile">
 					<div class="row">
@@ -741,7 +772,6 @@
 					<img src="<?php echo base_url().IMG; ?>common/more.png"/>
 				</a>
 			</div>
-		</form>
 	</div>
 	
 </div>

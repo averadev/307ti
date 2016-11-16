@@ -31,7 +31,6 @@ class collection extends CI_Controller {
 			$page = 0;
 			$sql = $this->getFilters($_POST, '');
 			$data = $this->collection_db->getCollection($sql);
-			//$data = array_slice($collection, $page, 25);
 			if( count($data) > 0 ){
 				foreach( $data[0] as $key => $item ){
 					$keys[] = $key;
@@ -223,7 +222,11 @@ class collection extends CI_Controller {
 			$this->load->view('collection/collectionDialogEdit');
 		}
 	}
-	
+	public function modalReport(){
+		if($this->input->is_ajax_request()) {
+			$this->load->view('collection/modalReport');
+		}
+	}
 	public function modalAcc(){
 		if($this->input->is_ajax_request()){
 			$typeAcc = $_GET['typeAcc'];

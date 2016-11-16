@@ -240,6 +240,80 @@ class pdfs_db extends CI_Model{
         $this->db->insert($table, $data);
         return $this->db->insert_id();
     }*/
+
+   public function getCollection2($filters){
+		$sql = "";
+        $this->db->distinct();
+        $this->db->select('r.pkResId, U.UnitCode');
+        $this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
+        $this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
+		$this->db->select('tt.TrxTypeDesc ,at1.Amount, otg.OccTypeGroupCode as OCCTYPECODE');
+		//, CONVERT(VARCHAR(11),at1.DueDt,106) as dueDate
+        //$this->db->select('DATEDIFF(day, CONVERT(VARCHAR(11),at1.DueDt,106), CONVERT(VARCHAR(11),GETDATE(),106)) AS DiffDate');
+		
+		$this->db->from('tblAccTrx at1');
+        $this->db->join('tblAcc a', 'a.pkAccId = at1.fkAccid');
+        $this->db->join('tblAcctype att', 'att.pkAcctypeId = a.fkAccTypeId');
+        $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = at1.fkTrxTypeId');
+        $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId and rpa.ynPrimaryPeople = 1');
+		$this->db->join('tblRes r', 'r.pkResId = rpa.fkResId and r.pkResRelatedId is Null');
+		$this->db->join('tblResInvt ri', 'r.pkResId = ri.fkResId');
+		$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
+		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
+		$this->db->join('tblOccTypeGroup otg', 'otg.pkOccTypeGroupId = ot.fkOccTypeGroupId');
+		$this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId');
+		if (!is_null($filters)){
+			if (isset($filters['words'])) {
+			if($filters['words'] != false){
+				if(isset($filters['words']['TrxIdColl'])){
+					$this->db->where('at1.pkAccTrxId', $filters['words']['TrxIdColl']);
+				}
+				if(isset($filters['words']['FolioColl'])){
+					$this->db->where('r.Folio', $filters['words']['FolioColl']);
+				}
+				if(isset($filters['words']['TrxAmtColl'])){
+					$this->db->where('at1.Amount', $filters['words']['TrxAmtColl']);
+				}
+				if(isset($filters['words']['PastDueDateColl'])){
+					if(!isset($filters['dates']['DueDateColl'])){
+						$this->db->where(" DATEDIFF(day, CONVERT(VARCHAR(11),at1.DueDt,106), CONVERT(VARCHAR(11),GETDATE(),106)) = ", $filters['words']['PastDueDateColl']);
+					}else{
+						$date = $filters['dates']['DueDateColl'];
+						$this->db->where(" DATEDIFF(day, CONVERT(VARCHAR(11),'" . $date . "',106), CONVERT(VARCHAR(11),GETDATE(),106)) = ", $filters['words']['PastDueDateColl']);
+					}
+				}
+				if(isset($filters['words']['LoginUserColl'])){
+					$this->db->where('us.UserLogin', $filters['words']['LoginUserColl']);
+				}
+			}
+			}
+			
+			if(isset($filters['options'])){
+				if(isset($filters['options']['TrxTypeColl'])){
+					$this->db->where('tt.pkTrxTypeId', $filters['options']['TrxTypeColl']);
+				}
+				if(isset($filters['options']['AccTypeColl'])){
+					$this->db->where('att.pkAcctypeId', $filters['options']['AccTypeColl']);
+				}
+				if( isset($filters['options']['OccTypeGroupColl']) && !isset($filters['options']['OccTypeColl']) ){
+					$this->db->where('otg.pkOccTypeGroupId', $filters['options']['OccTypeGroupColl']);
+				}else if( isset($filters['options']['OccTypeGroupColl']) && isset($filters['options']['OccTypeColl'] ) ){
+					$this->db->where('ot.pkOccTypeId', $filters['options']['OccTypeColl']);
+				}
+			}
+			if(isset($filters['dates'])){
+				if(isset($filters['dates']['DueDateColl'])){
+					$this->db->where('CONVERT(VARCHAR(10),at1.DueDt,101)', $filters['dates']['DueDateColl']);
+				}
+				if(isset($filters['dates']['CrDateColl'])){
+					$this->db->where('CONVERT(VARCHAR(10),at1.CrDt,101)', $filters['dates']['CrDateColl']);
+				}
+			}
+		}
+		
+		return  $this->db->get()->result();
+		
+	}
 	   
 }
 /*pdf_model.php

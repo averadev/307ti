@@ -41,6 +41,12 @@ $(document).ready(function(){
 	$(document).on( 'click', '#postBatch', function(){
 		postBatch();
 	});
+	$(document).off( 'click', '#cancelBatch');
+	$(document).on( 'click', '#cancelBatch', function(){
+		var IDStatus = 6;
+		var IDBatch = $("#cventaPrice").text().trim();
+		updateStatusBatch(IDStatus, IDBatch);
+	});
 });
 
 function newBacth(){
@@ -284,10 +290,32 @@ function postBatch(){
 function postBatchMsj(data){
 	msgMaintenance.dismiss();
 	alertify.success(data["mensaje"]);
+	$("#botonesBatch").empty();
 }
 
 function reportMaintenance(id){
 
 	var url = "Pdfs/reportMaintanance?id=" + id;
 	window.open(url);
+}
+
+function updateStatusBatch(ID, IDBatch){
+	msgMaintenanceStatus = alertify.success('Saving changes, please wait ....', 0);
+	var ajaxDatos =  {
+		url: "Maintenance/updateStatus",
+		tipo: "json",
+		datos: {
+				IDStatus: ID,
+				IDBatch: IDBatch
+		},
+		funcionExito : updateStatusBatchMsj,
+		funcionError: mensajeAlertify
+	};
+	ajaxDATAG(ajaxDatos);
+}
+
+function updateStatusBatchMsj(data){
+	msgMaintenanceStatus.dismiss();
+	alertify.success(data["mensaje"]);
+	$("#botonesBatch").empty();
 }

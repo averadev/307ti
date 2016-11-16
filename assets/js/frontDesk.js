@@ -6,9 +6,9 @@
 */
 
 //var maxHeight = 400;
-var maxHeight = screen.height * .10;
-maxHeight = screen.height - maxHeight;
-
+// var maxHeight = screen.height * .10;
+// maxHeight = screen.height - maxHeight;
+getSizeModalGeneral();
 /*var dialogEditContract = modalEditReservations();
 var dialogHKConfig = modalHKConfig(0);
 var peopleDialogHK = addPeopleDialogHKC("");
@@ -485,7 +485,7 @@ function modalEditReservations(){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: maxWidth,
      	modal: true,
 		dialogClass: 'dialogModal',
      	buttons: [{
@@ -561,7 +561,7 @@ function modalHKConfig(id){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: maxWidth,
      	modal: true,
      	buttons: [{
 	       	text: "Cancel",
@@ -814,7 +814,7 @@ function addPeopleDialogHKC(typePeople) {
 		},
 		autoOpen: false,
 		height: maxHeight,
-		width: "50%",
+		width: maxWidth,
 		modal: true,
 		buttons: [{
 			text: "Ok",
@@ -960,7 +960,7 @@ function addUnitDialogHKC(){
 		},
 		autoOpen: false,
 		height: maxHeight,
-		width: "50%",
+		width: maxWidth,
 		modal: true,
 		buttons: [{
 			text: "Ok",
@@ -1168,7 +1168,7 @@ function editHKStatus(filters){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: "50%",
+     	width: maxWidth,
      	modal: true,
      	buttons: [{
 			text: "Cancel",
@@ -1402,7 +1402,7 @@ function showNewReservation(selector){
 function showReservation(selector){
 	//dialogEditContract.dialog('open');
 	var idRes = $(selector).attr('reservation');
-	 var dialogEditReservation = modalEditReservation(idRes);
+	var dialogEditReservation = modalEditReservation(idRes);
 	dialogEditReservation.dialog("open");
 }
 

@@ -577,5 +577,7 @@
 		</div>
 	<input type="hidden" value="0" id="idPeople" />
 </div>-->
-
+<div id="dialog-Edit-ReservationPeople" title="Reservation > Edit Reservation" style="display: none;"></div>
+<script type="text/javascript" src="<?php echo base_url().JS; ?>reservation.js"></script>
 <script type="text/javascript" src="<?php echo base_url().JS; ?>people.js"></script>
+

@@ -50,6 +50,10 @@ $(document).ready(function() {
 		ajaxSelectColl('collection/getOccupancyTypes?id='+id,'try again', generalSelects, 'OccTypeColl');
 	});
 	
+	$(document).off( 'click', '#btnCollReport');
+	$(document).on( 'click', '#btnCollReport', function () {
+		showModalReportAdmin();
+	});
 	//$('#textInvStartDate').val(getCurrentDate())
 });
 
@@ -407,6 +411,7 @@ function opcionAccountColl(attrType){
 					setDataOpcionAccountColl(attrType);
 					getTrxTypeColl('collection/getTrxType', attrType, 'try again', generalSelects, 'slcTransTypeAcc');
 					ajaxSelectsColl('collection/getTrxClass', 'try again', generalSelects, 'slcTrxClassAcc');
+					ajaxSelectsColl('contract/getCurrency', 'try again', generalSelects, 'CurrencyTrxClassAcc');
 				});
 			}else{
 				showLoading(div, true);
@@ -634,4 +639,48 @@ function saveAccContRes(attrType){
 		msgColletion.dismiss();
 		alertify.error("Try Again");
 	});
+}
+
+function showModalReportAdmin(){
+	var ajaxData =  {
+		url: "collection/modalReport",
+		tipo: "html",
+		datos: {},
+		funcionExito : addHTMLGeneral,
+		funcionError: mensajeAlertify
+	};
+	var modalPropiedades = {
+		div: "dialog-AdminReport",
+		altura: 275,
+		width: "30%",
+		onOpen: ajaxDATAG,
+		onSave: showReport,
+		botones :[{
+			text: "Close",
+		    "class": 'dialogModalButtonCancel',
+		    click: function() {
+		    	$(this).dialog('close');
+		    }
+		   	},{
+	       		text: "Generate",
+	       		"class": 'dialogModalButtonAccept',
+	       		click: function() {
+					showReport();
+	       		}
+	     	}]
+		};
+
+	if (modalCreditLimit!=null) {
+		modalCreditLimit.dialog( "destroy" );
+	}
+	modalCreditLimit = modalGeneralG(modalPropiedades, ajaxData);
+	modalCreditLimit.dialog( "open" );
+}
+
+function showReport(id){
+	var TextoOCC = $("#OccTypeGroupColl option:selected").text();
+	var IDOCC = $("#OccTypeGroupColl").val();
+
+	var url = "Pdfs/reportAdminTRX?IDOCC="+IDOCC;
+	window.open(url);
 }

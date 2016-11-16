@@ -313,5 +313,20 @@ Class Maintenance_db extends CI_MODEL
             return $row->pkTrxClassId;
         }
     }
+
+    public function getStatusBatchByID($ID){
+
+        $this->db->select("fkStatusId");
+        $this->db->from('tblbatch');
+        $this->db->where('pkBatchId', $ID);
+
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->fkStatusId;
+        }
+    }
 }
 //end model
