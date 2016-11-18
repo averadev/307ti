@@ -118,7 +118,7 @@ class Maintenance extends CI_Controller {
 			"Debit-"		=> 0,
 			"Credit+"		=> 0,
 			"Amount"		=> $precio,
-			"AbsAmount"		=> 0,
+			"AbsAmount"		=> $precio,
 			"Curr1Amt"		=> valideteNumber($euros),
 			"Curr2Amt"		=> valideteNumber($florines),
 			"Remark"		=> '', //

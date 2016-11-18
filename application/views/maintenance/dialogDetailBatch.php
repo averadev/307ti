@@ -177,7 +177,7 @@
 								<tr>
 									<th class="cellEdit">Print</th>
 									<th class="cellEdit">CSFBatchID</th>
-									
+									<th class="cellEdit">Folio</th>
 									<th class="cellGeneral">Legal Name</th>
 									<th class="cellGeneral">Maintenance Year</th>
 									<th class="cellGeneral">MaintenanceType</th>
@@ -196,6 +196,7 @@
 									foreach($Batchs as $item){?>
 									<tr>
 									<td><?php echo $item->ID; ?></td>
+									<td><?php echo $item->contractID; ?></td>
 									<td><?php echo $item->Folio; ?></td>
 									<td><?php echo $item->LegalName; ?></td>
 									<td><?php echo $item->Year; ?></td>

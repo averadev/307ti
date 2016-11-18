@@ -995,6 +995,7 @@ function ajaxDATAG(datos, div){
 	    url: datos.url,
 	    dataType: datos.tipo,
 	    success: function(data){
+			console.log(data)
 			datos.funcionExito(data, div);
 	    },
 	    error: function(){
