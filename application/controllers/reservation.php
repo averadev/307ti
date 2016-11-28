@@ -1013,23 +1013,24 @@ private function comprubaArray($valor, $array){
 				$amount = floatval($_POST['amount']);
 				$update = array();
 				$insertTrx = array();
+				$totalAmou2 = 0;
 				for($i = 0; $i<count($idTrans); $i++){
 					//$precio = valideteNumber($_POST['amount']);
 					
 					if($amount > 0){
 						$trans = floatval($valTrans[$i]);
 						$totalAmou = 0;
-						$totalAmou2 = 0;
+						$totalAmou2 += 0;
 						if($trans == $amount){
-							$totalAmou2 = $trans;
+							$totalAmou2 += $trans;
 							$amount = 0;
 						}else if( $trans > $amount ){
-							$totalAmou2 = $amount;
+							$totalAmou2 += $amount;
 							$totalAmou = $trans - $amount;
 							$amount = 0;
 						}else if($trans < $amount){
 							$amount = $amount - $trans;
-							$totalAmou2 = $trans;
+							$totalAmou2 += $trans;
 						}
 						$Moneda = $_POST['currency'];
 						$conversion = $this->convertMoney($Moneda, $totalAmou);
