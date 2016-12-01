@@ -197,7 +197,7 @@
 									<tr>
 									<td><?php echo $item->ID; ?></td>
 									<td><?php echo $item->contractID; ?></td>
-									<td><?php echo $item->Folio; ?></td>
+									<td><?php echo "1-". $item->Folio; ?></td>
 									<td><?php echo $item->LegalName; ?></td>
 									<td><?php echo $item->Year; ?></td>
 									<td><?php echo $item->BatchTypeDesc; ?></td>

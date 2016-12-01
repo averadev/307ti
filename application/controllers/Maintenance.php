@@ -137,6 +137,7 @@ class Maintenance extends CI_Controller {
 			$sql = $this->receiveWords($_POST);
 			$DELETE = [];
 			$contracts = $this->Maintenance_db->getContracts($sql);
+
 			//echo json_encode($contracts);
 			$contracts2 = $this->Maintenance_db->getContractsMTN();
 			if ($contracts2 != null && $contracts != null) {
