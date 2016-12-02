@@ -1318,9 +1318,22 @@ public function nextStatusContract(){
 				
 				$code = $this->contract_db->getStatusCode($IdStatus);
 				$RESRELATED = $this->contract_db->getRRelatedByID($id);
-
+				
+				$update2 = [
+					"ynActive" 	=> 0
+				];
+				$condicion2 = "fkResId = " . $id;
+				$this->contract_db->updateReturnId("tblResInvt", $update2, $condicion2);
+				
 				for ($i=0; $i < sizeof($RESRELATED); $i++) { 
 					$resConf = $this->contract_db->getConfirmationCodeByID($RESRELATED[$i]->ID);
+					
+					$update2 = [
+						"ynActive" 	=> 0
+					];
+					$condicion2 = "fkResId = " . $RESRELATED[$i]->ID;
+					$this->contract_db->updateReturnId("tblResInvt", $update2, $condicion2);
+					
 					$this->db->query("exec  spCNXRes @Resconf='" . $resConf . "', @StatusCode='" . $code . "'");
 				}
 				
