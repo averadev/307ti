@@ -1178,7 +1178,8 @@ class Contract_db extends CI_Model {
         $this->db->join('tblSeason SE', 'PRI.fkSeasonId = SE.pkSeasonId', 'inner');
         $this->db->join('tblProperty P', 'P.pkPropertyId = U.fkPropertyId', 'inner');
         $this->db->join('tblView V', 'U.fkViewId = V.pkViewId', 'inner');
-        $this->db->join('tblResInvt IV', 'U.pkUnitId = IV.fkUnitId and IV.Intv = PRI.Week', 'left');
+        $this->db->join('tblResInvt IV', 'U.pkUnitId = IV.fkUnitId and IV.Intv = PRI.Week and IV.ynActive = 1', 'left');
+		//$this->db->where('IV.ynActive', 1);
         $this->db->where('PRI.fkStatusId', 17);
         $this->db->where('(ISNULL(IV.LastOccYear+1, year(getDate()))<=2087)');
         
