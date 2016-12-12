@@ -2361,26 +2361,19 @@ function getAccounts( id, typeInfo, typeAcc ){
 				var maintenance = data["maintenance"];
 				var acc = data["acc"];
 				
-				
-				//var loan = parsearSALE(loan);
 				if( sale){
 					var sale = parsearSALE(sale);
 					drawTable2( sale, "tableAccountSeller", false, "" );
 					setTableAccount( sale, "tableSaleAccRes" );
 				}
 				if( maintenance){
-					if (maintenance.length>0) {
+					if (maintenance.length > 0) {
 						var maintenance = parsearSALE(maintenance);
 						drawTable2( maintenance, "tableAccountMaintenance", false, "" );
 						setTableAccount( maintenance, "tableMainteAccRes" );
 					}
-					
+						
 				}
-				/*if( loan.length > 0 ){
-					drawTable2( loan, "tableAccountLoan", false, "" );
-					setTableAccount( loan, "tableLoanAccRes" );
-				}*/
-				console.table(acc);
 				for( i=0; i<acc.length; i++ ){
 					var nameSafe = acc[i].accType;
 					$('#btNewTransAcc').data( 'idAcc' + nameSafe, acc[i].fkAccId );
