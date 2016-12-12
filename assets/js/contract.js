@@ -2240,7 +2240,10 @@ function getUnitiesContract(id){
 	    url: "contract/getUnitiesContract",
 	    dataType:'json',
 	    success: function(data){
-	    	drawTableSinHeadUnit(data, "tableUnidadesContract");
+	    	if (data) {
+	    		drawTableSinHeadUnit(data, "tableUnidadesContract");
+	    	}
+	    	
 	    },
 	    error: function(){
 	        alertify.error("Try again");
@@ -2267,7 +2270,13 @@ function getDatosContract(id){
 				//var status = drawTableSinHeadReservationPeople(data["peoples"], "peoplesContract");
 				drawTableSinHeadPeople(data["peoples"], "peoplesContract");
 			}
-	    	drawTableSinHeadUnit(data["unities"], "tableUnidadesContract");
+			if (data["unities"]) {
+				if (data['unities'].length>0) {
+					drawTableSinHeadUnit(data["unities"], "tableUnidadesContract");
+				}
+				
+			}
+	    	
 	    	drawTerminosVenta(data["terminosVenta"][0]);
 	    	drawTerminoFinanciamiento(data["terminosFinanciamiento"][0]);
 			var contraTemp = data["contract"][0];
@@ -2343,37 +2352,35 @@ function tableOnclick(id){
 function getAccounts( id, typeInfo, typeAcc ){
 	var id = getIDContrato();
 	$.ajax({
-	    data:{
-	        idContrato: id,
+		data:{
+			idContrato: id,
 			typeInfo:typeInfo,
 			typeAcc: typeAcc
-	    },
-	    type: "POST",
-	    url: "contract/getAccountsById",
-	    dataType:'json',
-	    success: function(data){
-	    	data["balance"] = parseFloat(data["balance"]);
-	    	data["downpayment"] = parseFloat(data["downpayment"]);
+		},
+		type: "POST",
+		url: "contract/getAccountsById",
+		dataType:'json',
+		success: function(data){
+			data["balance"] = parseFloat(data["balance"]);
+			data["downpayment"] = parseFloat(data["downpayment"]);
 			$("#balanceAccount").text(data["balance"]);
 			if(typeInfo == "account"){
 				var sale = data["sale"];
 
 				var maintenance = data["maintenance"];
 				var acc = data["acc"];
-				
-				if( sale){
+				if (sale.length > 0) {
 					var sale = parsearSALE(sale);
 					drawTable2( sale, "tableAccountSeller", false, "" );
 					setTableAccount( sale, "tableSaleAccRes" );
 				}
-				if( maintenance){
-					if (maintenance.length > 0) {
-						var maintenance = parsearSALE(maintenance);
-						drawTable2( maintenance, "tableAccountMaintenance", false, "" );
-						setTableAccount( maintenance, "tableMainteAccRes" );
-					}
-						
+				
+				if (maintenance.length > 0) {
+					var maintenance = parsearSALE(maintenance);
+					drawTable2( maintenance, "tableAccountMaintenance", false, "" );
+					setTableAccount( maintenance, "tableMainteAccRes" );
 				}
+
 				for( i=0; i<acc.length; i++ ){
 					var nameSafe = acc[i].accType;
 					$('#btNewTransAcc').data( 'idAcc' + nameSafe, acc[i].fkAccId );
@@ -2393,10 +2400,10 @@ function getAccounts( id, typeInfo, typeAcc ){
 					});
 				}
 			}
-	    },
-	    error: function(){
-	        alertify.error("Try again");
-	    }
+		},
+		error: function(){
+			alertify.error("Try again");
+		}
 	});
 }
 
