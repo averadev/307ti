@@ -155,31 +155,24 @@ Class Maintenance_db extends CI_MODEL
     }
     public function getContracts($filters){
         $this->db->distinct();
-  //   	$this->db->select("R.pkResId as ID, R.Folio, R.LegalName, F.FloorPlanDesc, FR.FrequencyDesc");
-		// $this->db->select("S.StatusDesc, R.CrDt, R.FirstOccYear, R.LastOccYear, 0 as UnitPrice, PM.Amount as MaintenancePrice");
-  //       $this->db->from('tblRes R');
-      
-  //       $this->db->join('tblResinvt RI', 'R.pkResId = RI.fkResId');
-  //       $this->db->join('tblFloorPlan F', 'RI.fkFloorPlanId = F.pkFloorPlanID');
-  //       $this->db->join('tblStatus S', 'R.fkStatusId = S.pkStatusId');
-  //       $this->db->join('tblFrequency FR', 'RI.fkFrequencyId = FR.pkFrequencyId');
-  //       $this->db->join('tblPriceMnt PM', 'RI.fkFloorPlanId = PM.fkFloorPlanId and PM.OccYear = '.$filters['Year']);
-  //       // and PM.OccYear  '.$filters['Year']
-
-  //       $this->db->where('RI.fkseassonId', $filters['Season']);
-  //       $this->db->where('(RI.fkseassonId = 1 or RI.fkseassonId = 2 or RI.fkseassonId = 3)');
         $this->db->select("R.pkResId as ID, cast(R.Prefix as varchar) + '-' + cast(R.Folio as varchar) as Folio");
         $this->db->select("R.LegalName as LegalName, RTRIM(F.FloorPlanDesc) as FloorPlanDesc, FR.FrequencyDesc");
         $this->db->select("ES.StatusDesc, RI.CrDt, R.FirstOccYear, R.LastOccYear, RF.ListPrice, PM.Amount as MaintenancePrice");
         $this->db->from('tblRes R');
 
         $this->db->join('tblResinvt RI', 'RI.fkResId = R.pkResId');
+        
+        $this->db->join('tblunit u', 'u.pkunitid = ri.fkUnitid');
+        $this->db->join('tblres r2', 'r2.pkResRelatedId = r.pkResId');
+        $this->db->join('tblResOcc Ro', 'Ro.fkResId = r2.pkResId');
+        $this->db->join('tblcalendar ca', 'ca.pkCalendarid = ro.fkCalendarid');
+
         $this->db->join('tblFloorPlan F', 'F.pkFloorPlanID = RI.fkFloorPlanId');
         $this->db->join('tblFrequency FR', 'FR.pkFrequencyId = RI.fkFrequencyId');
         $this->db->join('tblStatus ES', 'ES.pkStatusId = R.fkStatusId');
         $this->db->join('tblResFin RF', 'RF.fkResId = R.pkResId');
         $this->db->join('tblPriceMnt PM', 'RI.fkFloorPlanId = PM.fkFloorPlanId');
-        //$this->db->where('(RI.fkseassonId = 1 or RI.fkseassonId = 2 or RI.fkseassonId = 3)');
+
 		if (isset($filters['SaleType']) && !empty($filters['SaleType'])) {
 			$this->db->where('R.fkSaleTypeId', $filters['SaleType']);
 		}
@@ -187,10 +180,14 @@ Class Maintenance_db extends CI_MODEL
 			$this->db->where('RI.fkFloorPlanId', $filters['FloorPlan']);
 		}
         if (isset($filters['Year']) && !empty($filters['Year'])) {
-            $this->db->where( $filters['Year'].' BETWEEN R.FirstOccYear and R.LastOccYear');
+            $this->db->where( $filters['Year'].' = ro.OccYear');
         }
+        $this->db->where('ca.fkDayOfWeekId = 1');
+        $this->db->where('ro.occyear = ca.Year');
+        $this->db->where('pm.occyear = ro.OccYear');
+        $this->db->where('r.fkStatusId <> 6');
         $this->db->where('R.fkResTypeId', 10);
-        $this->db->order_by('ID', 'DESC');
+        $this->db->order_by('r.PkREsid', 'DESC');
         $query = $this->db->get();
 
         if($query->num_rows() > 0 )

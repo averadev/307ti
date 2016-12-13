@@ -138,7 +138,7 @@ class Maintenance extends CI_Controller {
 			$DELETE = [];
 			$contracts = $this->Maintenance_db->getContracts($sql);
 
-			//echo json_encode($contracts);
+/*			//echo json_encode($contracts);
 			$contracts2 = $this->Maintenance_db->getContractsMTN();
 			if ($contracts2 != null && $contracts != null) {
 				foreach ($contracts as $key => $value) {
@@ -155,7 +155,7 @@ class Maintenance extends CI_Controller {
 			}
 			if ($contracts != null) {
 				$contracts = array_values($contracts);
-			}
+			}*/
 			
 			echo json_encode($contracts);
 		}

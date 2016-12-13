@@ -137,12 +137,6 @@ class Contract_db extends CI_Model {
     }
 	
 	public function getResOfContract( $idCon ){
-		/*$this->db->select('r.pkResId as ID ');
-        $this->db->from('tblRes r');
-        $this->db->where('r.pkResRelatedId', $idCon);
-		$this->db->or_where('r.pkResId', $idCon);
-        $query = $this->db->get();
-        return $query->result();*/
 		
 		$ini = "( SELECT top 1 c2.date from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId and ro2.OccYear = r.FirstOccYear ORDER BY c2.Date ASC )";
 		$end = "( SELECT top 1 c2.date from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId and ro2.OccYear = r.FirstOccYear ORDER BY c2.Date DESC )";
@@ -1174,12 +1168,11 @@ class Contract_db extends CI_Model {
         $this->db->select('CAST(PRI.PriceFixedWk AS DECIMAL(10,2)) as Price, PRI.Week, SE.SeasonDesc, PRI.ClosingCost, V.ViewDesc as View, ISNULL(IV.LastOccYear+1, year(getDate())) as LastOccYear');
         $this->db->from('tblUnit U');
         $this->db->join('tblFloorPlan FP', 'U.fkFloorPlanId = FP.pkFloorPlanID', 'inner');
-        $this->db->join('tblPrice PRI', 'U.pkUnitId = PRI.fkUnitId', 'inner');
+        $this->db->join('tblPrice PRI', 'U.pkUnitId = PRI.fkUnitId and PRI.fkSeasonId = 1', 'inner');
         $this->db->join('tblSeason SE', 'PRI.fkSeasonId = SE.pkSeasonId', 'inner');
         $this->db->join('tblProperty P', 'P.pkPropertyId = U.fkPropertyId', 'inner');
         $this->db->join('tblView V', 'U.fkViewId = V.pkViewId', 'inner');
         $this->db->join('tblResInvt IV', 'U.pkUnitId = IV.fkUnitId and IV.Intv = PRI.Week and IV.ynActive = 1', 'left');
-		//$this->db->where('IV.ynActive', 1);
         $this->db->where('PRI.fkStatusId', 17);
         $this->db->where('(ISNULL(IV.LastOccYear+1, year(getDate()))<=2087)');
         
