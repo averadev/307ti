@@ -275,17 +275,18 @@ class Pdfs extends CI_Controller {
 		$title = "Maintenance Fee";
 		$name = "Maintenance Fee";
 		$saveFiler = "Guest_Information" . $idRes;
-		$pdf = $this->generatePdfTemp( $name, $title );
+		$pdf = $this->generatePdfTempLandscape( $name, $title );
 		$style = $this->generateStyle();
 		$i = 0;
 		$body = '';
-		$body .= '<table class="poll" width="100%">';
+		
 		
 
 		foreach ($contracts as $key) {
 			$i++;
+			$body .= '<table class="poll" width="100%" >';
 			$body .= '<h4></h4>';
-			$body .= '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt repellendus temporibus itaque atque facilis sed commodi blanditiis quod nulla totam modi, impedit, maiores sint reprehenderit laudantium quaerat! Quam, quisquam, debitis.</p>';
+			$body .= '<p class="max">PLEASE NOTE AN INCREASE OF 3.9% IN THE .... BASE ON THE LOCAL C.P.I. AND MANDATORY UTILITY CLAUSE.</p>';
 			$body .= '<h4></h4>';
 			$body .= '<tr><td>Contract NO:</td><td> 1-'. $key->Folio .'</td><td>UNIT/WEEK:</td><td>'.$key->UnitCode .'/'.$key->Intv .'</td><td>2016</td><td>M/F: '. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
 			$body .= '<tr><td class="first">INVOICE DATE:</td><td>'.$key->Date.'</td><td>AMOUNT DUE:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td><td>AMOUNT PAID:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
@@ -294,16 +295,15 @@ class Pdfs extends CI_Controller {
 
 	
 		$body .= '<h4></h4>';
-		$body .= '<table width="100%">';
-		$body.= '<tr>';
-		$body.= '<th >Name</th><th >LName</th><th >Street1</th><th >Street2</th><th >City</th><th >State</th><th >ZipCode</th><th>Country</th></tr>';
+		$body .= '<table width="100%" class="alinearR">';
 		foreach ($People as $item){
 
-			$body .= '<tr><td class="Name">' .  $item->Name . '</td><td class="Last name">' . $item->Last_name . '</td>';
-			$body .= '<td class="type">' .  $item->Street1 . '</td><td class="type">' . $item->Street2 . '</td>';
-			$body .= '<td class="type">' .  $item->City . '</td><td class="type">' . $item->StateDesc . '</td>';
-			$body .= '<td class="type">' .  $item->ZipCode . '</td><td class="type">' . $item->CountryDesc . '</td></tr>';
+			$body .= '<tr><td class="type">' .  $item->Name . ' ' . $item->Last_name . '</td></tr>';
+			$body .= '<tr><td class="type">' .  $item->Street1 . ' ' . $item->Street2 . '</td></tr>';
+			$body .= '<tr><td class="type">' .  $item->City . ' ' . $item->StateDesc . '</td></tr>';
+			$body .= '<tr><td class="type">' .  $item->ZipCode . ' ' . $item->CountryDesc . '</td></tr>';
 		}
+		$body .= '</table>';
 		$body .= '</table>';
 		if ($i != sizeof($contracts)) {
 			$body .= '<br pagebreak="true" />';
@@ -708,21 +708,7 @@ class Pdfs extends CI_Controller {
 		$day = 1;
 		$cont = 0;
 		$seasonA = array();
-		//array_pop ( $RateAmtNigh );
-		/*foreach( $RateAmtNigh as $item ){
-			if( $season != $item->fkSeasonId ){
-				$season = $item->fkSeasonId;
-				array_push($seasonA, array( 'season' =>  $item->fkSeasonId, 'days' => 1, 'RateAmtNight' => $item->RateAmtNight ) );
-				$cont++;
-			}else{
-				$seasonA[$cont - 1]['days'] = $seasonA[$cont - 1]['days'] + 1;
-			}
-			
-		}*/
-		/*foreach( $RateAmtNigh as $item ){
-			//$body .= '<tr><td>Us Toll Free</td><td>The rate is ' . $item['RateAmtNight'] . ' Por ' . $item['days']  . ' dias</td></tr>';
-			$body .= '<tr><td>Us Toll Free</td><td>The rate is ' . $item['RateAmtNight'] . ' Por ' . $item['days']  . ' dias</td></tr>';
-		}*/
+
 		if($restype == 7){
 			if( count($RateAmtNigh) > 0){
 				$body .= '<tr><td>Us Toll Free</td><td>The rate is ' . round($RateAmtNigh[0]->RateAmtNight, 2) . ' By ' . count($RateAmtNigh)  . ' days</td></tr>';
@@ -798,42 +784,6 @@ class Pdfs extends CI_Controller {
 		$body .= '<h4 class="header">All Rooms Are None Smoking</h4>';
 		$body .= '<h4>All rooms are non smoking, violators will be subjected to a $500.00, penalty.</h4>';
 		
-		/*$body .= '<h3>Resort Policies</h3>';
-		$body .= '<h4>Hotel Policies & Reservations Confirmations</h4>';
-		$body .= '<h4>The Towers at Mullet Bay Policies and Reservation Information page will provide you with all information you will need to make a reservation and stay with us at THE TOWERS SINT MAARTEN.</h4>';
-		$body .= '<h4>Guaranteed Reservations</h4>';
-		$body .= '<h4>To guarantee a reservation at The Towers at Mullet Bay, a valid credit card is required at time of booking. If a credit card is not available, your reservation will only be held for a minimal time period.</h4>';
-		$body .= '<h4>Cancellation Policy</h4>';
-		$body .= '<h4>Guaranteed reservations at The Towers at Mullet Bay must be cancelled 72 hours prior to arrival date to avoid cancellation penalties.';
-		$body .= ' If you wish to cancel your reservation within the cancel policy, a 1night penalty including taxes/fees will be applied.</h4>';
-		$body .= '<h4>Group and Conference reservations are subject to the cancellation and deposit policies outlined at time of booking and may vary from standard hotel policies.</h4>';
-		$body .= '<h4>New Year’s Eve Cancellation and Deposit Policy</h4>';
-		$body .= '<h4>New Year’s Eve reservations will be charged a deposit at time of booking, with the balance of the stay being charged in full on December 12th. Cancellations prior to 4pm on December 12 will forfeit the $100.00 deposit';
-		$body .= 'Cancellations after 4pm on December will forfeit 50% of the New Year’s Eve Stay along with a $100.00 deposit.';
-		$body .= 'Cancellations requested after 4pm 48hrs prior to arrival will forfeit 100% of stay and applicable taxes.</h4>';
-		$body .= '<h4></h4>';
-		$body .= '<h4>Pets</h4>';
-		$body .= '<h4>The Towers at Mullet Bay unfortunately does not accept pets</h4>';
-		$body .= '<h4>Check in / Check out</h4>';
-		$body .= '<h4>Check in time at The Towers at Mullet Bay begins at 4:00PM';
-		$body .= 'Every Saturday If your party happens to arrive earlier and the room is not available at the time of arrival, our concierge desk will be happy to store your bags so you can enjoy your day in Our Pool Bar.';
-		$body .= 'Check out time is for 10:00AM every Saturday the day of departure.</h4>';
-		$body .= '<h4>Age Requirement</h4>';
-		$body .= '<h4>To reserve a room at The Towers at Mullet Bay, there must be at least 1 adult present in the room 18 years of age or older.</h4>';
-		$body .= '<h4>Payment options</h4>';
-		$body .= '<h4>The Towers at Mullet Bay accepts all major credit cards, as well as cash, Visa, Master card, American Express, Maestro.</h4>';
-		$body .= '<h4>Taxes & Fee</h4>';
-		$body .= '<h4>Hotel stays in The Towers at Mullet Bay are subject to tax and PF (Promotion Fee, which is NOT a tax) totaling 19.67% (13% is Sint Maarten Government Tax)';
-		$body .= 'Implemented by The Towers at Mullet Bay Falls to travelers the PF may also be used to generate better services for visitors while in Sint Maarten.</h4>';
-		$body .= '<h4>Dining establishments, attractions and retail outlets will also be subject to the Promotional Fee.</h4>';
-		$body .= '<h4>Room Occupancy</h4>';
-		$body .= '<h4>The Towers at Mullet Bay Hotel fire code permits a maximum of 5 guests in a room depending on the room category. Some room types have a maximum occupancy of less than 5.</h4>';
-		$body .= '<h4>Pre-authorization Information</h4>';
-		$body .= '<h4>In the case that a guest’s room is to be paid by another party’s credit card that will not be attending the hotel, a pre-authorization form is required to be filled out by the credit card holder allowing the Hotel to use the credit card for the specified charges.';
-		$body .= ' A reservation agent will be able to fax or e-mail you the form to be filled out at your request.</h4>';
-		$body .= '<h4>Photo ID</h4>';
-		$body .= '<h4>Valid photo ID is required both for the check in process, as well as being a necessity to process a credit card.</h4>';
-		$html = '';*/
 		$html .= ' <html><head></head><body>';
 		$html .= $body;
 		$html .= $style;
@@ -903,6 +853,11 @@ class Pdfs extends CI_Controller {
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
 		$style .= ' .cafe{ color: #662C19; font-size:15px; }';
 		$style .= ' h4.header{ color: #666666; font-weight: normal; font-size:16px; }';
+		$style .= ' .tablaGrande{ color: #666666; font-weight: normal; font-size:9px; }';
+		$style .= ' .alinearR{text-align:right;font-size:9px;}';
+		$style .= ' .max{max-width: 500px;}';
+		$style .= ' .alinearL{ text-align:right; }';
+		
 		$style .= '</style>';
 		return $style;
 	}
@@ -945,7 +900,7 @@ class Pdfs extends CI_Controller {
         $pdf->setFontSubsetting(true);
  
 		// Establecer el tipo de letra
- 
+
 		//Si tienes que imprimir carácteres ASCII estándar, puede utilizar las fuentes básicas como
 		// Helvetica para reducir el tamaño del archivo.
         $pdf->SetFont('freemono', '', 14, '', true);
@@ -958,7 +913,6 @@ class Pdfs extends CI_Controller {
         $pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
  
 		return $pdf;
- 
 	}
 	private function generatePdfTemp2( $name, $title ){
 		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
@@ -1109,5 +1063,57 @@ class Pdfs extends CI_Controller {
 		$hoy = getdate();
 		$strHoy = $hoy["year"]."-".$hoy["mon"]."-".$hoy["mday"] . " " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
 		return $strHoy;
+	}
+		private function generatePdfTempLandscape( $name, $title ){
+		$pdf = new Pdf('L', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('307ti');
+        $pdf->SetTitle($name);
+        $pdf->SetSubject('report');
+        $pdf->SetKeywords('report');
+ 
+	
+		$logo = "logo.jpg";
+		$headerString = " Created by: " . $this->nativesessions->get('username') .  " \n      " . $this->getonlyDate(0);
+		$pdf->SetHeaderData($logo, 20, "     " . $title, "     " . $headerString,  array( 102,44,25 ), array( 102,44,25 ));
+        $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
+ 
+		// datos por defecto de cabecera, se pueden modificar en el archivo tcpdf_config.php de libraries/config
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+ 
+		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+        //$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+ 
+		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+        $pdf->SetMargins(5, PDF_MARGIN_TOP, 5);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+ 
+		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+ 
+		//relación utilizada para ajustar la conversión de los píxeles
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+ 
+ 
+		// ---------------------------------------------------------
+		// establecer el modo de fuente por defecto
+        $pdf->setFontSubsetting(true);
+ 
+		// Establecer el tipo de letra
+
+		//Si tienes que imprimir carácteres ASCII estándar, puede utilizar las fuentes básicas como
+		// Helvetica para reducir el tamaño del archivo.
+        $pdf->SetFont('freemono', '', 14, '', true);
+ 
+		// Añadir una página
+		// Este método tiene varias opciones, consulta la documentación para más información.
+        $pdf->AddPage('L', array(210,150));
+ 
+		//fijar efecto de sombra en el texto
+        $pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
+ 
+		return $pdf;
 	}
 }
