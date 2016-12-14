@@ -1070,7 +1070,7 @@ class Pdfs extends CI_Controller {
 		$strHoy = $hoy["year"]."-".$hoy["mon"]."-".$hoy["mday"] . " " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
 		return $strHoy;
 	}
-		private function generatePdfTempLandscape( $name, $title ){
+	private function generatePdfTempLandscape( $name, $title ){
 		$pdf = new Pdf('L', 'mm', 'A4', true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('307ti');
@@ -1079,20 +1079,21 @@ class Pdfs extends CI_Controller {
         $pdf->SetKeywords('report');
  
 	
-		$logo = "logo.jpg";
-		$headerString = " Created by: " . $this->nativesessions->get('username') .  " \n      " . $this->getonlyDate(0);
-		$pdf->SetHeaderData('', 20, "", "" ,  array( 102,44,25 ), array( 102,44,25 ));
+		//$logo = "logo.jpg";
+		//$headerString = " Created by: " . $this->nativesessions->get('username') .  " \n      " . $this->getonlyDate(0);
+		//$pdf->SetHeaderData('', 20, "", "" ,  array( 102,44,25 ), array( 102,44,25 ));
         $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
- 
+ 		
 		// datos por defecto de cabecera, se pueden modificar en el archivo tcpdf_config.php de libraries/config
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->SetPrintHeader(false);
         $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
  
 		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
         //$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
  
 		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
-        $pdf->SetMargins(27, 20, 27);
+        $pdf->SetMargins(27, 40, 27);
         $pdf->SetHeaderMargin(20);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
  
