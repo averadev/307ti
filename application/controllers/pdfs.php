@@ -279,29 +279,34 @@ class Pdfs extends CI_Controller {
 		$style = $this->generateStyle();
 		$i = 0;
 		$body = '';
-		
-		
 
 		foreach ($contracts as $key) {
 			$i++;
 			$body .= '<table class="poll" width="100%" >';
 			$body .= '<h4></h4>';
-			$body .= '<p class="max">PLEASE NOTE AN INCREASE OF 3.9% IN THE .... BASE ON THE LOCAL C.P.I. AND MANDATORY UTILITY CLAUSE.</p>';
+			$body .= '<p width="80%" class="fuenteP">PLEASE NOTE AN INCREASE OF 3.9% IN THE .... ';
+			$body .= 'BASE ON THE <br>LOCAL C.P.I. AND MANDATORY UTILITY CLAUSE</p>';
 			$body .= '<h4></h4>';
-			$body .= '<tr><td>Contract NO:</td><td> 1-'. $key->Folio .'</td><td>UNIT/WEEK:</td><td>'.$key->UnitCode .'/'.$key->Intv .'</td><td>2016</td><td>M/F: '. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
-			$body .= '<tr><td class="first">INVOICE DATE:</td><td>'.$key->Date.'</td><td>AMOUNT DUE:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td><td>AMOUNT PAID:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
-			$body .= '<tr><td class="first">DUE DATE:</td><td>'. $key->DueDt .'</td><td colspan="4">PLEASE RETURN THIS STUB WITH YOUR PAYMENT</td></tr>';
+			$body .= '<tr class="fuenteP"><td>Contract NO:</td><td> 1-'. $key->Folio .'</td><td>UNIT/WEEK:</td><td>'.$key->UnitCode .'/'.$key->Intv .'</td>';
+			$body .= '<td> 2016</td><td>M/F: '. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
+			
+			$body .= '<tr class="fuenteP"><td class="first">INVOICE DATE:</td><td>'.$key->Date.'</td><td>AMOUNT DUE:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td>';
+
+			$body .= '<td>AMOUNT PAID:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
+			$body .= '<tr class="fuenteP"><td class="first">DUE DATE:</td><td>'. $key->DueDt .'</td><td colspan="2"></td><td colspan="2">PLEASE RETURN THIS STUB WITH YOUR PAYMENT</td></tr>';
 			$People = $this->pdfs_db->getDataPrimaryPeople($key->pkResId);
 
 	
 		$body .= '<h4></h4>';
-		$body .= '<table width="100%" class="alinearR">';
+		$body .= '<h4></h4>';
+
+		$body .= '<table width="100%" class="fuenteP">';
 		foreach ($People as $item){
 
-			$body .= '<tr><td class="type">' .  $item->Name . ' ' . $item->Last_name . '</td></tr>';
-			$body .= '<tr><td class="type">' .  $item->Street1 . ' ' . $item->Street2 . '</td></tr>';
-			$body .= '<tr><td class="type">' .  $item->City . ' ' . $item->StateDesc . '</td></tr>';
-			$body .= '<tr><td class="type">' .  $item->ZipCode . ' ' . $item->CountryDesc . '</td></tr>';
+			$body .= '<tr><td colspan="2"></td><td class="type">' .  $item->Name . ' ' . $item->Last_name . '</td></tr>';
+			$body .= '<tr><td colspan="2"></td><td class="type">' .  $item->Street1 . ' ' . $item->Street2 . '</td></tr>';
+			$body .= '<tr><td colspan="2"></td><td class="type">' .  $item->City . ' ' . $item->StateDesc . '</td></tr>';
+			$body .= '<tr><td colspan="2"></td><td class="type">' .  $item->ZipCode . ' ' . $item->CountryDesc . '</td></tr>';
 		}
 		$body .= '</table>';
 		$body .= '</table>';
@@ -842,7 +847,7 @@ class Pdfs extends CI_Controller {
 		$style .= ' table.balance{ font-size:12px; }';
 		$style .= ' table.balance tr td, table tr th{ height: 25px; }';
 		$style .= ' th{ color: #662C19;  background-color: #fdf0d8; }';
-		$style .= ' table.poll{ color: #666666; font-size:14px; }';
+		$style .= ' table.poll{ color: #666666; font-size:14px;}';
 		$style .= ' table.poll tr td{  height: 25px; }';
 		$style .= ' .blackLine{ border-bottom: solid 2px #000000; }';
 		$style .= ' .blackLine1{ border-bottom: solid 2px #E2E2E2; }';
@@ -854,7 +859,8 @@ class Pdfs extends CI_Controller {
 		$style .= ' .cafe{ color: #662C19; font-size:15px; }';
 		$style .= ' h4.header{ color: #666666; font-weight: normal; font-size:16px; }';
 		$style .= ' .tablaGrande{ color: #666666; font-weight: normal; font-size:9px; }';
-		$style .= ' .alinearR{text-align:right;font-size:9px;}';
+		$style .= ' .alinearR{text-align:right;font-size:12px;}';
+		$style .= ' .fuenteP{font-size:12px;}';
 		$style .= ' .max{max-width: 500px;}';
 		$style .= ' .alinearL{ text-align:right; }';
 		
@@ -1075,7 +1081,7 @@ class Pdfs extends CI_Controller {
 	
 		$logo = "logo.jpg";
 		$headerString = " Created by: " . $this->nativesessions->get('username') .  " \n      " . $this->getonlyDate(0);
-		$pdf->SetHeaderData($logo, 20, "     " . $title, "     " . $headerString,  array( 102,44,25 ), array( 102,44,25 ));
+		$pdf->SetHeaderData('', 20, "", "" ,  array( 102,44,25 ), array( 102,44,25 ));
         $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
  
 		// datos por defecto de cabecera, se pueden modificar en el archivo tcpdf_config.php de libraries/config
@@ -1086,8 +1092,8 @@ class Pdfs extends CI_Controller {
         //$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
  
 		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
-        $pdf->SetMargins(5, PDF_MARGIN_TOP, 5);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetMargins(27, 20, 27);
+        $pdf->SetHeaderMargin(20);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
  
 		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
@@ -1109,7 +1115,7 @@ class Pdfs extends CI_Controller {
  
 		// Añadir una página
 		// Este método tiene varias opciones, consulta la documentación para más información.
-        $pdf->AddPage('L', array(210,150));
+        $pdf->AddPage('L', array(264,140));
  
 		//fijar efecto de sombra en el texto
         $pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
