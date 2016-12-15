@@ -282,13 +282,14 @@ class Pdfs extends CI_Controller {
 
 		foreach ($contracts as $key) {
 			$i++;
-			$body .= '<table class="poll" width="100%" >';
+			$body .= '<table class="poll2" width="100%" >';
+			$body .= '<h4></h4>';
 			$body .= '<h4></h4>';
 			$body .= '<p width="80%" class="fuenteP">PLEASE NOTE AN INCREASE OF 3.9% IN THE .... ';
 			$body .= 'BASE ON THE <br>LOCAL C.P.I. AND MANDATORY UTILITY CLAUSE</p>';
 			$body .= '<h4></h4>';
 			$body .= '<tr class="fuenteP"><td>Contract NO:</td><td> 1-'. $key->Folio .'</td><td>UNIT/WEEK:</td><td>'.$key->UnitCode .'/'.$key->Intv .'</td>';
-			$body .= '<td> 2016</td><td>M/F: '. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
+			$body .= '<td> 2017</td><td>M/F: '. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
 			
 			$body .= '<tr class="fuenteP"><td class="first">INVOICE DATE:</td><td>'.$key->Date.'</td><td>AMOUNT DUE:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td>';
 
@@ -297,8 +298,7 @@ class Pdfs extends CI_Controller {
 			$People = $this->pdfs_db->getDataPrimaryPeople($key->pkResId);
 
 	
-		$body .= '<h4></h4>';
-		$body .= '<h4></h4>';
+		$body .= '<h6></h6>';
 
 		$body .= '<table width="100%" class="fuenteP">';
 		foreach ($People as $item){
@@ -849,6 +849,8 @@ class Pdfs extends CI_Controller {
 		$style .= ' th{ color: #662C19;  background-color: #fdf0d8; }';
 		$style .= ' table.poll{ color: #666666; font-size:14px;}';
 		$style .= ' table.poll tr td{  height: 25px; }';
+		$style .= ' table.poll2{ color: #666666; font-size:14px;}';
+		$style .= ' table.poll2 tr td{  height: 10px; }';
 		$style .= ' .blackLine{ border-bottom: solid 2px #000000; }';
 		$style .= ' .blackLine1{ border-bottom: solid 2px #E2E2E2; }';
 		$style .= ' .blackLine2{ border-bottom: solid .5px black; height: 40px; font-weight:bold;}';
