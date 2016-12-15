@@ -285,11 +285,11 @@ class Pdfs extends CI_Controller {
 			$body .= '<table class="poll2" width="100%" >';
 			$body .= '<h4></h4>';
 			$body .= '<h4></h4>';
-			$body .= '<p width="80%" class="fuenteP">PLEASE NOTE AN INCREASE OF 3.9% IN THE .... ';
-			$body .= 'BASE ON THE <br>LOCAL C.P.I. AND MANDATORY UTILITY CLAUSE</p>';
+			$body .= '<p width="80%" class="fuenteP">PLEASE NOTE AN INCREASE OF 3.9% IN THE ';
+			$body .= 'MAINTENANCE FEES BASE <br>ON THE LOCAL C.P.I. AND MANDATORY UTILITY CLAUSE.</p>';
 			$body .= '<h4></h4>';
 			$body .= '<tr class="fuenteP"><td>Contract NO:</td><td> 1-'. $key->Folio .'</td><td>UNIT/WEEK:</td><td>'.$key->UnitCode .'/'.$key->Intv .'</td>';
-			$body .= '<td> 2017</td><td>M/F: '. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
+			$body .= '<td>2017</td><td>M/F: '. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
 			
 			$body .= '<tr class="fuenteP"><td class="first">INVOICE DATE:</td><td>'.$key->Date.'</td><td>AMOUNT DUE:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td>';
 
