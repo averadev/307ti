@@ -285,9 +285,11 @@ class Pdfs extends CI_Controller {
 			$body .= '<table class="poll2" width="100%" >';
 			$body .= '<h4></h4>';
 			$body .= '<h4></h4>';
-			$body .= '<p width="80%" class="fuenteP">PLEASE NOTE AN INCREASE OF 3.9% IN THE ';
-			$body .= 'MAINTENANCE FEES BASE <br>ON THE LOCAL C.P.I. AND MANDATORY UTILITY CLAUSE.</p>';
 			$body .= '<h4></h4>';
+			$body .= '<h4></h4>';
+			$body .= '<p width="80%" class="fuenteP1">PLEASE NOTE AN INCREASE OF 3.5% IN THE ';
+			$body .= 'MAINTENANCE FEES BASED <br>ON THE LOCAL C.P.I. AND MANDATORY UTILITY CLAUSE.</p>';
+
 			$body .= '<tr class="fuenteP"><td>Contract NO:</td><td> 1-'. $key->Folio .'</td><td>UNIT/WEEK:</td><td>'.$key->UnitCode .'/'.$key->Intv .'</td>';
 			$body .= '<td>2017</td><td>M/F: '. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
 			
@@ -296,9 +298,6 @@ class Pdfs extends CI_Controller {
 			$body .= '<td>AMOUNT PAID:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
 			$body .= '<tr class="fuenteP"><td class="first">DUE DATE:</td><td>'. $key->DueDt .'</td><td colspan="2"></td><td colspan="2">PLEASE RETURN THIS STUB WITH YOUR PAYMENT</td></tr>';
 			$People = $this->pdfs_db->getDataPrimaryPeople($key->pkResId);
-
-	
-		$body .= '<h6></h6>';
 
 		$body .= '<table width="100%" class="fuenteP">';
 		foreach ($People as $item){
@@ -850,7 +849,7 @@ class Pdfs extends CI_Controller {
 		$style .= ' table.poll{ color: #666666; font-size:14px;}';
 		$style .= ' table.poll tr td{  height: 25px; }';
 		$style .= ' table.poll2{ color: #666666; font-size:14px;}';
-		$style .= ' table.poll2 tr td{  height: 10px; }';
+		$style .= ' table.poll2 tr td{  height: 8px; }';
 		$style .= ' .blackLine{ border-bottom: solid 2px #000000; }';
 		$style .= ' .blackLine1{ border-bottom: solid 2px #E2E2E2; }';
 		$style .= ' .blackLine2{ border-bottom: solid .5px black; height: 40px; font-weight:bold;}';
@@ -863,6 +862,7 @@ class Pdfs extends CI_Controller {
 		$style .= ' .tablaGrande{ color: #666666; font-weight: normal; font-size:9px; }';
 		$style .= ' .alinearR{text-align:right;font-size:12px;}';
 		$style .= ' .fuenteP{font-size:12px;}';
+		$style .= ' .fuenteP1{font-size:12px; margin-bottom:2px;}';
 		$style .= ' .max{max-width: 500px;}';
 		$style .= ' .alinearL{ text-align:right; }';
 		
