@@ -848,7 +848,7 @@ class Pdfs extends CI_Controller {
 		$style .= ' th{ color: #662C19;  background-color: #fdf0d8; }';
 		$style .= ' table.poll{ color: #666666; font-size:14px;}';
 		$style .= ' table.poll tr td{  height: 25px; }';
-		$style .= ' table.poll2{ color: #666666; font-size:14px;}';
+		$style .= ' table.poll2{ color: #666666; font-size:14px; font-weight:bold;}';
 		$style .= ' table.poll2 tr td{  height: 8px; }';
 		$style .= ' .blackLine{ border-bottom: solid 2px #000000; }';
 		$style .= ' .blackLine1{ border-bottom: solid 2px #E2E2E2; }';
@@ -1121,7 +1121,7 @@ class Pdfs extends CI_Controller {
         $pdf->AddPage('L', array(264,140));
  
 		//fijar efecto de sombra en el texto
-        $pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
+        //$pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
  
 		return $pdf;
 	}

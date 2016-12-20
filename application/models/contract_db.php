@@ -1174,7 +1174,7 @@ class Contract_db extends CI_Model {
         $this->db->join('tblView V', 'U.fkViewId = V.pkViewId', 'inner');
         $this->db->join('tblResInvt IV', 'U.pkUnitId = IV.fkUnitId and IV.Intv = PRI.Week and IV.ynActive = 1', 'left');
         $this->db->where('PRI.fkStatusId', 17);
-        $this->db->where('(ISNULL(IV.LastOccYear+1, year(getDate()))<=2087)');
+        $this->db->where('(ISNULL(IV.LastOccYear, year(getDate()))<=2087)');
         
         if (!empty($filters['interval'])) {
             $this->db->where('PRI.Week', $filters['interval']);
