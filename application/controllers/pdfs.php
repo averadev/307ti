@@ -298,7 +298,9 @@ class Pdfs extends CI_Controller {
 			$body .= '<td>AMOUNT PAID:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
 			$body .= '<tr class="fuenteP"><td class="first">DUE DATE:</td><td>'. $key->DueDt .'</td><td colspan="2"></td><td colspan="2">PLEASE RETURN THIS STUB WITH YOUR PAYMENT</td></tr>';
 			$People = $this->pdfs_db->getDataPrimaryPeople($key->pkResId);
-
+		$body .= '<h4></h4>';
+		$body .= '<h4></h4>';
+		$body .= '<h4></h4>';
 		$body .= '<table width="100%" class="fuenteP">';
 		foreach ($People as $item){
 
@@ -848,8 +850,8 @@ class Pdfs extends CI_Controller {
 		$style .= ' th{ color: #662C19;  background-color: #fdf0d8; }';
 		$style .= ' table.poll{ color: #666666; font-size:14px;}';
 		$style .= ' table.poll tr td{  height: 25px; }';
-		$style .= ' table.poll2{ color: black; font-size:14px; font-weight:bold;}';
-		$style .= ' table.poll2 tr td{  height: 8px; }';
+		$style .= ' table.poll2{ color: black; font-size:18px; font-weight:bold;}';
+		$style .= ' table.poll2 tr td{  height: 8px; paddig-right:0px;}';
 		$style .= ' .blackLine{ border-bottom: solid 2px #000000; }';
 		$style .= ' .blackLine1{ border-bottom: solid 2px #E2E2E2; }';
 		$style .= ' .blackLine2{ border-bottom: solid .5px black; height: 40px; font-weight:bold;}';
@@ -1114,11 +1116,11 @@ class Pdfs extends CI_Controller {
 
 		//Si tienes que imprimir carácteres ASCII estándar, puede utilizar las fuentes básicas como
 		// Helvetica para reducir el tamaño del archivo.
-        $pdf->SetFont('freemono', '', 14, '', true);
+        $pdf->SetFont('freemono', '', 16, '', true);
  
 		// Añadir una página
 		// Este método tiene varias opciones, consulta la documentación para más información.
-        $pdf->AddPage('L', array(264,140));
+        $pdf->AddPage('L', array(364,240));
  
 		//fijar efecto de sombra en el texto
         //$pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
