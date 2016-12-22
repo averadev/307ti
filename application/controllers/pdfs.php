@@ -1,4 +1,4 @@
-<?php
+﻿<?php
  
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
@@ -283,39 +283,36 @@ class Pdfs extends CI_Controller {
 		foreach ($contracts as $key) {
 			$i++;
 			$body .= '<table class="poll2" width="100%" >';
-			$body .= '<h4></h4>';
-			$body .= '<h4></h4>';
-			$body .= '<h4></h4>';
-			$body .= '<h4></h4>';
-			$body .= '<p width="80%" class="fuenteP1">PLEASE NOTE AN INCREASE OF 3.5% IN THE ';
+			$body .= '<p width="80%" class="fuenteP11">PLEASE NOTE AN INCREASE OF 3.5% IN THE ';
 			$body .= 'MAINTENANCE FEES BASED <br>ON THE LOCAL C.P.I. AND MANDATORY UTILITY CLAUSE.</p>';
 
-			$body .= '<tr class="fuenteP"><td>Contract NO:</td><td> 1-'. $key->Folio .'</td><td>UNIT/WEEK:</td><td>'.$key->UnitCode .'/'.$key->Intv .'</td>';
-			$body .= '<td>2017</td><td>M/F: '. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
+			$body .= '<tr class="fuenteP10"><td>CONTRACT NO:</td><td> 1-'. $key->Folio .'</td><td>UNIT/WEEK:</td><td>'.$key->UnitCode .'/'.$key->Intv .'</td>';
+
+			$body .= '<td>2017 M/F</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
+				//$body .= '<td>2017 M/F    '. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
+
+		    $body .= '<tr class="fuenteP10"><td class="first">INVOICE DATE:</td><td>'. date("d/m/Y", strtotime($key->Date)) .'</td><td>AMOUNT DUE:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td>';
+	        $body .= '<td>AMOUNT DUE:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
+			$body .= '<tr class="fuenteP10"><td class="first">DUE DATE:</td><td>'. 'JANUARY 15, 2017' .'</td><td colspan="2"></td><td colspan="2">PLEASE RETURN THIS STUB WITH</td></tr>';
+	                      $body .= '<tr class="fuenteP10"><td class="first"> </td><td>'. ' ' .'</td><td colspan="2"></td><td colspan="2">YOUR PAYMENT</td></tr>';	
+				$People = $this->pdfs_db->getDataPrimaryPeople($key->pkResId);
+			$body .= '<h4></h4>';
+
+			$body .= '<table width="100%" class="fuenteP10">';
+			foreach ($People as $item){
+
+				$body .= '<tr><td colspan="2"></td><td class="type">' .  $item->Name . ' ' . $item->Last_name . '</td></tr>';
+				$body .= '<tr><td colspan="2"></td><td class="type">' .  $item->Street1 . ' ' . $item->Street2 . '</td></tr>';
+				$body .= '<tr><td colspan="2"></td><td class="type">' .  $item->City . ' ' . $item->StateDesc . '</td></tr>';
+				$body .= '<tr><td colspan="2"></td><td class="type">' .  $item->ZipCode . ' ' . $item->CountryDesc . '</td></tr>';
+			}
+			$body .= '</table>';
+			$body .= '</table>';
+			if ($i != sizeof($contracts)) {
+				$body .= '<br pagebreak="true" />';
+			}
 			
-			$body .= '<tr class="fuenteP"><td class="first">INVOICE DATE:</td><td>'.$key->Date.'</td><td>AMOUNT DUE:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td>';
-
-			$body .= '<td>AMOUNT PAID:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
-			$body .= '<tr class="fuenteP"><td class="first">DUE DATE:</td><td>'. $key->DueDt .'</td><td colspan="2"></td><td colspan="2">PLEASE RETURN THIS STUB WITH YOUR PAYMENT</td></tr>';
-			$People = $this->pdfs_db->getDataPrimaryPeople($key->pkResId);
-		$body .= '<h4></h4>';
-		$body .= '<h4></h4>';
-		$body .= '<h4></h4>';
-		$body .= '<table width="100%" class="fuenteP">';
-		foreach ($People as $item){
-
-			$body .= '<tr><td colspan="2"></td><td class="type">' .  $item->Name . ' ' . $item->Last_name . '</td></tr>';
-			$body .= '<tr><td colspan="2"></td><td class="type">' .  $item->Street1 . ' ' . $item->Street2 . '</td></tr>';
-			$body .= '<tr><td colspan="2"></td><td class="type">' .  $item->City . ' ' . $item->StateDesc . '</td></tr>';
-			$body .= '<tr><td colspan="2"></td><td class="type">' .  $item->ZipCode . ' ' . $item->CountryDesc . '</td></tr>';
-		}
-		$body .= '</table>';
-		$body .= '</table>';
-		if ($i != sizeof($contracts)) {
-			$body .= '<br pagebreak="true" />';
-		}
-		
-		}
+			}
 		$html = '';
 		$html .= ' <html><head>';
 		$html .= $style;
@@ -324,7 +321,7 @@ class Pdfs extends CI_Controller {
 		$html .= '</body></html>';
 
 		$pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
-		
+	
 		$pdf = $this->showpdf( $pdf, $saveFiler, $idRes, $title );
 		
 	}
@@ -865,6 +862,8 @@ class Pdfs extends CI_Controller {
 		$style .= ' .alinearR{text-align:right;font-size:12px;}';
 		$style .= ' .fuenteP{font-size:12px;}';
 		$style .= ' .fuenteP1{font-size:12px; margin-bottom:2px;}';
+$style .= ' .fuenteP10{font-size:14px; margin-bottom:2px;}';
+$style .= ' .fuenteP11{font-size:15px; margin-bottom:2px;}';
 		$style .= ' .max{max-width: 500px;}';
 		$style .= ' .alinearL{ text-align:right; }';
 		
@@ -1099,7 +1098,7 @@ class Pdfs extends CI_Controller {
 		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
         $pdf->SetMargins(27, 40, 27);
         $pdf->SetHeaderMargin(20);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        //$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
  
 		// se pueden modificar en el archivo tcpdf_config.php de libraries/config
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
