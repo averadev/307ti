@@ -264,10 +264,6 @@ class Reservation_db extends CI_Model {
         $this->db->order_by('U.pkUnitId', 'ASC');
         $query = $this->db->get();
         return $query->result();
-        /*if($query->num_rows() > 0 )
-        {
-            
-        }*/
     }
     
     public function getUnidadesOcc($filters, $unitId ){
@@ -352,10 +348,7 @@ class Reservation_db extends CI_Model {
         $this->db->order_by('', 'DESC');
         $query = $this->db->get();
 		return $query->result();
-       /* if($query->num_rows() > 0 )
-        {
-            return $query->result();
-        }*/
+
     }
 	
 	public function getDataChangeRoom($id){
@@ -575,18 +568,6 @@ class Reservation_db extends CI_Model {
             return $row->pkinvtTypeId;
         }
     }
-    
-    /*public function select_Folio(){
-        $this->db->select('MAX(Folio)+1 as Folio');
-        $this->db->from('tblRes');
-        $query = $this->db->get();
-
-        if($query->num_rows() > 0 )
-        {
-            $row = $query->row();
-            return $row->Folio;
-        }
-    }*/
 	
 	public function select_Folio($typeId){
 		$this->db->select('pf.NextFolio');
@@ -601,10 +582,6 @@ class Reservation_db extends CI_Model {
 	
 	public function next_Folio($typeId){
 		$query = $this->db->query("UPDATE tblPropertyFolio SET NextFolio = ( select top 1 (NextFolio)+1 as Folio from tblPropertyFolio pf2 WHERE pf2.fkFolioTypeID = '" . $typeId ."' ) WHERE fkFolioTypeID = '" . $typeId ."'");
-		//this->db->affected_rows();
-		/*$this->db->where($condicion);
-        $this->db->update($table, $data);
-        return $this->db->affected_rows();*/
 	}
 
     public function selectBalance($id){
@@ -629,10 +606,6 @@ class Reservation_db extends CI_Model {
         $this->db->where('R.fkResId', $id);
         $query = $this->db->get();
 		return $query->result();
-        /*if($query->num_rows() > 0 )
-        {
-            return $query->result();
-        }*/
     }
 
     public function getTerminosFinanciamiento($id){
@@ -642,10 +615,6 @@ class Reservation_db extends CI_Model {
         $this->db->where('R.fkResId', $id);
         $query = $this->db->get();
 		return $query->result();
-        /*if($query->num_rows() > 0 )
-        {
-            return $query->result();
-        }*/
     }
     
     public function selectFinanceBalance($idContrato){
@@ -698,13 +667,11 @@ class Reservation_db extends CI_Model {
         if($typeInfo == "payment"){
             $ssql = '(tt.TrxSign = 1 or tt.TrxSign is null)';
             $this->db->where($ssql);
-            //$this->db->where('tt.TrxSign', 1);
             $this->db->where('a.fkAccTypeId = ', $typeAcc);
             $this->db->where('att.AbsAmount > 0');
         }
 		if($typeInfo == "account"){
 			$this->db->order_by("fkPay", "ASC");
-			//$this->db->order_by("ID", "DESC");
 		}
 		$this->db->where('rpa.ynActive',1);
         $query = $this->db->get();
@@ -721,8 +688,6 @@ class Reservation_db extends CI_Model {
         }else if($type == "addPayAcc"){
             $this->db->where('TrxSign = -1');
         }
-        //$this->db->where('TrxSign = -1');
-		//$this->db->order_by('att.TrxTypeDesc ASC');
         $query = $this->db->get();
         if($query->num_rows() > 0 )
         {
@@ -742,7 +707,6 @@ class Reservation_db extends CI_Model {
     }
     
     public function getAccByRes($id){
-        //$this->db->distinct();
         $this->db->select( "rpa.fkAccId, RTRIM(att.AccTypeCode) as accType" );
         $this->db->from( 'tblResPeopleAcc rpa' );
         $this->db->join( 'tblAcc a', 'a.pkAccId = rpa.fkAccId' );
@@ -781,7 +745,6 @@ class Reservation_db extends CI_Model {
         return $query->result();
     }
     
-    /////////////////////////
     
     public function selectIdFrequency($string){
         $this->db->select("pkFrequencyID");
@@ -919,11 +882,6 @@ class Reservation_db extends CI_Model {
         $query = $this->db->get();
 		$row = $query->row();
         return $row->CollectionFeeAmt;
-        /*if($query->num_rows() > 0 )
-        {
-            $row = $query->row();
-            return $row->CollectionFeeAmt;
-        }*/
     }
     
     public function selectView(){
@@ -957,19 +915,10 @@ class Reservation_db extends CI_Model {
         if($query->num_rows() > 0 )
         {
              return $query->result();
-            //$row = $query->row();
-            //return $row->financeBalance;
         }
     }
     
     public function selectUnitiesContract($resId){
-       /* $this->db->select("RI.pkResInvtId, RI.fkUnitId, RI.Intv, RI.FirstOccYear, RI.LastOccYear, C.pkCalendarId,C.fkDayOfWeekId, C.Year");
-        $this->db->from('tblResInvt RI');
-        $this->db->join('tblCalendar C', 'C.Intv = RI.Intv', 'inner');
-        $this->db->where('C.Year', $year);
-        $this->db->where('fkResId', $resId);
-        $this->db->order_by('intv', 'ASC');
-        $query = $this->db->get();*/
         
         $this->db->select("RI.pkResInvtId, RI.fkUnitId, RI.Intv, RI.FirstOccYear, RI.LastOccYear");
         $this->db->from('tblResInvt RI');
@@ -1070,23 +1019,6 @@ class Reservation_db extends CI_Model {
             return $query->result();
         }
     }
-
-    
-    /*public function getRateType( $floorPlan, $floor, $view, $season, $season2, $occupancy, $occYear ){
-        $this->db->select("rt.RateAmtNight as ID, rt.RateTypeDesc");
-        $this->db->from('tblRateType rt');
-        $this->db->where('rt.ynActive', 1);
-        $this->db->where('rt.fkOccTypeId', $occupancy);
-        $this->db->where('rt.OccYear', $occYear);
-        $this->db->where('rt.fkFloorPlanID', $floorPlan);
-        //$this->db->where('rt.fkFloorId', $floor);
-        $this->db->where('rt.fkViewId', $view);
-		$this->db->where("( rt.fkSeasonId = '" . $season . "' or rt.fkSeasonId = '" . $season2 . "' )");
-		//$this->db->where('(rt.fkSeasonId =' $season);
-        
-        $query = $this->db->get();
-        return $query->result();
-    }*/
 	
 	public function getRateType( $idGroup ){
         $this->db->select("RT.pkRateTypeId as ID, RT.RateAmtNight");
@@ -1463,12 +1395,8 @@ class Reservation_db extends CI_Model {
         $this->db->from($p['tabla']);
         $this->db->where($p['codicion'], $p['id']);
         $query = $this->db->get();
-		//$query = $this->db->get();
         return $query->result();
-        /*if($query->num_rows() > 0 ){
-            //$row = $query->row();
-            return $row->$p['alias'];
-        }*/
+
     }
 	
 	public function getCurrentStatus($idStatus){
@@ -1511,17 +1439,6 @@ class Reservation_db extends CI_Model {
         }
 	}
 	
-    /*public function selectNextStatusDesc($idStatus){
-        $this->db->select('S.StatusDesc as Descripcion');
-        $this->db->from('tblStatus S');
-        $this->db->where('pkStatusId', $idStatus);
-        $query = $this->db->get();
-
-        if($query->num_rows() > 0 ){
-            $row = $query->row();
-            return $row->Descripcion;
-        }
-    }*/
 
 	public function selectNextStatusDesc2($id){
         $this->db->select('s.statusDesc');
@@ -1539,12 +1456,7 @@ class Reservation_db extends CI_Model {
         }
     }
     public function selectMaxStatus(){
-       /* $this->db->select('max(PkStatusTypeStatusId) as maximo');
-        $this->db->from('tblstatustypestatus sts');
-        $this->db->join('tblstatustype st', 'st.pkStatusTypeid = sts.fkStatusTypeId', 'inner');
-        $this->db->join('tblstatus s', 's.pkStatusId = sts.fkStatusId', 'inner');
-        $this->db->where('st.pkStatusTypeid', 2);
-        $this->db->where('st.ynActive', 1);*/
+
 		$this->db->select('sts.fkStatusId as maximo');
 		$this->db->from('tblStatusTypeStatus sts');
 		$this->db->where('sts.fkStatusTypeId', 2);

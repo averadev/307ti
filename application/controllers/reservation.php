@@ -1448,59 +1448,58 @@ private function comprubaArray($valor, $array){
 	}
 
 	public function createCreditCardAcc(){
-	if($this->input->is_ajax_request()){	
 
-		$datos = $_POST['card'];
-		$id = $_POST['idAccount'];
-		$data["tarjetaAsociada"] = $this->reservation_db->getCreditCardAS($id);
-		$Tarjeta = isValidateCreditCard();
-		if ($Tarjeta['valido']) {
-		if ($data["tarjetaAsociada"]) {
-			
-			
-				if ($datos) {
-					$Card = [
-						"fkCcTypeId"	=> intval($datos['type']),
-						"fkAccId"		=> $id,
-						"CCNumber"		=> $datos['number'],
-						"expDate"		=> $datos['dateExpiration'],
-						"ZIP"			=> $datos['poscode'],
-						"Code"			=> $datos['code'],
-						"ynActive"		=> 1,
-						"CrBy"			=> $this->nativesessions->get('id'),
-						"CrDt"			=> $this->getToday()
-					];
-					$condicion = "fkAccId = " . $id;
-					$afectados = $this->reservation_db->updateReturnId('tblAcccc', $Card, $condicion);
-					$mensaje = ["mensaje"=>"Update Correctly", "status" => 1];
-					echo json_encode($mensaje);
-			
-			}
-		}else{
-			if ($datos) {
-				$Card = [
-					"fkCcTypeId"	=> intval($datos['type']),
-					"fkAccId"		=> $id,
-					"CCNumber"		=> $datos['number'],
-					"expDate"		=> $datos['dateExpiration'],
-					"ZIP"			=> $datos['poscode'],
-					"Code"			=> $datos['code'],
-					"ynActive"		=> 1,
-					"CrBy"			=> $this->nativesessions->get('id'),
-					"CrDt"			=> $this->getToday()
-				];
-				$this->reservation_db->insertReturnId('tblAcccc', $Card);
-		}
-	
-		$mensaje = ["mensaje"=>"Save Correctly", "status" => 1];
-		echo json_encode($mensaje);
-		}
-		}else{
-						echo  json_encode([
-							"mensaje" => $Tarjeta['mensajes'],
-							"status" => 0
-						]);
+		if($this->input->is_ajax_request()){	
+
+			$datos = $_POST['card'];
+			$id = $_POST['idAccount'];
+			$data["tarjetaAsociada"] = $this->reservation_db->getCreditCardAS($id);
+			$Tarjeta = isValidateCreditCard();
+			if ($Tarjeta['valido']) {
+				if ($data["tarjetaAsociada"]) {
+					if ($datos) {
+						$Card = [
+							"fkCcTypeId"	=> intval($datos['type']),
+							"fkAccId"		=> $id,
+							"CCNumber"		=> $datos['number'],
+							"expDate"		=> $datos['dateExpiration'],
+							"ZIP"			=> $datos['poscode'],
+							"Code"			=> $datos['code'],
+							"ynActive"		=> 1,
+							"CrBy"			=> $this->nativesessions->get('id'),
+							"CrDt"			=> $this->getToday()
+						];
+						$condicion = "fkAccId = " . $id;
+						$afectados = $this->reservation_db->updateReturnId('tblAcccc', $Card, $condicion);
+						$mensaje = ["mensaje"=>"Update Correctly", "status" => 1];
+						echo json_encode($mensaje);
+
 					}
+				}else{
+					if ($datos) {
+						$Card = [
+							"fkCcTypeId"	=> intval($datos['type']),
+							"fkAccId"		=> $id,
+							"CCNumber"		=> $datos['number'],
+							"expDate"		=> $datos['dateExpiration'],
+							"ZIP"			=> $datos['poscode'],
+							"Code"			=> $datos['code'],
+							"ynActive"		=> 1,
+							"CrBy"			=> $this->nativesessions->get('id'),
+							"CrDt"			=> $this->getToday()
+						];
+						$this->reservation_db->insertReturnId('tblAcccc', $Card);
+					}
+
+					$mensaje = ["mensaje"=>"Save Correctly", "status" => 1];
+					echo json_encode($mensaje);
+				}
+			}else{
+				echo  json_encode([
+					"mensaje" => $Tarjeta['mensajes'],
+					"status" => 0
+					]);
+			}
 		}
 	}
 	
@@ -1586,29 +1585,6 @@ private function comprubaArray($valor, $array){
 		}
 	}
 	
-	/*
-	public function getUnidades(){
-		if($this->input->is_ajax_request()) {
-			$filtros = $this->receiveWords($_POST);
-			$unidades = $this->reservation_db->getUnidades( $filtros );
-			$noUnidades = $this->reservation_db->getUnidadesOcc( $filtros, null );
-			$season = $this->reservation_db->getSeasonUnit( $filtros );
-			$unitDelete = array();
-			foreach( $unidades as $key => $item ){
-				foreach( $noUnidades as $item2 ){
-					if($item2->pkUnitId == $item->ID){
-						$unitDelete[] = $key;
-					}
-				}
-			}
-			foreach( $unitDelete as $item ){
-				unset( $unidades[$item] );
-			}
-			$unidades = array_values($unidades);
-			echo json_encode(array('items' => $unidades, 'season' => $season));
-		}
-	}
-	*/
 	
 	public function modalEdit(){
 		if($this->input->is_ajax_request()) {
@@ -1623,7 +1599,6 @@ private function comprubaArray($valor, $array){
 				"id"		=>	$id
 			];
 			$personas = $this->reservation_db->getPeopleNamesReservation($id);
-			//var_dump($personas);
 			$legalName = '';
 			if (sizeof($personas)> 0) {
 				for ($i=0; $i < sizeof($personas); $i++) {
@@ -1675,8 +1650,7 @@ private function comprubaArray($valor, $array){
 			$condicion = "pkResId = " . $id;
 			$afectados = $this->reservation_db->updateReturnId('tblRes', $Res, $condicion);
 			if ($afectados>0) {
-
-				//$next = $this->reservation_db->getNextStatus($IdStatus);
+				
 				$actual = $this->reservation_db->getCurrentStatus($IdStatus);
 				if ($actual == "Out") {
 					$financiamiento = [
