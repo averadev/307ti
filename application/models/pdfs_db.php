@@ -248,8 +248,6 @@ class pdfs_db extends CI_Model{
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),c.Date,106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId ASC) as arrivaDate');
         $this->db->select('(select top 1 CONVERT(VARCHAR(11),dateadd(day, 1, c.Date),106) from tblResOcc ro2 INNER JOIN tblCalendar c on c.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId ORDER BY ro2.fkCalendarId DESC) as depatureDate');
 		$this->db->select('tt.TrxTypeDesc ,at1.Amount, otg.OccTypeGroupCode as OCCTYPECODE');
-		//, CONVERT(VARCHAR(11),at1.DueDt,106) as dueDate
-        //$this->db->select('DATEDIFF(day, CONVERT(VARCHAR(11),at1.DueDt,106), CONVERT(VARCHAR(11),GETDATE(),106)) AS DiffDate');
 		
 		$this->db->from('tblAccTrx at1');
         $this->db->join('tblAcc a', 'a.pkAccId = at1.fkAccid');
@@ -314,8 +312,30 @@ class pdfs_db extends CI_Model{
 		return  $this->db->get()->result();
 		
 	}
-	   
+
+
+	public function getTrxCA($filters){
+		$sql = "";
+        $this->db->distinct();
+        $this->db->select('OTG.OccTypeGroupDesc as OccTypeGroup');
+		$this->db->select('OC.OccTypeDesc as OccType, AC.pkAccTrxId as TrxID');
+		$this->db->select('TT.TrxTypeDesc, AC.CrDt as TrxDate, AC.Amount');
+
+		$this->db->from('tblRes R');
+
+        $this->db->join('tblResInvt RI', '(RI.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)');
+        $this->db->join('tblResPeopleAcc RP', 'RP.fkResId = R.pkResId');
+        $this->db->join('tblResOcc RO', 'RO.fkResInvtId = RI.pkResInvtId');
+        $this->db->join('tblOccType OC', 'OC.pkOccTypeId = RO.fkOccTypeId');
+		$this->db->join('tblOccTypeGroup OTG', 'OC.fkOccTypeGroupId = OTG.pkOccTypeGroupId');
+		$this->db->join('tblAccTrx AC', 'RP.fkAccId = AC.fkAccid');
+		$this->db->join('TblTrxType TT', 'AC.fkTrxTypeId = TT.pkTrxTypeId');
+		$this->db->where('(R.fkResTypeId = 6 or R.fkResTypeId = 7)');
+		$this->db->where('OTG.pkOccTypeGroupId', 5);
+		$this->db->where('AC.AbsAmount', 0);
+		$this->db->order_by("AC.pkAccTrxId ASC");
+		
+		return  $this->db->get()->result();
+		
+	} 
 }
-/*pdf_model.php
- * el modelo
- */

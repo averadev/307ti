@@ -585,7 +585,7 @@ Class frontDesk_db extends CI_MODEL
 
 		$this->db->distinct();
 		$this->db->select("AC.pkAccTrxId as TrxID, U.UnitCode, AC.CrDt, ISNULL(USS.UserLogin, '') as CrBy, TT.TrxTypeDesc, TT.TrxSign");
-		$this->db->select("round(AC.AbsAmount, 2) as Amount, REPLACE(ISNULL( AC.NAuditDate, ''), 'Jan  1 1900 12:00AM', '') as Date_Audit, ISNULL(US.UserLogin, '') as AuditedBy");
+		$this->db->select("round(AC.Amount * tt.TrxSign, 2) as Amount, REPLACE(ISNULL( AC.NAuditDate, ''), 'Jan  1 1900 12:00AM', '') as Date_Audit, ISNULL(US.UserLogin, '') as AuditedBy");
 		$this->db->from("tblRes R");
 		$this->db->join('tblResInvt RI', 'R.pkResId = RI.fkResId', 'inner');
 		$this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
@@ -619,7 +619,7 @@ Class frontDesk_db extends CI_MODEL
 			$this->db->join('tblUser USS', 'AC.CrBy = USS.pkUserID', 'left');
 		}
 		if (isset($filtros["User"]) && !empty($filtros["User"])) {
-			$this->db->where("AC.NAuditUserId = (select pkUserID from tblUser where UserLogin = '".$filtros["User"]."')");
+			$this->db->where("AC.CrBy = (select pkUserID from tblUser where UserLogin = '".$filtros["User"]."')");
 		}
 		if (isset($filtros["Transaction"])&& !empty($filtros["Transaction"])) {
 			$this->db->where("TT.pkTrxTypeId", $filtros["Transaction"]);

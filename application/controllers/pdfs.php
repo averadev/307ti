@@ -332,7 +332,6 @@ class Pdfs extends CI_Controller {
 			$filters['options']['OccTypeGroupColl'] = $_GET['IDOCC'];
 		}
 		$TRX = $this->pdfs_db->getCollection2($filters);
-		//var_dump($TRX);
 		$body = '';
 		$title = "Account Status";
 		$name = "Account Status";
@@ -385,16 +384,6 @@ class Pdfs extends CI_Controller {
 			
 			$body .= '</tr>';
 			$Anterior = $item->pkResId;
-/*			if ($pagina != $pdf->getAliasNumPage()) {
-				$body.= '<tr>';
-				foreach ($TRX[0] as $clave => $valor){
-					if ($clave != "OCCTYPECODE") {
-						$body .= '<th>' . $clave . '</th>';
-					}
-					
-				}
-				$body.= '</tr>';
-			}*/
 			switch ($item->OCCTYPECODE) {
 				case 'OW':
 					$totalOW += floatval($item->Amount);
@@ -450,7 +439,68 @@ class Pdfs extends CI_Controller {
 		$html .= $body;
 		$html .= $style;
 		$html .= '</body></html>';
-		//var_dump($body);
+		$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+		
+		$pdf = $this->showpdf2( $pdf, $saveFiler );
+	}
+	public function reportAdminCA(){
+		$filters =[];
+		if ($_GET['IDOCC']) {
+			$filters['options']['OccTypeGroupColl'] = $_GET['IDOCC'];
+		}
+		$TRX = $this->pdfs_db->getTrxCA($filters);
+		$body = '';
+		$title = "Company Agreement";
+		$name = "Company Agreement";
+		$saveFiler = "Company_Agreement";
+		$pdf = $this->generatePdfTemp( $name, $title );
+		$style = $this->generateStyle();
+
+		$body .= '<table width="100%" cellpadding="2">';
+		$body.= '<tr>';
+		foreach ($TRX[0] as $clave => $valor){
+			if ($clave != "OCCTYPECODE") {
+				$body .= '<th>' . $clave . '</th>';
+			}
+			
+		}
+		$body.= '</tr>';
+		$total = 0;
+		$Anterior = '';
+		$subtotal = 0;
+		$RES = '';
+		$pagina = 0;
+		foreach ($TRX as $item){
+			if ($Anterior != '') {
+				if ($Anterior != $item->OccType) {
+					$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">SUBTOTAL</td><td class="blackLine21">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+					$subtotal = floatval($item->Amount);	 
+				}else{
+					$subtotal += floatval($item->Amount);
+				}
+			}else{
+				$subtotal += floatval($item->Amount);
+			}
+			$body .= '<tr>'; 
+			$body .= '<td  class="blackLine1">' . $item->OccTypeGroup . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->OccType . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->TrxID . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->TrxTypeDesc . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->TrxDate . '</td>';
+			$body .= '<td  class="blackLine1">$' . number_format((float)$item->Amount, 2, '.', '') . '</td>';
+			
+			$body .= '</tr>';
+			$Anterior = $item->OccType;
+			$total += floatval($item->Amount);
+		}
+		$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">SUBTOTAL</td><td class="blackLine3">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+		$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">TOTAL</td><td class="blackLine21">$'.number_format((float)$total, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+		$body .= '</table>';
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
 		$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 		
 		$pdf = $this->showpdf2( $pdf, $saveFiler );
