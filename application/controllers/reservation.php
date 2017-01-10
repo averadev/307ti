@@ -979,23 +979,23 @@ private function comprubaArray($valor, $array){
 				$euros = valideteNumber($precioDolares * $tipoCambioDolaresEuros);
 				$precio = $precioDolares;
 			}
+		return [$precio, $euros, $florines];
 	}
 	public function saveTransactionAcc(){
 		if($this->input->is_ajax_request()) {
-			$this->conversionMoneda();
+			$PRECIOS = $this->conversionMoneda();
 			if($_POST['attrType'] == "newTransAcc"){
 				$debit = -1 * abs($_POST['amount']);
-				
 				$transaction = [
 					"fkAccid" 			=> $_POST['accId'],  //la cuenta
 					"fkTrxTypeId"		=> $_POST['trxTypeId'], //lista
 					"fkTrxClassID"		=> $_POST['trxClassID'], // vendedor
 					"Debit-"			=> valideteNumber($debit),
 					"Credit+"			=> 0,
-					"Amount"			=> $precio,
-					"AbsAmount"			=> $precio,
-					"Curr1Amt"			=> $euros,
-					"Curr2Amt"			=> $florines,
+					"Amount"			=> $PRECIOS[0],
+					"AbsAmount"			=> $PRECIOS[0],
+					"Curr1Amt"			=> $PRECIOS[1],
+					"Curr2Amt"			=> $PRECIOS[2],
 					"Remark"			=> $_POST['remark'],
 					"Doc"				=> $_POST['doc'],
 					"DueDt"				=> $_POST['dueDt'],
@@ -1013,34 +1013,34 @@ private function comprubaArray($valor, $array){
 				$idTrans = $_POST['idTrans'];
 				$valTrans = $_POST['valTrans'];
 				$trxClass = $_POST['trxClass'];
-				$amount = floatval($_POST['amount']);
+				$PAGO = floatval($_POST['amount']);
 				$update = array();
 				$insertTrx = array();
 				$totalAmou2 = 0;
 				for($i = 0; $i<count($idTrans); $i++){
 					
-					if($amount > 0){
-						$montoTRX = floatval($valTrans[$i]);
+					if($PAGO > 0){
+						$totaAPagar = floatval($valTrans[$i]);
 						$totalAmou = 0;
 						$totalAmou2 += 0;
-						if($montoTRX == $amount){
-							$totalAmou2 += $montoTRX;
-							$amount = 0;
-						}else if( $montoTRX > $amount ){
-							$totalAmou2 += $amount;
-							$totalAmou = $montoTRX - $amount;
-							$amount = 0;
-						}else if($montoTRX < $amount){
-							$amount = $amount - $montoTRX;
-							$totalAmou2 += $montoTRX;
+						if($totaAPagar == $PAGO){
+							$totalAmou2 += $totaAPagar;
+							$PAGO = 0;
+						}else if( $totaAPagar > $PAGO ){
+							$totalAmou2 += $PAGO;
+							$totalAmou = $totaAPagar - $PAGO;
+							$PAGO = 0;
+						}else if($totaAPagar < $PAGO){
+							$PAGO = $PAGO - $totaAPagar;
+							$totalAmou2 += $totaAPagar;
 						}
 						$Moneda = $_POST['currency'];
 						$conversion = $this->convertMoney($Moneda, $totalAmou);
 						$totalAmou = $conversion['precio'];
 						$totalAmou = str_replace(",", ".", $totalAmou);
-						$transU = array(
+						$transU = [
 							'AbsAmount'		=>	$totalAmou,
-						);
+						];
 						$condicion = "pkAccTrxId = " . $idTrans[$i];
 						$ID = $this->reservation_db->updateReturnId( 'tblAccTrx', $transU, $condicion );
 						if ($ID) {
@@ -1056,14 +1056,14 @@ private function comprubaArray($valor, $array){
 				$debit = floatval(-1 * abs($totalAmou2));
 				$debit = str_replace(",", ".", $debit);
 				$totalAmou2 = str_replace(",", ".", $totalAmou2);
-				$transI = array(
+				$transI = [
 					"fkAccid" 			=> $_POST['accId'],
 					"fkTrxTypeId"		=> $_POST['trxTypeId'],
 					"fkTrxClassID"		=> $this->reservation_db->gettrxClassID('PAY'),
 					"Debit-"			=> $debit,
 					"Credit+"			=> 0,
 					"Amount"			=> $totalAmou2,
-					"AbsAmount"			=> $totalAmou2,
+					"AbsAmount"			=> 0,
 					"Curr1Amt"			=> $euros,
 					"Curr2Amt"			=> $florines,
 					"Remark"			=> $_POST['remark'],
@@ -1074,7 +1074,7 @@ private function comprubaArray($valor, $array){
 					"CrDt"				=> $this->getToday(),
 					"MdBy"				=> $this->nativesessions->get('id'),
 					"MdDt"				=> $this->getToday()
-					);
+				];
 				$IDPago = $this->reservation_db->insertReturnId( 'tblAccTrx', $transI );
 				for ($i=0; $i < sizeof($insertTrx) ; $i++) { 
 					$pagos = [
@@ -1088,7 +1088,7 @@ private function comprubaArray($valor, $array){
 					$this->reservation_db->insertReturnId( 'tblPayTrx', $pagos );
 				}
 				
-				$message= array('success' => true, 'message' => "transaction save");
+				$message = array('success' => true, 'message' => "transaction save");
 			}
 			echo json_encode($message);
 		}

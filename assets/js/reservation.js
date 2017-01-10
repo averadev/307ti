@@ -2613,7 +2613,8 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 						$("input[name='checkPayAcc[]']:checked").each(function(){
 							amoutCur = amoutCur + parseFloat($(this).val());
 						});
-						$('#amountSettledAcc').text( '$ ' + amoutCur.toFixed(4) );
+						$('#amountSettledAcc').text( '$ ' + amoutCur.toFixed(2) );
+
 					});
 				}
 			}

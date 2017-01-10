@@ -79,7 +79,7 @@ class pdfs_db extends CI_Model{
 	
 	function getResAcc($idRes){
 		$this->db->distinct();
-		$this->db->select('r.ResConf, r.Folio, rpa.fkAccId, p.PropertyName,  p.PropertyShortName, otg.OccTypeGroupDesc');
+		$this->db->select('r.ResConf, r.Folio, rpa.fkAccId, p.PropertyName,  p.PropertyShortName, otg.OccTypeGroupDesc, u.UnitCode');
 		$this->db->from('tblRes r');
 		$this->db->join('tblResPeopleAcc rpa', 'rpa.fkResId = r.pkResId', 'INNER');
 		$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'INNER');
@@ -317,23 +317,24 @@ class pdfs_db extends CI_Model{
 	public function getTrxCA($filters){
 		$sql = "";
         $this->db->distinct();
-        $this->db->select('OTG.OccTypeGroupDesc as OccTypeGroup');
-		$this->db->select('OC.OccTypeDesc as OccType, AC.pkAccTrxId as TrxID');
-		$this->db->select('TT.TrxTypeDesc, AC.CrDt as TrxDate, AC.Amount');
+        $this->db->select('OTG.OccTypeGroupCode as OccGroup, R.ResConf');
+		$this->db->select('convert(VARCHAR(10), AC.CrDt, 110) as TrxDate, AC.Doc, AC.Remark');
+		$this->db->select('AC.pkAccTrxId as TrxID, TT.TrxTypeDesc as Description,  u.unitcode as Unit');
+		$this->db->select('OC.OccTypeDesc as BillTo, AC.AbsAmount as Charge');
 
 		$this->db->from('tblRes R');
-
-        $this->db->join('tblResInvt RI', '(RI.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)');
-        $this->db->join('tblResPeopleAcc RP', 'RP.fkResId = R.pkResId');
-        $this->db->join('tblResOcc RO', 'RO.fkResInvtId = RI.pkResInvtId');
-        $this->db->join('tblOccType OC', 'OC.pkOccTypeId = RO.fkOccTypeId');
-		$this->db->join('tblOccTypeGroup OTG', 'OC.fkOccTypeGroupId = OTG.pkOccTypeGroupId');
-		$this->db->join('tblAccTrx AC', 'RP.fkAccId = AC.fkAccid');
-		$this->db->join('TblTrxType TT', 'AC.fkTrxTypeId = TT.pkTrxTypeId');
+        $this->db->join('tblResInvt RI', '(RI.fkResId =  CASE WHEN R.fkResTypeId = 6 THEN R.pkResRelatedId ELSE R.pkResId END)', 'INNER');
+        $this->db->join('tblUnit U', 'u.pkUnitId = RI.fkUnitId', 'INNER');
+        $this->db->join('tblResPeopleAcc RP', 'RP.fkResId = R.pkResId', 'INNER');
+        $this->db->join('tblResOcc RO', 'RO.fkResInvtId = RI.pkResInvtId', 'INNER');
+        $this->db->join('tblOccType OC', 'OC.pkOccTypeId = RO.fkOccTypeId', 'INNER');
+		$this->db->join('tblOccTypeGroup OTG', 'OC.fkOccTypeGroupId = OTG.pkOccTypeGroupId', 'INNER');
+		$this->db->join('tblAccTrx AC', 'RP.fkAccId = AC.fkAccid', 'INNER');
+		$this->db->join('TblTrxType TT', 'AC.fkTrxTypeId = TT.pkTrxTypeId', 'INNER');
 		$this->db->where('(R.fkResTypeId = 6 or R.fkResTypeId = 7)');
 		$this->db->where('OTG.pkOccTypeGroupId', 5);
-		$this->db->where('AC.AbsAmount', 0);
-		$this->db->order_by("AC.pkAccTrxId ASC");
+		$this->db->where('AC.AbsAmount > 0');
+		$this->db->order_by("OccTypeGroupCode, OccTypeDesc ASC");
 		
 		return  $this->db->get()->result();
 		

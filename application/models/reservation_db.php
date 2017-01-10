@@ -1343,9 +1343,9 @@ class Reservation_db extends CI_Model {
     }
     public function validateResDate($ResConf){
         $sql = "select pkResId from tblRes R where ResConf = '". $ResConf. "' ";
-        $sql.= " and getdate() <= (SELECT top 1 c2.Date from tblResOcc ro2 ";
+       /* $sql.= " and getdate() + 100 <= (SELECT top 1 c2.Date from tblResOcc ro2 ";
         $sql.= " INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId ";
-        $sql.=" where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId asc)";  
+        $sql.=" where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId asc)";  */
         $query = $this->db->query($sql);
 
         if($query->num_rows() > 0 ){
@@ -1588,4 +1588,8 @@ class Reservation_db extends CI_Model {
         //return $this->db->affected_rows();
     }
     
+    public function saveTransantionsPRO($TRXIDS, $TRXPAYS, $PAY){
+        $query = $this->db->query("CALL pc()");
+        return $query->result();
+    }
 }

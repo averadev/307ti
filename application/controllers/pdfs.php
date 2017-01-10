@@ -445,9 +445,6 @@ class Pdfs extends CI_Controller {
 	}
 	public function reportAdminCA(){
 		$filters =[];
-		if ($_GET['IDOCC']) {
-			$filters['options']['OccTypeGroupColl'] = $_GET['IDOCC'];
-		}
 		$TRX = $this->pdfs_db->getTrxCA($filters);
 		$body = '';
 		$title = "Company Agreement";
@@ -472,29 +469,33 @@ class Pdfs extends CI_Controller {
 		$pagina = 0;
 		foreach ($TRX as $item){
 			if ($Anterior != '') {
-				if ($Anterior != $item->OccType) {
-					$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">SUBTOTAL</td><td class="blackLine21">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
-					$subtotal = floatval($item->Amount);	 
+				if ($Anterior != $item->BillTo) {
+							$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine22">SUBTOTAL</td><td class="blackLine3">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+					$subtotal = floatval($item->Charge);	 
 				}else{
-					$subtotal += floatval($item->Amount);
+					$subtotal += floatval($item->Charge);
 				}
 			}else{
-				$subtotal += floatval($item->Amount);
+				$subtotal += floatval($item->Charge);
 			}
 			$body .= '<tr>'; 
-			$body .= '<td  class="blackLine1">' . $item->OccTypeGroup . '</td>';
-			$body .= '<td  class="blackLine1">' . $item->OccType . '</td>';
-			$body .= '<td  class="blackLine1">' . $item->TrxID . '</td>';
-			$body .= '<td  class="blackLine1">' . $item->TrxTypeDesc . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->OccGroup . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->ResConf . '</td>';
 			$body .= '<td  class="blackLine1">' . $item->TrxDate . '</td>';
-			$body .= '<td  class="blackLine1">$' . number_format((float)$item->Amount, 2, '.', '') . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->Doc . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->Remark . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->TrxID . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->Description . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->Unit . '</td>';
+			$body .= '<td  class="blackLine1">' . $item->BillTo . '</td>';
+			$body .= '<td  class="blackLine1">$' . number_format((float)$item->Charge, 2, '.', '') . '</td>';
 			
 			$body .= '</tr>';
-			$Anterior = $item->OccType;
-			$total += floatval($item->Amount);
+			$Anterior = $item->BillTo;
+			$total += floatval($item->Charge);
 		}
-		$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">SUBTOTAL</td><td class="blackLine3">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
-		$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">TOTAL</td><td class="blackLine21">$'.number_format((float)$total, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+		$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine22">SUBTOTAL</td><td class="blackLine3">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+		$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine22">TOTAL</td><td class="blackLine3">$'.number_format((float)$total, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
 		$body .= '</table>';
 		$html = '';
 		$html .= ' <html><head></head><body>';
@@ -534,15 +535,12 @@ class Pdfs extends CI_Controller {
 		$style = $this->generateStyle();
 		
 		$body = '';
-		//var_dump($data2);
-		// var_dump($data2[0]);
-		// foreach ($data2 as $item){
-		// 	var_dump($item);
 			$data3 = $this->pdfs_db->getAccTrx($data2[0]->fkAccId);
 			$body .= '<table width="100%">';
 			$body .= '<tr><td>' . $data2[0]->PropertyName . '</td><td>Reservation Confirmation # ' . $data2[0]->ResConf . '</td></tr>';
 			$body .= '<tr><td>' . $data2[0]->PropertyShortName . '</td><td>Account Name: ' . $data2[0]->OccTypeGroupDesc . '</td></tr>';
 			$body .= '<tr><td>Netherlands Antilles</td><td>Account Id: ' . $data2[0]->fkAccId . '</td></tr>';
+			$body .= '<tr><td>Unit Code:</td><td>' . $data2[0]->UnitCode . '</td></tr>';
 			if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
 				$body .= '<tr><td></td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
 			}
@@ -613,7 +611,6 @@ class Pdfs extends CI_Controller {
 	public function Invoice(){
 		
 		$idRes = $_GET['idRes'];
-		//$idRes = 125;
 		$OccTypeDesc = $this->pdfs_db->getOCCTypeByID($idRes);
 		$data = $this->pdfs_db->getPeople($idRes);
 		$data2 = $this->pdfs_db->getResAcc($idRes);
@@ -624,13 +621,13 @@ class Pdfs extends CI_Controller {
 		$style = $this->generateStyle();
 		
 		$body = '';
-		
-		//foreach ($data2 as $item){
+
 			$data3 = $this->pdfs_db->getAccTrx($data2[0]->fkAccId);
 			$body .= '<table width="100%">';
 			$body .= '<tr><td>' . $data2[0]->PropertyName . '</td><td>Reservation Confirmation # ' . $data2[0]->ResConf . '</td></tr>';
 			$body .= '<tr><td>' . $data2[0]->PropertyShortName . '</td><td>Account Name: ' . $data2[0]->OccTypeGroupDesc . '</td></tr>';
 			$body .= '<tr><td>Netherlands Antilles</td><td>Account Id: ' . $data2[0]->fkAccId . '</td></tr>';
+			$body .= '<tr><td>Unit Code:</td><td>' . $data2[0]->UnitCode . '</td></tr>';
 			if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
 				$body .= '<tr><td></td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
 			}
@@ -904,6 +901,7 @@ class Pdfs extends CI_Controller {
 		$style .= ' .blackLine2{ border-bottom: solid .5px black; height: 40px; font-weight:bold;}';
 		$style .= ' .blackLine21{ border-bottom: solid .5px #A4A4A4; height: 40px; font-weight:bold;}';
 		$style .= ' .blackLine3{border-bottom: solid .5px #A4A4A4; height: 60px; font-weight:bold;}';
+		$style .= ' .blackLine22{font-size:11px; border-bottom: solid .5px #A4A4A4; height: 60px; font-weight:bold;}';
 		$style .= ' h3{ color: #662C19; }';
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
 		$style .= ' .cafe{ color: #662C19; font-size:15px; }';
