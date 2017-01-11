@@ -3968,15 +3968,9 @@ function saveAccContRes(attrType){
 			trxClass.push($(this).attr('trxclass'));
 		});
 	}
-	//showAlert(true,"Saving changes, please wait ....",'progressbar');
+
 	msgReservation = alertify.success('Saving changes, please wait ....', 0);
 	var accType = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accType');
-	//var accId = 0;
-	/*if(accType == 6){
-		accId = $('#btNewTransAccRes').data( 'idAccRes' );
-	}else if(accType == 5){
-		accId = $('#btNewTransAccRes').data( 'idAccFront' );
-	}*/
 	var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
 		var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
 	$.ajax({
@@ -3998,22 +3992,14 @@ function saveAccContRes(attrType){
 		url: 'reservation/saveTransactionAcc'
 	}).done(function( data, textStatus, jqXHR ) {
 		if( data.success ){
-			//alert("guardeishion");
-			//getDatailByID("contractstbody");
 			getAccountsRes( $('#btNewTransAccRes').data( 'idRes' ), "account", "" );
 			$("#dialog-accountsRes").dialog('close');
-			//showAlert(false,"Saving changes, please wait ....",'progressbar');
 			msgReservation.dismiss();
 		}else{
 			$("#dialog-accountsRes").dialog('close');
-			//showAlert(false,"Saving changes, please wait ....",'progressbar');
 			msgReservation.dismiss();
-			//alert("no transacenshion");
 		}
 	}).fail(function( jqXHR, textStatus, errorThrown ) {
-		//alert("no guardeishion");
-		//$("#dialog-accountsRes").dialog('close');
-		//showAlert(false,"Saving changes, please wait ....",'progressbar');
 		msgReservation.dismiss();
 		alertify.error("Try Again");
 	});

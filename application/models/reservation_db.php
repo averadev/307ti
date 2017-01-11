@@ -1592,4 +1592,8 @@ class Reservation_db extends CI_Model {
         $query = $this->db->query("CALL pc()");
         return $query->result();
     }
+
+    public function beginTransactions(){
+        $this->db->trans_begin();
+    }
 }

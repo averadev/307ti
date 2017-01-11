@@ -1017,6 +1017,8 @@ private function comprubaArray($valor, $array){
 				$update = array();
 				$insertTrx = array();
 				$totalAmou2 = 0;
+
+				$this->reservation_db->db->trans_begin();
 				for($i = 0; $i<count($idTrans); $i++){
 					
 					if($PAGO > 0){
@@ -1087,8 +1089,16 @@ private function comprubaArray($valor, $array){
 					];
 					$this->reservation_db->insertReturnId( 'tblPayTrx', $pagos );
 				}
-				
-				$message = array('success' => true, 'message' => "transaction save");
+				if ($this->reservation_db->db->trans_status() === false)
+				{
+				        $this->reservation_db->db->trans_rollback();
+				        $message = array('success' => false, 'message' => "Error", 'status' => $this->reservation_db->db->trans_status());
+				}
+				else
+				{
+				        $this->reservation_db->db->trans_commit();
+				        $message = array('success' => true, 'message' => "transaction save", 'status' => $this->reservation_db->db->trans_status());
+				}
 			}
 			echo json_encode($message);
 		}
