@@ -457,7 +457,11 @@ class Pdfs extends CI_Controller {
 		$body.= '<tr>';
 		foreach ($TRX[0] as $clave => $valor){
 			if ($clave != "OCCTYPECODE") {
-				$body .= '<th>' . $clave . '</th>';
+				if ($clave == 'Description') {
+					$body .= '<th colspan="2">' . $clave . '</th>';
+				}else{
+					$body .= '<th class="blackLine45">' . $clave . '</th>';
+				}
 			}
 			
 		}
@@ -470,7 +474,7 @@ class Pdfs extends CI_Controller {
 		foreach ($TRX as $item){
 			if ($Anterior != '') {
 				if ($Anterior != $item->BillTo) {
-							$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine22">SUBTOTAL</td><td class="blackLine3">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+							$body .= '<tr><td class="blackLine45"></td><td class="blackLine1"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine22">SUBTOTAL</td><td class="blackLine39">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine45"></td><td class="blackLine45"></td></tr>';
 					$subtotal = floatval($item->Charge);	 
 				}else{
 					$subtotal += floatval($item->Charge);
@@ -479,23 +483,23 @@ class Pdfs extends CI_Controller {
 				$subtotal += floatval($item->Charge);
 			}
 			$body .= '<tr>'; 
-			$body .= '<td  class="blackLine1">' . $item->OccGroup . '</td>';
-			$body .= '<td  class="blackLine1">' . $item->ResConf . '</td>';
-			$body .= '<td  class="blackLine1">' . $item->TrxDate . '</td>';
-			$body .= '<td  class="blackLine1">' . $item->Doc . '</td>';
-			$body .= '<td  class="blackLine1">' . $item->Remark . '</td>';
-			$body .= '<td  class="blackLine1">' . $item->TrxID . '</td>';
-			$body .= '<td  class="blackLine1">' . $item->Description . '</td>';
-			$body .= '<td  class="blackLine1">' . $item->Unit . '</td>';
-			$body .= '<td  class="blackLine1">' . $item->BillTo . '</td>';
-			$body .= '<td  class="blackLine1">$' . number_format((float)$item->Charge, 2, '.', '') . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->OG . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->ResConf . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->TrxDate . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->Doc . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->Remark . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->TrxID . '</td>';
+			$body .= '<td colspan="2" class="blackLine45">' . $item->Description . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->Unit . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->BillTo . '</td>';
+			$body .= '<td  class="blackLine45">$' . number_format((float)$item->Charge, 2, '.', '') . '</td>';
 			
 			$body .= '</tr>';
 			$Anterior = $item->BillTo;
 			$total += floatval($item->Charge);
 		}
-		$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine22">SUBTOTAL</td><td class="blackLine3">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
-		$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine22">TOTAL</td><td class="blackLine3">$'.number_format((float)$total, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+		$body .= '<tr><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine22">SUBTOTAL</td><td class="blackLine39">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine45"></td><td class="blackLine45"></td></tr>';
+		$body .= '<tr><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45"></td><td class="blackLine45">TOTAL</td><td class="blackLine39">$'.number_format((float)$total, 2, '.', '').'</td><td class="blackLine45"></td><td class="blackLine45"></td></tr>';
 		$body .= '</table>';
 		$html = '';
 		$html .= ' <html><head></head><body>';
@@ -901,7 +905,9 @@ class Pdfs extends CI_Controller {
 		$style .= ' .blackLine2{ border-bottom: solid .5px black; height: 40px; font-weight:bold;}';
 		$style .= ' .blackLine21{ border-bottom: solid .5px #A4A4A4; height: 40px; font-weight:bold;}';
 		$style .= ' .blackLine3{border-bottom: solid .5px #A4A4A4; height: 60px; font-weight:bold;}';
+		$style .= ' .blackLine39{font-size:11px;border-bottom: solid .5px #A4A4A4; height: 60px; font-weight:bold;}';
 		$style .= ' .blackLine22{font-size:11px; border-bottom: solid .5px #A4A4A4; height: 60px; font-weight:bold;}';
+		$style .= ' .blackLine45{font-size:11px;}';
 		$style .= ' h3{ color: #662C19; }';
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
 		$style .= ' .cafe{ color: #662C19; font-size:15px; }';
@@ -909,9 +915,11 @@ class Pdfs extends CI_Controller {
 		$style .= ' .tablaGrande{ color: #666666; font-weight: normal; font-size:9px; }';
 		$style .= ' .alinearR{text-align:right;font-size:12px;}';
 		$style .= ' .fuenteP{font-size:12px;}';
+		$style .= ' th.CA{ width:32px; }';
+		$style .= ' th.CA2{ width:60px; }';
 		$style .= ' .fuenteP1{font-size:12px; margin-bottom:2px;}';
-$style .= ' .fuenteP10{font-size:14px; margin-bottom:2px;}';
-$style .= ' .fuenteP11{font-size:15px; margin-bottom:2px;}';
+		$style .= ' .fuenteP10{font-size:14px; margin-bottom:2px;}';
+		$style .= ' .fuenteP11{font-size:15px; margin-bottom:2px;}';
 		$style .= ' .max{max-width: 500px;}';
 		$style .= ' .alinearL{ text-align:right; }';
 		

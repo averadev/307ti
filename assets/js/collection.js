@@ -15,6 +15,9 @@ var msgColletion = null;
 $('#btnCollSearch').off();
 $('#btnCollSearch').on('click', function() {  getCollection(0); });
 
+$('#btnCollReportCA').off();
+$('#btnCollReportCA').on('click', function() {  generateReportCA(); });
+
 /************Funciones**************/
 
 /**
@@ -683,4 +686,16 @@ function showReport(id){
 
 	var url = "Pdfs/reportAdminTRX?IDOCC="+IDOCC;
 	window.open(url);
+}
+
+function generateReportCA(){
+	// filters = {};
+	// dates = {};
+	// words = getWords(["dateAuditTRX", "userTrxAudit", "Transaction", "isAudited"]);
+	// options = {};
+	// url = "?type=report";
+	// for(j in words){
+	// 	url+= "&"+j+"="+words[j];
+	// }
+	window.open("Pdfs/reportAdminCA");
 }

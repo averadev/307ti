@@ -317,7 +317,7 @@ class pdfs_db extends CI_Model{
 	public function getTrxCA($filters){
 		$sql = "";
         $this->db->distinct();
-        $this->db->select('OTG.OccTypeGroupCode as OccGroup, R.ResConf');
+        $this->db->select('OTG.OccTypeGroupCode as OG, R.ResConf');
 		$this->db->select('convert(VARCHAR(10), AC.CrDt, 110) as TrxDate, AC.Doc, AC.Remark');
 		$this->db->select('AC.pkAccTrxId as TrxID, TT.TrxTypeDesc as Description,  u.unitcode as Unit');
 		$this->db->select('OC.OccTypeDesc as BillTo, AC.AbsAmount as Charge');

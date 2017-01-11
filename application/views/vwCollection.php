@@ -20,19 +20,20 @@
 					<div class="small-12 medium-12 large-12 columns">
 						<div class="row">
 							<!-- trx id -->
-							<div class="small-12 large-3 columns">
+							<div class="small-12 large-2 columns">
 								<label id="alertTrxIdColl" for="TrxIdColl" class="text-left">TrxId
 									<input type="number" id="TrxIdColl" class="txtSearch"/>
 								</label>
 							</div>
 							<!-- folio -->
-							<div class="small-12 large-3 columns">
+							<div class="small-12 large-2 columns">
 								<label id="alertFolioColl" for="FolioColl" class="text-left">Folio
 									<input type="number" id="FolioColl" class="txtSearch"/>
 								</label>
 							</div>
+							
 							<!-- trx type -->
-							<div class="small-12 large-3 columns">
+							<div class="small-12 large-2 columns">
 								<label id="alertTrxTypeColl" for="TrxTypeColl" class="text-left">Trx Type
 									<div class="caja" >
 										<select id="TrxTypeColl" class="txtSearch input-group-field round">
@@ -65,9 +66,18 @@
 									</div>
 								</label>
 							</div>
+							<div class="small-12 large-3 columns">
+							<label id="alertFolioColl" for="FolioColl" class="text-left">Report
+								
+								</label>
+								<a id="btnCollReportCA" class="btn btn-primary spanSelect">
+									<div class="label"> Agreements Report</div>
+									<i class="fa fa-print" aria-hidden="true"></i>
+								</a>
+							</div>
 						</div>
 					</div>
-					<!----->
+
 					<div class="small-12 medium-12 large-12 columns">
 						<div class="row">
 							<!-- Due Date -->
@@ -102,7 +112,6 @@
 							</div>
 						</div>
 					</div>
-					<!----->
 					<div class="small-12 medium-12 large-12 columns">
 						<div class="row">
 							<!-- Occ type Group -->
