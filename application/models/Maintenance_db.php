@@ -173,16 +173,20 @@ Class Maintenance_db extends CI_MODEL
         $this->db->join('tblResFin RF', 'RF.fkResId = R.pkResId');
         $this->db->join('tblPriceMnt PM', 'PM.fkFloorPlanId = U.fkFloorPlanId');
         $this->db->join('tblCsfBatch FB', 'FB.fkResId = R.pkResId', 'left');  /**   **/
-
-		if (isset($filters['SaleType']) && !empty($filters['SaleType'])) {
-			$this->db->where('R.fkSaleTypeId', $filters['SaleType']);
-		}
-		if (isset($filters['FloorPlan']) && !empty($filters['FloorPlan'])) {
-			$this->db->where('u.fkFloorPlanId', $filters['FloorPlan']);
-		}
-        if (isset($filters['Year']) && !empty($filters['Year'])) {
-            $this->db->where( $filters['Year'].' = ro.OccYear');
+        if (isset($filters['Folio']) && !empty($filters['Folio'])) {
+              $this->db->where('R.Folio', $filters['Folio']);
+        }else{
+            if (isset($filters['SaleType']) && !empty($filters['SaleType'])) {
+                $this->db->where('R.fkSaleTypeId', $filters['SaleType']);
+            }
+            if (isset($filters['FloorPlan']) && !empty($filters['FloorPlan'])) {
+                $this->db->where('u.fkFloorPlanId', $filters['FloorPlan']);
+            }
+            if (isset($filters['Year']) && !empty($filters['Year'])) {
+                $this->db->where( $filters['Year'].' = ro.OccYear');
+            }
         }
+
         $this->db->where('ca.fkDayOfWeekId = 1');
         $this->db->where('ro.occyear = ca.Year');
         $this->db->where('pm.occyear = ro.OccYear');

@@ -233,6 +233,7 @@ function changeTabsModalBatch(screen){
 
 function searchMaintenanceContracts(){
 	showLoading('#tablaSearcBatchs',true);
+
 	var ajaxDatos =  {
 		url: "Maintenance/getContrats",
 		tipo: "json",
@@ -242,7 +243,8 @@ function searchMaintenanceContracts(){
 				SaleType: $("#NSaleType").val(),
 				FloorPlan: $("#NFloorPlan").val(),
 				Frequency: $("#NFrequency").val(),
-				Season: $("#NSeason").val()
+				Season: $("#NSeason").val(),
+				Folio: $("#MFolio").val().replace("1-", "")
 		},
 		funcionExito : drawTableM,
 		funcionError: mensajeAlertify

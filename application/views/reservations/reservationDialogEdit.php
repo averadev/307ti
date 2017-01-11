@@ -456,7 +456,9 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 				<?php
 					if( !($statusActual == "Cancel" || $statusActual == "Exchange") ){
 					?>
-						
+						<p id="NEWRES"></p>
+						<p id="NEWFRONT"></p>
+						<p id="NEWDEPS"></p>
 						<a  id="btNewTransAccRes" attr_type="newTransAcc" class="btn btn-primary btn-Search" <?php if( $statusActual == "Out"){ ?> style="display:none;" <?php  }?> >
 							<div class="label">New Transaction</div>
 							<img src="<?php echo base_url().IMG; ?>common/more.png"/>

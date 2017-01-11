@@ -2602,7 +2602,7 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 					var nameSafe = acc[i].accType;
 					$('#btNewTransAccRes').data( 'idAcc' + nameSafe, acc[i].fkAccId );	
 				}
-				$('#btNewTransAccRes').data( 'idRes', id )
+				$('#btNewTransAccRes').data( 'idRes', id );
 			}else{
 				var acc = data["acc"];
 				if(acc.length > 0){
@@ -3940,7 +3940,8 @@ function setDataOpcionAccountRes(attrType){
 		$('#grpTrxClassAcc').show();
 		$('#grpTablePayAcc').hide();
 	}else{
-		getAccountsRes( $('#btNewTransAccRes').data( 'idRes' ), "payment", accType );
+		var id = $("#idReservationX").text();
+		getAccountsRes( id , "payment", accType );
 		$('#grpTrxClassAcc').hide();
 		$('#grpTablePayAcc').show();
 	}
@@ -3972,7 +3973,7 @@ function saveAccContRes(attrType){
 	msgReservation = alertify.success('Saving changes, please wait ....', 0);
 	var accType = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accType');
 	var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
-		var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
+	var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
 	$.ajax({
 		data: {
 			attrType:attrType,

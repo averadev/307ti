@@ -132,6 +132,19 @@ label {
 	border-bottom-right-radius:3px;
 	font-family: Arimo;
 }
+.caja2 {
+	overflow: hidden;
+	position:relative;
+	margin-bottom:16px;
+}
+
+.caja2 select{
+	background-image:none;
+}
+
+.caja2 select:focus{
+	 outline: none;
+}
 
 /**
 * @diseño de los botones en general

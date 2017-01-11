@@ -102,6 +102,15 @@
 				</select>
 			</div>
 	</div>
+	<div class="small-6 columns">
+		<div class="small-3 columns">
+			<label class="text-left" for="legalName">Folio</label>
+		</div>
+		<div class="small-9 columns"></div>
+			<div class="caja2" >
+				<input id="MFolio" type="text" class="round" placeholder="Folio" name="search">
+			</div>
+	</div>
 	<div class="row">
 		<a id="btnSearchContracts" class="btn btn-primary btn-Search float-right">
 				<div class="label">Search</div>
