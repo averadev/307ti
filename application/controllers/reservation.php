@@ -1215,10 +1215,10 @@ private function comprubaArray($valor, $array){
 								$item->Overdue_Amount = $item->Pay_Amount;
 							}
 						}
-						unset( $item->idpay, $item->fkPay );
-						/*if ($item->PAYID == 0) {
-							$item->PAYID = '';
-						}*/
+						//unset( $item->idpay, $item->fkPay );
+						if ($item->idpay == 0) {
+							$item->idpay = '';
+						}
 					}
 					
 					$datos[$tyTr] = $data;

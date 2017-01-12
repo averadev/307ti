@@ -682,7 +682,7 @@ class Reservation_db extends CI_Model {
         $this->db->distinct();
         if($typeInfo == "account"){
             $this->db->select('att.pkAccTrxId as ID');
-             $this->db->select("ISNULL(PT1.fkPayId, 0) as PAYID");
+            $this->db->select("ISNULL(PT1.fkPayId, 0) as PAYID");
 			$this->db->select("PT.fkPayId as idpay, CASE WHEN PT.fkPayId is NULL THEN att.pkAccTrxId ELSE PT.fkAccTrxId END as 'fkPay'");
             $this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Sign_transaction, att.fkAccId as AccID');
             $this->db->select('tc.TrxClassDesc as Concept_Trxid');
@@ -1115,8 +1115,8 @@ class Reservation_db extends CI_Model {
     
 	public function selectWeeksReservation($id){
 		$this->db->distinct();
-		$this->db->select("r.pkResId as ID, r.folio as ContractNum,r.ResConf, ro.RateAmtNight, s.StatusDesc,r.FirstOccYear as OccYear,Fp.FloorPlanDesc");
-        $this->db->select("u.UnitCode as FixedUnitCode,ri.Intv as Intv,rt.resTypeDesc, ro.NightId, cal.Date, CONVERT(VARCHAR(11),cal.Date,106) as Date1, us.UserLogin, 0 as Delete, ro.pkResOccId");
+		$this->db->select("r.pkResId as ID, r.folio as Contract,r.ResConf, ro.RateAmtNight, s.StatusDesc as Status,r.FirstOccYear as OccYear,Fp.FloorPlanDesc");
+        $this->db->select("u.UnitCode as Unit,ri.Intv as Intv,rt.resTypeDesc as ResType, ro.NightId, cal.Date, CONVERT(VARCHAR(11),cal.Date,106) as Date1, us.UserLogin as User, 0 as Delete, ro.pkResOccId");
 		$this->db->from('tblres r ');
 		$this->db->join('tblStatus s with(nolock) ', ' s.pkStatusid = r.fkStatusId', 'inner');
 		$this->db->join('tblResType rt with(nolock) ', ' rt.pkResTypeid = r.fkResTypeId', 'inner');

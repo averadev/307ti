@@ -399,7 +399,7 @@ function drawTable2(data, table ,funcion, cadena, option){
 		//"scrollY": heightScroll - 50,
 		"scrollY": '60vh',
         "scrollCollapse": true,
-		"scrollX": true,
+		"scrollX": false,
 		"paging":   false,
 		"ordering": false,
 		"info":     false,
@@ -914,7 +914,6 @@ function setHeightModal(div){
 	var hTabs = $('#' + div + ' .contentModalHeader').height();
 	var hContent = $('#' + div + ' .contentModal').height();
 	$('#' + div + ' .contentModal').css('height', ( hContent - hTabs));
-	//$('#' + div + ' .contentModal').width('100%');
 }
 
 function  gotoDiv(contenedor, div){

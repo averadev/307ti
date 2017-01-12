@@ -269,6 +269,8 @@ class Pdfs extends CI_Controller {
 	}
 	public function reportMaintanance(){
 		
+		ini_set('max_execution_time', 700);
+		ini_set('memory_limit', '2048M');
 		$idRes = $_GET['id'];
 		
 		$contracts = $this->pdfs_db->getDataMaintenanceContract($idRes);

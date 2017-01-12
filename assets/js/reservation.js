@@ -1792,6 +1792,7 @@ function getDatailByIDRes(id){
 }
 
 function modalEditReservation(id){
+	console.log(maxWidth);
 	showLoading('#dialog-Edit-Reservation',true);
 	dialogo = $("#dialog-Edit-Reservation").dialog ({
   		open : function (event){
@@ -1818,7 +1819,7 @@ function modalEditReservation(id){
 		},
 		autoOpen: false,
      	height: maxHeight,
-     	width: maxWidth,
+     	width: "75%",
      	modal: true,
      	buttons: [
 	   	{
@@ -2549,7 +2550,7 @@ function getDatosReservation(id){
 				$('td.folioAccount').text(contraTemp.Folio);
 				$('#editReservationStatus').attr( 'statusRes', contraTemp.StatusDesc );
 			}
-			setHeightModal('dialog-Edit-Reservation');
+			//setHeightModal('dialog-Edit-Reservation');
 			addFunctionalityRes();
 	    },
 	    error: function(){
