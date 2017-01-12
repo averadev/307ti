@@ -632,6 +632,55 @@ class Reservation_db extends CI_Model {
     public function getAccountsById( $id, $typeInfo, $typeAcc ){
         $this->db->distinct();
         if($typeInfo == "account"){
+            $this->db->select('att.pkAccTrxId as ID, PT.fkPayId as idpay');
+            $this->db->select('tt.TrxTypeCode as Code, tt.TrxTypeDesc as Type, tt.TrxSign as Sign_transaction');
+            $this->db->select('att.fkAccId as AccID, tc.TrxClassDesc as Concept_Trxid');
+            $this->db->select('CONVERT(VARCHAR(10), att.DueDt, 101) as Due_Date');
+            $this->db->select('att.Amount, att.AbsAmount as Pay_Amount, 0 as Balance');
+            $this->db->select('0 as Overdue_Amount, att.Curr1Amt as Euros, att.Curr2Amt as Nederlands_Florins');
+            $this->db->select('att.Doc as Document, att.Remark as Reference');
+            $this->db->select('u.UserLogin as CreateBy, att.CrDt as Creation_Date');
+        }else{
+            $this->db->select('0 as inputAll');
+            $this->db->select('att.pkAccTrxId as ID');
+            $this->db->select('tt.TrxTypeCode as Code');
+            $this->db->select('tc.pkTrxClassid, tc.TrxClassDesc as Concept_Trxid, tt.TrxTypeDesc as Type');
+            $this->db->select('att.DueDt as Due_Date, att.Amount, att.AbsAmount');
+        }
+        $this->db->from('tblAccTrx att');
+        $this->db->join('tblAcc a', 'a.pkAccId = att.fkAccId');
+        $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId');
+        $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = att.fkTrxTypeId');
+        $this->db->join('tblTrxClass tc', 'tc.pkTrxClassid = att.fkTrxClassID');
+        $this->db->join('tblUser u', 'att.CrBy = u.pkUserId');
+
+        $this->db->join('tblPayTrx PT', ' att.pkAccTrxID = PT.fkAccTrxId and PT.pkPayTrxId  = (select top 1 PT2.pkPayTrxId from tblPayTrx PT2  with(nolock)  where PT2.fkAccTrxId =  PT.fkAccTrxId ORDER BY PT2.pkPayTrxId DESC) ', 'left');
+        
+        $this->db->where('rpa.fkResId', $id);
+        if($typeAcc == "reservation"){
+            $this->db->where('a.fkAccTypeId = 6');
+        }else if($typeAcc == "frontDesk"){
+            $this->db->where('a.fkAccTypeId = 5');
+        }
+        else if($typeAcc == "ADV"){
+            $this->db->where('a.fkAccTypeId = 7');
+        }
+        if($typeInfo == "payment"){
+            $ssql = '(tt.TrxSign = 1 or tt.TrxSign is null)';
+            $this->db->where($ssql);
+            $this->db->where('a.fkAccTypeId = ', $typeAcc);
+            $this->db->where('att.AbsAmount > 0');
+        }
+        if($typeInfo == "account"){
+            $this->db->order_by("pkAccTrxId", "ASC");
+        }
+        $this->db->where('rpa.ynActive',1);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    public function getAccountsById2( $id, $typeInfo, $typeAcc ){
+        $this->db->distinct();
+        if($typeInfo == "account"){
             $this->db->select('att.pkAccTrxId as ID');
              $this->db->select("ISNULL(PT1.fkPayId, 0) as PAYID");
 			$this->db->select("PT.fkPayId as idpay, CASE WHEN PT.fkPayId is NULL THEN att.pkAccTrxId ELSE PT.fkAccTrxId END as 'fkPay'");

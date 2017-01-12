@@ -383,8 +383,11 @@ $(document).on( 'click', '#btAddLinkACC', function(){
 });
 
 function eventTransAccRes(selector){
+
 	var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
-	var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
+	//var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
+	var idAccColl = getTypeAccount(accCode);
+
 	var statusRes = $('#editReservationStatus').attr( 'statusRes' );
 	if(idAccColl != undefined){
 		if( accCode == "FDK" && statusRes != "In House" && $(selector).attr('id') == "btNewTransAccRes" ){
@@ -2600,7 +2603,15 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 				}
 				for( i=0; i<acc.length; i++ ){
 					var nameSafe = acc[i].accType;
-					$('#btNewTransAccRes').data( 'idAcc' + nameSafe, acc[i].fkAccId );	
+					$('#btNewTransAccRes').data( 'idAcc' + nameSafe, acc[i].fkAccId );
+					if (nameSafe == 'RES') {
+						console.log("La reserva es "+ acc[i].fkAccId);
+						$("#NEWRES").text(acc[i].fkAccId);
+					}
+					if(nameSafe == 'ADep'){
+						console.log("La cuenta AVDeposito es "+ acc[i].fkAccId);
+						$("#NEWDEPS").text(acc[i].fkAccId);
+					}	
 				}
 				$('#btNewTransAccRes').data( 'idRes', id );
 			}else{
@@ -3846,7 +3857,6 @@ function opcionAccountRes(attrType){
   				showLoading(div, true);
 				$(this).load ("contract/modalAccount" , function(){
 					showLoading(div, false);
-					//initEventosSellers();
 					$( "#dueDateAcc" ).Zebra_DatePicker({
 						format: 'm/d/Y',
 						show_icon: false,
@@ -3945,17 +3955,28 @@ function setDataOpcionAccountRes(attrType){
 		$('#grpTrxClassAcc').hide();
 		$('#grpTablePayAcc').show();
 	}
+
 	if(accType == 6){
-		$('#accountIdAcc').text( $('#btNewTransAccRes').data( 'idAccRes' ) );
-	}else if(accType == 5){
-		$('#accountIdAcc').text( $('#btNewTransAccRes').data( 'idAccFront' ) );
-	}
-	else if(accType == 7){
-		$('#accountIdAcc').text( $('#btNewTransAccRes').data( 'idAccADep' ) );
+		//$('#accountIdAcc').text( $('#btNewTransAccRes').data( 'idAccRes' ) );
+		var cuentaRES = $("#NEWRES").text();
+		$('#accountIdAcc').text(cuentaRES);
+	}else if(accType == 7){
+		//$('#accountIdAcc').text( $('#btNewTransAccRes').data( 'idAccADep' ) );
+		var cuentaDEP = $("#NEWDEPS").text();
+		$('#accountIdAcc').text(cuentaDEP);
 	}
 	$('#dueDateAcc').val(getCurrentDate());
 	$('#legalNameAcc').text($('#editContractTitle').text());
 	$('#balanceAcc').text($('.balanceAccount').text());
+}
+
+function getTypeAccount(accCode){
+	if (accCode == "RES") {
+		var idAccColl = $('#NEWRES').text();
+	}else if (accCode == "ADep") {
+		var idAccColl = $('#NEWDEPS').text();
+	}
+	return idAccColl
 }
 
 function saveAccContRes(attrType){
@@ -3973,7 +3994,8 @@ function saveAccContRes(attrType){
 	msgReservation = alertify.success('Saving changes, please wait ....', 0);
 	var accType = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accType');
 	var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
-	var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
+	var idAccColl = getTypeAccount(accCode);
+	
 	$.ajax({
 		data: {
 			attrType:attrType,
@@ -3993,7 +4015,8 @@ function saveAccContRes(attrType){
 		url: 'reservation/saveTransactionAcc'
 	}).done(function( data, textStatus, jqXHR ) {
 		if( data.success ){
-			getAccountsRes( $('#btNewTransAccRes').data( 'idRes' ), "account", "" );
+			var id = $("#idReservationX").text();
+			getAccountsRes( id, "account", "" );
 			$("#dialog-accountsRes").dialog('close');
 			msgReservation.dismiss();
 		}else{
@@ -4421,12 +4444,10 @@ function mensajeGeneral(data){
 	}
 }
 
-
-
 function showCreditCardASR(){
 	var accCode = $('#tab-RAccounts .tabsModal .tabs .active').attr('attr-accCode');
-	var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
-	
+	//var idAccColl = $('#btNewTransAccRes').data( 'idAcc' + accCode );
+	var idAccColl = getTypeAccount(accCode);
 	if (idAccColl) {
 		var ajaxData =  {
 		url: "reservation/modalCreditCardAS",

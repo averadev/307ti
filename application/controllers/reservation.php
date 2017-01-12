@@ -1014,11 +1014,14 @@ private function comprubaArray($valor, $array){
 				$valTrans = $_POST['valTrans'];
 				$trxClass = $_POST['trxClass'];
 				$PAGO = floatval($_POST['amount']);
+				$CUENTA = $_POST['accId'];
 				$update = array();
 				$insertTrx = array();
 				$totalAmou2 = 0;
-
-				$this->reservation_db->db->trans_begin();
+				if (!isset($CUENTA) || empty($CUENTA)) {
+					 $message = array('success' => false, 'message' => "Error");
+				}else{
+					$this->reservation_db->db->trans_begin();
 				for($i = 0; $i<count($idTrans); $i++){
 					
 					if($PAGO > 0){
@@ -1059,7 +1062,7 @@ private function comprubaArray($valor, $array){
 				$debit = str_replace(",", ".", $debit);
 				$totalAmou2 = str_replace(",", ".", $totalAmou2);
 				$transI = [
-					"fkAccid" 			=> $_POST['accId'],
+					"fkAccid" 			=> $CUENTA,
 					"fkTrxTypeId"		=> $_POST['trxTypeId'],
 					"fkTrxClassID"		=> $this->reservation_db->gettrxClassID('PAY'),
 					"Debit-"			=> $debit,
@@ -1092,13 +1095,15 @@ private function comprubaArray($valor, $array){
 				if ($this->reservation_db->db->trans_status() === false)
 				{
 				        $this->reservation_db->db->trans_rollback();
-				        $message = array('success' => false, 'message' => "Error", 'status' => $this->reservation_db->db->trans_status());
+				        $message = array('success' => false, 'message' => "Error");
 				}
 				else
 				{
 				        $this->reservation_db->db->trans_commit();
-				        $message = array('success' => true, 'message' => "transaction save", 'status' => $this->reservation_db->db->trans_status());
+				        $message = array('success' => true, 'message' => "transaction save");
 				}
+				}
+				
 			}
 			echo json_encode($message);
 		}
@@ -1211,9 +1216,9 @@ private function comprubaArray($valor, $array){
 							}
 						}
 						unset( $item->idpay, $item->fkPay );
-						if ($item->PAYID == 0) {
+						/*if ($item->PAYID == 0) {
 							$item->PAYID = '';
-						}
+						}*/
 					}
 					
 					$datos[$tyTr] = $data;
