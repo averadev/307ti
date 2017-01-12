@@ -3915,10 +3915,11 @@ function opcionAccountRes(attrType){
 						alertify.success("Please fill required fields (red)");
 					}else{
 						var amoutCur = 0;
+						var PAGO = parseFloat($('#AmountAcc').val().trim());
 						$("input[name='checkPayAcc[]']:checked").each(function(){
 							amoutCur = amoutCur + parseFloat($(this).val());
 						});
-						if( amoutCur.toFixed(4) > parseFloat($('#AmountAcc').val().trim()).toFixed(4)){
+						if( amoutCur > PAGO){
 							var msg = "The stated amount does not cover all of the selected concepts. A partial payment was stored.";
 							alertify.confirm('Transactions.', msg, 
 								function(){ saveAccContRes(attrType); },
