@@ -1,4 +1,4 @@
-<div class="contentModal" id="section-HKLookUp">
+<div class="contentModal alturaModal" id="section-HKLookUp">
 	<div id="tab-HKLPGeneral" class="large-12 columns tab-modal" style="display:inline;">
 		<label id="alertFloorPlanHKConfig" class="text-left">Transactions to Post
 			<select id="multipleTRX" class="input-group-field round"  multiple="multiple">

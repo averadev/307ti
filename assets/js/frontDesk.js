@@ -1510,7 +1510,7 @@ function showModalAuditAddTrx(){
 	};
 	var modalPropiedades = {
 		div: "dialog-addTransactionsAudit",
-		altura: 540,
+		altura: 440,
 		width: 540,
 		onOpen: ajaxDATA,
 		botones :[{

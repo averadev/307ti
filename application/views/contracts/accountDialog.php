@@ -2,16 +2,6 @@
     <div id="accountTransaction" class="contentAccount">
 		<form id="saveAccCont" data-abide>
             <div class="fieldset large-12 columns" style="margin-top:0;"> 
-                <!--<legend>
-                    Contract Data
-                </legend>-->
-				<!--<div class="small-4 columns">
-                        <label for="legalName" class="text-left">Legal Name</label>
-                    </div>
-                    <div class="small-8 columns">
-                        <input type="text" id="legalName" name="legalName" class="round general" >
-                    </div>-->
-                <!-- Legal name-->
 				<div class="row">
 					<div class="small-4 columns">
                         <label for="accountIdAcc" class="text-left titleBold">Account ID:</label>
@@ -120,6 +110,25 @@
                     <div class="small-8 columns">
                         <input type="text" id="referenceAcc" name="referenceAcc" class="round general" >
                     </div>
+                </div>
+                                <!-- Reference -->
+                <div class="row" id="inputCheckAll">
+                    <div class="small-4 columns">
+                        <label for="referenceAcc" class="text-left"></label>
+                    </div>
+                <a id="btnCheckAll" class="btn btn-primary btn-Search">
+            <div class="label">Select All</div>
+            <i class="fa fa-check-circle" aria-hidden="true"></i>
+        </a>
+                </div>
+                                <div class="row" id="inputCheckAll">
+                    <div class="small-4 columns">
+                        <label for="referenceAcc" class="text-left"></label>
+                    </div>
+                <a id="btnUnCheckAll" class="btn btn-primary btn-Search">
+            <div class="label">Deselect All</div>
+            <i class="fa fa-check-circle" aria-hidden="true"></i>
+        </a>
                 </div>
             </div>
 			<div class="fieldset large-12 columns" style="margin-top:0; min-height:200px;" id="grpTablePayAcc" >

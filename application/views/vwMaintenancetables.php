@@ -1,0 +1,152 @@
+
+<div class="row section" id="section-InvDetailed">
+	<div class="large-12 columns fiter-section">
+		<div class="box" id="boxInvDetailedSearch" relation-attr="box-inventary-relation" >
+			<!-- header search -->
+			<div class="box-header pr-color">
+				<div class="pull-right box-tools">
+					<span id="minusPeople" class="box-btn" data-widget="collapse">
+						<i class="fa fa-minus"></i>
+					</span>
+				</div>
+				<h3 class="box-title">
+					<span>Inventory Search</span>
+				</h3>
+			</div>
+			<!-- body search-->
+			<div class="box-body box-filter" style="display: block;">
+				<!--filter-->
+				<div class="row">
+					<fieldset class="large-12 columns" id="alertInventaryUnit" style="display:none">
+							<div class="callout small alert">
+								<p>Select a unit, please.</p>
+							</div>
+					</fieldset>
+					<!-- text Field date and select -->
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
+							<legend class="legendSearch">Choose the type search</legend>
+							<!-- Type of Availability -->
+							<div class="rdoField">
+								<input type="radio" name="SearchInventary" class="RadioSearchInventary" value="detailedAvailability" id="RadioDetailedAvailability" checked >
+								<label for="RadioDetailedAvailability" >Detailed Availability</label>
+							</div>
+							<!-- Type of Availability -->
+							<div class="rdoField">
+								<input type="radio" name="SearchInventary" class="RadioSearchInventary" value="roomsControl" id="RadioRoomsControl">
+								<label for="RadioRoomsControl">Rooms Control</label>
+							</div>
+						</fieldset>
+					</div>
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="small-12 medium-12 large-12 columns fieldsetFilter filterDetailedAvailability">
+							<legend class="legendSearch">Choose the availability</legend>
+							<!-- Type of Availability -->
+							<div class="rdoField">
+								<input type="radio" name="InvTypeAvailability" class="RadioSearchInv" value="Availability" id="RadioInvAvailability" checked >
+								<label for="RadioInvAvailability" >Availability </label>
+							</div>
+							<!-- Type of Availability -->
+							<div class="rdoField">
+								<input type="radio" name="InvTypeAvailability" class="RadioSearchInv" value="Occupancy" id="RadioInvOccupancy">
+								<label for="RadioInvOccupancy">Occupancy </label>
+							</div>
+						</fieldset>
+					</div>
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="small-12 medium-12 large-12 columns fieldsetFilter filterDetailedAvailability">
+							<legend class="legendSearch">Choose the filters</legend>
+							<!-- Include Non Deducted -->
+							<div class="rdoField">
+								<input type="checkbox" id="CheckInvNonDeducted" class="CheckSearchInv" value="Non Deducted">
+								<label for="CheckInvNonDeducted">Include Non Deducted</label>
+							</div>
+							<!-- Include Overbooking -->
+							<div class="rdoField">
+								<input type="checkbox" id="CheckInvOverbooking" class="CheckSearchInv" value="Overbooking">
+								<label for="CheckInvOverbooking">Include Overbooking</label>
+							</div>
+							<!-- Include OOO  -->
+							<div class="rdoField">
+								<input type="checkbox" id="CheckInvOOO" class="CheckSearchInv" value="OOO">
+								<label for="CheckInvOOO">Include OOO</label>
+							</div>
+						</fieldset>
+					</div>
+					<div class="small-12 medium-12 large-12 columns">
+						<fieldset class="large-12 columns fieldsetFilter">
+							<legend class="legendSearch">Enter the filter</legend>
+							<div class="row">
+								<div class="small-10 large-3 columns">
+									<input type="text" id="textInvStartDate" class="txtSearch" placeholder="Enter a date" >
+								</div>
+								<!-- Tipo de Habitación -->
+								<div class="small-12 large-3 columns filterDetailedAvailability">
+									<div class="caja" >
+										<select id="textInvFloorPlan" class="comboBoxInvDetailed selectSearch input-group-field round">
+											<option value="0">select a Floor Plan</option>
+											<?php
+											foreach($floorPlan as $item){
+											?>
+												<option value="<?php echo $item->pkFloorPlanID; ?>" code="<?php echo $item->FloorPlanCode; ?>"><?php echo $item->FloorPlanDesc; ?></option>
+											<?php
+											}
+											?>
+										</select>
+									</div>
+								</div>
+								<!-- Propiedad -->
+								<div class="small-12 large-3 columns">
+									<div class="caja" >
+										<select id="textInvProperty" class="comboBoxInvDetailed selectSearch input-group-field round">
+<!-- 											<option value="0">select a Property</option> -->
+											<?php
+											foreach($property as $item){
+											?>
+												<option value="<?php echo $item->pkPropertyId; ?>" code="<?php echo $item->PropertyCode; ?>"><?php echo $item->PropertyName; ?></option>
+											<?php
+											}
+											?>
+										</select>
+									</div>
+								</div>
+								<div class="small-12 large-3 columns">
+									<a id="btnInvSearch" class="btn btn-primary btn-Search">
+										<div class="label">Search</div>
+										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+									</a>
+									<a id="btnInvCleanSearch" class="btn btn-primary spanSelect">
+										<div class="label">Clean</div>
+										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+									</a>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="large-12 columns" id="box-inventary-relation">
+		<div class="box">
+			<div class="box-header pr-color">
+				<div class="pull-right box-tools">
+				</div>
+				<h3 class="box-title">
+					<span>Inventory Relation</span>
+				</h3>
+			</div>
+			<div class="box-body" id="section-table-InvDetailed" style="display: block;">
+				<div class="table" >
+					<iframe src="http://localhost/complemento/grid_dbo_TblTrxType/" width="100%" height="600">
+<p>Your browser does not support iframes.</p>
+</iframe>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+

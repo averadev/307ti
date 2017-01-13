@@ -8,7 +8,7 @@
 						</span>
 					</div>
 					<h3 class="box-title">
-						<span>Add Unidades</span>
+						<span>Add Unit</span>
 					</h3>
 					<div class="pull-left box-tools">
 						<span data-widget="newContrat" id="newContract">

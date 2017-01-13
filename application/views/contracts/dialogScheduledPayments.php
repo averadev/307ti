@@ -101,7 +101,7 @@
   </div>
 </form>
 <fieldset class="fieldset">
-    <legend class="btnAddressData">Pagos programados</legend>
+    <legend class="btnAddressData">Scheduled Payments</legend>
     <div class="containerPeople">
         <div class="row">
             <table id="tablePagosPrgSelected" width="100%">

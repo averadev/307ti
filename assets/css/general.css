@@ -920,7 +920,9 @@ table thead tr th, table tbody tr td{
 	border-top:1px solid #aaaaaa;
 	overflow-y:auto;
 }
-
+.alturaModal{
+	height:90%;
+}
 .tab-modal{
 	display:none;
 	/*overflow:auto;*/

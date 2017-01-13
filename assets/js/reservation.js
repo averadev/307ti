@@ -68,15 +68,20 @@ $(document).ready(function(){
 	$(document).on( 'click', '#btnChangeUnitRes', function () {
 		changeStatus();
 	});
+	
+	$(document).off( 'click', '#btnChangeUnitRes');
+	$(document).on( 'click', '#btnChangeUnitRes', function () {
+		changeStatus();
+	});
 
-	$(document).off( 'click', '#btnAddUnidadesRes');
-	$(document).on( 'click', '#btnAddUnidadesRes', function () {
-		if (unidadResDialog!=null) {
-			unidadResDialog.dialog( "destroy" );
-		}
-		unidadResDialog = addUnidadResDialog( null, null, 'alta' );
-		unidadResDialog.dialog( "open" );
-	        
+	$(document).off( 'click', '#btnCheckAll');
+	$(document).on( 'click', '#btnCheckAll', function () {
+		$('.checkPayAcc:checkbox').prop('checked', true);
+	});
+
+	$(document).off( 'click', '#btnUnCheckAll');
+	$(document).on( 'click', '#btnUnCheckAll', function () {
+		$('.checkPayAcc:checkbox').prop('checked', false);
 	});
  	
 	$(document).off( 'click', '#btnNewSellerRes');
@@ -3951,10 +3956,14 @@ function setDataOpcionAccountRes(attrType){
 	if(attrType == "newTransAcc"){
 		$('#grpTrxClassAcc').show();
 		$('#grpTablePayAcc').hide();
+		$('#inputCheckAll').hide();
+		$('#inputUnCheckAll').hide();
 	}else{
 		var id = $("#idReservationX").text();
 		getAccountsRes( id , "payment", accType );
 		$('#grpTrxClassAcc').hide();
+		$('#inputCheckAll').show();
+		$('#inputUnCheckAll').show();
 		$('#grpTablePayAcc').show();
 	}
 
@@ -3969,7 +3978,9 @@ function setDataOpcionAccountRes(attrType){
 	}
 	$('#dueDateAcc').val(getCurrentDate());
 	$('#legalNameAcc').text($('#editContractTitle').text());
-	$('#balanceAcc').text($('.balanceAccount').text());
+	var BALANCE = $('.balanceAccount').text();
+	BALANCE = parseFloat(BALANCE.replace("$", "")).toFixed(2);
+	$('#balanceAcc').text(BALANCE);
 }
 
 function getTypeAccount(accCode){

@@ -15,7 +15,7 @@
 			</li>
 		</ul>
 	</div>
-		<div class="large-12 columns contentModal" id="contentModalPeople">
+		<div class="large-12 columns contentModal alturaModal" id="contentModalPeople">
 	
 		<div id="tab-PGeneral" class="large-12 columns tab-modal" style="display:inline;">
 			<!-- Datos personales -->

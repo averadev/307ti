@@ -265,7 +265,7 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 							<tr>
 								<td>Cost contract</td>
 								<td id="cventaCostContractRes">$00.00</td>
-								<td>Hook amount transferred more</td>
+								<td>Downpayment</td>
 								<td id="cventaAmountTransfer">$000,000.00</td>
 							</tr>
 							<tr>
@@ -512,8 +512,8 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btnNewSellerRes" class="button tiny"><i class="fa fa-user-plus fa-lg">New seller</i></a>
-				<a id="btnRemoveSeller" class="button tiny"><i class="fa fa-user-times fa-lg">Remove Sale People</i></a>
+				<a id="btnNewSellerRes" class="button tiny"><i class="fa fa-user-plus fa-lg">New</i></a>
+				<a id="btnRemoveSeller" class="button tiny"><i class="fa fa-user-times fa-lg">Remove</i></a>
 			</div>
 		</form>
 	</div>
@@ -544,7 +544,7 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 				</div>
 			</fieldset>
 			<div class="small-12 medium-12 large-12 columns" > 
-				<a id="btnNewProvisionRes" class="button tiny"><i class="fa fa-plus-circle fa-lg">New Provision</i></a>
+				<a id="btnNewProvisionRes" class="button tiny"><i class="fa fa-plus-circle fa-lg">New</i></a>
 			</div>
 		</form>
 	</div>
