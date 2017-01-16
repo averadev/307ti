@@ -28,8 +28,8 @@
 							<div class="small-12 large-3 columns">
 									<div class="caja" >
 										<select id="catalogos" class="input-group-field round">
-											<option value="0">Transaction Type Lookup</option>
-											<option value="0">Country Lookup</option>
+											<option value="1">Transaction Type Lookup</option>
+											<option value="2">Country Lookup</option>
 										</select>
 									</div>
 								</div>
@@ -52,8 +52,8 @@
 				</h3>
 			</div>
 			<div class="box-body" id="section-table-InvDetailed" style="display: block;">
-				<div class="table" >
-					<iframe src="http://pms.thetowersatmulletbay.com/cat_training/mtblTrxType/grid_dbo_TblTrxType/" width="100%" height="600">
+				<div id="placeForCatalags" class="table" >
+					<iframe id="frameCatalagos" src="http://pms.thetowersatmulletbay.com/cat_training/mtblTrxType/grid_dbo_TblTrxType/" width="100%" height="600">
 						<p>Your browser does not support iframes.</p>
 					</iframe>
 				</div>
@@ -64,3 +64,4 @@
 
 </div>
 
+<script type="text/javascript" src="<?php echo base_url().JS; ?>catalagos.js"></script>
