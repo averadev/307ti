@@ -981,6 +981,35 @@ private function comprubaArray($valor, $array){
 			}
 		return [$precio, $euros, $florines];
 	}
+
+	private function validater($valor){
+		$isValid = false;
+		if(isset($valor) && !empty($valor)){
+			$isValid = true;
+		}
+		return $isValid;
+	}
+	private function validateTRX(){
+		$isValid = false;
+		$VALORES = [
+			"attrType" => isset($_POST['attrType']),
+			"accId" => isset($_POST['accId']),
+			"trxTypeId" => isset($_POST['trxTypeId']),
+			"trxClassID" => isset($_POST['trxClassID']),
+			"currency" => isset($_POST['currency']),
+			"amount" => isset($_POST['amount'])
+		];
+		foreach ($VALORES as $key => $value) {
+			if(!$value){
+				$isValid = false;
+				return $isValid;
+				break;
+			}else{
+				$isValid = true;
+			}
+		}
+		return $isValid;
+	}
 	public function saveTransactionAcc(){
 		if($this->input->is_ajax_request()) {
 			$PRECIOS = $this->conversionMoneda();
@@ -1010,17 +1039,22 @@ private function comprubaArray($valor, $array){
 				$this->reservation_db->insertReturnId('tblAccTrx', $transaction);
 				$message= array('success' => true, 'message' => "transaction save");
 			}else{
-				$idTrans = $_POST['idTrans'];
-				$valTrans = $_POST['valTrans'];
-				$trxClass = $_POST['trxClass'];
-				$PAGO = floatval($_POST['amount']);
-				$CUENTA = $_POST['accId'];
+				
+				$isSave = $this->validateTRX();
 				$update = array();
 				$insertTrx = array();
 				$totalAmou2 = 0;
-				if (!isset($CUENTA) || empty($CUENTA)) {
+				if (!$isSave) {
 					 $message = array('success' => false, 'message' => "Error");
 				}else{
+
+					$idTrans = $_POST['idTrans'];
+					$valTrans = $_POST['valTrans'];
+					$trxClass = $_POST['trxClass'];
+					$PAGO = floatval($_POST['amount']);
+					$PAGO = round($PAGO, 2);
+					$CUENTA = $_POST['accId'];
+
 					$this->reservation_db->db->trans_begin();
 				for($i = 0; $i<count($idTrans); $i++){
 					
@@ -1042,7 +1076,7 @@ private function comprubaArray($valor, $array){
 						$Moneda = $_POST['currency'];
 						$conversion = $this->convertMoney($Moneda, $totalAmou);
 						$totalAmou = $conversion['precio'];
-						$totalAmou = str_replace(",", ".", $totalAmou);
+						$totalAmou = valideteNumber($totalAmou);
 						$transU = [
 							'AbsAmount'		=>	$totalAmou,
 						];
@@ -1100,7 +1134,7 @@ private function comprubaArray($valor, $array){
 				else
 				{
 				        $this->reservation_db->db->trans_commit();
-				        $message = array('success' => true, 'message' => "transaction save");
+				        $message = array('success' => true, 'message' => "transaction save", "isValid" => $isSave);
 				}
 				}
 				
@@ -2100,7 +2134,7 @@ private function comprubaArray($valor, $array){
 		return $date;
 	}
 	
-	private function convertMoney($Moneda,$precio){
+	private function convertMoney($Moneda, $precio){
 		$Dolares = $this->reservation_db->selectIdCurrency('USD');
 		$Florinres  = $this->reservation_db->selectIdCurrency('NFL');
 		$Euros  = $this->reservation_db->selectIdCurrency('EUR');

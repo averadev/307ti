@@ -4021,7 +4021,7 @@ function saveAccContRes(attrType){
 			trxTypeId:$('#slcTransTypeAcc').val(),
 			trxClassID:$('#slcTrxClassAcc').val(),
 			currency:$("#CurrencyTrxClassAcc").val().trim(),
-			amount:$('#AmountAcc').val(),
+			amount:parseFloat($('#AmountAcc').val()).toFixed(2),
 			dueDt:$('#dueDateAcc').val(),
 			doc:$('#documentAcc').val(),
 			remark:$('#referenceAcc').val(),
