@@ -127,10 +127,10 @@
 					<span class="icon-menu-sel"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></span>
 					<div class="label-menu-sel">Maintenance Fee</div>
 				</div>
-				<div class="menu-sel" attr-screen="Maintenancetables">
-					<span class="icon-menu-sel"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></span>
-					<div class="label-menu-sel">ScriptCase</div>
-				</div>
+<!-- 				<div class="menu-sel" attr-screen="Maintenancetables">
+					<span class="icon-menu-sel"><i class="fa fa-table" aria-hidden="true"></i></span>
+					<div class="label-menu-sel">Catalogs</div>
+				</div> -->
 
 				<?php }; ?>
                 <div class="menu-fix">&nbsp;</div>
