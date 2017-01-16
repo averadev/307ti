@@ -53,7 +53,7 @@ class Contract_db extends CI_Model {
         $sql = "";
         $this->db->distinct();
         $this->db->select("R.pkResId as ID, cast(R.Prefix as varchar) + '-' + cast(R.Folio as varchar) as Folio");
-		$this->db->select("R.ResConf as Confirmation_code, ISNULL(cast(R.pkResRelatedId as varchar(10)), ' ') as ResRelated");
+		$this->db->select("R.ResConf as Confirmation, ISNULL(cast(R.pkResRelatedId as varchar(10)), ' ') as ResRelated");
 		$this->db->select("R.LegalName as LegalName, RTRIM(UT.FloorPlanDesc) as FloorPlan, FR.FrequencyDesc");
         $this->db->select('ES.StatusDesc, RI.CrDt, R.FirstOccYear, R.LastOccYear, RF.ListPrice, RF.NetSalePrice as netsale');
         $this->db->from('tblRes R');

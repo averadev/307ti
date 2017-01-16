@@ -111,25 +111,26 @@
                         <input type="text" id="referenceAcc" name="referenceAcc" class="round general" >
                     </div>
                 </div>
-                                <!-- Reference -->
-                <div class="row" id="inputCheckAll">
+                <div class="row displayInline" id="inputCheckAll">
                     <div class="small-4 columns">
                         <label for="referenceAcc" class="text-left"></label>
                     </div>
-                <a id="btnCheckAll" class="btn btn-primary btn-Search">
-            <div class="label">Select All</div>
-            <i class="fa fa-check-circle" aria-hidden="true"></i>
-        </a>
+                    <a id="btnCheckAll" class="btn btn-primary btn-Search">
+                        <div class="label">Select All</div>
+                        <i class="fa fa-check-circle" aria-hidden="true"></i>
+                    </a>
                 </div>
-                                <div class="row" id="inputCheckAll">
+                <div class="row displayInline" id="inputUnCheckAll">
                     <div class="small-4 columns">
                         <label for="referenceAcc" class="text-left"></label>
                     </div>
-                <a id="btnUnCheckAll" class="btn btn-primary btn-Search">
-            <div class="label">Deselect All</div>
-            <i class="fa fa-check-circle" aria-hidden="true"></i>
-        </a>
+                    <a id="btnUnCheckAll" class="btn btn-primary btn-Search">
+                        <div class="label">Unselect All</div>
+                        <i class="fa fa-check-circle" aria-hidden="true"></i>
+                    </a>
                 </div>
+
+
             </div>
 			<div class="fieldset large-12 columns" style="margin-top:0; min-height:200px;" id="grpTablePayAcc" >
 				<div class="row" style="padding:0;">

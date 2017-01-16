@@ -175,6 +175,7 @@ Class Maintenance_db extends CI_MODEL
         $this->db->join('tblCsfBatch FB', 'FB.fkResId = R.pkResId', 'left');  /**   **/
         if (isset($filters['Folio']) && !empty($filters['Folio'])) {
               $this->db->where('R.Folio', $filters['Folio']);
+              $this->db->where('PM.OccYear = 2017');
         }else{
             if (isset($filters['SaleType']) && !empty($filters['SaleType'])) {
                 $this->db->where('R.fkSaleTypeId', $filters['SaleType']);

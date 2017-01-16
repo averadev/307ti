@@ -131,7 +131,6 @@
 					<span class="icon-menu-sel"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></span>
 					<div class="label-menu-sel">ScriptCase</div>
 				</div>
-				<input type="button" value="Nueva ventana" onclick="javascript:window.open('http://localhost/complemento/grid_dbo_TblTrxType/','','width=1200,height=800,left=0,top=0,toolbar=yes');" />
 
 				<?php }; ?>
                 <div class="menu-fix">&nbsp;</div>

@@ -77,11 +77,13 @@ $(document).ready(function(){
 	$(document).off( 'click', '#btnCheckAll');
 	$(document).on( 'click', '#btnCheckAll', function () {
 		$('.checkPayAcc:checkbox').prop('checked', true);
+		updatePriceAccount();
 	});
 
 	$(document).off( 'click', '#btnUnCheckAll');
 	$(document).on( 'click', '#btnUnCheckAll', function () {
 		$('.checkPayAcc:checkbox').prop('checked', false);
+		updatePriceAccount();
 	});
  	
 	$(document).off( 'click', '#btnNewSellerRes');
@@ -2626,12 +2628,7 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 					drawTable2(acc, "tabletPaymentAccoun", false, "");
 					$(".checkPayAcc").off( 'change' );
 					$(".checkPayAcc").on('change', function (){
-						var amoutCur = 0;
-						$("input[name='checkPayAcc[]']:checked").each(function(){
-							amoutCur = amoutCur + parseFloat($(this).val());
-						});
-						$('#amountSettledAcc').text( '$ ' + amoutCur.toFixed(2) );
-
+						updatePriceAccount();
 					});
 				}
 			}
@@ -2640,6 +2637,14 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 	        alertify.error("Try again");
 	    }
 	});
+}
+
+function updatePriceAccount(){
+	var amoutCur = 0;
+	$("input[name='checkPayAcc[]']:checked").each(function(){
+		amoutCur = amoutCur + parseFloat($(this).val());
+	});
+	$('#amountSettledAcc').text( '$ ' + amoutCur.toFixed(2) );
 }
 
 function verificarRED(status, balance){

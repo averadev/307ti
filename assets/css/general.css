@@ -1760,3 +1760,6 @@ table tbody tr td{
 #reservationstbody > tbody > tr:first-child > td:first-child{
 	display: none;
 }
+.displayInline{
+	display: inline-block;
+}
