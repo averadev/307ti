@@ -26,6 +26,11 @@ var msgFrontDesk = null;
 
 $('.searchFD').off();
 $('.searchFD').on('click', function(){ $('.orderRow').removeClass("active"); getFrontDesk("",1); });
+$('#btnSearchReports').off();
+$('#btnSearchReports').on('click', function(){
+	var TYPE = $("#typeReport").val();
+	console.log("Buscando reporte "+ TYPE);
+});
 
 $(document).off( 'click', '#btnNewFrontExchange');
 $("#btnNewFrontExchange").on('click', function(){
@@ -45,7 +50,8 @@ $('#btnCleanAuditTransactions').off();
 $('#btnCleanAuditTransactions').on('click', function(){ cleanAuditUnitTRX(); });
 
 
-$('#typeSearchFrontDesk').on('change', function(){ showSection($(this).val()); });
+$('#typeSearchFrontDesk').on('change', function(){ 
+	showSection($(this).val()); });
 
 //muestra el modal para agregar
 $('#newFontDesk').off();
@@ -108,7 +114,7 @@ var dateYearER = null;
 $(function() {
 	
 	//dateField
-	datepickerZebra = $( "#dateArrivalFront, #dateDepartureFront, #dateHKConfig, #dateHKLookUp, #dateArrivalReport, #dateDepartureReport, #dateArrivalExchange, #dateDepartureExchange" ).Zebra_DatePicker({
+	datepickerZebra = $( "#dateArrivalFront, #dateDepartureCheckOut, #dateDepartureFront, #dateHKConfig, #dateHKLookUp, #dateArrivalReport, #dateDepartureReport, #dateArrivalExchange, #dateDepartureExchange" ).Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false,
 		onSelect: function(date1, date2, date3, elements){
@@ -286,7 +292,15 @@ function getFrontDesk(order, page){
 		options = {};
 		url = "frontDesk/getAuditTrx";
 	}
-
+	else if(section == "section9"){
+		/*filters = {};
+		dates = {};
+		words = {};
+		var Seleccionado = $("#dateDepartureCheckOut").val();
+		words.DateDeparture = Seleccionado;
+		options = {};
+		url = "frontDesk/getAuditUnits";*/
+	}
 	
 	ajaxFrontDesk( url, filters, dates, words, options, order, page );
 }
@@ -325,13 +339,16 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 			if(data.items){
 				switch(section) {
 					case "section1":
+						
 						//createTableLookUp(data);
 						//$("#NFL").text("Total: "+ data.items.length);
 					break;
 					case "section2":
+						
 						//$("#NHK").text("Total: "+ data.items.length);
 					break;
 					case "section3":
+						
 						$("#NHK").text("Total: "+ data.items.length);
 						drawTable2(data.items,"tableHKConfiguration","showModaFrontDesk","Edit");
 						paginadorFrontDesk(data.total,"paginationHKConfig",0);
@@ -339,24 +356,34 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 						//alert( 'Column '+order[0][0]+' is the ordering column' );
 					break;
 					case "section4":
+						
 						$("#NHKL").text("Total: "+ data.items.length);
 						var option = {type:"input", input:"checkbox", title:"Change_status", name:"HKLookUpStatus", id:"ID"};
 						drawTable2( data.items,"tableHKLookUp","showModaFrontDesk","Edit", option );
 						paginadorFrontDesk(data.total,"paginationHKLookUp",0);
 					break;
 					case "section5":
+						
 						$("#NHKR").text("Total: "+ data.items.length);
 						drawTable2( data.items, "tableHKReport", false, "" );
 					break;
 					case "section6":
+						
 						$("#NRF").text("Total: "+ data.items.length);
 						drawTable2( data.items, "tableExchangeRateFront", false, "" );
 					break;
 					case "section7":
+						
 						$("#NUA").text("Total: "+ data.items.length);
 						drawTable4( data.items, "tablaAuditUnits", false, "" );
 					break;
 					case "section8":
+
+						$("#NTA").text("Total: "+ data.items.length);
+						drawTable4( data.items, "tablaAuditTrx", false, "" );
+					break;
+					case "section9":
+						
 						$("#NTA").text("Total: "+ data.items.length);
 						drawTable4( data.items, "tablaAuditTrx", false, "" );
 					break;
@@ -598,10 +625,17 @@ function showSection(section){
 	}
 	if( section == "section3" || section == "section4" || section == "section5" ){
 		$('#newExchangeRate').show();
-	}if( section == "section7" || section == "section8"){
+	}
+	if( section == "section7" || section == "section8" || section == "section9"){
 		getFrontDesk("",1);
 	}else{
 		$('#newExchangeRate').hide();
+	}
+
+	if (section != "section9") {
+		$("#showReports").hide();
+	}else{
+		$("#showReports").show();
 	}
 	
 }

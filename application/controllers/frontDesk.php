@@ -388,7 +388,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 			$sql['words']['Transaction'] = $this->frontDesk_db->selectTRXDescription($sql['words']['Transaction']);
 		}
 		
-		$this->reportPDFTRX($data, "AuditReportTrx", $sql);
+		$this->reportPDFTRX($data, "Shift Report", $sql);
 	}
 	
 	public function getAuditTrx(){
@@ -1365,6 +1365,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 	}
 
 	private function reportPDFTRX($data, $titulo, $filtros){
+		setlocale(LC_MONETARY, 'en_US');
 		$body = '';
 		$title = $titulo;
 		$name = $titulo;
@@ -1384,7 +1385,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		foreach ($data as $item){
 			if ($Anterior != '') {
 				if ($Anterior != $item->TrxTypeDesc) {
-					$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">SUBTOTAL</td><td class="blackLine2">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine"></td><td class="blackLine"></td></tr>';
+					$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">SUBTOTAL</td><td class="blackLine2">$'.str_replace("-", "",number_format($subtotal, 2)).'</td><td class="blackLine"></td><td class="blackLine"></td></tr>';
 					$subtotal = floatval($item->Amount);	 
 				}else{
 					$subtotal += floatval($item->Amount);
@@ -1402,13 +1403,13 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 			$body .= '<td  class="blackLine">' . $item->CrBy . '</td>';
 			$body .= '<td  class="blackLine">' . $item->TrxTypeDesc . '</td>';
 			$body .= '<td  class="blackLine">' . $item->TrxSign . '</td>';
-			$body .= '<td  class="blackLine">$' . $item->Amount . '</td>';
+			$body .= '<td  class="blackLine">$' . str_replace("-", "",$item->Amount) . '</td>';
 			$body .= '<td  class="blackLine">' . $item->Date_Audit . '</td>';
 			$body .= '<td  class="blackLine">' . $item->AuditedBy . '</td>';
 			$body .= '</tr>';
 		}
-		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">SUBTOTAL</td><td class="blackLine2">$'.number_format((float)$subtotal, 2, '.', '').'</td><td class="blackLine"></td><td class="blackLine"></td></tr>';
-		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">TOTAL</td><td class="blackLine3">$'.number_format((float)$total, 2, '.', '').'</td><td class="blackLine"></td><td class="blackLine"></td></tr>'; 
+		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">SUBTOTAL</td><td class="blackLine2">$'.str_replace("-", "",number_format($subtotal, 2)).'</td><td class="blackLine"></td><td class="blackLine"></td></tr>';
+		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine">TOTAL</td><td class="blackLine3">$'. str_replace("-", "",number_format($total, 2)) .'</td><td class="blackLine"></td><td class="blackLine"></td></tr>'; 
 		$body .= '</table>';
 		$html = '';
 		$html .= ' <html><head></head><body>';

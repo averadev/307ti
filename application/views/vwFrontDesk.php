@@ -35,15 +35,28 @@
 								<option value="section4">Housekeeping Lookup</option>
 							<?php if(!in_array($elemento, $PeopleB)){?>
 								<option value="section6">Exchange Rate</option>
-								<option value="section5">Report</option>
+								<option value="section5">Resort Status</option>
+								<option value="section9">Reports</option>
 								<option value="section7">Audit Units</option>
 								<option value="section8">Audit Transactions</option>
 							<?php }; ?>
 							</select>
 						</fieldset>
 					</div>
+					<div class="row oculto" id="showReports">
+					<div class="small-12 medium-12 large-3 columns">
+						<fieldset class="large-12 columns fieldsetFilter" Id="sectionFilter" >
+
+							<legend class="legendSearch">Choose Report Type</legend>
+							
+							<select id="typeReport" class="txtSearch input-group-field round">
+								<option value="1">Check Out</option>
+								<option value="2">Check Out2</option>
+							</select>
+						</fieldset>
+					</div>
 				</div>
-				<!--filter-->
+				</div>
 				<div class="row sectionFrontDesk section1">
 					<!--<div class="small-12 medium-8 large-12 columns"> 
 						<fieldset class="large-12 columns fieldsetFilter">
@@ -356,14 +369,6 @@
 										</div>
 									</label>
 								</div>
-								<!--<div class="small-12 large-3 columns">
-									<label id="" class="text-left">Date Departure
-										<div class="input-group date" id="frontArrivalDate" >
-											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-											<input type="text" id="dateDepartureReport" class="txtSearch input-group-field roundRight" placeholder="Enter a date" readonly />
-										</div>
-									</label>
-								</div>-->
 								<div class="small-12 large-6 columns" style="padding-top:30px;">
 									<input name="checkReport" type="checkbox" id="checkReport" class="checkReport">
 									<label for="checkReport">Balances</label>
@@ -646,6 +651,48 @@
 						</fieldset>
 					</div>
 					
+				</div>
+				<div class="row sectionFrontDesk section9" style="display:none;">
+					<div class="small-12 medium-8 large-12 columns"> 
+						<fieldset class="large-12 columns fieldsetFilter">
+								
+						</fieldset>
+					</div>
+					<div class="small-12 medium-12 large-12 columns">
+					
+						<!-- text Field dates -->
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row">
+								<div class="small-12 large-3 columns">
+									<label id="" class="text-left">Departure Date
+										<div class="input-group date" id="frontArrivalDate" >
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="dateArrivalReport" class="txtSearch input-group-field roundRight" placeholder="Enter a date" readonly />
+										</div>
+									</label>
+								</div>
+							</div>
+						</fieldset>
+						<fieldset class="large-12 columns fieldsetFilter">
+							<div class="row" style="margin-bottom:0; padding-bottom:0;">
+								<div class="small-12 large-6 columns" style="padding-top:5px;">
+									<a id="btnSearchReports" class="btn btn-primary btn-Search">
+										<div class="label">Search</div>
+										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
+									</a>
+									<a id="btnCleanHKLookUp" class="btn btn-primary spanSelect">
+										<div class="label">Clean</div>
+										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
+									</a>
+									<a id="btnHKREPORT" class="btn btn-primary btn-Search">
+										<div class="label">Export</div>
+										<img src="<?php echo base_url().IMG; ?>common/report.png"/>
+									</a>
+								</div>
+								<div class="small-12 large-3 columns">&nbsp;</div>
+							</div>
+						</fieldset>
+					</div>
 				</div>
 				
 			</div>

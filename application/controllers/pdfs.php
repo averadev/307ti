@@ -18,36 +18,11 @@ class Pdfs extends CI_Controller {
     }
     
     public function index() {
-        //$data['provincias'] llena el select con las provincias españolas
-        //$data['provincias'] = $this->pdfs_db->getProvincias();
-        //cargamos la vista y pasamos el array $data['provincias'] para su uso
-        //$this->load->view('pdfs_view', $data);
-		
-		//$html = '';
-        /*$html .= "<style type=text/css>";
-        $html .= "th{color: #fff; font-weight: bold; background-color: #222}";
-        $html .= "td{background-color: #AAC7E3; color: #fff}";
-        $html .= "</style>";
-        //$html .= "<h2>Localidades de ".$prov."</h2><h4>Actualmente: ".count($provincias)." localidades</h4>";
-        $html .= "<table width='100%'>";
-        $html .= "<tr><th>Id localidad</th><th>Localidades</th></tr>";*/
-		/*echo $_SERVER['DOCUMENT_ROOT'];
-		echo "</br>";
-		echo $_SERVER['HTTP_HOST'];
-		echo "</br>";
-		echo str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
-		echo "</br>";
-		echo base_url();*/
-		
-		//echo $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/" . "prueba.png";
-		
-		//echo "</br>";
-		
-		//echo base_url();
 		
     }
 	
 	public function CheckOut(){
+		ini_set('memory_limit', '2048M');
 		$idRes = $_GET['idRes'];
 		$data = $this->pdfs_db->getCheckOut($idRes);
 		$title = "Out Letter";
@@ -92,7 +67,7 @@ class Pdfs extends CI_Controller {
 	}
 	
 	public function Farewell(){
-		
+		ini_set('memory_limit', '2048M');
 		$idRes = $_GET['idRes'];
 		$data = $this->pdfs_db->getCheckOut($idRes);
 		$title = "Farewell";
@@ -141,7 +116,7 @@ class Pdfs extends CI_Controller {
 	}
 	
 	public function GuestInfromation(){
-		
+		ini_set('memory_limit', '2048M');
 		$idRes = $_GET['idRes'];
 		$data = $this->pdfs_db->getCheckOut($idRes);
 		$data2 = $this->pdfs_db->getRoom($idRes);
@@ -446,6 +421,7 @@ class Pdfs extends CI_Controller {
 		$pdf = $this->showpdf2( $pdf, $saveFiler );
 	}
 	public function reportAdminCA(){
+		ini_set('memory_limit', '2048M');
 		$filters =[];
 		$TRX = $this->pdfs_db->getTrxCA($filters);
 		$body = '';
