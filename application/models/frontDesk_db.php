@@ -502,7 +502,57 @@ Class frontDesk_db extends CI_MODEL
 			$sql.= " and ";
 			$sql.= "(SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId and c2.Year = ". date('Y', strtotime($filters['words']['DateAudit'])) ." ORDER By ro2.fkCalendarId desc) and"; 
 		}
-		$sql.= " RP.ynPrimaryPeople = 1";
+		$sql.= " RP.ynPrimaryPeople = 1 ";
+		if (!isset($filters['words']['unitAudit'])) {
+			$filters['words']['unitAudit'] = 0;
+		}
+		if ($filters['words']['unitAudit'] != 0) {
+			$sql.= " and U.UnitCode = ". $filters['words']['unitAudit'];
+		}
+		$condicion = '';
+		if (isset($filters['words']['statusAudit'])) {
+			for ($i=0; $i < sizeof($filters['words']['statusAudit']); $i++) { 
+				$condicion .= 'ES.pkStatusId = '.$filters['words']['statusAudit'][$i];
+				if ($i+1 < sizeof($filters['words']['statusAudit'])) {
+					$condicion .=' or ';
+				}
+			}
+			$sql.="and ( " . $condicion . ")";
+		}
+		$condicion = '';
+		if (isset($filters['words']['occTypeAudit'])) {
+			for ($i=0; $i < sizeof($filters['words']['occTypeAudit']); $i++) { 
+				$condicion .= 'OG.pkOccTypeGroupId = '.$filters['words']['occTypeAudit'][$i];
+				if ($i+1 < sizeof($filters['words']['occTypeAudit'])) {
+					$condicion .=' or ';
+				}
+			}
+			$sql.="and ( " . $condicion . ")";
+		}
+		if (isset($filters['words']['DateArrival']) && !empty($filters['words']['DateArrival'])) {
+			$sql.=" and '". $filters['words']['DateArrival']."' = (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId asc)";
+		}
+		if (isset($filters['words']['DateDeparture']) && !empty($filters['words']['DateDeparture'])) {
+			$fecha =  new DateTime($filters['words']['DateDeparture']);
+			$fecha->modify("-1 day");
+			$fechaActual = $fecha->format('m/d/Y');
+			$sql.=" and '". $fechaActual ."' = (SELECT top 1 CONVERT(VARCHAR(10),c2.Date,101) from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = R.pkResId ORDER By ro2.fkCalendarId desc)";
+		}
+		$sql.=" ORDER BY Unit asc ";
+		$query = $this->db->query($sql);
+
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+	}
+public function getAuditUnitsCheckOut($filters){
+		$sql = "SELECT  distinct RTRIM(R.pkResId) as pkResId, RTRIM(U.UnitCode) as Unit, RTRIM(FP.FloorPlanDesc) as FloorPlan, ES.StatusDesc as Status, OG.OccTypeGroupDesc as OccTypeGroup, R.ResConf, RTRIM(P.LName) as LastName, RTRIM(P.Name) as Name";
+		$sql.= " from tblRes R inner join tblResInvt RI on R.pkResId = RI.fkResId ";
+		$sql.=" left JOIN tblUnit U on RI.fkUnitId = U.pkUnitId inner join tblResType RT on RT.pkResTypeId = R.fkResTypeId  ";
+		$sql.= " inner join tblResPeopleAcc RP on RP.fkResId =  R.pkResId INNER JOIN tblPeople P on RP.fkPeopleId = P.pkPeopleId  INNER JOIN tblResOcc RO on RO.fkResInvtId = RI.pkResInvtId  inner join tblOccType OC on OC.pkOccTypeId = RO.fkOccTypeId  inner join tblStatus ES on ES.pkStatusId = R.fkStatusId  ";
+		$sql.= " INNER JOIN tblFloorPlan FP on U.fkFloorPlanId = FP.pkFloorPlanID inner join tblOccTypeGroup OG on OC.fkOccTypeGroupId = OG.pkOccTypeGroupId";
+		$sql.= " where  ";
+		$sql.= " RP.ynPrimaryPeople = 1 ";
 		if (!isset($filters['words']['unitAudit'])) {
 			$filters['words']['unitAudit'] = 0;
 		}

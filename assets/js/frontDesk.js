@@ -29,7 +29,12 @@ $('.searchFD').on('click', function(){ $('.orderRow').removeClass("active"); get
 $('#btnSearchReports').off();
 $('#btnSearchReports').on('click', function(){
 	var TYPE = $("#typeReport").val();
-	console.log("Buscando reporte "+ TYPE);
+	reportType(TYPE);
+});
+
+$('#typeReport').off();
+$('#typeReport').on('change', function(){ 
+	showFiltersRepors($(this).val());
 });
 
 $(document).off( 'click', '#btnNewFrontExchange');
@@ -57,7 +62,11 @@ $('#typeSearchFrontDesk').on('change', function(){
 $('#newFontDesk').off();
 $('#newFontDesk').on('click', function() {  showModaFrontDesk(0); });
 
-
+$('#btnGenereteReport').off();
+$('#btnGenereteReport').on('click', function() {
+	var TYPE = $("#typeReport").val();
+	genereteReport(TYPE);
+});
 
 $('#btnHKREPORT').off();
 $('#btnHKREPORT').on('click', function() {  generateReportFrontDesk(); });
@@ -114,7 +123,7 @@ var dateYearER = null;
 $(function() {
 	
 	//dateField
-	datepickerZebra = $( "#dateArrivalFront, #dateDepartureCheckOut, #dateDepartureFront, #dateHKConfig, #dateHKLookUp, #dateArrivalReport, #dateDepartureReport, #dateArrivalExchange, #dateDepartureExchange" ).Zebra_DatePicker({
+	datepickerZebra = $("#dateArrivalFront, #dateDepartureCheckOut, #dateDepartureFront, #dateHKConfig, #dateHKLookUp, #dateArrivalReport, #dateDepartureReport, #dateArrivalExchange, #dateDepartureExchange" ).Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false,
 		onSelect: function(date1, date2, date3, elements){
@@ -124,7 +133,10 @@ $(function() {
 			$('#textIntervalExchange').html("<option value=''>Select a interval</option>");
 		},
 	});
-		
+	$("#fromCreateDate , #toCreateDate," ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false
+	});	
 	$( "#dateYearFront, #dateYearExchange" ).Zebra_DatePicker({
 		format: 'Y',
 		view: 'years',
@@ -293,13 +305,16 @@ function getFrontDesk(order, page){
 		url = "frontDesk/getAuditTrx";
 	}
 	else if(section == "section9"){
-		/*filters = {};
+		var order =""; var page = 1;
+		var Seleccionado = $("#dateDepartureCheckOut").val();
+		filters = {};
 		dates = {};
 		words = {};
-		var Seleccionado = $("#dateDepartureCheckOut").val();
 		words.DateDeparture = Seleccionado;
+		words.unitAudit = "";
+		words.statusAudit = [15];
 		options = {};
-		url = "frontDesk/getAuditUnits";*/
+		url = "frontDesk/getAuditUnits";
 	}
 	
 	ajaxFrontDesk( url, filters, dates, words, options, order, page );
@@ -385,7 +400,7 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 					case "section9":
 						
 						$("#NTA").text("Total: "+ data.items.length);
-						drawTable4( data.items, "tablaAuditTrx", false, "" );
+						drawTable4( data.items, "tablaReports", false, "" );
 					break;
 				}
 			}else{
@@ -412,6 +427,11 @@ function ajaxFrontDesk( url, filters, dates, words, options, order, page ){
 					case "section8":
 						alertify.success("No Data Found");
 						$("#tablaAuditTrx tbody").empty();
+					break;
+					case "section9":
+						alertify.success("No Data Found");
+						$("#tablaReports tbody").empty();
+					break;
 				}
 			}
 			showLoading('#table-frontDesk',false);	
@@ -1609,7 +1629,6 @@ function saveExitoTrx(data){
 function generateReportAuditUnits(){
 	filters = {};
 	dates = {};
-	//words = getWords(["unitAudit", "DateAudit", "DateArrival", "DateDeparture"]);
 	words = getWords(["unitAudit", "DateAudit"]);
 	var Seleccionado = $("#ArrivalDeparture").val();
 	switch(Seleccionado) {
@@ -1716,4 +1735,94 @@ function ConvertDate(fecha){
 	} 
 	
 	return  mm+'/'+dd+'/'+yyyy;
+}
+
+function reportType(type){
+	switch(type) {
+    case "1":
+    	getReportCheckOut();
+        break;
+    case "2":
+       alertify.success("Reporte en desarrollo");
+        break;
+    default:
+        alertify.success("Reporte en desarrollo");
+    }
+}
+function getReportCheckOut(){
+	    var order =""; var page = 1;
+		var Seleccionado = $("#dateDepartureCheckOut").val();
+		filters = {};
+		dates = {};
+		words = {};
+		words.DateDeparture = Seleccionado;
+		words.unitAudit = "";
+		words.statusAudit = [15];
+		options = {};
+		url = "frontDesk/getAuditUnits";
+	
+	ajaxFrontDesk( url, filters, dates, words, options, order, page );
+}
+
+function genereteReport(type){
+	switch(type) {
+    case "1":
+    	generatePDFCheckOut();
+        break;
+    case "2":
+       console.log("=D");
+        break;
+    default:
+        console.log("No hay ese reporte");
+    }
+}
+
+function generatePDFCheckOut(){
+	 var order =""; var page = 1;
+	var Seleccionado = $("#dateDepartureCheckOut").val();
+	filters = {};
+	dates = {};
+	words = {};
+	words.DateDeparture = Seleccionado;
+	words.unitAudit = "";
+	words.statusAudit = [15];
+	options = {};
+	url = "?type=report";
+	dates = JSON.stringify(dates);
+	words = JSON.stringify(words);
+	url += "&words=" + words;
+	window.open("frontDesk/getReports"+ url);
+	
+}
+
+function hideALL(){
+	$('.reports').hide();
+}
+
+function showFiltersCheckOut(){
+	$('.checkout').show();
+}
+function showFiltersAdvanceDeposit(){
+	$('.avdanceDeposit').show();
+}
+
+function showFiltersRepors(type){
+	switch(type) {
+    case "1":
+    	hideALL();
+    	showFiltersCheckOut();
+        break;
+    case "2":
+       	hideALL();
+       	setDefaultDate();
+    	showFiltersAdvanceDeposit();
+        break;
+    default:
+        console.log("No hay ese reporte");
+    }
+}
+
+function setDefaultDate(){
+	$("#fromCreateDate").val(getCurrentDateMENOS(0));
+	$("#toCreateDate").val(getCurrentDateMENOS(0))
 }

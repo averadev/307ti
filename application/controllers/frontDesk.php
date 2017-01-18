@@ -287,7 +287,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 			$filtros = $this->receiveWords($_POST);
 			$data = $this->frontDesk_db->getAuditUnitsQUERY($filtros);
 			if ($filtros['words']["unitAudit"] || isset($filtros['words']["occTypeAudit"]) || isset($filtros['words']["statusAudit"])) {
-				echo json_encode(array('items' => $data));
+				echo json_encode(['items' => $data, "aqui" => "=D"]);
 			}else{
 				$data2 = $this->frontDesk_db->selectUnitsAudit();
 				
@@ -331,6 +331,45 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		}
 
 		$data = $this->frontDesk_db->getAuditUnitsQUERY($sql);
+
+		if (isset($sql['words']['statusAudit']) && !empty($sql['words']['statusAudit'])) {
+			$Descriptions = '';
+			for ($i=0; $i < sizeof($sql['words']['statusAudit']); $i++) {
+				$Descriptions .= $this->frontDesk_db->selectDescStatus($sql['words']['statusAudit'][$i]);
+				if ($i+1 < sizeof($sql['words']['statusAudit'])) {
+					$Descriptions.= ", ";
+				}
+			}
+			$sql['words']['statusAudit'] = $Descriptions;
+		}
+		if (isset($sql['words']['occTypeAudit']) && !empty($sql['words']['occTypeAudit'])) {
+			$Descriptions = '';
+			for ($i=0; $i < sizeof($sql['words']['occTypeAudit']); $i++) {
+				$Descriptions .= $this->frontDesk_db->selectDescOCCGroup($sql['words']['occTypeAudit'][$i]);
+				if ($i+1 < sizeof($sql['words']['occTypeAudit'])) {
+					$Descriptions.= ", ";
+				}
+			}
+			$sql['words']['occTypeAudit'] = $Descriptions;
+		}
+
+		if (isset($sql['words']["unitAudit"]) || isset($sql['words']["statusAudit"]) || isset($sql['words']["occTypeAudit"])) {
+			$this->reportPDFUnits($data,"AuditReportunits", $sql);
+		}else{
+			$data2 = $this->frontDesk_db->selectUnitsAudit();
+			$datos = $this->mergeArrayDatos($data, $data2);
+			$this->reportPDFUnits($datos,"AuditReportunits", $sql);
+		}
+		
+	}
+
+		public function getReports(){
+		if(isset($_GET['words'])){
+			$words = json_decode( $_GET['words'] );
+			$sql['words'] = $this->receiveWords($words);
+		}
+
+		$data = $this->frontDesk_db->getAuditUnitsCheckOut($sql);
 
 		if (isset($sql['words']['statusAudit']) && !empty($sql['words']['statusAudit'])) {
 			$Descriptions = '';

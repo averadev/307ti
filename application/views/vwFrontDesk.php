@@ -51,7 +51,8 @@
 							
 							<select id="typeReport" class="txtSearch input-group-field round">
 								<option value="1">Check Out</option>
-								<option value="2">Check Out2</option>
+								<option value="2">Advance Deposit</option>
+								<!-- <option value="2">Room Rate</option> -->
 							</select>
 						</fieldset>
 					</div>
@@ -663,20 +664,42 @@
 						<!-- text Field dates -->
 						<fieldset class="large-12 columns fieldsetFilter">
 							<div class="row">
-								<div class="small-12 large-3 columns">
-									<label id="" class="text-left">Departure Date
-										<div class="input-group date" id="frontArrivalDate" >
-											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
-											<input type="text" id="dateArrivalReport" class="txtSearch input-group-field roundRight" placeholder="Enter a date" readonly />
-										</div>
-									</label>
+								<div class="reports checkout">
+									<div class="small-12 large-3 columns">
+										<label id="" class="text-left">Departure Date
+											<div class="input-group date" id="frontArrivalDate" >
+												<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+												<input type="text" id="dateDepartureCheckOut" class="txtSearch input-group-field roundRight" placeholder="Enter a date" readonly />
+											</div>
+										</label>
+									</div>
+								</div>
+								<div class="reports avdanceDeposit oculto">
+									<div class="small-12 large-3 columns">
+										<label id="" class="text-left">From Create Date
+											<div class="input-group date">
+												<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+												<input type="text" id="fromCreateDate" class="txtSearch input-group-field roundRight" placeholder="Enter a date" readonly />
+											</div>
+										</label>
+									</div>
+								</div>
+								<div class="reports avdanceDeposit oculto">
+									<div class="small-12 large-3 columns">
+										<label id="" class="text-left">To Create Date
+											<div class="input-group date">
+												<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+												<input type="text" id="toCreateDate" class="txtSearch input-group-field roundRight" placeholder="Enter a date" readonly />
+											</div>
+										</label>
+									</div>
 								</div>
 							</div>
 						</fieldset>
 						<fieldset class="large-12 columns fieldsetFilter">
 							<div class="row" style="margin-bottom:0; padding-bottom:0;">
 								<div class="small-12 large-6 columns" style="padding-top:5px;">
-									<a id="btnSearchReports" class="btn btn-primary btn-Search">
+									<a id="btnSearchReports" class="btn btn-primary btn-Search searchFD">
 										<div class="label">Search</div>
 										<img src="<?php echo base_url().IMG; ?>common/BUSCAR.png"/>
 									</a>
@@ -684,7 +707,7 @@
 										<div class="label">Clean</div>
 										<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 									</a>
-									<a id="btnHKREPORT" class="btn btn-primary btn-Search">
+									<a id="btnGenereteReport" class="btn btn-primary btn-Search">
 										<div class="label">Export</div>
 										<img src="<?php echo base_url().IMG; ?>common/report.png"/>
 									</a>
@@ -907,6 +930,29 @@
 					</div>
 					<div class="section8 tableSection" style="display:none;">
 						<table id="tablaAuditTrx" style="width:100%">
+							<thead>
+								<tr>
+									<th>Unit</th>
+									<th>CrDate</th>
+									<th>User</th>
+									<th>Trx Description</th>
+									<th>Sign</th>
+									<th>TrxAmount</th>
+									<th>Credit</th>
+									<th>Debit</th>
+									<th>Audit Date</th>
+									<th>Audit by user</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+						<div class="pages">
+						<span id="NTA"></span>
+						</div>
+					</div>
+					<div class="section9 tableSection" style="display:none;">
+						<table id="tablaReports" style="width:100%">
 							<thead>
 								<tr>
 									<th>Unit</th>
