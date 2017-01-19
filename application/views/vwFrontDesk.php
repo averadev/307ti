@@ -52,7 +52,7 @@
 							<select id="typeReport" class="txtSearch input-group-field round">
 								<option value="1">Check Out</option>
 								<option value="2">Advance Deposit</option>
-								<!-- <option value="2">Room Rate</option> -->
+								<option value="3">Room Rate</option>
 							</select>
 						</fieldset>
 					</div>

@@ -123,7 +123,7 @@ var dateYearER = null;
 $(function() {
 	
 	//dateField
-	datepickerZebra = $("#dateArrivalFront, #dateDepartureCheckOut, #dateDepartureFront, #dateHKConfig, #dateHKLookUp, #dateArrivalReport, #dateDepartureReport, #dateArrivalExchange, #dateDepartureExchange" ).Zebra_DatePicker({
+	datepickerZebra = $("#fromCreateDate , #toCreateDate, #dateArrivalFront, #dateDepartureCheckOut, #dateDepartureFront, #dateHKConfig, #dateHKLookUp, #dateArrivalReport, #dateDepartureReport, #dateArrivalExchange, #dateDepartureExchange" ).Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false,
 		onSelect: function(date1, date2, date3, elements){
@@ -133,10 +133,10 @@ $(function() {
 			$('#textIntervalExchange').html("<option value=''>Select a interval</option>");
 		},
 	});
-	$("#fromCreateDate , #toCreateDate," ).Zebra_DatePicker({
+/*	$("#fromCreateDate , #toCreateDate," ).Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false
-	});	
+	});	*/
 	$( "#dateYearFront, #dateYearExchange" ).Zebra_DatePicker({
 		format: 'Y',
 		view: 'years',
@@ -1743,7 +1743,7 @@ function reportType(type){
     	getReportCheckOut();
         break;
     case "2":
-       alertify.success("Reporte en desarrollo");
+       getReportAdvanceDeposit();
         break;
     default:
         alertify.success("Reporte en desarrollo");
@@ -1770,7 +1770,7 @@ function genereteReport(type){
     	generatePDFCheckOut();
         break;
     case "2":
-       console.log("=D");
+       generatePDFAdvanceDeposit();
         break;
     default:
         console.log("No hay ese reporte");
@@ -1778,7 +1778,7 @@ function genereteReport(type){
 }
 
 function generatePDFCheckOut(){
-	 var order =""; var page = 1;
+	var order =""; var page = 1;
 	var Seleccionado = $("#dateDepartureCheckOut").val();
 	filters = {};
 	dates = {};
@@ -1792,6 +1792,24 @@ function generatePDFCheckOut(){
 	words = JSON.stringify(words);
 	url += "&words=" + words;
 	window.open("frontDesk/getReports"+ url);
+	
+}
+function generatePDFAdvanceDeposit(){
+	var arrayDate = ["fromCreateDate", "toCreateDate"];
+    var dates = getDates(arrayDate);
+    var options = {};
+    options.AccTypeColl = 7;
+
+	words = {};
+
+	url = "?type=report";
+	dates = JSON.stringify(dates);
+	words = JSON.stringify(words);
+	options = JSON.stringify(options);
+	url += "&words=" + words;
+	url += "&dates=" + dates;
+	url += "&options=" + options;
+	window.open("Pdfs/reportPDFAdvanceDeposit"+ url);
 	
 }
 
@@ -1825,4 +1843,36 @@ function showFiltersRepors(type){
 function setDefaultDate(){
 	$("#fromCreateDate").val(getCurrentDateMENOS(0));
 	$("#toCreateDate").val(getCurrentDateMENOS(0))
+}
+
+function getReportAdvanceDeposit(){
+	showLoading('#tablaReports',true);
+    var arrayDate = ["fromCreateDate", "toCreateDate"];
+    var dates = getDates(arrayDate);
+    var options = {};
+    options.AccTypeColl = 7;
+	$.ajax({
+		data:{
+			dates: dates,
+			words: words,
+			options: options
+		},
+   		type: "POST",
+       	url: "frontDesk/getReportAdvanceDeposit",
+		dataType:'json',
+		success: function(data){
+			if( data.items.length > 0 ){
+				alertify.success("Found "+ data.items.length);
+				drawTable4( data.items, "tablaReports", false, "" );
+			}else{
+				alertify.error("no results found");
+				$("#tablaReports").empty();
+			}
+			showLoading('#tablaReports',false);
+		},
+		error: function(){
+			noResultsTable("section-Colletion", "tableColletion", "Try again");
+			showLoading('#section-Colletion',false);
+		}
+    });
 }

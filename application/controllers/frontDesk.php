@@ -363,7 +363,7 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		
 	}
 
-		public function getReports(){
+	public function getReports(){
 		if(isset($_GET['words'])){
 			$words = json_decode( $_GET['words'] );
 			$sql['words'] = $this->receiveWords($words);
@@ -556,6 +556,26 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		}
 	}
 	
+	public function getReportAdvanceDeposit(){
+		if($this->input->is_ajax_request()){
+			$page = 0;
+			$sql = $this->getFilters($_POST, '');
+			$data = $this->frontDesk_db->getReportAD($sql);
+			if( count($data) > 0 ){
+				foreach( $data[0] as $key => $item ){
+					$keys[] = $key;
+				}
+				foreach( $data as $key => $item ){
+					foreach($keys as $ke){
+						if( is_null( $item->$ke ) ){
+							$item->$ke = "";
+						}
+					}
+				}
+			}
+			echo json_encode(array('items' => $data));
+		}
+	}
 	/***************************************/
 	/**********Housekeeping Look up*********/
 	/***************************************/

@@ -304,6 +304,8 @@ class Pdfs extends CI_Controller {
 	}
 
 	public function reportAdminTRX(){
+		ini_set('max_execution_time', 700);
+		ini_set('memory_limit', '2048M');
 		$filters =[];
 		if ($_GET['IDOCC']) {
 			$filters['options']['OccTypeGroupColl'] = $_GET['IDOCC'];
@@ -410,6 +412,70 @@ class Pdfs extends CI_Controller {
 			$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">Owner - Booking</td><td class="blackLine21">$'.number_format((float)$totalOWB, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
 		}
 		$body .= '<tr><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine1"></td><td class="blackLine21">TOTAL</td><td class="blackLine21">$'.number_format((float)$total, 2, '.', '').'</td><td class="blackLine1"></td><td class="blackLine1"></td></tr>';
+		$body .= '</table>';
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
+		$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+		
+		$pdf = $this->showpdf2( $pdf, $saveFiler );
+	}
+	public function reportPDFAdvanceDeposit(){
+		ini_set('max_execution_time', 700);
+		ini_set('memory_limit', '2048M');
+		$sql =[];
+
+		if(isset($_GET['dates'])){
+			$dates = json_decode( $_GET['dates']);
+			$sql['dates'] = [
+				"fromCreateDate" => $dates->fromCreateDate,
+				"toCreateDate" => $dates->toCreateDate
+			];
+		}
+		if(isset($_GET['options'])){
+			$options = json_decode( $_GET['options']);
+			$sql['options'] = [
+				"AccTypeColl" => $options->AccTypeColl
+			];
+		}
+
+		$TRX = $this->pdfs_db->getReportAD($sql);
+		$body = '';
+		$title = "Account Status";
+		$name = "Account Status";
+		$saveFiler = "Account_Status";
+		$pdf = $this->generatePdfTemp( $name, $title );
+		$style = $this->generateStyle();
+
+		$body .= '<table width="100%" cellpadding="2">';
+		$body.= '<tr>';
+		foreach ($TRX[0] as $clave => $valor){
+			if ($clave != "OCCTYPECODE") {
+				$body .= '<th class="blackLine45">' . $clave . '</th>';
+			}
+			
+		}
+		$body.= '</tr>';
+		foreach ($TRX as $item){
+		
+			$body .= '<tr>'; 
+			$body .= '<td  class="blackLine45">' . $item->ID . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->Folio . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->ResConf . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->TrxType . '</td>';
+			$body .= '<td  class="blackLine45">$' . number_format((float)$item->Amount, 2, '.', '') . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->DueDate . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->CreateDate . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->DiffDate . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->AccType . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->Document . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->Reference . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->CrByUser . '</td>';
+			
+			$body .= '</tr>';
+		}
 		$body .= '</table>';
 		$html = '';
 		$html .= ' <html><head></head><body>';

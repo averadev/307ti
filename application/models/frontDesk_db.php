@@ -1090,6 +1090,52 @@ public function getAuditUnitsCheckOut($filters){
         }
     }
 	
+
+    public function getReportAD($filters){
+    	$sql = "";
+    	$this->db->distinct();
+    	$this->db->select('at1.pkAccTrxId as ID, r.Folio,r.ResConf, tt.TrxTypeDesc as TrxType, at1.Amount, CONVERT(VARCHAR(11),at1.DueDt,106) as DueDate, CONVERT(VARCHAR(11),at1.CrDt,106) as CreateDate');
+    	$this->db->select('DATEDIFF(day, CONVERT(VARCHAR(11),at1.DueDt,106), CONVERT(VARCHAR(11),GETDATE(),106)) AS DiffDate');
+    	$this->db->select('att.AccTypeDesc as AccType, at1.Doc as Document, at1.Remark as Reference, us.UserLogin as CrByUser');
+    	$this->db->from('tblAccTrx at1');
+    	$this->db->join('tblAcc a', 'a.pkAccId = at1.fkAccid');
+    	$this->db->join('tblAcctype att', 'att.pkAcctypeId = a.fkAccTypeId');
+    	$this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = at1.fkTrxTypeId');
+    	$this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId and rpa.ynPrimaryPeople = 1');
+    	$this->db->join('tblRes r', 'r.pkResId = rpa.fkResId and r.pkResRelatedId is Null');
+    	$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
+    	$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
+    	$this->db->join('tblOccTypeGroup otg', 'otg.pkOccTypeGroupId = ot.fkOccTypeGroupId');
+    	$this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId');
+    	$this->db->join('tblPeoplePhone pph', 'pph.fkPeopleId = p.pkPeopleId and pph.ynPrimaryPhone = 1', 'LEFT');
+    	$this->db->join('tblUser us', 'us.pkUserId = at1.CrBy');
+    	if (!is_null($filters)){
+    		if($filters['options'] != false){
+    			if(isset($filters['options']['AccTypeColl'])){
+    				$this->db->where('att.pkAcctypeId', $filters['options']['AccTypeColl']);
+    			}
+    		}
+    		if($filters['dates'] != false){
+    			if(isset($filters['dates']['fromCreateDate']) && isset($filters['dates']['toCreateDate'])){
+    				$from = $filters['dates']['fromCreateDate'];
+    				$to = $filters['dates']['toCreateDate'];
+    				//$this->db->where('CONVERT(VARCHAR(10),at1.DueDt,101)', $filters['dates']['fromCreateDate']);
+    				$this->db->where("CONVERT(VARCHAR(10),at1.CrDt,101) BETWEEN "."'". $from."'". " and "."'". $to."'");
+    				//$this->db->where("'".$filters['dates']['fromCreateDate']."'". 'BETWEEN '. $sqlWhere1. ' and '. $sqlWhere2);
+    			}
+    			elseif(!isset($filters['dates']['fromCreateDate']) && isset($filters['dates']['toCreateDate'])){
+    				$this->db->where('CONVERT(VARCHAR(10),at1.CrDt,101)', $filters['dates']['fromCreateDate']);
+
+    			}
+    			/*elseif (!isset($filters['dates']['fromCreateDate']) && isset($filters['dates']['toCreateDate'])) {
+
+    				$this->db->where('CONVERT(VARCHAR(10),at1.CrDt,101)', $filters['dates']['fromCreateDate']);
+    			}*/
+    		}
+    	}
+		return  $this->db->get()->result();
+	}
+
 }
-//end model
+
 
