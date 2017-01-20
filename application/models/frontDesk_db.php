@@ -1094,7 +1094,7 @@ public function getAuditUnitsCheckOut($filters){
     public function getReportAD($filters){
     	$sql = "";
     	$this->db->distinct();
-    	$this->db->select('at1.pkAccTrxId as ID, r.Folio,r.ResConf, tt.TrxTypeDesc as TrxType, at1.Amount, CONVERT(VARCHAR(11),at1.DueDt,106) as DueDate, CONVERT(VARCHAR(11),at1.CrDt,106) as CreateDate');
+    	$this->db->select('at1.pkAccTrxId as ID, r.Folio,r.ResConf, tt.TrxTypeDesc as TrxType, (tt.TrxSign*"at1"."amount") as amount, CONVERT(VARCHAR(11),at1.DueDt,106) as DueDate, CONVERT(VARCHAR(11),at1.CrDt,106) as CreateDate');
     	$this->db->select('DATEDIFF(day, CONVERT(VARCHAR(11),at1.DueDt,106), CONVERT(VARCHAR(11),GETDATE(),106)) AS DiffDate');
     	$this->db->select('att.AccTypeDesc as AccType, at1.Doc as Document, at1.Remark as Reference, us.UserLogin as CrByUser');
     	$this->db->from('tblAccTrx at1');
@@ -1134,6 +1134,55 @@ public function getAuditUnitsCheckOut($filters){
     		}
     	}
 		return  $this->db->get()->result();
+	}
+
+	public function getRoomsRates($filters){
+		$sql = "select r.pkresid AS ID, u.unitcode AS Unit,";
+		$sql .="RTRIM(p.Name) + ' '+ RTRIM(p.LName) as GUEST_NAME,";
+		$sql .="(select count(*) as Adult from tblResPeopleAcc PA where PA.fkResId = R.pkResId) AS Adult,";
+		$sql .=" 0 as Child, ro.rateamtnight as RATE_CHRGD, 'Nightly' as Type,";
+		$sql .=" s.statusdesc AS Status, r.folio  AS Contract, r.resconf,";
+		$sql .=" r.firstoccyear AS OccYear, Fp.floorplandesc, ri.intv AS Intv,";
+		$sql .=" rt.restypedesc AS ResType, ro.nightid, cal.Date";
+
+		$sql.= " FROM   tblres r";
+
+		$sql.=" INNER JOIN tblResPeopleAcc rpa  ON rpa.fkResId = r.pkResId  ";
+		$sql.=" INNER JOIN tblPeople p  ON p.pkPeopleId = rpa.fkPeopleId  ";
+		$sql.=" INNER JOIN tblstatus s  ON s.pkstatusid = r.fkstatusid   ";
+		$sql.=" INNER JOIN tblrestype rt  ON rt.pkrestypeid = r.fkrestypeid   ";
+		$sql.=" INNER JOIN tblresinvt ri  ON ri.fkresid = r.pkresid  ";
+		$sql.=" INNER JOIN tblfloorplan fp  ON fp.pkfloorplanid = ri.fkfloorplanid  ";
+		$sql.=" INNER JOIN tblresocc ro  ON ro.fkresid = r.pkresid   ";
+		$sql.=" INNER JOIN tblocctype oty  ON oty.pkocctypeid = ro.fkocctypeid ";
+		$sql.=" INNER JOIN tblunit u  ON u.pkunitid = ri.fkunitid ";	
+		$sql.=" INNER JOIN tblrestype rty  ON rty.pkrestypeid = ro.fkrestypeid  ";
+		$sql.=" INNER JOIN tblcalendar cal  ON cal.pkCalendarid = ro.fkcalendarid ";
+		$sql.=" LEFT JOIN tbluser us  ON us.pkuserid = ro.crby  ";
+
+		$sql.= " where rpa.ynActive = 1 and rpa.ynActive = 1";
+		
+		if (isset($filters['dates']['dateRoomRate'])) {
+			$sql.=" and cal.Date = '". $filters['dates']['dateRoomRate'] ."'";
+		}
+
+		$condicion = '';
+		if (isset($filters['words']['statusAudit'])) {
+			for ($i=0; $i < sizeof($filters['words']['statusAudit']); $i++) { 
+				$condicion .= 'r.fkstatusid  = '.$filters['words']['statusAudit'][$i];
+				if ($i+1 < sizeof($filters['words']['statusAudit'])) {
+					$condicion .=' or ';
+				}
+			}
+			$sql.="and ( " . $condicion . ")";
+		}
+
+		$sql.=" ORDER BY nightid asc ";
+		$query = $this->db->query($sql);
+
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
 	}
 
 }

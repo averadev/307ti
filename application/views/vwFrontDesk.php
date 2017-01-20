@@ -694,6 +694,31 @@
 										</label>
 									</div>
 								</div>
+								<div class="reports roomRate oculto">
+									<div class="small-12 large-3 columns">
+										<label id="" class="text-left">To Create Date
+											<div class="input-group date">
+												<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+												<input type="text" id="dateRoomRate" class="txtSearch input-group-field roundRight" placeholder="Enter a date" readonly />
+											</div>
+										</label>
+									</div>
+								</div>
+								<div class="reports roomRate oculto">
+									<div class="small-12 large-2 columns">
+									<label id="statusAuditLabel" class="text-left">Status
+											<select  id="statusAuditRoom"  class="input-group-field round"  multiple="multiple">
+												<?php
+												foreach($statusRes as $item){
+													?>
+													<option value="<?php echo $item->ID; ?>"><?php echo $item->StatusDesc; ?></option>
+													<?php
+												}
+												?>
+											</select>
+									</label>
+								</div>
+								</div>
 							</div>
 						</fieldset>
 						<fieldset class="large-12 columns fieldsetFilter">

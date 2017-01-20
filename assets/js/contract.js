@@ -2470,6 +2470,7 @@ function setTableAccount(items, table){
 	var atrasadoLoan = 0;
 	var loan = 0;
 	var sales = 0;
+	
 	for(i=0;i<items.length;i++){
 		var item = items[i];
 		if( item.Sign_transaction == "1"){
@@ -2491,6 +2492,8 @@ function setTableAccount(items, table){
 		}
 	}
 	balance = tempTotal - tempTotal2;
+
+	//Actualiza el encabezado de las tablas 
 	$('#' + table +  ' tbody tr td.balanceAccount').text('$ ' + balance.toFixed(2));
 	$('#' + table +  ' tbody tr td.balanceDepAccount').text('$ ' + downpayment.toFixed(2));
 	$('#' + table +  ' tbody tr td.balanceSaleAccount').text('$ ' + loan.toFixed(2));

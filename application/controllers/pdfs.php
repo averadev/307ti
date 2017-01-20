@@ -141,7 +141,6 @@ class Pdfs extends CI_Controller {
 		$body .= '</table>';
 		$body .= '<h4></h4>';
 		$body .= '<table width="100%">';
-		//$body .= "<tr><th>Unit</th><th>ContFx</th><th>Exchanger</th><th>Guest</th></tr>";
 		foreach($data2 as $item){
 			$body .= '<tr><td>' . $item->UnitCode . '</td><td>' . $item->ResTypeDesc . '</td><td>' . $item->Folio . '</td><td>' . $item->ResConf . '</td></tr>';
 		}
@@ -486,6 +485,81 @@ class Pdfs extends CI_Controller {
 		
 		$pdf = $this->showpdf2( $pdf, $saveFiler );
 	}
+
+	public function reportPDFRoomRate(){
+		ini_set('max_execution_time', 700);
+		ini_set('memory_limit', '2048M');
+		$sql =[];
+
+		if(isset($_GET['dates'])){
+			$dates = json_decode( $_GET['dates']);
+			$sql['dates'] = [
+				"dateRoomRate" => $dates->dateRoomRate
+			];
+		}
+		if(isset($_GET['words'])){
+			$options = json_decode( $_GET['options']);
+			$sql['statusAudit'] = $this->receiveWords($options);
+		}
+
+		$TRX = $this->pdfs_db->getRoomsRates($sql);
+		$body = '';
+		$title = "Room Rate";
+		$name = "Room Rate";
+		$saveFiler = "Room_Rate";
+		$pdf = $this->generatePdfTemp( $name, $title );
+		$style = $this->generateStyle();
+
+		$body .= '<table width="100%" cellpadding="2">';
+		$body.= '<tr>';
+		foreach ($TRX[0] as $clave => $valor){
+			if ($clave != "OCCTYPECODE") {
+				$body .= '<th class="blackLine45">' . $clave . '</th>';
+			}
+			
+		}
+		$body.= '</tr>';
+		foreach ($TRX as $item){
+		
+			$body .= '<tr>'; 
+			$body .= '<td  class="blackLine45">' . $item->ID . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->Unit . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->GUEST_NAME . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->Adult . '</td>';
+			//$body .= '<td  class="blackLine45">$' . number_format((float)$item->Amount, 2, '.', '') . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->Child . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->RATE_CHRGD . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->Type . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->Status . '</td>';
+			
+			$body .= '</tr>';
+		}
+		$body .= '</table>';
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
+		$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+		
+		$pdf = $this->showpdf2( $pdf, $saveFiler );
+	}
+
+	private function receiveWords($words){
+
+		$ArrayWords = [];
+		foreach ($words as $key => $value) {
+			if(!empty($value)){
+				$ArrayWords[$key] = $value;
+			}
+		}
+		if (!empty($ArrayWords)){
+			return $ArrayWords;
+		}else{
+			return false;
+		}
+	}
+
 	public function reportAdminCA(){
 		ini_set('memory_limit', '2048M');
 		$filters =[];

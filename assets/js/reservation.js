@@ -2607,7 +2607,7 @@ function getAccountsRes( id, typeInfo, typeAcc ){
 				if (avdDeposit.length>0) {
 					var avdDeposit = parsearSALERes(avdDeposit);
 					drawTable2(avdDeposit, "tableAccountLoan", false, "");
-					//setTableAccountRes( avdDeposit, "tableAccountLoan" );
+					setTableAccountRes( avdDeposit, "tableAccountLoanDetail" );
 				}
 				for( i=0; i<acc.length; i++ ){
 					var nameSafe = acc[i].accType;

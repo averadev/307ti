@@ -1318,7 +1318,6 @@ class Contract_db extends CI_Model {
 		}
         $this->db->from('tblAccTrx att');
         $this->db->join('tblAcc a', 'a.pkAccId = att.fkAccId');
-        //$this->db->join('tblPayTrx PT', 'att.pkAccTrxID = PT.fkAccTrxId', 'left');
 		$this->db->join('tblPayTrx PT', ' att.pkAccTrxID = PT.fkPayId and PT.pkPayTrxId = (select top 1 PT2.pkPayTrxId from tblPayTrx PT2 where PT2.fkPayId =  PT.fkPayId ORDER BY PT2.pkPayTrxId DESC) ', 'left');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId');
         $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = att.fkTrxTypeId');

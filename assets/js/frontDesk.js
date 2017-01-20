@@ -123,7 +123,7 @@ var dateYearER = null;
 $(function() {
 	
 	//dateField
-	datepickerZebra = $("#fromCreateDate , #toCreateDate, #dateArrivalFront, #dateDepartureCheckOut, #dateDepartureFront, #dateHKConfig, #dateHKLookUp, #dateArrivalReport, #dateDepartureReport, #dateArrivalExchange, #dateDepartureExchange" ).Zebra_DatePicker({
+	datepickerZebra = $("#fromCreateDate , #toCreateDate,#dateRoomRate, #dateArrivalFront, #dateDepartureCheckOut, #dateDepartureFront, #dateHKConfig, #dateHKLookUp, #dateArrivalReport, #dateDepartureReport, #dateArrivalExchange, #dateDepartureExchange" ).Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false,
 		onSelect: function(date1, date2, date3, elements){
@@ -190,6 +190,15 @@ $(function() {
 		width: '100%',
 		placeholder: "Select one",
 		selectAll: false,
+		onClick: function(view) {
+		},
+	});
+
+	OCCSTATUSROOM = $('#statusAuditRoom').multipleSelect({
+		filter: true,
+		width: '100%',
+		placeholder: "Select one",
+		selectAll: true,
 		onClick: function(view) {
 		},
 	});
@@ -1745,10 +1754,48 @@ function reportType(type){
     case "2":
        getReportAdvanceDeposit();
         break;
+    case "3":
+    	getReportRoomRate();
+    break;
     default:
         alertify.success("Reporte en desarrollo");
     }
 }
+
+function getReportRoomRate(){
+	//OCCSTATUSROOM.multipleSelect('getSelects');
+	showLoading('#tablaReports',true);
+    var arrayDate = ["dateRoomRate"];
+    var dates = getDates(arrayDate);
+    var words = {};
+    var options = {};
+    words.statusAudit = OCCSTATUSROOM.multipleSelect('getSelects');
+	$.ajax({
+		data:{
+			dates: dates,
+			words: words,
+			options: options
+		},
+   		type: "POST",
+       	url: "frontDesk/getReportRoomRate",
+		dataType:'json',
+		success: function(data){
+			if( data.items){
+				alertify.success("Found "+ data.items.length);
+				drawTable4( data.items, "tablaReports", false, "" );
+			}else{
+				alertify.error("no results found");
+				$("#tablaReports").empty();
+			}
+			showLoading('#tablaReports',false);
+		},
+		error: function(){
+			noResultsTable("section-Colletion", "tableColletion", "Try again");
+			showLoading('#section-Colletion',false);
+		}
+    });
+}
+
 function getReportCheckOut(){
 	    var order =""; var page = 1;
 		var Seleccionado = $("#dateDepartureCheckOut").val();
@@ -1771,6 +1818,9 @@ function genereteReport(type){
         break;
     case "2":
        generatePDFAdvanceDeposit();
+        break;
+	case "3":
+       generatePDFRoomRate();
         break;
     default:
         console.log("No hay ese reporte");
@@ -1813,27 +1863,46 @@ function generatePDFAdvanceDeposit(){
 	
 }
 
+function generatePDFRoomRate(){
+	var arrayDate = ["dateRoomRate"];
+    var dates = getDates(arrayDate);
+    var words = {};
+    var options = {};
+    words.statusAudit = OCCSTATUSROOM.multipleSelect('getSelects');
+
+	url = "?type=report";
+	dates = JSON.stringify(dates);
+	words = JSON.stringify(words);
+	options = JSON.stringify(options);
+	url += "&words=" + words;
+	url += "&dates=" + dates;
+	url += "&options=" + options;
+	window.open("Pdfs/getReportRoomRate"+ url);
+	
+}
+
 function hideALL(){
 	$('.reports').hide();
 }
-
-function showFiltersCheckOut(){
-	$('.checkout').show();
-}
-function showFiltersAdvanceDeposit(){
-	$('.avdanceDeposit').show();
+function showFilters(clase){
+	$('.'+clase).show();
 }
 
 function showFiltersRepors(type){
 	switch(type) {
     case "1":
     	hideALL();
-    	showFiltersCheckOut();
+    	showFilters('checkout');
         break;
     case "2":
        	hideALL();
        	setDefaultDate();
-    	showFiltersAdvanceDeposit();
+    	showFilters('avdanceDeposit');
+        break;
+     case "3":
+       	hideALL();
+       	$("#dateRoomRate").val(getCurrentDateMENOS(0));
+    	showFilters('roomRate');
         break;
     default:
         console.log("No hay ese reporte");
@@ -1863,6 +1932,7 @@ function getReportAdvanceDeposit(){
 		success: function(data){
 			if( data.items.length > 0 ){
 				alertify.success("Found "+ data.items.length);
+				console.table(data.items);
 				drawTable4( data.items, "tablaReports", false, "" );
 			}else{
 				alertify.error("no results found");

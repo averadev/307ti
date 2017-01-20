@@ -286,8 +286,8 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		if($this->input->is_ajax_request()){
 			$filtros = $this->receiveWords($_POST);
 			$data = $this->frontDesk_db->getAuditUnitsQUERY($filtros);
-			if ($filtros['words']["unitAudit"] || isset($filtros['words']["occTypeAudit"]) || isset($filtros['words']["statusAudit"])) {
-				echo json_encode(['items' => $data, "aqui" => "=D"]);
+			if ($filtros['words']["unitAudit"] || isset($filtros['words']["occTypeAudit"]) ||isset($filtros['words']["statusAudit"])) {
+				echo json_encode(['items' => $data]);
 			}else{
 				$data2 = $this->frontDesk_db->selectUnitsAudit();
 				
@@ -303,7 +303,14 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		}
 	}
 
-
+	public function getReportRoomRate(){
+		if($this->input->is_ajax_request()){
+			//var_dump($_POST);
+			$filtros = $this->receiveWords($_POST);
+			$data = $this->frontDesk_db->getRoomsRates($filtros);
+			echo json_encode(['items' => $data]);
+	}
+}
 	private function mergeArrayDatos($datos1, $datos2){
 		$Datos = [];
 		foreach( $datos1 as $key => $item ){
