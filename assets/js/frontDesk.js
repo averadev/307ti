@@ -1877,7 +1877,7 @@ function generatePDFRoomRate(){
 	url += "&words=" + words;
 	url += "&dates=" + dates;
 	url += "&options=" + options;
-	window.open("Pdfs/getReportRoomRate"+ url);
+	window.open("Pdfs/reportPDFRoomRate"+ url);
 	
 }
 
