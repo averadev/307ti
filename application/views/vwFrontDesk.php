@@ -53,6 +53,7 @@
 								<option value="1">Check Out</option>
 								<option value="2">Advance Deposit</option>
 								<option value="3">Room Rate</option>
+								<option value="4">Code Subcode</option>
 							</select>
 						</fieldset>
 					</div>
@@ -719,6 +720,64 @@
 									</label>
 								</div>
 								</div>
+							<div class="reports codeSubcode oculto">
+								<!-- Arrival Date -->
+								<div class="small-12 large-4 columns">
+									<label class="text-left">Date
+										<div class="input-group date">
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<input type="text" id="dateCodeTRX" class="txtSearch input-group-field roundRight" readonly/>
+										</div>
+									</label>
+								</div>
+								</div>
+								<!-- Departure Date -->
+								<div class="reports codeSubcode oculto">
+								<div class="small-12 large-4 columns">
+									<label class="text-left">TRX Description
+											<select  id="codeTRX"  class="input-group-field round"  multiple="multiple">
+											<?php
+												foreach($TrxTypes as $item){
+													?>
+													<option value="<?php echo $item->ID; ?>"><?php echo $item->TrxTypeDesc; ?></option>
+													<?php
+												}
+												?>
+											</select>
+									</label>
+								</div>
+								<!-- <div class="small-12 large-4 columns">
+									<label id="trxAuditLabel" class="text-left">Trx Description
+										<div class="input-group date" >
+											<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
+											<select  id="codeTRX" class="txtSearch input-group-field roundRight">
+											<option value="">Choose an option</option>
+												<?php
+												foreach($TrxTypes as $item){
+													?>
+													<option value="<?php echo $item->ID; ?>"><?php echo $item->TrxTypeDesc; ?></option>
+													<?php
+												}
+												?>
+											</select>
+										</div>
+									</label>
+								</div> -->
+								<!-- Year -->
+<!-- 								<div class="small-12 large-3 columns">
+									<label id="alertYearFront" class="text-left">YnAudit
+										<div class="input-group date" >
+											<span  class="input-group-label prefix"><i class="fa fa-check-circle-o"></i></span>
+											<select id="isAudited" class="txtSearch input-group-field round">
+											<option value="">Choose an option</option>
+											<option value="1">All</option>
+											<option value="2">Audit</option>
+											<option value="3">no Audit</option>
+											</select>
+										</div>
+									</label>
+								</div> -->
+							</div>
 							</div>
 						</fieldset>
 						<fieldset class="large-12 columns fieldsetFilter">

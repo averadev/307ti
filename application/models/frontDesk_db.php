@@ -1138,11 +1138,11 @@ public function getAuditUnitsCheckOut($filters){
 
 	public function getRoomsRates($filters){
 		$sql = "select r.pkresid AS ID, u.unitcode AS Unit,";
-		$sql .="RTRIM(p.Name) + ' '+ RTRIM(p.LName) as GUEST_NAME,";
+		$sql .="RTRIM(p.Name) + ' '+ RTRIM(p.LName) as GuestName,";
 		$sql .="(select count(*) as Adult from tblResPeopleAcc PA where PA.fkResId = R.pkResId) AS Adult,";
-		$sql .=" 0 as Child, ro.rateamtnight as RATE_CHRGD, 'Nightly' as Type,";
-		$sql .=" s.statusdesc AS Status, r.folio  AS Contract, r.resconf,";
-		$sql .=" r.firstoccyear AS OccYear, Fp.floorplandesc, ri.intv AS Intv,";
+		$sql .=" 0 as Child, ro.rateamtnight as RateChrgd, 'Nightly' as Type,";
+		$sql .=" s.statusdesc AS Status, r.resconf as ResConf,";
+		$sql .=" ri.intv AS Intv,";
 		$sql .=" rt.restypedesc AS ResType, ro.nightid, cal.Date";
 
 		$sql.= " FROM   tblres r";
@@ -1160,7 +1160,7 @@ public function getAuditUnitsCheckOut($filters){
 		$sql.=" INNER JOIN tblcalendar cal  ON cal.pkCalendarid = ro.fkcalendarid ";
 		$sql.=" LEFT JOIN tbluser us  ON us.pkuserid = ro.crby  ";
 
-		$sql.= " where rpa.ynActive = 1 and rpa.ynActive = 1";
+		$sql.= " where rpa.ynActive = 1 and rpa.ynActive = 1 and rpa.ynPrimaryPeople = 1";
 		
 		if (isset($filters['dates']['dateRoomRate'])) {
 			$sql.=" and cal.Date = '". $filters['dates']['dateRoomRate'] ."'";
@@ -1177,7 +1177,48 @@ public function getAuditUnitsCheckOut($filters){
 			$sql.="and ( " . $condicion . ")";
 		}
 
-		$sql.=" ORDER BY nightid asc ";
+		$sql.=" ORDER BY unit asc ";
+		$query = $this->db->query($sql);
+
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+	}
+
+	public function getCodeSubcode($filters){
+		$sql = "select distinct RTRIM(TT.TrxTypeDesc) AS TRXDescription,";
+		$sql .=" (AC.Amount * tt.TrxSign) as Amount, ";
+		$sql .=" CASE WHEN A.fkAccTypeId = 6 THEN (AC.Amount * tt.TrxSign) ELSE 0 END as Reservations,";
+		$sql .=" CASE WHEN A.fkAccTypeId = 7 THEN (AC.Amount * tt.TrxSign) ELSE 0 END as AdvanceDeposit";
+
+		$sql.= " FROM tblRes R";
+
+		$sql.=" INNER JOIN tblResInvt RI on R.pkResId = RI.fkResId  ";
+		$sql.=" INNER JOIN tblResPeopleAcc RP on RP.fkResId = R.pkResId  ";
+		$sql.=" INNER JOIN tblPeople P on RP.fkPeopleId = P.pkPeopleId   ";
+		$sql.=" INNER JOIN tblAccTrx AC on RP.fkAccId = AC.fkAccid   ";
+		$sql.=" INNER JOIN tblAcc A ON A.pkAccId = AC.fkAccId  ";
+		$sql.=" INNER JOIN TblTrxType TT on AC.fkTrxTypeId = TT.pkTrxTypeId  ";
+
+
+		$sql.= " where R.ynActive = 1";
+		
+		if (isset($filters['dates']['dateCodeTRX']) && !empty($filters['dates']['dateCodeTRX'])) {
+			$sql.=" and AC.DueDt = '". $filters['dates']['dateCodeTRX'] ."'";
+		}
+
+		$condicion = '';
+		if (isset($filters['words']['status'])) {
+			for ($i=0; $i < sizeof($filters['words']['status']); $i++) { 
+				$condicion .= 'AC.fkTrxTypeId  = '.$filters['words']['status'][$i];
+				if ($i+1 < sizeof($filters['words']['status'])) {
+					$condicion .=' or ';
+				}
+			}
+			$sql.="and ( " . $condicion . ")";
+		}
+
+		//$sql.=" ORDER BY unit asc ";
 		$query = $this->db->query($sql);
 
         if($query->num_rows() > 0 ){

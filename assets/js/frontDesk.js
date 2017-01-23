@@ -123,7 +123,7 @@ var dateYearER = null;
 $(function() {
 	
 	//dateField
-	datepickerZebra = $("#fromCreateDate , #toCreateDate,#dateRoomRate, #dateArrivalFront, #dateDepartureCheckOut, #dateDepartureFront, #dateHKConfig, #dateHKLookUp, #dateArrivalReport, #dateDepartureReport, #dateArrivalExchange, #dateDepartureExchange" ).Zebra_DatePicker({
+	datepickerZebra = $("#fromCreateDate , #toCreateDate,#dateRoomRate,#dateCodeTRX, #dateArrivalFront, #dateDepartureCheckOut, #dateDepartureFront, #dateHKConfig, #dateHKLookUp, #dateArrivalReport, #dateDepartureReport, #dateArrivalExchange, #dateDepartureExchange" ).Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false,
 		onSelect: function(date1, date2, date3, elements){
@@ -195,6 +195,15 @@ $(function() {
 	});
 
 	OCCSTATUSROOM = $('#statusAuditRoom').multipleSelect({
+		filter: true,
+		width: '100%',
+		placeholder: "Select one",
+		selectAll: true,
+		onClick: function(view) {
+		},
+	});
+
+	TRXDESCRIPTION = $('#codeTRX').multipleSelect({
 		filter: true,
 		width: '100%',
 		placeholder: "Select one",
@@ -1757,6 +1766,9 @@ function reportType(type){
     case "3":
     	getReportRoomRate();
     break;
+    case "4":
+    	getReportCodeSubcode();
+    break;
     default:
         alertify.success("Reporte en desarrollo");
     }
@@ -1782,7 +1794,42 @@ function getReportRoomRate(){
 		success: function(data){
 			if( data.items){
 				alertify.success("Found "+ data.items.length);
-				drawTable4( data.items, "tablaReports", false, "" );
+				var datos = parsearRoomRate(data.items);
+				drawTable4( datos, "tablaReports", false, "" );
+			}else{
+				alertify.error("no results found");
+				$("#tablaReports").empty();
+			}
+			showLoading('#tablaReports',false);
+		},
+		error: function(){
+			noResultsTable("section-Colletion", "tableColletion", "Try again");
+			showLoading('#section-Colletion',false);
+		}
+    });
+}
+
+function getReportCodeSubcode(){
+	showLoading('#tablaReports',true);
+    var arrayDate = ["dateCodeTRX"];
+    var dates = getDates(arrayDate);
+    var words = {};
+    var options = {};
+    words.status = TRXDESCRIPTION.multipleSelect('getSelects');
+	$.ajax({
+		data:{
+			dates: dates,
+			words: words,
+			options: options
+		},
+   		type: "POST",
+       	url: "frontDesk/getReportCodeSubcode",
+		dataType:'json',
+		success: function(data){
+			if( data.items){
+				alertify.success("Found "+ data.items.length);
+				var datos = parsearCodeSubcode(data.items);
+				drawTable4( datos, "tablaReports", false, "" );
 			}else{
 				alertify.error("no results found");
 				$("#tablaReports").empty();
@@ -1821,6 +1868,9 @@ function genereteReport(type){
         break;
 	case "3":
        generatePDFRoomRate();
+        break;
+    case "4":
+       generatePDFCodeSubcode();
         break;
     default:
         console.log("No hay ese reporte");
@@ -1868,7 +1918,7 @@ function generatePDFRoomRate(){
     var dates = getDates(arrayDate);
     var words = {};
     var options = {};
-    words.statusAudit = OCCSTATUSROOM.multipleSelect('getSelects');
+    words.status = OCCSTATUSROOM.multipleSelect('getSelects');
 
 	url = "?type=report";
 	dates = JSON.stringify(dates);
@@ -1878,6 +1928,23 @@ function generatePDFRoomRate(){
 	url += "&dates=" + dates;
 	url += "&options=" + options;
 	window.open("Pdfs/reportPDFRoomRate"+ url);
+	
+}
+function generatePDFCodeSubcode(){
+	var arrayDate = ["dateCodeTRX"];
+    var dates = getDates(arrayDate);
+    var words = {};
+    var options = {};
+    words.statusAudit = OCCSTATUSROOM.multipleSelect('getSelects');
+
+	url = "?type=report";
+	dates = JSON.stringify(dates);
+	words = JSON.stringify(words);
+	options = JSON.stringify(options);
+	url += "&words=" + words;
+	url += "&dates=" + dates;
+	url += "&options=" + options;
+	window.open("Pdfs/reportPDFCodeSubCode"+ url);
 	
 }
 
@@ -1899,10 +1966,15 @@ function showFiltersRepors(type){
        	setDefaultDate();
     	showFilters('avdanceDeposit');
         break;
-     case "3":
+    case "3":
        	hideALL();
        	$("#dateRoomRate").val(getCurrentDateMENOS(0));
     	showFilters('roomRate');
+        break;
+	case "4":
+       	hideALL();
+       	//$("#dateRoomRate").val(getCurrentDateMENOS(0));
+    	showFilters('codeSubcode');
         break;
     default:
         console.log("No hay ese reporte");
@@ -1945,4 +2017,44 @@ function getReportAdvanceDeposit(){
 			showLoading('#section-Colletion',false);
 		}
     });
+}
+
+
+
+function parsearRoomRate(sales){
+	for(var i = 0; i < sales.length; i++){
+		if (sales[i].RateChrgd !=".0000" && sales[i].RateChrgd != null) {
+			sales[i].RateChrgd = parseFloat(sales[i].RateChrgd).toFixed(2);
+		}else{
+			sales[i].RateChrgd = 0;
+		}
+
+	}
+	return sales;	
+}
+function parsearCodeSubcode(sales){
+	for(var i = 0; i < sales.length; i++){
+		if (sales[i].Amount !=".0000" && sales[i].Amount != null) {
+			sales[i].Amount = parseFloat(sales[i].Amount).toFixed(2);
+		}else{
+			sales[i].Amount = 0;
+		}
+		if (sales[i].AdvanceDeposit !=".0000" && sales[i].AdvanceDeposit != null) {
+			sales[i].AdvanceDeposit = parseFloat(sales[i].AdvanceDeposit).toFixed(2);
+		}else{
+			sales[i].AdvanceDeposit = 0;
+		}
+		if (sales[i].Reservations !=".0000" && sales[i].Reservations != null) {
+			sales[i].Reservations = parseFloat(sales[i].Reservations).toFixed(2);
+		}else{
+			sales[i].Reservations = 0;
+		}
+		if (sales[i].Reservations == 0 || sales[i].AdvanceDeposit == 0) {
+			sales[i].Total = sales[i].Amount;
+		}else{
+			sales[i].Total = sales[i].Reservations - sales[i].AdvanceDeposit;
+		}
+		
+	}
+	return sales;	
 }

@@ -309,8 +309,16 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 			$filtros = $this->receiveWords($_POST);
 			$data = $this->frontDesk_db->getRoomsRates($filtros);
 			echo json_encode(['items' => $data]);
+		}
 	}
-}
+
+	public function getReportCodeSubcode(){
+		if($this->input->is_ajax_request()){
+			$filtros = $this->receiveWords($_POST);
+			$data = $this->frontDesk_db->getCodeSubcode($filtros);
+			echo json_encode(['items' => $data]);
+		}
+	}
 	private function mergeArrayDatos($datos1, $datos2){
 		$Datos = [];
 		foreach( $datos1 as $key => $item ){

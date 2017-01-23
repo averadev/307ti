@@ -32,7 +32,6 @@ class Pdfs extends CI_Controller {
 		$style = $this->generateStyle();
 		
 		$body .= '<table width="100%">';
-		//$table .= "<tr><th>Name</th><th>Last name</th><th>Type people</th></tr>";
 		foreach ($data as $item){
 			$name = $item->Name;
 			$lname = $item->Last_name;
@@ -524,14 +523,18 @@ class Pdfs extends CI_Controller {
 			$body .= '<tr>'; 
 			$body .= '<td  class="blackLine45">' . $item->ID . '</td>';
 			$body .= '<td  class="blackLine45">' . $item->Unit . '</td>';
-			$body .= '<td  class="blackLine45">' . $item->GUEST_NAME . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->GuestName . '</td>';
 			$body .= '<td  class="blackLine45">' . $item->Adult . '</td>';
 			//$body .= '<td  class="blackLine45">$' . number_format((float)$item->Amount, 2, '.', '') . '</td>';
 			$body .= '<td  class="blackLine45">' . $item->Child . '</td>';
-			$body .= '<td  class="blackLine45">' . $item->RATE_CHRGD . '</td>';
+			$body .= '<td  class="blackLine45">' . number_format((float)$item->RateChrgd, 2, '.', '') . '</td>';
 			$body .= '<td  class="blackLine45">' . $item->Type . '</td>';
 			$body .= '<td  class="blackLine45">' . $item->Status . '</td>';
-			
+			$body .= '<td  class="blackLine45">' . $item->ResConf . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->Intv . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->ResType . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->nightid . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->Date . '</td>';
 			$body .= '</tr>';
 		}
 		$body .= '</table>';
@@ -545,6 +548,56 @@ class Pdfs extends CI_Controller {
 		$pdf = $this->showpdf2( $pdf, $saveFiler );
 	}
 
+	public function reportPDFCodeSubCode(){
+		ini_set('max_execution_time', 700);
+		ini_set('memory_limit', '2048M');
+		$sql =[];
+
+		if(isset($_GET['dates'])){
+			$dates = json_decode( $_GET['dates']);
+			$sql['dates'] = [
+				"dateCodeTRX" => $dates->dateCodeTRX
+			];
+		}
+		if(isset($_GET['words'])){
+			$options = json_decode( $_GET['options']);
+			$sql['status'] = $this->receiveWords($options);
+		}
+
+		$TRX = $this->pdfs_db->getCodeSubcode($sql);
+		$body = '';
+		$title = "Room Rate";
+		$name = "Room Rate";
+		$saveFiler = "Room_Rate";
+		$pdf = $this->generatePdfTemp( $name, $title );
+		$style = $this->generateStyle();
+
+		$body .= '<table width="100%" cellpadding="2">';
+		$body.= '<tr>';
+		foreach ($TRX[0] as $clave => $valor){
+			$body .= '<th class="blackLine45">' . $clave . '</th>';
+		}
+		$body.= '</tr>';
+		foreach ($TRX as $item){
+		
+			$body .= '<tr>'; 
+			$body .= '<td  class="blackLine45">' . $item->TRXDescription . '</td>';
+			$body .= '<td  class="blackLine45">' . number_format((float)$item->Amount, 2, '.', '') . '</td>';
+			$body .= '<td  class="blackLine45">' . number_format((float)$item->Reservations, 2, '.', '') . '</td>';
+			$body .= '<td  class="blackLine45">' . number_format((float)$item->Reservations, 2, '.', '') . '</td>';
+			//$body .= '<td  class="blackLine45">' . number_format((float)$item->Total, 2, '.', '') . '</td>';
+			$body .= '</tr>';
+		}
+		$body .= '</table>';
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
+		$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+		
+		$pdf = $this->showpdf2( $pdf, $saveFiler );
+	}
 	private function receiveWords($words){
 
 		$ArrayWords = [];
