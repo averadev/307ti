@@ -331,9 +331,7 @@
 		</div>
 		<!-- contenido del modal -->
 		<div class="ModalContractAccounts">
-			<!-- ventas-->
-			<div id="tab-CASales" class="large-12 columns tab-modal" style="display:inline;">
-				<div class="row" style="padding:0;">
+			<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
 						<table class="tableAccountResult" id="tableSaleAccRes" style="margin-top:16px;">
 							<tbody>
@@ -365,6 +363,7 @@
 						</table>
 					</div>
 				</div>
+			<div id="tab-CASales" class="large-12 columns tab-modal" style="display:inline;">
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns table-section2" style="padding:0;" >
 						<table id="tableAccountSeller" width="100%" style="min-height:150px;">

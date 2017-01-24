@@ -676,7 +676,7 @@ div.fieldset legend {
     max-width: none;
     background-color: #ffffff;
     height: 400px;
-	overflow-y:auto;
+	
 	width:100%;
 	
 }
@@ -918,16 +918,16 @@ table thead tr th, table tbody tr td{
 	/*height:90%;*/
 	padding: .5em 1em;
 	border-top:1px solid #aaaaaa;
-	overflow-y:auto;
+	
 }
 .alturaModal{
 	height:90%;
 }
 .tab-modal{
 	display:none;
-	/*overflow:auto;*/
-	/*height:400px;*/
-	height:100%;
+	overflow:auto;
+	height:400px;
+/*	height:100%;*/
 	position:relative;
 	float:left;
 }
