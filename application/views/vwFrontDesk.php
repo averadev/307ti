@@ -697,7 +697,7 @@
 								</div>
 								<div class="reports roomRate oculto">
 									<div class="small-12 large-3 columns">
-										<label id="" class="text-left">To Create Date
+										<label id="" class="text-left">Create Date
 											<div class="input-group date">
 												<span  class="input-group-label prefix"><i class="fa fa-calendar"></i></span>
 												<input type="text" id="dateRoomRate" class="txtSearch input-group-field roundRight" placeholder="Enter a date" readonly />

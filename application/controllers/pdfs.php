@@ -441,9 +441,9 @@ class Pdfs extends CI_Controller {
 
 		$TRX = $this->pdfs_db->getReportAD($sql);
 		$body = '';
-		$title = "Account Status";
-		$name = "Account Status";
-		$saveFiler = "Account_Status";
+		$title = "Advance Deposit Report";
+		$name = "Advance Deposit Report";
+		$saveFiler = "Advance_Deposit_Report";
 		$pdf = $this->generatePdfTemp( $name, $title );
 		$style = $this->generateStyle();
 
@@ -474,6 +474,7 @@ class Pdfs extends CI_Controller {
 			
 			$body .= '</tr>';
 		}
+		$body .= '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td colspan="2" >Total: '. sizeof($TRX).'</td></tr>';
 		$body .= '</table>';
 		$html = '';
 		$html .= ' <html><head></head><body>';
@@ -489,7 +490,6 @@ class Pdfs extends CI_Controller {
 		ini_set('max_execution_time', 700);
 		ini_set('memory_limit', '2048M');
 		$sql =[];
-
 		if(isset($_GET['dates'])){
 			$dates = json_decode( $_GET['dates']);
 			$sql['dates'] = [
@@ -497,23 +497,45 @@ class Pdfs extends CI_Controller {
 			];
 		}
 		if(isset($_GET['words'])){
-			$options = json_decode( $_GET['options']);
-			$sql['statusAudit'] = $this->receiveWords($options);
+			$options = json_decode($_GET['words']);
+			$sql['words'] = $this->receiveWords($options);
+		}
+		$Descriptions = '';
+
+		if (isset($sql['words']['statusAudit']) && !empty($sql['words']['statusAudit'])) {
+			
+			for ($i=0; $i < sizeof($sql['words']['statusAudit']); $i++) {
+				$Descriptions .= $this->pdfs_db->selectDescStatus($sql['words']['statusAudit'][$i]);
+				if ($i+1 < sizeof($sql['words']['statusAudit'])) {
+					$Descriptions.= ", ";
+				}
+			}
+			$sql['filtros'] = $Descriptions;
 		}
 
 		$TRX = $this->pdfs_db->getRoomsRates($sql);
-		$body = '';
+		if($TRX){
+			$body = '';
 		$title = "Room Rate";
 		$name = "Room Rate";
 		$saveFiler = "Room_Rate";
-		$pdf = $this->generatePdfTemp( $name, $title );
+		$pdf = $this->generatePdfTempTRX( $name, $title, $sql);
 		$style = $this->generateStyle();
 
 		$body .= '<table width="100%" cellpadding="2">';
 		$body.= '<tr>';
 		foreach ($TRX[0] as $clave => $valor){
 			if ($clave != "OCCTYPECODE") {
-				$body .= '<th class="blackLine45">' . $clave . '</th>';
+				if ($clave != "ID") {
+					if ($clave == "ADL" || $clave == "CHL") {
+						$body .= '<th class="blackLine45" width="30px">' . $clave . '</th>';
+					}elseif($clave == "Intv") {
+						$body .= '<th class="blackLine45" width="40px">' . $clave . '</th>';
+					}
+					else{
+						$body .= '<th class="blackLine45" width="67px">' . $clave . '</th>';
+					}
+				}
 			}
 			
 		}
@@ -521,22 +543,21 @@ class Pdfs extends CI_Controller {
 		foreach ($TRX as $item){
 		
 			$body .= '<tr>'; 
-			$body .= '<td  class="blackLine45">' . $item->ID . '</td>';
 			$body .= '<td  class="blackLine45">' . $item->Unit . '</td>';
 			$body .= '<td  class="blackLine45">' . $item->GuestName . '</td>';
-			$body .= '<td  class="blackLine45">' . $item->Adult . '</td>';
-			//$body .= '<td  class="blackLine45">$' . number_format((float)$item->Amount, 2, '.', '') . '</td>';
-			$body .= '<td  class="blackLine45">' . $item->Child . '</td>';
+			$body .= '<td  class="blackLine452">' . $item->ADL . '</td>';
+			$body .= '<td  class="blackLine452">' . $item->CHL . '</td>';
 			$body .= '<td  class="blackLine45">' . number_format((float)$item->RateChrgd, 2, '.', '') . '</td>';
 			$body .= '<td  class="blackLine45">' . $item->Type . '</td>';
-			$body .= '<td  class="blackLine45">' . $item->Status . '</td>';
+			$body .= '<td  class="blackLine45">' . $item->STS . '</td>';
 			$body .= '<td  class="blackLine45">' . $item->ResConf . '</td>';
-			$body .= '<td  class="blackLine45">' . $item->Intv . '</td>';
+			$body .= '<td  class="blackLine452">' . $item->Intv . '</td>';
 			$body .= '<td  class="blackLine45">' . $item->ResType . '</td>';
 			$body .= '<td  class="blackLine45">' . $item->nightid . '</td>';
 			$body .= '<td  class="blackLine45">' . $item->Date . '</td>';
 			$body .= '</tr>';
 		}
+		$body .= '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td colspan="2" >Total: '. sizeof($TRX).'</td></tr>';
 		$body .= '</table>';
 		$html = '';
 		$html .= ' <html><head></head><body>';
@@ -546,6 +567,55 @@ class Pdfs extends CI_Controller {
 		$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 		
 		$pdf = $this->showpdf2( $pdf, $saveFiler );
+	}else{
+		var_dump($TRX);
+	}
+		
+	}
+	private function generatePdfTempTRX( $name, $title, $filtros){
+		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('307ti');
+        $pdf->SetTitle($name);
+        $pdf->SetSubject('report');
+        $pdf->SetKeywords('report');
+
+		$logo = "logo.jpg";
+		$headerString = " " . $this->nativesessions->get('username') .  " \n      " . $this->getonlyDate(0);
+		$headerString.= " \n" ;
+		if (isset($filtros['dates'])) {
+			if (isset($filtros['dates']['dateCodeTRX'])) {
+				$headerString.= "\t \t \t".'Crete Date '. $filtros['dates']['dateCodeTRX'] .' ';
+			}
+			if (isset($filtros['dates']['dateRoomRate'])) {
+				$headerString.= "\t \t \t".'Crete Date '. $filtros['dates']['dateRoomRate'] .' ';
+			}
+		}
+		
+		$headerString.= 'Status: '. $filtros['filtros'];
+		
+		$pdf->SetHeaderData($logo, 20, "     " . $title, "     " . $headerString,  array( 102,44,25 ), array( 102,44,25 ));
+        $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
+
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+ 
+        $pdf->SetMargins(5, PDF_MARGIN_TOP, 5);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+ 
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->setFontSubsetting(true);
+        $pdf->SetFont('freemono', '', 14, '', true);
+        $pdf->AddPage();
+ 
+		//fijar efecto de sombra en el texto
+        $pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
+ 
+		return $pdf;
+ 
 	}
 
 	public function reportPDFCodeSubCode(){
@@ -560,16 +630,28 @@ class Pdfs extends CI_Controller {
 			];
 		}
 		if(isset($_GET['words'])){
-			$options = json_decode( $_GET['options']);
-			$sql['status'] = $this->receiveWords($options);
+			$options = json_decode( $_GET['words']);
+			$sql['words'] = $this->receiveWords($options);
+		}
+		$Descriptions = '';
+
+		if (isset($sql['words']['statusAudit']) && !empty($sql['words']['statusAudit'])) {
+			
+			for ($i=0; $i < sizeof($sql['words']['statusAudit']); $i++) {
+				$Descriptions .= $this->pdfs_db->selectDescStatus($sql['words']['statusAudit'][$i]);
+				if ($i+1 < sizeof($sql['words']['statusAudit'])) {
+					$Descriptions.= ", ";
+				}
+			}
+			$sql['filtros'] = $Descriptions;
 		}
 
 		$TRX = $this->pdfs_db->getCodeSubcode($sql);
 		$body = '';
-		$title = "Room Rate";
-		$name = "Room Rate";
-		$saveFiler = "Room_Rate";
-		$pdf = $this->generatePdfTemp( $name, $title );
+		$title = "Code Subcode Report";
+		$name = "Code Subcode Report";
+		$saveFiler = "Code_Subcode_Report";
+		$pdf = $this->generatePdfTempTRX( $name, $title, $sql);
 		$style = $this->generateStyle();
 
 		$body .= '<table width="100%" cellpadding="2">';
@@ -578,16 +660,26 @@ class Pdfs extends CI_Controller {
 			$body .= '<th class="blackLine45">' . $clave . '</th>';
 		}
 		$body.= '</tr>';
+		$TOTAL = 0;
+		$TOTALR = 0;
+		$TOTALA = 0;
 		foreach ($TRX as $item){
-		
+			$Amount = number_format((float)$item->Amount, 2, '.', '');
+			$TOTAL += $Amount;
+			$Reservations = number_format((float)$item->Reservations, 2, '.', '');
+			$TOTALR += $Reservations;
+			$AdvanceDeposit = number_format((float)$item->AdvanceDeposit, 2, '.', '');
+			$TOTALA += $AdvanceDeposit;
+
 			$body .= '<tr>'; 
 			$body .= '<td  class="blackLine45">' . $item->TRXDescription . '</td>';
-			$body .= '<td  class="blackLine45">' . number_format((float)$item->Amount, 2, '.', '') . '</td>';
+			$body .= '<td  class="blackLine45">' . $Amount . '</td>';
 			$body .= '<td  class="blackLine45">' . number_format((float)$item->Reservations, 2, '.', '') . '</td>';
-			$body .= '<td  class="blackLine45">' . number_format((float)$item->Reservations, 2, '.', '') . '</td>';
-			//$body .= '<td  class="blackLine45">' . number_format((float)$item->Total, 2, '.', '') . '</td>';
-			$body .= '</tr>';
+			$body .= '<td  class="blackLine45">' . number_format((float)$item->AdvanceDeposit, 2, '.', '') . '</td>';
+			$body.="</tr>";
 		}
+		$body .= '<tr><td>TOTAL</td><td>'. number_format((float)$TOTAL, 2, '.', '') .'</td><td>'. number_format((float)$TOTALR, 2, '.', '')  .'</td><td>'. number_format((float)$TOTALA, 2, '.', '') .'</td></tr>';
+		$body .= '<tr><td></td><td></td><td></td><td>Total: '. sizeof($TRX).'</td></tr>';
 		$body .= '</table>';
 		$html = '';
 		$html .= ' <html><head></head><body>';
@@ -1079,6 +1171,7 @@ class Pdfs extends CI_Controller {
 		$style .= ' .blackLine39{font-size:11px;border-bottom: solid .5px #A4A4A4; height: 60px; font-weight:bold;}';
 		$style .= ' .blackLine22{font-size:11px; border-bottom: solid .5px #A4A4A4; height: 60px; font-weight:bold;}';
 		$style .= ' .blackLine45{font-size:11px;}';
+		$style .= ' .blackLine452{font-size:11px; width:30px}';
 		$style .= ' h3{ color: #662C19; }';
 		$style .= ' h4{ color: #666666; font-weight: normal; font-size:14px; }';
 		$style .= ' .cafe{ color: #662C19; font-size:15px; }';

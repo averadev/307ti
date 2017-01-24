@@ -1918,7 +1918,7 @@ function generatePDFRoomRate(){
     var dates = getDates(arrayDate);
     var words = {};
     var options = {};
-    words.status = OCCSTATUSROOM.multipleSelect('getSelects');
+    words.statusAudit = OCCSTATUSROOM.multipleSelect('getSelects');
 
 	url = "?type=report";
 	dates = JSON.stringify(dates);
@@ -1955,26 +1955,34 @@ function showFilters(clase){
 	$('.'+clase).show();
 }
 
+function changeTitleTable(title){
+	$("#box-frontDesk-relation .box-title").text(title);
+}
+
 function showFiltersRepors(type){
 	switch(type) {
     case "1":
     	hideALL();
     	showFilters('checkout');
+    	changeTitleTable("checkout");
         break;
     case "2":
        	hideALL();
        	setDefaultDate();
     	showFilters('avdanceDeposit');
+    	changeTitleTable("avdanceDeposit");
         break;
     case "3":
        	hideALL();
        	$("#dateRoomRate").val(getCurrentDateMENOS(0));
     	showFilters('roomRate');
+    	changeTitleTable("roomRate");
         break;
 	case "4":
        	hideALL();
-       	//$("#dateRoomRate").val(getCurrentDateMENOS(0));
+       	$("#dateCodeTRX").val(getCurrentDateMENOS(0));
     	showFilters('codeSubcode');
+    	changeTitleTable("codeSubcode");
         break;
     default:
         console.log("No hay ese reporte");

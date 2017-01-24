@@ -1094,7 +1094,7 @@ public function getAuditUnitsCheckOut($filters){
     public function getReportAD($filters){
     	$sql = "";
     	$this->db->distinct();
-    	$this->db->select('at1.pkAccTrxId as ID, r.Folio,r.ResConf, tt.TrxTypeDesc as TrxType, (tt.TrxSign*"at1"."amount") as amount, CONVERT(VARCHAR(11),at1.DueDt,106) as DueDate, CONVERT(VARCHAR(11),at1.CrDt,106) as CreateDate');
+    	$this->db->select('at1.pkAccTrxId as ID, r.Folio,r.ResConf, tt.TrxTypeDesc as TrxType, (tt.TrxSign*"at1"."amount") as Amount, CONVERT(VARCHAR(11),at1.DueDt,106) as DueDate, CONVERT(VARCHAR(11),at1.CrDt,106) as CreateDate');
     	$this->db->select('DATEDIFF(day, CONVERT(VARCHAR(11),at1.DueDt,106), CONVERT(VARCHAR(11),GETDATE(),106)) AS DiffDate');
     	$this->db->select('att.AccTypeDesc as AccType, at1.Doc as Document, at1.Remark as Reference, us.UserLogin as CrByUser');
     	$this->db->from('tblAccTrx at1');
@@ -1137,7 +1137,7 @@ public function getAuditUnitsCheckOut($filters){
 	}
 
 	public function getRoomsRates($filters){
-		$sql = "select r.pkresid AS ID, u.unitcode AS Unit,";
+		$sql = "select distinct r.pkresid AS ID, u.unitcode AS Unit,";
 		$sql .="RTRIM(p.Name) + ' '+ RTRIM(p.LName) as GuestName,";
 		$sql .="(select count(*) as Adult from tblResPeopleAcc PA where PA.fkResId = R.pkResId) AS Adult,";
 		$sql .=" 0 as Child, ro.rateamtnight as RateChrgd, 'Nightly' as Type,";

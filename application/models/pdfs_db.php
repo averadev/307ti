@@ -339,11 +339,22 @@ class pdfs_db extends CI_Model{
 		return  $this->db->get()->result();
 		
 	}
+	public function selectDescStatus($ID){
+        $this->db->select('StatusDesc');
+        $this->db->from('tblStatus');
+        $this->db->where('pkStatusId', $ID);
+        $query = $this->db->get();
 
+        if($query->num_rows() > 0 )
+        {
+            $row = $query->row();
+            return $row->StatusDesc;
+        }
+    }
     public function getReportAD($filters){
     	$sql = "";
     	$this->db->distinct();
-    	$this->db->select('at1.pkAccTrxId as ID, r.Folio,r.ResConf, tt.TrxTypeDesc as TrxType, (tt.TrxSign*"at1"."amount") as amount, CONVERT(VARCHAR(11),at1.DueDt,106) as DueDate, CONVERT(VARCHAR(11),at1.CrDt,106) as CreateDate');
+    	$this->db->select('at1.pkAccTrxId as ID, r.Folio,r.ResConf, tt.TrxTypeDesc as TrxType, (tt.TrxSign*"at1"."amount") as Amount, CONVERT(VARCHAR(11),at1.DueDt,106) as DueDate, CONVERT(VARCHAR(11),at1.CrDt,106) as CreateDate');
     	$this->db->select('DATEDIFF(day, CONVERT(VARCHAR(11),at1.DueDt,106), CONVERT(VARCHAR(11),GETDATE(),106)) AS DiffDate');
     	$this->db->select('att.AccTypeDesc as AccType, at1.Doc as Document, at1.Remark as Reference, us.UserLogin as CrByUser');
     	$this->db->from('tblAccTrx at1');
@@ -376,13 +387,13 @@ class pdfs_db extends CI_Model{
 		return  $this->db->get()->result();
 	} 
 	public function getRoomsRates($filters){
-		$sql = "select r.pkresid AS ID, u.unitcode AS Unit,";
+		$sql = "select distinct r.pkresid AS ID, u.unitcode AS Unit,";
 		$sql .="RTRIM(p.Name) + ' '+ RTRIM(p.LName) as GuestName,";
-		$sql .="(select count(*) as Adult from tblResPeopleAcc PA where PA.fkResId = R.pkResId) AS Adult,";
-		$sql .=" 0 as Child, ro.rateamtnight as RateChrgd, 'Nightly' as Type,";
-		$sql .=" s.statusdesc AS Status, r.resconf as ResConf,";
+		$sql .="(select count(*) as Adult from tblResPeopleAcc PA where PA.fkResId = R.pkResId) AS ADL,";
+		$sql .=" 0 as CHL, ro.rateamtnight as RateChrgd, 'Nightly' as Type,";
+		$sql .=" s.statusdesc AS STS, r.resconf as ResConf,";
 		$sql .=" ri.intv AS Intv,";
-		$sql .=" rt.restypedesc AS ResType, ro.nightid, cal.Date";
+		$sql .=" rt.restypedesc AS ResType, ro.nightid, CONVERT(VARCHAR(11),cal.Date,101) as Date";
 
 		$sql.= " FROM   tblres r";
 
@@ -399,14 +410,14 @@ class pdfs_db extends CI_Model{
 		$sql.=" INNER JOIN tblcalendar cal  ON cal.pkCalendarid = ro.fkcalendarid ";
 		$sql.=" LEFT JOIN tbluser us  ON us.pkuserid = ro.crby  ";
 
-		$sql.= " where rpa.ynActive = 1 and rpa.ynActive = 1";
+		$sql.= " where rpa.ynActive = 1 and rpa.ynPrimaryPeople = 1 ";
 		
-		if (isset($filters['dates']['dateRoomRate'])) {
+		if (isset($filters['dates']['dateRoomRate']) && !empty($filters['dates']['dateRoomRate'])) {
 			$sql.=" and cal.Date = '". $filters['dates']['dateRoomRate'] ."'";
 		}
 
 		$condicion = '';
-		if (isset($filters['words']['statusAudit'])) {
+		if (isset($filters['words']['statusAudit']) && !empty($filters['words']['statusAudit'])) {
 			for ($i=0; $i < sizeof($filters['words']['statusAudit']); $i++) { 
 				$condicion .= 'r.fkstatusid  = '.$filters['words']['statusAudit'][$i];
 				if ($i+1 < sizeof($filters['words']['statusAudit'])) {
@@ -414,11 +425,13 @@ class pdfs_db extends CI_Model{
 				}
 			}
 			$sql.="and ( " . $condicion . ")";
+		}else{
+			$sql.= "and OccYear = ".date("Y");
 		}
 
 		$sql.=" ORDER BY nightid asc ";
 		$query = $this->db->query($sql);
-
+		//var_dump($sql);
         if($query->num_rows() > 0 ){
             return $query->result();
         }

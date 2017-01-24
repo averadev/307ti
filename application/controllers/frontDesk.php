@@ -408,11 +408,11 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		}
 
 		if (isset($sql['words']["unitAudit"]) || isset($sql['words']["statusAudit"]) || isset($sql['words']["occTypeAudit"])) {
-			$this->reportPDFUnits($data,"AuditReportunits", $sql);
+			$this->reportPDFCheckOut($data,"Check Out Report", $sql);
 		}else{
 			$data2 = $this->frontDesk_db->selectUnitsAudit();
 			$datos = $this->mergeArrayDatos($data, $data2);
-			$this->reportPDFUnits($datos,"AuditReportunits", $sql);
+			$this->reportPDFCheckOut($datos,"Check Out Report", $sql);
 		}
 		
 	}
@@ -1396,6 +1396,51 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 		$strHoy = $hoy["year"]."-".$hoy["mon"]."-".$hoy["mday"] . " " . $hoy["hours"] . ":" . $hoy["minutes"] . ":" . $hoy["seconds"];
 		return $strHoy;
 	}
+
+	private function reportPDFCheckOut($data, $titulo, $filtros){
+		
+		$title = $titulo;
+		$name = $titulo;
+		$saveFiler = $titulo;
+		$pdf = $this->generatePdfTempTRX( $name, $title, $filtros);
+		$style = $this->generateStyles();
+		$body = '';
+		$body .= '<table id="auditUnits" width="100%" cellpadding="2" class="audit">';
+		$body.= '<tr>';
+		foreach ($data[0] as $clave => $valor){
+			if ($clave != 'pkResId') {
+				if ($clave == 'FloorPlan') {
+					$body .= '<th width="110px">' . $clave . '</th>';
+				}
+				else{
+					$body .= '<th>' . $clave . '</th>';
+				}
+			}
+			
+			
+		}
+		$body.= '</tr>';
+		for ($i=0; $i <sizeof($data) ; $i++) {
+			$body .= '<tr>'; 
+			foreach ($data[$i] as $clave => $valor){
+				if ($clave != 'pkResId') {
+					$body .= '<td  class="blackLine">' . $valor . '</td>';
+				}
+			}
+			$body .= '</tr>';
+		}
+		$body .= '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td>Total: '. sizeof($data).'</td></tr>'; 
+		$body .= '</table>';
+		$html = '';
+		$html .= ' <html><head></head><body>';
+		$html .= $body;
+		$html .= $style;
+		$html .= '</body></html>';
+		
+		$pdf->writeHTMLCell(0, 0, '','', $html, 0, 1, 0, true, '', true);
+		
+		$pdf = $this->showpdf( $pdf, $saveFiler );
+	}
 	private function reportPDFUnits($data, $titulo, $filtros){
 		
 		$title = $titulo;
@@ -1421,9 +1466,6 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 				}
 			}
 			$body .= '</tr>';
-
-			
-			
 		}
 		$body .= '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td>Total: '. sizeof($data).'</td></tr>'; 
 		$body .= '</table>';
