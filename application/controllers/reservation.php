@@ -1644,7 +1644,7 @@ private function comprubaArray($valor, $array){
 					}
 				}
 			}
-
+			var_dump($legalName);
 			$IdStatus = $this->reservation_db->selectStatusResID($id);
 			if (isset($data['contract'][0]->ResRelated)) {
 				$ResConf = $this->reservation_db->getConfirmationCodeByID($data['contract'][0]->ResRelated);

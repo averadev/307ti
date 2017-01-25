@@ -399,7 +399,7 @@ function drawTable2(data, table ,funcion, cadena, option){
 		//"scrollY": heightScroll - 50,
 		"scrollY": '60vh',
         "scrollCollapse": true,
-		"scrollX": false,
+		"scrollX": true,
 		"paging":   false,
 		"ordering": false,
 		"info":     false,

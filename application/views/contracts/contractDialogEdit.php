@@ -324,36 +324,30 @@
 				<li class="tabs-title" attr-screen="tab-CAMaintenance" attr-accType="3" attr-accCode="FEE" >
 					<a>Maintenance</a>
 				</li>
-				<!--<li class="tabs-title" attr-screen="tab-CALoan" attr-accType="2" attr-accCode="LOA" >
-					<a>Loan</a>
-				</li>-->
 			</ul>
 		</div>
 		<!-- contenido del modal -->
 		<div class="ModalContractAccounts">
-			<div class="row" style="padding:0;">
+			<div id="tab-CASales" class="large-12 columns" style="display:inline;">
+-				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
 						<table class="tableAccountResult" id="tableSaleAccRes" style="margin-top:16px;">
 							<tbody>
 								<tr>
 									<td >Folio Contract</td>
 									<td class="folioAccount">00000</td>
+									<td>Downpayment Balance</td>
+									<td class="balanceDepAccount">$00.00</td>
 									<td></td>
 									<td></td>
+									<td> Downpaymet Past Due Amount</td>
+									<td class="defeatedDepAccount">$00.00</td>
 								</tr>
 								<tr>
 									<td>Balance</td>
 									<td class="balanceAccount">$00.00</td>
 									<td></td>
 									<td></td>
-								</tr>
-								<tr>
-									<td>Downpayment Balance</td>
-									<td class="balanceDepAccount">$00.00</td>
-									<td> Downpaymet Past Due Amount</td>
-									<td class="defeatedDepAccount">$00.00</td>
-								</tr>
-								<tr>
 									<td>Balance Sales</td>
 									<td class="balanceSaleAccount">$00.00</td>
 									<td>Past Due Amount</td>
@@ -362,9 +356,7 @@
 							</tbody>
 						</table>
 					</div>
-				</div>
-			<div id="tab-CASales" class="large-12 columns tab-modal" style="display:inline;">
-				<div class="row" style="padding:0;">
+					</div>
 					<div class="large-12 columns table-section2" style="padding:0;" >
 						<table id="tableAccountSeller" width="100%" style="min-height:150px;">
 							<thead>
@@ -389,7 +381,6 @@
 						</table>
 					</div>
 				</div>
-			</div>
 			<!-- mantenimiento -->
 			<div id="tab-CAMaintenance" class="large-12 columns tab-modal" style="display:none;">
 				<div class="row" style="padding:0;">
@@ -745,4 +736,4 @@
 			</div>
 	</div>
 	
-</div>
+</div>	

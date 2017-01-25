@@ -1763,3 +1763,12 @@ table tbody tr td{
 .displayInline{
 	display: inline-block;
 }
+
+.tab-modal{
+	display:none;
+	overflow:auto;
+	height:400px;
+/*	height:100%;*/
+	position:relative;
+	float:left;
+}

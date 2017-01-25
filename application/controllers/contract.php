@@ -1615,6 +1615,9 @@ public function getFlagsContract(){
 								$item->Overdue_Amount = $item->Pay_Amount;
 							}
 						}
+						if ($item->IDPay == 0) {
+							$item->IDPay = '';
+						}
 					}
 					$datos[$tyTr] = $data;
 				}

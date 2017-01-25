@@ -11,6 +11,7 @@ if(!isset($contract[0]->depatureDate)){$contract[0]->depatureDate ="";};
 if(!isset($contract[0]->FirstOccYear)){$contract[0]->FirstOccYear ="";};
 if(!isset($contract[0]->ResRelated)){$contract[0]->ResRelated="";};
 if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
+if(!isset($contract[0]->LegalName)){$contract[0]->LegalName ="";};
 ?>
 <div class="contentModalHeader">
 <div class="row collapse headerGeneral" >
@@ -50,7 +51,7 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 	<p id="idReservationX" style="display: none;"><?php echo $contract[0]->ID;  ?></p>
 	<p id="idResTypeX" style="display: none;"><?php echo $contract[0]->fkResTypeId;  ?></p>
 		<label class="headerDescriptionTitle small-12 columns" id="editContractTitle"><?php echo $contract[0]->Confirmation_code; ?></label>
-		<label class="headerDescriptionTitle small-12 columns"><?php echo "Legal Name :". $legalName; ?></label>
+		<label class="headerDescriptionTitle small-12 columns"><?php echo "Legal Name :". $contract[0]->LegalName; ?></label>
 		<label class="headerDescriptionTitle small-12 columns"><?php echo "Balance :$". number_format((float)$Balance, 2, '.', '');?></label>
 		<label class="headerGeneral small-12 columns" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
 		<label class="headerGeneral small-12 columns" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>
@@ -266,11 +267,11 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 								<td>Cost contract</td>
 								<td id="cventaCostContractRes">$00.00</td>
 								<td>Downpayment</td>
-								<td id="cventaAmountTransfer">$000,000.00</td>
+								<td id="cventaAmountTransfer">$0.00</td>
 							</tr>
 							<tr>
 								<td>Pack amount</td>
-								<td id="cventapackAmountRes">$000,000.00</td>
+								<td id="cventapackAmountRes">$0.00</td>
 								<td>Balance to be financed</td>
 								<td id="cventaFinancedRes">$00.00</td>
 							</tr>
@@ -335,7 +336,6 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 		</div>
 		<!-- contenido del modal -->
 		<div class="ModalContractAccounts">
-			<!-- ventas-->
 			<div id="tab-RARes" class="large-12 columns tab-modal" style="display:inline;">
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
@@ -344,26 +344,22 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 								<tr>
 									<td >Folio Reservation</td>
 									<td class="folioAccount">00000</td>
+									<td>Balance of Deposits</td>
+									<td class="balanceDepAccount">$0.00</td>
 									<td>Credit Limit</td>
 									<td id="creditLimitRes"><?php echo floatval($creditLimit); ?></td>
+									<td>Past Due Deposits</td>
+									<td class="defeatedDepAccount">$0.00</td>
 								</tr>
 								<tr>
 									<td>Balance</td>
 									<td class="balanceAccount"><?php echo floatval($Balance);?></td>
-									<td></td>
-									<td></td>
-								</tr>
-								<tr>
-									<td>Balance of Deposits</td>
-									<td class="balanceDepAccount">$000,000.00</td>
-									<td>Past Due Deposits</td>
-									<td class="defeatedDepAccount">$000,000.00</td>
-								</tr>
-								<tr>
 									<td>Balance Sales</td>
-									<td class="balanceSaleAccount">$000,000.00</td>
+									<td class="balanceSaleAccount">$0.00</td>
+									<td></td>
+									<td></td>
 									<td>Past Due Sales</td>
-									<td class="defeatedSaleAccount">$000,000.00</td>
+									<td class="defeatedSaleAccount">$0.00</td>
 								</tr>
 							</tbody>
 						</table>
@@ -415,15 +411,15 @@ if(!isset($contract[0]->Occ_type)){$contract[0]->Occ_type ="";};
 								</tr>
 								<tr>
 									<td>Balance of Deposits</td>
-									<td class="balanceDepAccount">$000,000.00</td>
+									<td class="balanceDepAccount">$0.00</td>
 									<td>Past Due Deposits</td>
-									<td class="defeatedDepAccount">$000,000.00</td>
+									<td class="defeatedDepAccount">$0.00</td>
 								</tr>
 								<tr>
 									<td>Balance Sales</td>
-									<td class="balanceSaleAccount">$000,000.00</td>
+									<td class="balanceSaleAccount">$0.00</td>
 									<td>Past Due Sales</td>
-									<td class="defeatedSaleAccount">$000,000.00</td>
+									<td class="defeatedSaleAccount">$0.00</td>
 								</tr>
 							</tbody>
 						</table>
