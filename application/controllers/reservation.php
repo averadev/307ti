@@ -1046,7 +1046,6 @@ private function comprubaArray($valor, $array){
 				$totalAmou2 = 0;
 				if (!$isSave) {
 					 $message = array('success' => false, 'message' => "Error");
-					 $message = ['success' => false, 'message' => "Error"];
 				}else{
 
 					$idTrans = $_POST['idTrans'];
@@ -1056,7 +1055,7 @@ private function comprubaArray($valor, $array){
 					$PAGO = round($PAGO, 2);
 					$CUENTA = $_POST['accId'];
 
-				$this->reservation_db->db->trans_begin();
+					$this->reservation_db->db->trans_begin();
 				for($i = 0; $i<count($idTrans); $i++){
 					
 					if($PAGO > 0){
@@ -1096,9 +1095,6 @@ private function comprubaArray($valor, $array){
 				$debit = floatval(-1 * abs($totalAmou2));
 				$debit = str_replace(",", ".", $debit);
 				$totalAmou2 = str_replace(",", ".", $totalAmou2);
-
-
-
 				$transI = [
 					"fkAccid" 			=> $CUENTA,
 					"fkTrxTypeId"		=> $_POST['trxTypeId'],
@@ -1118,9 +1114,7 @@ private function comprubaArray($valor, $array){
 					"MdBy"				=> $this->nativesessions->get('id'),
 					"MdDt"				=> $this->getToday()
 				];
-
 				$IDPago = $this->reservation_db->insertReturnId( 'tblAccTrx', $transI );
-
 				for ($i=0; $i < sizeof($insertTrx) ; $i++) { 
 					$pagos = [
 						"fkAccTrxId"	=> $insertTrx[$i],
@@ -1142,7 +1136,7 @@ private function comprubaArray($valor, $array){
 				        $this->reservation_db->db->trans_commit();
 				        $message = array('success' => true, 'message' => "transaction save", "isValid" => $isSave);
 				}
-			}
+				}
 				
 			}
 			echo json_encode($message);
