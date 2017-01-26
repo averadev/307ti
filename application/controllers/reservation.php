@@ -1706,17 +1706,14 @@ private function comprubaArray($valor, $array){
 				$CheckOut = $this->reservation_db->getCheckOut($id);
 				
 				if( $_POST['NextStatus'] == "Cancel" || $_POST['NextStatus'] == "Exchange" ){
-					//if( $idRestype == 7){
 						$resConf = $this->reservation_db->getResConf($id);
 						$code = $this->reservation_db->getStatusCode($IdStatus);
-						$this->db->query("exec  spCNXRes @Resconf='" . $resConf . "', @StatusCode='" . $code . "'");
-					//}
+						$this->db->query("exec  spCNXRes @Resconf='" . $resConf . "', @StatusCode='" . $code . "'". "', @ID='" . 0 . "'");
 				}
 				$mensaje = [
 					"mensaje"=>"save correctly",
 					"afectados" => $afectados,
 					"status" => $actual,
-					//"next" => $next,
 					"dateCheckOut" => $CheckOut,
 					"dateCheckIn" => $dateCheckIn
 				];
@@ -1725,57 +1722,6 @@ private function comprubaArray($valor, $array){
 				$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
 				echo json_encode($mensaje);
 			}
-			/*$peticion = [
-				"tabla" 	=> 'tblRes',
-				"valor" 	=> 'fkStatusId',
-				"alias" 	=> 'ID',
-				"codicion"	=> 'pkResID',
-				"id"		=>	$id
-			];
-			//$IdStatus = $this->reservation_db->propertyTable($peticion);
-			$IdStatus = $this->reservation_db->selectStatusResID($id);
-			$maximo = $this->reservation_db->selectMaxStatus();
-			$IdStatus = $this->reservation_db->getNextStatusID($IdStatus);
-			$Res = [
-				"fkStatusId"	=> $IdStatus,
-				"MdBy"			=> $this->nativesessions->get('id'),
-				"MdDt"			=> $this->getToday()
-			];
-			$condicion = "pkResId = " . $id;
-			$afectados = $this->reservation_db->updateReturnId('tblRes', $Res, $condicion);
-			if ($afectados>0) {
-
-			$next = $this->reservation_db->getNextStatus($IdStatus);
-			$actual = $this->reservation_db->getCurrentStatus($IdStatus);
-			if ($actual == "Out") {
-				$financiamiento = [
-					"CheckOut"	=> $this->getToday(),
-				];
-				$condicion = "pkResId = " . $id;
-				$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
-				}
-			if ($actual == "In House") {
-				$financiamiento = [
-					"checkIn"	=> $this->getToday(),
-				];
-				$condicion = "pkResId = " . $id;
-				$afectados = $this->reservation_db->updateReturnId('tblRes', $financiamiento, $condicion);
-				}
-				$dateCheckIn = $this->reservation_db->getCheckIn($id);
-				$CheckOut = $this->reservation_db->getCheckOut($id);
-				$mensaje = [
-					"mensaje"=>"save correctly",
-					"afectados" => $afectados,
-					"status" => $actual,
-					"next" => $next,
-					"dateCheckOut" => $CheckOut,
-					"dateCheckIn" => $dateCheckIn
-				];
-				echo json_encode($mensaje);
-			}else{
-				$mensaje = ["mesaje"=>"error try again", $afectados => $afectados, "status" => $this->getPropertyStatus($IdStatus)];	
-				echo json_encode($mensaje);
-			}*/
 		}
 	}
 
@@ -1869,7 +1815,6 @@ private function comprubaArray($valor, $array){
 			];
 
 			$IdStatus = $this->reservation_db->selectStatusResID($idReserva);
-			//if ($IdStatus == 15) {
 				$financiamiento = [
 					"fkPeopleStatusId"	=> $idStatus,
 				];
@@ -1883,12 +1828,6 @@ private function comprubaArray($valor, $array){
 					$mensaje = ["mensaje"=>"An Error Occurred", "status" => 0];	
 					echo json_encode($mensaje);
 				}	
-			/*}else{
-				$mensaje = ["mensaje"=>"Not Save, Change Status Reservation", "status" => 0];	
-					echo json_encode($mensaje);
-			}*/
-
-	
 		}
 	}
 	public function modalDepositDownpayment(){

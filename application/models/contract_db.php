@@ -1473,17 +1473,6 @@ class Contract_db extends CI_Model {
 	}
 	
 	public function getResCon($id){
-		/*$ini = "( SELECT top 1 c2.date from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId and ro2.OccYear = r.FirstOccYear ORDER BY c2.Date ASC )";
-		$end = "( SELECT top 1 c2.date from tblResOcc ro2 INNER JOIN tblCalendar c2 on c2.pkCalendarId = ro2.fkCalendarId where ro2.fkResId = r.pkResId and ro2.OccYear = r.FirstOccYear ORDER BY c2.Date DESC )";
-		$this->db->distinct();
-		$this->db->select('r.pkResId, r.FirstOccYear');
-        $this->db->from('tblRes r');
-        $this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'LEFT');
-		$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId', 'LEFT');
-		$this->db->join('tblCalendar c', 'c.pkCalendarId = ro.fkCalendarId', 'LEFT');
-		$this->db->where('r.pkResRelatedId = ' . $id);
-		$this->db->where(' ( not GETDATE() > c.date and NOT( GETDATE() BETWEEN ( ' . $ini . ' ) and ( ' . $end . ' )  ) ) ');
-		return  $this->db->get()->result();*/
 		$this->db->select('r.pkResId, r.FirstOccYear, ri.pkResInvtId');
 		$this->db->from('tblRes r');
 		$this->db->join('tblResInvt ri', 'ri.fkResId = r.pkResId', 'LEFT');
@@ -1492,14 +1481,13 @@ class Contract_db extends CI_Model {
 		return  $this->db->get()->result();
 	}
 	
-    //
+
     private function filterContracts($filters){
 
         $string = $filters['words']['stringContrat'];
 
         if (isset($filters['checks']['personaId'])){
             $this->db->join('tblpeople P', 'P.pkPeopleId='.$string);
-            //$this->db->like('pkPeopleId', $string);
         }
         if (isset($filters['checks']['contrato'])){
             $this->db->like('pkResId', $string);
