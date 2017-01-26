@@ -2539,6 +2539,7 @@ function getDatosReservation(id){
 			var c = parseFloat(data['CollectionCost']);
 	    	$("#CollectionCostRes").text(c);
 			if(data["peoples"].length > 0){
+				updateLegalName(data["peoples"]);
 				var status = drawTableSinHeadReservationPeople(data["peoples"], "peoplesReservation");
 				ajaxSelectsPeopleStatus(status);
 			}
@@ -4565,6 +4566,21 @@ function creditCardMsgR(data){
 	
 }
 
+function updateLegalName(peoples){
+	console.table(peoples);
+	var nombre = $("#legalNAMER").text().trim();
+	var legalName = "Legal Name :";
+	for(var i = 0; i < peoples.length; i++){
+		legalName += peoples[i].Name + " " + peoples[i].lastName;
+		if (i+1 != peoples.length) {
+			legalName += " and ";
+		}
+	}
+	if (nombre == "Legal Name :") {
+		$("#legalNAMER").text(legalName);
+	}
+}
+
 function savePeopleRes(){
 	
 	var personas = getValueTablePersonasRes('peopleContractRes');
@@ -4583,6 +4599,7 @@ function savePeopleRes(){
 			}).done(function( data, textStatus, jqXHR ) {
 				msgReservation.dismiss();
 				if(data.items.length > 0){
+					updateLegalName(data.items);
 					var status = drawTableSinHeadReservationPeople(data.items, "peoplesReservation");
 					ajaxSelectsPeopleStatus(status);
 				}

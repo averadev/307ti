@@ -31,7 +31,7 @@
                         <label for="" class="text-left titleBold">Balance:</label>
                     </div>
                     <div class="small-8 columns">
-                        <label for="" id="balanceAcc" class="text-left">$ 000,000.00</label>
+                        <label for="" id="balanceAcc" class="text-left">$ 0.00</label>
                     </div>
                 </div>
 			</div>

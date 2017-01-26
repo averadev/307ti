@@ -1708,7 +1708,7 @@ private function comprubaArray($valor, $array){
 				if( $_POST['NextStatus'] == "Cancel" || $_POST['NextStatus'] == "Exchange" ){
 						$resConf = $this->reservation_db->getResConf($id);
 						$code = $this->reservation_db->getStatusCode($IdStatus);
-						$this->db->query("exec  spCNXRes @Resconf='" . $resConf . "', @StatusCode='" . $code . "'". "', @ID='" . 0 . "'");
+						$this->db->query("exec  spCNXRes @Resconf='" . $resConf . "', @StatusCode='" . $code . "', @ID='" . 0 . "'");
 				}
 				$mensaje = [
 					"mensaje"=>"save correctly",

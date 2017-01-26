@@ -51,7 +51,7 @@ if(!isset($contract[0]->LegalName)){$contract[0]->LegalName ="";};
 	<p id="idReservationX" style="display: none;"><?php echo $contract[0]->ID;  ?></p>
 	<p id="idResTypeX" style="display: none;"><?php echo $contract[0]->fkResTypeId;  ?></p>
 		<label class="headerDescriptionTitle small-12 columns" id="editContractTitle"><?php echo $contract[0]->Confirmation_code; ?></label>
-		<label class="headerDescriptionTitle small-12 columns"><?php echo "Legal Name :". $contract[0]->LegalName; ?></label>
+		<label class="headerDescriptionTitle small-12 columns" id="legalNAMER"><?php echo "Legal Name :". $contract[0]->LegalName; ?></label>
 		<label class="headerDescriptionTitle small-12 columns"><?php echo "Balance :$". number_format((float)$Balance, 2, '.', '');?></label>
 		<label class="headerGeneral small-12 columns" id="editContracFloorPlan"><?php echo $contract[0]->FloorPlan;?></label>
 		<label class="headerGeneral small-12 columns" id="editContracYear">Year: <?php echo $contract[0]->FirstOccYear; ?></label>

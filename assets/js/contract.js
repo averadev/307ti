@@ -3449,7 +3449,10 @@ function setDataOpcionAccount(attrType){
 	$('#accountIdAcc').text( idAccColl );
 	$('#dueDateAcc').val(getCurrentDate());
 	$('#legalNameAcc').text($('#editContractTitle').text());
-	$('#balanceAcc').text($('.balanceAccount').text());
+
+	var PRECIOS = $('.balanceAccount').text().split("$");
+	var total = "Total: $"+ PRECIOS[1] + "  Sales: $"+ PRECIOS[2] + "  Loan: $" + PRECIOS[3];
+	$('#balanceAcc').text(total);
 }
 
 function saveAccCont(attrType){
