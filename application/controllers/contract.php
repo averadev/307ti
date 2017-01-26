@@ -80,7 +80,7 @@ private function makeTransactions($idContrato){
 	
 	$this->insertPricetransaction($idContrato);
 	$this->insertExtrastransaction($idContrato);
-	$this->insertESDtransaction($idContrato);
+	//$this->insertESDtransaction($idContrato);
 	//$this->insertDownpaymentransaction($idContrato);
 	$this->insertDeposittransaction($idContrato);
 	$this->insertClosingCosttransaction($idContrato);
@@ -1334,7 +1334,7 @@ public function nextStatusContract(){
 					$condicion2 = "fkResId = " . $RESRELATED[$i]->ID;
 					$this->contract_db->updateReturnId("tblResInvt", $update2, $condicion2);
 					
-					$this->db->query("exec  spCNXRes @Resconf='" . $resConf . "', @StatusCode='" . $code . "'". "', @ID='" . $id . "'");
+					$this->db->query("exec  spCNXRes @Resconf='" . $resConf . "', @StatusCode='" . $code . "', @ID='" . $id . "'");
 				}
 				
 			}
