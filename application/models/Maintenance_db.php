@@ -175,11 +175,12 @@ Class Maintenance_db extends CI_MODEL
         $this->db->join('tblCsfBatch FB', 'FB.fkResId = R.pkResId', 'left');  /**   **/
         if (isset($filters['Folio']) && !empty($filters['Folio'])) {
               $this->db->where('R.Folio', $filters['Folio']);
-              $this->db->where('PM.OccYear = 2017');
+        }elseif (isset($filters['Year']) && !empty($filters['Year'])) {
+            $this->db->where('PM.OccYear ='. $filters['Year']);
         }else{
-            if (isset($filters['SaleType']) && !empty($filters['SaleType'])) {
+          /*  if (isset($filters['SaleType']) && !empty($filters['SaleType'])) {
                 $this->db->where('R.fkSaleTypeId', $filters['SaleType']);
-            }
+            }*/
             if (isset($filters['FloorPlan']) && !empty($filters['FloorPlan'])) {
                 $this->db->where('u.fkFloorPlanId', $filters['FloorPlan']);
             }
@@ -193,7 +194,7 @@ Class Maintenance_db extends CI_MODEL
         $this->db->where('pm.occyear = ro.OccYear');
         $this->db->where('r.fkStatusId <> 6');
         $this->db->where('R.fkResTypeId', 10);
-        $this->db->where('FB.pkCSFBatchId IS NULL');   /** **/
+        $this->db->where('(FB.pkCSFBatchId IS NULL or FB.ynActive = 0)');   /** **/
 
         $this->db->order_by('r.PkREsid');
         $query = $this->db->get();

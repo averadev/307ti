@@ -1772,3 +1772,11 @@ table tbody tr td{
 	position:relative;
 	float:left;
 }
+
+#tablePagosSelectedFin tbody tr td{
+	font-size: 16px;
+}
+
+#tablePagosSelectedFin thead tr th{
+	font-size: 16px;
+}

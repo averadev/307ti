@@ -92,6 +92,14 @@ class Maintenance extends CI_Controller {
 			];
 			$condicion = "pkBatchId = " . $ID;
 			$this->Maintenance_db->updateReturnId("tblBatch", $TRX, $condicion);
+
+			$TRX2 =[
+				"ynActive"	=> 0,
+				"ynCanceled" => 1
+			];
+			$condicion2 = "fkBatchId = " . $ID;
+			$this->Maintenance_db->updateReturnId("tblCSFBatch", $TRX2, $condicion2);
+
 			echo json_encode(["mensaje"=> "Save Correctly"]);
 		}
 		
