@@ -706,7 +706,7 @@ class Pdfs extends CI_Controller {
 	}
 
 	public function reportAdminCA(){
-		ini_set('memory_limit', '2048M');
+		ini_set('memory_limit', '-1');
 		$filters =[];
 		$TRX = $this->pdfs_db->getTrxCA($filters);
 		$body = '';

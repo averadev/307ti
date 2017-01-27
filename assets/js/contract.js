@@ -2709,12 +2709,13 @@ function updateFinanciamiento(id){
 }
 
 function afterUpdateFinanciamiento(data){
+	showLoading("#dialog-Financiamiento",false);
+	showLoading("#dialog-Edit-Contract", false);
 	alertify.success(data['mensaje']);
 }
 
 function initEventosFinanciamiento(){
 
-	//setDate("fechaPrimerPagoF");
 	$( "#fechaPrimerPagoF" ).Zebra_DatePicker({
 		format: 'm/d/Y',
 		show_icon: false,
@@ -2728,7 +2729,8 @@ function initEventosFinanciamiento(){
 	$("#btnCalcularF").click(function(){
 		var factor = $("#terminosFinanciamientoF option:selected").attr("code");
 		var factor = parseFloat(factor.replace(",", "."));
-		var pagoTotal = parseFloat($('#balanceFinanciarF').text().trim());
+		var pagoTotal = $('#balanceFinanciarF').text().trim().replace("$", "");
+		pagoTotal = parseFloat(pagoTotal.replace(",", ""));
 		var meses = parseFloat($("#numeroMesesF").text().split(" ")[0]);
 		var pagoMensual = parseFloat((pagoTotal*factor));
 		var pagoMensual = parseFloat(pagoMensual.toFixed(2));

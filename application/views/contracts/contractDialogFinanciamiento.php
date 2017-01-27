@@ -5,15 +5,15 @@
       <label for="totalContracF" class="text-left">Total Contract</label>
     </div>
     <div id="totalContracF" class="small-9 columns">
-       <span >$ <?php echo number_format((float)$precio[0]->totalFinanceAmt, 2, '.', ''); ?></span>
+       <span >$ <?php echo number_format((float)$precio[0]->totalFinanceAmt, 2, '.', ','); ?></span>
     </div>
   </div>
   <div class="row">
     <div class="small-3 columns">
-      <label for="balanceFinanciarF" class="text-left">Balance a financiar</label>
+      <label for="balanceFinanciarF" class="text-left">Balance to be Financed</label>
     </div>
     <div id="balanceFinanciarF" class="small-9 columns">
-       </span>$ <?php echo number_format((float)$precio[0]->financeBalance, 2, '.', ''); ?></span>
+       </span>$ <?php echo number_format((float)$precio[0]->financeBalance, 2, '.', ','); ?></span>
     </div>
   </div>
   <div class="row">
@@ -85,7 +85,7 @@
                 <tbody id="tbodyPagosSelectedFin">
                 <tr>
                     <td id="pagoMF">0.00</td>
-                    <td id="CargoCF"><?php echo floatval($CostCollection);?></td>
+                    <td id="CargoCF"><?php echo number_format((float)$CostCollection, 2, '.', ',');?></td>
                     <td id="totalPagarF">0.00</td>
                 </tr>
                 </tbody>

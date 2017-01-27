@@ -516,15 +516,27 @@ private function insertFinanciamiento($idContrato){
 
 public function updateFinanciamiento(){
 	if($this->input->is_ajax_request()) {
+
+		$this->contract_db->db->trans_begin();
+
 		$IDContrato = $_POST['idContrato'];
 		$financiamiento = [
 			"fkFactorId"	=> $_POST['factor'],
 			"MonthlyPmtAmt" => $this->remplaceFloat($_POST['pagoMensual'])
 		];
 		$condicion = "fkResId = " . $IDContrato;
+
+		$condicionDELETE = "(fkTrxTypeId = 11 and fkTrxClassID = 4 )";
+		$this->contract_db->deleteReturnId('tblAccTrx', $condicionDELETE);
+
 		$afectados = $this->contract_db->updateReturnId('tblResfin', $financiamiento, $condicion);
 		$this->CreateTransferToLoan();
 		$this->insertTransaccionesCredito();
+		if ($this->contract_db->db->trans_status() === false){
+			$this->contract_db->db->trans_rollback();
+		}else{
+			$this->contract_db->db->trans_commit();
+		}
 		if ($afectados>0) {
 			$mensaje = ["mensaje"=>"Save Correctly","afected" => $afectados];
 			echo json_encode($mensaje);
