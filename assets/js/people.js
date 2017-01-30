@@ -748,10 +748,6 @@ function searchPeople(page){
 					total = total - 1;		
 				}
 				total = total + 1
-				// if(page == 0){
-				// 	$('#paginationPeopleInput').val(true);
-				// 	loadPaginatorPeople(total);
-				// }
 				$('#paginationPeopleInput').val(true);
 				loadPaginatorPeople(total);
 				drawTable2(data.items,"tablePeople","showModal","Edit");

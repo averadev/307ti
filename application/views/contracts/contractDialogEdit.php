@@ -328,8 +328,9 @@
 		</div>
 		<!-- contenido del modal -->
 		<div class="ModalContractAccounts">
-			<div id="tab-CASales" class="large-12 columns" style="display:inline;">
--				<div class="row" style="padding:0;">
+			<div id="tab-CASales" class="large-12 columns tab-modal" style="display:block;">
+				<div class="row" style="padding:0;">
+
 					<div class="large-12 columns" style="padding:0;" >
 						<table class="tableAccountResult" id="tableSaleAccRes" style="margin-top:16px;">
 							<tbody>
@@ -380,8 +381,8 @@
 							</tbody>
 						</table>
 					</div>
-				</div>
-			<!-- mantenimiento -->
+			</div>
+
 			<div id="tab-CAMaintenance" class="large-12 columns tab-modal" style="display:none;">
 				<div class="row" style="padding:0;">
 					<div class="large-12 columns" style="padding:0;" >
@@ -441,6 +442,8 @@
 					</div>
 				</div>
 			</div>
+
+
 			<!-- Misceláneos -->
 			<div id="tab-CALoan" class="large-12 columns tab-modal" style="display:none;">
 				<div class="row" style="padding:0;">

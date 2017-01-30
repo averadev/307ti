@@ -77,7 +77,6 @@ class Pdfs extends CI_Controller {
 		
 		$body = '';
 		$body .= '<table width="100%">';
-		//$body .= "<tr><th>Name</th><th>Last name</th><th>Type people</th></tr>";
 		foreach ($data as $item){
 			$name = $item->Name;
 			$lname = $item->Last_name;
@@ -156,7 +155,6 @@ class Pdfs extends CI_Controller {
 		$body .= '<tr><td class="first">How was your check out?</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
 		$body .= '<tr><td class="blackLine">Comments:</td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td></tr>';
 		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td></tr>';
-		//$body .= '<tr><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
 		$body .= '</table>';
 		
 		$body .= '<h4></h4>';
@@ -165,7 +163,6 @@ class Pdfs extends CI_Controller {
 		$body .= '<tr><td class="first">Activities on Island Information?</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
 		$body .= '<tr><td class="blackLine">Comments:</td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td></tr>';
 		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td></tr>';
-		//$body .= '<tr><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
 		$body .= '</table>';
 		
 		$body .= '<h4></h4>';
@@ -175,7 +172,6 @@ class Pdfs extends CI_Controller {
 		$body .= '<tr><td class="first">Condition of apt. On arrival</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
 		$body .= '<tr><td class="blackLine">Comments:</td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td></tr>';
 		$body .= '<tr><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td><td class="blackLine"></td></tr>';
-		//$body .= '<tr><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>';
 		$body .= '</table>';
 		
 		/*$body .= '<h4></h4>';
@@ -264,8 +260,6 @@ class Pdfs extends CI_Controller {
 			$body .= '<tr class="fuenteP10"><td>CONTRACT NO:</td><td> 1-'. $key->Folio .'</td><td>UNIT/WEEK:</td><td>'.$key->UnitCode .'/'.$key->Intv .'</td>';
 
 			$body .= '<td>2017 M/F</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
-				//$body .= '<td>2017 M/F    '. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
-
 		    $body .= '<tr class="fuenteP10"><td class="first">INVOICE DATE:</td><td>'. date("d/m/Y", strtotime($key->Date)) .'</td><td>AMOUNT DUE:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td>';
 	        $body .= '<td>AMOUNT DUE:</td><td>'. number_format((float)$key->Amount, 2, '.', '').'</td></tr>';
 			$body .= '<tr class="fuenteP10"><td class="first">DUE DATE:</td><td>'. 'JANUARY 15, 2017' .'</td><td colspan="2"></td><td colspan="2">PLEASE RETURN THIS STUB WITH</td></tr>';
@@ -518,9 +512,6 @@ class Pdfs extends CI_Controller {
 		}
 
 		$TRX = $this->pdfs_db->getRoomsRates($sql);
-
-
-
 
 		if($TRX) {
 			$body = '';
@@ -800,7 +791,6 @@ class Pdfs extends CI_Controller {
 	public function Statement(){
 		
 		$idRes = $_GET['idRes'];
-		//$idRes = 125;
 		$OccTypeDesc = $this->pdfs_db->getOCCTypeByID($idRes);
 		$data = $this->pdfs_db->getPeople($idRes);
 		$data2 = $this->pdfs_db->getResAcc($idRes);
@@ -811,17 +801,17 @@ class Pdfs extends CI_Controller {
 		$style = $this->generateStyle();
 		
 		$body = '';
-			$data3 = $this->pdfs_db->getAccTrx($data2[0]->fkAccId);
-			$body .= '<table width="100%">';
-			$body .= '<tr><td>' . $data2[0]->PropertyName . '</td><td>Reservation Confirmation # ' . $data2[0]->ResConf . '</td></tr>';
-			$body .= '<tr><td>' . $data2[0]->PropertyShortName . '</td><td>Account Name: ' . $data2[0]->OccTypeGroupDesc . '</td></tr>';
-			$body .= '<tr><td>Netherlands Antilles</td><td>Account Id: ' . $data2[0]->fkAccId . '</td></tr>';
-			$body .= '<tr><td>Unit Code: ' . $data2[0]->UnitCode . '</td><td></td></tr>';
-			if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
-				$body .= '<tr><td></td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
-			}
-			$body .= '</table>';
-		//}
+		$data3 = $this->pdfs_db->getAccTrx($data2[0]->fkAccId);
+		$body .= '<table width="100%">';
+		$body .= '<tr><td>' . $data2[0]->PropertyName . '</td><td>Reservation Confirmation # ' . $data2[0]->ResConf . '</td></tr>';
+		$body .= '<tr><td>' . $data2[0]->PropertyShortName . '</td><td>Account Name: ' . $data2[0]->OccTypeGroupDesc . '</td></tr>';
+		$body .= '<tr><td>Netherlands Antilles</td><td>Account Id: ' . $data2[0]->fkAccId . '</td></tr>';
+		$body .= '<tr><td>Unit Code: ' . $data2[0]->UnitCode . '</td><td></td></tr>';
+		if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
+			$body .= '<tr><td></td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
+		}
+		$body .= '</table>';
+
 		$body.= '<h4 class="cafe">Guest Information</h4> <hr>';
 		$body .= '<table width="100%">';
 		foreach ($data as $item){
@@ -839,40 +829,37 @@ class Pdfs extends CI_Controller {
 		}
 		$body .= '</table>';
 		
-		
-		//foreach($data2 as $item){
-			$body .= '<h4></h4>';
-			$body .= '<table class="balance" width="100%">';
-			$finalCredit = 0;
-			$finalCharge = 0;
-			$balance = 0;
-			$body .= "<tr><th>Date</th><th>Doc#</th><th>Description</th><th>Source</th><th>Bill</th><th>Credit</th><th>Charge</th></tr>";
-			foreach ($data3 as $item3){
-				$Credit = 0;
-				$Charge = 0;
-				if($item3->TrxSign == 1){
-					$Credit = $item3->Amount;
-					if($Credit == 0){
-						$Credit = 0;
-					}
-				}else if($item3->TrxSign == -1){
-					$Charge = $item3->Amount;
-					if($Charge == 0){
-						$Charge = 0;
-					}
+		$body .= '<h4></h4>';
+		$body .= '<table class="balance" width="100%">';
+		$finalCredit = 0;
+		$finalCharge = 0;
+		$balance = 0;
+		$body .= "<tr><th>Date</th><th>Doc#</th><th>Description</th><th>Source</th><th>Bill</th><th>Credit</th><th>Charge</th></tr>";
+		foreach ($data3 as $item3){
+			$Credit = 0;
+			$Charge = 0;
+			if($item3->TrxSign == 1){
+				$Credit = $item3->Amount;
+				if($Credit == 0){
+					$Credit = 0;
 				}
-				$body .= '<tr><td>' . $item3->date . '</td><td>' . $item3->Doc . '</td><td>' . $item3->TrxTypeDesc . '</td>';
-				$body .= '<td></td><td></td>';
-				$body .= '<td>' . round($Credit, 2) . '</td><td>' . round($Charge,2) . '</td></tr>';
-				$finalCredit = $finalCredit + $Credit;
-				$finalCharge = $finalCharge + $Charge;
+			}else if($item3->TrxSign == -1){
+				$Charge = $item3->Amount;
+				if($Charge == 0){
+					$Charge = 0;
+				}
 			}
-			$balance = $finalCredit - $finalCharge;
-			$body .= '<tr><th></th><th></th><th></th><th></th><th>Bill</th><th>Final Credit</th><th>Final Charge</th></tr>';
-			$body .= '<tr><td></td><td></td><td></td><td></td><td>' . round($balance,2) . '</td><td>' . round($finalCredit,2) . '</td><td>' . round($finalCharge,2) . '</td></tr>';
-			$body .= '</table>';
-			$body .= '<h4></h4>';
-		//}
+			$body .= '<tr><td>' . $item3->date . '</td><td>' . $item3->Doc . '</td><td>' . $item3->TrxTypeDesc . '</td>';
+			$body .= '<td></td><td></td>';
+			$body .= '<td>' . round($Credit, 2) . '</td><td>' . round($Charge,2) . '</td></tr>';
+			$finalCredit = $finalCredit + $Credit;
+			$finalCharge = $finalCharge + $Charge;
+		}
+		$balance = $finalCredit - $finalCharge;
+		$body .= '<tr><th></th><th></th><th></th><th></th><th>Bill</th><th>Final Credit</th><th>Final Charge</th></tr>';
+		$body .= '<tr><td></td><td></td><td></td><td></td><td>' . round($balance,2) . '</td><td>' . round($finalCredit,2) . '</td><td>' . round($finalCharge,2) . '</td></tr>';
+		$body .= '</table>';
+		$body .= '<h4></h4>';
 		
 		$html = '';
 		$html .= ' <html><head></head><body>';
@@ -898,16 +885,16 @@ class Pdfs extends CI_Controller {
 		
 		$body = '';
 
-			$data3 = $this->pdfs_db->getAccTrx($data2[0]->fkAccId);
-			$body .= '<table width="100%">';
-			$body .= '<tr><td>' . $data2[0]->PropertyName . '</td><td>Reservation Confirmation # ' . $data2[0]->ResConf . '</td></tr>';
-			$body .= '<tr><td>' . $data2[0]->PropertyShortName . '</td><td>Account Name: ' . $data2[0]->OccTypeGroupDesc . '</td></tr>';
-			$body .= '<tr><td>Netherlands Antilles</td><td>Account Id: ' . $data2[0]->fkAccId . '</td></tr>';
-			$body .= '<tr><td>Unit Code: ' . $data2[0]->UnitCode . '</td><td></td></tr>';
-			if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
-				$body .= '<tr><td></td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
-			}
-			$body .= '</table>';
+		$data3 = $this->pdfs_db->getAccTrx($data2[0]->fkAccId);
+		$body .= '<table width="100%">';
+		$body .= '<tr><td>' . $data2[0]->PropertyName . '</td><td>Reservation Confirmation # ' . $data2[0]->ResConf . '</td></tr>';
+		$body .= '<tr><td>' . $data2[0]->PropertyShortName . '</td><td>Account Name: ' . $data2[0]->OccTypeGroupDesc . '</td></tr>';
+		$body .= '<tr><td>Netherlands Antilles</td><td>Account Id: ' . $data2[0]->fkAccId . '</td></tr>';
+		$body .= '<tr><td>Unit Code: ' . $data2[0]->UnitCode . '</td><td></td></tr>';
+		if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
+			$body .= '<tr><td></td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
+		}
+		$body .= '</table>';
 
 		$body.= '<h4 class="cafe">Guest Information</h4> <hr>';
 		$body .= '<table width="100%">';
@@ -925,41 +912,38 @@ class Pdfs extends CI_Controller {
 			$body .= '<tr><td>' . $item->City . ' ' . $item->ZipCode . ' ' . $item->StateCode . '</td></tr>';
 		}
 		$body .= '</table>';
-		
-		
-		//foreach($data2 as $item){
-			$body .= '<h4></h4>';
-			$body .= '<table class="balance" width="100%">';
-			$finalCredit = 0;
-			$finalCharge = 0;
-			$balance = 0;
-			$body .= "<tr><th>Date</th><th>Doc#</th><th>Description</th><th>Source</th><th>Bill</th><th>Credit</th><th>Charge</th></tr>";
-			foreach ($data3 as $item3){
-				$Credit = 0;
-				$Charge = 0;
-				if($item3->TrxSign == 1){
-					$Credit = $item3->Amount;
-					if($Credit == 0){
-						$Credit = 0;
-					}
-				}else if($item3->TrxSign == -1){
-					$Charge = $item3->Amount;
-					if($Charge == 0){
-						$Charge = 0;
-					}
+
+		$body .= '<h4></h4>';
+		$body .= '<table class="balance" width="100%">';
+		$finalCredit = 0;
+		$finalCharge = 0;
+		$balance = 0;
+		$body .= "<tr><th>Date</th><th>Doc#</th><th>Description</th><th>Source</th><th>Bill</th><th>Credit</th><th>Charge</th></tr>";
+		foreach ($data3 as $item3){
+			$Credit = 0;
+			$Charge = 0;
+			if($item3->TrxSign == 1){
+				$Credit = $item3->Amount;
+				if($Credit == 0){
+					$Credit = 0;
 				}
-				$body .= '<tr><td>' . $item3->date . '</td><td>' . $item3->Doc . '</td><td>' . $item3->TrxTypeDesc . '</td>';
-				$body .= '<td></td><td></td>';
-				$body .= '<td>' . round($Credit, 2) . '</td><td>' . round($Charge,2) . '</td></tr>';
-				$finalCredit = $finalCredit + $Credit;
-				$finalCharge = $finalCharge + $Charge;
+			}else if($item3->TrxSign == -1){
+				$Charge = $item3->Amount;
+				if($Charge == 0){
+					$Charge = 0;
+				}
 			}
-			$balance = $finalCredit - $finalCharge;
-			$body .= '<tr><th></th><th></th><th></th><th></th><th>Bill</th><th>Final Credit</th><th>Final Charge</th></tr>';
-			$body .= '<tr><td></td><td></td><td></td><td></td><td>' . round($balance,2) . '</td><td>' . round($finalCredit,2) . '</td><td>' . round($finalCharge,2) . '</td></tr>';
-			$body .= '</table>';
-			$body .= '<h4></h4>';
-		//}
+			$body .= '<tr><td>' . $item3->date . '</td><td>' . $item3->Doc . '</td><td>' . $item3->TrxTypeDesc . '</td>';
+			$body .= '<td></td><td></td>';
+			$body .= '<td>' . round($Credit, 2) . '</td><td>' . round($Charge,2) . '</td></tr>';
+			$finalCredit = $finalCredit + $Credit;
+			$finalCharge = $finalCharge + $Charge;
+		}
+		$balance = $finalCredit - $finalCharge;
+		$body .= '<tr><th></th><th></th><th></th><th></th><th>Bill</th><th>Final Credit</th><th>Final Charge</th></tr>';
+		$body .= '<tr><td></td><td></td><td></td><td></td><td>' . round($balance,2) . '</td><td>' . round($finalCredit,2) . '</td><td>' . round($finalCharge,2) . '</td></tr>';
+		$body .= '</table>';
+		$body .= '<h4></h4>';
 		
 		$html = '';
 		$html .= ' <html><head></head><body>';
@@ -985,7 +969,6 @@ class Pdfs extends CI_Controller {
 		$style = $this->generateStyle();
 		
 		$body = '';
-		//$body .= '<img src="assets/img/logo/header.jpg"  width="1000" />';
 		$body .= '<h3>Dear:</h3>';
 		$body .= '<h4>';
 		$cont = 0;
@@ -995,9 +978,6 @@ class Pdfs extends CI_Controller {
 			}
 			$body .= $item->Name . " " . $item->Last_name;
 			
-			//$name = $item->Name;
-			//$lname = $item->Last_name;
-			//$body .= '<tr><td class="Name">' . $name . '</td><td class="Last name">' . $lname . '</td>';
 			$cont++;
 		}
 		$body .= '</h4>';
@@ -1006,7 +986,6 @@ class Pdfs extends CI_Controller {
 		$restype = 0;
 		foreach( $data as $item ){
 			$item = $data[0];
-			//$body .= '<h3>Dear ' . $item->LName . ' ' . $item->Name . ' </h3>';
 			$body .= '<h4>Your reservation with us has been completed successfully.</h4>';
 			$body .= '<h3>SUMMARY OF YOUR RESERVATION</h3>';
 			$body .= '<table class="balance" width="100%">';
@@ -1023,7 +1002,6 @@ class Pdfs extends CI_Controller {
 			$body .= '<tr><td>Unit Type</td><td>' . $item->FloorPlanDesc . '</td></tr>';
 			$body .= '<tr><td>Max Number of Persons</td><td>' . $item->MaxPersons . '</td></tr>';
 			$body .= '<tr><td>Meal Plan Type</td><td> </td></tr>';
-			//$body .= '<tr><td>View</td><td>' . $item->ViewDesc . '</td></tr>';
 			$body .= '<tr><td>Resort Type</td><td></td></tr>';
 			$body .= '<tr><td>Call Address</td><td></td></tr>';
 			$restype = $item->fkResTypeId; 
@@ -1130,7 +1108,6 @@ class Pdfs extends CI_Controller {
 		$style = $this->generateStyle();
 		
 		$body .= '<table width="100%">';
-		//$table .= "<tr><th>Name</th><th>Last name</th><th>Type people</th></tr>";
 		foreach ($data as $item){
 			$name = $item->Name;
 			$lname = $item->Last_name;
@@ -1284,14 +1261,11 @@ class Pdfs extends CI_Controller {
 		//relación utilizada para ajustar la conversión de los píxeles
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
  
- 
-		// ---------------------------------------------------------
 		// establecer el modo de fuente por defecto
         $pdf->setFontSubsetting(true);
  
 		// Establecer el tipo de letra
- 
-		//Si tienes que imprimir carácteres ASCII estándar, puede utilizar las fuentes básicas como
+ 		//Si tienes que imprimir carácteres ASCII estándar, puede utilizar las fuentes básicas como
 		// Helvetica para reducir el tamaño del archivo.
         $pdf->SetFont('freemono', '', 14, '', true);
  
@@ -1311,7 +1285,6 @@ class Pdfs extends CI_Controller {
 		$path = $_SERVER['DOCUMENT_ROOT'].str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME'])."assets/pdf/";
 
 		$extension = ($ext = pathinfo($file[0]->docPath, PATHINFO_EXTENSION));
-		//var_dump($extension);
 		if ($extension != 'pdf') {
 				switch( $extension ) {
     			case "gif": $ctype="image/gif"; break;
@@ -1327,21 +1300,18 @@ class Pdfs extends CI_Controller {
 			$mi_img = fopen ($path.$file[0]->docPath, "r");
 			header('Content-type: ' . $ctype);
 			fpassthru($mi_img);
-			//fclose ($archivo);
 		}else{
 			if( count($file) > 0 ){
 				$SERVER = substr($_SERVER['DOCUMENT_ROOT'],0, -1);
 				$path = $SERVER . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) ."assets/pdf/";
-				//var_dump($_SERVER['DOCUMENT_ROOT']);
-				
-				//var_dump(str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']));
+			
 				$mi_pdf = fopen ($path.$file[0]->docPath, "r");
 				if (!$mi_pdf) {
 					echo "<p>You can not open the file for reading</p>";
 					exit;
 				}
 				header('Content-type: application/pdf');
-				fpassthru($mi_pdf); // Esto hace la magia
+				fpassthru($mi_pdf); 
 				fclose ($archivo);
 			}else{
 				echo "No documents found";
@@ -1356,10 +1326,7 @@ class Pdfs extends CI_Controller {
 		$saveFiler .= $date->getTimestamp() . ".pdf";
 		
 		$nombre_archivo = utf8_decode($saveFiler);
-		//$nombre_archivo = $_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/" . $nombre_archivo;
-		
 		$nombre_archivo2 = utf8_decode($saveFiler);
-		
 		
 		$pdf->Output($_SERVER['DOCUMENT_ROOT'] . str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']) . "assets/pdf/".$nombre_archivo,'FI');
 		

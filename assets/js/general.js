@@ -507,7 +507,6 @@ function activeTable(table){
 (function($) {
     "use strict";
 
-    //$("[data-widget='collapse']").click(function() {
 	$(document).on("click","[data-widget='collapse']", function() {
         //Find the box parent        
         var box = $(this).parents(".box").first();

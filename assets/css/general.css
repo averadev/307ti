@@ -920,6 +920,14 @@ table thead tr th, table tbody tr td{
 	border-top:1px solid #aaaaaa;
 	
 }
+.contentModal2{
+	position:relative;
+	float:left;
+	/*height:90%;*/
+	padding: .5em 1em;
+	border-top:1px solid #aaaaaa;
+	
+}
 .alturaModal{
 	height:90%;
 }
@@ -927,6 +935,14 @@ table thead tr th, table tbody tr td{
 	display:none;
 	overflow:auto;
 	height:400px;
+/*	height:100%;*/
+	position:relative;
+	float:left;
+}
+.tab-modal2{
+	display:none;
+	overflow:auto;
+	height:500px;
 /*	height:100%;*/
 	position:relative;
 	float:left;

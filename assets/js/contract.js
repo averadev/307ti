@@ -15,7 +15,7 @@ $(document).ready(function(){
 	$(document).off( 'click', '#btnRefinancingContract');
 	$(document).on( 'click', '#btnRefinancingContract', function () {
 		var id = getIDContrato();
-		showModalFin(id);
+		showModalFin2(id);
 	});
 
 	$(document).off( 'click', '#btnSavePeople');
@@ -2658,7 +2658,8 @@ function showModalFin(id){
 	       	"class": 'dialogModalButtonCancel',
 	       	click: function() {
 	         	$(this).dialog('close');
-	         	var dialogEditContract = modalEditContract(id);
+	         	
+				var dialogEditContract = modalEditContract(id);
  				dialogEditContract.dialog("open");
 	       }
 	   	},{
@@ -2684,7 +2685,52 @@ function showModalFin(id){
 	modalFin = modalGeneral2(modalPropiedades, ajaxData);
 	modalFin.dialog( "open" );
 }
+function showModalFin2(id){
 
+	var ajaxData =  {
+		url: "contract/modalFinanciamiento",
+		tipo: "html",
+		datos: {
+			idContrato: id
+		},
+		funcionExito : addHTMLModalFin,
+		funcionError: mensajeAlertify
+	};
+	var modalPropiedades = {
+		div: "dialog-Financiamiento",
+		altura: maxHeight,
+		width: maxWidth,
+		onOpen: ajaxDATA,
+		onSave: createNewContract,
+		botones :[{
+	       	text: "Cancel",
+	       	"class": 'dialogModalButtonCancel',
+	       	click: function() {
+	         	$(this).dialog('close');	         	
+	       }
+	   	},{
+       		text: "Ok",
+       		"class": 'dialogModalButtonAccept',
+       		click: function() {
+       			var totaltoPay = getNumberTextString("totalPagarF");
+       			if (totaltoPay>0) {
+       				updateFinanciamiento(id);
+    				$(this).dialog('close');
+    				var dialogEditContract = modalEditContract(id);
+ 					dialogEditContract.dialog("open");
+       			}else{
+       				alertify.error("Please Calculate the Monthly Payment");
+       			}
+       		}
+     	}]
+	};
+
+	if (modalFin!=null) {
+		modalFin.dialog( "destroy" );
+	}
+	modalFin = modalGeneral2(modalPropiedades, ajaxData);
+	modalFin.dialog( "open" );
+}
 function updateFinanciamiento(id){
 	var fechaPP = $("#fechaPrimerPagoF").val();
     var factor = $("#terminosFinanciamientoF").val();
