@@ -487,8 +487,11 @@ class Pdfs extends CI_Controller {
 	}
 
 	public function reportPDFRoomRate(){
+
 		ini_set('max_execution_time', 700);
 		ini_set('memory_limit', '2048M');
+
+
 		$sql =[];
 		if(isset($_GET['dates'])){
 			$dates = json_decode( $_GET['dates']);
@@ -500,6 +503,7 @@ class Pdfs extends CI_Controller {
 			$options = json_decode($_GET['words']);
 			$sql['words'] = $this->receiveWords($options);
 		}
+
 		$Descriptions = '';
 
 		if (isset($sql['words']['statusAudit']) && !empty($sql['words']['statusAudit'])) {
@@ -514,62 +518,67 @@ class Pdfs extends CI_Controller {
 		}
 
 		$TRX = $this->pdfs_db->getRoomsRates($sql);
-		if($TRX){
-			$body = '';
-		$title = "Room Rate";
-		$name = "Room Rate";
-		$saveFiler = "Room_Rate";
-		$pdf = $this->generatePdfTempTRX( $name, $title, $sql);
-		$style = $this->generateStyle();
 
-		$body .= '<table width="100%" cellpadding="2">';
-		$body.= '<tr>';
-		foreach ($TRX[0] as $clave => $valor){
-			if ($clave != "OCCTYPECODE") {
-				if ($clave != "ID") {
-					if ($clave == "ADL" || $clave == "CHL") {
-						$body .= '<th class="blackLine45" width="30px">' . $clave . '</th>';
-					}elseif($clave == "Intv") {
-						$body .= '<th class="blackLine45" width="40px">' . $clave . '</th>';
-					}
-					else{
-						$body .= '<th class="blackLine45" width="67px">' . $clave . '</th>';
+
+
+
+		if($TRX) {
+			$body = '';
+			$title = "Room Rate";
+			$name = "Room Rate";
+			$saveFiler = "Room_Rate";
+			$pdf = $this->generatePdfTempTRX( $name, $title, $sql);
+			$style = $this->generateStyle();
+
+			$body .= '<table width="100%" cellpadding="2">';
+			$body.= '<tr>';
+			foreach ($TRX[0] as $clave => $valor){
+				if ($clave != "OCCTYPECODE") {
+					if ($clave != "ID") {
+						if ($clave == "ADL" || $clave == "CHL") {
+							$body .= '<th class="blackLine45" width="30px">' . $clave . '</th>';
+						}elseif($clave == "Intv") {
+							$body .= '<th class="blackLine45" width="40px">' . $clave . '</th>';
+						}
+						else{
+							$body .= '<th class="blackLine45" width="67px">' . $clave . '</th>';
+						}
 					}
 				}
+
 			}
-			
+			$body.= '</tr>';
+			foreach ($TRX as $item){
+
+				$body .= '<tr>'; 
+				$body .= '<td  class="blackLine45">' . $item->Unit . '</td>';
+				$body .= '<td  class="blackLine45">' . $item->GuestName . '</td>';
+				$body .= '<td  class="blackLine452">' . $item->ADL . '</td>';
+				$body .= '<td  class="blackLine452">' . $item->CHL . '</td>';
+				$body .= '<td  class="blackLine45">' . number_format((float)$item->RateChrgd, 2, '.', '') . '</td>';
+				$body .= '<td  class="blackLine45">' . $item->Type . '</td>';
+				$body .= '<td  class="blackLine45">' . $item->STS . '</td>';
+				$body .= '<td  class="blackLine45">' . $item->ResConf . '</td>';
+				$body .= '<td  class="blackLine452">' . $item->Intv . '</td>';
+				$body .= '<td  class="blackLine45">' . $item->ResType . '</td>';
+				$body .= '<td  class="blackLine45">' . $item->nightid . '</td>';
+				$body .= '<td  class="blackLine45">' . $item->Date . '</td>';
+				$body .= '</tr>';
+			}
+			$body .= '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td colspan="2" >Total: '. sizeof($TRX).'</td></tr>';
+			$body .= '</table>';
+			$html = '';
+			$html .= ' <html><head></head><body>';
+			$html .= $body;
+			$html .= $style;
+			$html .= '</body></html>';
+
+			$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+
+			$pdf = $this->showpdf2( $pdf, $saveFiler );
+		}else{
+			var_dump($TRX);
 		}
-		$body.= '</tr>';
-		foreach ($TRX as $item){
-		
-			$body .= '<tr>'; 
-			$body .= '<td  class="blackLine45">' . $item->Unit . '</td>';
-			$body .= '<td  class="blackLine45">' . $item->GuestName . '</td>';
-			$body .= '<td  class="blackLine452">' . $item->ADL . '</td>';
-			$body .= '<td  class="blackLine452">' . $item->CHL . '</td>';
-			$body .= '<td  class="blackLine45">' . number_format((float)$item->RateChrgd, 2, '.', '') . '</td>';
-			$body .= '<td  class="blackLine45">' . $item->Type . '</td>';
-			$body .= '<td  class="blackLine45">' . $item->STS . '</td>';
-			$body .= '<td  class="blackLine45">' . $item->ResConf . '</td>';
-			$body .= '<td  class="blackLine452">' . $item->Intv . '</td>';
-			$body .= '<td  class="blackLine45">' . $item->ResType . '</td>';
-			$body .= '<td  class="blackLine45">' . $item->nightid . '</td>';
-			$body .= '<td  class="blackLine45">' . $item->Date . '</td>';
-			$body .= '</tr>';
-		}
-		$body .= '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td colspan="2" >Total: '. sizeof($TRX).'</td></tr>';
-		$body .= '</table>';
-		$html = '';
-		$html .= ' <html><head></head><body>';
-		$html .= $body;
-		$html .= $style;
-		$html .= '</body></html>';
-		$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
-		
-		$pdf = $this->showpdf2( $pdf, $saveFiler );
-	}else{
-		var_dump($TRX);
-	}
 		
 	}
 	private function generatePdfTempTRX( $name, $title, $filtros){
@@ -807,7 +816,7 @@ class Pdfs extends CI_Controller {
 			$body .= '<tr><td>' . $data2[0]->PropertyName . '</td><td>Reservation Confirmation # ' . $data2[0]->ResConf . '</td></tr>';
 			$body .= '<tr><td>' . $data2[0]->PropertyShortName . '</td><td>Account Name: ' . $data2[0]->OccTypeGroupDesc . '</td></tr>';
 			$body .= '<tr><td>Netherlands Antilles</td><td>Account Id: ' . $data2[0]->fkAccId . '</td></tr>';
-			$body .= '<tr><td>Unit Code:</td><td>' . $data2[0]->UnitCode . '</td></tr>';
+			$body .= '<tr><td>Unit Code: ' . $data2[0]->UnitCode . '</td><td></td></tr>';
 			if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
 				$body .= '<tr><td></td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
 			}
@@ -894,12 +903,12 @@ class Pdfs extends CI_Controller {
 			$body .= '<tr><td>' . $data2[0]->PropertyName . '</td><td>Reservation Confirmation # ' . $data2[0]->ResConf . '</td></tr>';
 			$body .= '<tr><td>' . $data2[0]->PropertyShortName . '</td><td>Account Name: ' . $data2[0]->OccTypeGroupDesc . '</td></tr>';
 			$body .= '<tr><td>Netherlands Antilles</td><td>Account Id: ' . $data2[0]->fkAccId . '</td></tr>';
-			$body .= '<tr><td>Unit Code:</td><td>' . $data2[0]->UnitCode . '</td></tr>';
+			$body .= '<tr><td>Unit Code: ' . $data2[0]->UnitCode . '</td><td></td></tr>';
 			if (isset($OccTypeDesc[0]->ID) && $OccTypeDesc[0]->ID == 5) {
 				$body .= '<tr><td></td><td>Bill To: ' . $OccTypeDesc[0]->OccTypeDesc . '</td></tr>';
 			}
 			$body .= '</table>';
-		//}
+
 		$body.= '<h4 class="cafe">Guest Information</h4> <hr>';
 		$body .= '<table width="100%">';
 		foreach ($data as $item){

@@ -385,7 +385,8 @@ class pdfs_db extends CI_Model{
     		}*/
     	}
 		return  $this->db->get()->result();
-	} 
+	}
+
 	public function getRoomsRates($filters){
 		$sql = "select distinct r.pkresid AS ID, u.unitcode AS Unit,";
 		$sql .="RTRIM(p.Name) + ' '+ RTRIM(p.LName) as GuestName,";
@@ -426,12 +427,12 @@ class pdfs_db extends CI_Model{
 			}
 			$sql.="and ( " . $condicion . ")";
 		}else{
-			$sql.= "and OccYear = ".date("Y");
+			$sql.= "and OccYear = ". date("Y");
 		}
 
 		$sql.=" ORDER BY nightid asc ";
 		$query = $this->db->query($sql);
-		//var_dump($sql);
+
         if($query->num_rows() > 0 ){
             return $query->result();
         }
