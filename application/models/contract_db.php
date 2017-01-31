@@ -703,8 +703,6 @@ class Contract_db extends CI_Model {
         if($query->num_rows() > 0 )
         {
              return $query->result();
-            //$row = $query->row();
-            //return $row->financeBalance;
         }
     }
     
@@ -886,6 +884,42 @@ class Contract_db extends CI_Model {
         $this->db->where($lYear.' BETWEEN firstOccYear  AND LastOccYear');
         $this->db->where('I.Intv', $Intervalo);
         $this->db->where('I.ynActive', 1);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->Ocupadas;
+        }
+    }
+    public function selectCountSP($cuenta){
+        $this->db->select('count(*) as Ocupadas');
+        $this->db->from('tblAccTrx T');
+        $this->db->where('T.fkAccId', $cuenta);
+        $this->db->where('(T.fkTrxTypeId = 11 and T.fkTrxClassID = 4)');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->Ocupadas;
+        }
+    }
+    public function selectCountTransferToLoan($cuenta){
+        $this->db->select('count(*) as Ocupadas');
+        $this->db->from('tblAccTrx T');
+        $this->db->where('T.fkAccId', $cuenta);
+        $this->db->where('T.fkTrxTypeId = 43');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->Ocupadas;
+        }
+    }
+    public function selectCountFinanceCost($cuenta){
+        $this->db->select('count(*) as Ocupadas');
+        $this->db->from('tblAccTrx T');
+        $this->db->where('T.fkAccId', $cuenta);
+        $this->db->where('T.fkTrxTypeId = 40');
         $query = $this->db->get();
 
         if($query->num_rows() > 0 ){

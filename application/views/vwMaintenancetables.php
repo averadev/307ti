@@ -10,7 +10,7 @@
 					</span>
 				</div>
 				<h3 class="box-title">
-					<span>Inventory Search</span>
+					<span>Catalogs Search</span>
 				</h3>
 			</div>
 			<!-- body search-->
@@ -48,7 +48,7 @@
 				<div class="pull-right box-tools">
 				</div>
 				<h3 class="box-title">
-					<span>Inventory Relation</span>
+					<span>Catalogs</span>
 				</h3>
 			</div>
 			<div class="box-body" id="section-table-InvDetailed" style="display: block;">

@@ -5,7 +5,7 @@
       <label for="totalContracF" class="text-left">Total Contract</label>
     </div>
     <div id="totalContracF" class="small-9 columns">
-       <span >$ <?php echo number_format((float)$precio[0]->totalFinanceAmt, 2, '.', ','); ?></span>
+       <span >$ <?php echo number_format((float)$terminosVenta[0]->NetSalePrice, 2, '.', ','); ?></span>
     </div>
   </div>
   <div class="row">

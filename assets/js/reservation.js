@@ -3282,11 +3282,11 @@ function getWeeksRes(id){
 				drawTable2(data,"tableCOccupationSelected", false, "");
 				$(document).off('click','.btnDeleteOccRes')
 				$(document).on('click','.btnDeleteOccRes', function(){ 
-					if( $("#idResTypeX").text() == 7 ){
+/*					if( $("#idResTypeX").text() == 7 ){*/
 						confirmDeleteOccRes(this); 
-					}else{
+/*					}else{
 						alertify.error('You can not delete nights Occupancy');
-					}
+					}*/
 				});
 			}else{
 				noResultsTable(div, "tableCOccupationSelected", "No results found");

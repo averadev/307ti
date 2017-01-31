@@ -518,20 +518,31 @@ public function updateFinanciamiento(){
 	if($this->input->is_ajax_request()) {
 
 		$this->contract_db->db->trans_begin();
-
 		$IDContrato = $_POST['idContrato'];
+
+		$CUENTA = $this->contract_db->getACCIDByContracID($IDContrato);
+		$SP = $this->contract_db->selectCountSP($CUENTA);
+		$TRL = $this->contract_db->selectCountTransferToLoan($CUENTA);
+		if ($SP > 11) {
+			$condicionDELETE = "(fkTrxTypeId = 11 and fkTrxClassID = 4  and fkAccId =". $CUENTA ." )";
+			$this->contract_db->deleteReturnId('tblAccTrx', $condicionDELETE);
+		}
+		if ($TRL == 0) {
+			$this->CreateTransferToLoan();
+		}
+		
+		
+		
 		$financiamiento = [
 			"fkFactorId"	=> $_POST['factor'],
 			"MonthlyPmtAmt" => $this->remplaceFloat($_POST['pagoMensual'])
 		];
 		$condicion = "fkResId = " . $IDContrato;
 
-		$condicionDELETE = "(fkTrxTypeId = 11 and fkTrxClassID = 4 )";
-		$this->contract_db->deleteReturnId('tblAccTrx', $condicionDELETE);
+		
 
 		$afectados = $this->contract_db->updateReturnId('tblResfin', $financiamiento, $condicion);
-		$this->CreateTransferToLoan();
-		$this->insertTransaccionesCredito();
+		$this->insertTransaccionesCredito($CUENTA);
 		if ($this->contract_db->db->trans_status() === false){
 			$this->contract_db->db->trans_rollback();
 		}else{
@@ -586,7 +597,7 @@ private function CreateTransferToLoan(){
 		$this->contract_db->insertReturnId('tblAccTrx', $transaction);
 }
 
-private function insertTransaccionesCredito(){
+private function insertTransaccionesCredito($cuenta){
 	$IDContrato = $_POST['idContrato'];
 	$pagoMensual = floatval($_POST['pagoMensual']);
 	$meses = intval($_POST['meses']);
@@ -594,7 +605,10 @@ private function insertTransaccionesCredito(){
 	$balanceActual = floatval($_POST['balanceActual']);
 	if ($balanceActual < $total) {
 		$cantidad = $total - $balanceActual;
+		$condicionDELETE = "(fkTrxTypeId = 40 and fkTrxClassID = 4  and fkAccId =". $cuenta ." )";
+		$this->contract_db->deleteReturnId('tblAccTrx', $condicionDELETE);
 		$this->insertFinanceCostTransacction($cantidad);
+
 	}
 
 	$Dolares = $this->contract_db->selectIdCurrency('USD');
@@ -1787,6 +1801,8 @@ private function search($array, $key, $value){
 		if($this->input->is_ajax_request()) {
 			$idContrato = $_POST['idContrato'];
 			$data['precio'] = $this->contract_db->selectPriceFin($idContrato);
+			$data['terminosVenta'] = $this->contract_db->getTerminosVentaContract($idContrato);
+			//var_dump($data);
 			$data['factores'] = $this->contract_db->selectFactors();
 			$data['CostCollection'] = $this->contract_db->selectCostCollection();
 			$this->load->view('contracts/contractDialogFinanciamiento', $data);

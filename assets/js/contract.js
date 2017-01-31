@@ -2548,16 +2548,22 @@ function drawTerminosVenta(data){
 	var balanceFinal = parseFloat(data.BalanceActual);
 	var unidades = getValueTableUnidadesSize();
 
-	$("#cventaPrice").text(price.toFixed(2));
+	$("#cventaPrice").text("$" + price.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 	$("#cventaWeeks").text(unidades);
-	$("#cventaPackR").text(SpecialDiscount.toFixed(2));
-	$("#cventaSalePrice").text(salePrice.toFixed(2));
-	$("#cventaHitch").text(enganche.toFixed(2));
-	$("#cventaTransferA").text(transferido.toFixed(2));
-	$("#cventaCostContract").text(costoContract.toFixed(2));
+	$("#cventaPackR").text("$" + SpecialDiscount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+	$("#cventaSalePrice").text("$" + salePrice.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+	$("#cventaHitch").text("$" + enganche.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+	$("#cventaTransferA").text("$" + transferido.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+	$("#cventaCostContract").text("$" + costoContract.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 	//$("#cventapackAmount").text(packAmount.toFixed(2));
-	$("#cventaFinanced").text(balanceFinal.toFixed(2));
+	$("#cventaFinanced").text("$" + balanceFinal.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 	//$("#cventaAmountTransfer").text(transferido);
+}
+
+
+function moneyFormat(price){
+	price.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+	return "$" + price;
 }
 
 function drawTerminoFinanciamiento(data){
@@ -2566,12 +2572,12 @@ function drawTerminoFinanciamiento(data){
 	var porEnganche = parseFloat(data.porcentaje);
 	var balanceFinal = parseFloat(data.TotalFinanceAmt);
 
-	$("#cfbalanceFinanced").text(balanceFinal);
-	$("#cfPagoMensual").text(pagoMensual);
-	$("#cfEnganche").text(porEnganche);
+	$("#cfbalanceFinanced").text("$" + balanceFinal.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+	$("#cfPagoMensual").text("$" + pagoMensual.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+	$("#cfEnganche").text("$" + porEnganche.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 	$("#typeFinance").text(data.FactorDesc);
-	$("#totalFounding").text(balanceFinal);
-	$("#totalMonthlyPayment").text(pagoMensual);
+	$("#totalFounding").text("$" + balanceFinal.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+	$("#totalMonthlyPayment").text("$" + pagoMensual.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 
 }
 

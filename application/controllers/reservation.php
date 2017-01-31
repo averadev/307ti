@@ -726,9 +726,6 @@ class Reservation extends CI_Controller {
 		$Unidades = [];
 		$fYear = $Years[0]->FirstOccYear;
 		$lYear = $Years[0]->LastOccYear;
-		/*for ($i = $fYear; $i <= $lYear ; $i++) { 
-			array_push($Unidades, $this->reservation_db->selectUnitiesContract($idContrato, $i, $_POST['iniDate'], $_POST['endDate']));
-		}*/
 		$resInt =  $this->reservation_db->selectUnitiesContract($idContrato);
 		$idCalendar =  $this->reservation_db->selectDateCalendar( $iniDate, $endDate );
 		
