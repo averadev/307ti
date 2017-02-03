@@ -100,8 +100,11 @@ Class collection_db extends CI_MODEL
 				if(isset($filters['options']['TrxTypeColl'])){
 					$this->db->where('tt.pkTrxTypeId', $filters['options']['TrxTypeColl']);
 				}
-				if(isset($filters['options']['AccTypeColl'])){
-					$this->db->where('att.pkAcctypeId', $filters['options']['AccTypeColl']);
+				if(isset($filters['options']['TrxTypeColl'])){
+					$this->db->where('tt.pkTrxTypeId', $filters['options']['TrxTypeColl']);
+				}
+				if(isset($filters['options']['Outstanding']) && ($filters['options']['Outstanding'] === true)){
+					$this->db->where('at1.AbsAmount > 0');
 				}
 				if( isset($filters['options']['OccTypeGroupColl']) && !isset($filters['options']['OccTypeColl']) ){
 					$this->db->where('otg.pkOccTypeGroupId', $filters['options']['OccTypeGroupColl']);

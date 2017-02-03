@@ -115,7 +115,7 @@
 					<div class="small-12 medium-12 large-12 columns">
 						<div class="row">
 							<!-- Occ type Group -->
-							<div class="small-12 large-3 columns">
+							<div class="small-12 large-2 columns">
 								<label id="alertTypeGroupColl" for="OccTypeGroupColl" class="text-left">Occ Type Group
 									<div class="caja" >
 										<select id="OccTypeGroupColl" class="txtSearch input-group-field round">
@@ -132,7 +132,7 @@
 								</label>
 							</div>
 							<!-- Past Due Days -->
-							<div class="small-12 large-3 columns">
+							<div class="small-12 large-2 columns">
 								<label id="alertOccTypeColl" for="OccTypeColl" class="text-left">Occ type
 									<div class="caja" >
 										<select id="OccTypeColl" class="txtSearch input-group-field round">
@@ -142,11 +142,17 @@
 								</label>
 							</div>
 							<!-- login user -->
-							<div class="small-12 large-3 columns float-left">
+							<div class="small-12 large-2 columns float-left">
 								<label id="alertLoginUserColl" for="LoginUserColl" class="text-left">User
 									<input type="text" id="LoginUserColl" class="txtSearch"/>
 								</label>
 							</div>
+							<fieldset class="large-3 columns fieldsetFilter">
+							<div class="rdoField">
+								<input type="checkbox" id="Outstanding" class="checkFilter">
+								<label for="Outstanding">Outstanding Balances</label>
+							</div>
+							</fieldset>
 							<!-- btn -->
 							<div class="small-12 large-3 columns" style="padding-top:25px;">
 								<a id="btnCollSearch" class="btn btn-primary btn-Search">

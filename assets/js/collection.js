@@ -129,6 +129,7 @@ function getCollection(){
     var words = getWords(arrayWords);
 	var arrayOption = ["TrxTypeColl", "AccTypeColl","OccTypeGroupColl", "OccTypeColl" ];
     var options = getWords(arrayOption);
+    options.Outstanding = $('#Outstanding').prop('checked')
 	$.ajax({
 		data:{
 			dates: dates,
