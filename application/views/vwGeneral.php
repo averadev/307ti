@@ -113,12 +113,6 @@
 					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/4.png"/></span>
 					<div class="label-menu-sel">Reservation</div>
 				</div>
-
-<!-- 				<div class="menu-sel" attr-screen="billing">
-					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/4.png"/></span>
-					<div class="label-menu-sel">Billing</div>
-				</div> -->
-
 				<div class="menu-sel" attr-screen="collection">
 					<span class="icon-menu-sel"><img src="<?php echo base_url().IMG; ?>common/1.png"/></span>
 					<div class="label-menu-sel">Admin</div>
@@ -127,11 +121,14 @@
 					<span class="icon-menu-sel"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></span>
 					<div class="label-menu-sel">Maintenance Fee</div>
 				</div>
+
+				<?php }; ?>
+				 <?php $PeopleB2 = [1, 2]; $elemento = $this->nativesessions->get('id'); ?>
+				<?php if(in_array($elemento, $PeopleB2)){?>
 				<div class="menu-sel" attr-screen="Maintenancetables">
 					<span class="icon-menu-sel"><i class="fa fa-table" aria-hidden="true"></i></span>
 					<div class="label-menu-sel">Catalogs</div>
 				</div>
-
 				<?php }; ?>
                 <div class="menu-fix">&nbsp;</div>
             </div>
