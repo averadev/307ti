@@ -13,6 +13,7 @@ $(document).ready(function(){
 	});
 	FloorPlanDetail = null;
 
+
 	$(document).off( 'click', '#btnManCleanSearch');
 	$(document).on( 'click', '#btnManCleanSearch', function () {
 		$("#MSearch").val('');
@@ -101,6 +102,7 @@ function createNewBatch(){
 		url: "Maintenance/newBatch",
 		tipo: "json",
 		datos: {
+			DueDate: $("#dueDateMaintenance").val(),
 			Property: $("#NProperty").val(),
 			Year: $("#NYears").val(),
 			SaleType: $("#NSaleType").val(),
@@ -321,3 +323,5 @@ function updateStatusBatchMsj(data){
 	alertify.success(data["mensaje"]);
 	$("#botonesBatch").empty();
 }
+
+

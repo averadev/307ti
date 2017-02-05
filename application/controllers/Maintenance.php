@@ -172,6 +172,10 @@ class Maintenance extends CI_Controller {
 	function newBatch(){
 		if($this->input->is_ajax_request()) {
 
+			$DueDate = $_POST['DueDate'];
+			if (empty($DueDate)) {
+				$DueDate = null;
+			}
 
 			$Batch = [
 				"fkPropertyId"	=> $_POST['Property'],
@@ -183,6 +187,7 @@ class Maintenance extends CI_Controller {
 				"BatchDesc"		=> $_POST['BatchDesc'],
 				"TotalRecords"	=> sizeof($_POST['Contracts']),
 				"TotalAmount"	=> $_POST['Total'],
+				"DueDate"		=> $DueDate,
 				"ynActive"		=> 1,
 				"fkStatusId"	=> 20,
 				"Year"			=>	$_POST['Year'],

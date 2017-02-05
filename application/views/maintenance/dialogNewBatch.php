@@ -111,6 +111,17 @@
 				<input id="MFolio" type="text" class="round" placeholder="Folio" name="search">
 			</div>
 	</div>
+	<div class="small-6 columns">
+		<div class="small-3 columns">
+			<label class="text-left" for="legalName">Due Date</label>
+		</div>
+		<div class="small-9 columns"></div>
+		<div class="caja2" >
+		<div class="input-group date" >
+				<input type="text" id="dueDateMaintenance" class="txtSearch input-group-field roundRight" placeholder="Enter a date" readonly />
+			</div>
+		</div>
+	</div>
 	<div class="row">
 		<a id="btnSearchContracts" class="btn btn-primary btn-Search float-right">
 				<div class="label">Search</div>
@@ -148,7 +159,12 @@
 					</div>
 				</div>
 			</fieldset>
-
+<script type="text/javascript">
+		datepickerZebra = $("#dueDateMaintenance" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false
+	});
+</script>
 
 
 		

@@ -61,7 +61,7 @@ Class Maintenance_db extends CI_MODEL
     }
     public function getBatchByID($ID){
 
-    	$this->db->select("B.pkBatchId as ID, P.PropertyShortName as Property, BT.BatchTypeDesc as BatchType, B.TotalRecords as Total");
+    	$this->db->select("B.pkBatchId as ID, P.PropertyShortName as Property, BT.BatchTypeDesc as BatchType, B.TotalRecords as Total, B.DueDate ");
 		$this->db->select("B.BatchDesc, B.Year, T.StatusDesc, B.TotalAmount, B.ynActive, B.CrDt");
 		$this->db->select("U.UserLogin as CreateBy, B.MdDt, U2.UserLogin as MdBy");
         $this->db->from('tblBatch B');

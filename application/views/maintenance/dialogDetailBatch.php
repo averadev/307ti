@@ -59,7 +59,8 @@
 								<td>Status:</td>
 								<td id="cventaHitch"><?= $Batch[0]->StatusDesc;?></td>
 								<td>Total Amount:</td>
-								<td id="cventaTransferA"><?= number_format((float)$Batch[0]->TotalAmount, 2, '.', '');?></td>
+								<td id="cventaTransferA">$ <?= number_format((float)$Batch[0]->TotalAmount, 2, '.', '');?></td>
+								
 							</tr>
 							<tr>
 								<td>YnActive:</td>
@@ -74,8 +75,8 @@
 								<td id="cventaTransferA"><?= $Batch[0]->MdDt;?></td>
 							</tr>
 							<tr>
-								<td>MdBy:</td>
-								<td id="cventaHitch"><?= $Batch[0]->MdBy;?></td>
+								<td>Due Date:</td>
+								<td id="cventaHitch"><?= $Batch[0]->DueDate;?></td>
 							</tr>
 						</tbody>
 					</table>
@@ -135,7 +136,7 @@
 								<td>Status:</td>
 								<td id="cventaHitch"><?= $Batch[0]->StatusDesc;?></td>
 								<td>Total Amount:</td>
-								<td id="cventaTransferA"><?= number_format((float)$Batch[0]->TotalAmount, 2, '.', '');?></td>
+								<td id="cventaTransferA">$<?= number_format((float)$Batch[0]->TotalAmount, 2, '.', '');?></td>
 							</tr>
 							<tr>
 								<td>YnActive:</td>
@@ -150,8 +151,8 @@
 								<td id="cventaTransferA"><?= $Batch[0]->MdDt;?></td>
 							</tr>
 							<tr>
-								<td>MdBy:</td>
-								<td id="cventaHitch"><?= $Batch[0]->MdBy;?></td>
+								<td>Due Date:</td>
+								<td id="cventaHitch"><?= $Batch[0]->DueDate;?></td>
 								<td class="iconEdit">
 									<a id="printReportMaintenance" class="btn btn-primary">
 										<div class="label">Print</div>

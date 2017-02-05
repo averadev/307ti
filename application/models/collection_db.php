@@ -55,7 +55,7 @@ Class collection_db extends CI_MODEL
 	public function getCollection($filters){
 		$sql = "";
         $this->db->distinct();
-        $this->db->select('at1.pkAccTrxId as ID, r.Folio, r.resCode, r.ResConf, tt.TrxTypeDesc as trxType, at1.Amount, CONVERT(VARCHAR(11),at1.DueDt,106) as dueDate, CONVERT(VARCHAR(11),at1.CrDt,106) as Create_Date');
+        $this->db->select('at1.pkAccTrxId as ID, r.Folio, r.resCode, r.ResConf, tt.TrxTypeDesc as trxType, at1.Amount, at1.AbsAmount as ToPay, CONVERT(VARCHAR(11),at1.DueDt,106) as dueDate, CONVERT(VARCHAR(11),at1.CrDt,106) as Create_Date');
         $this->db->select('DATEDIFF(day, CONVERT(VARCHAR(11),at1.DueDt,106), CONVERT(VARCHAR(11),GETDATE(),106)) AS DiffDate');
 		$this->db->select('att.AccTypeDesc as accType,  ( ph.PhoneDesc + ph.AreaCode ) AS Phone, em.EmailDesc as Email, us.UserLogin as User');
 		$this->db->from('tblAccTrx at1');
@@ -103,7 +103,7 @@ Class collection_db extends CI_MODEL
 				if(isset($filters['options']['AccTypeColl'])){
 					$this->db->where('tt.pkTrxTypeId', $filters['options']['AccTypeColl']);
 				}
-				if(isset($filters['options']['Outstanding']) && ($filters['options']['Outstanding'])){
+				if(isset($filters['options']['Outstanding']) && ($filters['options']['Outstanding'] == "true")){
 					$this->db->where('at1.AbsAmount > 0');
 				}
 				if( isset($filters['options']['OccTypeGroupColl']) && !isset($filters['options']['OccTypeColl']) ){
