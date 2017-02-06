@@ -36,6 +36,7 @@ class Contract extends CI_Controller {
 			$Contrato = isValidateContract();
 			if ($Contrato['valido']) {
 				$idContrato = $this->createContract();
+				$this->setUnitSale($IDContrato);
 				$Ocupaciones = $this->insertContratoOcupacion($idContrato);
 				$acc = $this->createAcc();
 				$this->insertPeoples($idContrato, $acc);
@@ -75,6 +76,21 @@ class Contract extends CI_Controller {
 		}
 	}
 
+
+public function setUnitSale($ID){
+	//getUnitContract
+	$datos = $this->contract_db->getUnitContract($ID);
+	$IdUnidad = $datos[0]->ID;
+	$Week = $datos[0]->WeeksNumber;
+	$IDCODE =$this->contract_db->getStatusCode("SOL");
+	$Card = [
+		"fkStatusId"	=> $IDCODE
+	];
+	$condicion = "fkUnitId = " . $IdUnidad. " and week = ". $Week;
+	$afectados = $this->contract_db->updateReturnId('tblPrice', $Card, $condicion);
+	//updateReturnId
+
+}
 
 private function makeTransactions($idContrato){
 	

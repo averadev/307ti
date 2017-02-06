@@ -202,13 +202,26 @@ class Contract_db extends CI_Model {
         $this->db->join('tblPrice PRI', 'U.pkUnitId = PRI.fkUnitId and RI.WeeksNumber = PRI.Week', 'inner');
 		$this->db->join('tblSeason S', 'S.pkSeasonId = RI.fkSeassonId', 'inner');
         $this->db->where('fkResId', $string);
-        $this->db->order_by('', 'DESC');
+       
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
 			return $query->result();
         }
     }
-
+    public function getUnitContract($idContrato){
+        $sql = "";
+        $this->db->distinct();
+        $this->db->select('U.pkUnitId as ID, RI.WeeksNumber');
+        $this->db->from('tblResInvt RI');
+        $this->db->join('tblUnit U', 'RI.fkUnitId = U.pkUnitId', 'inner');
+        $this->db->join('tblPrice PRI', 'U.pkUnitId = PRI.fkUnitId and RI.WeeksNumber = PRI.Week', 'inner');
+        $this->db->join('tblSeason S', 'S.pkSeasonId = RI.fkSeassonId', 'inner');
+        $this->db->where('fkResId', $idContrato);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            return $query->result();
+        }
+    }
     public function getIDByFolio($code){
         $this->db->select('R.pkResId');
         $this->db->from('tblRes R');
@@ -993,16 +1006,26 @@ class Contract_db extends CI_Model {
         }
     }
     public function getStatusCode($id){
-        $this->db->select('s.StatusCode as code');
+        $this->db->select('s.pkStatusId as ID');
         $this->db->from('tblStatus s');
-        $this->db->where('s.pkStatusId', $id);
+        $this->db->where('s.StatusCode', $id);
+        $query = $this->db->get();
+        if($query->num_rows() > 0 ){
+            $row = $query->row();
+            return $row->ID;
+        }
+    }
+    public function getStatusIDByCode($Code){
+        $this->db->select('s.pkStatusid');
+        $this->db->from('tblStatus s');
+        $this->db->where('s.StatusCode', $Code);
         $query = $this->db->get();
         if($query->num_rows() > 0 ){
             $row = $query->row();
             return $row->code;
         }
     }
-        public function getFolioByID($id){
+    public function getFolioByID($id){
         $this->db->select('R.Folio');
         $this->db->from('tblREs R');
         $this->db->where('R.pkResID', $id);
