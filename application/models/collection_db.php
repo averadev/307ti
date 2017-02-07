@@ -64,10 +64,10 @@ Class collection_db extends CI_MODEL
         $this->db->join('TblTrxType tt', 'tt.pkTrxTypeId = at1.fkTrxTypeId');
         $this->db->join('tblResPeopleAcc rpa', 'rpa.fkAccId = a.pkAccId and rpa.ynPrimaryPeople = 1');
 		$this->db->join('tblRes r', 'r.pkResId = rpa.fkResId and r.pkResRelatedId is Null');
-		$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId');
-		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId');
-		$this->db->join('tblOccTypeGroup otg', 'otg.pkOccTypeGroupId = ot.fkOccTypeGroupId');
-        $this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId');
+		$this->db->join('tblResOcc ro', 'ro.fkResId = r.pkResId', 'LEFT');
+		$this->db->join('tblOccType ot', 'ot.pkOccTypeId = ro.fkOccTypeId', 'LEFT');
+		$this->db->join('tblOccTypeGroup otg', 'otg.pkOccTypeGroupId = ot.fkOccTypeGroupId', 'LEFT');
+        $this->db->join('tblPeople p', 'p.pkPeopleId = rpa.fkPeopleId', 'LEFT');
 		$this->db->join('tblPeoplePhone pph', 'pph.fkPeopleId = p.pkPeopleId and pph.ynPrimaryPhone = 1', 'LEFT');
 		$this->db->join('tblPhone ph', 'ph.pkPhoneId = pph.fkPhoneId', 'LEFT');
 		$this->db->join('tblPeopleEmail pem', 'pem.fkPeopleId = p.pkPeopleId and pem.ynPrimaryEmail = 1', 'LEFT');
@@ -101,7 +101,7 @@ Class collection_db extends CI_MODEL
 					$this->db->where('tt.pkTrxTypeId', $filters['options']['TrxTypeColl']);
 				}
 				if(isset($filters['options']['AccTypeColl'])){
-					$this->db->where('tt.pkTrxTypeId', $filters['options']['AccTypeColl']);
+					$this->db->where('att.pkAcctypeId', $filters['options']['AccTypeColl']);
 				}
 				if(isset($filters['options']['Outstanding']) && ($filters['options']['Outstanding'] == "true")){
 					$this->db->where('at1.AbsAmount > 0');

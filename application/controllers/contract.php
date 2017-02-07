@@ -36,7 +36,6 @@ class Contract extends CI_Controller {
 			$Contrato = isValidateContract();
 			if ($Contrato['valido']) {
 				$idContrato = $this->createContract();
-				$this->setUnitSale($IDContrato);
 				$Ocupaciones = $this->insertContratoOcupacion($idContrato);
 				$acc = $this->createAcc();
 				$this->insertPeoples($idContrato, $acc);
@@ -58,6 +57,7 @@ class Contract extends CI_Controller {
 						]);
 					}
 				}
+				$this->setUnitSale($idContrato);
 				echo  json_encode([
 					"mensaje" => 'Contract Save',
 					"balance" => $this->contract_db->selectPriceFin($idContrato)[0],
