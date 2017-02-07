@@ -864,18 +864,13 @@ private function insertAuditTransaction($IdReserva, $Precio, $TrxID, $fecha){
 	
 	public function generateReport(){
 		if($this->input->is_ajax_request()){
-			//$this->createExcel();
 			$data = "excel generado";
 			echo json_encode($data);
 		}
 	}
 	
 	public function getReportFrontDesk(){
-		
-		/*$filters = json_decode( $_GET['filters'] );
-		$dates = json_decode( $_GET['dates'] );
-		$words = json_decode( $_GET['words'] );
-		$options = json_decode( $_GET['options'] );*/
+
 		$sql = array();
 		if(isset($_GET['filters'])){
 			$filters = json_decode( $_GET['filters'] );

@@ -12,6 +12,7 @@ class collection extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->helper('url');
+		$this->load->library('excel');
 		$this->load->database('default');
 		$this->load->model('collection_db');
 		$this->load->library('nativesessions');
@@ -277,4 +278,159 @@ class collection extends CI_Controller {
 		return $strHoy;
 	}
 	
+
+	public function makeExcelAdmin(){
+		$page = 0;
+			$sql = $this->getFilters($_POST, '');
+			$data = $this->collection_db->getCollection($sql);
+			if( count($data) > 0 ){
+				foreach( $data[0] as $key => $item ){
+					$keys[] = $key;
+				}
+				foreach( $data as $key => $item ){
+					foreach($keys as $ke){
+						if( is_null( $item->$ke ) ){
+							$item->$ke = "";
+						}
+					}
+				}
+			}
+			//echo json_encode(array('items' => $data));
+
+			$this->makeExcel($data, 'AdminTrx', $sql);
+	}
+	public function makeExcel($json, $nombre, $filtros){
+			$date = new DateTime();
+			$objPHPExcel = new PHPExcel();
+			 $lastColumn = $objPHPExcel->getActiveSheet()->getHighestColumn();
+			//activate worksheet number 1
+			$objPHPExcel->setActiveSheetIndex(0);
+			//name the worksheet
+			$objPHPExcel->getActiveSheet()->setTitle("report 1");
+			//$objPHPExcel->excel->getActiveSheet()->setTitle('frontdesk report2');
+			//set cell A1 content with some text
+			$objPHPExcel->getActiveSheet()->setCellValue('C1', 'Front Desk');
+			//change the font size
+			$objPHPExcel->getActiveSheet()->getStyle('C1')->getFont()->setSize(20);
+			//make the font become bold
+			$objPHPExcel->getActiveSheet()->getStyle('C1')->getFont()->setBold(true);
+			//merge cell A1 until D1
+			$objPHPExcel->getActiveSheet()->mergeCells('C1:J3');
+			//set aligment to center for that merged cell (A1 to D1)
+			$objPHPExcel->getActiveSheet()->getStyle('C1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			
+			$objPHPExcel->getActiveSheet()->setCellValue('C5', 	$nombre);
+			$objPHPExcel->getActiveSheet()->getStyle('C5')->getFont()->setSize(16);
+			$objPHPExcel->getActiveSheet()->getStyle('C5')->getFont()->setBold(true);
+			$objPHPExcel->getActiveSheet()->mergeCells('C5:J5');
+			$objPHPExcel->getActiveSheet()->getStyle('C5')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('Logo');
+			$objDrawing->setDescription('Logo');
+			$logo = APPPATH."/third_party/logo.jpg";
+			$objDrawing->setPath($logo);
+			$objDrawing->setCoordinates('A1');
+			$objDrawing->setHeight(88);
+			$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+           
+            $inicio = $lastColumn;
+
+            $head = 10;
+            $activa = 0;
+            $c = 0;
+            foreach ($json[0] as $key => $value) {
+                $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($lastColumn.$head, $key);
+                if ($c+1<count((array)$json[0])) {
+                	$lastColumn++;
+                }
+                $c++;
+            }
+            $objPHPExcel->getActiveSheet()->getRowDimension($head)->setRowHeight(30);
+            $c = 0;
+            $head = 7;
+            // if (isset($filtros['dates'])) {
+            // 	foreach ($filtros['dates'] as $key => $value) {
+            //     	$objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio.$head, $key." ".$value);
+	           //      if ($c+1<sizeof($filtros['dates'])) {
+	           //      	$lastColumn++;
+	           //      }
+	           //      $c++;
+	           //  }
+            // }
+            $c = 0;
+            $head = 8;
+
+	        if (isset($filtros['words']) && !empty($filtros['words'])) {
+	            foreach ($filtros['words'] as $key => $value) {
+	            	if (is_array($value)) {
+	            		for ($i=0; $i < sizeof($value) ; $i++) { 
+	            			$objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio.$head, $key." ".$value[$i]);
+	            		}
+	            	}else{
+	            		 $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio.$head, $key." ".$value);
+	            	}
+		            if ($c+1<sizeof($filtros['words'])) {
+		            	$lastColumn++;
+		            }
+		            $c++;
+		        }
+		    }
+           
+
+
+            $estilos = array(
+                'font'    => array(
+                    'bold'      => true
+                ),
+                'borders' => array(
+                	'allborders' => array(
+					'style' => PHPExcel_Style_Border::BORDER_THIN
+					)
+				),
+                'alignment' => array(
+					'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+					'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				)
+            );
+
+            $rango = $inicio."10".":".$lastColumn."10";
+			$objPHPExcel->getActiveSheet()
+			    ->getStyle($rango)
+			    ->applyFromArray(
+			        array(
+			            'fill' => array(
+			                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+			                'color' => array('rgb' => 'b77648')
+			            )
+			        )
+			    );
+
+            $objPHPExcel->getActiveSheet()->getStyle($rango)->applyFromArray($estilos);
+            $objPHPExcel->getActiveSheet()->setAutoFilter($rango);
+
+            for ($i = $inicio; $i != $lastColumn ; $i++) {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($i)->setAutoSize(true);
+            }
+
+            for ($j=0; $j <sizeof($json); $j++) {
+                $inicio = "A";
+                foreach ($json[$j] as $key => $value) {
+                    $objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio++.($j+11), $value);
+                }
+            }
+            // Rename worksheet
+            $objPHPExcel->getActiveSheet()->setTitle($nombre);
+            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            $objPHPExcel->setActiveSheetIndex(0);
+            $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);
+            $filename= $nombre . $date->getTimestamp() . '.xlsx'; //save our workbook as this file name
+			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //mime type
+			header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+			header('Cache-Control: max-age=0'); //no cache
+            // Save Excel 2007 file
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+			//ob_end_clean();
+			$objWriter->save('php://output');
+        }
 }

@@ -2182,7 +2182,7 @@ private function search($array, $key, $value){
 		$date = date( "m/d/Y", strtotime( $restarDay . " day", strtotime( $date ) ) ); 
 		return $date;
 	}
-	
+
 }
 
 
