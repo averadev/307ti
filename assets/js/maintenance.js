@@ -102,7 +102,6 @@ function createNewBatch(){
 		url: "Maintenance/newBatch",
 		tipo: "json",
 		datos: {
-			DueDate: $("#dueDateMaintenance").val(),
 			Property: $("#NProperty").val(),
 			Year: $("#NYears").val(),
 			SaleType: $("#NSaleType").val(),
@@ -283,7 +282,8 @@ function postBatch(){
 		url: "Maintenance/postBatch",
 		tipo: "json",
 		datos: {
-				ID: $("#cventaPrice").text().trim()
+				ID: $("#cventaPrice").text().trim(),
+				DueDate: $("#dueDateMaintenance").val()
 		},
 		funcionExito : postBatchMsj,
 		funcionError: mensajeAlertify

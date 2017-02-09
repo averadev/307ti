@@ -79,9 +79,22 @@ class Maintenance extends CI_Controller {
 			];
 			$condicion = "pkBatchId = " . $ID;
 			$this->Maintenance_db->updateReturnId("tblBatch", $TRX, $condicion);
+			$this->updateDueDateTblBach($ID);
 			echo json_encode(["mensaje"=> "Transactions created"]);
 		}
 	}
+	function updateDueDateTblBach($ID){
+		$DueDate = $_POST['DueDate'];
+		if (empty($DueDate)) {
+			$DueDate = null;
+		}
+		$Batch = [
+			"DueDate"	=> $DueDate
+		];
+		$condicion = "pkBatchId = " . $ID;
+		$this->Maintenance_db->updateReturnId("tblBatch", $Batch, $condicion);
+	//tblBatch
+}
 
 	public function updateStatus(){
 		if($this->input->is_ajax_request()) {
@@ -172,11 +185,6 @@ class Maintenance extends CI_Controller {
 	function newBatch(){
 		if($this->input->is_ajax_request()) {
 
-			$DueDate = $_POST['DueDate'];
-			if (empty($DueDate)) {
-				$DueDate = null;
-			}
-
 			$Batch = [
 				"fkPropertyId"	=> $_POST['Property'],
 				"fkBatchTypeId"	=> 2,
@@ -187,7 +195,6 @@ class Maintenance extends CI_Controller {
 				"BatchDesc"		=> $_POST['BatchDesc'],
 				"TotalRecords"	=> sizeof($_POST['Contracts']),
 				"TotalAmount"	=> $_POST['Total'],
-				"DueDate"		=> $DueDate,
 				"ynActive"		=> 1,
 				"fkStatusId"	=> 20,
 				"Year"			=>	$_POST['Year'],

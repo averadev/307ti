@@ -88,6 +88,17 @@
 				<a data-widget="postBatch" id="postBatch" class="btn btn-primary">
 					<div class="label">Post Batch</div>
 				</a>
+					<div class="small-6 columns">
+		<div class="small-3 columns">
+			<label class="text-left" for="legalName">Due Date</label>
+		</div>
+		<div class="small-9 columns"></div>
+		<div class="caja2" >
+		<div class="input-group date" >
+				<input type="text" id="dueDateMaintenance" class="txtSearch input-group-field roundRight" placeholder="Enter a date" readonly />
+			</div>
+		</div>
+	</div>
 				<a data-widget="cancelBatch" id="cancelBatch" class="btn btn-primary">
 					<div class="label">Cancel Batch</div>
 				</a>
@@ -222,3 +233,9 @@
 	</div>
 	
 </div>
+<script type="text/javascript">
+		datepickerZebra = $("#dueDateMaintenance" ).Zebra_DatePicker({
+		format: 'm/d/Y',
+		show_icon: false
+	});
+</script>
