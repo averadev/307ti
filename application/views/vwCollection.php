@@ -164,6 +164,7 @@
 									<img src="<?php echo base_url().IMG; ?>common/BORRAR2.png"/>
 								</a>
 								<a id="btnCollReport" class="btn btn-primary spanSelect">
+									<div class="label">Export</div>
 									<i class="fa fa-print" aria-hidden="true"></i>
 								</a>
 							</div>
