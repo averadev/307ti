@@ -72,7 +72,7 @@ class Maintenance extends CI_Controller {
 			$ID = $_POST['ID'];
 			$DueDate = $_POST['DueDate'];
 			if (empty($DueDate)) {
-				$DueDate = null;
+				$DueDate = $this->getToday();
 			}
 			$batchs = $this->Maintenance_db->getAccountsBatchs($ID);
 			for ($i=0; $i < sizeof($batchs); $i++) { 
