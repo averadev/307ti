@@ -55,10 +55,31 @@ $(document).ready(function() {
 	
 	$(document).off( 'click', '#btnCollReport');
 	$(document).on( 'click', '#btnCollReport', function () {
-		showModalReportAdmin();
+		//showModalReportAdmin();
+		generateExcelAdminTransactions();
 	});
 	//$('#textInvStartDate').val(getCurrentDate())
 });
+
+function generateExcelAdminTransactions(){
+	var arrayDate = ["DueDateColl", "CrDateColl"];
+    var dates = getDates(arrayDate);
+    var arrayWords = ["TrxIdColl", "FolioColl", "TrxAmtColl", "PastDueDateColl", "LoginUserColl"];
+    var words = getWords(arrayWords);
+	var arrayOption = ["TrxTypeColl", "AccTypeColl","OccTypeGroupColl", "OccTypeColl" ];
+    var options = getWords(arrayOption);
+    options.Outstanding = $('#Outstanding').prop('checked');
+
+    url = "?type=report";
+	dates = JSON.stringify(dates);
+	words = JSON.stringify(words);
+	options = JSON.stringify(options);
+	url += "&words=" + words;
+	url += "&dates=" + dates;
+	url += "&options=" + options;
+	window.open("collection/makeExcelAdmin"+ url);
+	
+}
 
 function ajaxSelectColl(url,errorMsj, funcion, divSelect) {
 	$.ajax({

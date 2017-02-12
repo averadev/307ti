@@ -70,9 +70,13 @@ class Maintenance extends CI_Controller {
 	public function postBatch(){
 		if($this->input->is_ajax_request()) {
 			$ID = $_POST['ID'];
+			$DueDate = $_POST['DueDate'];
+			if (empty($DueDate)) {
+				$DueDate = null;
+			}
 			$batchs = $this->Maintenance_db->getAccountsBatchs($ID);
 			for ($i=0; $i < sizeof($batchs); $i++) { 
-				$this->insertBatchTrx($batchs[$i]->pkAccId, $batchs[$i]->TotalAmount);
+				$this->insertBatchTrx($batchs[$i]->pkAccId, $batchs[$i]->TotalAmount, $DueDate);
 			}
 			$TRX =[
 				"fkStatusId"	=> 21
@@ -118,7 +122,7 @@ class Maintenance extends CI_Controller {
 		
 	}
 
-	public function insertBatchTrx($Account, $Price){
+	public function insertBatchTrx($Account, $Price, $Date){
 
 		$precio = valideteNumber($Price);
 
@@ -147,7 +151,7 @@ class Maintenance extends CI_Controller {
 			"DueDt"			=> $this->getToday(),
 			"ynActive"		=> 1,
 			"CrBy"			=> $this->nativesessions->get('id'),
-			"CrDt"			=> $this->getToday(),
+			"CrDt"			=> $Date,
 			"MdBy"			=> $this->nativesessions->get('id'),
 			"MdDt"			=> $this->getToday()
 		];

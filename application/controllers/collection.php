@@ -296,7 +296,7 @@ class collection extends CI_Controller {
 				}
 			}
 			//echo json_encode(array('items' => $data));
-
+			//var_dump($sql);
 			$this->makeExcel($data, 'AdminTrx', $sql);
 	}
 	public function makeExcel($json, $nombre, $filtros){
@@ -349,15 +349,15 @@ class collection extends CI_Controller {
             $objPHPExcel->getActiveSheet()->getRowDimension($head)->setRowHeight(30);
             $c = 0;
             $head = 7;
-            // if (isset($filtros['dates'])) {
-            // 	foreach ($filtros['dates'] as $key => $value) {
-            //     	$objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio.$head, $key." ".$value);
-	           //      if ($c+1<sizeof($filtros['dates'])) {
-	           //      	$lastColumn++;
-	           //      }
-	           //      $c++;
-	           //  }
-            // }
+            if (isset($filtros['dates']) && !empty($filtros['dates'])) {
+            	foreach ($filtros['dates'] as $key => $value) {
+                	$objPHPExcel->setActiveSheetIndex($activa)->setCellValue($inicio.$head, $key." ".$value);
+	                if ($c+1<sizeof($filtros['dates'])) {
+	                	$lastColumn++;
+	                }
+	                $c++;
+	            }
+            }
             $c = 0;
             $head = 8;
 
