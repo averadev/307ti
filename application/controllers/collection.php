@@ -281,7 +281,43 @@ class collection extends CI_Controller {
 
 	public function makeExcelAdmin(){
 		$page = 0;
-			$sql = $this->getFilters($_POST, '');
+			//$sql = $this->getFilters(json_decode($_GET), '');
+			if(isset($_GET['dates'])){
+				$dates = json_decode( $_GET['dates']);
+				$sql['dates'] = [
+					"DueDateColl" => $dates->DueDateColl,
+					"CrDateColl" => $dates->CrDateColl
+				];
+			}
+			if(isset($_GET['words'])){
+				$words = json_decode( $_GET['words']);
+				//$sql['words'] = $this->receiveWords($words);
+				$sql['words'] =[
+					"TrxIdColl" => $words->TrxIdColl,
+					"FolioColl" => $words->FolioColl,
+					"TrxAmtColl" => $words->TrxAmtColl,
+					"PastDueDateColl" => $words->PastDueDateColl,
+					"LoginUserColl" =>$words->LoginUserColl
+				];
+			}
+			if(isset($_GET['options'])){
+				$options = json_decode( $_GET['options']);
+				//$sql['options'] =  $this->receiveWords($options);
+				$sql['options'] = [
+					"TrxTypeColl" => $options->TrxTypeColl,
+					"AccTypeColl" => $options->AccTypeColl,
+					"OccTypeGroupColl" => $options->OccTypeGroupColl,
+					"OccTypeColl" => $options->OccTypeColl,
+					"Outstanding" => $options->Outstanding,
+				];
+			}
+			
+			$sql = $this->receiveWords($sql);
+			//var_dump($sql);
+			$sql['options'] = $this->cleanVariables($sql['options']);
+			$sql['words'] = $this->cleanVariables($sql['words']);
+			$sql['dates'] = $this->cleanVariables($sql['dates']);
+
 			$data = $this->collection_db->getCollection($sql);
 			if( count($data) > 0 ){
 				foreach( $data[0] as $key => $item ){
@@ -295,11 +331,25 @@ class collection extends CI_Controller {
 					}
 				}
 			}
-			//echo json_encode(array('items' => $data));
+			
+			//$data =  json_encode($data);
 			//var_dump($sql);
+			//svar_dump($data);
 			$this->makeExcel($data, 'AdminTrx', $sql);
 	}
+
+	public function cleanVariables($words){
+		$ArrayWords = [];
+		foreach ($words as $key => $value) {
+			if(!empty($value) && $value != ""){
+				$ArrayWords[$key] = $value;
+			}
+		}
+		return $ArrayWords;
+	}
+
 	public function makeExcel($json, $nombre, $filtros){
+		//var_dump($json_encode);
 			$date = new DateTime();
 			$objPHPExcel = new PHPExcel();
 			 $lastColumn = $objPHPExcel->getActiveSheet()->getHighestColumn();

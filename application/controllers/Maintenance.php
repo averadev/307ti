@@ -148,10 +148,10 @@ class Maintenance extends CI_Controller {
 			"Curr2Amt"		=> valideteNumber($florines),
 			"Remark"		=> '', //
 			"Doc"			=> '',
-			"DueDt"			=> $this->getToday(),
+			"DueDt"			=> $Date ,
 			"ynActive"		=> 1,
 			"CrBy"			=> $this->nativesessions->get('id'),
-			"CrDt"			=> $Date,
+			"CrDt"			=> $this->getToday(),
 			"MdBy"			=> $this->nativesessions->get('id'),
 			"MdDt"			=> $this->getToday()
 		];
